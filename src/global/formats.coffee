@@ -1,22 +1,21 @@
-showFormat: (decimalNum) ->
+global.showFormat = (decimalNum) ->
   decimalNum.toFixed(2)
 
-shortFormat: (decimalNum) ->
+global.shortFormat = (decimalNum) ->
   return decimalNum.toFixed(1);
 
 ###
 Removes commas from a number containing a string:
 e.g. 1,234,567.99 -> 1234567.99
 ###
-noCommaFormat: (numberWithCommas) ->
+global.noCommaFormat = (numberWithCommas) ->
   numberWithCommas.replace(',', '');
 
 ###
 Adds commas to a number, and returns the string representation of that number
 e.g. 1234567.99 -> 1,234,567.99
 ###
-addCommas: (plainNumber) ->
-
+global.commaFormat = (plainNumber) ->
   # Simple method of converting a parameter to a string
   plainNumber += ""
 

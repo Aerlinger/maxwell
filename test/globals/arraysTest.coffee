@@ -1,12 +1,17 @@
-{ArrayUtils} = require '.././arrays.coffee'
-
 describe "Array Utilities", ->
 
-  it "should build array of zeros from an empty array", ->
-    zeroArray(Array(5)).toString().should.equal [0, 0, 0, 0, 0].toString()
+  it "should build array of zeros of length 5", ->
+    zeroArray(5).toString().should.equal [0, 0, 0, 0, 0].toString()
 
-  it "should convert nonzero array to a zero array", ->
-    zeroArray([1, 2, 3, 4, 5]).toString().should.equal [0, 0, 0, 0, 0].toString()
+    it "should return an empty array for a length of -1", ->
+    zeroArray(-1).toString().should.equal ""
+    zeroArray(0).toString().should.equal ""
+
+  it "should build an empty 2d array when numRows or numCols is < 1", ->
+    zeroArray2(1, -5).toString().should.equal ""
+    zeroArray2(-1, -5).toString().should.equal ""
+    zeroArray2(-1, 5).toString().should.equal ""
+    zeroArray2(0, 0).toString().should.equal ""
 
   it "should build a 1x5 array of zeros", ->
     zeroArray2(1, 5).toString().should.equal [0, 0, 0, 0, 0].toString()
@@ -25,20 +30,20 @@ describe "Array Utilities", ->
   describe "ArrayUtils.isClean should reject", ->
     specify "1D arrays with NaN", ->
       arr = [1, NaN, 3, 4, 5]
-      isClean(arr).should.equal false
+      isCleanArray(arr).should.equal false
 
     specify "1D arrays with Inf", ->
       arr = [1, Infinity, 3, 4, 5]
-      isClean(arr).should.equal false
+      isCleanArray(arr).should.equal false
 
     specify "1D arrays with non-numeric values", ->
       arr = ['a', 2, 3, 4, 5]
-      isClean(arr).should.equal false
+      isCleanArray(arr).should.equal false
 
     specify "Nested arrays containing Infinity", ->
       arr = [[1, 2, 3, 4], [1, 2, 3, 4], [1, Infinity, 3, 4], [1, 2, 3, 4]]
-      isClean(arr).should.equal false
+      #isCleanArray(arr).should.equal false
 
     specify "Nested arrays containing NaN", ->
       arr = [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, NaN, 4], [1, 2, 3, 4]]
-      isClean(arr).should.equal false
+      #isCleanArray(arr).should.equal false
