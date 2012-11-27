@@ -1,4 +1,4 @@
-{ColorUtils} = require '../../util/color.coffee'
+{ColorUtils} = require '.././color.coffee'
 
 describe "Color Utilities", ->
 

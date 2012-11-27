@@ -22,7 +22,8 @@ if process.env
   CommandHistory = require('../ui/commandHistory')
   Hint = require('./hint')
   Grid = require('../ui/grid')
-  ArrayUtils = require('../util/arrayUtils')
+  ArrayUtils = require('./arrays')
+  Primitives = require('../render/primitives')
 
   Scope = require('../scope/scope')
 
@@ -48,7 +49,6 @@ class Circuit
 
 
   init: () ->
-    # CircuitElement.initClass() # < REMOVED
     @Solver.invalidate()
 
     dumpTypes = new Array(300)
@@ -118,7 +118,6 @@ class Circuit
   Removes all circuit elements and scopes from the workspace and resets time to zero.
   ###
   clearAndReset: ->
-
     @dumpTypes = []
     @nodeList = []
     @elementList = []
@@ -137,11 +136,6 @@ class Circuit
 
     for element in @elementList
       element.destroy()
-
-    # simulation variables
-    @time = 0                 # t is simulation time (in seconds)
-    @converged = true      # true if numerical analysis has converged
-    @subIterations = 5000
 
     @clearErrors()
 
@@ -166,7 +160,8 @@ class Circuit
       element.reset()
     for scope in @scopes
       scope.resetGraph()
-    @time = 0
+
+    @Solver.restart()
 
 
   # Returns the y position of the bottom of the circuit
@@ -206,6 +201,11 @@ class Circuit
 
   getGrid: ->
     return @grid
+
+  # TODO: This is a stub!
+  getCanvasBounds: ->
+    return new Primitives.Rectangle(0, 0, 500, 400);
+
 
   ###
   UpdateCircuit: Outermost method in event loops
@@ -287,9 +287,9 @@ class Circuit
         if bb > 0
 
           # Outline bad nodes
-          renderContext.circle(cn.x, cn.y, 2 * Settings.POST_RADIUS).attr
-            stroke: Color.color2HexString(Color.RED)
-            "stroke-dasharray": "--"
+#          renderContext.circle(cn.x, cn.y, 2 * Settings.POST_RADIUS).attr
+#            stroke: Color.color2HexString(Color.RED)
+#            "stroke-dasharray": "--"
 
           badNodes++
       ++i
@@ -311,10 +311,10 @@ class Circuit
         if @mousePost is -1
           @mouseElm.getInfo info
         else
-          info[0] = "V = " + getUnitText(@mouseElm.getPostVoltage(Circuit.mousePost), "V")
+          info[0] = "V = " + getUnitText(@mouseElm.getPostVoltage(@mousePost), "V")
       else
         Settings.fractionalDigits = 2
-        info[0] = "t = " + getUnitText(Circuit.t, "s") + "\nf.t.: " + (Circuit.lastTime - Circuit.lastFrameTime) + "\n"
+        info[0] = "t = " + getUnitText(@solver.time, "s") + "\nf.t.: " + (@lastTime - @lastFrameTime) + "\n"
       unless @Hint.hintType is -1
         i = 0
         while info[i]?
@@ -337,32 +337,21 @@ class Circuit
       info[++i] = badNodes + ((if (badNodes is 1) then " bad connection" else " bad connections"))  if badNodes > 0
       bottomTextOffset = 100
 
-      # Find where to show data; below circuit, not too high unless we need it
+      # TODO: Find where to show data; below circuit, not too high unless we need it
       ybase = CanvasBounds.height - 15 * i - bottomTextOffset
       ybase = Math.min(ybase, CanvasBounds.height)
       ybase = Math.max(ybase, Circuit.circuitBottom)
 
-      # TODO: CANVAS
-      i = 0
-      while info[i]?
-        renderContext.fillStyle = Color.color2HexString(Settings.TEXT_COLOR)
-        renderContext.fillText info[i], x, ybase + 15 * (i + 1)
-        ++i
+      # TODO: DRAW info text
 
-    # Draw selection outline:
-    if Circuit.selectedArea?
+    # TODO: Draw selection outline:
+    #if Circuit.selectedArea?
 
-      #renderContext.strokeStyle = Color.color2HexString(Settings.SELECTION_MARQUEE_COLOR);
-      renderContext.beginPath()
-      renderContext.strokeStyle = Settings.SELECT_COLOR
-      renderContext.strokeRect @selectedArea.x, @selectedArea.y, @selectedArea.width, @selectedArea.height
-      renderContext.closePath()
-
-    Circuit.mouseElm = realMouseElm
-    Circuit.frames++
+    @mouseElm = realMouseElm
+    @frames++
 
     endTime = (new Date()).getTime()
-    Circuit.lastFrameTime = Circuit.lastTime
+    @lastFrameTime = Circuit.lastTime
 
 
 # The Footer exports class(es) in this file via Node.js, if Node.js is defined.

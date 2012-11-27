@@ -1,3 +1,6 @@
+global.muString   = "u"
+global.ohmString  = "ohm"
+
 global.getUnitText = (v, u) ->
   va = Math.abs(v)
   return "0 " + u  if va < 1e-14
@@ -9,6 +12,3 @@ global.getUnitText = (v, u) ->
   return (v * 1e-3).toFixed(2) + " k" + u  if va < 1e6
   return (v * 1e-6).toFixed(2) + " M" + u  if va < 1e9
   (v * 1e-9).toFixed(2) + " G" + u
-
-global.muString   = "u"
-global.ohmString  = "ohm"

@@ -1,18 +1,23 @@
 require('coffee-script');
-require('jquery');
-require('./support/globals')
+var _ = require('underscore')._;
+
+// Global definitions:
+require('./src/global/arrays');
+require('./src/global/colorPalette');
+require('./src/global/console');
+require('./src/global/formats');
+require('./src/global/math');
+require('./src/global/units');
 
 console.log("Running Maxwell in environment: " + process.argv[2])
 process.env[process.argv[2]] = true
 
-Circuit = require('./core/circuit');
-CircuitElement = require('./component/circuitElement');
-Settings = require('./settings/Settings');
 
+Circuit = require('./src/core/circuit');
+CircuitElement = require('./src/component/circuitElement');
+Settings = require('./src/settings/Settings');
 
-// If we are in development environment include all modules:
-//if(process.env.development)
-  c = new Circuit()
-  c.updateCircuit()
-  CircuitElement = require('./component/circuitElement');
-  ce = new CircuitElement()
+c = new Circuit();
+c.updateCircuit();
+CircuitElement = require('./src/component/circuitElement');
+ce = new CircuitElement();

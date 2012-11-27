@@ -2,7 +2,7 @@
 if process.env
   Settings = require('../settings/settings')
   {Polygon, Rectangle, Point, Geom} = require('../render/primitives')
-  ArrayUtils = require('../util/arrayUtils')
+  ArrayUtils = require('./arrays')
 
 class CircuitElement
 

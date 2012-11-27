@@ -2,13 +2,15 @@ MatrixStamper = require('./matrixStamper')
 
 class CircuitSolver
 
-  @scaleFactors = (0 for i in [0..400])
-
-
   constructor: (@Circuit) ->
+    @scaleFactors = (0 for i in [0..400])
     @Stamper = new MatrixStamper(@Circuit, this)
-    @stopped = false
+    @reset();
 
+
+  reset: ->
+    # simulation variables
+    @time = 0                 # t is simulation time (in seconds)
     @converged = true      # true if numerical analysis has converged
     @subIterations = 5000
 
@@ -25,7 +27,7 @@ class CircuitSolver
 
     @circuitNonLinear = false
 
-    @analyzeFlag  = true     # Flag indicating if the circuit needs to be reanalyzed (only true when the circuit has changed)
+    @invalidate()
 
 
   # When the circuit has changed we will need to rebuild the node graph and the circuit matrix.
