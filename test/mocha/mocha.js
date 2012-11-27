@@ -1681,7 +1681,7 @@ require.register("reporters/doc.js", function(module, exports, require){
  */
 
 var Base = require('./base')
-  , utils = require('../utils');
+  , utils = require('.');
 
 /**
  * Expose `Doc`.
@@ -1863,7 +1863,7 @@ require.register("reporters/html.js", function(module, exports, require){
  */
 
 var Base = require('./base')
-  , utils = require('../utils')
+  , utils = require('.')
   , Progress = require('../browser/progress')
   , escape = utils.escape;
 
@@ -2577,7 +2577,7 @@ require.register("reporters/markdown.js", function(module, exports, require){
  */
 
 var Base = require('./base')
-  , utils = require('../utils');
+  , utils = require('.');
 
 /**
  * Expose `Markdown`.
@@ -3302,7 +3302,7 @@ require.register("reporters/xunit.js", function(module, exports, require){
  */
 
 var Base = require('./base')
-  , utils = require('../utils')
+  , utils = require('.')
   , escape = utils.escape;
 
 /**

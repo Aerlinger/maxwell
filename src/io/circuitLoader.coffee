@@ -103,7 +103,7 @@ class CircuitLoader
       while l isnt b.length - p
         if b.charAt(l + p) is "\n" or b.charAt(l + p) is "\r"
           linelen = l++
-          l++  if l + p < b.length and b.charAt(l + p) is "\n"
+          l++ if l + p < b.length and b.charAt(l + p) is "\n"
           break
         l++
       line = b.substring(p, p + linelen)
