@@ -1,4 +1,11 @@
-class Geom
+class Point
+  constructor: (@x = 0, @y = 0) ->
+
+  @toArray: (num) ->
+    (Point(0, 0) for i in [1..num])
+
+  @comparePair: (x1, x2, y1, y2) ->
+    (x1 is y1 and x2 is y2) or (x1 is y2 and x2 is y1)
 
   @distanceSq: (x1, y1, x2, y2) ->
     x2 -= x1
@@ -6,14 +13,8 @@ class Geom
     x2 * x2 + y2 * y2
 
 
-class Point
-  constructor: (@x = 0, @y = 0) ->
-
-  @toArray: (num) ->
-    Point(0, 0) for i in [1..num]
-
-
 class Rectangle
+
   constructor: (@x = 0, @y = 0, @width = 0, @height = 0) ->
 
   contains: (x, y) ->
@@ -42,10 +43,8 @@ class Rectangle
 class Polygon
 
   constructor: (@vertices) ->
-
     if @vertices and @vertices.length % 2 is 0
       i = 0
-
       while i < vertices.length
         @addVertex vertices[i], vertices[i + 1]
         i += 2
@@ -69,4 +68,3 @@ root = exports ? window
 root.Polygon    = Polygon
 root.Rectangle  = Rectangle
 root.Point      = Point
-root.Geom       = Geom
