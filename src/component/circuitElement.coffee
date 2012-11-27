@@ -1,28 +1,28 @@
 # If we are in Node.js:
 if process.env
   Settings = require('../settings/settings')
-  {Polygon, Rectangle, Point, Geom} = require('../render/primitives')
-  ArrayUtils = require('./arrays')
+  {Polygon, Rectangle, Point, Geom} = require('../util/primitives')
 
 class CircuitElement
 
   @ps1: new Point(0, 0)
   @ps2: new Point(0, 0)
 
-  point1: new Point(50, 100)
-  point2: new Point(50, 150)
-  lead1: new Point(0, 100)
-  lead2: new Point(0, 150)
-
-  volts = [0, 0]
-  current = 0
-  curcount = 0
-
-  noDiagonal: false
-  selected: false
-
 
   constructor: (@x1, @y1, @x2, @y2, flags, st...) ->
+
+    @point1 = new Point(50, 100)
+    @point2 = new Point(50, 150)
+    @lead1 = new Point(0, 100)
+    @lead2 = new Point(0, 150)
+
+    @volts = [0, 0]
+    @current = 0
+    @curcount = 0
+
+    @noDiagonal = false
+    @selected = false
+
     if isNaN(flags)
       @flags = @getDefaultFlags()
     else
@@ -41,13 +41,13 @@ class CircuitElement
     @nodes = ArrayUtils.zeroArray(@nodes)
 
   setPoints: ->
-    @dx = @x2 - @x
-    @dy = @y2 - @y
+    @dx = @x2 - @x1
+    @dy = @y2 - @y1
     @dn = Math.sqrt(@dx * @dx + @dy * @dy)
     @dpx1 = @dy / @dn
     @dpy1 = -@dx / @dn
     @dsign = (if (@dy is 0) then MathUtils.sign(@dx) else MathUtils.sign(@dy))
-    @point1 = new Point(@x, @y)
+    @point1 = new Point(@x1, @y1)
     @point2 = new Point(@x2, @y2)
 
   setColor: (color) ->
@@ -67,35 +67,23 @@ class CircuitElement
     "Circuit Element"
 
   isSelected: ->
-    selected
+    @selected
 
   initBoundingBox: ->
     @boundingBox = new Rectangle()
 
-    @boundingBox.x1 = Math.min(@x1, @x2);
-    @boundingBox.y = Math.min(@y, @y2);
+    @boundingBox.x = Math.min(@x1, @x2);
+    @boundingBox.y = Math.min(@y1, @y2);
     @boundingBox.width = Math.abs(@x2 - @x1) + 1;
-    @boundingBox.height = Math.abs(@y2 - @y) + 1;
-
-    CircuitElement.ps1 = new Point(0, 0)
-    CircuitElement.ps2 = new Point(0, 0)
-
-    #			shortFormat = new flash.globalization.NumberFormatter(LocaleID.DEFAULT);
-    #			shortFormat.fractionalDigits = 1;
-    #			showFormat = new flash.globalization.NumberFormatter(LocaleID.DEFAULT);
-    #			showFormat.fractionalDigits = 2;
-    #			showFormat.leadingZero = true;
-    #			noCommaFormat = new flash.globalization.NumberFormatter(LocaleID.DEFAULT);
-    #			noCommaFormat.fractionalDigits = 10;
-    #			noCommaFormat.useGrouping = false;
+    @boundingBox.height = Math.abs(@y2 - @y1) + 1;
 
 
   dump: ->
-    getDumpType() + " " + @x1 + " " + @y + " " + @x2 + " " + @y2 + " " + @flags;
+    @getDumpType() + " " + @x1 + " " + @y1 + " " + @x2 + " " + @y2 + " " + @flags;
 
   reset: ->
-    volts = 0 for volt in volts
-    curcount = 0
+    @volts = zeroArray(volts.length)
+    @curcount = 0
 
   setCurrent: (x, current) ->
     @current = current
@@ -139,41 +127,41 @@ class CircuitElement
     xx = Circuit.snapGrid(xx)
     yy = Circuit.snapGrid(yy)
     if @noDiagonal
-      if Math.abs(@x1 - xx) < Math.abs(@y - yy)
+      if Math.abs(@x1 - xx) < Math.abs(@y1 - yy)
         xx = @x1
       else
-        yy = @y
+        yy = @y1
     @x2 = xx
     @y2 = yy
     @setPoints()
 
   move: (dx, dy) ->
     @x1 += dx
-    @y += dy
+    @y1 += dy
     @x2 += dx
     @y2 += dy
-    @boundingBox.x1 += dx
+    @boundingBox.x += dx
     @boundingBox.y += dy
     @setPoints()
 
   allowMove: (dx, dy) ->
     nx = @x1 + dx
-    ny = @y + dy
+    ny = @y1 + dy
     nx2 = @x2 + dx
     ny2 = @y2 + dy
 
-    i = 0
-    while i < Circuit.elementList.length
-      ce = Circuit.getElm(i)
-      return false  if ce.x1 is nx and ce.y is ny and ce.x2 is nx2 and ce.y2 is ny2
-      return false  if ce.x1 is nx2 and ce.y is ny2 and ce.x2 is nx and ce.y2 is ny
-      ++i
+    for circuitElement in @Circuit.elementList
+      if circuitElement.x1 is nx and circuitElement.y1 is ny and circuitElement.x2 is nx2 and circuitElement.y2 is ny2
+        return false
+      if circuitElement.x1 is nx2 and circuitElement.y1 is ny2 and circuitElement.x2 is nx and circuitElement.y2 is ny
+        return false
+
     true
 
   movePoint: (n, dx, dy) ->
     if n is 0
       @x1 += dx
-      @y += dy
+      @y1 += dy
     else
       @x2 += dx
       @y2 += dy
@@ -192,7 +180,7 @@ class CircuitElement
     @nodes[nodeIdx] = newValue
 
   setVoltageSource: (node, value) ->
-    @voltSource = v
+    @voltSource = value
 
   getVoltageDiff: ->
     @volts[0] - @volts[1]
@@ -226,7 +214,7 @@ class CircuitElement
       q = y1
       y1 = y2
       y2 = q
-    @boundingBox.x1 = x1
+    @boundingBox.x = x1
     @boundingBox.y = y1
     @boundingBox.width = x2 - x1 + 1
     @boundingBox.height = y2 - y1 + 1
@@ -246,24 +234,24 @@ class CircuitElement
       q = y1
       y1 = y2
       y2 = q
-    x1 = Math.min(@boundingBox.x1, x1)
+    x1 = Math.min(@boundingBox.x, x1)
     y1 = Math.min(@boundingBox.y, y1)
-    x2 = Math.max(@boundingBox.x1 + @boundingBox.width - 1, x2)
+    x2 = Math.max(@boundingBox.x + @boundingBox.width - 1, x2)
     y2 = Math.max(@boundingBox.y + @boundingBox.height - 1, y2)
-    @boundingBox.x1 = x1
+    @boundingBox.x = x1
     @boundingBox.y = y1
     @boundingBox.width = x2 - x1
     @boundingBox.height = y2 - y1
 
   adjustBboxPt: (p1, p2) ->
-    @adjustBbox p1.x1, p1.y, p2.x1, p2.y
+    @adjustBbox p1.x, p1.y, p2.x, p2.y
 
   isCenteredText: ->
     false
 
   # Extended by subclasses
   getInfo: (arr) ->
-
+    null
 
   # Extended by subclasses
   getBasicInfo: (arr) ->
@@ -278,7 +266,7 @@ class CircuitElement
     (if (x is 1) then @getPower() else @getVoltageDiff())
 
   @getScopeUnits: (x) ->
-    (if (x is 1) then "W" else "V")
+    if (x is 1) then "W" else "V"
 
   # TODO: Implement
   getEditInfo: (n) ->
@@ -286,6 +274,7 @@ class CircuitElement
 
   # TODO: Implement
   setEditValue: (n, ei) ->
+    null
 
   getConnection: (n1, n2) ->
     true
@@ -299,11 +288,8 @@ class CircuitElement
   canViewInScope: ->
     return @getPostCount() <= 2
 
-  @comparePair: (x1, x2, y1, y2) ->
-    (x1 is y1 and x2 is y2) or (x1 is y2 and x2 is y1)
-
   needsHighlight: ->
-    Circuit.mouseElm is this or @selected
+    @Circuit.mouseElm is this or @selected
 
   isSelected: ->
     @selected
@@ -311,8 +297,8 @@ class CircuitElement
   setSelected: (selected) ->
     @selected = selected
 
-  selectRect: (r) ->
-    @selected = r.intersects(@boundingBox)
+  selectRect: (rect) ->
+    @selected = rect.intersects(@boundingBox)
 
   needsShortcut: ->
     false
@@ -328,29 +314,29 @@ class CircuitElement
   draw: ->
     # TODO: Rendering here
 
-    draw2Leads: ->
+  draw2Leads: ->
     color = @setVoltageColor(@volts[0])
     @drawThickLinePt @point1, @lead1, color
     color = @setVoltageColor(@volts[1])
     @drawThickLinePt @lead2, @point2, color
 
-  @updateDotCount: (cur, cc) ->
+  updateDotCount: (cur, cc) ->
     cur = @current  if isNaN(cur)
     cc = @curcount  if isNaN(cc)
-    return cc  if Circuit.stoppedCheck
+    return cc  if @Circuit.stoppedCheck
     cadd = cur * CircuitElement.currentMult
     cadd %= 8
     @curcount = cadd + cc
     cc + cadd
 
-  @doDots: ->
+  doDots: ->
     @curcount = @updateDotCount()
-    @drawDots @point1, @point2, @curcount  unless Circuit.dragElm is this
+    @drawDots @point1, @point2, @curcount  unless @Circuit.dragElm is this
 
   # Todo: move to independent drawing class
   drawDots: (pa, pb, pos) ->
     # If the sim is stopped or has dots disabled
-    return  if Circuit.stoppedCheck or pos is 0 or not Circuit.dotsCheckItem
+    return  if @Circuit.stoppedCheck or pos is 0 or not @Circuit.dotsCheckItem
     dx = pb.x1 - pa.x1
     dy = pb.y - pa.y
     dn = Math.sqrt(dx * dx + dy * dy)
@@ -412,7 +398,7 @@ class CircuitElement
       yc = @y2
     else
       xc = (@x2 + @x1) / 2
-      yc = (@y2 + @y) / 2
+      yc = (@y2 + @y1) / 2
     dpx = Math.floor(@dpx1 * hs)
     dpy = Math.floor(@dpy1 * hs)
     offset = 20
@@ -423,22 +409,22 @@ class CircuitElement
       paper.fillText s, xc - w / 2 + 3 * offset / 2, yc - Math.abs(dpy) - offset / 3
     else
       xx = xc + Math.abs(dpx) + offset
-      xx = xc - (10 + Math.abs(dpx) + offset)  if this instanceof VoltageElm or (@x1 < @x2 and @y > @y2)
+      xx = xc - (10 + Math.abs(dpx) + offset)  if this instanceof VoltageElm or (@x1 < @x2 and @y1 > @y2)
       # TODO: CANVAS
       paper.fillText s, xx, yc + dpy + ya
     textLabel
 
-  @drawPosts: ->
+  drawPosts: ->
     i = 0
     while i < @getPostCount()
       p = @getPost(i)
       @drawPost p.x1, p.y, @nodes[i]
       ++i
 
-  @drawPost: (x0, y0, node) ->
+  drawPost: (x0, y0, node) ->
     if node
-      return  if not Circuit.dragElm? and not @needsHighlight() and Circuit.getCircuitNode(node).links.length is 2
-      return  if Circuit.mouseMode is Circuit.MODE_DRAG_ROW or Circuit.mouseMode is Circuit.MODE_DRAG_COLUMN
+      return  if not @Circuit.dragElm? and not @needsHighlight() and @Circuit.getCircuitNode(node).links.length is 2
+      return  if @Circuit.mouseMode is @Circuit.MODE_DRAG_ROW or @Circuit.mouseMode is @Circuit.MODE_DRAG_COLUMN
     paper.beginPath()
     if @needsHighlight()
       paper.fillStyle = Color.color2HexString(Settings.POST_COLOR_SELECTED)
@@ -451,16 +437,16 @@ class CircuitElement
     paper.fill()
     paper.closePath()
 
-  @setVoltageColor: (volts) ->
+  setVoltageColor: (volts) ->
     return Settings.SELECT_COLOR  if @needsHighlight()
-    return CircuitElement.whiteColor  unless Circuit.powerCheckItem  unless Circuit.voltsCheckItem
+    return CircuitElement.whiteColor  unless @Circuit.powerCheckItem  unless @Circuit.voltsCheckItem
     c = Math.floor((volts + CircuitElement.voltageRange) * (CircuitElement.colorScaleCount - 1) / (CircuitElement.voltageRange * 2))
     c = 0  if c < 0
     c = CircuitElement.colorScaleCount - 1  if c >= CircuitElement.colorScaleCount
     Math.floor CircuitElement.colorScale[c].getColor()
 
   @setPowerColor: (yellow) ->
-    return  unless Circuit.powerCheckItem
+    return  unless @Circuit.powerCheckItem
 
     w0 = @getPower() * CircuitElement.powerMult
 

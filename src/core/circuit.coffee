@@ -23,7 +23,7 @@ if process.env
   Hint = require('./hint')
   Grid = require('../ui/grid')
   ArrayUtils = require('./arrays')
-  Primitives = require('../render/primitives')
+  Primitives = require('../util/primitives')
 
   Scope = require('../scope/scope')
 
