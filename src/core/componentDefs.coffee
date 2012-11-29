@@ -18,79 +18,80 @@ DumpTypes =
   "?" : Scope::
   "B" : Scope::
 
-ComponentDefs =
+ComponentDefs = [
 
   # Tested, working:
-  "WireElm" : "+Wire"
-  "ResistorElm" : "+Resistor"
-  "CapacitorElm" : "+Capacitor"
-  "InductorElm" : "+Inductor"
-  "SwitchElm" : "+Switch"
-  "GroundElm" : "+Ground"
-  "VoltageElm" : "+Voltage Source"
+  WireElm,
+  ResistorElm,
+  CapacitorElm,
+  InductorElm,
+  SwitchElm,
+  GroundElm,
+  VoltageElm,
 
   # Implemented, not tested
-  "DiodeElm" : "#Diode"
+  DiodeElm,
 
   # Not yet implemented:
-  "ACRailElm" : "-AC Rail"
-  "ACVoltageElm" : "-AC Voltage"
-  "ADCElm" : "-A/D Converter"
-  "AnalogSwitchElm" : "-Analog Switch"
-  "AnalogSwitch2Elm" : "-Analog Switch2"
-  "AndGateElm" : "-AndGateElm"
-  "AntennaElm" : "-Antenna"
-  "CC2Elm" : "-CC2"
-  "CC2NegElm" : "-CC2 Negative"
-  "ClockElm" : "-Clock Generator"
-  "CounterElm" : "-Counter"
-  "CurrentElm" : "-Current Source"
-  "DACElm" : "-D/A Converter"
-  "DCVoltageElm" : "-DC Voltage Src"
-  "DecadeElm" : "-Decade Counter"
-  "DFlipFlopElm" : "-D Flip Flop"
-  "DiacElm" : "-Diac"
-  "InverterElm" : "-InverterElm"
-  "JfetElm" : "-JFET"
-  "JKFlipFlopElm" : "-JK Flip Flop"
-  "LampElm" : "-LampElm"
-  "LatchElm" : "-Latch"
-  "LEDElm" : "-LED"
-  "LogicInputElm" : "-Logic Input"
-  "LogicOutputElm" : "-Logic Output"
-  "MemristorElm" : "-Memristor"
-  "MosfetElm" : "-MOSFET"
-  "NandGageElm" : "-NAND Gate"
-  "NJfetElm" : "-N-type JFET"
-  "PJfetElm" : "-P-type JFET"
-  "NMosfetElm" : "-N-type FET"
-  "PMosfetElm" : "-P-type FET"
-  "PotElm" : "-Potentiometer"
-  "ProbeElm" : "-Probe"
-  "PTransistorElm" : "-P Transistor"
-  "NTransistorElm" : "-N Transistor"
-  "PushSwitchElm" : "-PushSwitch"
-  "RailElm" : "-Voltage Rail"
-  "RelayElm" : "-Relay"
-  "SCRElm" : "-SCR Element"
-  "SevenSegElm" : "-7-Segment LCD"
-  "SparkGapElm" : "-Spark Gap"
-  "SquareRailElm" : "-SquareRail"
-  "SweepElm" : "-Freq. Sweep"
-  "Switch2Elm" : "-Switch 2"
-  "TappedTransformerElm" : "-Tapped Transformer"
-  "TextElm" : "-Text"
-  "ThermistorElm" : "-Thermistor"
-  "TimerElm" : "-Timer"
-  "TransformerElm" : "-Transformer"
-  "TransistorElm" : "-Transistor"
-  "TransmissionElm" : "-Xmission Line"
-  "TriacElm" : "-Triac"
-  "TriodeElm" : "-Triode"
-  "TunnelDiodeElm" : "-TunnelDiode"
-  "VarRailElm" : "-Variable Rail"
-  "VCOElm" : "-Volt. Cont. Osc."
-  "XORGateElm" : "-XOR Gate"
-  "ZenerElm" : "-Zener Diode"
+  ACRailElm,
+  ACVoltageElm,
+  ADCElm,
+  AnalogSwitchElm,
+  AnalogSwitch2Elm,
+  AndGateElm,
+  AntennaElm,
+  CC2Elm,
+  CC2NegElm,
+  ClockElm,
+  CounterElm,
+  CurrentElm,
+  DACElm,
+  DCVoltageElm,
+  DecadeElm,
+  DFlipFlopElm,
+  DiacElm,
+  InverterElm,
+  JfetElm,
+  JKFlipFlopElm,
+  LampElm,
+  LatchElm,
+  LEDElm,
+  LogicInputElm,
+  LogicOutputElm,
+  MemristorElm,
+  MosfetElm,
+  NandGageElm,
+  NJfetElm,
+  PJfetElm,
+  NMosfetElm,
+  PMosfetElm,
+  PotElm,
+  ProbeElm,
+  PTransistorElm,
+  NTransistorElm,
+  PushSwitchElm,
+  RailElm,
+  RelayElm,
+  SCRElm,
+  SevenSegElm,
+  SparkGapElm,
+  SquareRailElm,
+  SweepElm,
+  Switch2Elm,
+  TappedTransformerElm,
+  TextElm,
+  ThermistorElm,
+  TimerElm,
+  TransformerElm,
+  TransistorElm,
+  TransmissionElm,
+  TriacElm,
+  TriodeElm,
+  TunnelDiodeElm,
+  VarRailElm,
+  VCOElm,
+  XORGateElm,
+  ZenerElm
+]
 
 module.exports = ComponentDefs
