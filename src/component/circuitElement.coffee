@@ -1,7 +1,7 @@
 # If we are in Node.js:
 if process.env
   Settings = require('../settings/settings')
-  {Polygon, Rectangle, Point, Geom} = require('../util/primitives')
+  {Polygon, Rectangle, Point} = require('../util/shapePrimitives')
 
 class CircuitElement
 
@@ -16,7 +16,6 @@ class CircuitElement
     @lead1 = new Point(0, 100)
     @lead2 = new Point(0, 150)
 
-    @volts = [0, 0]
     @current = 0
     @curcount = 0
 
@@ -35,10 +34,8 @@ class CircuitElement
     @circuit = circuit
 
   allocNodes: ->
-    @nodes = new Array(@getPostCount() + @getInternalNodeCount())
-    @volts = new Array(@getPostCount() + @getInternalNodeCount())
-
-    @nodes = ArrayUtils.zeroArray(@nodes)
+    @nodes = zeroArray(@getPostCount() + @getInternalNodeCount())
+    @volts = zeroArray(@getPostCount() + @getInternalNodeCount())
 
   setPoints: ->
     @dx = @x2 - @x1
@@ -46,7 +43,7 @@ class CircuitElement
     @dn = Math.sqrt(@dx * @dx + @dy * @dy)
     @dpx1 = @dy / @dn
     @dpy1 = -@dx / @dn
-    @dsign = (if (@dy is 0) then MathUtils.sign(@dx) else MathUtils.sign(@dy))
+    @dsign = (if (@dy is 0) then sign(@dx) else sign(@dy))
     @point1 = new Point(@x1, @y1)
     @point2 = new Point(@x2, @y2)
 
@@ -82,7 +79,7 @@ class CircuitElement
     @getDumpType() + " " + @x1 + " " + @y1 + " " + @x2 + " " + @y2 + " " + @flags;
 
   reset: ->
-    @volts = zeroArray(volts.length)
+    @volts = zeroArray(@volts.length)
     @curcount = 0
 
   setCurrent: (x, current) ->
@@ -123,16 +120,16 @@ class CircuitElement
   getDefaultFlags: ->
     0
 
-  drag: (xx, yy) ->
-    xx = Circuit.snapGrid(xx)
-    yy = Circuit.snapGrid(yy)
+  drag: (newX, newY) ->
+    newX = Circuit.snapGrid(newX)
+    newY = Circuit.snapGrid(newY)
     if @noDiagonal
-      if Math.abs(@x1 - xx) < Math.abs(@y1 - yy)
-        xx = @x1
+      if Math.abs(@x1 - newX) < Math.abs(@y1 - newY)
+        newX = @x1
       else
-        yy = @y1
-    @x2 = xx
-    @y2 = yy
+        newY = @y1
+    @x2 = newX
+    @y2 = newY
     @setPoints()
 
   move: (dx, dy) ->
@@ -188,6 +185,7 @@ class CircuitElement
   nonlinear: ->
     false
 
+  # Two terminals by default, but likely to be overidden by subclasses
   getPostCount: ->
     2
 

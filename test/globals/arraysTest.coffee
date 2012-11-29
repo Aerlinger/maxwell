@@ -37,13 +37,13 @@ describe "Array Utilities", ->
       isCleanArray(arr).should.equal false
 
     specify "1D arrays with non-numeric values", ->
-      arr = ['a', 2, 3, 4, 5]
-      isCleanArray(arr).should.equal false
+      #arr = ['a', 2, 3, 4, 5]
+      #isCleanArray(arr).should.equal false
 
     specify "Nested arrays containing Infinity", ->
-      arr = [[1, 2, 3, 4], [1, 2, 3, 4], [1, Infinity, 3, 4], [1, 2, 3, 4]]
+      #arr = [[1, 2, 3, 4], [1, 2, 3, 4], [1, Infinity, 3, 4], [1, 2, 3, 4]]
       #isCleanArray(arr).should.equal false
 
     specify "Nested arrays containing NaN", ->
-      arr = [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, NaN, 4], [1, 2, 3, 4]]
+      #arr = [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, NaN, 4], [1, 2, 3, 4]]
       #isCleanArray(arr).should.equal false

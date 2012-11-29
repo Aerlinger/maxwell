@@ -1,8 +1,11 @@
 class Point
   constructor: (@x = 0, @y = 0) ->
 
+  equals: (otherPoint) ->
+    (@x is otherPoint.x and @y is otherPoint.y)
+
   @toArray: (num) ->
-    (Point(0, 0) for i in [1..num])
+    (new Point(0, 0) for i in Array(num))
 
   @comparePair: (x1, x2, y1, y2) ->
     (x1 is y1 and x2 is y2) or (x1 is y2 and x2 is y1)
@@ -18,7 +21,7 @@ class Rectangle
   constructor: (@x = 0, @y = 0, @width = 0, @height = 0) ->
 
   contains: (x, y) ->
-    if (x > @x && x < (@x + @width) && y > @y && (y < @y + @height))
+    if (x >= @x && x <= (@x + @width) && y >= @y && (y <= @y + @height))
       true
     else
       false
@@ -27,9 +30,7 @@ class Rectangle
     if otherRect?
       if( otherRect.x == @x && otherRect.y == @y &&otherRect.width == @width && otherRect.height == @height )
         return true
-
     return false
-
 
   intersects: (otherRect) ->
     topLeftIntersects = @.contains(otherRect.x, otherRect.y)
@@ -42,8 +43,9 @@ class Rectangle
 
 class Polygon
 
-  constructor: (@vertices) ->
-    if @vertices and @vertices.length % 2 is 0
+  constructor: (vertices) ->
+    @vertices = []
+    if vertices and vertices.length % 2 is 0
       i = 0
       while i < vertices.length
         @addVertex vertices[i], vertices[i + 1]
@@ -53,7 +55,7 @@ class Polygon
     @vertices.push new Point(x, y)
 
   getX: (n) ->
-    @vertices[n].x1
+    @vertices[n].x
 
   getY: (n) ->
     @vertices[n].y
