@@ -9,7 +9,7 @@ Removes commas from a number containing a string:
 e.g. 1,234,567.99 -> 1234567.99
 ###
 global.noCommaFormat = (numberWithCommas) ->
-  numberWithCommas.replace(',', '');
+  numberWithCommas.replace(/,/g, '');
 
 ###
 Adds commas to a number, and returns the string representation of that number

@@ -33,7 +33,7 @@ describe "Format utilities", ->
     noCommaFormat('1,234,567.99').should.equal '1234567.99'
 
   specify "addCommas(plainNumber)", ->
-    noCommaFormat('1234567.99').should.equal '1,234,567.99'
+    commaFormat('1234567.99').should.equal '1,234,567.99'
 
   specify "commaFormat and noCommaFormat are inverse operations", ->
     num = 123456789
