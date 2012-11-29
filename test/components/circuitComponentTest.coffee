@@ -3,6 +3,13 @@ CircuitElement = require('../../src/component/circuitElement')
 
 describe "Base Circuit Element", ->
 
+  specify "class methods", ->
+    CircuitElement.getScopeUnits(1).should.equal "W"
+    CircuitElement.getScopeUnits().should.equal "V"
+    CircuitElement.ps1.equals(new Point(0, 0)).should.equal true
+    CircuitElement.ps2.equals(new Point(0, 0)).should.equal true
+
+
   beforeEach () ->
     @circuitElement = new CircuitElement(10, 10, 13, 14)
 
@@ -22,20 +29,21 @@ describe "Base Circuit Element", ->
       circuitElm.flags.should.equal 5
 
     specify "should create default parameters", ->
-      @circuitElement.point1.equals(new Point(50, 100)).should.equal true
-      @circuitElement.point2.equals(new Point(50, 150)).should.equal true
-      @circuitElement.lead1.equals(new Point(0, 100)).should.equal true
-      @circuitElement.lead2.equals(new Point(0, 150)).should.equal true
-
-      @circuitElement.getPostCount().should.equal 2
-
-      #@circuitElement.volts.toString().should.equal [0, 0].toString()
-
       @circuitElement.current.should.equal 0
       @circuitElement.getCurrent().should.equal 0
       @circuitElement.curcount.should.equal 0
       @circuitElement.noDiagonal.should.equal false
       @circuitElement.selected.should.equal false
+
+    specify "default method return values", ->
+      @circuitElement.getPostCount().should.equal 2
+      @circuitElement.isSelected().should.equal false
+      @circuitElement.isWire().should.equal false
+      @circuitElement.hasGroundConnection().should.equal false
+      @circuitElement.needsHighlight().should.equal false
+      @circuitElement.needsShortcut().should.equal false
+      @circuitElement.canViewInScope().should.equal true
+
 
     it "should allocate nodes", ->
       @circuitElement.nodes.toString().should.equal [0, 0].toString()

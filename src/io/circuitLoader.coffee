@@ -137,7 +137,7 @@ class CircuitLoader
           break
 
         # ===================== NEW ELEMENTS ARE INSTANTIATED HERE ============================================
-        ce = Circuit.constructElement(cls, x1, y1, x2, y2, f, st)
+        ce = @.constructElement(cls, x1, y1, x2, y2, f, st)
         console.log ce
         ce.setPoints()
         # =====================================================================================================
@@ -152,6 +152,15 @@ class CircuitLoader
 
     #initCircuit();
     console.log "dump: \n" + dumpMessage
+
+  @constructElement: (elementObjName, xa, ya, xb, yb, f, st) ->
+    # todo: Use elementObj.call(...) instead of eval for security reasons
+    try
+      newElement = eval("new " + elementObjName + "(" + xa + "," + ya + "," + xb + "," + yb + "," + f + "," + 'st' + ");");
+    catch e
+      console.log "Couldn't construct element:  #{elementObjName}  #{e.message()}"
+
+    return newElement
 
 
 # The Footer exports class(es) in this file via Node.js, if Node.js is defined.

@@ -22,7 +22,6 @@ if process.env
   CommandHistory = require('../ui/commandHistory')
   Hint = require('./hint')
   Grid = require('../ui/grid')
-  ArrayUtils = require('./arrays')
   Primitives = require('../util/shapePrimitives')
 
   Scope = require('../scope/scope')
@@ -30,13 +29,6 @@ if process.env
 
 
 class Circuit
-  # CLASS VARIABLES:
-
-  stopElm = null
-  stopMessage  = 0
-
-  renderContext = null
-
 
   constructor: ->
     console.log "Started Simulation"
@@ -51,13 +43,9 @@ class Circuit
   init: () ->
     @Solver.invalidate()
 
-    dumpTypes = new Array(300)
-    dumpTypes["o"] = Scope::
-    dumpTypes["h"] = Scope::
-    dumpTypes["$"] = Scope::
-    dumpTypes["%"] = Scope::
-    dumpTypes["?"] = Scope::
-    dumpTypes["B"] = Scope::
+    @stopElm = null
+    @stopMessage  = 0
+    @renderContext = null
 
     @grid = new Grid()
     @registerAll()
@@ -75,7 +63,7 @@ class Circuit
   # ##########
   registerAll: ->
     for ElementName, ElementDescription of ComponentDefs
-      console.log "\tRegistering Element: #{ElementName}   (#{ElementDescription})"
+      console.log "Registering Element: #{ElementName}   (#{ElementDescription})"
       @register(ElementName)
 
   setupScopes: ->
@@ -87,21 +75,20 @@ class Circuit
   register: (elmClassName) ->
     try
       # Create this component by its className
-      elm = Circuit.constructElement elmClassName, 0, 0, 0, 0, 0, null
-
+      elm = CircuitLoader.constructElement elmClassName, 0, 0, 0, 0, 0, null
       dumpType = elm.getDumpType()
       dumpClass = elmClassName
 
-      if Circuit.dumpTypes[dumpType] is dumpClass
+      if @dumpTypes[dumpType] is dumpClass
         console.log "#{elmClassName} is a dump class"
         return
-      if Circuit.dumpTypes[dumpType]?
-        console.log "Dump type conflict: " + dumpType + " " + Circuit.dumpTypes[dumpType]
+      if @dumpTypes[dumpType]?
+        console.log "Dump type conflict: " + dumpType + " " + @dumpTypes[dumpType]
         return
 
-      Circuit.dumpTypes[dumpType] = elmClassName
+      @dumpTypes[dumpType] = elmClassName
     catch e
-      Logger.warn "\t\tElement: " + elmClassName + " Not yet implemented"
+      Logger.warn "Element: #{elmClassName} Not yet implemented: [#{e.message}]"
 
 
   ## #######################################################################################################
@@ -118,6 +105,10 @@ class Circuit
   Removes all circuit elements and scopes from the workspace and resets time to zero.
   ###
   clearAndReset: ->
+
+    for element in @elementList?
+      element.destroy()
+
     @dumpTypes = []
     @nodeList = []
     @elementList = []
@@ -133,9 +124,6 @@ class Circuit
     @mouseState = new MouseState()
     @keyboardState = new KeyboardState()
     @colorMapState = new ColorMapState()
-
-    for element in @elementList
-      element.destroy()
 
     @clearErrors()
 
@@ -163,7 +151,6 @@ class Circuit
 
     @Solver.restart()
 
-
   # Returns the y position of the bottom of the circuit
   calcCircuitBottom: ->
     @circuitBottom = 0
@@ -174,7 +161,6 @@ class Circuit
       @circuitBottom = bottom if (bottom > @circuitBottom)
 
     return @circuitBottom
-
 
   clearErrors: ->
     @stopMessage = null
@@ -229,7 +215,7 @@ class Circuit
     #		CirSim.mouseElm = CirSim.editDialog.elm;
     # as CircuitElement;
 
-    mouseElm = @stopElm  unless Circuit.mouseElm?
+    mouseElm = @stopElm  unless @mouseElm?
 
     # TODO: test
     @setupScopes()
@@ -243,56 +229,49 @@ class Circuit
         return
 
       sysTime = (new Date()).getTime()
-      unless Circuit.lastTime is 0
-        inc = Math.floor(sysTime - Circuit.lastTime)
+      unless @lastTime is 0
+        inc = Math.floor(sysTime - @lastTime)
         current_speed = Math.exp(@EngineParams.current_speed / 3.5 - 14.2)
-        CircuitElement.currentMult = 1.7 * inc * current_speed
-      if (sysTime - Circuit.secTime) >= 1000
-        Circuit.framerate = Circuit.frames
-        Circuit.steprate = Circuit.steps
-        Circuit.frames = 0
-        Circuit.steps = 0
-        Circuit.secTime = sysTime
-      Circuit.lastTime = sysTime
+        @EngineParams.currentMult = 1.7 * inc * current_speed
+      if (sysTime - @secTime) >= 1000
+        @framerate = @frames
+        @steprate = @steps
+        @frames = 0
+        @steps = 0
+        @secTime = sysTime
+      @lastTime = sysTime
     else
-      Circuit.lastTime = 0
-    CircuitElement.powerMult = Math.exp(Circuit.powerBar / 4.762 - 7)
+      @lastTime = 0
+    @EngineParams.powerMult = Math.exp(@powerBar / 4.762 - 7)
 
     # Draw each circuit element
-    for elm in @elementList
-      elm.draw()
+    for circuitElm in @elementList
+      circuitElm.draw()
 
     # Draw the posts for each circuit
-    if Circuit.tempMouseMode is Circuit.MODE_DRAG_ROW or Circuit.tempMouseMode is Circuit.MODE_DRAG_COLUMN or Circuit.tempMouseMode is Circuit.MODE_DRAG_POST or Circuit.tempMouseMode is Circuit.MODE_DRAG_SELECTED
-      for elm in @elementList
-        elm.drawPost elm.x, elm.y
-        elm.drawPost elm.x2, elm.y2
+    if @mouseState.tempMouseMode is MouseState.MODE_DRAG_ROW or
+       @mouseState.tempMouseMode is MouseState.MODE_DRAG_COLUMN or
+       @mouseState.tempMouseMode is MouseState.MODE_DRAG_POST or
+       @mouseState.tempMouseMode is MouseState.MODE_DRAG_SELECTED
 
+      for circuitElm in @elementList
+        circuitElm.drawPost circuitElm.x, circuitElm.y
+        circuitElm.drawPost circuitElm.x2, circuitElm.y2
+
+
+    # Find bad connections. Nodes not connected to other elements which intersect other elements' bounding boxes
     badNodes = 0
-
-    # find bad connections. Nodes not connected to other elements which intersect other elements' bounding boxes
-    i = 0
-    while i < @nodeList.length
-      cn = @getCircuitNode(i)
-      if not cn.intern and cn.links.length is 1
+    for circuitNode in @nodeList
+      if not circuitNode.intern and circuitNode.links.length is 1
         bb = 0
-        cn1 = cn.links[0]
+        firstCircuitNode = circuitNode.links[0]
 
-        # CircuitNodeLink
-        j = 0
-
-        while j < @elementList.length
-          bb++  if cn1.elm isnt @getElm(j) and @getElm(j).boundingBox.contains(cn.x, cn.y)
-          ++j
+        for circuitElm in @elementList
+          bb++ if firstCircuitNode.elm isnt circuitElm and circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)
         if bb > 0
-
-          # Outline bad nodes
-#          renderContext.circle(cn.x, cn.y, 2 * Settings.POST_RADIUS).attr
-#            stroke: Color.color2HexString(Color.RED)
-#            "stroke-dasharray": "--"
-
+          # Todo: outline bad nodes here
           badNodes++
-      ++i
+
     @dragElm.draw null if @dragElm? and (@dragElm.x isnt @dragElm.x2 or @dragElm.y isnt @dragElm.y2)
     scopeCount = @scopeCount
     scopeCount = 0  if @stopMessage?
@@ -314,7 +293,7 @@ class Circuit
           info[0] = "V = " + getUnitText(@mouseElm.getPostVoltage(@mousePost), "V")
       else
         Settings.fractionalDigits = 2
-        info[0] = "t = " + getUnitText(@solver.time, "s") + "\nf.t.: " + (@lastTime - @lastFrameTime) + "\n"
+        info[0] = "t = " + getUnitText(@Solver.time, "s") + "\nf.t.: " + (@lastTime - @lastFrameTime) + "\n"
       unless @Hint.hintType is -1
         i = 0
         while info[i]?
@@ -340,18 +319,18 @@ class Circuit
       # TODO: Find where to show data; below circuit, not too high unless we need it
       ybase = CanvasBounds.height - 15 * i - bottomTextOffset
       ybase = Math.min(ybase, CanvasBounds.height)
-      ybase = Math.max(ybase, Circuit.circuitBottom)
+      ybase = Math.max(ybase, @circuitBottom)
 
       # TODO: DRAW info text
 
     # TODO: Draw selection outline:
-    #if Circuit.selectedArea?
+    #if @selectedArea?
 
     @mouseElm = realMouseElm
     @frames++
 
     endTime = (new Date()).getTime()
-    @lastFrameTime = Circuit.lastTime
+    @lastFrameTime = @lastTime
 
 
 # The Footer exports class(es) in this file via Node.js, if Node.js is defined.

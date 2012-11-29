@@ -3,15 +3,15 @@ MatrixStamper = require('./matrixStamper')
 class CircuitSolver
 
   constructor: (@Circuit) ->
-    @scaleFactors = (0 for i in [0..400])
+    @scaleFactors = zeroArray(400)
     @Stamper = new MatrixStamper(@Circuit, this)
     @reset();
 
 
   reset: ->
     # simulation variables
-    @time = 0                 # t is simulation time (in seconds)
-    @converged = true      # true if numerical analysis has converged
+    @time = 0             # t is simulation time (in seconds)
+    @converged = true     # true if numerical analysis has converged
     @subIterations = 5000
 
     @circuitMatrix    = []
@@ -22,8 +22,6 @@ class CircuitSolver
 
     @circuitRowInfo   = []
     @circuitPermute   = []
-
-    @scaleFactors     = []
 
     @circuitNonLinear = false
 
@@ -140,6 +138,7 @@ class CircuitSolver
         circuitElement.setVoltageSource j, voltageSourceTotal++
         ++j
       ++i
+
     @Circuit.voltageSourceCount = voltageSourceTotal
     @matrixSize = @Circuit.nodeList.length - 1 + voltageSourceTotal
     @circuitMatrix = initializeTwoDArray(@matrixSize, @matrixSize)
