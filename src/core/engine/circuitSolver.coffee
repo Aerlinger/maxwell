@@ -36,11 +36,13 @@ class CircuitSolver
   stop: (message="Simulator Stopped") ->
     @stopped = true
 
+  run: ->
+    @stopped = false
 
   analyzeCircuit: ->
     return if !@analyzeFlag || @Circuit.numElements() is 0
 
-    @calcCircuitBottom()
+    @getCircuitBottom()
 
     @Circuit.clearErrors()
     @Circuit.nodeList = new Array()

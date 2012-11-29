@@ -34,3 +34,6 @@ describe "Base Circuit Element", ->
 
     it "should call analyze circuit on the solver", ->
 
+    it "should update after modifying solver", ->
+      @Circuit.restartAndRun()
+

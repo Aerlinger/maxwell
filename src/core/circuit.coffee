@@ -19,6 +19,8 @@ if process.env
   KeyboardState = require('../ui/circuitStates').KeyboardState
   ColorMapState = require('../ui/circuitStates').ColorMapState
 
+  Renderer = require('../render/renderer')
+
   CommandHistory = require('../ui/commandHistory')
   Hint = require('./hint')
   Grid = require('../ui/grid')
@@ -35,71 +37,10 @@ class Circuit
 
     @EngineParams = new CircuitEngineParams()
     @CommandHistory = new CommandHistory()
+    @Renderer = new Renderer(this)
 
     @clearAndReset()
     @init()
-
-
-  init: () ->
-    @Solver.invalidate()
-
-    @stopElm = null
-    @stopMessage  = 0
-    @renderContext = null
-
-    @grid = new Grid()
-    @registerAll()
-
-    @scopes = new Array(20)         # Array of scope objects
-    @scopeColCount = new Array(20)  # Array of integers
-    @scopeCount = 0
-
-    @loadCircuit( Settings.defaultCircuit )
-
-
-  ## #######################################################################################################
-  # Loops through through all existing elements defined within the ElementMap Hash (see
-  #   <code>ComponentDefinitions.coffee</code>) and registers their class with the solver engine
-  # ##########
-  registerAll: ->
-    for ElementName, ElementDescription of ComponentDefs
-      console.log "Registering Element: #{ElementName}   (#{ElementDescription})"
-      @register(ElementName)
-
-  setupScopes: ->
-
-  ## #######################################################################################################
-  # Registers, constructs, and places an element with the given class name within this circuit.
-  #   This method is called by <code>register</code>
-  # ##########
-  register: (elmClassName) ->
-    try
-      # Create this component by its className
-      elm = CircuitLoader.constructElement elmClassName, 0, 0, 0, 0, 0, null
-      dumpType = elm.getDumpType()
-      dumpClass = elmClassName
-
-      if @dumpTypes[dumpType] is dumpClass
-        console.log "#{elmClassName} is a dump class"
-        return
-      if @dumpTypes[dumpType]?
-        console.log "Dump type conflict: " + dumpType + " " + @dumpTypes[dumpType]
-        return
-
-      @dumpTypes[dumpType] = elmClassName
-    catch e
-      Logger.warn "Element: #{elmClassName} Not yet implemented: [#{e.message}]"
-
-
-  ## #######################################################################################################
-  # Loads the circuit from the given text file
-  # ##########
-  loadCircuit: (defaultCircuit) ->
-    @clearAndReset()    # Clear and reset circuit elements
-    @CommandHistory.reset()
-    CircuitLoader.readSetupList this, false
-    CircuitLoader.readCircuitFromFile this, "#{defaultCircuit}.txt", false
-
 
   ###
   Removes all circuit elements and scopes from the workspace and resets time to zero.
@@ -127,33 +68,88 @@ class Circuit
 
     @clearErrors()
 
-    @scopes = new Array(20)        # Array of scope objects
-    @scopeColCount = new Array(20) # Array of integers
+    @scopes = []         # Array of scope objects
+    @scopeColCount = []  # Array of integers
     @scopeCount = 0
 
-    @circuitBottom = 0;
 
+  init: () ->
+    @Solver.invalidate()
+
+    @stopElm = null
+    @stopMessage  = 0
+
+    @grid = new Grid()
+    @registerAll()
+
+    @loadCircuit( Settings.defaultCircuit )
+
+
+  ## #######################################################################################################
+  # Loops through through all existing elements defined within the ElementMap Hash (see
+  #   <code>ComponentDefinitions.coffee</code>) and registers their class with the solver engine
+  # ##########
+  registerAll: ->
+    for Component in ComponentDefs
+      console.log "Registering Element: #{ElementName}   (#{ElementDescription})"
+      @register(Component)
+
+  setupScopes: ->
+
+  ## #######################################################################################################
+  # Registers, constructs, and places an element with the given class name within this circuit.
+  #   This method is called by <code>register</code>
+  # ##########
+  register: (ComponentConstructor) ->
+    try
+      # Create this component by its className
+      newComponent = CircuitLoader.constructElement ComponentConstructor, 0, 0, 0, 0, 0, null
+      dumpType = newComponent.getDumpType()
+      dumpClass = ComponentConstructor
+
+      if @dumpTypes[dumpType] is dumpClass
+        console.log "#{ComponentConstructor} is a dump class"
+        return
+      if @dumpTypes[dumpType]?
+        console.log "Dump type conflict: " + dumpType + " " + @dumpTypes[dumpType]
+        return
+
+      @dumpTypes[dumpType] = ComponentConstructor
+    catch e
+      Logger.warn "Element: #{ComponentConstructor} Not yet implemented: [#{e.message}]"
+
+
+  ## #######################################################################################################
+  # Loads the circuit from the given text file
+  # ##########
+  loadCircuit: (defaultCircuit) ->
+    @clearAndReset()    # Clear and reset circuit elements
+    @CommandHistory.reset()
+    CircuitLoader.readSetupList this, false
+    CircuitLoader.readCircuitFromFile this, "#{defaultCircuit}.txt", false
 
   ###
   Clears current states, graphs, and errors then Restarts the circuit from time zero.
   ###
   restartAndStop: ->
-    @restartAndPlay()
+    @restartAndRun()
     @Solver.stop("Restarted Circuit from time 0")
     @Solver.invalidate()
 
 
-  restartAndPlay: ->
+  restartAndRun: ->
     for element in @elementList
       element.reset()
     for scope in @scopes
       scope.resetGraph()
 
-    @Solver.restart()
+    @Solver.reset()
+    @Solver.run()
 
   # Returns the y position of the bottom of the circuit
-  calcCircuitBottom: ->
-    @circuitBottom = 0
+  getCircuitBottom: ->
+    if @circuitBottom
+      return @circuitBottom
 
     for element in @elementList
       rect = element.boundingBox
@@ -206,16 +202,11 @@ class Circuit
     realMouseElm = @mouseElm
 
     # Render Warning and error messages:
-
     @Solver.analyzeCircuit()
 
+    # TODO Setup edit dialog
 
-    # TODO
-    #    if(CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElement)
-    #		CirSim.mouseElm = CirSim.editDialog.elm;
-    # as CircuitElement;
-
-    mouseElm = @stopElm  unless @mouseElm?
+    @mouseElm = @stopElm unless @mouseElm?
 
     # TODO: test
     @setupScopes()
@@ -246,7 +237,7 @@ class Circuit
 
     # Draw each circuit element
     for circuitElm in @elementList
-      circuitElm.draw()
+      @Renderer.drawComponent(circuitElm)
 
     # Draw the posts for each circuit
     if @mouseState.tempMouseMode is MouseState.MODE_DRAG_ROW or
@@ -258,9 +249,62 @@ class Circuit
         circuitElm.drawPost circuitElm.x, circuitElm.y
         circuitElm.drawPost circuitElm.x2, circuitElm.y2
 
-
     # Find bad connections. Nodes not connected to other elements which intersect other elements' bounding boxes
-    badNodes = 0
+    badNodes = @findBadNodes()
+
+    if @dragElm? and (@dragElm.x isnt @dragElm.x2 or @dragElm.y isnt @dragElm.y2)
+      @dragElm.draw null
+
+    scopeCount = @scopeCount
+    scopeCount = 0 if @stopMessage?
+
+    # TODO Implement scopes
+    #for scope in @scopes
+    #  scope.draw();
+    if @stopMessage?
+      @printError @stopMessage
+    else
+      @getCircuitBottom() if @circuitBottom is 0
+
+      info = []
+      # Array of messages to be displayed at the bottom of the canvas
+      if @mouseElm?
+        if @mousePost is -1
+          @mouseElm.getInfo info
+        else
+          info.push "V = " + getUnitText(@mouseElm.getPostVoltage(@mousePost), "V")
+      else
+        Settings.fractionalDigits = 2
+        info.push "t = " + getUnitText(@Solver.time, "s") + "\nf.t.: " + (@lastTime - @lastFrameTime) + "\n"
+      unless @Hint.hintType is -1
+        s = @Hint.getHint()
+        unless s?
+          @Hint.hintType = -1
+        else
+          info.push s
+
+      # TODO: Implement scopes
+      x = 0
+      x = @scopes[scopeCount - 1].rightEdge() + 20  unless scopeCount is 0
+      x = 0 unless x
+      #x = Math.max(x, CanvasBounds.width * 2 / 3)
+
+      info.push "Bad Connections: #{badNodes.length}" if badNodes > 0
+
+      # TODO: DRAW info text
+      @Renderer.drawInfo(info)
+
+    # TODO: Draw selection outline:
+
+    @mouseElm = realMouseElm
+    @frames++
+
+    endTime = (new Date()).getTime()
+    @lastFrameTime = @lastTime
+
+
+  findBadNodes: ->
+    badNodes = []
     for circuitNode in @nodeList
       if not circuitNode.intern and circuitNode.links.length is 1
         bb = 0
@@ -270,67 +314,7 @@ class Circuit
           bb++ if firstCircuitNode.elm isnt circuitElm and circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)
         if bb > 0
           # Todo: outline bad nodes here
-          badNodes++
-
-    @dragElm.draw null if @dragElm? and (@dragElm.x isnt @dragElm.x2 or @dragElm.y isnt @dragElm.y2)
-    scopeCount = @scopeCount
-    scopeCount = 0  if @stopMessage?
-
-    # TODO Implement scopes
-    #for(i=0; i!=ct; ++i)
-    #    CirSim.scopes[i].draw();
-    if @stopMessage?
-      @printError @stopMessage
-    else
-      @calcCircuitBottom()  if @circuitBottom is 0
-      info = []
-
-      # Array of messages to be displayed at the bottom of the canvas
-      if @mouseElm?
-        if @mousePost is -1
-          @mouseElm.getInfo info
-        else
-          info[0] = "V = " + getUnitText(@mouseElm.getPostVoltage(@mousePost), "V")
-      else
-        Settings.fractionalDigits = 2
-        info[0] = "t = " + getUnitText(@Solver.time, "s") + "\nf.t.: " + (@lastTime - @lastFrameTime) + "\n"
-      unless @Hint.hintType is -1
-        i = 0
-        while info[i]?
-          ++i
-        s = @Hint.getHint()
-        unless s?
-          @Hint.hintType = -1
-        else
-          info[i] = s
-      x = 0
-
-      # TODO: Implement scopes
-      x = @scopes[scopeCount - 1].rightEdge() + 20  unless scopeCount is 0
-      CanvasBounds = @getCanvasBounds()
-      x = 0 unless x
-      x = Math.max(x, CanvasBounds.width * 2 / 3)
-      i = 0
-      while info[i]?
-        ++i
-      info[++i] = badNodes + ((if (badNodes is 1) then " bad connection" else " bad connections"))  if badNodes > 0
-      bottomTextOffset = 100
-
-      # TODO: Find where to show data; below circuit, not too high unless we need it
-      ybase = CanvasBounds.height - 15 * i - bottomTextOffset
-      ybase = Math.min(ybase, CanvasBounds.height)
-      ybase = Math.max(ybase, @circuitBottom)
-
-      # TODO: DRAW info text
-
-    # TODO: Draw selection outline:
-    #if @selectedArea?
-
-    @mouseElm = realMouseElm
-    @frames++
-
-    endTime = (new Date()).getTime()
-    @lastFrameTime = @lastTime
+          badNodes.push circuitNode
 
 
 # The Footer exports class(es) in this file via Node.js, if Node.js is defined.
