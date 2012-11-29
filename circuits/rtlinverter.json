@@ -1,0 +1,9 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":52.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"rtlinverter.txt",		"power_range":0.0,		"sim_speed":10.0,		"time_step":5.0e-06,		"title":"RTL Inverter",		"topic":"RTL",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"r",		"x1":"240",		"y1":"224",		"x2":"320",		"y2":"224",		"flags":"0",		"params":["470.0"]},		
+{"sym":"t",		"x1":"320",		"y1":"224",		"x2":"368",		"y2":"224",		"flags":"0",		"params":["1",		"0.6381869044881298",		"0.6478945398933037"]},		
+{"sym":"r",		"x1":"368",		"y1":"208",		"x2":"368",		"y2":"112",		"flags":"0",		"params":["640.0"]},		
+{"sym":"w",		"x1":"368",		"y1":"240",		"x2":"368",		"y2":"288",		"flags":"0",		"params":[]},		
+{"sym":"L",		"x1":"240",		"y1":"224",		"x2":"192",		"y2":"224",		"flags":"0",		"params":["false",		"false",		"3.6",		"0.0"]},		
+{"sym":"R",		"x1":"368",		"y1":"112",		"x2":"320",		"y2":"112",		"flags":"0",		"params":["0",		"40.0",		"3.6",		"0.0"]},		
+{"sym":"M",		"x1":"368",		"y1":"208",		"x2":"432",		"y2":"208",		"flags":"0",		"params":[]},		
+{"sym":"g",		"x1":"368",		"y1":"288",		"x2":"368",		"y2":"320",		"flags":"0",		"params":[]}]

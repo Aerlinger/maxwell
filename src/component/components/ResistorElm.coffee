@@ -1,18 +1,20 @@
-
-# Step 2: Prototype of DepthRectangle is Rectangle
-
-# Step 3: Now we need to set the constructor to the DepthRectangle instead of Rectangle
+CircuitElement = require('../circuitElement')
+{Polygon, Rectangle, Point} = require('../../util/shapePrimitives')
 
 #/////////////////////////////////////////////////////////////////////////////
 # Constructor ////////////////////////////////////////////////////////////////
-ResistorElm = (xa, ya, xb, yb, f, st) ->
-  CircuitElement.call this, xa, ya, xb, yb, f, st
-  
-  #var options = st.split(' ');
-  if st and st.length > 0
-    @resistance = parseFloat(st)
-  else
-    @resistance = 500
+class ResistorElm extends CircuitElement
+
+  consructor: (xa, ya, xb, yb, f, st) ->
+    super(this, xa, ya, xb, yb, f, st)
+
+    #var options = st.split(' ');
+    if st and st.length > 0
+      @resistance = parseFloat(st)
+    else
+      @resistance = 500
+
+
 ResistorElm::resistance = 1000
 ResistorElm::ps3 = new Point(100, 50)
 ResistorElm::ps4 = new Point(100, 150)
@@ -98,3 +100,6 @@ ResistorElm::stamp = ->
 
 ResistorElm::toString = ->
   "ResistorElm"
+
+
+module.exports = ResistorElm

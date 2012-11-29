@@ -1,0 +1,9 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":66.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"spark-sawtooth.txt",		"power_range":50.0,		"sim_speed":43.84883893407173,		"time_step":1.0e-06,		"title":"Sawtooth Generator",		"topic":"Spark Gap",		"updated_at":null,		"voltage_range":2000.0},		
+{"sym":"R",		"x1":"320",		"y1":"160",		"x2":"320",		"y2":"128",		"flags":"0",		"params":["0",		"40.0",		"2000.0",		"0.0",		"0.0",		"0.5"]},		
+{"sym":"r",		"x1":"320",		"y1":"160",		"x2":"320",		"y2":"240",		"flags":"0",		"params":["2000000.0"]},		
+{"sym":"187",		"x1":"320",		"y1":"240",		"x2":"320",		"y2":"336",		"flags":"0",		"params":["10000.0",		"1.0E9",		"1000.0",		"0.0010"]},		
+{"sym":"g",		"x1":"320",		"y1":"336",		"x2":"320",		"y2":"352",		"flags":"0",		"params":[]},		
+{"sym":"c",		"x1":"352",		"y1":"240",		"x2":"352",		"y2":"336",		"flags":"0",		"params":["1.0E-8",		"954.6107492378424"]},		
+{"sym":"w",		"x1":"352",		"y1":"336",		"x2":"320",		"y2":"336",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"320",		"y1":"240",		"x2":"352",		"y2":"240",		"flags":"0",		"params":[]},		
+{"sym":"o",		"x1":"4",		"y1":"128",		"x2":"0",		"y2":"35",		"flags":"1280.0",		"params":["0.1",		"0",		"-1"]}]

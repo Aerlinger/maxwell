@@ -1,0 +1,8 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":54.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"nmosinverter.txt",		"power_range":0.0,		"sim_speed":10.0,		"time_step":5.0e-06,		"title":"NMOS Inverter",		"topic":"NMOS",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"R",		"x1":"272",		"y1":"128",		"x2":"208",		"y2":"128",		"flags":"0",		"params":["0",		"40.0",		"5.0",		"0.0"]},		
+{"sym":"g",		"x1":"272",		"y1":"288",		"x2":"272",		"y2":"320",		"flags":"0",		"params":[]},		
+{"sym":"L",		"x1":"224",		"y1":"224",		"x2":"176",		"y2":"224",		"flags":"0",		"params":["false",		"false"]},		
+{"sym":"r",		"x1":"272",		"y1":"128",		"x2":"272",		"y2":"208",		"flags":"0",		"params":["5000.0"]},		
+{"sym":"M",		"x1":"272",		"y1":"208",		"x2":"352",		"y2":"208",		"flags":"0",		"params":[]},		
+{"sym":"f",		"x1":"224",		"y1":"224",		"x2":"272",		"y2":"224",		"flags":"4",		"params":[]},		
+{"sym":"w",		"x1":"272",		"y1":"240",		"x2":"272",		"y2":"288",		"flags":"0",		"params":[]}]

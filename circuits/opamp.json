@@ -1,0 +1,5 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"opamp.txt",		"power_range":50.0,		"sim_speed":10.812258501325767,		"time_step":5.0e-06,		"title":"Op-Amp",		"topic":"Op-Amps",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"a",		"x1":"256",		"y1":"240",		"x2":"384",		"y2":"240",		"flags":"0",		"params":["15.0",		"-15.0"]},		
+{"sym":"172",		"x1":"256",		"y1":"224",		"x2":"208",		"y2":"224",		"flags":"0",		"params":["6",		"3.0",		"5.0",		"0.0",		"0.0",		"0.5",		"-",		"Voltage"]},		
+{"sym":"172",		"x1":"256",		"y1":"256",		"x2":"208",		"y2":"256",		"flags":"0",		"params":["6",		"4.0",		"5.0",		"0.0",		"0.0",		"0.5",		"+",		"Voltage"]},		
+{"sym":"O",		"x1":"384",		"y1":"240",		"x2":"432",		"y2":"240",		"flags":"1",		"params":[]}]

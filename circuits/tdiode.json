@@ -1,0 +1,6 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":56.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"tdiode.txt",		"power_range":50.0,		"sim_speed":10.634267539816555,		"time_step":5.0e-06,		"title":"I/V Curve",		"topic":"Tunnel Diodes",		"updated_at":null,		"voltage_range":2.0},		
+{"sym":"R",		"x1":"320",		"y1":"208",		"x2":"320",		"y2":"160",		"flags":"0",		"params":["3",		"50.0",		"0.28",		"0.26",		"0.0",		"0.5"]},		
+{"sym":"g",		"x1":"320",		"y1":"288",		"x2":"320",		"y2":"320",		"flags":"0",		"params":[]},		
+{"sym":"175",		"x1":"320",		"y1":"208",		"x2":"320",		"y2":"288",		"flags":"0",		"params":[]},		
+{"sym":"o",		"x1":"2",		"y1":"32",		"x2":"0",		"y2":"35",		"flags":"0.625",		"params":["0.0125",		"0",		"-1"]},		
+{"sym":"o",		"x1":"2",		"y1":"64",		"x2":"0",		"y2":"99",		"flags":"0.625",		"params":["0.0125",		"1",		"-1"]}]

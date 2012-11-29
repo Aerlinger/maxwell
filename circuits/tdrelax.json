@@ -1,0 +1,12 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":54.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"tdrelax.txt",		"power_range":50.0,		"sim_speed":10.20027730826997,		"time_step":5.0e-06,		"title":"Relaxation Oscillator",		"topic":"Tunnel Diodes",		"updated_at":null,		"voltage_range":1.5},		
+{"sym":"R",		"x1":"176",		"y1":"176",		"x2":"144",		"y2":"176",		"flags":"0",		"params":["0",		"40.0",		"1.5",		"0.0",		"0.0",		"0.5"]},		
+{"sym":"r",		"x1":"176",		"y1":"176",		"x2":"256",		"y2":"176",		"flags":"0",		"params":["80.0"]},		
+{"sym":"r",		"x1":"256",		"y1":"176",		"x2":"256",		"y2":"288",		"flags":"0",		"params":["24.0"]},		
+{"sym":"175",		"x1":"256",		"y1":"176",		"x2":"336",		"y2":"176",		"flags":"0",		"params":[]},		
+{"sym":"l",		"x1":"336",		"y1":"176",		"x2":"336",		"y2":"288",		"flags":"0",		"params":["0.7",		"0.002697977898647033"]},		
+{"sym":"O",		"x1":"336",		"y1":"176",		"x2":"384",		"y2":"176",		"flags":"0",		"params":[]},		
+{"sym":"g",		"x1":"256",		"y1":"288",		"x2":"256",		"y2":"304",		"flags":"0",		"params":[]},		
+{"sym":"g",		"x1":"336",		"y1":"288",		"x2":"336",		"y2":"304",		"flags":"0",		"params":[]},		
+{"sym":"o",		"x1":"3",		"y1":"64",		"x2":"0",		"y2":"35",		"flags":"0.0390625",		"params":["0.00625",		"0",		"-1",		"diode"]},		
+{"sym":"o",		"x1":"3",		"y1":"64",		"x2":"0",		"y2":"99",		"flags":"0.625",		"params":["0.00625",		"1",		"-1"]},		
+{"sym":"o",		"x1":"5",		"y1":"64",		"x2":"0",		"y2":"34",		"flags":"0.625",		"params":["4.8828125E-5",		"2",		"-1",		"output"]}]

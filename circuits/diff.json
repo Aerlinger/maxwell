@@ -1,0 +1,8 @@
+[{"completion_status":"complete",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"diff.txt",		"power_range":0.0,		"sim_speed":10.0,		"time_step":5.0e-06,		"title":"Differentiator",		"topic":"Other Passive Circuits",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"v",		"x1":"160",		"y1":"288",		"x2":"160",		"y2":"144",		"flags":"0",		"params":["2",		"40.0",		"5.0",		"0.0"]},		
+{"sym":"c",		"x1":"160",		"y1":"144",		"x2":"352",		"y2":"144",		"flags":"0",		"params":["9.0E-6",		"4.999340978003125"]},		
+{"sym":"r",		"x1":"352",		"y1":"144",		"x2":"352",		"y2":"288",		"flags":"0",		"params":["120.0"]},		
+{"sym":"w",		"x1":"160",		"y1":"288",		"x2":"352",		"y2":"288",		"flags":"0",		"params":[]},		
+{"sym":"o",		"x1":"0",		"y1":"64",		"x2":"0",		"y2":"2",		"flags":"10.0",		"params":["9.765625E-5",		"0"]},		
+{"sym":"o",		"x1":"2",		"y1":"64",		"x2":"0",		"y2":"3",		"flags":"20.0",		"params":["0.2",		"0"]},		
+{"sym":"h",		"x1":"2",		"y1":"2",		"x2":"1",		"y2":null,		"flags":null,		"params":[]}]

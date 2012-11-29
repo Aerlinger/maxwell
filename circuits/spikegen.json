@@ -1,0 +1,10 @@
+[{"completion_status":"complete",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"spikegen.txt",		"power_range":0.0,		"sim_speed":10.0,		"time_step":5.0e-06,		"title":"Spike Generator",		"topic":"Diodes",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"v",		"x1":"112",		"y1":"288",		"x2":"112",		"y2":"144",		"flags":"0",		"params":["2",		"40.0",		"5.0",		"0.0"]},		
+{"sym":"r",		"x1":"240",		"y1":"144",		"x2":"240",		"y2":"288",		"flags":"0",		"params":["110.0"]},		
+{"sym":"d",		"x1":"240",		"y1":"144",		"x2":"368",		"y2":"144",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"112",		"y1":"288",		"x2":"240",		"y2":"288",		"flags":"0",		"params":[]},		
+{"sym":"c",		"x1":"112",		"y1":"144",		"x2":"240",		"y2":"144",		"flags":"0",		"params":["1.0E-5",		"4.9868403762557465"]},		
+{"sym":"O",		"x1":"368",		"y1":"144",		"x2":"432",		"y2":"144",		"flags":"0",		"params":[]},		
+{"sym":"r",		"x1":"368",		"y1":"144",		"x2":"368",		"y2":"288",		"flags":"0",		"params":["100.0"]},		
+{"sym":"w",		"x1":"240",		"y1":"288",		"x2":"368",		"y2":"288",		"flags":"0",		"params":[]},		
+{"sym":"o",		"x1":"5",		"y1":"64",		"x2":"0",		"y2":"3",		"flags":"10.0",		"params":["9.765625E-5"]}]

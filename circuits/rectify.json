@@ -1,0 +1,7 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":55.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"rectify.txt",		"power_range":0.0,		"sim_speed":13.2,		"time_step":5.0e-06,		"title":"Half-Wave Rectifier",		"topic":"Diodes",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"v",		"x1":"112",		"y1":"320",		"x2":"112",		"y2":"96",		"flags":"0",		"params":["1",		"40.0",		"5.0",		"0.0"]},		
+{"sym":"r",		"x1":"416",		"y1":"96",		"x2":"416",		"y2":"320",		"flags":"0",		"params":["640.0"]},		
+{"sym":"d",		"x1":"112",		"y1":"96",		"x2":"416",		"y2":"96",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"112",		"y1":"320",		"x2":"416",		"y2":"320",		"flags":"0",		"params":[]},		
+{"sym":"o",		"x1":"0",		"y1":"64",		"x2":"0",		"y2":"3",		"flags":"5.0",		"params":["0.0125"]},		
+{"sym":"o",		"x1":"1",		"y1":"64",		"x2":"0",		"y2":"3",		"flags":"5.0",		"params":["0.0125"]}]

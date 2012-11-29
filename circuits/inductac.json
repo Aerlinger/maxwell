@@ -1,0 +1,6 @@
+[{"completion_status":"complete",		"created_at":null,		"current_speed":55.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"inductac.txt",		"power_range":0.0,		"sim_speed":14.3,		"time_step":5.0e-06,		"title":"Inductor",		"topic":"A/C Circuits",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"v",		"x1":"176",		"y1":"256",		"x2":"176",		"y2":"80",		"flags":"0",		"params":["1",		"40.0",		"5.0",		"0.0"]},		
+{"sym":"r",		"x1":"176",		"y1":"80",		"x2":"336",		"y2":"80",		"flags":"0",		"params":["180.0"]},		
+{"sym":"w",		"x1":"176",		"y1":"256",		"x2":"336",		"y2":"256",		"flags":"0",		"params":[]},		
+{"sym":"l",		"x1":"336",		"y1":"80",		"x2":"336",		"y2":"256",		"flags":"0",		"params":["1.0",		"-0.01522759374043248"]},		
+{"sym":"o",		"x1":"3",		"y1":"64",		"x2":"0",		"y2":"3",		"flags":"10.0",		"params":["0.025"]}]

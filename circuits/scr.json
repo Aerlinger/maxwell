@@ -1,0 +1,9 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"scr.txt",		"power_range":50.0,		"sim_speed":10.20027730826997,		"time_step":5.0e-06,		"title":"SCR",		"topic":"Silicon-Controlled Rectifiers",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"r",		"x1":"384",		"y1":"160",		"x2":"384",		"y2":"96",		"flags":"0",		"params":["100.0"]},		
+{"sym":"R",		"x1":"384",		"y1":"96",		"x2":"384",		"y2":"80",		"flags":"0",		"params":["0",		"40.0",		"5.0",		"0.0",		"0.0",		"0.5"]},		
+{"sym":"s",		"x1":"384",		"y1":"288",		"x2":"384",		"y2":"368",		"flags":"0",		"params":["1",		"false"]},		
+{"sym":"s",		"x1":"352",		"y1":"256",		"x2":"256",		"y2":"256",		"flags":"0",		"params":["1",		"false"]},		
+{"sym":"r",		"x1":"256",		"y1":"176",		"x2":"256",		"y2":"256",		"flags":"0",		"params":["100.0"]},		
+{"sym":"R",		"x1":"256",		"y1":"176",		"x2":"256",		"y2":"128",		"flags":"0",		"params":["0",		"40.0",		"5.0",		"0.0",		"0.0",		"0.5"]},		
+{"sym":"g",		"x1":"384",		"y1":"368",		"x2":"384",		"y2":"384",		"flags":"0",		"params":[]},		
+{"sym":"177",		"x1":"384",		"y1":"160",		"x2":"368",		"y2":"288",		"flags":"0",		"params":["0.0",		"0.0"]}]

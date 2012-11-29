@@ -1,0 +1,12 @@
+[{"completion_status":"complete",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"notch.txt",		"power_range":40.0,		"sim_speed":10.391409633455755,		"time_step":5.0e-06,		"title":"Notch Filter",		"topic":"Passive Filters",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"l",		"x1":"368",		"y1":"128",		"x2":"368",		"y2":"224",		"flags":"0",		"params":["0.5",		"0"]},		
+{"sym":"c",		"x1":"368",		"y1":"224",		"x2":"368",		"y2":"320",		"flags":"0",		"params":["3.17E-5",		"0"]},		
+{"sym":"r",		"x1":"256",		"y1":"128",		"x2":"368",		"y2":"128",		"flags":"0",		"params":["100.0"]},		
+{"sym":"O",		"x1":"368",		"y1":"128",		"x2":"432",		"y2":"128",		"flags":"0",		"params":[]},		
+{"sym":"g",		"x1":"368",		"y1":"320",		"x2":"368",		"y2":"352",		"flags":"0",		"params":[]},		
+{"sym":"170",		"x1":"256",		"y1":"128",		"x2":"224",		"y2":"128",		"flags":"3",		"params":["20.0",		"60.0",		"5.0",		"0.5"]},		
+{"sym":"o",		"x1":"5",		"y1":"64",		"x2":"0",		"y2":"34",		"flags":"5.0",		"params":["9.765625E-5",		"0",		"-1",		"in"]},		
+{"sym":"o",		"x1":"3",		"y1":"64",		"x2":"0",		"y2":"34",		"flags":"5.0",		"params":["9.765625E-5",		"1",		"-1",		"out"]},		
+{"sym":"o",		"x1":"0",		"y1":"64",		"x2":"0",		"y2":"34",		"flags":"10.0",		"params":["0.025",		"2",		"-1",		"inductor"]},		
+{"sym":"o",		"x1":"1",		"y1":"64",		"x2":"0",		"y2":"34",		"flags":"10.0",		"params":["0.025",		"2",		"-1",		"cap"]},		
+{"sym":"h",		"x1":"1",		"y1":"0",		"x2":"1",		"y2":null,		"flags":null,		"params":[]}]

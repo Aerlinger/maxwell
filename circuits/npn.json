@@ -1,0 +1,8 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":43.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"npn.txt",		"power_range":50.0,		"sim_speed":10.812258501325767,		"time_step":5.0e-06,		"title":"NPN Transistor",		"topic":"Transistors",		"updated_at":null,		"voltage_range":2.0},		
+{"sym":"172",		"x1":"240",		"y1":"240",		"x2":"208",		"y2":"240",		"flags":"0",		"params":["6",		"0.705",		"0.75",		"0.5",		"0.0",		"0.5",		"Base",		"Voltage"]},		
+{"sym":"w",		"x1":"352",		"y1":"256",		"x2":"352",		"y2":"304",		"flags":"1",		"params":[]},		
+{"sym":"w",		"x1":"352",		"y1":"224",		"x2":"352",		"y2":"176",		"flags":"1",		"params":[]},		
+{"sym":"172",		"x1":"352",		"y1":"176",		"x2":"352",		"y2":"144",		"flags":"0",		"params":["6",		"2.0",		"2.0",		"0.0",		"0.0",		"0.5",		"Collector",		"Voltage"]},		
+{"sym":"g",		"x1":"352",		"y1":"304",		"x2":"352",		"y2":"320",		"flags":"0",		"params":[]},		
+{"sym":"t",		"x1":"304",		"y1":"240",		"x2":"352",		"y2":"240",		"flags":"0",		"params":["1",		"-4.295",		"0.7049999999999998",		"100.0"]},		
+{"sym":"w",		"x1":"240",		"y1":"240",		"x2":"304",		"y2":"240",		"flags":"1",		"params":[]}]

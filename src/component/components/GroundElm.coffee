@@ -1,10 +1,10 @@
-# Step 2: Prototype of DepthRectangle is Rectangle
+CircuitElement = require('../circuitElement')
+{Polygon, Rectangle, Point} = require('../../util/shapePrimitives')
 
-# Step 3: Now we need to set the constructor to the DepthRectangle instead of Rectangle
-GroundElm = (xa, ya, xb, yb, f, st) ->
-  CircuitElement.call this, xa, ya, xb, yb, f, st
-GroundElm:: = new CircuitElement()
-GroundElm::constructor = GroundElm
+class GroundElm extends CircuitElement
+  constructor: (xa, ya, xb, yb, f, st) ->
+    super this, xa, ya, xb, yb, f, st
+
 GroundElm::getDumpType = ->
   "g"
 
@@ -15,7 +15,6 @@ GroundElm::draw = ->
   color = @setVoltageColor(0)
   @doDots()
   CircuitElement.drawThickLinePt @point1, @point2, color
-  i = undefined
   i = 0
   while i < 3
     a = 10 - i * 4
@@ -23,7 +22,7 @@ GroundElm::draw = ->
     CircuitElement.interpPoint2 @point1, @point2, CircuitElement.ps1, CircuitElement.ps2, 1 + b / @dn, a
     CircuitElement.drawThickLinePt CircuitElement.ps1, CircuitElement.ps2, color
     i++
-  CircuitElement.interpPoint @point1, @point2, CircuitElement.ps2, 1 + 11. / @dn
+  CircuitElement.interpPoint @point1, @point2, CircuitElement.ps2, 1 + 11.0 / @dn
   @setBboxPt @point1, CircuitElement.ps2, 11
   @drawPost @x1, @y, @nodes[0]
 
@@ -51,3 +50,6 @@ GroundElm::needsShortcut = ->
 
 GroundElm::toString = ->
   "GroundElm"
+
+
+module.exports = GroundElm

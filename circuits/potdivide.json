@@ -1,0 +1,8 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"potdivide.txt",		"power_range":50.0,		"sim_speed":10.20027730826997,		"time_step":5.0e-06,		"title":"Potentiometer Divider",		"topic":"Basics",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"174",		"x1":"320",		"y1":"352",		"x2":"384",		"y2":"96",		"flags":"0",		"params":["1000.0",		"0.5",		"Resistance"]},		
+{"sym":"v",		"x1":"240",		"y1":"352",		"x2":"240",		"y2":"96",		"flags":"0",		"params":["0",		"40.0",		"5.0",		"0.0",		"0.0",		"0.5"]},		
+{"sym":"w",		"x1":"240",		"y1":"96",		"x2":"320",		"y2":"96",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"240",		"y1":"352",		"x2":"320",		"y2":"352",		"flags":"0",		"params":[]},		
+{"sym":"O",		"x1":"320",		"y1":"96",		"x2":"432",		"y2":"96",		"flags":"1",		"params":[]},		
+{"sym":"O",		"x1":"384",		"y1":"224",		"x2":"432",		"y2":"224",		"flags":"1",		"params":[]},		
+{"sym":"O",		"x1":"320",		"y1":"352",		"x2":"432",		"y2":"352",		"flags":"1",		"params":[]}]

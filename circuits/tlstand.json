@@ -1,0 +1,11 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"tlstand.txt",		"power_range":50.0,		"sim_speed":2.7070718156067044,		"time_step":1.0e-12,		"title":"Standing Wave",		"topic":"Transmission Lines",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"171",		"x1":"176",		"y1":"192",		"x2":"496",		"y2":"192",		"flags":"0",		"params":["0.0000000020",		"300.0",		"80",		"0.0"]},		
+{"sym":"w",		"x1":"128",		"y1":"272",		"x2":"176",		"y2":"272",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"496",		"y1":"192",		"x2":"544",		"y2":"192",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"496",		"y1":"272",		"x2":"544",		"y2":"272",		"flags":"0",		"params":[]},		
+{"sym":"r",		"x1":"128",		"y1":"192",		"x2":"176",		"y2":"192",		"flags":"0",		"params":["300.0"]},		
+{"sym":"g",		"x1":"544",		"y1":"272",		"x2":"544",		"y2":"288",		"flags":"0",		"params":[]},		
+{"sym":"g",		"x1":"128",		"y1":"272",		"x2":"128",		"y2":"288",		"flags":"0",		"params":[]},		
+{"sym":"R",		"x1":"128",		"y1":"192",		"x2":"96",		"y2":"192",		"flags":"0",		"params":["1",		"1500000000.0",		"5.0",		"0.0",		"0.0",		"0.5"]},		
+{"sym":"w",		"x1":"544",		"y1":"192",		"x2":"544",		"y2":"272",		"flags":"0",		"params":[]},		
+{"sym":"o",		"x1":"4",		"y1":"16",		"x2":"0",		"y2":"34",		"flags":"5.0",		"params":["0.025",		"0",		"-1"]}]

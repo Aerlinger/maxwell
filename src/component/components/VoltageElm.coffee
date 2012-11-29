@@ -1,54 +1,58 @@
-{
-  "type": "block",
-  "src": "{",
-  "value": "{",
-  "lineno": 332,
-  "children": [],
-  "varDecls": [],
-  "labels": {
-    "table": {},
-    "size": 0
-  },
-  "functions": [],
-  "nonfunctions": [],
-  "transformed": true
-}
-{
-  "type": "block",
-  "src": "{",
-  "value": "{",
-  "lineno": 332,
-  "children": [],
-  "varDecls": [],
-  "labels": {
-    "table": {},
-    "size": 0
-  },
-  "functions": [],
-  "nonfunctions": [],
-  "transformed": true
-}
-# Prototypal inheritance
-VoltageElm = (xa, ya, xb, yb, f, st) ->
-  CircuitElement.call this, xa, ya, xb, yb, f, st
-  @maxVoltage = 5
-  @frequency = 40
-  @waveform = VoltageElm.WF_DC
-  @dutyCycle = 0.5
-  if st
-    st = st.split(" ")  if typeof st is "string"
-    @waveform = (if st[0] then Math.floor(parseInt(st[0])) else VoltageElm.WF_DC)
-    @frequency = (if st[1] then parseFloat(st[1]) else 40)
-    @maxVoltage = (if st[2] then parseFloat(st[2]) else 5)
-    @bias = (if st[3] then parseFloat(st[3]) else 0)
-    @phaseShift = (if st[4] then parseFloat(st[4]) else 0)
-    @dutyCycle = (if st[5] then parseFloat(st[5]) else .5)
-  if @flags & VoltageElm.FLAG_COS isnt 0
-    @flags &= ~VoltageElm.FLAG_COS
-    @phaseShift = Math.PI / 2
-  @reset()
-VoltageElm:: = new CircuitElement()
-VoltageElm::constructor = VoltageElm
+#{
+#  "type": "block",
+#  "src": "{",
+#  "value": "{",
+#  "lineno": 332,
+#  "children": [],
+#  "varDecls": [],
+#  "labels": {
+#    "table": {},
+#    "size": 0
+#  },
+#  "functions": [],
+#  "nonfunctions": [],
+#  "transformed": true
+#}
+#{
+#  "type": "block",
+#  "src": "{",
+#  "value": "{",
+#  "lineno": 332,
+#  "children": [],
+#  "varDecls": [],
+#  "labels": {
+#    "table": {},
+#    "size": 0
+#  },
+#  "functions": [],
+#  "nonfunctions": [],
+#  "transformed": true
+
+
+CircuitElement = require('../circuitElement')
+
+class VoltageElm extends CircuitElement
+
+  constructor: (xa, ya, xb, yb, f, st) ->
+    super this, xa, ya, xb, yb, f, st
+
+    @maxVoltage = 5
+    @frequency = 40
+    @waveform = VoltageElm.WF_DC
+    @dutyCycle = 0.5
+    if st
+      st = st.split(" ")  if typeof st is "string"
+      @waveform = (if st[0] then Math.floor(parseInt(st[0])) else VoltageElm.WF_DC)
+      @frequency = (if st[1] then parseFloat(st[1]) else 40)
+      @maxVoltage = (if st[2] then parseFloat(st[2]) else 5)
+      @bias = (if st[3] then parseFloat(st[3]) else 0)
+      @phaseShift = (if st[4] then parseFloat(st[4]) else 0)
+      @dutyCycle = (if st[5] then parseFloat(st[5]) else .5)
+    if @flags & VoltageElm.FLAG_COS isnt 0
+      @flags &= ~VoltageElm.FLAG_COS
+      @phaseShift = Math.PI / 2
+    @reset()
+
 VoltageElm.FLAG_COS = 2
 VoltageElm.WF_DC = 0
 VoltageElm.WF_AC = 1
@@ -279,3 +283,7 @@ VoltageElm::setEditValue = (n, ei) ->
 
 VoltageElm::toString = ->
   "VoltageElm"
+
+
+
+module.exports = VoltageElm

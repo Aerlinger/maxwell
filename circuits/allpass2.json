@@ -1,0 +1,13 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":55.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"allpass2.txt",		"power_range":50.0,		"sim_speed":10.634267539816555,		"time_step":5.0e-06,		"title":"Allpass w/ Square",		"topic":"Active Filters",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"a",		"x1":"320",		"y1":"224",		"x2":"416",		"y2":"224",		"flags":"0",		"params":["15.0",		"-15.0"]},		
+{"sym":"r",		"x1":"320",		"y1":"208",		"x2":"240",		"y2":"208",		"flags":"0",		"params":["1000.0"]},		
+{"sym":"r",		"x1":"320",		"y1":"240",		"x2":"240",		"y2":"240",		"flags":"0",		"params":["1000.0"]},		
+{"sym":"w",		"x1":"320",		"y1":"208",		"x2":"320",		"y2":"144",		"flags":"0",		"params":[]},		
+{"sym":"r",		"x1":"320",		"y1":"144",		"x2":"416",		"y2":"144",		"flags":"0",		"params":["1000.0"]},		
+{"sym":"w",		"x1":"416",		"y1":"144",		"x2":"416",		"y2":"224",		"flags":"0",		"params":[]},		
+{"sym":"c",		"x1":"320",		"y1":"240",		"x2":"320",		"y2":"320",		"flags":"0",		"params":["1.0E-6",		"-4.292934919713338"]},		
+{"sym":"g",		"x1":"320",		"y1":"320",		"x2":"320",		"y2":"336",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"240",		"y1":"208",		"x2":"240",		"y2":"240",		"flags":"0",		"params":[]},		
+{"sym":"O",		"x1":"416",		"y1":"224",		"x2":"480",		"y2":"224",		"flags":"0",		"params":[]},		
+{"sym":"R",		"x1":"240",		"y1":"208",		"x2":"192",		"y2":"208",		"flags":"0",		"params":["2",		"100.0",		"5.0",		"0.0",		"0.0",		"0.5"]},		
+{"sym":"o",		"x1":"9",		"y1":"16",		"x2":"0",		"y2":"34",		"flags":"24.0",		"params":["9.765625E-55",		"0",		"-1",		"output"]}]
