@@ -4,6 +4,7 @@ require('coffee-script');
 
 chai = require('chai');
 chai.should()
+chai.expect()
 
 assert = require('assert');
 

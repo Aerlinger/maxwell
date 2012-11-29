@@ -9,7 +9,7 @@ class Logger
     #TODO: drawError()
 
   @warn: (msg) ->
-    console.warn "Warning: " + msg
+    console.error "Warning: " + msg
     warningStack.push msg
     #TODO: drawWarning()
 

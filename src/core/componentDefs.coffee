@@ -8,6 +8,16 @@
 #   Elements that are implemented but not tested have their names (key) prefixed with a '#'
 #   Elements that are not yet implemented have their names (key) prefixed with a '-'
 
+Scope = require('../scope/scope')
+
+DumpTypes =
+  "o" : Scope::
+  "h" : Scope::
+  "$" : Scope::
+  "%" : Scope::
+  "?" : Scope::
+  "B" : Scope::
+
 ComponentDefs =
 
   # Tested, working:
