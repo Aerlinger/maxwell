@@ -33,7 +33,7 @@ VarRailElm.getVoltage = function () {
     return frequency;
 };
 
-VarRailElm.prototype.delete = function () {
+VarRailElm.prototype.destroy = function () {
     Circuit.main.remove(label);
     Circuit.main.remove(slider);
 };
