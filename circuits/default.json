@@ -1,0 +1,5 @@
+[{"completion_status":"complete",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"default.txt",		"power_range":50.0,		"sim_speed":14.235633750745258,		"time_step":1.0e-06,		"title":"Default",		"topic":"Basics",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"R",		"x1":"480",		"y1":"160",		"x2":"416",		"y2":"160",		"flags":"0",		"params":["0",		"40.0",		"15.0",		"0.0",		"0.0",		"0.5"]},		
+{"sym":"r",		"x1":"480",		"y1":"160",		"x2":"480",		"y2":"272",		"flags":"0",		"params":["1000"]},		
+{"sym":"l",		"x1":"480",		"y1":"272",		"x2":"480",		"y2":"372",		"flags":"0",		"params":["3",		"0"]},		
+{"sym":"g",		"x1":"480",		"y1":"372",		"x2":"480",		"y2":"472",		"flags":"0",		"params":[]}]

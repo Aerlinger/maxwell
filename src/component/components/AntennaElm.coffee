@@ -1,8 +1,4 @@
-AntennaElm = (xa, ya, xb, yb, f, st) ->
-  CircuitElement.call this, xa, ya, xb, yb, f
+class AntennaElm extends CircuitElement
 
-# Step 1: Prototype of DepthRectangle is Rectangle
-AntennaElm:: = new CircuitElement()
-
-# Step 2: Now we need to set the constructor to the DepthRectangle instead of Rectangle
-AntennaElm::constructor = AntennaElm
+  constructor: (xa, ya, xb, yb, f, st) ->
+    super this, xa, ya, xb, yb, f

@@ -1,0 +1,13 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":58.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"jfetcurrentsrc.txt",		"power_range":0.0,		"sim_speed":10.0,		"time_step":5.0e-06,		"title":"JFET Current Source",		"topic":"JFETs",		"updated_at":null,		"voltage_range":10.0},		
+{"sym":"g",		"x1":"256",		"y1":"336",		"x2":"256",		"y2":"368",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"256",		"y1":"224",		"x2":"256",		"y2":"176",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"256",		"y1":"176",		"x2":"304",		"y2":"176",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"256",		"y1":"80",		"x2":"304",		"y2":"80",		"flags":"0",		"params":[]},		
+{"sym":"R",		"x1":"256",		"y1":"80",		"x2":"256",		"y2":"32",		"flags":"0",		"params":["0",		"40.0",		"10.0",		"0.0"]},		
+{"sym":"s",		"x1":"304",		"y1":"80",		"x2":"304",		"y2":"176",		"flags":"0",		"params":["true",		"false"]},		
+{"sym":"r",		"x1":"256",		"y1":"80",		"x2":"256",		"y2":"176",		"flags":"0",		"params":["1500.0"]},		
+{"sym":"j",		"x1":"208",		"y1":"240",		"x2":"256",		"y2":"240",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"208",		"y1":"240",		"x2":"208",		"y2":"336",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"208",		"y1":"336",		"x2":"256",		"y2":"336",		"flags":"0",		"params":[]},		
+{"sym":"r",		"x1":"256",		"y1":"256",		"x2":"256",		"y2":"336",		"flags":"0",		"params":["1000.0"]},		
+{"sym":"o",		"x1":"4",		"y1":"64",		"x2":"0",		"y2":"1",		"flags":"5.0",		"params":["0.00625"]}]

@@ -1,0 +1,10 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":59.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"dcrestoration.txt",		"power_range":0.0,		"sim_speed":7.0,		"time_step":1.0e-06,		"title":"DC Restoration",		"topic":"Diodes",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"R",		"x1":"160",		"y1":"144",		"x2":"96",		"y2":"144",		"flags":"0",		"params":["1",		"500.0",		"5.0",		"0.0"]},		
+{"sym":"c",		"x1":"160",		"y1":"144",		"x2":"272",		"y2":"144",		"flags":"0",		"params":["5.0E-6",		"-3.0584720734913993"]},		
+{"sym":"d",		"x1":"272",		"y1":"256",		"x2":"272",		"y2":"144",		"flags":"0",		"params":[]},		
+{"sym":"g",		"x1":"272",		"y1":"256",		"x2":"272",		"y2":"288",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"272",		"y1":"144",		"x2":"352",		"y2":"144",		"flags":"0",		"params":[]},		
+{"sym":"r",		"x1":"352",		"y1":"144",		"x2":"352",		"y2":"256",		"flags":"0",		"params":["5000.0"]},		
+{"sym":"g",		"x1":"352",		"y1":"256",		"x2":"352",		"y2":"288",		"flags":"0",		"params":[]},		
+{"sym":"O",		"x1":"352",		"y1":"144",		"x2":"416",		"y2":"144",		"flags":"0",		"params":[]},		
+{"sym":"o",		"x1":"7",		"y1":"32",		"x2":"0",		"y2":"2",		"flags":"10.0",		"params":["9.765625E-5"]}]

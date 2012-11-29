@@ -1,0 +1,12 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"cap.txt",		"power_range":0.0,		"sim_speed":16.0,		"time_step":5.0e-06,		"title":"Capacitor",		"topic":"Basics",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"v",		"x1":"96",		"y1":"336",		"x2":"96",		"y2":"64",		"flags":"0",		"params":["0",		"40.0",		"5.0",		"0.0"]},		
+{"sym":"S",		"x1":"256",		"y1":"144",		"x2":"256",		"y2":"64",		"flags":"0",		"params":["false",		"false",		"0"]},		
+{"sym":"w",		"x1":"96",		"y1":"64",		"x2":"240",		"y2":"64",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"272",		"y1":"64",		"x2":"400",		"y2":"64",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"400",		"y1":"64",		"x2":"400",		"y2":"336",		"flags":"0",		"params":[]},		
+{"sym":"c",		"x1":"256",		"y1":"144",		"x2":"256",		"y2":"256",		"flags":"0",		"params":["1.9999999999999996E-4",		"0"]},		
+{"sym":"r",		"x1":"256",		"y1":"256",		"x2":"256",		"y2":"336",		"flags":"0",		"params":["100.0"]},		
+{"sym":"w",		"x1":"96",		"y1":"336",		"x2":"256",		"y2":"336",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"256",		"y1":"336",		"x2":"400",		"y2":"336",		"flags":"0",		"params":[]},		
+{"sym":"o",		"x1":"5",		"y1":"128",		"x2":"0",		"y2":"3",		"flags":"5.0",		"params":["0.05"]},		
+{"sym":"h",		"x1":"2",		"y1":"6",		"x2":"5",		"y2":null,		"flags":null,		"params":[]}]

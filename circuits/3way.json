@@ -1,0 +1,12 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":44.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"3way.txt",		"power_range":15.0,		"sim_speed":3.0,		"time_step":5.0e-06,		"title":"3-Way Light Switches",		"topic":"Other Passive Circuits",		"updated_at":null,		"voltage_range":120.0},		
+{"sym":"v",		"x1":"32",		"y1":"320",		"x2":"32",		"y2":"80",		"flags":"0",		"params":["1",		"60.0",		"120.0",		"0.0"]},		
+{"sym":"r",		"x1":"496",		"y1":"80",		"x2":"496",		"y2":"320",		"flags":"0",		"params":["150.0"]},		
+{"sym":"w",		"x1":"32",		"y1":"80",		"x2":"112",		"y2":"80",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"416",		"y1":"80",		"x2":"496",		"y2":"80",		"flags":"0",		"params":[]},		
+{"sym":"S",		"x1":"112",		"y1":"208",		"x2":"192",		"y2":"208",		"flags":"0",		"params":["true",		"false",		"0"]},		
+{"sym":"w",		"x1":"112",		"y1":"80",		"x2":"112",		"y2":"208",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"416",		"y1":"80",		"x2":"416",		"y2":"208",		"flags":"0",		"params":[]},		
+{"sym":"S",		"x1":"416",		"y1":"208",		"x2":"336",		"y2":"208",		"flags":"0",		"params":["false",		"false",		"0"]},		
+{"sym":"w",		"x1":"192",		"y1":"192",		"x2":"336",		"y2":"192",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"336",		"y1":"224",		"x2":"192",		"y2":"224",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"32",		"y1":"320",		"x2":"496",		"y2":"320",		"flags":"0",		"params":[]}]

@@ -1,0 +1,11 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":54.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"zenerref.txt",		"power_range":50.0,		"sim_speed":10.20027730826997,		"time_step":5.0e-06,		"title":"Voltage Reference",		"topic":"Zener Diodes",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"R",		"x1":"272",		"y1":"160",		"x2":"224",		"y2":"160",		"flags":"0",		"params":["1",		"40.0",		"1.0",		"6.7",		"0.0",		"0.5"]},		
+{"sym":"z",		"x1":"336",		"y1":"288",		"x2":"336",		"y2":"160",		"flags":"1",		"params":["0.805904783",		"5.6"]},		
+{"sym":"g",		"x1":"336",		"y1":"288",		"x2":"336",		"y2":"304",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"336",		"y1":"160",		"x2":"416",		"y2":"160",		"flags":"0",		"params":[]},		
+{"sym":"r",		"x1":"416",		"y1":"160",		"x2":"416",		"y2":"288",		"flags":"0",		"params":["10000.0"]},		
+{"sym":"g",		"x1":"416",		"y1":"288",		"x2":"416",		"y2":"304",		"flags":"0",		"params":[]},		
+{"sym":"r",		"x1":"272",		"y1":"160",		"x2":"336",		"y2":"160",		"flags":"0",		"params":["500.0"]},		
+{"sym":"o",		"x1":"0",		"y1":"64",		"x2":"0",		"y2":"34",		"flags":"10.0",		"params":["0.003125",		"0",		"-1",		"in"]},		
+{"sym":"o",		"x1":"4",		"y1":"64",		"x2":"0",		"y2":"34",		"flags":"10.0",		"params":["3.90625E-4",		"1",		"-1",		"out"]},		
+{"sym":"o",		"x1":"1",		"y1":"64",		"x2":"0",		"y2":"35",		"flags":"10.0",		"params":["0.00625",		"2",		"-1",		"zener"]}]

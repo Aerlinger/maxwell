@@ -1,0 +1,13 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"tlmismatch.txt",		"power_range":50.0,		"sim_speed":12.682493960703473,		"time_step":5.0e-12,		"title":"Mismatched lines (Pulse)",		"topic":"Transmission Lines",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"171",		"x1":"112",		"y1":"192",		"x2":"256",		"y2":"192",		"flags":"0",		"params":["1.0E-8",		"75.0",		"64",		"0.0"]},		
+{"sym":"171",		"x1":"256",		"y1":"192",		"x2":"384",		"y2":"192",		"flags":"0",		"params":["1.0E-8",		"500.0",		"64",		"0.0"]},		
+{"sym":"171",		"x1":"384",		"y1":"192",		"x2":"512",		"y2":"192",		"flags":"0",		"params":["1.0E-8",		"75.0",		"64",		"0.0"]},		
+{"sym":"r",		"x1":"112",		"y1":"192",		"x2":"64",		"y2":"192",		"flags":"0",		"params":["75.0"]},		
+{"sym":"w",		"x1":"64",		"y1":"256",		"x2":"112",		"y2":"256",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"512",		"y1":"192",		"x2":"544",		"y2":"192",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"512",		"y1":"256",		"x2":"544",		"y2":"256",		"flags":"0",		"params":[]},		
+{"sym":"r",		"x1":"544",		"y1":"192",		"x2":"544",		"y2":"256",		"flags":"0",		"params":["75.0"]},		
+{"sym":"v",		"x1":"64",		"y1":"256",		"x2":"64",		"y2":"192",		"flags":"0",		"params":["2",		"1.0E7",		"2.5",		"2.5",		"0.0",		"0.03"]},		
+{"sym":"g",		"x1":"256",		"y1":"256",		"x2":"256",		"y2":"272",		"flags":"0",		"params":[]},		
+{"sym":"g",		"x1":"384",		"y1":"256",		"x2":"384",		"y2":"272",		"flags":"0",		"params":[]},		
+{"sym":"g",		"x1":"512",		"y1":"256",		"x2":"512",		"y2":"272",		"flags":"0",		"params":[]}]

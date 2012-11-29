@@ -1,0 +1,13 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"diodelimit.txt",		"power_range":0.0,		"sim_speed":10.0,		"time_step":5.0e-06,		"title":"Diode Limiter",		"topic":"Diodes",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"v",		"x1":"176",		"y1":"288",		"x2":"176",		"y2":"144",		"flags":"0",		"params":["1",		"40.0",		"5.0",		"0.0"]},		
+{"sym":"r",		"x1":"176",		"y1":"144",		"x2":"272",		"y2":"144",		"flags":"0",		"params":["110.0"]},		
+{"sym":"w",		"x1":"272",		"y1":"144",		"x2":"272",		"y2":"192",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"272",		"y1":"192",		"x2":"304",		"y2":"192",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"272",		"y1":"192",		"x2":"240",		"y2":"192",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"176",		"y1":"288",		"x2":"240",		"y2":"288",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"240",		"y1":"288",		"x2":"304",		"y2":"288",		"flags":"0",		"params":[]},		
+{"sym":"d",		"x1":"240",		"y1":"192",		"x2":"240",		"y2":"288",		"flags":"0",		"params":[]},		
+{"sym":"d",		"x1":"304",		"y1":"288",		"x2":"304",		"y2":"192",		"flags":"0",		"params":[]},		
+{"sym":"O",		"x1":"272",		"y1":"144",		"x2":"368",		"y2":"144",		"flags":"0",		"params":[]},		
+{"sym":"o",		"x1":"0",		"y1":"32",		"x2":"0",		"y2":"3",		"flags":"5.0",		"params":["0.05"]},		
+{"sym":"o",		"x1":"9",		"y1":"64",		"x2":"0",		"y2":"2",		"flags":"1.25",		"params":["2.44140625E-5"]}]

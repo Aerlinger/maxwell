@@ -1,0 +1,9 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"mosswitch.txt",		"power_range":50.0,		"sim_speed":10.812258501325767,		"time_step":5.0e-06,		"title":"Switch",		"topic":"MOSFETs",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"s",		"x1":"288",		"y1":"224",		"x2":"288",		"y2":"304",		"flags":"0",		"params":["1",		"false"]},		
+{"sym":"w",		"x1":"288",		"y1":"128",		"x2":"400",		"y2":"128",		"flags":"0",		"params":[]},		
+{"sym":"r",		"x1":"400",		"y1":"128",		"x2":"400",		"y2":"288",		"flags":"0",		"params":["300.0"]},		
+{"sym":"w",		"x1":"400",		"y1":"320",		"x2":"400",		"y2":"336",		"flags":"0",		"params":[]},		
+{"sym":"f",		"x1":"288",		"y1":"304",		"x2":"400",		"y2":"304",		"flags":"0",		"params":["1.5"]},		
+{"sym":"w",		"x1":"288",		"y1":"128",		"x2":"288",		"y2":"224",		"flags":"0",		"params":[]},		
+{"sym":"R",		"x1":"288",		"y1":"128",		"x2":"240",		"y2":"128",		"flags":"0",		"params":["0",		"40.0",		"5.0",		"0.0",		"0.0",		"0.5"]},		
+{"sym":"g",		"x1":"400",		"y1":"336",		"x2":"400",		"y2":"352",		"flags":"0",		"params":[]}]

@@ -1,0 +1,9 @@
+[{"completion_status":"complete",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"filt-lopass.txt",		"power_range":50.0,		"sim_speed":6.499443210467817,		"time_step":5.0e-06,		"title":"Low-Pass Filter (RC)",		"topic":"Passive Filters",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"O",		"x1":"400",		"y1":"160",		"x2":"512",		"y2":"160",		"flags":"0",		"params":[]},		
+{"sym":"g",		"x1":"400",		"y1":"288",		"x2":"400",		"y2":"320",		"flags":"0",		"params":[]},		
+{"sym":"r",		"x1":"240",		"y1":"160",		"x2":"400",		"y2":"160",		"flags":"0",		"params":["187.0"]},		
+{"sym":"c",		"x1":"400",		"y1":"160",		"x2":"400",		"y2":"288",		"flags":"0",		"params":["1.0E-5",		"0"]},		
+{"sym":"170",		"x1":"240",		"y1":"160",		"x2":"208",		"y2":"160",		"flags":"3",		"params":["20.0",		"1000.0",		"5.0",		"0.1"]},		
+{"sym":"o",		"x1":"4",		"y1":"32",		"x2":"0",		"y2":"34",		"flags":"5.0",		"params":["9.765625E-5",		"0",		"-1"]},		
+{"sym":"o",		"x1":"0",		"y1":"32",		"x2":"0",		"y2":"34",		"flags":"5.0",		"params":["9.765625E-5",		"1",		"-1"]},		
+{"sym":"h",		"x1":"3",		"y1":"2",		"x2":"3",		"y2":null,		"flags":null,		"params":[]}]

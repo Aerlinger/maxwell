@@ -1,0 +1,13 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"inductkick-block.txt",		"power_range":42.0,		"sim_speed":10.0,		"time_step":5.0e-06,		"title":"Blocking Inductive Kickback",		"topic":"Diodes",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"v",		"x1":"176",		"y1":"304",		"x2":"176",		"y2":"128",		"flags":"0",		"params":["0",		"40.0",		"5.0",		"0.0"]},		
+{"sym":"w",		"x1":"176",		"y1":"304",		"x2":"224",		"y2":"304",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"336",		"y1":"304",		"x2":"288",		"y2":"304",		"flags":"0",		"params":[]},		
+{"sym":"s",		"x1":"224",		"y1":"304",		"x2":"288",		"y2":"304",		"flags":"0",		"params":["false",		"false"]},		
+{"sym":"w",		"x1":"288",		"y1":"304",		"x2":"288",		"y2":"336",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"224",		"y1":"304",		"x2":"224",		"y2":"336",		"flags":"0",		"params":[]},		
+{"sym":"c",		"x1":"224",		"y1":"336",		"x2":"288",		"y2":"336",		"flags":"0",		"params":["5.0E-10",		"-0.0"]},		
+{"sym":"l",		"x1":"176",		"y1":"128",		"x2":"336",		"y2":"128",		"flags":"0",		"params":["1.0",		"0"]},		
+{"sym":"r",		"x1":"336",		"y1":"128",		"x2":"336",		"y2":"304",		"flags":"0",		"params":["100.0"]},		
+{"sym":"w",		"x1":"176",		"y1":"128",		"x2":"176",		"y2":"80",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"336",		"y1":"128",		"x2":"336",		"y2":"80",		"flags":"0",		"params":[]},		
+{"sym":"d",		"x1":"336",		"y1":"80",		"x2":"176",		"y2":"80",		"flags":"0",		"params":[]}]

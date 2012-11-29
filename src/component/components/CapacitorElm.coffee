@@ -4,8 +4,11 @@ CapacitorElm = (xa, ya, xb, yb, f, st) ->
     st = st.split(" ")  if typeof st is "string"
     @capacitance = Number(st[0])
     @voltdiff = Number(st[1])
+
 CapacitorElm:: = new CircuitElement()
 CapacitorElm::constructor = CapacitorElm
+
+
 CapacitorElm::capacitance = 5e-6
 CapacitorElm::compResistance = 0
 CapacitorElm::voltDiff = 10

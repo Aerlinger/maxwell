@@ -1,0 +1,11 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"moscurrentsrc.txt",		"power_range":50.0,		"sim_speed":11.708435524800691,		"time_step":5.0e-06,		"title":"Current Source",		"topic":"MOSFETs",		"updated_at":null,		"voltage_range":10.0},		
+{"sym":"f",		"x1":"352",		"y1":"288",		"x2":"400",		"y2":"288",		"flags":"0",		"params":["1.5"]},		
+{"sym":"w",		"x1":"400",		"y1":"304",		"x2":"400",		"y2":"352",		"flags":"1",		"params":[]},		
+{"sym":"g",		"x1":"400",		"y1":"352",		"x2":"400",		"y2":"384",		"flags":"0",		"params":[]},		
+{"sym":"R",		"x1":"400",		"y1":"112",		"x2":"400",		"y2":"80",		"flags":"0",		"params":["0",		"40.0",		"10.0",		"0.0",		"0.0",		"0.5"]},		
+{"sym":"w",		"x1":"400",		"y1":"272",		"x2":"400",		"y2":"240",		"flags":"0",		"params":[]},		
+{"sym":"r",		"x1":"400",		"y1":"112",		"x2":"400",		"y2":"240",		"flags":"0",		"params":["300.0"]},		
+{"sym":"w",		"x1":"400",		"y1":"112",		"x2":"448",		"y2":"112",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"400",		"y1":"240",		"x2":"448",		"y2":"240",		"flags":"0",		"params":[]},		
+{"sym":"s",		"x1":"448",		"y1":"112",		"x2":"448",		"y2":"240",		"flags":"0",		"params":["1",		"false"]},		
+{"sym":"R",		"x1":"352",		"y1":"288",		"x2":"320",		"y2":"288",		"flags":"0",		"params":["0",		"40.0",		"3.0",		"0.0",		"0.0",		"0.5"]}]

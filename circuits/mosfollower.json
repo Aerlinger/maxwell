@@ -1,0 +1,9 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":54.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"mosfollower.txt",		"power_range":50.0,		"sim_speed":11.251013186076355,		"time_step":5.0e-06,		"title":"Source Follower",		"topic":"MOSFETs",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"R",		"x1":"208",		"y1":"144",		"x2":"176",		"y2":"144",		"flags":"0",		"params":["1",		"40.0",		"5.0",		"0.0",		"0.0",		"0.5"]},		
+{"sym":"O",		"x1":"256",		"y1":"160",		"x2":"320",		"y2":"160",		"flags":"0",		"params":[]},		
+{"sym":"f",		"x1":"208",		"y1":"144",		"x2":"256",		"y2":"144",		"flags":"0",		"params":["1.5"]},		
+{"sym":"r",		"x1":"256",		"y1":"48",		"x2":"256",		"y2":"128",		"flags":"0",		"params":["500.0"]},		
+{"sym":"R",		"x1":"256",		"y1":"48",		"x2":"208",		"y2":"48",		"flags":"0",		"params":["0",		"40.0",		"15.0",		"0.0",		"0.0",		"0.5"]},		
+{"sym":"R",		"x1":"256",		"y1":"256",		"x2":"256",		"y2":"288",		"flags":"0",		"params":["0",		"40.0",		"-15.0",		"0.0",		"0.0",		"0.5"]},		
+{"sym":"i",		"x1":"256",		"y1":"160",		"x2":"256",		"y2":"256",		"flags":"0",		"params":["0.0050"]},		
+{"sym":"o",		"x1":"1",		"y1":"64",		"x2":"0",		"y2":"34",		"flags":"12.0",		"params":["1.220703125E-5",		"0",		"-1"]}]

@@ -91,7 +91,7 @@ class Circuit
   # ##########
   registerAll: ->
     for Component in ComponentDefs
-      console.log "Registering Element: #{ElementName}   (#{ElementDescription})"
+      console.log "Registering Element: #{Component} "
       @register(Component)
 
   setupScopes: ->

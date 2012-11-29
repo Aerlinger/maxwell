@@ -1,0 +1,10 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"ohms.txt",		"power_range":50.0,		"sim_speed":10.391409633455755,		"time_step":5.0e-06,		"title":"Ohm's Law",		"topic":"Basics",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"r",		"x1":"256",		"y1":"176",		"x2":"256",		"y2":"304",		"flags":"0",		"params":["100.0"]},		
+{"sym":"172",		"x1":"304",		"y1":"176",		"x2":"304",		"y2":"128",		"flags":"0",		"params":["6",		"5.0",		"5.0",		"0.0",		"0.0",		"0.5",		"Voltage"]},		
+{"sym":"g",		"x1":"256",		"y1":"336",		"x2":"256",		"y2":"352",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"256",		"y1":"304",		"x2":"256",		"y2":"336",		"flags":"1",		"params":[]},		
+{"sym":"r",		"x1":"352",		"y1":"176",		"x2":"352",		"y2":"304",		"flags":"0",		"params":["1000.0"]},		
+{"sym":"w",		"x1":"352",		"y1":"304",		"x2":"352",		"y2":"336",		"flags":"1",		"params":[]},		
+{"sym":"g",		"x1":"352",		"y1":"336",		"x2":"352",		"y2":"352",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"304",		"y1":"176",		"x2":"352",		"y2":"176",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"256",		"y1":"176",		"x2":"304",		"y2":"176",		"flags":"0",		"params":[]}]

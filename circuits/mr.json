@@ -1,0 +1,7 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":52.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"mr.txt",		"power_range":50.0,		"sim_speed":1.3804574186067096,		"time_step":2.0e-08,		"title":"Memristor",		"topic":"Memristors",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"m",		"x1":"256",		"y1":"144",		"x2":"256",		"y2":"288",		"flags":"0",		"params":["100.0",		"16000.0",		"0",		"1.0E-8",		"1.0E-10"]},		
+{"sym":"g",		"x1":"256",		"y1":"320",		"x2":"256",		"y2":"336",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"256",		"y1":"288",		"x2":"256",		"y2":"320",		"flags":"1",		"params":[]},		
+{"sym":"172",		"x1":"256",		"y1":"144",		"x2":"256",		"y2":"112",		"flags":"0",		"params":["6",		"5.0",		"5.0",		"-5.0",		"0.0",		"0.5",		"Voltage"]},		
+{"sym":"o",		"x1":"0",		"y1":"8",		"x2":"0",		"y2":"35",		"flags":"5.0",		"params":["0.05",		"0",		"-1"]},		
+{"sym":"o",		"x1":"0",		"y1":"8",		"x2":"2",		"y2":"35",		"flags":"640.0",		"params":["9.765625E-5",		"1",		"-1",		"resistance"]}]

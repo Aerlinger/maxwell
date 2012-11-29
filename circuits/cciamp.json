@@ -1,0 +1,13 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"cciamp.txt",		"power_range":50.0,		"sim_speed":10.20027730826997,		"time_step":5.0e-06,		"title":"Current Amplifier",		"topic":"Current Conveyor",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"179",		"x1":"208",		"y1":"176",		"x2":"304",		"y2":"176",		"flags":"0",		"params":["1.0"]},		
+{"sym":"i",		"x1":"144",		"y1":"304",		"x2":"208",		"y2":"304",		"flags":"0",		"params":["0.01"]},		
+{"sym":"g",		"x1":"144",		"y1":"304",		"x2":"144",		"y2":"320",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"208",		"y1":"240",		"x2":"208",		"y2":"304",		"flags":"0",		"params":[]},		
+{"sym":"r",		"x1":"208",		"y1":"176",		"x2":"112",		"y2":"176",		"flags":"0",		"params":["10.0"]},		
+{"sym":"g",		"x1":"112",		"y1":"176",		"x2":"112",		"y2":"192",		"flags":"0",		"params":[]},		
+{"sym":"g",		"x1":"400",		"y1":"256",		"x2":"400",		"y2":"272",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"208",		"y1":"240",		"x2":"144",		"y2":"240",		"flags":"0",		"params":[]},		
+{"sym":"174",		"x1":"144",		"y1":"240",		"x2":"80",		"y2":"272",		"flags":"0",		"params":["100.0",		"0.7277",		"Multiplier"]},		
+{"sym":"174",		"x1":"352",		"y1":"208",		"x2":"448",		"y2":"256",		"flags":"0",		"params":["100.0",		"0.32180000000000003",		"Z",		"Resistance"]},		
+{"sym":"g",		"x1":"112",		"y1":"272",		"x2":"112",		"y2":"288",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"304",		"y1":"208",		"x2":"352",		"y2":"208",		"flags":"1",		"params":[]}]

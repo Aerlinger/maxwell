@@ -1,0 +1,10 @@
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":50.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"transswitch.txt",		"power_range":0.0,		"sim_speed":10.0,		"time_step":5.0e-06,		"title":"Switch",		"topic":"Transistors",		"updated_at":null,		"voltage_range":5.0},		
+{"sym":"v",		"x1":"144",		"y1":"352",		"x2":"144",		"y2":"80",		"flags":"0",		"params":["0",		"40.0",		"5.0",		"0.0"]},		
+{"sym":"w",		"x1":"144",		"y1":"80",		"x2":"256",		"y2":"80",		"flags":"0",		"params":[]},		
+{"sym":"t",		"x1":"256",		"y1":"256",		"x2":"368",		"y2":"256",		"flags":"0",		"params":["1",		"0.5597337598267538",		"0.646589672025579"]},		
+{"sym":"r",		"x1":"256",		"y1":"80",		"x2":"256",		"y2":"176",		"flags":"0",		"params":["10000.0"]},		
+{"sym":"s",		"x1":"256",		"y1":"176",		"x2":"256",		"y2":"256",		"flags":"0",		"params":["true",		"false"]},		
+{"sym":"w",		"x1":"256",		"y1":"80",		"x2":"368",		"y2":"80",		"flags":"0",		"params":[]},		
+{"sym":"r",		"x1":"368",		"y1":"80",		"x2":"368",		"y2":"240",		"flags":"0",		"params":["300.0"]},		
+{"sym":"w",		"x1":"368",		"y1":"272",		"x2":"368",		"y2":"352",		"flags":"0",		"params":[]},		
+{"sym":"w",		"x1":"368",		"y1":"352",		"x2":"144",		"y2":"352",		"flags":"0",		"params":[]}]
