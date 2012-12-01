@@ -2,6 +2,7 @@
 if process.env
   Settings = require('../settings/settings')
   {Polygon, Rectangle, Point} = require('../util/shapePrimitives')
+  DrawHelpers = require('./drawHelpers')
 
 class CircuitElement
 
@@ -9,7 +10,7 @@ class CircuitElement
   @ps2: new Point(0, 0)
 
 
-  constructor: (@x1, @y1, @x2, @y2, flags, st...) ->
+  constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags, st...) ->
     @current = 0
     @curcount = 0
     @noDiagonal = false
@@ -25,7 +26,7 @@ class CircuitElement
     @initBoundingBox()
 
   setCircuit: (circuit) ->
-    @circuit = circuit
+    @Circuit = circuit
 
   allocNodes: ->
     @nodes = zeroArray(@getPostCount() + @getInternalNodeCount())
@@ -34,12 +35,17 @@ class CircuitElement
   setPoints: ->
     @dx = @x2 - @x1
     @dy = @y2 - @y1
+
     @dn = Math.sqrt(@dx * @dx + @dy * @dy)
     @dpx1 = @dy / @dn
     @dpy1 = -@dx / @dn
     @dsign = (if (@dy is 0) then sign(@dx) else sign(@dy))
+
+    printStackTrace() unless @dn
+
     @point1 = new Point(@x1, @y1)
     @point2 = new Point(@x2, @y2)
+
     #TODO: Implement snapping here:
 
   setColor: (color) ->
@@ -53,10 +59,7 @@ class CircuitElement
 
   # Todo: implement needed
   getDumpClass: ->
-    "Needs implementation"
-
-  toString: ->
-    "Circuit Element"
+    this.toString()
 
   isSelected: ->
     @selected
@@ -87,8 +90,15 @@ class CircuitElement
   doStep: ->
     # to be extended by subclasses
 
+  startIteration: ->
+    # to be extended by nonlinear elements
+
+  orphaned: ->
+    return @Circuit is null or @Circuit is undefined
+
   destroy: ->
-    # TODO: Implement
+    @Circuit.desolder
+    # TODO: Fully Implement
 
   startIteration: ->
     # TODO: Implement
@@ -109,15 +119,15 @@ class CircuitElement
       @lead2 = @point2
       return
 
-    @lead1 = CircuitElementDrawUtils.interpPointPt(@point1, @point2, (@dn - len) / (2 * @dn));
-    @lead2 = CircuitElementDrawUtils.interpPointPt(@point1, @point2, (@dn + len) / (2 * @dn));
+    @lead1 = DrawHelpers.interpPointPt(@point1, @point2, (@dn - len) / (2 * @dn));
+    @lead2 = DrawHelpers.interpPointPt(@point1, @point2, (@dn + len) / (2 * @dn));
 
   getDefaultFlags: ->
     0
 
   drag: (newX, newY) ->
-    newX = Circuit.snapGrid(newX)
-    newY = Circuit.snapGrid(newY)
+    newX = @Circuit.snapGrid(newX)
+    newY = @Circuit.snapGrid(newY)
     if @noDiagonal
       if Math.abs(@x1 - newX) < Math.abs(@y1 - newY)
         newX = @x1
@@ -177,7 +187,7 @@ class CircuitElement
   getVoltageDiff: ->
     @volts[0] - @volts[1]
 
-  nonlinear: ->
+  nonLinear: ->
     false
 
   # Two terminals by default, but likely to be overidden by subclasses

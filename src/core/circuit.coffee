@@ -33,9 +33,7 @@ if process.env
 class Circuit
 
   constructor: ->
-    console.log "Started Simulation"
-
-    @EngineParams = new CircuitEngineParams()
+    @Params = new CircuitEngineParams()
     @CommandHistory = new CommandHistory()
     @Renderer = new Renderer(this)
 
@@ -74,14 +72,9 @@ class Circuit
 
 
   init: () ->
-    @Solver.invalidate()
-
-    @stopElm = null
-    @stopMessage  = 0
-
     @grid = new Grid()
-    @registerAll()
 
+    @registerAll()
     @loadCircuit( Settings.defaultCircuit )
 
 
@@ -91,7 +84,8 @@ class Circuit
   # ##########
   registerAll: ->
     for Component in ComponentDefs
-      console.log "Registering Element: #{Component} "
+      if process.env.NODE_ENV == 'development'
+        console.log "Registering Element: #{Component.prototype} "
       @register(Component)
 
   setupScopes: ->
@@ -116,7 +110,8 @@ class Circuit
 
       @dumpTypes[dumpType] = ComponentConstructor
     catch e
-      Logger.warn "Element: #{ComponentConstructor} Not yet implemented: [#{e.message}]"
+      if process.env.NODE_ENV == 'development'
+        Logger.warn "Element: #{ComponentConstructor.prototype} Not yet implemented: [#{e.message}]"
 
 
   ## #######################################################################################################
@@ -125,8 +120,9 @@ class Circuit
   loadCircuit: (defaultCircuit) ->
     @clearAndReset()    # Clear and reset circuit elements
     @CommandHistory.reset()
-    CircuitLoader.readSetupList this, false
-    CircuitLoader.readCircuitFromFile this, "#{defaultCircuit}.txt", false
+    #TODO: Disabled temporarily
+    #CircuitLoader.readSetupList this, false
+    #CircuitLoader.readCircuitFromFile this, "#{defaultCircuit}.txt", false
 
   ###
   Clears current states, graphs, and errors then Restarts the circuit from time zero.
@@ -146,17 +142,9 @@ class Circuit
     @Solver.reset()
     @Solver.run()
 
-  # Returns the y position of the bottom of the circuit
-  getCircuitBottom: ->
-    if @circuitBottom
-      return @circuitBottom
-
-    for element in @elementList
-      rect = element.boundingBox
-      bottom = rect.height + rect.y
-      @circuitBottom = bottom if (bottom > @circuitBottom)
-
-    return @circuitBottom
+  halt: (message) ->
+    console.warn(message)
+    @stopMessage = message
 
   clearErrors: ->
     @stopMessage = null
@@ -165,15 +153,40 @@ class Circuit
   getRenderContext: ->
     @renderContext
 
+  # "Solders" a new element to this circuit (adds it to the element list array).
+  solder: (newElement) ->
+    newElement.Circuit = this
+    newElement.setPoints()
+    @elementList.push newElement
+
+  # "Desolders" an existing element to this circuit (removes it to the element list array).
+  desolder: (oldElement) ->
+    oldElement.Circuit = null
+    @elementList.remove(oldElement)
+
   #It may be worthwhile to return a defensive copy here
   getElements: ->
     @elementList
 
-  getElm: (elmIdx) ->
+  findElm: (searchElm) ->
+    for circuitElm in @elementList
+      return circuitElm if searchElm == circuitElm
+    return false
+
+  getElmByIdx: (elmIdx) ->
     return @elementList[elmIdx]
 
   numElements: ->
     return @elementList.length
+
+  resetNodes: ->
+    @nodeList = []
+
+  addCircuitNode: (circuitNode) ->
+    @nodeList.push circuitNode
+
+  getCircuitNode: (idx) ->
+    return @nodeList[idx]
 
   getNodes: ->
     @nodeList
@@ -188,6 +201,17 @@ class Circuit
   getCanvasBounds: ->
     return new Primitives.Rectangle(0, 0, 500, 400);
 
+  # Returns the y position of the bottom of the circuit
+  getCircuitBottom: ->
+    if @circuitBottom
+      return @circuitBottom
+
+    for element in @elementList
+      rect = element.boundingBox
+      bottom = rect.height + rect.y
+      @circuitBottom = bottom if (bottom > @circuitBottom)
+
+    return @circuitBottom
 
   ###
   UpdateCircuit: Outermost method in event loops
@@ -212,18 +236,18 @@ class Circuit
     @setupScopes()
 
     unless @Solver.stoppedCheck
-      try
-        @Solver.runCircuit()
-      catch e
-        console.log "error in run circuit: " + e.message
-        @Solver.invalidate()
-        return
+#      try
+      @Solver.runCircuit()
+#      catch e
+#        console.log "error in run circuit: " + e.message
+#        @Solver.invalidate()
+#        return
 
       sysTime = (new Date()).getTime()
       unless @lastTime is 0
         inc = Math.floor(sysTime - @lastTime)
-        current_speed = Math.exp(@EngineParams.current_speed / 3.5 - 14.2)
-        @EngineParams.currentMult = 1.7 * inc * current_speed
+        current_speed = Math.exp(@Params.current_speed / 3.5 - 14.2)
+        @Params.currentMult = 1.7 * inc * current_speed
       if (sysTime - @secTime) >= 1000
         @framerate = @frames
         @steprate = @steps
@@ -233,7 +257,7 @@ class Circuit
       @lastTime = sysTime
     else
       @lastTime = 0
-    @EngineParams.powerMult = Math.exp(@powerBar / 4.762 - 7)
+    @Params.powerMult = Math.exp(@powerBar / 4.762 - 7)
 
     # Draw each circuit element
     for circuitElm in @elementList

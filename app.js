@@ -8,6 +8,8 @@ require('./src/global/console');
 require('./src/global/formats');
 require('./src/global/math');
 require('./src/global/units');
+require('./src/global/mixin');
+require('./src/global/typeChecking');
 
 console.log("Running Maxwell in environment: " + process.argv[2])
 process.env[process.argv[2]] = true

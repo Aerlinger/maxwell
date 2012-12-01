@@ -1,3 +1,5 @@
+{Polygon, Rectangle, Point} = require('../util/shapePrimitives')
+
 class DrawHelpers
 
   @unitsFont: "Arial, Helvetica, sans-serif"
@@ -5,7 +7,7 @@ class DrawHelpers
   @colorScaleCount = 256
   @colorScale: new Array(@colorScaleCount)
 
-  @initializeColorScale = () ->
+  @buildColorScale = () ->
     i = 0
 
     while i < @colorScaleCount
@@ -24,10 +26,9 @@ class DrawHelpers
         @colorScale[i] = new Color(n2, n1, n2)
       ++i
 
-  DrawHelpers.initializeColorScale()
 
   @interpPointPt: (a, b, f, g) ->
-    Circuit.halt "no interpolation value (f) defined in interpPointPt" unless f
+    printStackTrace() unless f
     p = new Point(0, 0)
     @interpPoint a, b, p, f, g
     return p
@@ -37,11 +38,11 @@ class DrawHelpers
     gy = 0
     if g
       gx = b.y - a.y
-      gy = a.x1 - b.x1
+      gy = a.x - b.x
       g /= Math.sqrt(gx * gx + gy * gy)
     else
       g = 0
-    c.x1 = Math.floor(a.x1 * (1 - f) + b.x1 * f + g * gx + .48)
+    c.x = Math.floor(a.x * (1 - f) + b.x * f + g * gx + .48)
     c.y = Math.floor(a.y * (1 - f) + b.y * f + g * gy + .48)
     return b
 
@@ -50,36 +51,36 @@ class DrawHelpers
     gy = 0
     unless g is 0
       gx = b.y - a.y
-      gy = a.x1 - b.x1
+      gy = a.x - b.x
       g /= Math.sqrt(gx * gx + gy * gy)
     else
       g = 0
     offset = .48
 
-    c.x1  = Math.floor( a.x1 * (1 - f) + b.x1 * f + g * gx + offset )
+    c.x  = Math.floor( a.x * (1 - f) + b.x * f + g * gx + offset )
     c.y   = Math.floor( a.y  * (1 - f) + b.y  * f + g * gy + offset )
-    d.x1  = Math.floor( a.x1 * (1 - f) + b.x1 * f - g * gx + offset )
+    d.x  = Math.floor( a.x * (1 - f) + b.x * f - g * gx + offset )
     d.y   = Math.floor( a.y  * (1 - f) + b.y  * f - g * gy + offset )
 
   @calcArrow: (a, b, al, aw) ->
     poly = new Polygon()
     p1 = new Point(0, 0)
     p2 = new Point(0, 0)
-    adx = b.x1 - a.x1
+    adx = b.x - a.x
     ady = b.y - a.y
     l = Math.sqrt(adx * adx + ady * ady)
-    poly.addVertex b.x1, b.y
+    poly.addVertex b.x, b.y
     CircuitElement.interpPoint2 a, b, p1, p2, 1 - al / l, aw
-    poly.addVertex p1.x1, p1.y
-    poly.addVertex p2.x1, p2.y
+    poly.addVertex p1.x, p1.y
+    poly.addVertex p2.x, p2.y
     return poly
 
   @createPolygon: (a, b, c, d) ->
     p = new Polygon()
-    p.addVertex a.x1, a.y
-    p.addVertex b.x1, b.y
-    p.addVertex c.x1, c.y
-    p.addVertex d.x1, d.y  if d
+    p.addVertex a.x, a.y
+    p.addVertex b.x, b.y
+    p.addVertex c.x, c.y
+    p.addVertex d.x, d.y  if d
     return p
 
   @createPolygonFromArray: (a) ->
@@ -87,7 +88,7 @@ class DrawHelpers
     i = 0
 
     while i < a.length
-      p.addVertex a[i].x1, a[i].y
+      p.addVertex a[i].x, a[i].y
       ++i
     return p
 
@@ -96,7 +97,7 @@ class DrawHelpers
     # todo: implement
     segments = 40
     segf = 1 / segments
-    CircuitElement.ps1.x1 = p1.x1
+    CircuitElement.ps1.x = p1.x
     CircuitElement.ps1.y = p1.y
     i = 0
 
@@ -108,7 +109,7 @@ class DrawHelpers
       v = v1 + (v2 - v1) * i / segments
       color = @setVoltageColor(v)
       CircuitElement.drawThickLinePt CircuitElement.ps1, CircuitElement.ps2, color
-      CircuitElement.ps1.x1 = CircuitElement.ps2.x1
+      CircuitElement.ps1.x = CircuitElement.ps2.x
       CircuitElement.ps1.y = CircuitElement.ps2.y
       ++i
 
@@ -130,7 +131,7 @@ class DrawHelpers
     paper.closePath()
 
   @drawThickLinePt: (pa, pb, color) ->
-    CircuitElement.drawThickLine pa.x1, pa.y, pb.x1, pb.y, color
+    CircuitElement.drawThickLine pa.x, pa.y, pb.x, pb.y, color
 
   @drawThickPolygon: (xlist, ylist, c, color) ->
     i = undefined
@@ -194,5 +195,5 @@ class DrawHelpers
 # see script/test and the /test directory for details.
 #
 # To require this class in another file through Node, write {ClassName} = require(<path_to_coffee_file>)
-root = exports ? window
-root.DrawHelpers = DrawHelpers
+root = module.exports ? window
+module.exports = DrawHelpers

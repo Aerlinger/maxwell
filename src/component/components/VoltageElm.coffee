@@ -1,40 +1,9 @@
-#{
-#  "type": "block",
-#  "src": "{",
-#  "value": "{",
-#  "lineno": 332,
-#  "children": [],
-#  "varDecls": [],
-#  "labels": {
-#    "table": {},
-#    "size": 0
-#  },
-#  "functions": [],
-#  "nonfunctions": [],
-#  "transformed": true
-#}
-#{
-#  "type": "block",
-#  "src": "{",
-#  "value": "{",
-#  "lineno": 332,
-#  "children": [],
-#  "varDecls": [],
-#  "labels": {
-#    "table": {},
-#    "size": 0
-#  },
-#  "functions": [],
-#  "nonfunctions": [],
-#  "transformed": true
-
-
 CircuitElement = require('../circuitElement')
 
 class VoltageElm extends CircuitElement
 
   constructor: (xa, ya, xb, yb, f, st) ->
-    super this, xa, ya, xb, yb, f, st
+    super xa, ya, xb, yb, f, st
 
     @maxVoltage = 5
     @frequency = 40
@@ -84,15 +53,16 @@ VoltageElm::triangleFunc = (x) ->
 
 VoltageElm::stamp = ->
   if @waveform is VoltageElm.WF_DC
-    Circuit.stampVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
+    @Circuit.Solver.Stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
   else
-    Circuit.stampVoltageSource @nodes[0], @nodes[1], @voltSource
+    @Circuit.Solver.Stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource
 
 VoltageElm::doStep = ->
-  Circuit.updateVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()  unless @waveform is VoltageElm.WF_DC
+  unless @waveform is VoltageElm.WF_DC
+    @Circuit.Solver.updateVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
 
 VoltageElm::getVoltage = ->
-  w = 2 * Math.PI * (Circuit.t - @freqTimeZero) * @frequency + @phaseShift
+  w = 2 * Math.PI * (@Circuit.Solver.time - @freqTimeZero) * @frequency + @phaseShift
   switch @waveform
     when VoltageElm.WF_DC
       @maxVoltage + @bias
@@ -111,13 +81,13 @@ VoltageElm::getVoltage = ->
 
 VoltageElm.circleSize = 17
 VoltageElm::setPoints = ->
-  CircuitElement::setPoints.call this
+  super()
   @calcLeads (if (@waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR) then 8 else VoltageElm.circleSize * 2)
 
 VoltageElm::draw = ->
   @setBbox @x1, @y, @x2, @y2
   @updateDotCount()
-  unless Circuit.dragElm is this
+  unless @Circuit.dragElm is this
     unless @waveform is VoltageElm.WF_DC
       @drawDots @point1, @lead1, @curcount
       @drawDots @point2, @lead2, -@curcount
@@ -194,7 +164,7 @@ VoltageElm::drawWaveform = (center) ->
         oy = yy
         i++
       break
-  if Circuit.showValuesCheckItem
+  if Settings.showValuesCheckItem
     s = CircuitElement.getShortUnitText(@frequency, "Hz")
     @drawValues s, VoltageElm.circleSize  if @dx is 0 or @dy is 0
 
@@ -260,10 +230,10 @@ VoltageElm::setEditValue = (n, ei) ->
     # adjust time zero to maintain continuity in the waveform even though the frequency has changed.
     oldfreq = @frequency
     @frequency = ei.value
-    maxfreq = 1 / (8 * Circuit.timeStep)
+    maxfreq = 1 / (8 * @Circuit.timeStep)
     @frequency = maxfreq  if @frequency > maxfreq
     adj = @frequency - oldfreq
-    @freqTimeZero = Circuit.t - oldfreq * (Circuit.t - @freqTimeZero) / @frequency
+    @freqTimeZero = @Circuit.time - oldfreq * (@Circuit.time - @freqTimeZero) / @frequency
   if n is 1
     ow = @waveform
     

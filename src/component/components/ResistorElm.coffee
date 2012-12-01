@@ -5,29 +5,18 @@ CircuitElement = require('../circuitElement')
 # Constructor ////////////////////////////////////////////////////////////////
 class ResistorElm extends CircuitElement
 
-  consructor: (xa, ya, xb, yb, f, st) ->
-    super(this, xa, ya, xb, yb, f, st)
+  constructor: (xa, ya, xb, yb, f = 0, st = null) ->
+    super(xa, ya, xb, yb, f, st)
 
-    #var options = st.split(' ');
     if st and st.length > 0
       @resistance = parseFloat(st)
     else
       @resistance = 500
 
 
-ResistorElm::resistance = 1000
 ResistorElm::ps3 = new Point(100, 50)
 ResistorElm::ps4 = new Point(100, 150)
-ResistorElm:: = new CircuitElement()
-ResistorElm::constructor = ResistorElm
 
-#ResistorElm.prototype.setPoints = function() {
-#	// Call super-method
-#	CircuitElement.prototype.setPoints.call(this);
-#	this.calcLeads(32);
-#	this.ps3 = new Point(50, 50);
-#	this.ps4 = new Point(50, 150);
-#};
 ResistorElm::draw = ->
   
   # Always Draw dots first
@@ -90,14 +79,18 @@ ResistorElm::calculateCurrent = ->
   @current = (@volts[0] - @volts[1]) / @resistance
 
 ResistorElm::setPoints = ->
-  CircuitElement::setPoints.call this
+  #CircuitElement::setPoints.call this
+  super()
   @calcLeads 32
   @ps3 = new Point(0, 0)
   @ps4 = new Point(0, 0)
 
 ResistorElm::stamp = ->
-  Circuit.stampResistor @nodes[0], @nodes[1], @resistance
+  if @orphaned()
+    console.warn "attempting to stamp an orphaned resistor"
+  @Circuit.Solver.Stamper.stampResistor @nodes[0], @nodes[1], @resistance
 
+# Todo replace this:
 ResistorElm::toString = ->
   "ResistorElm"
 

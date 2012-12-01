@@ -421,7 +421,7 @@ CircuitElement.prototype.allowMove = function (dx, dy) {
     var ny2 = this.y2 + dy;
 
     for (var i = 0; i < Circuit.elementList.length; ++i) {
-        var ce = Circuit.getElm(i);
+        var ce = Circuit.getElmByIdx(i);
 
         if (ce.x1 == nx && ce.y == ny && ce.x2 == nx2 && ce.y2 == ny2)
             return false;

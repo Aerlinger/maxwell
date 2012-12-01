@@ -1,3 +1,5 @@
+VoltageElm = require('../../component/components/VoltageElm.coffee')
+
 class FindPathInfo
 
   @INDUCT: 1
@@ -10,28 +12,35 @@ class FindPathInfo
 
 
   findPath: (node, depth) ->
-
-    return true if node is @dest
-    return false if (depth-- is 0) or @used[node]
+    if node is @dest
+      return true
+    if (depth-- is 0) or @used[node]
+      return false
 
     @used[node] = true
 
     for element in @elementList
-      continue if element is @firstElm
-      continue if element instanceof CurrentElm if @type is FindPathInfo.INDUCT
-      continue unless element.isWire() or element instanceof VoltageElm if @type is FindPathInfo.VOLTAGE
-      continue if @type is FindPathInfo.SHORT and not element.isWire()
-      if @type is FindPathInfo.CAP_V
+      if element is @firstElm
+        continue
+      # TODO: Add Current Elm
+      #if (element instanceof CurrentElm) and (@type is FindPathInfo.INDUCT)
+      #  continue
+      if @type is FindPathInfo.VOLTAGE and (element.isWire() or element instanceof VoltageElm)
+        continue
+      if @type is FindPathInfo.SHORT and not element.isWire()
+        continue
+      if (@type is FindPathInfo.CAP_V)
         continue unless element.isWire() or element instanceof CapacitorElm or element instanceof VoltageElm
 
       if node is 0
         # Look for posts which have a ground connection. Our path can go through ground!
-        for j in [0...element.getPostCount()]
+        for j in Array(element.getPostCount())
           if element.hasGroundConnection(j) and @findPath(element.getNode(j), depth)
             @used[node] = false
             return true
 
-      for terminal_num in [0...element.getPostCount()]
+      terminal_num = 0
+      for terminal_num in Array(element.getPostCount())
         break if element.getNode(terminal_num) is node    #console.log(element + " " + ce.getNode(j));
 
       # TODO: ENSURE EQUALITY HERE
@@ -69,4 +78,4 @@ class FindPathInfo
 #
 # To require this class in another file through Node, write {ClassName} = require(<path_to_coffee_file>)
 root = exports ? window
-root.FindPathInfo = FindPathInfo
+module.exports = FindPathInfo

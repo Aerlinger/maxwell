@@ -1,3 +1,5 @@
+VoltageElm = require('./VoltageElm')
+
 RailElm = (xa, ya, xb, yb, f, st) ->
   VoltageElm.call this, xa, ya, xb, yb, f, st
 RailElm:: = new VoltageElm()

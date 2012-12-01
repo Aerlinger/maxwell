@@ -25,8 +25,8 @@ class Hint
 
   getHint: ->
 
-    c1 = @Circuit.getElm(@hintItem1)
-    c2 = @Circuit.getElm(@hintItem2)
+    c1 = @Circuit.getElmByIdx(@hintItem1)
+    c2 = @Circuit.getElmByIdx(@hintItem2)
 
     return null  if not c1? or not c2?
 
