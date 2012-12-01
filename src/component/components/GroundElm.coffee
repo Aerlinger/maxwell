@@ -3,7 +3,7 @@ CircuitElement = require('../circuitElement')
 
 class GroundElm extends CircuitElement
   constructor: (xa, ya, xb, yb, f, st) ->
-    super this, xa, ya, xb, yb, f, st
+    super xa, ya, xb, yb, f, st
 
 GroundElm::getDumpType = ->
   "g"
@@ -30,7 +30,7 @@ GroundElm::setCurrent = (x, c) ->
   @current = -c
 
 GroundElm::stamp = ->
-  Circuit.stampVoltageSource 0, @nodes[0], @voltSource, 0
+  @Circuit.Solver.Stamper.stampVoltageSource 0, @nodes[0], @voltSource, 0
 
 GroundElm::getVoltageDiff = ->
   0

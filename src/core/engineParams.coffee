@@ -1,10 +1,20 @@
 class CircuitEngineParams
 
-  constructor: (@flags = 1,
-                @time_step = 5.0e-6,
-                @simulation_speed = 11.251013186076355,
-                @current_speed = 50,
-                @voltage_range = 5.0,
-                @power_range = 50) ->
+  constructor: (paramsHash) ->
+
+    @status = paramsHash?['completion_status']
+    @createdAt = paramsHash?['created_at']
+    @currentSpeed = paramsHash?['current_speed']
+    @updatedAt = paramsHash?['updated_at']
+    @description = paramsHash?['description']
+    @flags = paramsHash?['flags']
+    @id = paramsHash?['id']
+    @name = paramsHash?['name']
+    @powerRange = paramsHash?['power_range']
+    @voltageRange = paramsHash?['voltage_range']
+    @simSpeed = paramsHash?['sim_speed']
+    @timeStep = paramsHash?['time_step']
+    @title = paramsHash?['title']
+    @topic = paramsHash?['topic']
 
 module.exports = CircuitEngineParams

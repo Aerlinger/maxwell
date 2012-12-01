@@ -3,7 +3,7 @@ CircuitElement = require('../circuitElement')
 
 class WireElm extends CircuitElement
   constructor: (xa, ya, xb, yb, f, st) ->
-    super this, xa, ya, xb, yb, f, st
+    super xa, ya, xb, yb, f, st
 
 WireElm.FLAG_SHOWCURRENT = 1
 WireElm.FLAG_SHOWVOLTAGE = 2
@@ -21,7 +21,7 @@ WireElm::draw = ->
   @drawPosts()
 
 WireElm::stamp = ->
-  Circuit.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
+  @Circuit.Solver.Stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
 
 WireElm::mustShowCurrent = ->
   (@flags & WireElm.FLAG_SHOWCURRENT) isnt 0

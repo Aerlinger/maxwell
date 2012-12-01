@@ -23,13 +23,20 @@ DumpTypes =
   "?" : Scope::
   "B" : Scope::
 
-ComponentDefs = [
+DumpTypeConversions = {
+  'r':'ResistorElm'
+  'w':'WireElm'
+  'g':'GroundElm'
+  '172':'VoltageElm'
+}
+
+ComponentDefs = {
 
   ## Tested, working:
-  WireElm,
-  ResistorElm,
-  GroundElm,
-  VoltageElm
+  'w':WireElm,
+  'r':ResistorElm,
+  'g':GroundElm,
+  '172':VoltageElm
 #  CapacitorElm,
 #  InductorElm,
 #  SwitchElm,
@@ -97,6 +104,7 @@ ComponentDefs = [
 #  VCOElm,
 #  XORGateElm,
 #  ZenerElm
-]
+}
 
-module.exports = ComponentDefs
+exports.ComponentDefs = ComponentDefs
+exports.DumpTypeConversions = DumpTypeConversions

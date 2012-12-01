@@ -21,11 +21,12 @@ describe "Base Circuit Element", ->
       @circuitElement.x2.should.equal 13
       @circuitElement.y2.should.equal 14
 
+
     specify "without flags passed as an argument", ->
       @circuitElement.flags.should.equal 0
 
     specify "without flags passed as an argument", ->
-      circuitElm = new CircuitElement(0, 0, 0, 0, 5)
+      circuitElm = new CircuitElement(0, 3, 0, 4, 5)
       circuitElm.flags.should.equal 5
 
     specify "should create default parameters", ->
@@ -78,4 +79,4 @@ describe "Base Circuit Element", ->
       @circuitElement.dump().should.equal '0 10 10 13 14 0'
 
     specify "base elements should be linear by default", ->
-      @circuitElement.nonlinear().should.equal false
+      @circuitElement.nonLinear().should.equal false
