@@ -48,7 +48,8 @@ class Circuit
     for element in @elementList?
       element.destroy()
 
-    @dumpTypes = []
+    @grid = new Grid()
+
     @nodeList = []
     @elementList = []
 
@@ -71,13 +72,6 @@ class Circuit
     @scopeCount = 0
 
 
-  init: () ->
-    @grid = new Grid()
-
-    @registerAll()
-    @loadCircuit( Settings.defaultCircuit )
-
-
   ## #######################################################################################################
   # Loops through through all existing elements defined within the ElementMap Hash (see
   #   <code>ComponentDefinitions.coffee</code>) and registers their class with the solver engine
@@ -89,40 +83,8 @@ class Circuit
       @register(Component)
 
   setupScopes: ->
+    console.log "Not yet implemented"
 
-  ## #######################################################################################################
-  # Registers, constructs, and places an element with the given class name within this circuit.
-  #   This method is called by <code>register</code>
-  # ##########
-  register: (ComponentConstructor) ->
-    try
-      # Create this component by its className
-      newComponent = CircuitLoader.constructElement ComponentConstructor, 0, 0, 0, 0, 0, null
-      dumpType = newComponent.getDumpType()
-      dumpClass = ComponentConstructor
-
-      if @dumpTypes[dumpType] is dumpClass
-        console.log "#{ComponentConstructor} is a dump class"
-        return
-      if @dumpTypes[dumpType]?
-        console.log "Dump type conflict: " + dumpType + " " + @dumpTypes[dumpType]
-        return
-
-      @dumpTypes[dumpType] = ComponentConstructor
-    catch e
-      if process.env.NODE_ENV == 'development'
-        Logger.warn "Element: #{ComponentConstructor.prototype} Not yet implemented: [#{e.message}]"
-
-
-  ## #######################################################################################################
-  # Loads the circuit from the given text file
-  # ##########
-  loadCircuit: (defaultCircuit) ->
-    @clearAndReset()    # Clear and reset circuit elements
-    @CommandHistory.reset()
-    #TODO: Disabled temporarily
-    #CircuitLoader.readSetupList this, false
-    #CircuitLoader.readCircuitFromFile this, "#{defaultCircuit}.txt", false
 
   ###
   Clears current states, graphs, and errors then Restarts the circuit from time zero.
@@ -130,8 +92,6 @@ class Circuit
   restartAndStop: ->
     @restartAndRun()
     @Solver.stop("Restarted Circuit from time 0")
-    @Solver.invalidate()
-
 
   restartAndRun: ->
     for element in @elementList
@@ -142,8 +102,12 @@ class Circuit
     @Solver.reset()
     @Solver.run()
 
+  warn: (message) ->
+    Logger.warn message
+    @warnMessage = message
+
   halt: (message) ->
-    console.warn(message)
+    Logger.error message
     @stopMessage = message
 
   clearErrors: ->
@@ -160,9 +124,10 @@ class Circuit
     @elementList.push newElement
 
   # "Desolders" an existing element to this circuit (removes it to the element list array).
-  desolder: (oldElement) ->
+  desolder: (oldElement, destroy = true) ->
     oldElement.Circuit = null
-    @elementList.remove(oldElement)
+    @elementList.remove oldElement
+    oldElement.destroy()
 
   #It may be worthwhile to return a defensive copy here
   getElements: ->
@@ -178,6 +143,10 @@ class Circuit
 
   numElements: ->
     return @elementList.length
+
+  #########################
+  # Nodes:
+  #########################
 
   resetNodes: ->
     @nodeList = []
@@ -221,8 +190,6 @@ class Circuit
   updateCircuit: ->
     startTime = (new Date()).getTime()
 
-    # Clear the canvas:
-    # TODO: # renderContext.clearRect 0, 0, CANVAS.width(), CANVAS.height()
     realMouseElm = @mouseElm
 
     # Render Warning and error messages:
@@ -232,22 +199,17 @@ class Circuit
 
     @mouseElm = @stopElm unless @mouseElm?
 
-    # TODO: test
+    # TODO: needs scopes
     @setupScopes()
 
     unless @Solver.stoppedCheck
-#      try
       @Solver.runCircuit()
-#      catch e
-#        console.log "error in run circuit: " + e.message
-#        @Solver.invalidate()
-#        return
 
       sysTime = (new Date()).getTime()
       unless @lastTime is 0
         inc = Math.floor(sysTime - @lastTime)
-        current_speed = Math.exp(@Params.current_speed / 3.5 - 14.2)
-        @Params.currentMult = 1.7 * inc * current_speed
+        currentSpeed = Math.exp(@Params.currentSpeed / 3.5 - 14.2)
+        @Params.currentMult = 1.7 * inc * currentSpeed
       if (sysTime - @secTime) >= 1000
         @framerate = @frames
         @steprate = @steps
@@ -257,6 +219,7 @@ class Circuit
       @lastTime = sysTime
     else
       @lastTime = 0
+
     @Params.powerMult = Math.exp(@powerBar / 4.762 - 7)
 
     # Draw each circuit element
@@ -270,13 +233,13 @@ class Circuit
        @mouseState.tempMouseMode is MouseState.MODE_DRAG_SELECTED
 
       for circuitElm in @elementList
-        circuitElm.drawPost circuitElm.x, circuitElm.y
+        circuitElm.drawPost circuitElm.x1, circuitElm.y1
         circuitElm.drawPost circuitElm.x2, circuitElm.y2
 
     # Find bad connections. Nodes not connected to other elements which intersect other elements' bounding boxes
     badNodes = @findBadNodes()
 
-    if @dragElm? and (@dragElm.x isnt @dragElm.x2 or @dragElm.y isnt @dragElm.y2)
+    if @dragElm? and (@dragElm.x1 isnt @dragElm.x2 or @dragElm.y1 isnt @dragElm.y2)
       @dragElm.draw null
 
     scopeCount = @scopeCount
@@ -311,7 +274,6 @@ class Circuit
       x = 0
       x = @scopes[scopeCount - 1].rightEdge() + 20  unless scopeCount is 0
       x = 0 unless x
-      #x = Math.max(x, CanvasBounds.width * 2 / 3)
 
       info.push "Bad Connections: #{badNodes.length}" if badNodes > 0
 

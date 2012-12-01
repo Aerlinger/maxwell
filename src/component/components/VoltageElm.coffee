@@ -16,7 +16,7 @@ class VoltageElm extends CircuitElement
       @maxVoltage = (if st[2] then parseFloat(st[2]) else 5)
       @bias = (if st[3] then parseFloat(st[3]) else 0)
       @phaseShift = (if st[4] then parseFloat(st[4]) else 0)
-      @dutyCycle = (if st[5] then parseFloat(st[5]) else .5)
+      @dutyCycle = (if st[5] then parseFloat(st[5]) else 0.5)
     if @flags & VoltageElm.FLAG_COS isnt 0
       @flags &= ~VoltageElm.FLAG_COS
       @phaseShift = Math.PI / 2
@@ -36,7 +36,7 @@ VoltageElm::maxVoltage = 5
 VoltageElm::freqTimeZero = 0
 VoltageElm::bias = 0
 VoltageElm::phaseShift = 0
-VoltageElm::dutyCycle = .5
+VoltageElm::dutyCycle = 0.5
 VoltageElm::getDumpType = ->
   "v"
 
@@ -104,7 +104,7 @@ VoltageElm::draw = ->
     CircuitElement.drawThickLinePt CircuitElement.ps1, CircuitElement.ps2, color
   else
     @setBboxPt @point1, @point2, VoltageElm.circleSize
-    CircuitElement.interpPoint @lead1, @lead2, CircuitElement.ps1, .5
+    CircuitElement.interpPoint @lead1, @lead2, CircuitElement.ps1, 0.5
     @drawWaveform CircuitElement.ps1
   @drawPosts()
 
@@ -158,7 +158,7 @@ VoltageElm::drawWaveform = (center) ->
       oy = -1
       i = -xl
       while i <= xl
-        yy = yc + Math.floor(.95 * Math.sin(i * Math.PI / xl) * wl)
+        yy = yc + Math.floor(0.95 * Math.sin(i * Math.PI / xl) * wl)
         CircuitElement.drawThickLine ox, oy, xc + i, yy, color  unless ox is -1
         ox = xc + i
         oy = yy
@@ -245,11 +245,9 @@ VoltageElm::setEditValue = (n, ei) ->
     else @waveform isnt VoltageElm.WF_DC and ow is VoltageElm.WF_DC
     
     #ei.newDialog = true;
-    
-    #ei.newDialog = true;
     @setPoints()  if (@waveform is VoltageElm.WF_SQUARE or ow is VoltageElm.WF_SQUARE) and @waveform isnt ow
   @phaseShift = ei.value * Math.PI / 180  if n is 4
-  @dutyCycle = ei.value * .01  if n is 5
+  @dutyCycle = ei.value * 0.01  if n is 5
 
 VoltageElm::toString = ->
   "VoltageElm"

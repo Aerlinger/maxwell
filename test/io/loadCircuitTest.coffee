@@ -14,6 +14,7 @@ describe "CircuitLoader", ->
       @circuit.numElements().should.equal 9
 
     it "should have valid matrices", ->
+      @circuit.Solver.analyzeCircuit()
       console.log @circuit.Solver.circuitMatrix
       console.log @circuit.Solver.circuitRightSide
 

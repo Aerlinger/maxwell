@@ -50,6 +50,7 @@ class CircuitSolver
 
 
   stop: (message = "Simulator Stopped") ->
+    Logger.log message
     @stopped = true
 
   run: ->
@@ -58,7 +59,7 @@ class CircuitSolver
   getIterCount: ->
     if Settings.speedBar is 0
       return 0
-    return .1 * Math.exp (Settings.speedBar - 61) * 24
+    return 0.1 * Math.exp (Settings.speedBar - 61) * 24
 
   analyzeCircuit: ->
     return if !@analyzeFlag || @Circuit.numElements() is 0
@@ -563,16 +564,9 @@ class CircuitSolver
       tm = (new Date()).getTime()
       lit = tm
 
-      #console.log("diff: " + (tm-CirSim.lastIterTime) + " iter: " + iter + " ");
-      #console.log(iterCount + " breaking from iteration: " + " sr: " + steprate + " iter: " + subiter + " time: " + (tm - CirSim.lastIterTime)+ " lastFrametime: " + CirSim.lastFrameTime );
-      #iterCount++;
       if iter * 1000 >= steprate * (tm - @lastIterTime)
-
-        #console.log("1 breaking from iteration: " + " sr: " + steprate + " iter: " + subiter + " time: " + (tm - CirSim.lastIterTime)+ " lastFrametime: " + CirSim.lastFrameTime );
         break
-
-        #console.log("2 breaking from iteration: " + " sr: " + steprate + " iter: " + iter + " time: " + (tm - CirSim.lastIterTime) + " lastFrametime: " + CirSim.lastFrameTime );
-      else break  if tm - @lastFrameTime > 500
+      else break if tm - @lastFrameTime > 500
       ++iter
 
     @lastIterTime = lit

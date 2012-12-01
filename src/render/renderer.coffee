@@ -14,4 +14,20 @@ class Renderer
     #ybase = Math.min(ybase, CanvasBounds.height)
     #ybase = Math.max(ybase, @circuitBottom)
 
+  drawWarning: (context) ->
+    msg = ""
+    for warning in warningStack
+      msg += warning + "\n"
+
+    console.error "Simulation Warning: " + msg
+    #context.fillText msg, 150, 70
+
+  drawError: (context) ->
+    msg = ""
+    for error in errorStack
+      msg += error + "\n"
+
+    console.error "Simulation Error: " + msg
+    #context.fillText msg, 150, 50
+
 module.exports = Renderer

@@ -1,17 +1,25 @@
-class Color
+class ColorScale
+  @colorScaleCount = 32;
+  @colorScale = new Array()
 
-  @hexToRgb: (hex) ->
-    result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+  # Creates the color scale
+  @initializeColorScale: ->
+    @colorScale = new Array(@colorScaleCount)
 
-    if result
-      r: parseInt(result[1], 16)
-      g: parseInt(result[2], 16)
-      b: parseInt(result[3], 16)
-    else
-      null
+    for i in [1..@colorScaleCount]
+      v = i * 2 / @colorScaleCount - 1
+      if v < 0
+        n1 = Math.floor (128 * -v) + 127
+        n2 = Math.floor 127 * (1 + v)
 
-  @rgbToHex: (r, g, b) ->
-    "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+        # Color is red for a negative voltage:
+        @colorScale[i] = new Color(n1, n2, n2)
+      else
+        n1 = Math.floor (128 * v) + 127
+        n2 = Math.floor 127 * (1 - v)
+
+        # Color is green for a positive voltage
+        @colorScale[i] = new Color(n2, n1, n2)
 
   @scale: ->
     [ "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
@@ -23,4 +31,4 @@ class Color
 # Footer to allow this class to be exported via node.js. This allows this class to be required by Mocha for testing
 # This should be present at the bottom of every file in order to be read through Mocha.
 root = exports ? window
-module.exports = Color
+module.exports = ColorScale

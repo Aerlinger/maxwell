@@ -2,15 +2,11 @@
 if process.env
   Settings = require('../settings/settings')
   {Polygon, Rectangle, Point} = require('../util/shapePrimitives')
-  DrawHelpers = require('./drawHelpers')
+  DrawHelpers = require('../util/drawUtils.coffee')
 
 class CircuitElement
 
-  @ps1: new Point(0, 0)
-  @ps2: new Point(0, 0)
-
-
-  constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags, st...) ->
+  constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, st = []) ->
     @current = 0
     @curcount = 0
     @noDiagonal = false
