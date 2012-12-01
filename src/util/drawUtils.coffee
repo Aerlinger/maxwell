@@ -1,31 +1,11 @@
-{Polygon, Rectangle, Point} = require('../util/shapePrimitives')
+{Polygon, Rectangle, Point} = require('shapePrimitives.coffee')
 
 class DrawHelpers
 
+  @ps1: new Point(0, 0)
+  @ps2: new Point(0, 0)
+
   @unitsFont: "Arial, Helvetica, sans-serif"
-
-  @colorScaleCount = 256
-  @colorScale: new Array(@colorScaleCount)
-
-  @buildColorScale = () ->
-    i = 0
-
-    while i < @colorScaleCount
-      v = i * 2 / @colorScaleCount - 1
-      if v < 0
-        n1 = Math.floor((128 * -v) + 127)
-        n2 = Math.floor(127 * (1 + v))
-
-        # Color is red for a negative voltage:
-        @colorScale[i] = new Color(n1, n2, n2)
-      else
-        n1 = Math.floor((128 * v) + 127)
-        n2 = Math.floor(127 * (1 - v))
-
-        # Color is green for a positive voltage
-        @colorScale[i] = new Color(n2, n1, n2)
-      ++i
-
 
   @interpPointPt: (a, b, f, g) ->
     printStackTrace() unless f
@@ -42,8 +22,8 @@ class DrawHelpers
       g /= Math.sqrt(gx * gx + gy * gy)
     else
       g = 0
-    c.x = Math.floor(a.x * (1 - f) + b.x * f + g * gx + .48)
-    c.y = Math.floor(a.y * (1 - f) + b.y * f + g * gy + .48)
+    c.x = Math.floor(a.x * (1 - f) + b.x * f + g * gx + 0.48)
+    c.y = Math.floor(a.y * (1 - f) + b.y * f + g * gy + 0.48)
     return b
 
   @interpPoint2: (a, b, c, d, f, g) ->
@@ -55,7 +35,7 @@ class DrawHelpers
       g /= Math.sqrt(gx * gx + gy * gy)
     else
       g = 0
-    offset = .48
+    offset = 0.48
 
     c.x  = Math.floor( a.x * (1 - f) + b.x * f + g * gx + offset )
     c.y   = Math.floor( a.y  * (1 - f) + b.y  * f + g * gy + offset )
@@ -70,7 +50,7 @@ class DrawHelpers
     ady = b.y - a.y
     l = Math.sqrt(adx * adx + ady * ady)
     poly.addVertex b.x, b.y
-    CircuitElement.interpPoint2 a, b, p1, p2, 1 - al / l, aw
+    @.interpPoint2 a, b, p1, p2, 1 - al / l, aw
     poly.addVertex p1.x, p1.y
     poly.addVertex p2.x, p2.y
     return poly
@@ -97,20 +77,20 @@ class DrawHelpers
     # todo: implement
     segments = 40
     segf = 1 / segments
-    CircuitElement.ps1.x = p1.x
-    CircuitElement.ps1.y = p1.y
+    @ps1.x = p1.x
+    @ps1.y = p1.y
     i = 0
 
     while i < segments
       cx = (((i + 1) * 8 * segf) % 2) - 1
       hsx = Math.sqrt(1 - cx * cx)
       hsx = -hsx  if hsx < 0
-      CircuitElement.interpPoint p1, p2, CircuitElement.ps2, i * segf, hsx * hs
+      @.interpPoint p1, p2, @ps2, i * segf, hsx * hs
       v = v1 + (v2 - v1) * i / segments
       color = @setVoltageColor(v)
-      CircuitElement.drawThickLinePt CircuitElement.ps1, CircuitElement.ps2, color
-      CircuitElement.ps1.x = CircuitElement.ps2.x
-      CircuitElement.ps1.y = CircuitElement.ps2.y
+      @.drawThickLinePt @ps1, @ps2, color
+      @ps1.x = @ps2.x
+      @ps1.y = @ps2.y
       ++i
 
   @drawCircle: (x0, y0, r, color) ->
@@ -123,7 +103,7 @@ class DrawHelpers
 
   @drawThickLine: (x, y, x2, y2, color) ->
     #paper.strokeStyle = (if (color) then Color.color2HexString(color) else CircuitElement.color)
-    paper.strokeStyle = color || CircuitElement.color
+    paper.strokeStyle = color || Settings.color
     paper.beginPath()
     paper.moveTo x, y
     paper.lineTo x2, y2
@@ -131,31 +111,31 @@ class DrawHelpers
     paper.closePath()
 
   @drawThickLinePt: (pa, pb, color) ->
-    CircuitElement.drawThickLine pa.x, pa.y, pb.x, pb.y, color
+    @.drawThickLine pa.x, pa.y, pb.x, pb.y, color
 
   @drawThickPolygon: (xlist, ylist, c, color) ->
     i = undefined
     i = 0
     while i < (c.length - 1)
-      CircuitElement.drawThickLine xlist[i], ylist[i], xlist[i + 1], ylist[i + 1], color
+      @.drawThickLine xlist[i], ylist[i], xlist[i + 1], ylist[i + 1], color
       ++i
-    CircuitElement.drawThickLine xlist[i], ylist[i], xlist[0], ylist[0], color
+    @.drawThickLine xlist[i], ylist[i], xlist[0], ylist[0], color
 
   @drawThickPolygonP: (polygon, color) ->
     c = polygon.numPoints()
     i = undefined
     i = 0
     while i < (c - 1)
-      CircuitElement.drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(i + 1), polygon.getY(i + 1), color
+      @.drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(i + 1), polygon.getY(i + 1), color
       ++i
-    CircuitElement.drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
+    @.drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
 
 
   @getVoltageDText: (v) ->
-    CircuitElement.getUnitText Math.abs(v), "V"
+    @.getUnitText Math.abs(v), "V"
 
   @getVoltageText: (v) ->
-    CircuitElement.getUnitText v, "V"
+    @.getUnitText v, "V"
 
   @getUnitText: (v, u) ->
     va = Math.abs(v)
@@ -183,10 +163,10 @@ class DrawHelpers
     (v * 1e-9).toFixed(1) + "G" + u
 
   @getCurrentText: (i) ->
-    CircuitElement.getUnitText i, "A"
+    getUnitText i, "A"
 
   @getCurrentDText: (i) ->
-    CircuitElement.getUnitText Math.abs(i), "A"
+    getUnitText Math.abs(i), "A"
 
 
 # The Footer exports class(es) in this file via Node.js, if Node.js is defined.
