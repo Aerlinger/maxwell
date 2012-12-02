@@ -8,9 +8,9 @@
 
 if process.env
   Settings = require('../settings/settings')
-  CircuitEngineParams = require('./engineParams')
+  CircuitEngineParams = require('circuitParams.coffee')
   CircuitSolver = require('./engine/circuitSolver')
-  ComponentDefs = require('./componentDefs')
+  ComponentDefs = require('../component/componentDefs.coffee')
 
   CircuitLoader = require('../io/circuitLoader')
   Logger = require('../io/logger')
@@ -26,7 +26,7 @@ if process.env
   Grid = require('../ui/grid')
   Primitives = require('../util/shapePrimitives')
 
-  Scope = require('../scope/scope')
+  Oscilloscope = require('../scope/oscilloscope.coffee')
 
 
 
@@ -246,8 +246,6 @@ class Circuit
     scopeCount = 0 if @stopMessage?
 
     # TODO Implement scopes
-    #for scope in @scopes
-    #  scope.draw();
     if @stopMessage?
       @printError @stopMessage
     else

@@ -4,7 +4,7 @@ if process.env
   {Polygon, Rectangle, Point} = require('../util/shapePrimitives')
   DrawHelpers = require('../util/drawUtils.coffee')
 
-class CircuitElement
+class AbstractCircuitComponent
 
   constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, st = []) ->
     @current = 0
@@ -254,8 +254,8 @@ class CircuitElement
 
   # Extended by subclasses
   getBasicInfo: (arr) ->
-    arr[1] = "I = " + CircuitElement.getCurrentDText(@getCurrent())
-    arr[2] = "Vd = " + CircuitElement.getVoltageDText(@getVoltageDiff())
+    arr[1] = "I = " + AbstractCircuitComponent.getCurrentDText(@getCurrent())
+    arr[2] = "Vd = " + AbstractCircuitComponent.getVoltageDText(@getVoltageDiff())
     3
 
   getPower: ->
@@ -310,4 +310,4 @@ class CircuitElement
 #
 # To require this class in another file through Node, write {ClassName} = require(<path_to_coffee_file>)
 root = (exports) ? window
-module.exports = CircuitElement
+module.exports = AbstractCircuitComponent

@@ -1,8 +1,8 @@
-ProbeElm.prototype = new CircuitElement();
+ProbeElm.prototype = new AbstractCircuitComponent();
 ProbeElm.prototype.constructor = ProbeElm;
 
 function ProbeElm(xa, ya, xb, yb, f, st) {
-    CircuitElement.call(this, xa, ya, xb, yb, f);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f);
 
 }
 ;
@@ -16,7 +16,7 @@ ProbeElm.prototype.getDumpType = function () {
 };
 
 ProbeElm.prototype.setPoints = function () {
-    CircuitElement.prototype.setPoints.call(this);
+    AbstractCircuitComponent.prototype.setPoints.call(this);
 
     // swap points so that we subtract higher from lower
     if (this.point2.y < this.point1.y) {
@@ -24,39 +24,39 @@ ProbeElm.prototype.setPoints = function () {
         this.point1 = this.point2;
         this.point2 = this.x1;
     }
-    this.center = CircuitElement.interpPointPt(this.point1, this.point2, .5);
+    this.center = AbstractCircuitComponent.interpPointPt(this.point1, this.point2, .5);
 };
 
 ProbeElm.prototype.draw = function () {
     var hs = 8;
 
-    CircuitElement.setBboxPt(this.point1, this.point2, hs);
+    AbstractCircuitComponent.setBboxPt(this.point1, this.point2, hs);
     var selected = (this.needsHighlight() || Circuit.plotYElm == this);
     var len = (selected || Circuit.dragElm == this) ? 16 : this.dn - 32;
 
-    CircuitElement.calcLeads(Math.floor(len));
+    AbstractCircuitComponent.calcLeads(Math.floor(len));
     var color = this.setVoltageColor(this.volts[0]);
 
     if (selected)
-        color = CircuitElement.selectColor;
+        color = AbstractCircuitComponent.selectColor;
 
-    CircuitElement.drawThickLinePt(this.point1, this.lead1, color);
+    AbstractCircuitComponent.drawThickLinePt(this.point1, this.lead1, color);
 
     color = this.setVoltageColor(this.volts[1]);
     if (selected)
-        CircuitElement.setColor(this.selectColor);
+        AbstractCircuitComponent.setColor(this.selectColor);
 
-    CircuitElement.drawThickLinePt(this.lead2, this.point2);
+    AbstractCircuitComponent.drawThickLinePt(this.lead2, this.point2);
     var f = new Font("SansSerif", Font.BOLD, 14);
 
-    CircuitElement.setFont(f);
+    AbstractCircuitComponent.setFont(f);
 
     if (this == Circuit.plotXElm)
-        CircuitElement.drawCenteredText("X", this.center.x1, this.center.y, color);
+        AbstractCircuitComponent.drawCenteredText("X", this.center.x1, this.center.y, color);
     if (this == Circuit.plotYElm)
-        CircuitElement.drawCenteredText("Y", this.center.x1, this.center.y, color);
+        AbstractCircuitComponent.drawCenteredText("Y", this.center.x1, this.center.y, color);
     if (this.mustShowVoltage()) {
-        var s = CircuitElement.getShortUnitText(volts[0], "V");
+        var s = AbstractCircuitComponent.getShortUnitText(volts[0], "V");
         this.drawValues(s, 4);
     }
 
@@ -70,7 +70,7 @@ ProbeElm.prototype.mustShowVoltage = function () {
 
 ProbeElm.prototype.getInfo = function (arr) {
     arr[0] = "scope probe";
-    arr[1] = "Vd = " + CircuitElement.getVoltageText(this.getVoltageDiff());
+    arr[1] = "Vd = " + AbstractCircuitComponent.getVoltageText(this.getVoltageDiff());
 };
 
 ProbeElm.prototype.getConnection = function (n1, n2) {

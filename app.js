@@ -16,10 +16,10 @@ process.env[process.argv[2]] = true
 
 
 Circuit = require('./src/core/circuit');
-CircuitElement = require('./src/component/circuitElement');
+CircuitElement = require('src/component/abstractCircuitComponent.coffee');
 Settings = require('./src/settings/Settings');
 
 c = new Circuit();
 c.updateCircuit();
-CircuitElement = require('./src/component/circuitElement');
+CircuitElement = require('src/component/abstractCircuitComponent.coffee');
 ce = new CircuitElement();

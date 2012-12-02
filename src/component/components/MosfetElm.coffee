@@ -29,7 +29,7 @@
   "transformed": true
 }
 MosfetElm = (xa, ya, xb, yb, f, st) ->
-  CircuitElement.call this, xa, ya, xb, yb, f
+  AbstractCircuitComponent.call this, xa, ya, xb, yb, f
   @pnp = (if ((f & MosfetElm.FLAG_PNP) isnt 0) then -1 else 1)
   @noDiagonal = true
   @vt = @getDefaultThreshold()
@@ -37,7 +37,7 @@ MosfetElm = (xa, ya, xb, yb, f, st) ->
     if st and st.length > 0
       st = st.split(" ")  if typeof st is "string"
       @vt = st[0]
-MosfetElm:: = new CircuitElement()
+MosfetElm:: = new AbstractCircuitComponent()
 MosfetElm::constructor = MosfetElm
 MosfetElm::pnp
 MosfetElm.FLAG_PNP = 1
@@ -66,7 +66,7 @@ MosfetElm::reset = ->
   @lastv1 = @lastv2 = @volts[0] = @volts[1] = @volts[2] = @curcount = 0
 
 MosfetElm::dump = ->
-  CircuitElement::dump.call(this) + " " + @vt
+  AbstractCircuitComponent::dump.call(this) + " " + @vt
 
 MosfetElm::getDumpType = ->
   "f"
@@ -75,9 +75,9 @@ MosfetElm::hs = 16
 MosfetElm::draw = ->
   @setBboxPt @point1, @point2, @hs
   color = @setVoltageColor(@volts[1])
-  CircuitElement.drawThickLinePt @src[0], @src[1], color
+  AbstractCircuitComponent.drawThickLinePt @src[0], @src[1], color
   color = @setVoltageColor(@volts[2])
-  CircuitElement.drawThickLinePt @drn[0], @drn[1], color
+  AbstractCircuitComponent.drawThickLinePt @drn[0], @drn[1], color
   segments = 6
   i = undefined
   @setPowerColor true
@@ -86,25 +86,25 @@ MosfetElm::draw = ->
   while i isnt segments
     v = @volts[1] + (@volts[2] - @volts[1]) * i / segments
     color = @setVoltageColor(v)
-    CircuitElement.interpPoint @src[1], @drn[1], CircuitElement.ps1, i * segf
-    CircuitElement.interpPoint @src[1], @drn[1], CircuitElement.ps2, (i + 1) * segf
-    CircuitElement.drawThickLinePt CircuitElement.ps1, CircuitElement.ps2, color
+    AbstractCircuitComponent.interpPoint @src[1], @drn[1], AbstractCircuitComponent.ps1, i * segf
+    AbstractCircuitComponent.interpPoint @src[1], @drn[1], AbstractCircuitComponent.ps2, (i + 1) * segf
+    AbstractCircuitComponent.drawThickLinePt AbstractCircuitComponent.ps1, AbstractCircuitComponent.ps2, color
     i++
   color = @setVoltageColor(@volts[1])
-  CircuitElement.drawThickLinePt @src[1], @src[2], color
+  AbstractCircuitComponent.drawThickLinePt @src[1], @src[2], color
   color = @setVoltageColor(@volts[2])
-  CircuitElement.drawThickLinePt @drn[1], @drn[2], color
+  AbstractCircuitComponent.drawThickLinePt @drn[1], @drn[2], color
   unless @drawDigital()
     color = @setVoltageColor((if @pnp is 1 then @volts[1] else @volts[2]))
-    CircuitElement.drawThickPolygonP @arrowPoly, color
+    AbstractCircuitComponent.drawThickPolygonP @arrowPoly, color
   
   #g.fillPolygon(arrowPoly);
   Circuit.powerCheckItem
   
   #g.setColor(Color.gray);
   color = @setVoltageColor(@volts[0])
-  CircuitElement.drawThickLinePt @point1, @gate[1], color
-  CircuitElement.drawThickLinePt @gate[0], @gate[2], color
+  AbstractCircuitComponent.drawThickLinePt @point1, @gate[1], color
+  AbstractCircuitComponent.drawThickLinePt @gate[0], @gate[2], color
   @drawDigital() and @pnp is -1
   
   #Main.getMainCanvas().drawThickCircle(pcircle.x, pcircle.y, pcircler, Settings.FG_COLOR);
@@ -146,26 +146,26 @@ MosfetElm::getPostCount = ->
   3
 
 MosfetElm::setPoints = ->
-  CircuitElement::setPoints.call this
+  AbstractCircuitComponent::setPoints.call this
   
   # find the coordinates of the various points we need to draw
   # the MOSFET.
   hs2 = @hs * @dsign
-  @src = CircuitElement.newPointArray(3)
-  @drn = CircuitElement.newPointArray(3)
-  CircuitElement.interpPoint2 @point1, @point2, @src[0], @drn[0], 1, -hs2
-  CircuitElement.interpPoint2 @point1, @point2, @src[1], @drn[1], 1 - 22 / @dn, -hs2
-  CircuitElement.interpPoint2 @point1, @point2, @src[2], @drn[2], 1 - 22 / @dn, -hs2 * 4 / 3
-  @gate = CircuitElement.newPointArray(3)
-  CircuitElement.interpPoint2 @point1, @point2, @gate[0], @gate[2], 1 - 28 / @dn, hs2 / 2 # was 1-20/dn
-  CircuitElement.interpPoint @gate[0], @gate[2], @gate[1], .5
+  @src = AbstractCircuitComponent.newPointArray(3)
+  @drn = AbstractCircuitComponent.newPointArray(3)
+  AbstractCircuitComponent.interpPoint2 @point1, @point2, @src[0], @drn[0], 1, -hs2
+  AbstractCircuitComponent.interpPoint2 @point1, @point2, @src[1], @drn[1], 1 - 22 / @dn, -hs2
+  AbstractCircuitComponent.interpPoint2 @point1, @point2, @src[2], @drn[2], 1 - 22 / @dn, -hs2 * 4 / 3
+  @gate = AbstractCircuitComponent.newPointArray(3)
+  AbstractCircuitComponent.interpPoint2 @point1, @point2, @gate[0], @gate[2], 1 - 28 / @dn, hs2 / 2 # was 1-20/dn
+  AbstractCircuitComponent.interpPoint @gate[0], @gate[2], @gate[1], .5
   unless @drawDigital()
     if @pnp is 1
-      @arrowPoly = CircuitElement.calcArrow(@src[1], @src[0], 10, 4)
+      @arrowPoly = AbstractCircuitComponent.calcArrow(@src[1], @src[0], 10, 4)
     else
-      @arrowPoly = CircuitElement.calcArrow(@drn[0], @drn[1], 12, 5)
+      @arrowPoly = AbstractCircuitComponent.calcArrow(@drn[0], @drn[1], 12, 5)
   else if @pnp is -1
-    CircuitElement.interpPoint @point1, @point2, @gate[1], 1 - 36 / @dn
+    AbstractCircuitComponent.interpPoint @point1, @point2, @gate[1], 1 - 36 / @dn
     dist = (if (@dsign < 0) then 32 else 31)
     @pcircle = @interpPointPt(@point1, @point2, 1 - dist / @dn)
     @pcircler = 3
@@ -248,12 +248,12 @@ MosfetElm::doStep = ->
 
 MosfetElm::getFetInfo = (arr, n) ->
   arr[0] = ((if (@pnp is -1) then "p-" else "n-")) + n
-  arr[0] += " (Vt = " + CircuitElement.getVoltageText(@pnp * @vt) + ")"
-  arr[1] = ((if (@pnp is 1) then "Ids = " else "Isd = ")) + CircuitElement.getCurrentText(@ids)
-  arr[2] = "Vgs = " + CircuitElement.getVoltageText(@volts[0] - @volts[(if @pnp is -1 then 2 else 1)])
-  arr[3] = ((if (@pnp is 1) then "Vds = " else "Vsd = ")) + CircuitElement.getVoltageText(@volts[2] - @volts[1])
+  arr[0] += " (Vt = " + AbstractCircuitComponent.getVoltageText(@pnp * @vt) + ")"
+  arr[1] = ((if (@pnp is 1) then "Ids = " else "Isd = ")) + AbstractCircuitComponent.getCurrentText(@ids)
+  arr[2] = "Vgs = " + AbstractCircuitComponent.getVoltageText(@volts[0] - @volts[(if @pnp is -1 then 2 else 1)])
+  arr[3] = ((if (@pnp is 1) then "Vds = " else "Vsd = ")) + AbstractCircuitComponent.getVoltageText(@volts[2] - @volts[1])
   arr[4] = (if (@mode is 0) then "off" else (if (@mode is 1) then "linear" else "saturation"))
-  arr[5] = "gm = " + CircuitElement.getUnitText(@gm, "A/V")
+  arr[5] = "gm = " + AbstractCircuitComponent.getUnitText(@gm, "A/V")
 
 MosfetElm::getInfo = (arr) ->
   @getFetInfo arr, "MOSFET"

@@ -1,9 +1,9 @@
-SparkGapElm.prototype = new CircuitElement();
+SparkGapElm.prototype = new AbstractCircuitComponent();
 SparkGapElm.prototype.constructor = SparkGapElm;
 
 function SparkGapElm(xa, ya, xb, yb, f, st) {
 
-    CircuitElement.call(this, xa, ya, xb, yb, f);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f);
 
     this.resistance = 0;
     this.offresistance = 1e9;
@@ -34,7 +34,7 @@ SparkGapElm.prototype.getDumpType = function () {
 };
 
 SparkGapElm.prototype.dump = function () {
-    return CircuitElement.prototype.dump.call(this) + " " + this.onresistance + " " + this.offresistance + " "
+    return AbstractCircuitComponent.prototype.dump.call(this) + " " + this.onresistance + " " + this.offresistance + " "
         + this.breakdown + " " + this.holdcurrent;
 };
 
@@ -42,14 +42,14 @@ SparkGapElm.prototype.arrow1; // Polgons
 SparkGapElm.prototype.arrow2;
 
 SparkGapElm.prototype.setPoints = function () {
-    CircuitElement.prototype.setPoints.call(this);
+    AbstractCircuitComponent.prototype.setPoints.call(this);
     var dist = 16;
     var alen = 8;
     this.calcLeads(dist + alen);
-    var p1 = CircuitElement.interpPointPt(this.point1, this.point2, (this.dn - alen) / (2 * this.dn));
-    this.arrow1 = CircuitElement.calcArrow(this.point1, p1, alen, alen);
-    p1 = CircuitElement.interpPointPt(this.point1, this.point2, (this.dn + alen) / (2 * this.dn));
-    this.arrow2 = CircuitElement.calcArrow(this.point2, p1, alen, alen);
+    var p1 = AbstractCircuitComponent.interpPointPt(this.point1, this.point2, (this.dn - alen) / (2 * this.dn));
+    this.arrow1 = AbstractCircuitComponent.calcArrow(this.point1, p1, alen, alen);
+    p1 = AbstractCircuitComponent.interpPointPt(this.point1, this.point2, (this.dn + alen) / (2 * this.dn));
+    this.arrow2 = AbstractCircuitComponent.calcArrow(this.point2, p1, alen, alen);
 };
 
 SparkGapElm.prototype.draw = function () {
@@ -60,10 +60,10 @@ SparkGapElm.prototype.draw = function () {
     this.draw2Leads();
     this.setPowerColor(true);
     var color = this.setVoltageColor(this.volts[0]);
-    CircuitElement.drawThickPolygonP(this.arrow1, color);
+    AbstractCircuitComponent.drawThickPolygonP(this.arrow1, color);
 
     color = this.setVoltageColor(this.volts[1]);
-    CircuitElement.drawThickPolygonP(this.arrow2, color);
+    AbstractCircuitComponent.drawThickPolygonP(this.arrow2, color);
     if (this.state)
         this.doDots();
     this.drawPosts();
@@ -75,7 +75,7 @@ SparkGapElm.prototype.calculateCurrent = function () {
 };
 
 SparkGapElm.prototype.reset = function () {
-    CircuitElement.prototype.reset.call(this);
+    AbstractCircuitComponent.prototype.reset.call(this);
     this.state = false;
 };
 
@@ -101,9 +101,9 @@ SparkGapElm.prototype.getInfo = function (arr) {
     arr[0] = "spark gap";
     this.getBasicInfo(arr);
     arr[3] = this.state ? "on" : "off";
-    arr[4] = "Ron = " + CircuitElement.getUnitText(this.onresistance, Circuit.ohmString);
-    arr[5] = "Roff = " + CircuitElement.getUnitText(this.offresistance, Circuit.ohmString);
-    arr[6] = "Vbreakdown = " + CircuitElement.getUnitText(this.breakdown, "V");
+    arr[4] = "Ron = " + AbstractCircuitComponent.getUnitText(this.onresistance, Circuit.ohmString);
+    arr[5] = "Roff = " + AbstractCircuitComponent.getUnitText(this.offresistance, Circuit.ohmString);
+    arr[6] = "Vbreakdown = " + AbstractCircuitComponent.getUnitText(this.breakdown, "V");
 };
 
 SparkGapElm.prototype.getEditInfo = function (n) {

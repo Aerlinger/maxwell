@@ -1,9 +1,9 @@
 /* TODO: Not yet fully implemented */
-TextElm.prototype = new CircuitElement();
+TextElm.prototype = new AbstractCircuitComponent();
 TextElm.prototype.constructor = TextElm;
 
 function TextElm(xa, ya, xb, yb, f, st) {
-    CircuitElement.call(this, xa, ya, xb, yb, f);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f);
 
     this.text = "hello";
     this.lines = new Array();  // new vector()
@@ -73,7 +73,7 @@ TextElm.prototype.split = function () {
 
 
 TextElm.prototype.dump = function () {
-    return CircuitElement.prototype.dump.call(this) + " " + this.size + " " + this.text;
+    return AbstractCircuitComponent.prototype.dump.call(this) + " " + this.size + " " + this.text;
 };
 
 TextElm.prototype.getDumpType = function () {
@@ -88,7 +88,7 @@ TextElm.prototype.drag = function (xx, yy) {
 };
 
 TextElm.prototype.draw = function () {
-    var color = this.needsHighlight() ? CircuitElement.selectColor : Color.LIGHT_GREY;
+    var color = this.needsHighlight() ? AbstractCircuitComponent.selectColor : Color.LIGHT_GREY;
 
     var f = new Font("SansSerif", 0, size);
     g.setFont(f);
@@ -110,7 +110,7 @@ TextElm.prototype.draw = function () {
         g.drawString(s, this.x1, cury);
         if ((this.flags & TextElm.FLAG_BAR) != 0) {
             var by = cury - fm.getAscent();
-            CircuitElement.drawLine(this.x1, by, this.x1 + fm.stringWidth(s) - 1, by);
+            AbstractCircuitComponent.drawLine(this.x1, by, this.x1 + fm.stringWidth(s) - 1, by);
         }
         this.adjustBbox(this.x1, cury - fm.getAscent(),
             this.x1 + fm.stringWidth(s), cury + fm.getDescent());

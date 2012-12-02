@@ -24,7 +24,6 @@ class Hint
 
 
   getHint: ->
-
     c1 = @Circuit.getElmByIdx(@hintItem1)
     c2 = @Circuit.getElmByIdx(@hintItem2)
 

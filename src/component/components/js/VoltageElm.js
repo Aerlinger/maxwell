@@ -1,5 +1,5 @@
 // Prototypal inheritance
-VoltageElm.prototype = new CircuitElement();
+VoltageElm.prototype = new AbstractCircuitComponent();
 VoltageElm.prototype.constructor = VoltageElm;
 
 VoltageElm.FLAG_COS = 2;
@@ -23,7 +23,7 @@ VoltageElm.prototype.dutyCycle = .5;
 
 function VoltageElm(xa, ya, xb, yb, f, st) {
 
-    CircuitElement.call(this, xa, ya, xb, yb, f, st);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f, st);
 
     this.maxVoltage = 5;
     this.frequency = 40;
@@ -60,7 +60,7 @@ VoltageElm.prototype.getDumpType = function () {
 };
 
 VoltageElm.prototype.dump = function () {
-    return CircuitElement.prototype.dump.call(this) + " " + this.waveform + " " + this.frequency + " " +
+    return AbstractCircuitComponent.prototype.dump.call(this) + " " + this.waveform + " " + this.frequency + " " +
         this.maxVoltage + " " + this.bias + " " + this.phaseShift + " " + this.dutyCycle;
 };
 
@@ -113,7 +113,7 @@ VoltageElm.prototype.getVoltage = function () {
 VoltageElm.circleSize = 17;
 
 VoltageElm.prototype.setPoints = function () {
-    CircuitElement.prototype.setPoints.call(this);
+    AbstractCircuitComponent.prototype.setPoints.call(this);
     this.calcLeads((this.waveform == VoltageElm.WF_DC || this.waveform == VoltageElm.WF_VAR) ? 8 : VoltageElm.circleSize * 2);
 };
 
@@ -134,17 +134,17 @@ VoltageElm.prototype.draw = function () {
     if (this.waveform == VoltageElm.WF_DC) {
         this.setPowerColor(false);
         var color = this.setVoltageColor(this.volts[0]);
-        CircuitElement.interpPoint2(this.lead1, this.lead2, CircuitElement.ps1, CircuitElement.ps2, 0, 10);
-        CircuitElement.drawThickLinePt(CircuitElement.ps1, CircuitElement.ps2, color);
+        AbstractCircuitComponent.interpPoint2(this.lead1, this.lead2, AbstractCircuitComponent.ps1, AbstractCircuitComponent.ps2, 0, 10);
+        AbstractCircuitComponent.drawThickLinePt(AbstractCircuitComponent.ps1, AbstractCircuitComponent.ps2, color);
         color = this.setVoltageColor(this.volts[1]);
         var hs = 16;
         this.setBboxPt(this.point1, this.point2, hs);
-        CircuitElement.interpPoint2(this.lead1, this.lead2, CircuitElement.ps1, CircuitElement.ps2, 1, hs);
-        CircuitElement.drawThickLinePt(CircuitElement.ps1, CircuitElement.ps2, color);
+        AbstractCircuitComponent.interpPoint2(this.lead1, this.lead2, AbstractCircuitComponent.ps1, AbstractCircuitComponent.ps2, 1, hs);
+        AbstractCircuitComponent.drawThickLinePt(AbstractCircuitComponent.ps1, AbstractCircuitComponent.ps2, color);
     } else {
         this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
-        CircuitElement.interpPoint(this.lead1, this.lead2, CircuitElement.ps1, .5);
-        this.drawWaveform(CircuitElement.ps1);
+        AbstractCircuitComponent.interpPoint(this.lead1, this.lead2, AbstractCircuitComponent.ps1, .5);
+        this.drawWaveform(AbstractCircuitComponent.ps1);
     }
 
     this.drawPosts();
@@ -152,7 +152,7 @@ VoltageElm.prototype.draw = function () {
 
 VoltageElm.prototype.drawWaveform = function (center) {
 
-    var color = this.needsHighlight() ? CircuitElement.selectColor : Settings.FG_COLOR;
+    var color = this.needsHighlight() ? AbstractCircuitComponent.selectColor : Settings.FG_COLOR;
 
     //g.beginFill();
     this.setPowerColor(false);
@@ -162,7 +162,7 @@ VoltageElm.prototype.drawWaveform = function (center) {
 
 
     // TODO:
-    CircuitElement.drawCircle(xc, yc, VoltageElm.circleSize, color);
+    AbstractCircuitComponent.drawCircle(xc, yc, VoltageElm.circleSize, color);
     //Main.getMainCanvas().drawThickCircle(xc, yc, circleSize, color);
 
     var wl = 8;
@@ -177,31 +177,31 @@ VoltageElm.prototype.drawWaveform = function (center) {
         case VoltageElm.WF_SQUARE:
             xc2 = Math.floor(wl * 2 * this.dutyCycle - wl + xc);
             xc2 = Math.max(xc - wl + 3, Math.min(xc + wl - 3, xc2));
-            CircuitElement.drawThickLine(xc - wl, yc - wl, xc - wl, yc, color);
-            CircuitElement.drawThickLine(xc - wl, yc - wl, xc2, yc - wl, color);
-            CircuitElement.drawThickLine(xc2, yc - wl, xc2, yc + wl, color);
-            CircuitElement.drawThickLine(xc + wl, yc + wl, xc2, yc + wl, color);
-            CircuitElement.drawThickLine(xc + wl, yc, xc + wl, yc + wl, color);
+            AbstractCircuitComponent.drawThickLine(xc - wl, yc - wl, xc - wl, yc, color);
+            AbstractCircuitComponent.drawThickLine(xc - wl, yc - wl, xc2, yc - wl, color);
+            AbstractCircuitComponent.drawThickLine(xc2, yc - wl, xc2, yc + wl, color);
+            AbstractCircuitComponent.drawThickLine(xc + wl, yc + wl, xc2, yc + wl, color);
+            AbstractCircuitComponent.drawThickLine(xc + wl, yc, xc + wl, yc + wl, color);
             break;
         case VoltageElm.WF_PULSE:
             yc += wl / 2;
-            CircuitElement.drawThickLine(xc - wl, yc - wl, xc - wl, yc, color);
-            CircuitElement.drawThickLine(xc - wl, yc - wl, xc - wl / 2, yc - wl, color);
-            CircuitElement.drawThickLine(xc - wl / 2, yc - wl, xc - wl / 2, yc, color);
-            CircuitElement.drawThickLine(xc - wl / 2, yc, xc + wl, yc, color);
+            AbstractCircuitComponent.drawThickLine(xc - wl, yc - wl, xc - wl, yc, color);
+            AbstractCircuitComponent.drawThickLine(xc - wl, yc - wl, xc - wl / 2, yc - wl, color);
+            AbstractCircuitComponent.drawThickLine(xc - wl / 2, yc - wl, xc - wl / 2, yc, color);
+            AbstractCircuitComponent.drawThickLine(xc - wl / 2, yc, xc + wl, yc, color);
             break;
         case VoltageElm.WF_SAWTOOTH:
-            CircuitElement.drawThickLine(xc, yc - wl, xc - wl, yc, color);
-            CircuitElement.drawThickLine(xc, yc - wl, xc, yc + wl, color);
-            CircuitElement.drawThickLine(xc, yc + wl, xc + wl, yc, color);
+            AbstractCircuitComponent.drawThickLine(xc, yc - wl, xc - wl, yc, color);
+            AbstractCircuitComponent.drawThickLine(xc, yc - wl, xc, yc + wl, color);
+            AbstractCircuitComponent.drawThickLine(xc, yc + wl, xc + wl, yc, color);
             break;
         case VoltageElm.WF_TRIANGLE:
         {
             var xl = 5;
-            CircuitElement.drawThickLine(xc - xl * 2, yc, xc - xl, yc - wl, color);
-            CircuitElement.drawThickLine(xc - xl, yc - wl, xc, yc, color);
-            CircuitElement.drawThickLine(xc, yc, xc + xl, yc + wl, color);
-            CircuitElement.drawThickLine(xc + xl, yc + wl, xc + xl * 2, yc, color);
+            AbstractCircuitComponent.drawThickLine(xc - xl * 2, yc, xc - xl, yc - wl, color);
+            AbstractCircuitComponent.drawThickLine(xc - xl, yc - wl, xc, yc, color);
+            AbstractCircuitComponent.drawThickLine(xc, yc, xc + xl, yc + wl, color);
+            AbstractCircuitComponent.drawThickLine(xc + xl, yc + wl, xc + xl * 2, yc, color);
             break;
         }
         case VoltageElm.WF_AC:
@@ -213,7 +213,7 @@ VoltageElm.prototype.drawWaveform = function (center) {
             for (i = -xl; i <= xl; i++) {
                 var yy = yc + Math.floor(.95 * Math.sin(i * Math.PI / xl) * wl);
                 if (ox != -1)
-                    CircuitElement.drawThickLine(ox, oy, xc + i, yy, color);
+                    AbstractCircuitComponent.drawThickLine(ox, oy, xc + i, yy, color);
                 ox = xc + i;
                 oy = yy;
             }
@@ -221,7 +221,7 @@ VoltageElm.prototype.drawWaveform = function (center) {
         }
     }
     if (Circuit.showValuesCheckItem) {
-        var s = CircuitElement.getShortUnitText(this.frequency, "Hz");
+        var s = AbstractCircuitComponent.getShortUnitText(this.frequency, "Hz");
         if (this.dx == 0 || this.dy == 0)
             this.drawValues(s, VoltageElm.circleSize);
     }
@@ -262,20 +262,20 @@ VoltageElm.prototype.getInfo = function (arr) {
             break;
     }
 
-    arr[1] = "I = " + CircuitElement.getCurrentText(this.getCurrent());
+    arr[1] = "I = " + AbstractCircuitComponent.getCurrentText(this.getCurrent());
     arr[2] = ((this instanceof RailElm) ? "V = " : "Vd = ") +
-        CircuitElement.getVoltageText(this.getVoltageDiff());
+        AbstractCircuitComponent.getVoltageText(this.getVoltageDiff());
 
     if (this.waveform != VoltageElm.WF_DC && this.waveform != VoltageElm.WF_VAR) {
-        arr[3] = "f = " + CircuitElement.getUnitText(this.frequency, "Hz");
-        arr[4] = "Vmax = " + CircuitElement.getVoltageText(this.maxVoltage);
+        arr[3] = "f = " + AbstractCircuitComponent.getUnitText(this.frequency, "Hz");
+        arr[4] = "Vmax = " + AbstractCircuitComponent.getVoltageText(this.maxVoltage);
         var i = 5;
         if (this.bias != 0)
             arr[i++] = "Voff = " + this.getVoltageText(this.bias);
         else if (this.frequency > 500)
             arr[i++] = "wavelength = " +
-                CircuitElement.getUnitText(2.9979e8 / this.frequency, "m");
-        arr[i++] = "P = " + CircuitElement.getUnitText(this.getPower(), "W");
+                AbstractCircuitComponent.getUnitText(2.9979e8 / this.frequency, "m");
+        arr[i++] = "P = " + AbstractCircuitComponent.getUnitText(this.getPower(), "W");
     }
 };
 

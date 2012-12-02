@@ -1,4 +1,4 @@
-CapacitorElm.prototype = new CircuitElement();
+CapacitorElm.prototype = new AbstractCircuitComponent();
 CapacitorElm.prototype.constructor = CapacitorElm;
 
 CapacitorElm.prototype.capacitance = 5e-6;
@@ -11,7 +11,7 @@ CapacitorElm.FLAG_BACK_EULER = 2;
 
 
 function CapacitorElm(xa, ya, xb, yb, f, st) {
-    CircuitElement.call(this, xa, ya, xb, yb, f);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f);
 
     if (st) {
         if (typeof st == 'string')
@@ -27,7 +27,7 @@ CapacitorElm.prototype.isTrapezoidal = function () {
 };
 
 CapacitorElm.prototype.setNodeVoltage = function (n, c) {
-    CircuitElement.prototype.setNodeVoltage.call(this, n, c);
+    AbstractCircuitComponent.prototype.setNodeVoltage.call(this, n, c);
     this.voltdiff = this.volts[0] - this.volts[1];
 };
 
@@ -42,21 +42,21 @@ CapacitorElm.prototype.getDumpType = function () {
 };
 
 CapacitorElm.prototype.dump = function () {
-    return CircuitElement.prototype.dump.call(this) + " " + this.capacitance + " " + this.voltdiff;
+    return AbstractCircuitComponent.prototype.dump.call(this) + " " + this.capacitance + " " + this.voltdiff;
 };
 
 CapacitorElm.prototype.setPoints = function () {
-    CircuitElement.prototype.setPoints.call(this);
+    AbstractCircuitComponent.prototype.setPoints.call(this);
     var f = (this.dn / 2 - 4) / this.dn;
     // calc leads
-    this.lead1 = CircuitElement.interpPointPt(this.point1, this.point2, f);
-    this.lead2 = CircuitElement.interpPointPt(this.point1, this.point2, 1 - f);
+    this.lead1 = AbstractCircuitComponent.interpPointPt(this.point1, this.point2, f);
+    this.lead2 = AbstractCircuitComponent.interpPointPt(this.point1, this.point2, 1 - f);
     // calc plates
-    this.plate1 = CircuitElement.newPointArray(2);
-    this.plate2 = CircuitElement.newPointArray(2);
+    this.plate1 = AbstractCircuitComponent.newPointArray(2);
+    this.plate2 = AbstractCircuitComponent.newPointArray(2);
 
-    CircuitElement.interpPoint2(this.point1, this.point2, this.plate1[0], this.plate1[1], f, 12);
-    CircuitElement.interpPoint2(this.point1, this.point2, this.plate2[0], this.plate2[1], 1 - f, 12);
+    AbstractCircuitComponent.interpPoint2(this.point1, this.point2, this.plate1[0], this.plate1[1], f, 12);
+    AbstractCircuitComponent.interpPoint2(this.point1, this.point2, this.plate2[0], this.plate2[1], 1 - f, 12);
 };
 
 CapacitorElm.prototype.draw = function (g) {
@@ -71,22 +71,22 @@ CapacitorElm.prototype.draw = function (g) {
 
     // draw first lead and plate
     var color = this.setVoltageColor(this.volts[0]);
-    CircuitElement.drawThickLinePt(this.point1, this.lead1, color);
+    AbstractCircuitComponent.drawThickLinePt(this.point1, this.lead1, color);
     this.setPowerColor(false);
-    CircuitElement.drawThickLinePt(this.plate1[0], this.plate1[1], color);
+    AbstractCircuitComponent.drawThickLinePt(this.plate1[0], this.plate1[1], color);
     // TODO:
 //    if (CirSim.powerCheckItem)
 //        g.beginFill(Color.GRAY);
 
     // draw second lead and plate
     color = this.setVoltageColor(this.volts[1]);
-    CircuitElement.drawThickLinePt(this.point2, this.lead2, color);
+    AbstractCircuitComponent.drawThickLinePt(this.point2, this.lead2, color);
     this.setPowerColor(false);
-    CircuitElement.drawThickLinePt(this.plate2[0], this.plate2[1], color);
+    AbstractCircuitComponent.drawThickLinePt(this.plate2[0], this.plate2[1], color);
 
     this.drawPosts();
     if (Circuit.showValuesCheckItem) {
-        var s = CircuitElement.getShortUnitText(this.capacitance, "F");
+        var s = AbstractCircuitComponent.getShortUnitText(this.capacitance, "F");
         this.drawValues(s, hs);
     }
 };
@@ -130,10 +130,10 @@ CapacitorElm.prototype.doStep = function () {
 CapacitorElm.prototype.getInfo = function (arr) {
     arr[0] = "capacitor";
     this.getBasicInfo(arr);
-    arr[3] = "C = " + CircuitElement.getUnitText(this.capacitance, "F");
-    arr[4] = "P = " + CircuitElement.getUnitText(this.getPower(), "W");
+    arr[3] = "C = " + AbstractCircuitComponent.getUnitText(this.capacitance, "F");
+    arr[4] = "P = " + AbstractCircuitComponent.getUnitText(this.getPower(), "W");
     var v = this.getVoltageDiff();
-    arr[4] = "U = " + CircuitElement.getUnitText(.5 * this.capacitance * v * v, "J");
+    arr[4] = "U = " + AbstractCircuitComponent.getUnitText(.5 * this.capacitance * v * v, "J");
 };
 
 CapacitorElm.prototype.getEditInfo = function (n) {

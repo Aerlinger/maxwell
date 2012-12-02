@@ -11,14 +11,14 @@ draw2Leads: ->
   color = @setVoltageColor(@volts[1])
   @drawThickLinePt @lead2, @point2, color
 
-updateDotCount: (cur, cc) ->
-  cur = @current  if isNaN(cur)
-  cc = @curcount  if isNaN(cc)
-  return cc  if @Circuit.stoppedCheck
-  cadd = cur * CircuitElement.currentMult
-  cadd %= 8
-  @curcount = cadd + cc
-  cc + cadd
+updateDotCount: (current, currentCount) ->
+  current = @current if isNaN(current)
+  currentCount = @curcount if isNaN(currentCount)
+  return currentCount  if @Circuit.stoppedCheck
+  currentIncrement = current * AbstractCircuitComponent.currentMult
+  currentIncrement %= 8
+  @curcount = currentIncrement + currentCount
+  currentCount + currentIncrement
 
 doDots: ->
   @curcount = @updateDotCount()
@@ -28,17 +28,17 @@ doDots: ->
 drawDots: (pa, pb, pos) ->
   # If the sim is stopped or has dots disabled
   return  if @Circuit.stoppedCheck or pos is 0 or not @Circuit.dotsCheckItem
-  dx = pb.x1 - pa.x1
-  dy = pb.y - pa.y
-  dn = Math.sqrt(dx * dx + dy * dy)
-  ds = 16
-  pos %= ds
-  pos += ds  if pos < 0
+  deltaX = pb.x1 - pa.x1
+  deltaY = pb.y - pa.y
+  dn = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+  deltaSegment = 16
+  pos %= deltaSegment
+  pos += deltaSegment  if pos < 0
   di = pos
 
   while di < dn
-    x0 = (pa.x1 + di * dx / dn)
-    y0 = (pa.y + di * dy / dn)
+    x0 = (pa.x1 + di * deltaX / dn)
+    y0 = (pa.y + di * deltaY / dn)
 
     # Draws each dot:
     paper.beginPath()
@@ -48,7 +48,7 @@ drawDots: (pa, pb, pos) ->
     paper.stroke()
     paper.fill()
     paper.closePath()
-    di += ds
+    di += deltaSegment
 
 ###
 Todo: Not yet implemented
@@ -130,16 +130,16 @@ drawPost: (x0, y0, node) ->
 
 setVoltageColor: (volts) ->
   return Settings.SELECT_COLOR  if @needsHighlight()
-  return CircuitElement.whiteColor  unless @Circuit.powerCheckItem  unless @Circuit.voltsCheckItem
-  c = Math.floor((volts + CircuitElement.voltageRange) * (CircuitElement.colorScaleCount - 1) / (CircuitElement.voltageRange * 2))
+  return AbstractCircuitComponent.whiteColor  unless @Circuit.powerCheckItem unless @Circuit.voltsCheckItem
+  c = Math.floor((volts + AbstractCircuitComponent.voltageRange) * (AbstractCircuitComponent.colorScaleCount - 1) / (AbstractCircuitComponent.voltageRange * 2))
   c = 0  if c < 0
-  c = CircuitElement.colorScaleCount - 1  if c >= CircuitElement.colorScaleCount
-  Math.floor CircuitElement.colorScale[c].getColor()
+  c = AbstractCircuitComponent.colorScaleCount - 1  if c >= AbstractCircuitComponent.colorScaleCount
+  Math.floor AbstractCircuitComponent.colorScale[c].getColor()
 
 @setPowerColor: (yellow) ->
   return unless @Circuit.powerCheckItem
 
-  w0 = @getPower() * CircuitElement.powerMult
+  w0 = @getPower() * AbstractCircuitComponent.powerMult
   w = if (w0 < 0) then -w0 else w0
   w = 1 if w > 1
   rg = 128 + Math.floor w * 127

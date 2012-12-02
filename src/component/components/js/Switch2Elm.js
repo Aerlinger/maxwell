@@ -32,11 +32,11 @@ Switch2Elm.prototype.swpoled = new Array();
 Switch2Elm.prototype.setPoints = function () {
     SwitchElm.prototype.setPoints.call(this);
     this.calcLeads(32);
-    this.swposts = CircuitElement.newPointArray(2);
-    this.swpoles = CircuitElement.newPointArray(3);
-    CircuitElement.interpPoint2(this.lead1, this.lead2, this.swpoles[0], this.swpoles[1], 1, this.openhs);
+    this.swposts = AbstractCircuitComponent.newPointArray(2);
+    this.swpoles = AbstractCircuitComponent.newPointArray(3);
+    AbstractCircuitComponent.interpPoint2(this.lead1, this.lead2, this.swpoles[0], this.swpoles[1], 1, this.openhs);
     this.swpoles[2] = this.lead2;
-    CircuitElement.interpPoint2(this.point1, this.point2, this.swposts[0], this.swposts[1], 1, this.openhs);
+    AbstractCircuitComponent.interpPoint2(this.point1, this.point2, this.swposts[0], this.swposts[1], 1, this.openhs);
     this.posCount = this.hasCenterOff() ? 3 : 2;
 };
 
@@ -46,22 +46,22 @@ Switch2Elm.prototype.draw = function () {
 
     // draw first lead
     var color = this.setVoltageColor(this.volts[0]);
-    CircuitElement.drawThickLinePt(this.point1, this.lead1, color);
+    AbstractCircuitComponent.drawThickLinePt(this.point1, this.lead1, color);
 
     // draw second lead
     var color = this.setVoltageColor(this.volts[1]);
-    CircuitElement.drawThickLinePt(this.swpoles[0], this.swposts[0], color);
+    AbstractCircuitComponent.drawThickLinePt(this.swpoles[0], this.swposts[0], color);
 
     // draw third lead
     this.setVoltageColor(this.volts[2], color);
-    CircuitElement.drawThickLinePt(this.swpoles[1], this.swposts[1], color);
+    AbstractCircuitComponent.drawThickLinePt(this.swpoles[1], this.swposts[1], color);
 
     // draw switch
     if (!this.needsHighlight())
         color = Settings.SELECT_COLOR;
 
 
-    CircuitElement.drawThickLinePt(this.lead1, this.swpoles[this.position], color);
+    AbstractCircuitComponent.drawThickLinePt(this.lead1, this.swpoles[this.position], color);
 
     this.updateDotCount();
     this.drawDots(this.point1, this.lead1, this.curcount);

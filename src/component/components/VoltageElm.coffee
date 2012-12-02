@@ -1,4 +1,4 @@
-CircuitElement = require('../circuitElement')
+CircuitElement = require('../abstractCircuitComponent.coffee')
 
 class VoltageElm extends CircuitElement
 

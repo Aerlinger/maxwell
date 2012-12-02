@@ -3,7 +3,7 @@ ResistorElm.prototype.ps3 = new Point(100, 50);
 ResistorElm.prototype.ps4 = new Point(100, 150);
 
 // Step 2: Prototype of DepthRectangle is Rectangle
-ResistorElm.prototype = new CircuitElement();
+ResistorElm.prototype = new AbstractCircuitComponent();
 // Step 3: Now we need to set the constructor to the DepthRectangle instead of Rectangle
 ResistorElm.prototype.constructor = ResistorElm;
 
@@ -12,7 +12,7 @@ ResistorElm.prototype.constructor = ResistorElm;
 // Constructor ////////////////////////////////////////////////////////////////
 function ResistorElm(xa, ya, xb, yb, f, st) {
 
-    CircuitElement.call(this, xa, ya, xb, yb, f, st);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f, st);
 
     //var options = st.split(' ');
     if (st && st.length > 0) {
@@ -64,10 +64,10 @@ ResistorElm.prototype.draw = function () {
         var v = v1 + (v2 - v1) * i / segments;
         var color = this.setVoltageColor(v);
 
-        CircuitElement.interpPoint(this.lead1, this.lead2, CircuitElement.ps1, i * segf, hs * ox);
-        CircuitElement.interpPoint(this.lead1, this.lead2, CircuitElement.ps2, (i + 1) * segf, hs * nx);
+        AbstractCircuitComponent.interpPoint(this.lead1, this.lead2, AbstractCircuitComponent.ps1, i * segf, hs * ox);
+        AbstractCircuitComponent.interpPoint(this.lead1, this.lead2, AbstractCircuitComponent.ps2, (i + 1) * segf, hs * nx);
 
-        CircuitElement.drawThickLinePt(CircuitElement.ps1, CircuitElement.ps2, color);
+        AbstractCircuitComponent.drawThickLinePt(AbstractCircuitComponent.ps1, AbstractCircuitComponent.ps2, color);
 
         ox = nx;
 
@@ -75,7 +75,7 @@ ResistorElm.prototype.draw = function () {
 
 
     if (Circuit.showValuesCheckItem) {
-        var s = CircuitElement.getShortUnitText(this.resistance, "ohm");
+        var s = AbstractCircuitComponent.getShortUnitText(this.resistance, "ohm");
         this.drawValues(s, hs);
     }
 
@@ -84,7 +84,7 @@ ResistorElm.prototype.draw = function () {
 };
 
 ResistorElm.prototype.dump = function () {
-    return CircuitElement.prototype.dump.call(this) + " " + this.resistance;
+    return AbstractCircuitComponent.prototype.dump.call(this) + " " + this.resistance;
 };
 
 ResistorElm.prototype.getDumpType = function () {
@@ -105,8 +105,8 @@ ResistorElm.prototype.setEditValue = function (n, ei) {
 ResistorElm.prototype.getInfo = function (arr) {
     arr[0] = "resistor";
     this.getBasicInfo(arr);
-    arr[3] = "R = " + CircuitElement.getUnitText(this.resistance, Circuit.ohmString);
-    arr[4] = "P = " + CircuitElement.getUnitText(this.getPower(), "W");
+    arr[3] = "R = " + AbstractCircuitComponent.getUnitText(this.resistance, Circuit.ohmString);
+    arr[4] = "P = " + AbstractCircuitComponent.getUnitText(this.getPower(), "W");
 };
 
 ResistorElm.prototype.needsShortcut = function () {
@@ -118,7 +118,7 @@ ResistorElm.prototype.calculateCurrent = function () {
 };
 
 ResistorElm.prototype.setPoints = function () {
-    CircuitElement.prototype.setPoints.call(this)
+    AbstractCircuitComponent.prototype.setPoints.call(this)
     this.calcLeads(32);
     this.ps3 = new Point(0, 0);
     this.ps4 = new Point(0, 0);

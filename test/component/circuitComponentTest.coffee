@@ -1,4 +1,4 @@
-CircuitElement = require('../../src/component/circuitElement')
+CircuitElement = require('../../src/component/abstractCircuitComponent.coffee')
 {Polygon, Rectangle, Point} = require('../../src/util/shapePrimitives')
 
 describe "Base Circuit Element", ->

@@ -8,12 +8,12 @@
 #   Elements that are implemented but not tested have their names (key) prefixed with a '#'
 #   Elements that are not yet implemented have their names (key) prefixed with a '-'
 
-WireElm     = require('../component/components/WireElm')
-ResistorElm = require('../component/components/ResistorElm')
-GroundElm   = require('../component/components/GroundElm')
-VoltageElm  = require('../component/components/VoltageElm')
+WireElm     = require('components/WireElm.coffee')
+ResistorElm = require('components/ResistorElm.coffee')
+GroundElm   = require('components/GroundElm.coffee')
+VoltageElm  = require('components/VoltageElm.coffee')
 
-Scope = require('../scope/scope')
+Scope = require('../scope/oscilloscope.coffee')
 
 DumpTypes =
   "o" : Scope::

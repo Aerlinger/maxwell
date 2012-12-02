@@ -1,8 +1,8 @@
 function LogicOutputElm(xa, ya, xb, yb, f, st) {
-    CircuitElement.call(this, xa, ya, xb, yb, f);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f);
 
 }
 ;
 
-LogicOutputElm.prototype = new CircuitElement();
+LogicOutputElm.prototype = new AbstractCircuitComponent();
 LogicOutputElm.prototype.constructor = LogicOutputElm;

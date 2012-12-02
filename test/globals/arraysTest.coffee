@@ -1,4 +1,4 @@
-CircuitElement = require('../../src/component/circuitElement')
+CircuitElement = require('../../src/component/abstractCircuitComponent.coffee')
 
 describe "Array Utilities", ->
 

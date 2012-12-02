@@ -1,7 +1,6 @@
-class CircuitEngineParams
+class CircuitParams
 
   constructor: (paramsHash) ->
-
     @status = paramsHash?['completion_status']
     @createdAt = paramsHash?['created_at']
     @currentSpeed = paramsHash?['current_speed']
@@ -17,4 +16,4 @@ class CircuitEngineParams
     @title = paramsHash?['title']
     @topic = paramsHash?['topic']
 
-module.exports = CircuitEngineParams
+module.exports = CircuitParams
