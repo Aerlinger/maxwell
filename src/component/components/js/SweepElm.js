@@ -1,5 +1,5 @@
 function SweepElm(xa, ya, xb, yb, f, st) {
-    CircuitElement.call(this, xa, ya, xb, yb, f);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f);
 
     if (st) {
         if (typeof st == 'string')
@@ -20,7 +20,7 @@ function SweepElm(xa, ya, xb, yb, f, st) {
 SweepElm.FLAG_LOG = 1;
 SweepElm.FLAG_BIDIR = 2;
 
-SweepElm.prototype = new CircuitElement();
+SweepElm.prototype = new AbstractCircuitComponent();
 SweepElm.prototype.constructor = SweepElm;
 
 
@@ -35,29 +35,29 @@ SweepElm.prototype.getPostCount = function () {
 SweepElm.prototype.circleSize = 17;
 
 SweepElm.prototype.dump = function () {
-    return CircuitElement.prototype.dump.call(this) + " " + this.minF + " " + this.maxF + " " + this.maxV + " " +
+    return AbstractCircuitComponent.prototype.dump.call(this) + " " + this.minF + " " + this.maxF + " " + this.maxV + " " +
         this.sweepTime;
 };
 
 SweepElm.prototype.setPoints = function () {
-    CircuitElement.prototype.setPoints.call(this);
+    AbstractCircuitComponent.prototype.setPoints.call(this);
 
-    this.lead1 = CircuitElement.interpPointPt(this.point1, this.point2, 1 - this.circleSize / this.dn);
+    this.lead1 = AbstractCircuitComponent.interpPointPt(this.point1, this.point2, 1 - this.circleSize / this.dn);
 };
 
 SweepElm.prototype.draw = function () {
 
     this.setBboxPt(this.point1, this.point2, this.circleSize);
     var color = this.setVoltageColor(this.volts[0]);
-    CircuitElement.drawThickLinePt(this.point1, this.lead1, color);
+    AbstractCircuitComponent.drawThickLinePt(this.point1, this.lead1, color);
 
-    this.setVoltageColor(this.needsHighlight() ? CircuitElement.selectColor : Color.GREY);
+    this.setVoltageColor(this.needsHighlight() ? AbstractCircuitComponent.selectColor : Color.GREY);
 
     var powerColor = this.setPowerColor(false);
 
     var xc = this.point2.x1;
     var yc = this.point2.y;
-    CircuitElement.drawCircle(xc, yc, this.circleSize);
+    AbstractCircuitComponent.drawCircle(xc, yc, this.circleSize);
 
     var wl = 8;
     this.adjustBbox(xc - this.circleSize, yc - this.circleSize,
@@ -76,12 +76,12 @@ SweepElm.prototype.draw = function () {
     for (i = -xl; i <= xl; i++) {
         var yy = yc + Math.floor(.95 * Math.sin(i * Math.PI * w / xl) * wl);
         if (ox != -1)
-            CircuitElement.drawThickLine(ox, oy, xc + i, yy);
+            AbstractCircuitComponent.drawThickLine(ox, oy, xc + i, yy);
         ox = xc + i;
         oy = yy;
     }
     if (Circuit.showValuesCheckItem) {
-        var s = CircuitElement.getShortUnitText(this.frequency, "Hz");
+        var s = AbstractCircuitComponent.getShortUnitText(this.frequency, "Hz");
         if (this.dx == 0 || this.dy == 0)
             this.drawValues(s, this.circleSize);
     }
@@ -170,12 +170,12 @@ SweepElm.prototype.hasGroundConnection = function (n1) {
 
 SweepElm.prototype.getInfo = function (arr) {
     arr[0] = "sweep " + (((this.flags & SweepElm.FLAG_LOG) == 0) ? "(linear)" : "(log)");
-    arr[1] = "I = " + CircuitElement.getCurrentDText(this.getCurrent());
-    arr[2] = "V = " + CircuitElement.getVoltageText(this.volts[0]);
-    arr[3] = "f = " + CircuitElement.getUnitText(this.frequency, "Hz");
-    arr[4] = "range = " + CircuitElement.getUnitText(this.minF, "Hz") + " .. " +
-        CircuitElement.getUnitText(this.maxF, "Hz");
-    arr[5] = "time = " + CircuitElement.getUnitText(this.sweepTime, "s");
+    arr[1] = "I = " + AbstractCircuitComponent.getCurrentDText(this.getCurrent());
+    arr[2] = "V = " + AbstractCircuitComponent.getVoltageText(this.volts[0]);
+    arr[3] = "f = " + AbstractCircuitComponent.getUnitText(this.frequency, "Hz");
+    arr[4] = "range = " + AbstractCircuitComponent.getUnitText(this.minF, "Hz") + " .. " +
+        AbstractCircuitComponent.getUnitText(this.maxF, "Hz");
+    arr[5] = "time = " + AbstractCircuitComponent.getUnitText(this.sweepTime, "s");
 };
 
 SweepElm.prototype.getEditInfo = function (n) {

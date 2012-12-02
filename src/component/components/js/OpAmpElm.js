@@ -1,4 +1,4 @@
-OpAmpElm.prototype = new CircuitElement();
+OpAmpElm.prototype = new AbstractCircuitComponent();
 OpAmpElm.prototype.constructor = OpAmpElm;
 
 OpAmpElm.FLAG_SWAP = 1;
@@ -8,7 +8,7 @@ OpAmpElm.FLAG_LOWGAIN = 4;
 
 function OpAmpElm(xa, ya, xb, yb, f, st) {
 
-    CircuitElement.call(this, xa, ya, xb, yb, f);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f);
 
     this.opsize = 0;
     this.opheight = 0;
@@ -65,7 +65,7 @@ OpAmpElm.prototype.setGain = function () {
 };
 
 OpAmpElm.prototype.dump = function () {
-    return CircuitElement.prototype.dump.call(this) + " " + this.maxOut + " " + this.minOut + " " + this.gbw;
+    return AbstractCircuitComponent.prototype.dump.call(this) + " " + this.maxOut + " " + this.minOut + " " + this.gbw;
 };
 
 OpAmpElm.prototype.nonLinear = function () {
@@ -76,19 +76,19 @@ OpAmpElm.prototype.draw = function () {
     this.setBboxPt(this.point1, this.point2, this.opheight * 2);
     var color = this.setVoltageColor(this.volts[0]);
 
-    CircuitElement.drawThickLinePt(this.in1p[0], this.in1p[1], color);
+    AbstractCircuitComponent.drawThickLinePt(this.in1p[0], this.in1p[1], color);
     color = this.setVoltageColor(this.volts[1]);
-    CircuitElement.drawThickLinePt(this.in2p[0], this.in2p[1], color);
+    AbstractCircuitComponent.drawThickLinePt(this.in2p[0], this.in2p[1], color);
     //g.setColor(this.needsHighlight() ? this.selectColor : this.lightGrayColor);
     this.setPowerColor(true);
-    CircuitElement.drawThickPolygonP(this.triangle, this.needsHighlight() ? CircuitElement.selectColor : CircuitElement.lightGrayColor);
+    AbstractCircuitComponent.drawThickPolygonP(this.triangle, this.needsHighlight() ? AbstractCircuitComponent.selectColor : AbstractCircuitComponent.lightGrayColor);
     //g.setFont(plusFont);
 
     //this.drawCenteredText("-", this.textp[0].x + 3, this.textp[0].y + 8, true).attr({'font-weight':'bold', 'font-size':17});
     //this.drawCenteredText("+", this.textp[1].x + 3, this.textp[1].y + 10, true).attr({'font-weight':'bold', 'font-size':14});
 
     color = this.setVoltageColor(this.volts[2]);
-    CircuitElement.drawThickLinePt(this.lead2, this.point2, color);
+    AbstractCircuitComponent.drawThickLinePt(this.lead2, this.point2, color);
 
     this.curcount = this.updateDotCount(this.current, this.curcount);
     this.drawDots(this.point2, this.lead2, this.curcount);
@@ -109,7 +109,7 @@ OpAmpElm.prototype.setSize = function (s) {
 
 OpAmpElm.prototype.setPoints = function () {
 
-    CircuitElement.prototype.setPoints.call(this);
+    AbstractCircuitComponent.prototype.setPoints.call(this);
     if (this.dn > 150 && this == Circuit.dragElm)
         this.setSize(2);
     var ww = Math.floor(this.opwidth);
@@ -119,17 +119,17 @@ OpAmpElm.prototype.setPoints = function () {
     var hs = Math.floor(this.opheight * this.dsign);
     if ((this.flags & OpAmpElm.FLAG_SWAP) != 0)
         hs = -hs;
-    this.in1p = CircuitElement.newPointArray(2);
-    this.in2p = CircuitElement.newPointArray(2);
-    this.textp = CircuitElement.newPointArray(2);
+    this.in1p = AbstractCircuitComponent.newPointArray(2);
+    this.in2p = AbstractCircuitComponent.newPointArray(2);
+    this.textp = AbstractCircuitComponent.newPointArray(2);
 
-    CircuitElement.interpPoint2(this.point1, this.point2, this.in1p[0], this.in2p[0], 0, hs);
-    CircuitElement.interpPoint2(this.lead1, this.lead2, this.in1p[1], this.in2p[1], 0, hs);
-    CircuitElement.interpPoint2(this.lead1, this.lead2, this.textp[0], this.textp[1], .2, hs);
+    AbstractCircuitComponent.interpPoint2(this.point1, this.point2, this.in1p[0], this.in2p[0], 0, hs);
+    AbstractCircuitComponent.interpPoint2(this.lead1, this.lead2, this.in1p[1], this.in2p[1], 0, hs);
+    AbstractCircuitComponent.interpPoint2(this.lead1, this.lead2, this.textp[0], this.textp[1], .2, hs);
 
-    var tris = CircuitElement.newPointArray(2);
-    CircuitElement.interpPoint2(this.lead1, this.lead2, tris[0], tris[1], 0, hs * 2);
-    this.triangle = CircuitElement.createPolygon(tris[0], tris[1], this.lead2);
+    var tris = AbstractCircuitComponent.newPointArray(2);
+    AbstractCircuitComponent.interpPoint2(this.lead1, this.lead2, tris[0], tris[1], 0, hs * 2);
+    this.triangle = AbstractCircuitComponent.createPolygon(tris[0], tris[1], this.lead2);
     //this.plusFont = new Font("SansSerif", 0, opsize == 2 ? 14 : 10);
 };
 
@@ -148,15 +148,15 @@ OpAmpElm.prototype.getVoltageSourceCount = function () {
 OpAmpElm.prototype.getInfo = function (arr) {
 
     arr[0] = "op-amp";
-    arr[1] = "V+ = " + CircuitElement.getVoltageText(this.volts[1]);
-    arr[2] = "V- = " + CircuitElement.getVoltageText(this.volts[0]);
+    arr[1] = "V+ = " + AbstractCircuitComponent.getVoltageText(this.volts[1]);
+    arr[2] = "V- = " + AbstractCircuitComponent.getVoltageText(this.volts[0]);
 
     // sometimes the voltage goes slightly outside range, to make convergence easier.  so we hide that here.
     var vo = Math.max(Math.min(this.volts[2], this.maxOut), this.minOut);
-    arr[3] = "Vout = " + CircuitElement.getVoltageText(vo);
-    arr[4] = "Iout = " + CircuitElement.getCurrentText(this.getCurrent());
-    arr[5] = "range = " + CircuitElement.getVoltageText(this.minOut) + " to " +
-        CircuitElement.getVoltageText(this.maxOut);
+    arr[3] = "Vout = " + AbstractCircuitComponent.getVoltageText(vo);
+    arr[4] = "Iout = " + AbstractCircuitComponent.getCurrentText(this.getCurrent());
+    arr[5] = "range = " + AbstractCircuitComponent.getVoltageText(this.minOut) + " to " +
+        AbstractCircuitComponent.getVoltageText(this.maxOut);
 
 };
 

@@ -1,14 +1,14 @@
 TransistorElm.FLAG_FLIP = 1;
 
 // Step 1: Prototype of DepthRectangle is Rectangle
-TransistorElm.prototype = new CircuitElement();
+TransistorElm.prototype = new AbstractCircuitComponent();
 // Step 2: Now we need to set the constructor to the DepthRectangle instead of Rectangle
 TransistorElm.prototype.constructor = TransistorElm;
 
 
 //TODO: Fully test transistor
 function TransistorElm(xa, ya, xb, yb, f, st) {
-    CircuitElement.call(this, xa, ya, xb, yb, f);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f);
 
     // Forward declarations:
     this.beta = 100;
@@ -90,7 +90,7 @@ TransistorElm.prototype.getDumpType = function () {
 };
 
 TransistorElm.prototype.dump = function () {
-    return CircuitElement.prototype.dump.call(this) + " " + this.pnp + " " + (this.volts[0] - this.volts[1]) + " " +
+    return AbstractCircuitComponent.prototype.dump.call(this) + " " + this.pnp + " " + (this.volts[0] - this.volts[1]) + " " +
         (this.volts[0] - this.volts[2]) + " " + this.beta;
 };
 
@@ -102,15 +102,15 @@ TransistorElm.prototype.draw = function () {
 
     // draw collector
     var color = this.setVoltageColor(this.volts[1]);
-    CircuitElement.drawThickLinePt(this.coll[0], this.coll[1], color);
+    AbstractCircuitComponent.drawThickLinePt(this.coll[0], this.coll[1], color);
 
     // draw emitter
     color = this.setVoltageColor(this.volts[2]);
-    CircuitElement.drawThickLinePt(this.emit[0], this.emit[1], color);
+    AbstractCircuitComponent.drawThickLinePt(this.emit[0], this.emit[1], color);
 
     // draw arrow
     //g.setColor(lightGrayColor);
-    CircuitElement.drawThickPolygonP(this.arrowPoly, Color.CYAN);
+    AbstractCircuitComponent.drawThickPolygonP(this.arrowPoly, Color.CYAN);
 
     // draw base
     color = this.setVoltageColor(this.volts[0]);
@@ -118,7 +118,7 @@ TransistorElm.prototype.draw = function () {
     if (Circuit.powerCheckItem)
         g.setColor(Color.gray);
 
-    CircuitElement.drawThickLinePt(this.point1, this.base, color);
+    AbstractCircuitComponent.drawThickLinePt(this.point1, this.base, color);
 
     // draw dots
     this.curcount_b = this.updateDotCount(-this.ib, this.curcount_b);
@@ -134,13 +134,13 @@ TransistorElm.prototype.draw = function () {
     this.setPowerColor(true);
 
     //g.fillPolygon(rectPoly);
-    CircuitElement.drawThickPolygonP(this.rectPoly, color);
+    AbstractCircuitComponent.drawThickPolygonP(this.rectPoly, color);
 
     if ((this.needsHighlight() || Circuit.dragElm == this) && this.dy == 0) {
         //g.setColor(Color.white);
         //g.setFont(this.unitsFont);
 
-        CircuitElement.setColor(Color.white);
+        AbstractCircuitComponent.setColor(Color.white);
 
         var ds = sign(this.dx);
         this.drawCenteredText("B", this.base.x1 - 10 * ds, this.base.y - 5, Color.WHITE);
@@ -165,7 +165,7 @@ TransistorElm.prototype.getPower = function () {
 
 
 TransistorElm.prototype.setPoints = function () {
-    CircuitElement.prototype.setPoints.call(this);
+    AbstractCircuitComponent.prototype.setPoints.call(this);
     var hs = 16;
 
     if ((this.flags & TransistorElm.FLAG_FLIP) != 0)
@@ -174,31 +174,31 @@ TransistorElm.prototype.setPoints = function () {
     var hs2 = hs * this.dsign * this.pnp;
 
     // calc collector, emitter posts
-    this.coll = CircuitElement.newPointArray(2);
-    this.emit = CircuitElement.newPointArray(2);
-    CircuitElement.interpPoint2(this.point1, this.point2, this.coll[0], this.emit[0], 1, hs2);
+    this.coll = AbstractCircuitComponent.newPointArray(2);
+    this.emit = AbstractCircuitComponent.newPointArray(2);
+    AbstractCircuitComponent.interpPoint2(this.point1, this.point2, this.coll[0], this.emit[0], 1, hs2);
 
     // calc rectangle edges
-    this.rect = CircuitElement.newPointArray(4);
-    CircuitElement.interpPoint2(this.point1, this.point2, this.rect[0], this.rect[1], 1 - 16 / this.dn, hs);
-    CircuitElement.interpPoint2(this.point1, this.point2, this.rect[2], this.rect[3], 1 - 13 / this.dn, hs);
+    this.rect = AbstractCircuitComponent.newPointArray(4);
+    AbstractCircuitComponent.interpPoint2(this.point1, this.point2, this.rect[0], this.rect[1], 1 - 16 / this.dn, hs);
+    AbstractCircuitComponent.interpPoint2(this.point1, this.point2, this.rect[2], this.rect[3], 1 - 13 / this.dn, hs);
 
     // calc points where collector/emitter leads contact rectangle
-    CircuitElement.interpPoint2(this.point1, this.point2, this.coll[1], this.emit[1], 1 - 13 / this.dn, 6 * this.dsign * this.pnp);
+    AbstractCircuitComponent.interpPoint2(this.point1, this.point2, this.coll[1], this.emit[1], 1 - 13 / this.dn, 6 * this.dsign * this.pnp);
 
     // calc point where base lead contacts rectangle
     this.base = new Point();
-    CircuitElement.interpPoint(this.point1, this.point2, this.base, 1 - 16 / this.dn);
+    AbstractCircuitComponent.interpPoint(this.point1, this.point2, this.base, 1 - 16 / this.dn);
 
     // rectangle
-    this.rectPoly = CircuitElement.createPolygon(this.rect[0], this.rect[2], this.rect[3], this.rect[1]);
+    this.rectPoly = AbstractCircuitComponent.createPolygon(this.rect[0], this.rect[2], this.rect[3], this.rect[1]);
 
     // arrow
     if (this.pnp == 1)
-        this.arrowPoly = CircuitElement.calcArrow(this.emit[1], this.emit[0], 8, 4);
+        this.arrowPoly = AbstractCircuitComponent.calcArrow(this.emit[1], this.emit[0], 8, 4);
     else {
-        var pt = CircuitElement.interpPoint(this.point1, this.point2, 1 - 11 / this.dn, -5 * this.dsign * this.pnp);
-        this.arrowPoly = CircuitElement.calcArrow(this.emit[0], pt, 8, 4);
+        var pt = AbstractCircuitComponent.interpPoint(this.point1, this.point2, 1 - 11 / this.dn, -5 * this.dsign * this.pnp);
+        this.arrowPoly = AbstractCircuitComponent.calcArrow(this.emit[0], pt, 8, 4);
     }
 };
 
@@ -320,17 +320,17 @@ TransistorElm.prototype.getInfo = function (arr) {
 
 TransistorElm.prototype.getScopeValue = function (x) {
     switch (x) {
-        case Scope.VAL_IB:
+        case Oscilloscope.VAL_IB:
             return this.ib;
-        case Scope.VAL_IC:
+        case Oscilloscope.VAL_IC:
             return this.ic;
-        case Scope.VAL_IE:
+        case Oscilloscope.VAL_IE:
             return this.ie;
-        case Scope.VAL_VBE:
+        case Oscilloscope.VAL_VBE:
             return this.volts[0] - this.volts[2];
-        case Scope.VAL_VBC:
+        case Oscilloscope.VAL_VBC:
             return this.volts[0] - this.volts[1];
-        case Scope.VAL_VCE:
+        case Oscilloscope.VAL_VCE:
             return this.volts[1] - this.volts[2];
     }
     return 0;
@@ -338,9 +338,9 @@ TransistorElm.prototype.getScopeValue = function (x) {
 
 TransistorElm.prototype.getScopeUnits = function (x) {
     switch (x) {
-        case Scope.VAL_IB:
-        case Scope.VAL_IC:
-        case Scope.VAL_IE:
+        case Oscilloscope.VAL_IB:
+        case Oscilloscope.VAL_IC:
+        case Oscilloscope.VAL_IE:
             return "A";
         default:
             return "V";

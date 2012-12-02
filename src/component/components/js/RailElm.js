@@ -18,14 +18,14 @@ RailElm.prototype.getPostCount = function () {
 
 RailElm.prototype.setPoints = function () {
     VoltageElm.prototype.setPoints.call(this);
-    this.lead1 = CircuitElement.interpPointPt(this.point1, this.point2, 1 - VoltageElm.circleSize / this.dn);
+    this.lead1 = AbstractCircuitComponent.interpPointPt(this.point1, this.point2, 1 - VoltageElm.circleSize / this.dn);
 };
 
 RailElm.prototype.draw = function () {
 
     this.setBboxPt(this.point1, this.point2, this.circleSize);
     var color = this.setVoltageColor(this.volts[0]);
-    CircuitElement.drawThickLinePt(this.point1, this.lead1, color);
+    AbstractCircuitComponent.drawThickLinePt(this.point1, this.lead1, color);
     var clock = this.waveform == VoltageElm.WF_SQUARE && (this.flags & VoltageElm.FLAG_CLOCK) != 0;
 
     if (this.waveform == VoltageElm.WF_DC || this.waveform == VoltageElm.WF_VAR || clock) {
@@ -34,7 +34,7 @@ RailElm.prototype.draw = function () {
         color = (this.needsHighlight() ? Settings.selectColor : Settings.whiteColor);
         //this.setPowerColor(g, false);
         var v = this.getVoltage();
-        var s = CircuitElement.getShortUnitText(v, "V");
+        var s = AbstractCircuitComponent.getShortUnitText(v, "V");
         if (Math.abs(v) < 1)
             s = /*showFormat.format(v)*/v + "V";
         if (this.getVoltage() > 0)

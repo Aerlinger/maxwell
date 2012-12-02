@@ -1,7 +1,7 @@
 
 
 // Step 2: Prototype of DepthRectangle is Rectangle
-WireElm.prototype = new CircuitElement();
+WireElm.prototype = new AbstractCircuitComponent();
 // Step 3: Now we need to set the constructor to the DepthRectangle instead of Rectangle
 WireElm.prototype.constructor = WireElm;
 
@@ -10,7 +10,7 @@ WireElm.FLAG_SHOWVOLTAGE = 2;
 
 
 function WireElm(xa, ya, xb, yb, f, st) {
-    CircuitElement.call(this, xa, ya, xb, yb, f, st);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f, st);
 }
 ;
 
@@ -19,14 +19,14 @@ WireElm.prototype.draw = function () {
 
     this.doDots();
 
-    CircuitElement.drawThickLinePt(this.point1, this.point2, color);
+    AbstractCircuitComponent.drawThickLinePt(this.point1, this.point2, color);
     this.setBboxPt(this.point1, this.point2, 3);
 
     if (this.mustShowCurrent()) {
-        var s = CircuitElement.getShortUnitText(Math.abs(this.getCurrent()), "A");
+        var s = AbstractCircuitComponent.getShortUnitText(Math.abs(this.getCurrent()), "A");
         this.drawValues(s, 4);
     } else if (this.mustShowVoltage()) {
-        var s = CircuitElement.getShortUnitText(this.volts[0], "V");
+        var s = AbstractCircuitComponent.getShortUnitText(this.volts[0], "V");
         this.drawValues(s, 4);
     }
 
@@ -53,8 +53,8 @@ WireElm.prototype.getVoltageSourceCount = function () {
 WireElm.prototype.getInfo = function (arr) {
     arr[0] = "Wire";
 
-    arr[1] = "I = " + CircuitElement.getCurrentDText(this.getCurrent());
-    arr[2] = "V = " + CircuitElement.getVoltageText(this.volts[0]);
+    arr[1] = "I = " + AbstractCircuitComponent.getCurrentDText(this.getCurrent());
+    arr[2] = "V = " + AbstractCircuitComponent.getVoltageText(this.volts[0]);
 };
 
 WireElm.prototype.getEditInfo = function (n) {

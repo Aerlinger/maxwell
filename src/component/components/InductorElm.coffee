@@ -1,12 +1,12 @@
 InductorElm = (xa, ya, xb, yb, f, st) ->
-  CircuitElement.call this, xa, ya, xb, yb, f
+  AbstractCircuitComponent.call this, xa, ya, xb, yb, f
   @ind = new Inductor()
   if st
     st = st.split(" ")  if typeof st is "string"
     @inductance = parseFloat(st[0])
     @current = parseFloat(st[1])
   @ind.setup @inductance, @current, @flags
-InductorElm:: = new CircuitElement()
+InductorElm:: = new AbstractCircuitComponent()
 InductorElm::constructor = InductorElm
 InductorElm::inductance = 0
 InductorElm::draw = ->
@@ -20,12 +20,12 @@ InductorElm::draw = ->
   @setPowerColor false
   @drawCoil 8, @lead1, @lead2, v1, v2
   if Circuit.showValuesCheckItem
-    s = CircuitElement.getShortUnitText(@inductance, "H")
+    s = AbstractCircuitComponent.getShortUnitText(@inductance, "H")
     @drawValues s, hs
   @drawPosts()
 
 InductorElm::dump = ->
-  CircuitElement::dump.call(this) + " " + @inductance + " " + @current
+  AbstractCircuitComponent::dump.call(this) + " " + @inductance + " " + @current
 
 InductorElm::getDumpType = ->
   "l"
@@ -47,8 +47,8 @@ InductorElm::doStep = ->
 InductorElm::getInfo = (arr) ->
   arr[0] = "inductor"
   @getBasicInfo arr
-  arr[3] = "L = " + CircuitElement.getUnitText(@inductance, "H")
-  arr[4] = "P = " + CircuitElement.getUnitText(@getPower(), "W")
+  arr[3] = "L = " + AbstractCircuitComponent.getUnitText(@inductance, "H")
+  arr[4] = "P = " + AbstractCircuitComponent.getUnitText(@getPower(), "W")
 
 InductorElm::reset = ->
   @current = @volts[0] = @volts[1] = @curcount = 0
@@ -74,7 +74,7 @@ InductorElm::setEditValue = (n, ei) ->
   @ind.setup @inductance, @current, @flags
 
 InductorElm::setPoints = ->
-  CircuitElement::setPoints.call this
+  AbstractCircuitComponent::setPoints.call this
   @calcLeads 32
 
 InductorElm::stamp = ->

@@ -11,7 +11,6 @@ RowInfo = require('./rowInfo.coffee')
 
 Settings = require('../../settings/settings')
 
-_ = require('underscore')._
 
 class CircuitSolver
 
@@ -65,7 +64,6 @@ class CircuitSolver
     return if !@analyzeFlag || @Circuit.numElements() is 0
 
     @Circuit.getCircuitBottom()
-
     @Circuit.clearErrors()
     @Circuit.resetNodes()
 
@@ -112,10 +110,8 @@ class CircuitSolver
         console.log("Allocating a node for each post#{j}")
         postPt = circuitElm.getPost(j)
 
-        k = 0
         for node in @Circuit.getNodes()
           break if postPt.x is node.x and postPt.y is node.y
-          k++
 
         if k is @Circuit.numNodes()
           circuitNode = new CircuitNode()
@@ -156,7 +152,7 @@ class CircuitSolver
     voltageSourceTotal = 0
     @circuitNonLinear = false
 
-    # determine if circuit instanceof nonlinear
+    # Determine if circuit is nonlinear
     for circuitElement in @Circuit.getElements()
       @circuitNonLinear = true if circuitElement.nonLinear()
       voltageSourceCount = circuitElement.getVoltageSourceCount()
@@ -166,22 +162,16 @@ class CircuitSolver
 
     @Circuit.voltageSourceCount = voltageSourceTotal
     @matrixSize = @Circuit.numNodes() - 1 + voltageSourceTotal
+    @circuitMatrixSize = @circuitMatrixFullSize = @matrixSize
+
     @circuitMatrix = zeroArray2(@matrixSize, @matrixSize)
     @origMatrix = zeroArray2(@matrixSize, @matrixSize)
-    @circuitRightSide = new Array(@matrixSize)
-
-    # Todo: check array length
-    zeroArray @circuitRightSide
-    @origRightSide = new Array(@matrixSize)
-
-    zeroArray @origRightSide
-    @circuitMatrixSize = @circuitMatrixFullSize = @matrixSize
-    @circuitRowInfo = new Array(@matrixSize)
-    @circuitPermute = new Array(@matrixSize)
 
     # Todo: check
-    @circuitRowInfo = zeroArray @circuitRowInfo
-    @circuitPermute = zeroArray @circuitPermute
+    @circuitRightSide = zeroArray @matrixSize
+    @origRightSide = zeroArray @matrixSize
+    @circuitRowInfo = zeroArray @matrixSize
+    @circuitPermute = zeroArray @matrixSize
 
     for i in [0...@matrixSize]
       @circuitRowInfo[i] = new RowInfo()
@@ -230,7 +220,7 @@ class CircuitSolver
             continue
           k = 0
           while k isnt circuitElm.getPostCount()
-            continue  if j is k
+            continue if j is k
             kn = circuitElm.getNode(k)
             if circuitElm.getConnection(j, k) and not closure[kn]
               closure[kn] = true
@@ -269,9 +259,9 @@ class CircuitSolver
 
       # Look for voltage source loops:
       if (ce instanceof VoltageElm and ce.getPostCount() is 2) or ce instanceof WireElm
-        fpi = new FindPathInfo(FindPathInfo.VOLTAGE, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
+        findPathInfo = new FindPathInfo(FindPathInfo.VOLTAGE, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
 
-        if fpi.findPath(ce.getNode(0)) is true
+        if findPathInfo.findPath(ce.getNode(0)) is true
           @Circuit.halt "Voltage source/wire loop with no resistance!", ce
           return
 
@@ -299,17 +289,17 @@ class CircuitSolver
 
       # look for rows that can be removed
       for j in [0...@matrixSize]
-        q = @circuitMatrix[i][j]
+        matrix_ij = @circuitMatrix[i][j]
         if @circuitRowInfo[j].type is RowInfo.ROW_CONST
           # Keep a running total of const values that have been removed already
-          rsadd -= @circuitRowInfo[j].value * q
+          rsadd -= @circuitRowInfo[j].value * matrix_ij
           continue
-        continue if q is 0
+        continue if matrix_ij is 0
         if qp is -1
           qp = j
-          qv = q
+          qv = matrix_ij
           continue
-        if qm is -1 and q is -qv
+        if qm is -1 and matrix_ij is -qv
           qm = j
           continue
         break
@@ -362,77 +352,72 @@ class CircuitSolver
     console.log(qp + " = " + qm);
 
     # find size of new matrix:
-    nn = 0
+    newMatDim = 0
     for i in [0...@matrixSize]
-      elt = @circuitRowInfo[i]
-      if elt.type is RowInfo.ROW_NORMAL
-        elt.mapCol = nn++
-
+      circuitRowInfo = @circuitRowInfo[i]
+      if circuitRowInfo.type is RowInfo.ROW_NORMAL
         #console.log("col " + i + " maps to " + elt.mapCol);
+        circuitRowInfo.mapCol = newMatDim++
         continue
-      if elt.type is RowInfo.ROW_EQUAL
-        e2 = null
-
+      if circuitRowInfo.type is RowInfo.ROW_EQUAL
         # resolve chains of equality; 100 max steps to avoid loops
         while j isnt [0...100]
-          e2 = @circuitRowInfo[elt.nodeEq]
-          break  unless e2.type is RowInfo.ROW_EQUAL
-          break  if i is e2.nodeEq
-          elt.nodeEq = e2.nodeEq
-      elt.mapCol = -1  if elt.type is RowInfo.ROW_CONST
-    # END for
+          rowNodeEq = @circuitRowInfo[circuitRowInfo.nodeEq]
+          break  unless rowNodeEq.type is RowInfo.ROW_EQUAL
+          break  if i is rowNodeEq.nodeEq
+          circuitRowInfo.nodeEq = rowNodeEq.nodeEq
+      circuitRowInfo.mapCol = -1  if circuitRowInfo.type is RowInfo.ROW_CONST
 
 
     for i in [0...@matrixSize]
-      elt = @circuitRowInfo[i]
-      if elt.type is RowInfo.ROW_EQUAL
-        e2 = @circuitRowInfo[elt.nodeEq]
-        if e2.type is RowInfo.ROW_CONST
+      circuitRowInfo = @circuitRowInfo[i]
+      if circuitRowInfo.type is RowInfo.ROW_EQUAL
+        rowNodeEq = @circuitRowInfo[circuitRowInfo.nodeEq]
+        if rowNodeEq.type is RowInfo.ROW_CONST
 
           # if something instanceof equal to a const, it's a const
-          elt.type = e2.type
-          elt.value = e2.value
-          elt.mapCol = -1
+          circuitRowInfo.type = rowNodeEq.type
+          circuitRowInfo.value = rowNodeEq.value
+          circuitRowInfo.mapCol = -1
 
-          console.log(i + " = [late]const " + elt.value);
+          console.log(i + " = [late]const " + circuitRowInfo.value);
         else
-          elt.mapCol = e2.mapCol
+          circuitRowInfo.mapCol = rowNodeEq.mapCol
 
-    console.log(i + " maps to: " + e2.mapCol);
+    console.log(i + " maps to: " + rowNodeEq.mapCol);
 
     # make the new, simplified matrix
-    newsize = nn
-    newmatx = zeroArray2(newsize, newsize)
-    newrs = new Array(newsize)
+    newSize = newMatDim
+    newMatx = zeroArray2(newSize, newSize)
+    newRS = new Array(newSize)
 
-    zeroArray newrs
+    zeroArray newRS
     ii = 0
     i = 0
     while i isnt @matrixSize
-      rri = @circuitRowInfo[i]
-      if rri.dropRow
-        rri.mapRow = -1
+      circuitRowInfo = @circuitRowInfo[i]
+      if circuitRowInfo.dropRow
+        circuitRowInfo.mapRow = -1
         continue
-      newrs[ii] = @circuitRightSide[i]
-      rri.mapRow = ii
+      newRS[ii] = @circuitRightSide[i]
+      circuitRowInfo.mapRow = ii
 
       console.log("Row " + i + " maps to " + ii);
       for j in [0...@matrixSize]
         rowInfo = @circuitRowInfo[j]
         if rowInfo.type is RowInfo.ROW_CONST
-          newrs[ii] -= rowInfo.value * @circuitMatrix[i][j]
+          newRS[ii] -= rowInfo.value * @circuitMatrix[i][j]
         else
-          newmatx[ii][rowInfo.mapCol] += @circuitMatrix[i][j]
+          newMatx[ii][rowInfo.mapCol] += @circuitMatrix[i][j]
       ii++
       i++
 
-    @circuitMatrix = newmatx
-    @circuitRightSide = newrs
-    @matrixSize = @circuitMatrixSize = newsize
+    @circuitMatrix = newMatx
+    @circuitRightSide = newRS
+    @matrixSize = @circuitMatrixSize = newSize
 
     for i in [0...@matrixSize]
       @origRightSide[i] = @circuitRightSide[i]
-
 
     for i in [0...@matrixSize]
       for j in [0...@matrixSize]
@@ -455,19 +440,18 @@ class CircuitSolver
 
     debugPrint = @dumpMatrix
     @dumpMatrix = false
-    steprate = Math.floor(160 * @getIterCount())
-    tm = (new Date()).getTime()
-    lit = @lastIterTime
+    stepRate = Math.floor(160 * @getIterCount())
+    timeStart = (new Date()).getTime()
+    lastIterTime = @lastIterTime
 
     # Double-check
-    if 1000 >= steprate * (tm - @lastIterTime)
-      console.log "returned: diff: " + (tm - @lastIterTime)
+    if 1000 >= stepRate * (timeStart - @lastIterTime)
+      console.log "returned: diff: " + (timeStart - @lastIterTime)
       return
 
     # Main iteration
     iter = 1
     loop
-
       # Start Iteration for each element in the circuit
       for circuitElm in @Circuit.getElements()
         circuitElm.startIteration()
@@ -561,15 +545,15 @@ class CircuitSolver
       while i < @Circuit.scopeCount
         @Circuit.scopes[i].timeStep()
         ++i
-      tm = (new Date()).getTime()
-      lit = tm
+      timeStart = (new Date()).getTime()
+      lastIterTime = timeStart
 
-      if iter * 1000 >= steprate * (tm - @lastIterTime)
+      if iter * 1000 >= stepRate * (timeStart - @lastIterTime)
         break
-      else break if tm - @lastFrameTime > 500
+      else break if timeStart - @lastFrameTime > 500
       ++iter
 
-    @lastIterTime = lit
+    @lastIterTime = lastIterTime
 
 
 
@@ -582,18 +566,14 @@ class CircuitSolver
   @param n dimension
   @param ipvt pivot index
   ###
-  lu_factor: (a, n, ipvt) ->
-    i = 0
-    j = 0
-    k = 0
-
+  lu_factor: (circuitMatrix, nDim, pivotArray) ->
     # Divide each row by largest element in that row and remember scale factors
     i = 0
-    while i < n
+    while i < nDim
       largest = 0
       j = 0
-      while j < n
-        x = Math.abs(a[i][j])
+      while j < nDim
+        x = Math.abs(circuitMatrix[i][j])
         largest = x  if x > largest
         ++j
 
@@ -604,30 +584,30 @@ class CircuitSolver
 
     # Crout's method: Loop through columns first
     j = 0
-    while j < n
+    while j < nDim
 
       # Calculate upper trangular elements for this column:
       i = 0
       while i < j
-        q = a[i][j]
+        q = circuitMatrix[i][j]
         k = 0
         while k isnt i
-          q -= a[i][k] * a[k][j]
+          q -= circuitMatrix[i][k] * circuitMatrix[k][j]
           ++k
-        a[i][j] = q
+        circuitMatrix[i][j] = q
         ++i
 
       # Calculate lower triangular elements for this column
       largest = 0
       largestRow = -1
       i = j
-      while i < n
-        q = a[i][j]
+      while i < nDim
+        q = circuitMatrix[i][j]
         k = 0
         while k < j
-          q -= a[i][k] * a[k][j]
+          q -= circuitMatrix[i][k] * circuitMatrix[k][j]
           ++k
-        a[i][j] = q
+        circuitMatrix[i][j] = q
         x = Math.abs(q)
         if x >= largest
           largest = x
@@ -638,25 +618,25 @@ class CircuitSolver
       unless j is largestRow
         k = 0
 
-        while k < n
-          x = a[largestRow][k]
-          a[largestRow][k] = a[j][k]
-          a[j][k] = x
+        while k < nDim
+          x = circuitMatrix[largestRow][k]
+          circuitMatrix[largestRow][k] = circuitMatrix[j][k]
+          circuitMatrix[j][k] = x
           ++k
         @scaleFactors[largestRow] = @scaleFactors[j]
 
       # keep track of row interchanges
-      ipvt[j] = largestRow
+      pivotArray[j] = largestRow
 
       # avoid zeros
 
       #console.log("avoided zero");
-      a[j][j] = 1e-18  if a[j][j] is 0
-      unless j is n - 1
-        mult = 1 / a[j][j]
+      circuitMatrix[j][j] = 1e-18 if circuitMatrix[j][j] is 0
+      unless j is nDim - 1
+        mult = 1 / circuitMatrix[j][j]
         i = j + 1
-        while i isnt n
-          a[i][j] *= mult
+        while i isnt nDim
+          circuitMatrix[i][j] *= mult
           ++i
       ++j
     true
@@ -674,43 +654,40 @@ class CircuitSolver
   @param ipvt pivot index
   @param b factored matrix
   ###
-  lu_solve: (a, n, ipvt, b) ->
-    i = undefined
-
+  lu_solve: (circuitMatrix, nDim, pivotMatrix, circuitRightSide) ->
     # find first nonzero b element
     i = 0
-    while i < n
-      row = ipvt[i]
-      swap = b[row]
-      b[row] = b[i]
-      b[i] = swap
+    while i < nDim
+      row = pivotMatrix[i]
+      swap = circuitRightSide[row]
+      circuitRightSide[row] = circuitRightSide[i]
+      circuitRightSide[i] = swap
       break unless swap is 0
       ++i
     bi = i++
-    while i < n
-      row = ipvt[i]
+    while i < nDim
+      row = pivotMatrix[i]
       j = undefined
-      tot = b[row]
-      b[row] = b[i]
+      tot = circuitRightSide[row]
+      circuitRightSide[row] = circuitRightSide[i]
 
       # Forward substitution by using the lower triangular matrix;
       j = bi
       while j < i
-        tot -= a[i][j] * b[j]
+        tot -= circuitMatrix[i][j] * circuitRightSide[j]
         ++j
-      b[i] = tot
+      circuitRightSide[i] = tot
       ++i
-    i = n - 1
+    i = nDim - 1
     while i >= 0
-      tot = b[i]
+      tot = circuitRightSide[i]
 
       # back-substitution using the upper triangular matrix
-      j = undefined
       j = i + 1
-      while j isnt n
-        tot -= a[i][j] * b[j]
+      while j isnt nDim
+        tot -= circuitMatrix[i][j] * circuitRightSide[j]
         ++j
-      b[i] = tot / a[i][i]
+      circuitRightSide[i] = tot / circuitMatrix[i][i]
       i--
 
   updateVoltageSource: (n1, n2, vs, v) ->

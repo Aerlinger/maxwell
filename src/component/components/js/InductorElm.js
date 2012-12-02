@@ -1,10 +1,10 @@
-InductorElm.prototype = new CircuitElement();
+InductorElm.prototype = new AbstractCircuitComponent();
 InductorElm.prototype.constructor = InductorElm;
 
 InductorElm.prototype.inductance = 0;
 
 function InductorElm(xa, ya, xb, yb, f, st) {
-    CircuitElement.call(this, xa, ya, xb, yb, f);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f);
 
     this.ind = new Inductor();
 
@@ -35,7 +35,7 @@ InductorElm.prototype.draw = function () {
     this.drawCoil(8, this.lead1, this.lead2, v1, v2);
 
     if (Circuit.showValuesCheckItem) {
-        var s = CircuitElement.getShortUnitText(this.inductance, "H");
+        var s = AbstractCircuitComponent.getShortUnitText(this.inductance, "H");
         this.drawValues(s, hs);
     }
 
@@ -43,7 +43,7 @@ InductorElm.prototype.draw = function () {
 };
 
 InductorElm.prototype.dump = function () {
-    return CircuitElement.prototype.dump.call(this) + " " + this.inductance + " " + this.current;
+    return AbstractCircuitComponent.prototype.dump.call(this) + " " + this.inductance + " " + this.current;
 };
 
 InductorElm.prototype.getDumpType = function () {
@@ -72,8 +72,8 @@ InductorElm.prototype.doStep = function () {
 InductorElm.prototype.getInfo = function (arr) {
     arr[0] = "inductor";
     this.getBasicInfo(arr);
-    arr[3] = "L = " + CircuitElement.getUnitText(this.inductance, "H");
-    arr[4] = "P = " + CircuitElement.getUnitText(this.getPower(), "W");
+    arr[3] = "L = " + AbstractCircuitComponent.getUnitText(this.inductance, "H");
+    arr[4] = "P = " + AbstractCircuitComponent.getUnitText(this.getPower(), "W");
 };
 
 InductorElm.prototype.reset = function () {
@@ -107,7 +107,7 @@ InductorElm.prototype.setEditValue = function (n, ei) {
 };
 
 InductorElm.prototype.setPoints = function () {
-    CircuitElement.prototype.setPoints.call(this);
+    AbstractCircuitComponent.prototype.setPoints.call(this);
     this.calcLeads(32);
 };
 

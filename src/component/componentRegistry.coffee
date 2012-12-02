@@ -13,7 +13,7 @@ ResistorElm = require('../component/components/ResistorElm')
 GroundElm   = require('../component/components/GroundElm')
 VoltageElm  = require('../component/components/VoltageElm')
 
-Scope = require('../scope/scope')
+Scope = require('../scope/oscilloscope.coffee')
 
 class ComponentRegistry
 

@@ -1,4 +1,4 @@
 LogicOutputElm = (xa, ya, xb, yb, f, st) ->
-  CircuitElement.call this, xa, ya, xb, yb, f
-LogicOutputElm:: = new CircuitElement()
+  AbstractCircuitComponent.call this, xa, ya, xb, yb, f
+LogicOutputElm:: = new AbstractCircuitComponent()
 LogicOutputElm::constructor = LogicOutputElm

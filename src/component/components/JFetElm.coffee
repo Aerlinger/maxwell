@@ -1,4 +1,4 @@
 JFetElm = (xa, ya, xb, yb, f, st) ->
-  CircuitElement.call this, xa, ya, xb, yb, f
-JFetElm:: = new CircuitElement()
+  AbstractCircuitComponent.call this, xa, ya, xb, yb, f
+JFetElm:: = new AbstractCircuitComponent()
 JFetElm::constructor = JFetElm

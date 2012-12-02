@@ -1,8 +1,8 @@
-MosfetElm.prototype = new CircuitElement();
+MosfetElm.prototype = new AbstractCircuitComponent();
 MosfetElm.prototype.constructor = MosfetElm;
 
 function MosfetElm(xa, ya, xb, yb, f, st) {
-    CircuitElement.call(this, xa, ya, xb, yb, f);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f);
 
     this.pnp = ((f & MosfetElm.FLAG_PNP) != 0) ? -1 : 1;
     this.noDiagonal = true;
@@ -56,7 +56,7 @@ MosfetElm.prototype.reset = function () {
 };
 
 MosfetElm.prototype.dump = function () {
-    return CircuitElement.prototype.dump.call(this) + " " + this.vt;
+    return AbstractCircuitComponent.prototype.dump.call(this) + " " + this.vt;
 }
 
 MosfetElm.prototype.getDumpType = function () {
@@ -70,9 +70,9 @@ MosfetElm.prototype.draw = function () {
     this.setBboxPt(this.point1, this.point2, this.hs);
 
     var color = this.setVoltageColor(this.volts[1]);
-    CircuitElement.drawThickLinePt(this.src[0], this.src[1], color);
+    AbstractCircuitComponent.drawThickLinePt(this.src[0], this.src[1], color);
     color = this.setVoltageColor(this.volts[2]);
-    CircuitElement.drawThickLinePt(this.drn[0], this.drn[1], color);
+    AbstractCircuitComponent.drawThickLinePt(this.drn[0], this.drn[1], color);
     var segments = 6;
     var i;
     this.setPowerColor(true);
@@ -81,19 +81,19 @@ MosfetElm.prototype.draw = function () {
     for (i = 0; i != segments; i++) {
         var v = this.volts[1] + (this.volts[2] - this.volts[1]) * i / segments;
         color = this.setVoltageColor(v);
-        CircuitElement.interpPoint(this.src[1], this.drn[1], CircuitElement.ps1, i * segf);
-        CircuitElement.interpPoint(this.src[1], this.drn[1], CircuitElement.ps2, (i + 1) * segf);
-        CircuitElement.drawThickLinePt(CircuitElement.ps1, CircuitElement.ps2, color);
+        AbstractCircuitComponent.interpPoint(this.src[1], this.drn[1], AbstractCircuitComponent.ps1, i * segf);
+        AbstractCircuitComponent.interpPoint(this.src[1], this.drn[1], AbstractCircuitComponent.ps2, (i + 1) * segf);
+        AbstractCircuitComponent.drawThickLinePt(AbstractCircuitComponent.ps1, AbstractCircuitComponent.ps2, color);
     }
 
     color = this.setVoltageColor(this.volts[1]);
-    CircuitElement.drawThickLinePt(this.src[1], this.src[2], color);
+    AbstractCircuitComponent.drawThickLinePt(this.src[1], this.src[2], color);
     color = this.setVoltageColor(this.volts[2]);
-    CircuitElement.drawThickLinePt(this.drn[1], this.drn[2], color);
+    AbstractCircuitComponent.drawThickLinePt(this.drn[1], this.drn[2], color);
 
     if (!this.drawDigital()) {
         color = this.setVoltageColor(this.pnp == 1 ? this.volts[1] : this.volts[2]);
-        CircuitElement.drawThickPolygonP(this.arrowPoly, color);
+        AbstractCircuitComponent.drawThickPolygonP(this.arrowPoly, color);
         //g.fillPolygon(arrowPoly);
     }
 
@@ -101,8 +101,8 @@ MosfetElm.prototype.draw = function () {
     }
     //g.setColor(Color.gray);
     color = this.setVoltageColor(this.volts[0]);
-    CircuitElement.drawThickLinePt(this.point1, this.gate[1], color);
-    CircuitElement.drawThickLinePt(this.gate[0], this.gate[2], color);
+    AbstractCircuitComponent.drawThickLinePt(this.point1, this.gate[1], color);
+    AbstractCircuitComponent.drawThickLinePt(this.gate[0], this.gate[2], color);
 
     if (this.drawDigital() && this.pnp == -1) {
     }
@@ -154,28 +154,28 @@ MosfetElm.prototype.getPostCount = function () {
 };
 
 MosfetElm.prototype.setPoints = function () {
-    CircuitElement.prototype.setPoints.call(this);
+    AbstractCircuitComponent.prototype.setPoints.call(this);
 
     // find the coordinates of the various points we need to draw
     // the MOSFET.
     var hs2 = this.hs * this.dsign;
-    this.src = CircuitElement.newPointArray(3);
-    this.drn = CircuitElement.newPointArray(3);
-    CircuitElement.interpPoint2(this.point1, this.point2, this.src[0], this.drn[0], 1, -hs2);
-    CircuitElement.interpPoint2(this.point1, this.point2, this.src[1], this.drn[1], 1 - 22 / this.dn, -hs2);
-    CircuitElement.interpPoint2(this.point1, this.point2, this.src[2], this.drn[2], 1 - 22 / this.dn, -hs2 * 4 / 3);
+    this.src = AbstractCircuitComponent.newPointArray(3);
+    this.drn = AbstractCircuitComponent.newPointArray(3);
+    AbstractCircuitComponent.interpPoint2(this.point1, this.point2, this.src[0], this.drn[0], 1, -hs2);
+    AbstractCircuitComponent.interpPoint2(this.point1, this.point2, this.src[1], this.drn[1], 1 - 22 / this.dn, -hs2);
+    AbstractCircuitComponent.interpPoint2(this.point1, this.point2, this.src[2], this.drn[2], 1 - 22 / this.dn, -hs2 * 4 / 3);
 
-    this.gate = CircuitElement.newPointArray(3);
-    CircuitElement.interpPoint2(this.point1, this.point2, this.gate[0], this.gate[2], 1 - 28 / this.dn, hs2 / 2); // was 1-20/dn
-    CircuitElement.interpPoint(this.gate[0], this.gate[2], this.gate[1], .5);
+    this.gate = AbstractCircuitComponent.newPointArray(3);
+    AbstractCircuitComponent.interpPoint2(this.point1, this.point2, this.gate[0], this.gate[2], 1 - 28 / this.dn, hs2 / 2); // was 1-20/dn
+    AbstractCircuitComponent.interpPoint(this.gate[0], this.gate[2], this.gate[1], .5);
 
     if (!this.drawDigital()) {
         if (this.pnp == 1)
-            this.arrowPoly = CircuitElement.calcArrow(this.src[1], this.src[0], 10, 4);
+            this.arrowPoly = AbstractCircuitComponent.calcArrow(this.src[1], this.src[0], 10, 4);
         else
-            this.arrowPoly = CircuitElement.calcArrow(this.drn[0], this.drn[1], 12, 5);
+            this.arrowPoly = AbstractCircuitComponent.calcArrow(this.drn[0], this.drn[1], 12, 5);
     } else if (this.pnp == -1) {
-        CircuitElement.interpPoint(this.point1, this.point2, this.gate[1], 1 - 36 / this.dn);
+        AbstractCircuitComponent.interpPoint(this.point1, this.point2, this.gate[1], 1 - 36 / this.dn);
         var dist = (this.dsign < 0) ? 32 : 31;
         this.pcircle = this.interpPointPt(this.point1, this.point2, 1 - dist / this.dn);
         this.pcircler = 3;
@@ -282,13 +282,13 @@ MosfetElm.prototype.doStep = function () {
 
 MosfetElm.prototype.getFetInfo = function (arr, n) {
     arr[0] = ((this.pnp == -1) ? "p-" : "n-") + n;
-    arr[0] += " (Vt = " + CircuitElement.getVoltageText(this.pnp * this.vt) + ")";
-    arr[1] = ((this.pnp == 1) ? "Ids = " : "Isd = ") + CircuitElement.getCurrentText(this.ids);
-    arr[2] = "Vgs = " + CircuitElement.getVoltageText(this.volts[0] - this.volts[this.pnp == -1 ? 2 : 1]);
-    arr[3] = ((this.pnp == 1) ? "Vds = " : "Vsd = ") + CircuitElement.getVoltageText(this.volts[2] - this.volts[1]);
+    arr[0] += " (Vt = " + AbstractCircuitComponent.getVoltageText(this.pnp * this.vt) + ")";
+    arr[1] = ((this.pnp == 1) ? "Ids = " : "Isd = ") + AbstractCircuitComponent.getCurrentText(this.ids);
+    arr[2] = "Vgs = " + AbstractCircuitComponent.getVoltageText(this.volts[0] - this.volts[this.pnp == -1 ? 2 : 1]);
+    arr[3] = ((this.pnp == 1) ? "Vds = " : "Vsd = ") + AbstractCircuitComponent.getVoltageText(this.volts[2] - this.volts[1]);
     arr[4] = (this.mode == 0) ? "off" :
         (this.mode == 1) ? "linear" : "saturation";
-    arr[5] = "gm = " + CircuitElement.getUnitText(this.gm, "A/V");
+    arr[5] = "gm = " + AbstractCircuitComponent.getUnitText(this.gm, "A/V");
 };
 
 MosfetElm.prototype.getInfo = function (arr) {

@@ -1,5 +1,5 @@
 OpAmpElm = (xa, ya, xb, yb, f, st) ->
-  CircuitElement.call this, xa, ya, xb, yb, f
+  AbstractCircuitComponent.call this, xa, ya, xb, yb, f
   @opsize = 0
   @opheight = 0
   @opwidth = 0
@@ -30,7 +30,7 @@ OpAmpElm = (xa, ya, xb, yb, f, st) ->
   @noDiagonal = true
   @setSize (if (f & OpAmpElm.FLAG_SMALL) isnt 0 then 1 else 2)
   @setGain()
-OpAmpElm:: = new CircuitElement()
+OpAmpElm:: = new AbstractCircuitComponent()
 OpAmpElm::constructor = OpAmpElm
 OpAmpElm.FLAG_SWAP = 1
 OpAmpElm.FLAG_SMALL = 2
@@ -43,7 +43,7 @@ OpAmpElm::setGain = ->
   @gain = (if ((@flags & OpAmpElm.FLAG_LOWGAIN) isnt 0) then 1000 else 100000)
 
 OpAmpElm::dump = ->
-  CircuitElement::dump.call(this) + " " + @maxOut + " " + @minOut + " " + @gbw
+  AbstractCircuitComponent::dump.call(this) + " " + @maxOut + " " + @minOut + " " + @gbw
 
 OpAmpElm::nonLinear = ->
   true
@@ -51,20 +51,20 @@ OpAmpElm::nonLinear = ->
 OpAmpElm::draw = ->
   @setBboxPt @point1, @point2, @opheight * 2
   color = @setVoltageColor(@volts[0])
-  CircuitElement.drawThickLinePt @in1p[0], @in1p[1], color
+  AbstractCircuitComponent.drawThickLinePt @in1p[0], @in1p[1], color
   color = @setVoltageColor(@volts[1])
-  CircuitElement.drawThickLinePt @in2p[0], @in2p[1], color
+  AbstractCircuitComponent.drawThickLinePt @in2p[0], @in2p[1], color
   
   #g.setColor(this.needsHighlight() ? this.selectColor : this.lightGrayColor);
   @setPowerColor true
-  CircuitElement.drawThickPolygonP @triangle, (if @needsHighlight() then CircuitElement.selectColor else CircuitElement.lightGrayColor)
+  AbstractCircuitComponent.drawThickPolygonP @triangle, (if @needsHighlight() then AbstractCircuitComponent.selectColor else AbstractCircuitComponent.lightGrayColor)
   
   #g.setFont(plusFont);
   
   #this.drawCenteredText("-", this.textp[0].x + 3, this.textp[0].y + 8, true).attr({'font-weight':'bold', 'font-size':17});
   #this.drawCenteredText("+", this.textp[1].x + 3, this.textp[1].y + 10, true).attr({'font-weight':'bold', 'font-size':14});
   color = @setVoltageColor(@volts[2])
-  CircuitElement.drawThickLinePt @lead2, @point2, color
+  AbstractCircuitComponent.drawThickLinePt @lead2, @point2, color
   @curcount = @updateDotCount(@current, @curcount)
   @drawDots @point2, @lead2, @curcount
   @drawPosts()
@@ -79,22 +79,22 @@ OpAmpElm::setSize = (s) ->
   @flags = (@flags & ~OpAmpElm.FLAG_SMALL) | ((if (s is 1) then OpAmpElm.FLAG_SMALL else 0))
 
 OpAmpElm::setPoints = ->
-  CircuitElement::setPoints.call this
+  AbstractCircuitComponent::setPoints.call this
   @setSize 2  if @dn > 150 and this is Circuit.dragElm
   ww = Math.floor(@opwidth)
   ww = Math.floor(@dn / 2)  if ww > @dn / 2
   @calcLeads ww * 2
   hs = Math.floor(@opheight * @dsign)
   hs = -hs  unless (@flags & OpAmpElm.FLAG_SWAP) is 0
-  @in1p = CircuitElement.newPointArray(2)
-  @in2p = CircuitElement.newPointArray(2)
-  @textp = CircuitElement.newPointArray(2)
-  CircuitElement.interpPoint2 @point1, @point2, @in1p[0], @in2p[0], 0, hs
-  CircuitElement.interpPoint2 @lead1, @lead2, @in1p[1], @in2p[1], 0, hs
-  CircuitElement.interpPoint2 @lead1, @lead2, @textp[0], @textp[1], .2, hs
-  tris = CircuitElement.newPointArray(2)
-  CircuitElement.interpPoint2 @lead1, @lead2, tris[0], tris[1], 0, hs * 2
-  @triangle = CircuitElement.createPolygon(tris[0], tris[1], @lead2)
+  @in1p = AbstractCircuitComponent.newPointArray(2)
+  @in2p = AbstractCircuitComponent.newPointArray(2)
+  @textp = AbstractCircuitComponent.newPointArray(2)
+  AbstractCircuitComponent.interpPoint2 @point1, @point2, @in1p[0], @in2p[0], 0, hs
+  AbstractCircuitComponent.interpPoint2 @lead1, @lead2, @in1p[1], @in2p[1], 0, hs
+  AbstractCircuitComponent.interpPoint2 @lead1, @lead2, @textp[0], @textp[1], .2, hs
+  tris = AbstractCircuitComponent.newPointArray(2)
+  AbstractCircuitComponent.interpPoint2 @lead1, @lead2, tris[0], tris[1], 0, hs * 2
+  @triangle = AbstractCircuitComponent.createPolygon(tris[0], tris[1], @lead2)
 
 
 #this.plusFont = new Font("SansSerif", 0, opsize == 2 ? 14 : 10);
@@ -109,14 +109,14 @@ OpAmpElm::getVoltageSourceCount = ->
 
 OpAmpElm::getInfo = (arr) ->
   arr[0] = "op-amp"
-  arr[1] = "V+ = " + CircuitElement.getVoltageText(@volts[1])
-  arr[2] = "V- = " + CircuitElement.getVoltageText(@volts[0])
+  arr[1] = "V+ = " + AbstractCircuitComponent.getVoltageText(@volts[1])
+  arr[2] = "V- = " + AbstractCircuitComponent.getVoltageText(@volts[0])
   
   # sometimes the voltage goes slightly outside range, to make convergence easier.  so we hide that here.
   vo = Math.max(Math.min(@volts[2], @maxOut), @minOut)
-  arr[3] = "Vout = " + CircuitElement.getVoltageText(vo)
-  arr[4] = "Iout = " + CircuitElement.getCurrentText(@getCurrent())
-  arr[5] = "range = " + CircuitElement.getVoltageText(@minOut) + " to " + CircuitElement.getVoltageText(@maxOut)
+  arr[3] = "Vout = " + AbstractCircuitComponent.getVoltageText(vo)
+  arr[4] = "Iout = " + AbstractCircuitComponent.getCurrentText(@getCurrent())
+  arr[5] = "range = " + AbstractCircuitComponent.getVoltageText(@minOut) + " to " + AbstractCircuitComponent.getVoltageText(@maxOut)
 
 OpAmpElm::stamp = ->
   vn = Circuit.nodeList.length + @voltSource

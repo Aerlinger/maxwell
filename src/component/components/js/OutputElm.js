@@ -1,9 +1,9 @@
-OutputElm.prototype = new CircuitElement();
+OutputElm.prototype = new AbstractCircuitComponent();
 OutputElm.prototype.constructor = OutputElm;
 
 function OutputElm(xa, ya, xb, yb, f, st) {
     // st not used for OutputElm
-    CircuitElement.call(this, xa, ya, xb, yb, f);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f);
 }
 ;
 
@@ -19,7 +19,7 @@ OutputElm.prototype.getPostCount = function () {
 };
 
 OutputElm.prototype.setPoints = function () {
-    CircuitElement.prototype.setPoints.call(this);
+    AbstractCircuitComponent.prototype.setPoints.call(this);
     this.lead1 = new Point();
 };
 
@@ -27,9 +27,9 @@ OutputElm.prototype.draw = function () {
     var selected = (this.needsHighlight() || Circuit.plotYElm == this);
     //Font f = new Font("SansSerif", selected ? Font.BOLD : 0, 14);
     //g.setFont(f);
-    var color = selected ? CircuitElement.selectColor : CircuitElement.whiteColor;
+    var color = selected ? AbstractCircuitComponent.selectColor : AbstractCircuitComponent.whiteColor;
 
-    var s = (this.flags & OutputElm.FLAG_VALUE) != 0 ? CircuitElement.getVoltageText(this.volts[0]) : "out";
+    var s = (this.flags & OutputElm.FLAG_VALUE) != 0 ? AbstractCircuitComponent.getVoltageText(this.volts[0]) : "out";
 
     //FontMetrics fm = g.getFontMetrics();
     if (this == Circuit.plotXElm)
@@ -37,7 +37,7 @@ OutputElm.prototype.draw = function () {
     if (this == Circuit.plotYElm)
         s = "Y";
 
-    CircuitElement.interpPoint(this.point1, this.point2, this.lead1, 1 - (3 * s.length / 2 + 8) / this.dn);         //fm.stringWidth(s)
+    AbstractCircuitComponent.interpPoint(this.point1, this.point2, this.lead1, 1 - (3 * s.length / 2 + 8) / this.dn);         //fm.stringWidth(s)
     this.setBboxPt(this.point1, this.lead1, 0);
     this.drawCenteredText(s, this.x2, this.y2, true);
 
@@ -45,7 +45,7 @@ OutputElm.prototype.draw = function () {
     if (selected)
         color = Settings.SELECT_COLOR;
 
-    CircuitElement.drawThickLinePt(this.point1, this.lead1, color);
+    AbstractCircuitComponent.drawThickLinePt(this.point1, this.lead1, color);
     this.drawPosts();
 };
 
@@ -55,7 +55,7 @@ OutputElm.prototype.getVoltageDiff = function () {
 
 OutputElm.prototype.getInfo = function (arr) {
     arr[0] = "output";
-    arr[1] = "V = " + CircuitElement.getVoltageText(this.volts[0]);
+    arr[1] = "V = " + AbstractCircuitComponent.getVoltageText(this.volts[0]);
 };
 
 OutputElm.prototype.getEditInfo = function (n) {

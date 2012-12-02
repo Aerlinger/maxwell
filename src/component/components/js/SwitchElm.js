@@ -1,19 +1,19 @@
 // Step 2: Prototype of SwitchElm is CircuitElement
-SwitchElm.prototype = new CircuitElement();
+SwitchElm.prototype = new AbstractCircuitComponent();
 // Step 3: Now we need to set the constructor to the DepthRectangle instead of Rectangle
 SwitchElm.prototype.constructor = SwitchElm;
 
 
 function SwitchElm(xa, ya, xb, yb, f, st) {
 
-    CircuitElement.call(this, xa, ya, xb, yb, f, st);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f, st);
     this.momentary = false;
 
     this.position = 0;
     this.posCount = 2;
 
     this.ps = new Point(0, 0);
-    CircuitElement.ps2 = new Point(0, 0);
+    AbstractCircuitComponent.ps2 = new Point(0, 0);
 
     if (st) {
 
@@ -42,14 +42,14 @@ SwitchElm.prototype.getDumpType = function () {
 };
 
 SwitchElm.prototype.dump = function () {
-    return CircuitElement.prototype.dump.call(this) + " " + this.position + " " + this.momentary;
+    return AbstractCircuitComponent.prototype.dump.call(this) + " " + this.position + " " + this.momentary;
 };
 
 SwitchElm.prototype.setPoints = function () {
-    CircuitElement.prototype.setPoints.call(this);
+    AbstractCircuitComponent.prototype.setPoints.call(this);
     this.calcLeads(32);
     this.ps = new Point(0, 0);
-    CircuitElement.ps2 = new Point(0, 0);
+    AbstractCircuitComponent.ps2 = new Point(0, 0);
 };
 
 SwitchElm.prototype.draw = function () {
@@ -65,10 +65,10 @@ SwitchElm.prototype.draw = function () {
 
     //if (!needsHighlight())
     //	g.beginFill(Color.WHITE);
-    CircuitElement.interpPoint(this.lead1, this.lead2, this.ps, 0, hs1);
-    CircuitElement.interpPoint(this.lead1, this.lead2, CircuitElement.ps2, 1, hs2);
+    AbstractCircuitComponent.interpPoint(this.lead1, this.lead2, this.ps, 0, hs1);
+    AbstractCircuitComponent.interpPoint(this.lead1, this.lead2, AbstractCircuitComponent.ps2, 1, hs2);
 
-    CircuitElement.drawThickLinePt(this.ps, CircuitElement.ps2, Settings.FG_COLOR);
+    AbstractCircuitComponent.drawThickLinePt(this.ps, AbstractCircuitComponent.ps2, Settings.FG_COLOR);
     this.drawPosts();
 };
 
@@ -101,11 +101,11 @@ SwitchElm.prototype.getInfo = function (arr) {
     arr[0] = (this.momentary) ? "push switch (SPST)" : "switch (SPST)";
     if (this.position == 1) {
         arr[1] = "open";
-        arr[2] = "Vd = " + CircuitElement.getVoltageDText(this.getVoltageDiff());
+        arr[2] = "Vd = " + AbstractCircuitComponent.getVoltageDText(this.getVoltageDiff());
     } else {
         arr[1] = "closed";
-        arr[2] = "V = " + CircuitElement.getVoltageText(this.volts[0]);
-        arr[3] = "I = " + CircuitElement.getCurrentDText(this.getCurrent());
+        arr[2] = "V = " + AbstractCircuitComponent.getVoltageText(this.volts[0]);
+        arr[3] = "I = " + AbstractCircuitComponent.getCurrentDText(this.getCurrent());
     }
 };
 

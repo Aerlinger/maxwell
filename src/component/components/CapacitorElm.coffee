@@ -1,11 +1,11 @@
 CapacitorElm = (xa, ya, xb, yb, f, st) ->
-  CircuitElement.call this, xa, ya, xb, yb, f
+  AbstractCircuitComponent.call this, xa, ya, xb, yb, f
   if st
     st = st.split(" ")  if typeof st is "string"
     @capacitance = Number(st[0])
     @voltdiff = Number(st[1])
 
-CapacitorElm:: = new CircuitElement()
+CapacitorElm:: = new AbstractCircuitComponent()
 CapacitorElm::constructor = CapacitorElm
 
 
@@ -19,7 +19,7 @@ CapacitorElm::isTrapezoidal = ->
   (@flags & CapacitorElm.FLAG_BACK_EULER) is 0
 
 CapacitorElm::setNodeVoltage = (n, c) ->
-  CircuitElement::setNodeVoltage.call this, n, c
+  AbstractCircuitComponent::setNodeVoltage.call this, n, c
   @voltdiff = @volts[0] - @volts[1]
 
 CapacitorElm::reset = ->
@@ -32,21 +32,21 @@ CapacitorElm::getDumpType = ->
   "c"
 
 CapacitorElm::dump = ->
-  CircuitElement::dump.call(this) + " " + @capacitance + " " + @voltdiff
+  AbstractCircuitComponent::dump.call(this) + " " + @capacitance + " " + @voltdiff
 
 CapacitorElm::setPoints = ->
-  CircuitElement::setPoints.call this
+  AbstractCircuitComponent::setPoints.call this
   f = (@dn / 2 - 4) / @dn
   
   # calc leads
-  @lead1 = CircuitElement.interpPointPt(@point1, @point2, f)
-  @lead2 = CircuitElement.interpPointPt(@point1, @point2, 1 - f)
+  @lead1 = AbstractCircuitComponent.interpPointPt(@point1, @point2, f)
+  @lead2 = AbstractCircuitComponent.interpPointPt(@point1, @point2, 1 - f)
   
   # calc plates
-  @plate1 = CircuitElement.newPointArray(2)
-  @plate2 = CircuitElement.newPointArray(2)
-  CircuitElement.interpPoint2 @point1, @point2, @plate1[0], @plate1[1], f, 12
-  CircuitElement.interpPoint2 @point1, @point2, @plate2[0], @plate2[1], 1 - f, 12
+  @plate1 = AbstractCircuitComponent.newPointArray(2)
+  @plate2 = AbstractCircuitComponent.newPointArray(2)
+  AbstractCircuitComponent.interpPoint2 @point1, @point2, @plate1[0], @plate1[1], f, 12
+  AbstractCircuitComponent.interpPoint2 @point1, @point2, @plate2[0], @plate2[1], 1 - f, 12
 
 CapacitorElm::draw = (g) ->
   hs = 12
@@ -58,9 +58,9 @@ CapacitorElm::draw = (g) ->
   
   # draw first lead and plate
   color = @setVoltageColor(@volts[0])
-  CircuitElement.drawThickLinePt @point1, @lead1, color
+  AbstractCircuitComponent.drawThickLinePt @point1, @lead1, color
   @setPowerColor false
-  CircuitElement.drawThickLinePt @plate1[0], @plate1[1], color
+  AbstractCircuitComponent.drawThickLinePt @plate1[0], @plate1[1], color
   
   # TODO:
   #    if (CirSim.powerCheckItem)
@@ -68,12 +68,12 @@ CapacitorElm::draw = (g) ->
   
   # draw second lead and plate
   color = @setVoltageColor(@volts[1])
-  CircuitElement.drawThickLinePt @point2, @lead2, color
+  AbstractCircuitComponent.drawThickLinePt @point2, @lead2, color
   @setPowerColor false
-  CircuitElement.drawThickLinePt @plate2[0], @plate2[1], color
+  AbstractCircuitComponent.drawThickLinePt @plate2[0], @plate2[1], color
   @drawPosts()
   if Circuit.showValuesCheckItem
-    s = CircuitElement.getShortUnitText(@capacitance, "F")
+    s = AbstractCircuitComponent.getShortUnitText(@capacitance, "F")
     @drawValues s, hs
 
 CapacitorElm::stamp = ->
@@ -111,10 +111,10 @@ CapacitorElm::doStep = ->
 CapacitorElm::getInfo = (arr) ->
   arr[0] = "capacitor"
   @getBasicInfo arr
-  arr[3] = "C = " + CircuitElement.getUnitText(@capacitance, "F")
-  arr[4] = "P = " + CircuitElement.getUnitText(@getPower(), "W")
+  arr[3] = "C = " + AbstractCircuitComponent.getUnitText(@capacitance, "F")
+  arr[4] = "P = " + AbstractCircuitComponent.getUnitText(@getPower(), "W")
   v = @getVoltageDiff()
-  arr[4] = "U = " + CircuitElement.getUnitText(.5 * @capacitance * v * v, "J")
+  arr[4] = "U = " + AbstractCircuitComponent.getUnitText(.5 * @capacitance * v * v, "J")
 
 CapacitorElm::getEditInfo = (n) ->
   return new EditInfo("Capacitance (F)", @capacitance, 0, 0)  if n is 0

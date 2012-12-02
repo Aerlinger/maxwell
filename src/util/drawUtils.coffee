@@ -9,9 +9,9 @@ class DrawHelpers
 
   @interpPointPt: (a, b, f, g) ->
     printStackTrace() unless f
-    p = new Point(0, 0)
-    @interpPoint a, b, p, f, g
-    return p
+    newPoint = new Point(0, 0)
+    @interpPoint a, b, newPoint, f, g
+    return newPoint
 
   @interpPoint: (a, b, c, f, g) ->
     gx = 0
@@ -22,8 +22,8 @@ class DrawHelpers
       g /= Math.sqrt(gx * gx + gy * gy)
     else
       g = 0
-    c.x = Math.floor(a.x * (1 - f) + b.x * f + g * gx + 0.48)
-    c.y = Math.floor(a.y * (1 - f) + b.y * f + g * gy + 0.48)
+    c.x = Math.floor a.x * (1 - f) + b.x * f + g * gx + 0.48
+    c.y = Math.floor a.y * (1 - f) + b.y * f + g * gy + 0.48
     return b
 
   @interpPoint2: (a, b, c, d, f, g) ->
@@ -37,10 +37,10 @@ class DrawHelpers
       g = 0
     offset = 0.48
 
-    c.x  = Math.floor( a.x * (1 - f) + b.x * f + g * gx + offset )
-    c.y   = Math.floor( a.y  * (1 - f) + b.y  * f + g * gy + offset )
-    d.x  = Math.floor( a.x * (1 - f) + b.x * f - g * gx + offset )
-    d.y   = Math.floor( a.y  * (1 - f) + b.y  * f - g * gy + offset )
+    c.x  = Math.floor a.x * (1 - f) + b.x * f + g * gx + offset
+    c.y   = Math.floor a.y  * (1 - f) + b.y  * f + g * gy + offset
+    d.x  = Math.floor a.x * (1 - f) + b.x * f - g * gx + offset
+    d.y   = Math.floor a.y  * (1 - f) + b.y  * f - g * gy + offset
 
   @calcArrow: (a, b, al, aw) ->
     poly = new Polygon()
@@ -56,21 +56,19 @@ class DrawHelpers
     return poly
 
   @createPolygon: (a, b, c, d) ->
-    p = new Polygon()
-    p.addVertex a.x, a.y
-    p.addVertex b.x, b.y
-    p.addVertex c.x, c.y
-    p.addVertex d.x, d.y  if d
-    return p
+    newPoly = new Polygon()
+    newPoly.addVertex a.x, a.y
+    newPoly.addVertex b.x, b.y
+    newPoly.addVertex c.x, c.y
+    newPoly.addVertex d.x, d.y  if d
+    return newPoly
 
-  @createPolygonFromArray: (a) ->
-    p = new Polygon()
-    i = 0
+  @createPolygonFromArray: (vertexArray) ->
+    newPoly = new Polygon()
+    for vertex in vertexArray
+      newPoly.addVertex vertex.x, vertex.y
 
-    while i < a.length
-      p.addVertex a[i].x, a[i].y
-      ++i
-    return p
+    return newPoly
 
   @drawCoil: (hs, p1, p2, v1, v2) ->
 
@@ -79,8 +77,8 @@ class DrawHelpers
     segf = 1 / segments
     @ps1.x = p1.x
     @ps1.y = p1.y
-    i = 0
 
+    i = 0
     while i < segments
       cx = (((i + 1) * 8 * segf) % 2) - 1
       hsx = Math.sqrt(1 - cx * cx)
@@ -103,18 +101,17 @@ class DrawHelpers
 
   @drawThickLine: (x, y, x2, y2, color) ->
     #paper.strokeStyle = (if (color) then Color.color2HexString(color) else CircuitElement.color)
-    paper.strokeStyle = color || Settings.color
-    paper.beginPath()
-    paper.moveTo x, y
-    paper.lineTo x2, y2
-    paper.stroke()
-    paper.closePath()
+#    paper.strokeStyle = color || Settings.color
+#    paper.beginPath()
+#    paper.moveTo x, y
+#    paper.lineTo x2, y2
+#    paper.stroke()
+#    paper.closePath()
 
   @drawThickLinePt: (pa, pb, color) ->
     @.drawThickLine pa.x, pa.y, pb.x, pb.y, color
 
   @drawThickPolygon: (xlist, ylist, c, color) ->
-    i = undefined
     i = 0
     while i < (c.length - 1)
       @.drawThickLine xlist[i], ylist[i], xlist[i + 1], ylist[i + 1], color
@@ -122,45 +119,20 @@ class DrawHelpers
     @.drawThickLine xlist[i], ylist[i], xlist[0], ylist[0], color
 
   @drawThickPolygonP: (polygon, color) ->
-    c = polygon.numPoints()
-    i = undefined
+    numVertices = polygon.numPoints()
+
     i = 0
-    while i < (c - 1)
+    while i < (numVertices - 1)
       @.drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(i + 1), polygon.getY(i + 1), color
       ++i
     @.drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
 
 
   @getVoltageDText: (v) ->
-    @.getUnitText Math.abs(v), "V"
+    getUnitText Math.abs(v), "V"
 
   @getVoltageText: (v) ->
-    @.getUnitText v, "V"
-
-  @getUnitText: (v, u) ->
-    va = Math.abs(v)
-    return "0 " + u  if va < 1e-14
-    return (v * 1e12).toFixed(2) + " p" + u  if va < 1e-9
-    return (v * 1e9).toFixed(2) + " n" + u  if va < 1e-6
-    return (v * 1e6).toFixed(2) + " " + Circuit.muString + u  if va < 1e-3
-    return (v * 1e3).toFixed(2) + " m" + u  if va < 1
-    return (v).toFixed(2) + " " + u  if va < 1e3
-    return (v * 1e-3).toFixed(2) + " k" + u  if va < 1e6
-    return (v * 1e-6).toFixed(2) + " M" + u  if va < 1e9
-    (v * 1e-9).toFixed(2) + " G" + u
-
-
-  @getShortUnitText: (v, u) ->
-    va = Math.abs(v)
-    return null  if va < 1e-13
-    return (v * 1e12).toFixed(1) + "p" + u  if va < 1e-9
-    return (v * 1e9).toFixed(1) + "n" + u  if va < 1e-6
-    return (v * 1e6).toFixed(1) + Circuit.muString + u  if va < 1e-3
-    return (v * 1e3).toFixed(1) + "m" + u  if va < 1
-    return (v).toFixed(1) + u  if va < 1e3
-    return (v * 1e-3).toFixed(1) + "k" + u  if va < 1e6
-    return (v * 1e-6).toFixed(1) + "M" + u  if va < 1e9
-    (v * 1e-9).toFixed(1) + "G" + u
+    getUnitText v, "V"
 
   @getCurrentText: (i) ->
     getUnitText i, "A"

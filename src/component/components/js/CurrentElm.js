@@ -1,6 +1,6 @@
 function CurrentElm(xa, ya, xb, yb, f, st) {
 
-    CircuitElement.call(this, xa, ya, xb, yb, f);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f);
     try {
         if (typeof st == 'string')
             st = st.split(' ');
@@ -13,30 +13,30 @@ function CurrentElm(xa, ya, xb, yb, f, st) {
 }
 ;
 
-CurrentElm.prototype = new CircuitElement();
+CurrentElm.prototype = new AbstractCircuitComponent();
 CurrentElm.prototype.constructor = CurrentElm;
 
 CurrentElm.prototype.dump = function () {
-    return CircuitElement.prototype.dump.call(this) + " " + this.currentValue;
+    return AbstractCircuitComponent.prototype.dump.call(this) + " " + this.currentValue;
 };
 
 CurrentElm.prototype.getDumpType = function () {
     return 'i';
 };
 
-CircuitElement.prototype.arrow;
-CircuitElement.prototype.ashaft1;
-CircuitElement.prototype.ashaft2;
-CircuitElement.prototype.center;
+AbstractCircuitComponent.prototype.arrow;
+AbstractCircuitComponent.prototype.ashaft1;
+AbstractCircuitComponent.prototype.ashaft2;
+AbstractCircuitComponent.prototype.center;
 
 CurrentElm.prototype.setPoints = function () {
-    CircuitElement.prototype.setPoints.call(this);
+    AbstractCircuitComponent.prototype.setPoints.call(this);
     this.calcLeads(26);
-    this.ashaft1 = CircuitElement.interpPointPt(this.lead1, this.lead2, .25);
-    this.ashaft2 = CircuitElement.interpPointPt(this.lead1, this.lead2, .6);
-    this.center = CircuitElement.interpPointPt(this.lead1, this.lead2, .5);
-    var p2 = CircuitElement.interpPointPt(this.lead1, this.lead2, .75);
-    this.arrow = CircuitElement.calcArrow(this.center, p2, 4, 4);
+    this.ashaft1 = AbstractCircuitComponent.interpPointPt(this.lead1, this.lead2, .25);
+    this.ashaft2 = AbstractCircuitComponent.interpPointPt(this.lead1, this.lead2, .6);
+    this.center = AbstractCircuitComponent.interpPointPt(this.lead1, this.lead2, .5);
+    var p2 = AbstractCircuitComponent.interpPointPt(this.lead1, this.lead2, .75);
+    this.arrow = AbstractCircuitComponent.calcArrow(this.center, p2, 4, 4);
 };
 
 CurrentElm.prototype.draw = function () {
@@ -45,15 +45,15 @@ CurrentElm.prototype.draw = function () {
     this.setVoltageColor((this.volts[0] + this.volts[1]) / 2);
     this.setPowerColor(false);
 
-    CircuitElement.drawCircle(this.center.x1, this.center.y, cr);
-    CircuitElement.drawCircle(this.ashaft1, this.ashaft2);
+    AbstractCircuitComponent.drawCircle(this.center.x1, this.center.y, cr);
+    AbstractCircuitComponent.drawCircle(this.ashaft1, this.ashaft2);
 
-    CircuitElement.fillPolygon(this.arrow);
-    CircuitElement.setBboxPt(this.point1, this.point2, cr);
+    AbstractCircuitComponent.fillPolygon(this.arrow);
+    AbstractCircuitComponent.setBboxPt(this.point1, this.point2, cr);
 
     this.doDots();
     if (Circuit.showValuesCheckItem) {
-        var s = CircuitElement.getShortUnitText(this.currentValue, "A");
+        var s = AbstractCircuitComponent.getShortUnitText(this.currentValue, "A");
         if (this.dx == 0 || this.dy == 0)
             this.drawValues(s, cr);
     }

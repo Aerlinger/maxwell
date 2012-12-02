@@ -2,7 +2,7 @@ DiodeElm.FLAG_FWDROP = 1;
 DiodeElm.DEFAULT_DROP = .805904783;
 
 function DiodeElm(xa, ya, xb, yb, f, st) {
-    CircuitElement.call(this, xa, ya, xb, yb, f);
+    AbstractCircuitComponent.call(this, xa, ya, xb, yb, f);
 
     this.diode = new Diode();
 
@@ -21,7 +21,7 @@ function DiodeElm(xa, ya, xb, yb, f, st) {
 }
 ;
 
-DiodeElm.prototype = new CircuitElement();
+DiodeElm.prototype = new AbstractCircuitComponent();
 DiodeElm.prototype.constructor = DiodeElm;
 
 DiodeElm.prototype.hs = 8;
@@ -42,18 +42,18 @@ DiodeElm.prototype.getDumpType = function () {
 
 DiodeElm.prototype.dump = function () {
     this.flags |= DiodeElm.FLAG_FWDROP;
-    return CircuitElement.prototype.dump.call(this) + " " + this.fwdrop;
+    return AbstractCircuitComponent.prototype.dump.call(this) + " " + this.fwdrop;
 };
 
 
 DiodeElm.prototype.setPoints = function () {
-    CircuitElement.prototype.setPoints.call(this);
+    AbstractCircuitComponent.prototype.setPoints.call(this);
     this.calcLeads(16);
-    this.cathode = CircuitElement.newPointArray(2);
-    var pa = CircuitElement.newPointArray(2);	// Point array
-    CircuitElement.interpPoint2(this.lead1, this.lead2, pa[0], pa[1], 0, this.hs);
-    CircuitElement.interpPoint2(this.lead1, this.lead2, this.cathode[0], this.cathode[1], 1, this.hs);
-    this.poly = CircuitElement.createPolygon(pa[0], pa[1], this.lead2);
+    this.cathode = AbstractCircuitComponent.newPointArray(2);
+    var pa = AbstractCircuitComponent.newPointArray(2);	// Point array
+    AbstractCircuitComponent.interpPoint2(this.lead1, this.lead2, pa[0], pa[1], 0, this.hs);
+    AbstractCircuitComponent.interpPoint2(this.lead1, this.lead2, this.cathode[0], this.cathode[1], 1, this.hs);
+    this.poly = AbstractCircuitComponent.createPolygon(pa[0], pa[1], this.lead2);
 
 };
 
@@ -80,12 +80,12 @@ DiodeElm.prototype.drawDiode = function () {
     //this.setPowerColor(true);
     var color = this.setVoltageColor(v1);
 
-    CircuitElement.drawThickPolygonP(this.poly, color);
+    AbstractCircuitComponent.drawThickPolygonP(this.poly, color);
     //g.fillPolygon(poly);
 
     // draw thing diode plate
     color = this.setVoltageColor(v2);
-    CircuitElement.drawThickLinePt(this.cathode[0], this.cathode[1], color);
+    AbstractCircuitComponent.drawThickLinePt(this.cathode[0], this.cathode[1], color);
 };
 
 DiodeElm.prototype.stamp = function () {
@@ -102,10 +102,10 @@ DiodeElm.prototype.calculateCurrent = function () {
 
 DiodeElm.prototype.getInfo = function (arr) {
     arr[0] = "diode";
-    arr[1] = "I = " + CircuitElement.getCurrentText(this.getCurrent());
-    arr[2] = "Vd = " + CircuitElement.getVoltageText(this.getVoltageDiff());
-    arr[3] = "P = " + CircuitElement.getUnitText(this.getPower(), "W");
-    arr[4] = "Vf = " + CircuitElement.getVoltageText(this.fwdrop);
+    arr[1] = "I = " + AbstractCircuitComponent.getCurrentText(this.getCurrent());
+    arr[2] = "Vd = " + AbstractCircuitComponent.getVoltageText(this.getVoltageDiff());
+    arr[3] = "P = " + AbstractCircuitComponent.getUnitText(this.getPower(), "W");
+    arr[4] = "Vf = " + AbstractCircuitComponent.getVoltageText(this.fwdrop);
 };
 
 DiodeElm.prototype.getEditInfo = function (n) {

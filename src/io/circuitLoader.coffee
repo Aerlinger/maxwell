@@ -1,8 +1,8 @@
 fs = require "fs"
-CircuitEngineParams = require('../core/engineParams')
+CircuitEngineParams = require('../core/circuitParams.coffee')
 
-ComponentDefs = require('../core/componentDefs').ComponentDefs
-DumpTypeConversions = require('../core/componentDefs').DumpTypeConversions
+ComponentDefs = require('../component/componentDefs.coffee').ComponentDefs
+DumpTypeConversions = require('../component/componentDefs.coffee').DumpTypeConversions
 
 
 class CircuitLoader
@@ -17,11 +17,11 @@ class CircuitLoader
     jsonParsed = JSON.parse(jsonRawData)
 
     # Circuit Parameters are stored at the header of the .json file (index 0)
-    circuitParams = jsonDataArray.shift()
+    circuitParams = jsonParsed.shift()
     circuit.Params = new CircuitEngineParams(circuitParams)
 
     # Load each Circuit component from JSON data:
-    for elementData in jsonDataArray
+    for elementData in jsonParsed
       type = elementData['sym']
       sym = ComponentDefs[type]
       x1 = elementData['x1']
@@ -33,7 +33,7 @@ class CircuitLoader
 
       if type is 'Hint'
         console.log "Hint found in file!"
-      if type is 'Scope'
+      if type is 'Oscilloscope'
         console.log "Scope found in file!"
 
       try
@@ -47,6 +47,7 @@ class CircuitLoader
       catch e
         circuit.halt e.message
 
+    # Now that we're finished, Call the callback passed to this function if it exists.
     onComplete?()
 
 
