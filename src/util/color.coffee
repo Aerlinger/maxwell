@@ -1,6 +1,6 @@
 class ColorScale
-  @colorScaleCount = 32;
-  @colorScale = new Array()
+  @colorScaleCount = 32
+  @colorScale = []
 
   # Creates the color scale
   @initializeColorScale: ->
