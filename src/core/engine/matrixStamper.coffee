@@ -78,13 +78,10 @@ class MatrixStamper
   ###
   stampMatrix: (row, col, value) ->
     if row > 0 and col > 0
-      console.log("stamping " + row + " " + col + " " + value);
       if @Circuit.Solver.circuitNeedsMap
         row = @Circuit.Solver.circuitRowInfo[row - 1].mapRow
         rowInfo = @Circuit.Solver.circuitRowInfo[col - 1]
-        console.log("circuit needs map #{row}  #{rowInfo}");
         if rowInfo.type is RowInfo.ROW_CONST
-          console.log("Stamping constant " + row + " " + col + " " + value);
           @Circuit.Solver.circuitRightSide[row] -= value * rowInfo.value
           return
         col = rowInfo.mapCol
@@ -92,7 +89,6 @@ class MatrixStamper
         row--
         col--
 
-      console.log("incrementing value " + value);
       @Circuit.Solver.circuitMatrix[row][col] += value
 
 
@@ -102,11 +98,9 @@ class MatrixStamper
   ###
   stampRightSide: (row, value) ->
     if isNaN(value)
-      console.log("rschanges true " + (row-1));
       @Circuit.Solver.circuitRowInfo[row - 1].rsChanges = true if row > 0
     else
       if row > 0
-        console.log(" >> stamping rs " + row + " " + value);
         if @Circuit.Solver.circuitNeedsMap
           row = @Circuit.Solver.circuitRowInfo[row - 1].mapRow
         else

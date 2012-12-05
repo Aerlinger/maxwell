@@ -16,5 +16,8 @@ class RowInfo
     @lsChanges = false;
     @dropRow = false;
 
+  toString: () ->
+    "RowInfo: #{@type} #{@nodeEq} #{@mapCol} #{@mapRow} #{@value} #{@rsChanges} #{@lsChanges} #{@dropRow}"
+
 
 module.exports = RowInfo

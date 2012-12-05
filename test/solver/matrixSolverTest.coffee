@@ -18,10 +18,8 @@ describe "Matrix Solver", ->
       @result.should.equal true
 
     it "should initialize permute matrix", ->
-      console.log @circuitPermute
 
     it "should solve matrix", ->
-      console.log @matrix3
 
     it "should return false for a singular matrix", ->
 
@@ -30,7 +28,5 @@ describe "Matrix Solver", ->
         @result = @Solver.lu_solve(@matrix3, 3, @circuitPermute, @solvedMatrix)
 
       it "should solve circuit matrix", ->
-        console.log @matrix
 
       it "should not modify circuitMatrix", ->
-        console.log @matrix3

@@ -2,6 +2,8 @@ Color = require('../util/color')
 
 class Settings
 
+  @SPEED = 112
+
   @FRACTIONAL_DIGITS: 2
 
   # Line Widths:
