@@ -156,9 +156,6 @@ class Circuit
   addCircuitNode: (circuitNode) ->
     @nodeList.push circuitNode
 
-  getCircuitNode: (idx) ->
-    return @nodeList[idx]
-
   getNode: (idx) ->
     @nodeList[idx]
 

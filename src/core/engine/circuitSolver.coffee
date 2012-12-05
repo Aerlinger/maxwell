@@ -37,6 +37,11 @@ class CircuitSolver
 
     @circuitNonLinear = false
 
+    @lastFrameTime = 0
+    @lastIterTime = 0
+    @frames = 0
+    @lastTime = 0
+
     @invalidate()
 
 
@@ -56,9 +61,9 @@ class CircuitSolver
     @stopped = false
 
   getIterCount: ->
-    if Settings.speedBar is 0
+    if Settings.SPEED is 0
       return 0
-    return 0.1 * Math.exp (Settings.speedBar - 61) * 24
+    return 0.1 * Math.exp((Settings.SPEED - 61) / 24)
 
   analyzeCircuit: ->
     return if !@analyzeFlag || @Circuit.numElements() is 0
@@ -85,9 +90,6 @@ class CircuitSolver
       if not volt? and circuitElm.toString() is 'VoltageElm'
         volt = circuitElm
 
-    console.log "Got Ground: #{gotGround}"
-    console.log "Got Rail: #{gotRail}"
-    console.log "volt: #{volt.toString()}"
 
     circuitNode = new CircuitNode()
 
@@ -104,7 +106,6 @@ class CircuitSolver
 
     # Allocate nodes and voltage sources
     for i in [0...@Circuit.numElements()]
-      console.log("Allocating nodes and vsources #{i}")
       circuitElm = @Circuit.getElmByIdx(i)
       internalNodeCount = circuitElm.getInternalNodeCount()
       internalVSCount = circuitElm.getVoltageSourceCount()
@@ -112,7 +113,6 @@ class CircuitSolver
 
       # allocate a node for each post and match postCount to nodes
       for j in [0...postCount]
-        console.log("Allocating a node for each post #{j}")
         postPt = circuitElm.getPost(j)
 
         k = 0
@@ -128,15 +128,13 @@ class CircuitSolver
           circuitNodeLink.num = j
           circuitNodeLink.elm = circuitElm
           circuitNode.links.push circuitNodeLink
-          console.log("Created new link at: " + k)
           circuitElm.setNode j, @Circuit.numNodes()
           @Circuit.addCircuitNode circuitNode
         else
           circuitNodeLink = new CircuitNodeLink()
           circuitNodeLink.num = j
           circuitNodeLink.elm = circuitElm
-          console.log "getting circuit node #{k} for j= #{j}"
-          @Circuit.getCircuitNode(k).links.push circuitNodeLink
+          @Circuit.getNode(k).links.push circuitNodeLink
           circuitElm.setNode(j, k)
           # If it's the ground node, make sure the node voltage instanceof 0, because it may not get set later.
           circuitElm.setNodeVoltage(j, 0) if k is 0
@@ -146,7 +144,6 @@ class CircuitSolver
         circuitNode.x = -1
         circuitNode.y = -1
         circuitNode.intern = true
-        console.log("j = " + circuitNode);
         circuitNodeLink = new CircuitNodeLink()
         circuitNodeLink.num = j + postCount
         circuitNodeLink.elm = circuitElm
@@ -170,7 +167,6 @@ class CircuitSolver
         circuitElement.setVoltageSource j, voltageSourceCount++
 
     @Circuit.voltageSourceCount = voltageSourceCount
-    console.log("voltage source count " + @Circuit.voltageSourceCount )
 
     @matrixSize = @Circuit.numNodes() - 1 + voltageSourceCount
     @circuitMatrixSize = @circuitMatrixFullSize = @matrixSize
@@ -189,11 +185,8 @@ class CircuitSolver
 
     @circuitNeedsMap = false
 
-    # stamp linear circuit elements
-    console.log("Stamping elements:")
     for circuitElm in @Circuit.getElements()
       circuitElm.stamp()
-    console.log("Done Stamping")
     closure = new Array(@Circuit.numNodes())
     closure[0] = true
 
@@ -248,7 +241,6 @@ class CircuitSolver
       # connect unconnected nodes
       for i in [0...@Circuit.numNodes()]
         if not closure[i] and not @Circuit.getCircuitNode(i).intern
-          @Circuit.error "node " + i + " unconnected"
           @Stamper.stampResistor 0, i, 1e8
           closure[i] = true
           changed = true
@@ -301,11 +293,9 @@ class CircuitSolver
 
       re = @circuitRowInfo[iter]
       if re.lsChanges or re.dropRow or re.rsChanges
-        console.log("row info continue")
         iter++
         continue
 
-      console.log "iter: #{iter}"
 
       rsadd = 0
       # look for rows that can be removed
@@ -314,38 +304,30 @@ class CircuitSolver
         if @circuitRowInfo[j].type is RowInfo.ROW_CONST
           # Keep a running total of const values that have been removed already
           rsadd -= @circuitRowInfo[j].value * matrix_ij
-          console.log("rsadd continue")
           continue
         if matrix_ij is 0
-          console.log("0 continue #{@matrixSize}")
           continue
         if qp is -1
           qp = j
           qv = matrix_ij
-          console.log("matrix continue")
           continue
         if qm is -1 and (matrix_ij is -qv)
           qm = j
-          console.log("qm continue: #{matrix_ij}")
           continue
         break
 
       if j is @matrixSize
         if qp is -1
-          console.log @circuitMatrix
-          console.log @circuitRowInfo
           @circuitRowInfo[j].type
           @Circuit.halt "Matrix error qp", null
           return
 
         elt = @circuitRowInfo[qp]
-        console.log("qp is #{qp}  #{elt.type}")
         if qm is -1
           # We found a row with only one nonzero entry, that value instanceof constant
           k = 0
           while elt.type is RowInfo.ROW_EQUAL and k < 100
             # Follow the chain
-            console.log("following the chain")
             qp = elt.nodeEq
             elt = @circuitRowInfo[qp]
             ++k
@@ -355,15 +337,12 @@ class CircuitSolver
             iter++
             continue
           unless elt.type is RowInfo.ROW_NORMAL
-            console.log("type already " + elt.type + " for " + qp + "!");
             iter++
             continue
 
           elt.type = RowInfo.ROW_CONST
           elt.value = (@circuitRightSide[iter] + rsadd) / qv
           @circuitRowInfo[iter].dropRow = true
-          console.log("elt.value = "  + elt.value + " type = " + elt.type);
-          console.log(qp + " * " + qv + " = const " + elt.value);
 
           #Todo: Checkbug!
           iter = -1 # start over from scratch
@@ -372,29 +351,24 @@ class CircuitSolver
           # we found a row with only two nonzero entries, and one
           # instanceof the negative of the other; the values are equal
           unless elt.type is RowInfo.ROW_NORMAL
-            console.log("swapping");
             qq = qm
             qm = qp
             qp = qq
             elt = @circuitRowInfo[qp]
             unless elt.type is RowInfo.ROW_NORMAL
               # we should follow the chain here, but this hardly ever happens so it's not worth worrying about
-              console.log("swap failed");
               iter++
               continue
-          console.log("continuing")
           elt.type = RowInfo.ROW_EQUAL
           elt.nodeEq = qm
           @circuitRowInfo[iter].dropRow = true
       iter++
 
-    console.log(qp + " is = " + qm);
 
     # find size of new matrix:
     newMatDim = 0
     for i in [0...@matrixSize]
       rowInfo = @circuitRowInfo[i]
-      console.log("col " + i + " maps to " + rowInfo.mapCol);
       if rowInfo.type is RowInfo.ROW_NORMAL
         rowInfo.mapCol = newMatDim++
         continue
@@ -418,11 +392,8 @@ class CircuitSolver
           rowInfo.type = rowNodeEq.type
           rowInfo.value = rowNodeEq.value
           rowInfo.mapCol = -1
-
-          console.log(i + " = [late]const " + rowInfo.value);
         else
           rowInfo.mapCol = rowNodeEq.mapCol
-          console.log(i + " maps to: " + rowNodeEq.mapCol);
 
 
     # make the new, simplified matrix
@@ -435,7 +406,6 @@ class CircuitSolver
     i = 0
     while i isnt @matrixSize
       circuitRowInfo = @circuitRowInfo[i]
-      console.log("Row " + i + " maps to " + ii);
       if circuitRowInfo.dropRow
         circuitRowInfo.mapRow = -1
         i++
@@ -452,9 +422,6 @@ class CircuitSolver
       ii++
       i++
 
-    console.log "FACTORED: #{@circuitMatrix}"
-    console.log "PERMUTE: #{@circuitPermute}"
-
     @circuitMatrix = newMatx
     @circuitRightSide = newRS
     @matrixSize = @circuitMatrixSize = newSize
@@ -470,18 +437,11 @@ class CircuitSolver
     @analyzeFlag = false
 
 
-
-
     # if a matrix is linear, we can do the lu_factor here instead of needing to do it every frame
     unless @circuitNonLinear
       if !@lu_factor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
         @Circuit.halt "Singular matrix!", null
         return
-      else
-        console.log "FACTORED: #{@circuitMatrix}"
-        console.log "PERMUTE: #{@circuitPermute}"
-        console.log @circuitRowInfo
-
 
 
   runCircuit: ->
@@ -492,17 +452,21 @@ class CircuitSolver
     debugPrint = @dumpMatrix
     @dumpMatrix = false
     stepRate = Math.floor(160 * @getIterCount())
-    timeStart = (new Date()).getTime()
+    timeEnd = (new Date()).getTime()
     lastIterTime = @lastIterTime
 
     # Double-check
-    if 1000 >= stepRate * (timeStart - @lastIterTime)
-      console.log "returned: diff: " + (timeStart - @lastIterTime)
+    if 1000 >= stepRate * (timeEnd - @lastIterTime)
+      console.log "returned: diff: " + (timeEnd - @lastIterTime)
       return
 
     # Main iteration
     iter = 1
     loop
+      console.log(lastIterTime)
+      console.log(stepRate)
+      console.log("ts: #{timeEnd}")
+
       # Start Iteration for each element in the circuit
       for circuitElm in @Circuit.getElements()
         circuitElm.startIteration()
@@ -520,7 +484,7 @@ class CircuitSolver
         @converged = true
         @subIterations = subiter
 
-        for i in [1...@circuitMatrixSize]
+        for i in [0...@circuitMatrixSize]
           @circuitRightSide[i] = @origRightSide[i]
 
         if @circuitNonLinear
@@ -534,7 +498,8 @@ class CircuitSolver
         for circuitElm in @Circuit.getElements()
           circuitElm.doStep()
 
-        return  if @stopMessage?
+        return if @stopMessage?
+
         printit = debugPrint
         debugPrint = false
 
@@ -552,6 +517,7 @@ class CircuitSolver
           unless @lu_factor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
             @Circuit.halt "Singular matrix!", null
             return
+
         @lu_solve @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide
 
         console.log(@circuitPermute)
@@ -568,34 +534,43 @@ class CircuitSolver
             @converged = false
             break
           if j < (@Circuit.numNodes() - 1)
-            circuitNode = @Circuit.getCircuitNode(j + 1)
+            circuitNode = @Circuit.getNode(j + 1)
             console.log("bridging links")
             for cn1 in circuitNode.links
               cn1.elm.setNodeVoltage cn1.num, res
           else
             ji = j - (@Circuit.numNodes() - 1)
-
-            @voltageSources[ji].setCurrent ji, res
+            console.log("setting vsrc " + ji + " to " + res);
+            @Circuit.voltageSources[ji].setCurrent ji, res
 
         console.log(@circuitNonLinear)
         break unless @circuitNonLinear
         subiter++
       # End for
+
       console.log "converged after " + subiter + " iterations"  if subiter > 5
       if subiter >= subiterCount
         @halt "Convergence failed: " + subiter, null
         break
+
       @time += @timeStep
+
       i = 0
       while i < @Circuit.scopeCount
         @Circuit.scopes[i].timeStep()
         ++i
-      timeStart = (new Date()).getTime()
-      lastIterTime = timeStart
 
-      if iter * 1000 >= stepRate * (timeStart - @lastIterTime)
+      timeEnd = (new Date()).getTime()
+      lastIterTime = timeEnd
+
+      console.log("diff: " + (timeEnd-@lastIterTime) + " iter: " + iter + " ");
+      console.log(iter + " breaking from iteration: " + " sr: " + stepRate + " subiter: " + subiter + " time: " + (timeEnd - @lastIterTime) + " lastFrametime: " + @lastFrameTime );
+
+      if iter * 1000 >= stepRate * (timeEnd - @lastIterTime)
         break
-      else break if timeStart - @lastFrameTime > 500
+      else
+        break if timeEnd - @lastFrameTime > 500
+
       ++iter
 
     @lastIterTime = lastIterTime
