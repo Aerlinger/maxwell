@@ -64,14 +64,15 @@ describe "Rectangle", ->
     congruentRect = new Rectangle(5, 6, 100, 151)
     @rect.equals(congruentRect).should.equal false
 
+  it "should not be able to detect points on its border", ->
+    @rect.contains(5, 6).should.equal false
+    @rect.contains(106, 156).should.equal false
+    @rect.contains(6, 6).should.equal false
+
   it "should be able to detect points within its border", ->
-    @rect.contains(5, 6).should.equal true
-    @rect.contains(6, 6).should.equal true
-    @rect.contains(100, 150).should.equal true
     @rect.contains(100, 151).should.equal true
     @rect.contains(75, 75).should.equal true
     @rect.contains(4, 6).should.equal false
-    @rect.contains(106, 156).should.equal false
 
   it "should not detect intersections with other rectangles with non-intersecting borders", ->
     inside_intersect = new Rectangle(40, 40, 20, 20)
@@ -88,10 +89,10 @@ describe "Rectangle", ->
 
   it "should detect intersections with other rectangles with intersecting borders", ->
     inside_intersect = new Rectangle(40, 40, 20, 20)
-    tl_intersect = new Rectangle(0, 0, 5, 6)
-    tr_intersect = new Rectangle(105, 5, 100, 100)
-    br_intersect = new Rectangle(105, 155, 5, 5)
-    bl_intersect = new Rectangle(0, 155, 6, 5)
+    tl_intersect = new Rectangle(0, 0, 6, 7)
+    tr_intersect = new Rectangle(104, 7, 100, 100)
+    br_intersect = new Rectangle(104, 154, 5, 5)
+    bl_intersect = new Rectangle(0, 155, 7, 6)
 
     @rect.intersects(inside_intersect).should.equal true
     @rect.intersects(tl_intersect).should.equal true

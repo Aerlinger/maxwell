@@ -21,10 +21,8 @@ class Rectangle
   constructor: (@x = 0, @y = 0, @width = 0, @height = 0) ->
 
   contains: (x, y) ->
-    if (x >= @x && x <= (@x + @width) && y >= @y && (y <= @y + @height))
-      true
-    else
-      false
+    return (x > @x && x < (@x + @width) && y > @y && (y < @y + @height))
+
       
   equals: (otherRect) ->
     if otherRect?

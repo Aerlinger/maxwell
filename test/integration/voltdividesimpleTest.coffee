@@ -65,16 +65,43 @@ describe "Circuit", ->
     it "6 nodes", ->
       @circuit.numNodes().should.equal 6
 
-    it "0 bad nodes", ->
-      @circuit.findBadNodes().length.should.equal 0
-
     it "should be linear", ->
       @circuit.Solver.circuitNonLinear.should.equal false
 
 
-    describe "should runCircuit() and have", ->
+    describe "should runCircuit()", ->
       before () ->
         @circuit.Solver.runCircuit()
+        @voltageCompnt = @circuit.getElmByIdx(0)
+        @resistor10k = @circuit.getElmByIdx(2)
+        @resistor20k = @circuit.getElmByIdx(6)
 
-      it "should update", ->
-        console.log(@circuit.Solver.circuitMatrix)
+      describe "components should have correct values", ->
+
+        specify "Voltage Source should have correct voltage", ->
+          @voltageCompnt.volts.should.eql [0, 10]
+
+        specify "Voltage Source should have correct current", ->
+          @voltageCompnt.current.should.eql 0.0015
+
+        specify "10k Resistor should have correct voltage", ->
+          @resistor10k.volts.should.eql [10, 0]
+
+        specify "10k Resistor should have correct current", ->
+          @resistor10k.current.should.equal 0.001
+
+        specify "20k Resistor should have correct voltage", ->
+          @resistor20k.volts.should.eql [10, 0]
+
+        specify "20k Resistor should have correct current", ->
+          @resistor20k.current.should.equal 0.0005
+
+        it "0 bad nodes", ->
+          @circuit.findBadNodes().length.should.equal 0
+
+
+  describe "should updateCircuit", ->
+    before () ->
+      @circuit.updateCircuit()
+
+    it "should update scopes", ->
