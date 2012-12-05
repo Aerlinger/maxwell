@@ -15,30 +15,45 @@ VoltageElm  = require('../component/components/VoltageElm')
 
 Scope = require('../scope/oscilloscope.coffee')
 
+DumpTypeConversions = {
+  'r':'ResistorElm'
+  'w':'WireElm'
+  'g':'GroundElm'
+  'v':'VoltageElm'
+}
+
+
+ComponentDefs = {
+  'w': WireElm
+  'r': ResistorElm
+  'g': GroundElm
+  'v': VoltageElm
+}
+
 class ComponentRegistry
 
 
-  DumpTypes =
-    "o" : Scope::
-    "h" : Scope::
-    "$" : Scope::
-    "%" : Scope::
-    "?" : Scope::
-    "B" : Scope::
+#  DumpTypes =
+#    "o" : Scope::
+#    "h" : Scope::
+#    "$" : Scope::
+#    "%" : Scope::
+#    "?" : Scope::
+#    "B" : Scope::
 
-  DumpTypeConversions = {
+  DumpTypeConversions:
     'r':'ResistorElm'
     'w':'WireElm'
     'g':'GroundElm'
-    '172':'VoltageElm'
-  }
+    'v':'VoltageElm'
 
-  ComponentDefs = {
+
+  ComponentDefs:
     'w': WireElm
     'r': ResistorElm
     'g': GroundElm
-    '172': VoltageElm
-  }
+    'v': VoltageElm
+
 
 
   @registerAll: () ->
@@ -46,10 +61,10 @@ class ComponentRegistry
       console.log "#{symbol}  #{constructor}"
 
 
-  ## #######################################################################################################
+  #########################################################################################################
   # Registers, constructs, and places an element with the given class name within this circuit.
   #   This method is called by <code>register</code>
-  # ##########
+  # ##########`
   register: (componentConstructor) ->
     try
     # Create this component by its className

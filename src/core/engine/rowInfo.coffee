@@ -8,7 +8,6 @@ class RowInfo
     @type = RowInfo.ROW_NORMAL
 
     @nodeEq = 0;
-    @type = 0;
     @mapCol = 0;
     @mapRow = 0;
 

@@ -8,9 +8,9 @@
 
 if process.env
   Settings = require('../settings/settings')
-  CircuitEngineParams = require('circuitParams.coffee')
+  CircuitEngineParams = require('./circuitParams.coffee')
   CircuitSolver = require('./engine/circuitSolver')
-  ComponentDefs = require('../component/componentDefs.coffee')
+  ComponentRegistry = require('../component/componentRegistry')
 
   CircuitLoader = require('../io/circuitLoader')
   Logger = require('../io/logger')
@@ -38,7 +38,6 @@ class Circuit
     @Renderer = new Renderer(this)
 
     @clearAndReset()
-    @init()
 
   ###
   Removes all circuit elements and scopes from the workspace and resets time to zero.
@@ -83,7 +82,7 @@ class Circuit
       @register(Component)
 
   setupScopes: ->
-    console.log "Not yet implemented"
+
 
 
   ###
@@ -129,6 +128,9 @@ class Circuit
     @elementList.remove oldElement
     oldElement.destroy()
 
+  getVoltageSources: ->
+    @voltageSources
+
   #It may be worthwhile to return a defensive copy here
   getElements: ->
     @elementList
@@ -156,6 +158,9 @@ class Circuit
 
   getCircuitNode: (idx) ->
     return @nodeList[idx]
+
+  getNode: (idx) ->
+    @nodeList[idx]
 
   getNodes: ->
     @nodeList

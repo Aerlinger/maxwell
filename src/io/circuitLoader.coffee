@@ -1,8 +1,8 @@
 fs = require "fs"
 CircuitEngineParams = require('../core/circuitParams.coffee')
 
-ComponentDefs = require('../component/componentDefs.coffee').ComponentDefs
-DumpTypeConversions = require('../component/componentDefs.coffee').DumpTypeConversions
+ComponentDefs = require('../component/componentRegistry').ComponentDefs
+DumpTypeConversions = require('../component/componentRegistry').DumpTypeConversions
 
 
 class CircuitLoader
@@ -38,7 +38,7 @@ class CircuitLoader
 
       try
         if !type
-          circuit.warn ""
+          circuit.warn "Unrecognized Type"
         if !sym
           circuit.warn "Unrecognized dump type: #{type}"
         else
