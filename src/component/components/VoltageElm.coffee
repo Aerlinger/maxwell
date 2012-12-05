@@ -62,20 +62,20 @@ VoltageElm::doStep = ->
     @Circuit.Solver.updateVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
 
 VoltageElm::getVoltage = ->
-  w = 2 * Math.PI * (@Circuit.Solver.time - @freqTimeZero) * @frequency + @phaseShift
+  omega = 2 * Math.PI * (@Circuit.Solver.time - @freqTimeZero) * @frequency + @phaseShift
   switch @waveform
     when VoltageElm.WF_DC
       @maxVoltage + @bias
     when VoltageElm.WF_AC
-      Math.sin(w) * @maxVoltage + @bias
+      Math.sin(omega) * @maxVoltage + @bias
     when VoltageElm.WF_SQUARE
-      @bias + ((if (w % (2 * Math.PI) > (2 * Math.PI * @dutyCycle)) then -@maxVoltage else @maxVoltage))
+      @bias + ((if (omega % (2 * Math.PI) > (2 * Math.PI * @dutyCycle)) then -@maxVoltage else @maxVoltage))
     when VoltageElm.WF_TRIANGLE
-      @bias + @triangleFunc(w % (2 * Math.PI)) * @maxVoltage
+      @bias + @triangleFunc(omega % (2 * Math.PI)) * @maxVoltage
     when VoltageElm.WF_SAWTOOTH
-      @bias + (w % (2 * Math.PI)) * (@maxVoltage / Math.PI) - @maxVoltage
+      @bias + (omega % (2 * Math.PI)) * (@maxVoltage / Math.PI) - @maxVoltage
     when VoltageElm.WF_PULSE
-      (if ((w % (2 * Math.PI)) < 1) then @maxVoltage + @bias else @bias)
+      (if ((omega % (2 * Math.PI)) < 1) then @maxVoltage + @bias else @bias)
     else
       0
 
@@ -235,17 +235,17 @@ VoltageElm::setEditValue = (n, ei) ->
     adj = @frequency - oldfreq
     @freqTimeZero = @Circuit.time - oldfreq * (@Circuit.time - @freqTimeZero) / @frequency
   if n is 1
-    ow = @waveform
+    waveform = @waveform
     
     #waveform = ei.choice.getSelectedIndex();
-    if @waveform is VoltageElm.WF_DC and ow isnt VoltageElm.WF_DC
+    if @waveform is VoltageElm.WF_DC and waveform isnt VoltageElm.WF_DC
       
       #ei.newDialog = true;
       @bias = 0
-    else @waveform isnt VoltageElm.WF_DC and ow is VoltageElm.WF_DC
+    else @waveform isnt VoltageElm.WF_DC and waveform is VoltageElm.WF_DC
     
     #ei.newDialog = true;
-    @setPoints()  if (@waveform is VoltageElm.WF_SQUARE or ow is VoltageElm.WF_SQUARE) and @waveform isnt ow
+    @setPoints()  if (@waveform is VoltageElm.WF_SQUARE or waveform is VoltageElm.WF_SQUARE) and @waveform isnt waveform
   @phaseShift = ei.value * Math.PI / 180  if n is 4
   @dutyCycle = ei.value * 0.01  if n is 5
 

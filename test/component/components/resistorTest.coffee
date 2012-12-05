@@ -9,6 +9,9 @@ describe "Resistor", ->
   it "should have correct resistance", ->
     @resistor.resistance.should.equal 50
 
+  it "should not have any internal voltage sources", ->
+    @resistor.getVoltageSourceCount().should.equal 0
+
   it "should calculate current when voltage is applied", ->
     @resistor.getPostCount().should.equal 2
     @resistor.getInternalNodeCount().should.equal 0

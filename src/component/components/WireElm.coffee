@@ -5,6 +5,9 @@ class WireElm extends CircuitElement
   constructor: (xa, ya, xb, yb, f, st) ->
     super xa, ya, xb, yb, f, st
 
+  toString: () ->
+    "WireElm"
+
 WireElm.FLAG_SHOWCURRENT = 1
 WireElm.FLAG_SHOWVOLTAGE = 2
 WireElm::draw = ->

@@ -1,4 +1,4 @@
-{Polygon, Rectangle, Point} = require('shapePrimitives.coffee')
+{Polygon, Rectangle, Point} = require('./shapePrimitives.coffee')
 
 class DrawHelpers
 

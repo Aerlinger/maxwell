@@ -6,8 +6,6 @@ describe "Base Circuit Element", ->
   specify "class methods", ->
     CircuitElement.getScopeUnits(1).should.equal "W"
     CircuitElement.getScopeUnits().should.equal "V"
-    CircuitElement.ps1.equals(new Point(0, 0)).should.equal true
-    CircuitElement.ps2.equals(new Point(0, 0)).should.equal true
 
 
   beforeEach () ->
