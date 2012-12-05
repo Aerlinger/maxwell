@@ -582,9 +582,9 @@ class CircuitSolver
 
   Called once each frame for resistive circuits, otherwise called many times each frame
 
-  @param a 2D matrix to be solved
-  @param n dimension
-  @param ipvt pivot index
+  @param circuitMatrix 2D matrix to be solved
+  @param nDim dimension
+  @param pivotArray pivot index
   ###
   lu_factor: (circuitMatrix, nDim, pivotArray) ->
     # Divide each row by largest element in that row and remember scale factors
@@ -669,24 +669,24 @@ class CircuitSolver
 
   Called once each frame for resistive circuits, otherwise called many times each frame
 
-  @param a matrix to be solved
-  @param n dimension
-  @param ipvt pivot index
-  @param b factored matrix
+  @param circuitMatrix matrix to be solved
+  @param numRows dimension
+  @param pivotVector pivot index
+  @param circuitRightSide Right-side (dependent) matrix
   ###
-  lu_solve: (circuitMatrix, nDim, pivotMatrix, circuitRightSide) ->
+  lu_solve: (circuitMatrix, numRows, pivotVector, circuitRightSide) ->
     # find first nonzero b element
     i = 0
-    while i < nDim
-      row = pivotMatrix[i]
+    while i < numRows
+      row = pivotVector[i]
       swap = circuitRightSide[row]
       circuitRightSide[row] = circuitRightSide[i]
       circuitRightSide[i] = swap
       break unless swap is 0
       ++i
     bi = i++
-    while i < nDim
-      row = pivotMatrix[i]
+    while i < numRows
+      row = pivotVector[i]
       j = undefined
       tot = circuitRightSide[row]
       circuitRightSide[row] = circuitRightSide[i]
@@ -698,21 +698,22 @@ class CircuitSolver
         ++j
       circuitRightSide[i] = tot
       ++i
-    i = nDim - 1
+    i = numRows - 1
     while i >= 0
       tot = circuitRightSide[i]
 
       # back-substitution using the upper triangular matrix
       j = i + 1
-      while j isnt nDim
+      while j isnt numRows
         tot -= circuitMatrix[i][j] * circuitRightSide[j]
         ++j
       circuitRightSide[i] = tot / circuitMatrix[i][i]
       i--
 
-  updateVoltageSource: (n1, n2, vs, v) ->
+
+  updateVoltageSource: (n1, n2, vs, voltage) ->
     vn = @Circuit.numNodes() + vs
-    @Stamper.stampRightSide(vn, v)
+    @Stamper.stampRightSide(vn, voltage)
 
 
 

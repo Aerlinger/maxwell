@@ -295,9 +295,8 @@ class Circuit
       if not circuitNode.intern and circuitNode.links.length is 1
         bb = 0
         firstCircuitNode = circuitNode.links[0]
-
         for circuitElm in @elementList
-          bb++ if firstCircuitNode.elm isnt circuitElm and circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)
+          bb++ if firstCircuitNode.elm.toString() != circuitElm.toString() and circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)
         if bb > 0
           # Todo: outline bad nodes here
           badNodes.push circuitNode
