@@ -7,17 +7,15 @@ describe "CircuitLoader", ->
     @circuit = new Circuit()
 
 
-  describe "should read voltdividesimple.json and have", ->
+  describe "should read voltdividesimple.json and", ->
     before (done) ->
       CircuitLoader.readCircuitFromFile @circuit, "./circuits/voltdividesimple.json", () =>
         done()
 
-    it "7 elements", ->
+    it "have only 7 elements", ->
       @circuit.numElements().should.equal 7
 
-    describe "should have correct circuit defaults", ->
-      #{"completion_status":"complete",		"created_at":null,		"current_speed":63.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"voltdivide.txt",		"power_range":62.0,		"sim_speed":10.0,		"time_step":5.0e-06,		"title":"Voltage Divider",		"topic":"Basics",		"updated_at":null,		"voltage_range":10.0}
-
+    describe "should load parameters", ->
       it "should have correct completionStatus", ->
         @circuit.Params.completionStatus.should.equal "complete"
 
