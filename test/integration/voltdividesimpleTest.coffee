@@ -10,7 +10,7 @@ describe "Circuit", ->
 
   describe "should Analyze voltdividesimple.json and have", ->
     before (done) ->
-      @circuit.Solver.analyzeCircuit()
+      @circuit.Solver.reconstruct()
       done()
 
     it "7 elements", ->
@@ -71,7 +71,7 @@ describe "Circuit", ->
 
     describe "should runCircuit()", ->
       before () ->
-        @circuit.Solver.runCircuit()
+        @circuit.Solver.solveCircuit()
         @voltageCompnt = @circuit.getElmByIdx(0)
         @resistor10k = @circuit.getElmByIdx(2)
         @resistor20k = @circuit.getElmByIdx(6)

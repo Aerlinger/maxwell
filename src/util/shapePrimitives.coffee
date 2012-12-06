@@ -17,12 +17,10 @@ class Point
 
 
 class Rectangle
-
   constructor: (@x = 0, @y = 0, @width = 0, @height = 0) ->
 
   contains: (x, y) ->
     return (x > @x && x < (@x + @width) && y > @y && (y < @y + @height))
-
       
   equals: (otherRect) ->
     if otherRect?
@@ -40,7 +38,6 @@ class Rectangle
 
 
 class Polygon
-
   constructor: (vertices) ->
     @vertices = []
     if vertices and vertices.length % 2 is 0

@@ -49,6 +49,7 @@ class CircuitSolver
   invalidate: ->
     @analyzeFlag = true
 
+
   needsRemap: ->
     return @analyzeFlag
 
@@ -57,15 +58,18 @@ class CircuitSolver
     Logger.log message
     @stopped = true
 
+
   run: ->
     @stopped = false
 
-  getIterCount: ->
+
+  getSimSpeed: ->
     if Settings.SPEED is 0
       return 0
     return 0.1 * Math.exp((Settings.SPEED - 61) / 24)
 
-  analyzeCircuit: ->
+
+  reconstruct: ->
     return if !@analyzeFlag || @Circuit.numElements() is 0
 
     console.log "\n :::::: Analyze Circuit ::::::"
@@ -89,7 +93,6 @@ class CircuitSolver
         gotRail = true
       if not volt? and circuitElm.toString() is 'VoltageElm'
         volt = circuitElm
-
 
     circuitNode = new CircuitNode()
 
@@ -189,27 +192,6 @@ class CircuitSolver
       circuitElm.stamp()
     closure = new Array(@Circuit.numNodes())
     closure[0] = true
-
-
-#    changed = true
-#    while changed
-#      changed = false
-#
-#      for elm in @Circuit.getElements()
-#        elm = @Circuit.getElmByIdx(i)
-#
-#        # Loop through all ce's nodes to see if they are connected to otehr nodes not in closure
-#        for k in [0...elm.getPostCount()]
-#          unless closure[elm.getNode(j)]
-#            closure[elm.getNode(j)] = changed = true if elm.hasGroundConnection(j)
-#            continue
-#          for j in [0...elm.getPostCount()]
-#            if j is k
-#              continue
-#            kNode = elm.getNode(k)
-#            if elm.getConnection(j, k) and not closure[kNode]
-#              closure[kNode] = true
-#              changed = true
 
     while changed
       changed = false
@@ -439,19 +421,19 @@ class CircuitSolver
 
     # if a matrix is linear, we can do the lu_factor here instead of needing to do it every frame
     unless @circuitNonLinear
-      if !@lu_factor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
+      if !@luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
         @Circuit.halt "Singular matrix!", null
         return
 
 
-  runCircuit: ->
+  solveCircuit: ->
     if not @circuitMatrix? or @Circuit.numElements() is 0
       @circuitMatrix = null
       return
 
     debugPrint = @dumpMatrix
     @dumpMatrix = false
-    stepRate = Math.floor(160 * @getIterCount())
+    stepRate = Math.floor(160 * @getSimSpeed())
     timeEnd = (new Date()).getTime()
     lastIterTime = @lastIterTime
 
@@ -514,11 +496,11 @@ class CircuitSolver
 
         if @circuitNonLinear
           break if @converged and subiter > 0
-          unless @lu_factor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
+          unless @luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
             @Circuit.halt "Singular matrix!", null
             return
 
-        @lu_solve @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide
+        @luSolve @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide
 
         console.log(@circuitPermute)
 
@@ -586,7 +568,7 @@ class CircuitSolver
   @param nDim dimension
   @param pivotArray pivot index
   ###
-  lu_factor: (circuitMatrix, nDim, pivotArray) ->
+  luFactor: (circuitMatrix, nDim, pivotArray) ->
     # Divide each row by largest element in that row and remember scale factors
     i = 0
     while i < nDim
@@ -637,7 +619,6 @@ class CircuitSolver
       # Pivot
       unless j is largestRow
         k = 0
-
         while k < nDim
           x = circuitMatrix[largestRow][k]
           circuitMatrix[largestRow][k] = circuitMatrix[j][k]
@@ -674,8 +655,8 @@ class CircuitSolver
   @param pivotVector pivot index
   @param circuitRightSide Right-side (dependent) matrix
   ###
-  lu_solve: (circuitMatrix, numRows, pivotVector, circuitRightSide) ->
-    # find first nonzero b element
+  luSolve: (circuitMatrix, numRows, pivotVector, circuitRightSide) ->
+    # Find first nonzero element of circuitRightSide
     i = 0
     while i < numRows
       row = pivotVector[i]
@@ -687,7 +668,6 @@ class CircuitSolver
     bi = i++
     while i < numRows
       row = pivotVector[i]
-      j = undefined
       tot = circuitRightSide[row]
       circuitRightSide[row] = circuitRightSide[i]
 

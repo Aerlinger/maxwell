@@ -8,7 +8,7 @@
 
 if process.env
   Settings = require('../settings/settings')
-  CircuitEngineParams = require('./circuitParams.coffee')
+  CircuitEngineParams = require('./circuitParams')
   CircuitSolver = require('./engine/circuitSolver')
   ComponentRegistry = require('../component/componentRegistry')
 
@@ -26,7 +26,7 @@ if process.env
   Grid = require('../ui/grid')
   Primitives = require('../util/shapePrimitives')
 
-  Oscilloscope = require('../scope/oscilloscope.coffee')
+  Oscilloscope = require('../scope/oscilloscope')
 
 
 
@@ -43,7 +43,6 @@ class Circuit
   Removes all circuit elements and scopes from the workspace and resets time to zero.
   ###
   clearAndReset: ->
-
     for element in @elementList?
       element.destroy()
 
@@ -83,35 +82,6 @@ class Circuit
 
   setupScopes: ->
 
-
-
-  ###
-  Clears current states, graphs, and errors then Restarts the circuit from time zero.
-  ###
-  restartAndStop: ->
-    @restartAndRun()
-    @Solver.stop("Restarted Circuit from time 0")
-
-  restartAndRun: ->
-    for element in @elementList
-      element.reset()
-    for scope in @scopes
-      scope.resetGraph()
-
-    @Solver.reset()
-    @Solver.run()
-
-  warn: (message) ->
-    Logger.warn message
-    @warnMessage = message
-
-  halt: (message) ->
-    Logger.error message
-    @stopMessage = message
-
-  clearErrors: ->
-    @stopMessage = null
-    @stopElm = null
 
   getRenderContext: ->
     @renderContext
@@ -153,24 +123,68 @@ class Circuit
   resetNodes: ->
     @nodeList = []
 
+
   addCircuitNode: (circuitNode) ->
+
     @nodeList.push circuitNode
 
   getNode: (idx) ->
     @nodeList[idx]
 
+
   getNodes: ->
     @nodeList
+
 
   numNodes: ->
     @nodeList.length
 
+
   getGrid: ->
     return @grid
+
 
   # TODO: This is a stub!
   getCanvasBounds: ->
     return new Primitives.Rectangle(0, 0, 500, 400);
+
+
+  #########################
+  # Computation
+  #########################
+
+  ###
+  UpdateCircuit:
+
+   Updates the circuit each frame.
+
+    1. ) Reconstruct Circuit:
+          Rebuilds a data representation of the circuit (only applied when circuit changes)
+    2. ) Solve Circuit build matrix representation of the circuit solve for the voltage and current for each component.
+          Solving is performed via LU factorization.
+  ###
+  updateCircuit: ->
+    startTime = (new Date()).getTime()
+
+    # Reconstruct circuit
+    @Solver.reconstruct()
+
+    # If the circuit isn't stopped, solve
+    unless @Solver.stoppedCheck
+      @Solver.solveCircuit()
+      @lastTime = @updateTimings()
+    else
+      @lastTime = 0
+
+    @renderCircuit()
+    @renderScopes()
+    @renderInfo()
+
+    endTime = (new Date()).getTime()
+    frameTime = endTime - startTime
+    console.log("Time: " + frameTime);
+    @lastFrameTime = @lastTime
+
 
   # Returns the y position of the bottom of the circuit
   getCircuitBottom: ->
@@ -184,70 +198,53 @@ class Circuit
 
     return @circuitBottom
 
-  ###
-  UpdateCircuit: Outermost method in event loops
 
-  Called once each frame
-  ###
-  updateCircuit: ->
-    startTime = (new Date()).getTime()
+  updateTimings: () ->
+    sysTime = (new Date()).getTime()
+    unless @lastTime is 0
+      inc = Math.floor(sysTime - @lastTime)
+      currentSpeed = Math.exp(@Params.currentSpeed / 3.5 - 14.2)
+      @Params.currentMult = 1.7 * inc * currentSpeed
+    if (sysTime - @secTime) >= 1000
+      @framerate = @frames
+      @steprate = @Solver.steps
+      @frames = 0
+      @steps = 0
+      @secTime = sysTime
 
-    realMouseElm = @mouseElm
+    @frames++
+    return sysTime
 
-    # Render Warning and error messages:
-    @Solver.analyzeCircuit()
 
-    # TODO Setup edit dialog
-
-    @mouseElm = @stopElm unless @mouseElm?
-
-    # TODO: needs scopes
-    @setupScopes()
-
-    unless @Solver.stoppedCheck
-      @Solver.runCircuit()
-
-      sysTime = (new Date()).getTime()
-      unless @lastTime is 0
-        inc = Math.floor(sysTime - @lastTime)
-        currentSpeed = Math.exp(@Params.currentSpeed / 3.5 - 14.2)
-        @Params.currentMult = 1.7 * inc * currentSpeed
-      if (sysTime - @secTime) >= 1000
-        @framerate = @frames
-        @steprate = @steps
-        @frames = 0
-        @steps = 0
-        @secTime = sysTime
-      @lastTime = sysTime
-    else
-      @lastTime = 0
-
-    @Params.powerMult = Math.exp(@powerBar / 4.762 - 7)
+  renderCircuit: () ->
+    @powerMult = Math.exp(@Params.powerRange / 4.762 - 7)
 
     # Draw each circuit element
     for circuitElm in @elementList
       @Renderer.drawComponent(circuitElm)
 
     # Draw the posts for each circuit
-    if @mouseState.tempMouseMode is MouseState.MODE_DRAG_ROW or
-       @mouseState.tempMouseMode is MouseState.MODE_DRAG_COLUMN or
-       @mouseState.tempMouseMode is MouseState.MODE_DRAG_POST or
-       @mouseState.tempMouseMode is MouseState.MODE_DRAG_SELECTED
+    tempMouseMode = @mouseState.tempMouseMode
+    if tempMouseMode is MouseState.MODE_DRAG_ROW or
+    tempMouseMode is MouseState.MODE_DRAG_COLUMN or
+    tempMouseMode is MouseState.MODE_DRAG_POST or
+    tempMouseMode is MouseState.MODE_DRAG_SELECTED
 
       for circuitElm in @elementList
         circuitElm.drawPost circuitElm.x1, circuitElm.y1
         circuitElm.drawPost circuitElm.x2, circuitElm.y2
 
-    # Find bad connections. Nodes not connected to other elements which intersect other elements' bounding boxes
-    badNodes = @findBadNodes()
+    # TODO: Draw selection outline:
 
-    if @dragElm? and (@dragElm.x1 isnt @dragElm.x2 or @dragElm.y1 isnt @dragElm.y2)
-      @dragElm.draw null
 
-    scopeCount = @scopeCount
-    scopeCount = 0 if @stopMessage?
-
+  renderScopes: () ->
     # TODO Implement scopes
+
+
+  renderInfo: () ->
+    realMouseElm = @mouseElm
+    @mouseElm = @stopElm unless @mouseElm?
+
     if @stopMessage?
       @printError @stopMessage
     else
@@ -262,7 +259,7 @@ class Circuit
           info.push "V = " + getUnitText(@mouseElm.getPostVoltage(@mousePost), "V")
       else
         Settings.fractionalDigits = 2
-        info.push "t = " + getUnitText(@Solver.time, "s") + "\nf.t.: " + (@lastTime - @lastFrameTime) + "\n"
+        info.push "t = " + getUnitText(@Solver.time, "s") + "\nft: " + (@lastTime - @lastFrameTime) + "\n"
       unless @Hint.hintType is -1
         s = @Hint.getHint()
         unless s?
@@ -270,23 +267,8 @@ class Circuit
         else
           info.push s
 
-      # TODO: Implement scopes
-      x = 0
-      x = @scopes[scopeCount - 1].rightEdge() + 20  unless scopeCount is 0
-      x = 0 unless x
-
-      info.push "Bad Connections: #{badNodes.length}" if badNodes > 0
-
-      # TODO: DRAW info text
       @Renderer.drawInfo(info)
-
-    # TODO: Draw selection outline:
-
-    @mouseElm = realMouseElm
-    @frames++
-
-    endTime = (new Date()).getTime()
-    @lastFrameTime = @lastTime
+      @mouseElm = realMouseElm
 
 
   findBadNodes: ->
@@ -300,6 +282,35 @@ class Circuit
         if bb > 0
           # Todo: outline bad nodes here
           badNodes.push circuitNode
+
+
+  ###
+  Clears current states, graphs, and errors then Restarts the circuit from time zero.
+  ###
+  restartAndStop: ->
+    @restartAndRun()
+    @Solver.stop("Restarted Circuit from time 0")
+
+  restartAndRun: ->
+    for element in @elementList
+      element.reset()
+    for scope in @scopes
+      scope.resetGraph()
+
+    @Solver.reset()
+    @Solver.run()
+
+  warn: (message) ->
+    Logger.warn message
+    @warnMessage = message
+
+  halt: (message) ->
+    Logger.error message
+    @stopMessage = message
+
+  clearErrors: ->
+    @stopMessage = null
+    @stopElm = null
 
 
 # The Footer exports class(es) in this file via Node.js, if Node.js is defined.

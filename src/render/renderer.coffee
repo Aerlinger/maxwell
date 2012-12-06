@@ -1,8 +1,11 @@
+Circuit = require './../core/circuit'
+
 class Renderer
 
   constructor: (@Circuit) ->
 
   drawComponent: (component) ->
+
 
   drawCircuit: ->
     renderContext.clearRect 0, 0, CANVAS.width(), CANVAS.height()
