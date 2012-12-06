@@ -1,9 +1,13 @@
 Color = require('../util/color')
 
+###
+Stores Environment-specific settings
+
+These are the global settings for Maxwell and should defined by the user.
+Settings do not change by loading a new circuit.
+###
 class Settings
-
   @SPEED = 112
-
   @FRACTIONAL_DIGITS: 2
 
   # Line Widths:

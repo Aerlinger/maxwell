@@ -1,14 +1,25 @@
+Canvas = require 'canvas'
+
 class Context
-  constructor: (width, height) ->
 
   fillCircle: (x, y, radius, lineWidth=1, fillColor='#FFFFFF', lineColor="#000000") ->
-    #throw("Can't call fillCircle on Context, it is an abstract class.")
+#    renderContext.
+#    renderContext.arc x0, y0, Settings.POST_RADIUS, 0, 2 * Math.PI, true
+#    renderContext.stroke()
+#    renderContext.fill()
+#    renderContext.closePath()
 
   drawThickLine: (x, y, x2, y2, color) ->
-    #throw("Can't call drawThickline on Context, it is an abstract class.")
+    #paper.strokeStyle = (if (color) then Color.color2HexString(color) else CircuitElement.color)
+    #    paper.strokeStyle = color || Settings.color
+    #    paper.beginPath()
+    #    paper.moveTo x, y
+    #    paper.lineTo x2, y2
+    #    paper.stroke()
+    #    paper.closePath()
 
   drawThickLinePt: (pa, pb, color) ->
-    @drawThickLine pa.x, pa.y, pb.x, pb.y, color
+    @.drawThickLine pa.x, pa.y, pb.x, pb.y, color
 
   drawThickPolygon: (xlist, ylist, c, color) ->
     i = 0
