@@ -560,21 +560,23 @@ class CircuitSolver
 
 
   ###
-  lu_factor: finds a solution to a factored matrix through LU (Lower-Upper) factorization
+  luFactor: finds a solution to a factored matrix through LU (Lower-Upper) factorization
 
   Called once each frame for resistive circuits, otherwise called many times each frame
 
   @param circuitMatrix 2D matrix to be solved
-  @param nDim dimension
+  @param matrixSize number or rows/columns in the matrix
   @param pivotArray pivot index
+
+  References:
   ###
-  luFactor: (circuitMatrix, nDim, pivotArray) ->
+  luFactor: (circuitMatrix, matrixSize, pivotArray) ->
     # Divide each row by largest element in that row and remember scale factors
     i = 0
-    while i < nDim
+    while i < matrixSize
       largest = 0
       j = 0
-      while j < nDim
+      while j < matrixSize
         x = Math.abs(circuitMatrix[i][j])
         largest = x  if x > largest
         ++j
@@ -586,31 +588,31 @@ class CircuitSolver
 
     # Crout's method: Loop through columns first
     j = 0
-    while j < nDim
+    while j < matrixSize
 
       # Calculate upper trangular elements for this column:
       i = 0
       while i < j
-        q = circuitMatrix[i][j]
+        matrix_ij = circuitMatrix[i][j]
         k = 0
         while k isnt i
-          q -= circuitMatrix[i][k] * circuitMatrix[k][j]
+          matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j]
           ++k
-        circuitMatrix[i][j] = q
+        circuitMatrix[i][j] = matrix_ij
         ++i
 
       # Calculate lower triangular elements for this column
       largest = 0
       largestRow = -1
       i = j
-      while i < nDim
-        q = circuitMatrix[i][j]
+      while i < matrixSize
+        matrix_ij = circuitMatrix[i][j]
         k = 0
         while k < j
-          q -= circuitMatrix[i][k] * circuitMatrix[k][j]
+          matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j]
           ++k
-        circuitMatrix[i][j] = q
-        x = Math.abs(q)
+        circuitMatrix[i][j] = matrix_ij
+        x = Math.abs(matrix_ij)
         if x >= largest
           largest = x
           largestRow = i
@@ -619,7 +621,7 @@ class CircuitSolver
       # Pivot
       unless j is largestRow
         k = 0
-        while k < nDim
+        while k < matrixSize
           x = circuitMatrix[largestRow][k]
           circuitMatrix[largestRow][k] = circuitMatrix[j][k]
           circuitMatrix[j][k] = x
@@ -633,10 +635,10 @@ class CircuitSolver
 
       #console.log("avoided zero");
       circuitMatrix[j][j] = 1e-18 if circuitMatrix[j][j] is 0
-      unless j is nDim - 1
+      unless j is matrixSize - 1
         mult = 1 / circuitMatrix[j][j]
         i = j + 1
-        while i isnt nDim
+        while i isnt matrixSize
           circuitMatrix[i][j] *= mult
           ++i
       ++j
@@ -654,6 +656,8 @@ class CircuitSolver
   @param numRows dimension
   @param pivotVector pivot index
   @param circuitRightSide Right-side (dependent) matrix
+
+  References:
   ###
   luSolve: (circuitMatrix, numRows, pivotVector, circuitRightSide) ->
     # Find first nonzero element of circuitRightSide
@@ -680,14 +684,14 @@ class CircuitSolver
       ++i
     i = numRows - 1
     while i >= 0
-      tot = circuitRightSide[i]
+      total = circuitRightSide[i]
 
       # back-substitution using the upper triangular matrix
       j = i + 1
       while j isnt numRows
-        tot -= circuitMatrix[i][j] * circuitRightSide[j]
+        total -= circuitMatrix[i][j] * circuitRightSide[j]
         ++j
-      circuitRightSide[i] = tot / circuitMatrix[i][i]
+      circuitRightSide[i] = total / circuitMatrix[i][i]
       i--
 
 

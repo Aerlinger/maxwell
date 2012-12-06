@@ -295,24 +295,24 @@ CircuitElement.interpPoint2 = function (a, b, c, d, f, g) {
     d.y = Math.floor(a.y * (1 - f) + b.y * f - g * gy + offset);
 };
 
-CircuitElement.prototype.draw2Leads = function () {
+CircuitElement.prototype.draw2Leads = function (renderContext) {
     var color = this.setVoltageColor(this.volts[0]);
-    CircuitElement.drawThickLinePt(this.point1, this.lead1, color);
+    renderContext.drawThickLinePt(this.point1, this.lead1, color);
 
     color = this.setVoltageColor(this.volts[1]);
-    CircuitElement.drawThickLinePt(this.lead2, this.point2, color);
+    renderContext.drawThickLinePt(this.lead2, this.point2, color);
 };
 
-CircuitElement.newPointArray = function (n) {
-    var a = new Array(n);
-    while (n > 0)
-        a[--n] = new Point(0, 0);
+CircuitElement.newPointArray = function (numElements) {
+    var a = new Array(numElements);
+    while (numElements > 0)
+        a[--numElements] = new Point(0, 0);
     return a;
 };
 
-CircuitElement.prototype.drawDots = function (pa, pb, pos) {
+CircuitElement.prototype.drawDots = function (pa, pb, pos, renderContext) {
     // If the sim is stopped or has dots disabled
-    if (Circuit.stoppedCheck || pos == 0 || !Circuit.dotsCheckItem)
+    if (@Circuit.Solver.stoppedCheck || pos == 0 || !@Circuit.dotsCheckItem)
         return;
 
     var dx = pb.x1 - pa.x1;
@@ -327,18 +327,18 @@ CircuitElement.prototype.drawDots = function (pa, pb, pos) {
         pos += ds;
 
     for (var di = pos; di < dn; di += ds) {
-        var x0 = (pa.x1 + di * dx / dn);
-        var y0 = (pa.y + di * dy / dn);
+      var x0 = (pa.x1 + di * dx / dn);
+      var y0 = (pa.y + di * dy / dn);
 
-        // Draws each dot:
-        // TODO CANVAS
-        paper.beginPath();
-            paper.strokeStyle   = Color.color2HexString(Settings.DOTS_OUTLINE);
-            paper.fillStyle     = Color.color2HexString(Settings.DOTS_COLOR);
-            paper.arc(x0, y0, Settings.CURRENT_RADIUS, 0, 2*Math.PI, true);
-            paper.stroke();
-            paper.fill();
-        paper.closePath();
+      // Draws each dot:
+      // TODO CANVAS
+      renderContext.beginPath();
+      renderContext.strokeStyle   = Settings.DOTS_OUTLINE;
+      renderContext.fillStyle     = Settings.DOTS_COLOR;
+      renderContext.arc(x0, y0, Settings.CURRENT_RADIUS, 0, 2 * Math.PI, true);
+      renderContext.stroke();
+      renderContext.fill();
+      renderContext.closePath();
     }
 };
 

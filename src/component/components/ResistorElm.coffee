@@ -1,5 +1,6 @@
 CircuitElement = require('../abstractCircuitComponent.coffee')
 {Polygon, Rectangle, Point} = require('../../util/shapePrimitives')
+DrawHelper = require('../../render/drawHelper')
 
 #/////////////////////////////////////////////////////////////////////////////
 # Constructor ////////////////////////////////////////////////////////////////
@@ -17,41 +18,40 @@ class ResistorElm extends CircuitElement
 ResistorElm::ps3 = new Point(100, 50)
 ResistorElm::ps4 = new Point(100, 150)
 
-ResistorElm::draw = ->
-  
-  # Always Draw dots first
-  @doDots()
+ResistorElm::draw = (renderContext) ->
+  @doDots(renderContext)
+
   segments = 16
-  ox = 0
+  oldOffset = 0
   hs = 6
   v1 = @volts[0]
   v2 = @volts[1]
-  @setBboxPt @point1, @point2, hs
-  @draw2Leads()
-  @setPowerColor true
-  segf = 1 / segments
-  i = 0
 
-  while i < segments
-    nx = 0
+  @setBboxPt @point1, @point2, hs
+  @draw2Leads(renderContext)
+  DrawHelper.getPowerColor @getPower
+  segf = 1 / segments
+
+  for i in [0...segments]
+    newOffset = 0
     switch i & 3
       when 0
-        nx = 1
+        newOffset = 1
       when 2
-        nx = -1
+        newOffset = -1
       else
-        nx = 0
+        newOffset = 0
     v = v1 + (v2 - v1) * i / segments
-    color = @setVoltageColor(v)
-    CircuitElement.interpPoint @lead1, @lead2, CircuitElement.ps1, i * segf, hs * ox
-    CircuitElement.interpPoint @lead1, @lead2, CircuitElement.ps2, (i + 1) * segf, hs * nx
-    CircuitElement.drawThickLinePt CircuitElement.ps1, CircuitElement.ps2, color
-    ox = nx
-    ++i
-  if Circuit.showValuesCheckItem
-    s = CircuitElement.getShortUnitText(@resistance, "ohm")
-    @drawValues s, hs
-  @drawPosts()
+    DrawHelper.interpPoint @lead1, @lead2, DrawHelper.ps1, i * segf, hs * oldOffset
+    DrawHelper.interpPoint @lead1, @lead2, DrawHelper.ps2, (i + 1) * segf, hs * newOffset
+    renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(v)
+    oldOffset = newOffset
+
+  if @Circuit.Params.showValues
+    resistanceVal = DrawHelper.getShortUnitText(@resistance, "ohm")
+    @drawValues resistanceVal, hs, renderContext
+
+  @drawPosts(renderContext)
 
 ResistorElm::dump = ->
   CircuitElement::dump.call(this) + " " + @resistance
