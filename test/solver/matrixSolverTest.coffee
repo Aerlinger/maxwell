@@ -12,7 +12,7 @@ describe "Matrix Solver", ->
 
   describe "calling lu_factor", ->
     beforeEach () ->
-      @result = @Solver.lu_factor(@matrix3, 3, @circuitPermute)
+      @result = @Solver.luFactor(@matrix3, 3, @circuitPermute)
 
     it "should factor a 3x3 nonsingular array", ->
       @result.should.equal true
@@ -25,7 +25,7 @@ describe "Matrix Solver", ->
 
     describe "then calling lu_solve", ->
       beforeEach () ->
-        @result = @Solver.lu_solve(@matrix3, 3, @circuitPermute, @solvedMatrix)
+        @result = @Solver.luSolve(@matrix3, 3, @circuitPermute, @solvedMatrix)
 
       it "should solve circuit matrix", ->
 

@@ -5,7 +5,6 @@ if process.env
   DrawHelpers = require('../util/drawUtils.coffee')
 
 class AbstractCircuitComponent
-
   constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, st = []) ->
     @current = 0
     @curcount = 0
