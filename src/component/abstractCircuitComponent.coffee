@@ -2,7 +2,7 @@
 if process.env
   Settings = require('../settings/settings')
   {Polygon, Rectangle, Point} = require('../util/shapePrimitives')
-  DrawHelpers = require('../util/drawUtils.coffee')
+  DrawHelpers = require('../render/drawHelper')
 
 class AbstractCircuitComponent
   constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, st = []) ->
@@ -165,7 +165,10 @@ class AbstractCircuitComponent
     @setPoints()
 
   stamp: ->
-    # to be overridden by subclasses
+    throw("Called abstract function stamp() in AbstractCircuitElement")
+
+  toString: ->
+    throw("Called abstract function toString() in AbstractCircuitElement")
 
   getVoltageSourceCount: ->
     0
@@ -249,7 +252,7 @@ class AbstractCircuitComponent
 
   # Extended by subclasses
   getInfo: (arr) ->
-    null
+    throw("Called abstract function getInfo() in AbstractCircuitElement")
 
   # Extended by subclasses
   getBasicInfo: (arr) ->
@@ -268,11 +271,11 @@ class AbstractCircuitComponent
 
   # TODO: Implement
   getEditInfo: (n) ->
-    null
+    throw("Called abstract function getEditInfo() in AbstractCircuitElement")
 
   # TODO: Implement
   setEditValue: (n, ei) ->
-    null
+    throw("Called abstract function setEditInfo() in AbstractCircuitElement")
 
   getConnection: (n1, n2) ->
     true
@@ -300,6 +303,122 @@ class AbstractCircuitComponent
 
   needsShortcut: ->
     false
+
+
+  ### #######################################################################
+  # RENDERING METHODS
+  ### #######################################################################
+
+  draw: ->
+    throw("Called abstract function draw() in AbstractCircuitElement")
+
+  draw2Leads: (renderContext) ->
+    renderContext.drawThickLinePt @point1, @lead1, DrawHelpers.getVoltageColor(@volts[0])
+    renderContext.drawThickLinePt @lead2, @point2, DrawHelpers.getVoltageColor(@volts[1])
+
+  updateDotCount: (current=@current, currentCount=@curcount) ->
+    return currentCount if @Circuit.stoppedCheck
+    currentIncrement = current * @Circuit.Params.currentMult
+    currentIncrement %= 8
+    @curcount = currentIncrement + currentCount
+    return currentCount + currentIncrement
+
+  doDots: (renderContext) ->
+    @curcount = @updateDotCount()
+    unless @Circuit.dragElm is this
+      @drawDots @point1, @point2, @curcount, renderContext
+
+  drawDots: (point1, point2, pos, renderContext) ->
+    # Don't do anything if the sim is stopped or has dots disabled.
+    return  if @Circuit.stoppedCheck or pos is 0 or not @Circuit.Params.dotsCheckItem
+
+    deltaX = point2.x - point1.x
+    deltaY = point2.y - point1.y
+    deltaR = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+    deltaSegment = 16
+    pos %= deltaSegment
+    pos += deltaSegment if pos < 0
+    newPos = pos
+
+    while newPos < deltaR
+      x0 = (point1.x + newPos * deltaX / deltaR)
+      y0 = (point1.y + newPos * deltaY / deltaR)
+
+      # Draws each dot:
+      renderContext.beginPath()
+      renderContext.strokeStyle = Settings.DOTS_OUTLINE
+      renderContext.fillStyle = Settings.DOTS_COLOR
+      renderContext.arc x0, y0, Settings.CURRENT_RADIUS, 0, 2 * Math.PI, true
+      renderContext.stroke()
+      renderContext.fill()
+      renderContext.closePath()
+      newPos += deltaSegment
+
+  ###
+  Todo: Not yet implemented
+  ###
+  drawCenteredText: (text, x, y, doCenter, renderContext) ->
+    # TODO: test
+    strWidth = 10 * text.length # fm.stringWidth(s);
+    x -= strWidth / 2 if doCenter
+    ascent = -10 # fm.getAscent() / 2;
+    descent = 5  # fm.getAscent() / 2;
+
+    # TODO: CANVAS
+    renderContext.fillStyle = Settings.TEXT_COLOR
+    renderContext.fillText text, x, y + ascent
+
+    @adjustBbox x, y - ascent, x + strWidth, y + ascent + descent
+    return text
+
+
+  ###
+  # Draws relevant values near components
+  #  e.g. 500 Ohms, 10V, etc...
+  ###
+  drawValues: (valueText, hs, renderContext) ->
+    return  unless valueText
+    stringWidth = 100 #fm.stringWidth(s);
+    ya = -10 #fm.getAscent() / 2;
+    if this instanceof RailElm or this instanceof SweepElm
+      xc = @x2
+      yc = @y2
+    else
+      xc = (@x2 + @x1) / 2
+      yc = (@y2 + @y1) / 2
+    dpx = Math.floor(@dpx1 * hs)
+    dpy = Math.floor(@dpy1 * hs)
+    offset = 20
+    renderContext.fillStyle = Settings.TEXT_COLOR
+    if dpx is 0
+      renderContext.fillText valueText, xc - stringWidth / 2 + 3 * offset / 2, yc - Math.abs(dpy) - offset / 3
+    else
+      xx = xc + Math.abs(dpx) + offset
+      xx = xc - (10 + Math.abs(dpx) + offset)  if this instanceof VoltageElm or (@x1 < @x2 and @y1 > @y2)
+      renderContext.fillText valueText, xx, yc + dpy + ya
+    return textLabel
+
+  drawPosts: (renderContext) ->
+    for i in [0...@getPostCount()]
+      p = @getPost(i)
+      @drawPost p.x, p.y, @nodes[i], renderContext
+
+  drawPost: (x0, y0, node, renderContext) ->
+    if node
+      return if not @Circuit.dragElm? and not @needsHighlight() and @Circuit.getNode(node).links.length is 2
+      return if @Circuit.mouseMode is @Circuit.MODE_DRAG_ROW or @Circuit.mouseMode is @Circuit.MODE_DRAG_COLUMN
+
+    if @needsHighlight()
+      fillColor = Settings.POST_COLOR_SELECTED
+      strokeColor = Settings.POST_COLOR_SELECTED
+    else
+      fillColor = Settings.POST_COLOR
+      strokeColor = Settings.POST_COLOR
+
+    renderContext.fillCircle x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor
+
+
+
 
 
 # The Footer exports class(es) in this file via Node.js, if it is defined.

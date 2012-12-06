@@ -30,9 +30,9 @@ class Rectangle
 
   intersects: (otherRect) ->
     topLeftIntersects = @.contains(otherRect.x, otherRect.y)
-    topRightIntersects = @.contains(otherRect.x+otherRect.width, otherRect.y)
-    bottomRightIntersects = @.contains(otherRect.x + otherRect.width, otherRect.y+otherRect.height)
-    bottomLeftIntersects = @.contains(otherRect.x, otherRect.y+otherRect.height);
+    topRightIntersects = @.contains(otherRect.x + otherRect.width, otherRect.y)
+    bottomRightIntersects = @.contains(otherRect.x + otherRect.width, otherRect.y + otherRect.height)
+    bottomLeftIntersects = @.contains(otherRect.x, otherRect.y + otherRect.height);
 
     return (topLeftIntersects or topRightIntersects or bottomRightIntersects or bottomLeftIntersects)
 

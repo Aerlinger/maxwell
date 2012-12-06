@@ -1,7 +1,7 @@
 Circuit = require './../core/circuit'
 Context = require './context'
 
-class Renderer
+class ComponentRenderer
 
   constructor: (@Circuit) ->
     @Context = new Context()
@@ -33,7 +33,7 @@ class Renderer
       msg += warning + "\n"
 
     console.error "Simulation Warning: " + msg
-    #context.fillText msg, 150, 70
+  #context.fillText msg, 150, 70
 
   drawError: (context) ->
     msg = ""
@@ -41,6 +41,6 @@ class Renderer
       msg += error + "\n"
 
     console.error "Simulation Error: " + msg
-    #context.fillText msg, 150, 50
+#context.fillText msg, 150, 50
 
 module.exports = Renderer

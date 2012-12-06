@@ -1,5 +1,6 @@
-CircuitElement = require('../abstractCircuitComponent.coffee')
+CircuitElement = require('../abstractCircuitComponent')
 {Polygon, Rectangle, Point} = require('../../util/shapePrimitives')
+DrawHelper = require('../../render/drawHelper')
 
 class WireElm extends CircuitElement
   constructor: (xa, ya, xb, yb, f, st) ->
@@ -10,10 +11,10 @@ class WireElm extends CircuitElement
 
 WireElm.FLAG_SHOWCURRENT = 1
 WireElm.FLAG_SHOWVOLTAGE = 2
-WireElm::draw = ->
-  color = @setVoltageColor(@volts[0])
-  @doDots()
-  CircuitElement.drawThickLinePt @point1, @point2, color
+
+WireElm::draw = (renderContext) ->
+  @doDots(renderContext)
+  renderContext.drawThickLinePt @point1, @point2, DrawHelper.getVoltageColor(@volts[0])
   @setBboxPt @point1, @point2, 3
   if @mustShowCurrent()
     s = CircuitElement.getShortUnitText(Math.abs(@getCurrent()), "A")
@@ -21,7 +22,7 @@ WireElm::draw = ->
   else if @mustShowVoltage()
     s = CircuitElement.getShortUnitText(@volts[0], "V")
     @drawValues s, 4
-  @drawPosts()
+  @drawPosts(renderContext)
 
 WireElm::stamp = ->
   @Circuit.Solver.Stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0

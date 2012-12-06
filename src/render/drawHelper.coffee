@@ -1,9 +1,38 @@
-{Polygon, Rectangle, Point} = require('./shapePrimitives.coffee')
+{Polygon, Rectangle, Point} = require('./../util/shapePrimitives')
+Settings = require('../settings/settings')
 
-class DrawHelpers
+class DrawHelper
 
   @ps1: new Point(0, 0)
   @ps2: new Point(0, 0)
+
+  @colorScaleCount = 32
+  @colorScale = []
+
+  # Creates the color scale
+  @initializeColorScale: ->
+    @colorScale = new Array(@colorScaleCount)
+
+    for i in [0...@colorScaleCount]
+      v = i * 2 / @colorScaleCount - 1
+      if v < 0
+        n1 = Math.floor (128 * -v) + 127
+        n2 = Math.floor 127 * (1 + v)
+
+        # Color is red for a negative voltage:
+        @colorScale[i] = new Color(n1, n2, n2)
+      else
+        n1 = Math.floor (128 * v) + 127
+        n2 = Math.floor 127 * (1 - v)
+
+        # Color is green for a positive voltage
+        @colorScale[i] = new Color(n2, n1, n2)
+
+  @scale: ->
+    [ "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
+      "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
+      "#7f7f7f", "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747",
+      "#3fbf3f", "#37c737", "#2fcf2f", "#27d727", "#1fdf1f", "#17e717", "#0fef0f", "#07f707", "#00ff00" ]
 
   @unitsFont: "Arial, Helvetica, sans-serif"
 
@@ -72,7 +101,6 @@ class DrawHelpers
 
   @drawCoil: (hs, p1, p2, v1, v2) ->
 
-    # todo: implement
     segments = 40
     segf = 1 / segments
     @ps1.x = p1.x
@@ -82,7 +110,7 @@ class DrawHelpers
     while i < segments
       cx = (((i + 1) * 8 * segf) % 2) - 1
       hsx = Math.sqrt(1 - cx * cx)
-      hsx = -hsx  if hsx < 0
+      hsx = -hsx if hsx < 0
       @.interpPoint p1, p2, @ps2, i * segf, hsx * hs
       v = v1 + (v2 - v1) * i / segments
       color = @setVoltageColor(v)
@@ -99,35 +127,6 @@ class DrawHelpers
     paper.closePath()
 
 
-  @drawThickLine: (x, y, x2, y2, color) ->
-    #paper.strokeStyle = (if (color) then Color.color2HexString(color) else CircuitElement.color)
-#    paper.strokeStyle = color || Settings.color
-#    paper.beginPath()
-#    paper.moveTo x, y
-#    paper.lineTo x2, y2
-#    paper.stroke()
-#    paper.closePath()
-
-  @drawThickLinePt: (pa, pb, color) ->
-    @.drawThickLine pa.x, pa.y, pb.x, pb.y, color
-
-  @drawThickPolygon: (xlist, ylist, c, color) ->
-    i = 0
-    while i < (c.length - 1)
-      @.drawThickLine xlist[i], ylist[i], xlist[i + 1], ylist[i + 1], color
-      ++i
-    @.drawThickLine xlist[i], ylist[i], xlist[0], ylist[0], color
-
-  @drawThickPolygonP: (polygon, color) ->
-    numVertices = polygon.numPoints()
-
-    i = 0
-    while i < (numVertices - 1)
-      @.drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(i + 1), polygon.getY(i + 1), color
-      ++i
-    @.drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
-
-
   @getVoltageDText: (v) ->
     getUnitText Math.abs(v), "V"
 
@@ -140,6 +139,24 @@ class DrawHelpers
   @getCurrentDText: (i) ->
     getUnitText Math.abs(i), "A"
 
+  @getVoltageColor: (volts, fullScaleVRange) ->
+    value = Math.floor (volts + fullScaleVRange) * (@colorScaleCount - 1) / (2 * fullScaleVRange)
+    if value < 0
+      value = 0
+    else if value >= @colorScaleCount
+      value = @colorScaleCount - 1
+
+    return @scale[value]
+
+  @getPowerColor: (power, scaleFactor=1) ->
+    return unless Settings.powerCheckItem
+
+    powerLevel = power * scaleFactor
+    power = Math.abs(powerLevel)
+    power = 1 if power > 1
+    rg = 128 + Math.floor power * 127
+    b = Math.floor 128 * (1 - power)
+
 
 # The Footer exports class(es) in this file via Node.js, if Node.js is defined.
 # This is necessary for testing through Mocha in development mode.
@@ -148,4 +165,4 @@ class DrawHelpers
 #
 # To require this class in another file through Node, write {ClassName} = require(<path_to_coffee_file>)
 root = module.exports ? window
-module.exports = DrawHelpers
+module.exports = DrawHelper
