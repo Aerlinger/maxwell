@@ -1,7 +1,7 @@
 class CircuitParams
 
   constructor: (paramsHash) ->
-    @status = paramsHash?['completion_status']
+    @completionStatus = paramsHash?['completion_status']
     @createdAt = paramsHash?['created_at']
     @currentSpeed = paramsHash?['current_speed']
     @updatedAt = paramsHash?['updated_at']
