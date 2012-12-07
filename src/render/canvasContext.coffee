@@ -3,7 +3,7 @@ Canvas = require 'canvas'
 Settings = require '../settings/settings'
 
 class CanvasContext extends Context
-  constructor: (@width, @height) ->
+  constructor: (@width=400, @height=300) ->
     @canvas = new Canvas(@width, @height)
     @context = @canvas.getContext('2d')
 
@@ -17,6 +17,9 @@ class CanvasContext extends Context
     @context.fill()
     @context.closePath()
 
+  drawThickLinePt: (pa, pb, color) ->
+    @drawThickLine pa.x, pa.y, pb.x, pb.y, color
+
   drawThickLine: (x, y, x2, y2, color=Settings.color) ->
     @context.strokeStyle = color
     @context.beginPath()
@@ -25,18 +28,13 @@ class CanvasContext extends Context
     @context.stroke()
     @context.closePath()
 
-  drawThickLinePt: (pa, pb, color) ->
-    @drawThickLine pa.x, pa.y, pb.x, pb.y, color
-
   drawThickPolygon: (xlist, ylist, color) ->
-    #while i < (c.length - 1)
     for i in [0...(xlist.length-1)]
       @drawThickLine xlist[i], ylist[i], xlist[i+1], ylist[i+1], color
     @drawThickLine xlist[i], ylist[i], xlist[0], ylist[0], color
 
   drawThickPolygonP: (polygon, color) ->
     numVertices = polygon.numPoints()
-    #while i < (numVertices - 1)
     for i in [0...numVertices]
       @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(i+1), polygon.getY(i+1), color
     @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
@@ -49,5 +47,10 @@ class CanvasContext extends Context
 
   getCanvas: () ->
     return @canvas
+
+  toBuffer: () ->
+    return @canvas.toBuffer
+
+
 
 module.exports = CanvasContext

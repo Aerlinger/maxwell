@@ -47,7 +47,7 @@ ResistorElm::draw = (renderContext) ->
     renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(v)
     oldOffset = newOffset
 
-  if @Circuit.Params.showValues
+  if @Circuit?.Params.showValues
     resistanceVal = DrawHelper.getShortUnitText(@resistance, "ohm")
     @drawValues resistanceVal, hs, renderContext
 

@@ -1,5 +1,5 @@
 fs = require "fs"
-CircuitEngineParams = require('../core/circuitParams.coffee')
+CircuitEngineParams = require('../core/circuitParams')
 
 ComponentDefs = require('../component/componentRegistry').ComponentDefs
 DumpTypeConversions = require('../component/componentRegistry').DumpTypeConversions
@@ -24,11 +24,11 @@ class CircuitLoader
     for elementData in jsonParsed
       type = elementData['sym']
       sym = ComponentDefs[type]
-      x1 = elementData['x1']
-      y1 = elementData['y1']
-      x2 = elementData['x2']
-      y2 = elementData['y2']
-      flags = elementData['flags']
+      x1 = parseInt elementData['x1']
+      y1 = parseInt elementData['y1']
+      x2 = parseInt elementData['x2']
+      y2 = parseInt elementData['y2']
+      flags = parseInt elementData['flags']
       params = elementData['params']
 
       if type is 'Hint'

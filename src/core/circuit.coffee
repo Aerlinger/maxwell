@@ -56,6 +56,9 @@ class Circuit
 
     @Solver = new CircuitSolver(this)
 
+    @time = 0
+    @lastTime = 0
+
     @Hint = new Hint(this)
 
     # State Handlers
@@ -91,6 +94,7 @@ class Circuit
     newElement.Circuit = this
     newElement.setPoints()
     @elementList.push newElement
+
 
   # "Desolders" an existing element to this circuit (removes it to the element list array).
   desolder: (oldElement, destroy = true) ->
@@ -170,7 +174,7 @@ class Circuit
     @Solver.reconstruct()
 
     # If the circuit isn't stopped, solve
-    unless @Solver.stoppedCheck
+    unless @Solver.stopped
       @Solver.solveCircuit()
       @lastTime = @updateTimings()
     else
@@ -201,10 +205,14 @@ class Circuit
 
   updateTimings: () ->
     sysTime = (new Date()).getTime()
-    unless @lastTime is 0
-      inc = Math.floor(sysTime - @lastTime)
-      currentSpeed = Math.exp(@Params.currentSpeed / 3.5 - 14.2)
-      @Params.currentMult = 1.7 * inc * currentSpeed
+    #if @lastTime != 0
+    inc = Math.floor(sysTime - @lastTime)
+    currentSpeed = Math.exp(@Params.currentSpeed / 3.5 - 14.2)
+    @Params.currentMult = 1.7 * inc * currentSpeed
+    console.log "timings"
+    console.log inc
+    console.log @Params.currentSpeed
+
     if (sysTime - @secTime) >= 1000
       @framerate = @frames
       @steprate = @Solver.steps

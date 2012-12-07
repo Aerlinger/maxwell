@@ -21,3 +21,11 @@ require('../src/global/math');
 require('../src/global/units');
 require('../src/global/mixin');
 require('../src/global/typeChecking');
+
+// Simple check to make sure mocha is loaded and working
+describe("Sanity check", function () {
+  it("should satisfy true equals true", function (done) {
+    "true".should.equal("true");`
+    done();
+  });
+});

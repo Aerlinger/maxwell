@@ -139,7 +139,7 @@ class DrawHelper
   @getCurrentDText: (i) ->
     getUnitText Math.abs(i), "A"
 
-  @getVoltageColor: (volts, fullScaleVRange) ->
+  @getVoltageColor: (volts, fullScaleVRange=5) ->
     value = Math.floor (volts + fullScaleVRange) * (@colorScaleCount - 1) / (2 * fullScaleVRange)
     if value < 0
       value = 0

@@ -16,5 +16,5 @@ else
   MOCHA_ARGS="test/*.js test/**/*Test.coffee test/*/*/*Test.coffee"
 fi
 
-echo "running mocha on: $MOCHA_ARGS"
+echo "running mocha on directories: $MOCHA_ARGS"
 mocha $MOCHA_ARGS
