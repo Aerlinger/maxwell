@@ -1,5 +1,6 @@
 CircuitElement = require('../abstractCircuitComponent.coffee')
 {Polygon, Rectangle, Point} = require('../../util/shapePrimitives')
+DrawHelper = require('../../render/drawHelper')
 
 class GroundElm extends CircuitElement
   constructor: (xa, ya, xb, yb, f, st) ->
@@ -11,23 +12,23 @@ GroundElm::getDumpType = ->
 GroundElm::getPostCount = ->
   1
 
-GroundElm::draw = ->
-  color = @setVoltageColor(0)
-  @doDots()
-  CircuitElement.drawThickLinePt @point1, @point2, color
-  i = 0
-  while i < 3
-    a = 10 - i * 4
-    b = i * 5 # -10;
-    CircuitElement.interpPoint2 @point1, @point2, CircuitElement.ps1, CircuitElement.ps2, 1 + b / @dn, a
-    CircuitElement.drawThickLinePt CircuitElement.ps1, CircuitElement.ps2, color
-    i++
-  CircuitElement.interpPoint @point1, @point2, CircuitElement.ps2, 1 + 11.0 / @dn
-  @setBboxPt @point1, CircuitElement.ps2, 11
-  @drawPost @x1, @y, @nodes[0]
+GroundElm::draw = (renderContext) ->
+  color = DrawHelper.getVoltageColor(0)
+  @doDots(renderContext)
+  renderContext.drawThickLinePt @point1, @point2, color
 
-GroundElm::setCurrent = (x, c) ->
-  @current = -c
+  for row in [0...3]
+    startPt = 10 - row * 4
+    endPt = row * 5
+    DrawHelper.interpPoint2 @point1, @point2, DrawHelper.ps1, DrawHelper.ps2, 1 + endPt / @dn, startPt
+    renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, color
+
+  DrawHelper.interpPoint @point1, @point2, DrawHelper.ps2, 1 + 11.0 / @dn
+  @setBboxPt @point1, DrawHelper.ps2, 11
+  @drawPost @x1, @y1, @nodes[0], renderContext
+
+GroundElm::setCurrent = (x, currentVal) ->
+  @current = -currentVal
 
 GroundElm::stamp = ->
   @Circuit.Solver.Stamper.stampVoltageSource 0, @nodes[0], @voltSource, 0
@@ -50,6 +51,7 @@ GroundElm::needsShortcut = ->
 
 GroundElm::toString = ->
   "GroundElm"
+
 
 
 module.exports = GroundElm

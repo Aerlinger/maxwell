@@ -97,9 +97,10 @@ VoltageElm::setPoints = ->
 
 VoltageElm::draw = (renderContext) ->
   @setBbox @x1, @y2, @x2, @y2
+
   @updateDotCount()
 
-  if !(@Circuit.dragElm is this) && !(@waveform is VoltageElm.WF_DC)
+  if !(@Circuit?.dragElm is this) && !(@waveform is VoltageElm.WF_DC)
     @drawDots @point1, @lead1, @curcount
     @drawDots @point2, @lead2, -@curcount
 
@@ -245,10 +246,10 @@ VoltageElm::setEditValue = (n, ei) ->
     # adjust time zero to maintain continuity in the waveform even though the frequency has changed.
     oldfreq = @frequency
     @frequency = ei.value
-    maxfreq = 1 / (8 * @Circuit.timeStep)
+    maxfreq = 1 / (8 * @Circuit?.timeStep)
     @frequency = maxfreq  if @frequency > maxfreq
     adj = @frequency - oldfreq
-    @freqTimeZero = @Circuit.time - oldfreq * (@Circuit.time - @freqTimeZero) / @frequency
+    @freqTimeZero = @Circuit?.time - oldfreq * (@Circuit?.time - @freqTimeZero) / @frequency
   if n is 1
     waveform = @waveform
     

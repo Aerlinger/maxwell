@@ -22,7 +22,7 @@ class CircuitSolver
 
   reset: ->
     # simulation variables
-    @time = 0             # t is simulation time (in seconds)
+    @time = 0             # simulation time (in seconds)
     @converged = true     # true if numerical analysis has converged
     @subIterations = 5000
 

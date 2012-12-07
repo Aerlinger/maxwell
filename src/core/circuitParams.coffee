@@ -7,7 +7,7 @@ class CircuitParams
   constructor: (paramsObj) ->
     @completionStatus = paramsObj?['completion_status']
     @createdAt = paramsObj?['created_at']
-    @currentSpeed = paramsObj?['current_speed']
+    @currentSpeed = paramsObj?['current_speed'] || 63
     @updatedAt = paramsObj?['updated_at']
     @description = paramsObj?['description']
     @flags = paramsObj?['flags']

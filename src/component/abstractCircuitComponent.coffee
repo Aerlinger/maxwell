@@ -317,20 +317,20 @@ class AbstractCircuitComponent
     renderContext.drawThickLinePt @lead2, @point2, DrawHelpers.getVoltageColor(@volts[1])
 
   updateDotCount: (current=@current, currentCount=@curcount) ->
-    return currentCount if @Circuit.stoppedCheck
-    currentIncrement = current * @Circuit.Params.currentMult
+    return currentCount if @Circuit?.Solver.stopped
+    currentIncrement = current * @Circuit?.Params.currentMult
     currentIncrement %= 8
     @curcount = currentIncrement + currentCount
     return currentCount + currentIncrement
 
   doDots: (renderContext) ->
     @curcount = @updateDotCount()
-    unless @Circuit.dragElm is this
+    unless @Circuit?.dragElm is this
       @drawDots @point1, @point2, @curcount, renderContext
 
   drawDots: (point1, point2, pos, renderContext) ->
     # Don't do anything if the sim is stopped or has dots disabled.
-    return  if @Circuit.stoppedCheck or pos is 0 or not @Circuit.Params.dotsCheckItem
+    return  if @Circuit?.Solver.stopped or pos is 0 or not @Circuit?.Params.dotsCheckItem
 
     deltaX = point2.x - point1.x
     deltaY = point2.y - point1.y
@@ -404,9 +404,9 @@ class AbstractCircuitComponent
       @drawPost p.x, p.y, @nodes[i], renderContext
 
   drawPost: (x0, y0, node, renderContext) ->
-    if node
-      return if not @Circuit.dragElm? and not @needsHighlight() and @Circuit.getNode(node).links.length is 2
-      return if @Circuit.mouseMode is @Circuit.MODE_DRAG_ROW or @Circuit.mouseMode is @Circuit.MODE_DRAG_COLUMN
+    #if node
+      #return if not @Circuit?.dragElm? and not @needsHighlight() and @Circuit?.getNode(node).links.length is 2
+      #return if @Circuit?.mouseMode is @Circuit?.MODE_DRAG_ROW or @Circuit?.mouseMode is @Circuit?.MODE_DRAG_COLUMN
 
     if @needsHighlight()
       fillColor = Settings.POST_COLOR_SELECTED

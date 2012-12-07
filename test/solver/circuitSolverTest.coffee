@@ -31,7 +31,3 @@ describe "Base Circuit Element", ->
       @Solver.origRightSide.should.be.empty
       @Solver.circuitRowInfo.should.be.empty
       @Solver.circuitPermute.should.be.empty
-
-
-
-

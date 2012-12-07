@@ -14,4 +14,4 @@ describe "Canvas", ->
 
     @canvas.toBuffer (err, buf) ->
       throw err if err
-      fs.writeFile(__dirname + '/block.png', buf)
+      fs.writeFile(__dirname + '/primitives/block.png', buf)
