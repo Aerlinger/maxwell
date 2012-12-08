@@ -86,8 +86,8 @@ class Circuit
   setupScopes: ->
 
 
-  getRenderContext: ->
-    @renderContext
+  getRenderer: ->
+    @Renderer
 
   # "Solders" a new element to this circuit (adds it to the element list array).
   solder: (newElement) ->
@@ -234,9 +234,9 @@ class Circuit
     # Draw the posts for each circuit
     tempMouseMode = @mouseState.tempMouseMode
     if tempMouseMode is MouseState.MODE_DRAG_ROW or
-    tempMouseMode is MouseState.MODE_DRAG_COLUMN or
-    tempMouseMode is MouseState.MODE_DRAG_POST or
-    tempMouseMode is MouseState.MODE_DRAG_SELECTED
+       tempMouseMode is MouseState.MODE_DRAG_COLUMN or
+       tempMouseMode is MouseState.MODE_DRAG_POST or
+       tempMouseMode is MouseState.MODE_DRAG_SELECTED
 
       for circuitElm in @elementList
         circuitElm.drawPost circuitElm.x1, circuitElm.y1
@@ -258,8 +258,8 @@ class Circuit
     else
       @getCircuitBottom() if @circuitBottom is 0
 
-      info = []
       # Array of messages to be displayed at the bottom of the canvas
+      info = []
       if @mouseElm?
         if @mousePost is -1
           @mouseElm.getInfo info
@@ -269,12 +269,11 @@ class Circuit
         Settings.fractionalDigits = 2
         info.push "t = " + getUnitText(@Solver.time, "s") + "\nft: " + (@lastTime - @lastFrameTime) + "\n"
       unless @Hint.hintType is -1
-        s = @Hint.getHint()
-        unless s?
+        hint = @Hint.getHint()
+        unless hint
           @Hint.hintType = -1
         else
-          info.push s
-
+          info.push hint
       @Renderer.drawInfo(info)
       @mouseElm = realMouseElm
 
@@ -283,13 +282,16 @@ class Circuit
     badNodes = []
     for circuitNode in @nodeList
       if not circuitNode.intern and circuitNode.links.length is 1
-        bb = 0
+        numBadPoints = 0
         firstCircuitNode = circuitNode.links[0]
         for circuitElm in @elementList
-          bb++ if firstCircuitNode.elm.toString() != circuitElm.toString() and circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)
-        if bb > 0
+          console.log "Compare: #{firstCircuitNode.elm.toString()}  #{circuitElm.toString()}"
+          if firstCircuitNode.elm.toString() != circuitElm.toString() and circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)
+            numBadPoints++
+        if numBadPoints > 0
           # Todo: outline bad nodes here
           badNodes.push circuitNode
+    return badNodes
 
 
   ###
@@ -300,10 +302,8 @@ class Circuit
     @Solver.stop("Restarted Circuit from time 0")
 
   restartAndRun: ->
-    for element in @elementList
-      element.reset()
-    for scope in @scopes
-      scope.resetGraph()
+    element.reset() for element in @elementList
+    scope.resetGraph() for scope in @scopes
 
     @Solver.reset()
     @Solver.run()

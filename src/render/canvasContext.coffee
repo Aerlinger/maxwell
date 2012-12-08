@@ -3,7 +3,7 @@ Canvas = require 'canvas'
 Settings = require '../settings/settings'
 
 class CanvasContext extends Context
-  constructor: (@width=400, @height=300) ->
+  constructor: (@width=600, @height=400) ->
     @canvas = new Canvas(@width, @height)
     @context = @canvas.getContext('2d')
 

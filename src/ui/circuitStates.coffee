@@ -4,7 +4,6 @@ class ColorMapState
 
 
 class MouseState
-
   # Available mouse modes (Only one can be active at a time)
   @MODE_ADD_ELM       = "MODE_ADD_ELM"
   @MODE_DRAG_ALL      = "MODE_DRAG_ALL"
@@ -38,7 +37,6 @@ class MouseState
 
 
 class KeyboardState
-
   @NO_KEY_DOWN  = 0
   @KEY_DELETE   = 46
   @KEY_SHIFT    = 16

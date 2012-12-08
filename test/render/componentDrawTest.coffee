@@ -24,7 +24,7 @@ describe "Should render", ->
       done()
 
   specify "A Wire", (done) ->
-    @Wire = new Wire(50, 50, 50, 150, [500])
+    @Wire = new Wire(50, 50, 50, 150)
     @Renderer.drawComponent(@Wire)
 
     @Renderer.getCanvas().toBuffer (err, buf) ->
@@ -42,7 +42,7 @@ describe "Should render", ->
       done()
 
   specify "A Ground Symbol", (done) ->
-    @Ground = new Ground(50, 50, 50, 150, [500])
+    @Ground = new Ground(50, 50, 50, 150)
     @Renderer.drawComponent(@Ground)
 
     @Renderer.getCanvas().toBuffer (err, buf) ->

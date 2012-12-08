@@ -14,21 +14,21 @@ class DrawHelper
     @colorScale = new Array(@colorScaleCount)
 
     for i in [0...@colorScaleCount]
-      v = i * 2 / @colorScaleCount - 1
-      if v < 0
-        n1 = Math.floor (128 * -v) + 127
-        n2 = Math.floor 127 * (1 + v)
+      voltage = i * 2 / @colorScaleCount - 1
+      if voltage < 0
+        n1 = Math.floor (128 * -voltage) + 127
+        n2 = Math.floor 127 * (1 + voltage)
 
-        # Color is red for a negative voltage:
+        # Color red for a negative voltage:
         @colorScale[i] = new Color(n1, n2, n2)
       else
-        n1 = Math.floor (128 * v) + 127
-        n2 = Math.floor 127 * (1 - v)
+        n1 = Math.floor (128 * voltage) + 127
+        n2 = Math.floor 127 * (1 - voltage)
 
-        # Color is green for a positive voltage
+        # Color green for a positive voltage
         @colorScale[i] = new Color(n2, n1, n2)
 
-  @scale: ->
+  @scale =
     [ "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
       "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
       "#7f7f7f", "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747",
@@ -56,8 +56,6 @@ class DrawHelper
     return b
 
   @interpPoint2: (a, b, c, d, f, g) ->
-    gx = 0
-    gy = 0
     unless g is 0
       gx = b.y - a.y
       gy = a.x - b.x
@@ -67,9 +65,9 @@ class DrawHelper
     offset = 0.48
 
     c.x  = Math.floor a.x * (1 - f) + b.x * f + g * gx + offset
-    c.y   = Math.floor a.y  * (1 - f) + b.y  * f + g * gy + offset
+    c.y  = Math.floor a.y  * (1 - f) + b.y  * f + g * gy + offset
     d.x  = Math.floor a.x * (1 - f) + b.x * f - g * gx + offset
-    d.y   = Math.floor a.y  * (1 - f) + b.y  * f - g * gy + offset
+    d.y  = Math.floor a.y  * (1 - f) + b.y  * f - g * gy + offset
 
   @calcArrow: (a, b, al, aw) ->
     poly = new Polygon()
@@ -99,30 +97,26 @@ class DrawHelper
 
     return newPoly
 
-  @drawCoil: (hs, p1, p2, v1, v2) ->
+  @drawCoil: (hs, point1, point2, vStart, vEnd) ->
 
     segments = 40
-    segf = 1 / segments
-    @ps1.x = p1.x
-    @ps1.y = p1.y
+    @ps1.x = point1.x
+    @ps1.y = point1.y
 
-    i = 0
-    while i < segments
-      cx = (((i + 1) * 8 * segf) % 2) - 1
+    for i in [0...segments]
+      cx = (((i + 1) * 8 / segments) % 2) - 1
       hsx = Math.sqrt(1 - cx * cx)
-      hsx = -hsx if hsx < 0
-      @.interpPoint p1, p2, @ps2, i * segf, hsx * hs
-      v = v1 + (v2 - v1) * i / segments
-      color = @setVoltageColor(v)
+      @.interpPoint point1, point2, @ps2, i / segments, hsx * hs
+      voltageLevel = vStart + (vEnd - vStart) * i / segments
+      color = @setVoltageColor(voltageLevel)
       @.drawThickLinePt @ps1, @ps2, color
       @ps1.x = @ps2.x
       @ps1.y = @ps2.y
-      ++i
 
-  @drawCircle: (x0, y0, r, color) ->
+  @drawCircle: (x0, y0, radius, color) ->
     paper.beginPath()
     paper.strokeStyle = color
-    paper.arc x0, y0, r, 0, 2 * Math.PI, true
+    paper.arc x0, y0, radius, 0, 2 * Math.PI, true
     paper.stroke()
     paper.closePath()
 
@@ -133,13 +127,13 @@ class DrawHelper
   @getVoltageText: (v) ->
     getUnitText v, "V"
 
-  @getCurrentText: (i) ->
-    getUnitText i, "A"
+  @getCurrentText: (value) ->
+    getUnitText value, "A"
 
-  @getCurrentDText: (i) ->
-    getUnitText Math.abs(i), "A"
+  @getCurrentDText: (value) ->
+    getUnitText Math.abs(value), "A"
 
-  @getVoltageColor: (volts, fullScaleVRange=5) ->
+  @getVoltageColor: (volts, fullScaleVRange=10) ->
     value = Math.floor (volts + fullScaleVRange) * (@colorScaleCount - 1) / (2 * fullScaleVRange)
     if value < 0
       value = 0

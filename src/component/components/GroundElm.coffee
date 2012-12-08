@@ -18,8 +18,8 @@ GroundElm::draw = (renderContext) ->
   renderContext.drawThickLinePt @point1, @point2, color
 
   for row in [0...3]
-    startPt = 10 - row * 4
-    endPt = row * 5
+    startPt = 10 - row * 2
+    endPt = row * 3
     DrawHelper.interpPoint2 @point1, @point2, DrawHelper.ps1, DrawHelper.ps2, 1 + endPt / @dn, startPt
     renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, color
 
