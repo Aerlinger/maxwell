@@ -16,7 +16,7 @@ class Renderer
   drawInfo: ->
     # TODO: Find where to show data; below circuit, not too high unless we need it
     bottomTextOffset = 100
-    ybase = @Circuit.getCircuitBottom - 15 * 1 - bottomTextOffset
+    ybase = @Circuit.getCircuitBottom - (15 * 1) - bottomTextOffset
 
   drawWarning: (context) ->
     msg = ""

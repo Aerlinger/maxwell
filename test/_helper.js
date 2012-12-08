@@ -25,7 +25,7 @@ require('../src/global/typeChecking');
 // Simple check to make sure mocha is loaded and working
 describe("Sanity check", function () {
   it("should satisfy true equals true", function (done) {
-    "true".should.equal("true");`
+    "true".should.equal("true");
     done();
   });
 });

@@ -2,6 +2,8 @@ CircuitLoader = require "../../src/io/circuitLoader"
 Circuit = require "../../src/core/circuit"
 CircuitNode = require("../../src/core/nodeGraph/circuitNode").CircuitNode
 
+fs = require 'fs'
+
 describe "Circuit", ->
   before (done) ->
     @circuit = new Circuit()
@@ -104,4 +106,9 @@ describe "Circuit", ->
     before () ->
       @circuit.updateCircuit()
 
-    it "should update scopes", ->
+    it "should render circuit", (done) ->
+      @circuit.renderCircuit()
+      @circuit.getRenderer().getCanvas().toBuffer (err, buf) ->
+        throw err if err
+        fs.writeFile(__dirname + '/voltDivideSimple.png', buf)
+        done()

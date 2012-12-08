@@ -83,10 +83,7 @@ class AbstractCircuitComponent
 
   # Steps forward one frame and performs calculation
   doStep: ->
-    # to be extended by subclasses
-
-  startIteration: ->
-    # to be extended by nonlinear elements
+    throw "Called doStep() on abstract class CircuitComponent"
 
   orphaned: ->
     return @Circuit is null or @Circuit is undefined
@@ -96,7 +93,7 @@ class AbstractCircuitComponent
     # TODO: Fully Implement
 
   startIteration: ->
-    # TODO: Implement
+    throw "Called startIteration() on abstract class CircuitComponent"
 
   getPostVoltage: (post_idx) ->
     @volts[post_idx]
@@ -132,36 +129,36 @@ class AbstractCircuitComponent
     @y2 = newY
     @setPoints()
 
-  move: (dx, dy) ->
-    @x1 += dx
-    @y1 += dy
-    @x2 += dx
-    @y2 += dy
-    @boundingBox.x += dx
-    @boundingBox.y += dy
+  move: (deltaX, deltaY) ->
+    @x1 += deltaX
+    @y1 += deltaY
+    @x2 += deltaX
+    @y2 += deltaY
+    @boundingBox.x += deltaX
+    @boundingBox.y += deltaY
     @setPoints()
 
-  allowMove: (dx, dy) ->
-    nx = @x1 + dx
-    ny = @y1 + dy
-    nx2 = @x2 + dx
-    ny2 = @y2 + dy
+  allowMove: (deltaX, deltaY) ->
+    newX = @x1 + deltaX
+    newY = @y1 + deltaY
+    newX2 = @x2 + deltaX
+    newY2 = @y2 + deltaY
 
-    for circuitElement in @Circuit.elementList
-      if circuitElement.x1 is nx and circuitElement.y1 is ny and circuitElement.x2 is nx2 and circuitElement.y2 is ny2
+    for circuitElm in @Circuit.elementList
+      if circuitElm.x1 is newX and circuitElm.y1 is newY and circuitElm.x2 is newX2 and circuitElm.y2 is newY2
         return false
-      if circuitElement.x1 is nx2 and circuitElement.y1 is ny2 and circuitElement.x2 is nx and circuitElement.y2 is ny
+      if circuitElm.x1 is newX2 and circuitElm.y1 is newY2 and circuitElm.x2 is newX and circuitElm.y2 is newY
         return false
 
     true
 
-  movePoint: (n, dx, dy) ->
+  movePoint: (n, deltaX, deltaY) ->
     if n is 0
-      @x1 += dx
-      @y1 += dy
+      @x1 += deltaX
+      @y1 += deltaY
     else
-      @x2 += dx
-      @y2 += dy
+      @x2 += deltaX
+      @y2 += deltaY
     @setPoints()
 
   stamp: ->
@@ -208,23 +205,23 @@ class AbstractCircuitComponent
 
   setBbox: (x1, y1, x2, y2) ->
     if x1 > x2
-      q = x1
+      temp = x1
       x1 = x2
-      x2 = q
+      x2 = temp
     if y1 > y2
-      q = y1
+      temp = y1
       y1 = y2
-      y2 = q
+      y2 = temp
     @boundingBox.x = x1
     @boundingBox.y = y1
     @boundingBox.width = x2 - x1 + 1
     @boundingBox.height = y2 - y1 + 1
 
-  setBboxPt: (p1, p2, w) ->
+  setBboxPt: (p1, p2, width) ->
     @setBbox p1.x1, p1.y, p2.x1, p2.y
-    dpx = (@dpx1 * w)
-    dpy = (@dpy1 * w)
-    @adjustBbox p1.x1 + dpx, p1.y + dpy, p1.x1 - dpx, p1.y - dpy
+    deltaX = (@dpx1 * width)
+    deltaY = (@dpy1 * width)
+    @adjustBbox p1.x1 + deltaX, p1.y + deltaY, p1.x1 - deltaX, p1.y - deltaY
 
   adjustBbox: (x1, y1, x2, y2) ->
     if x1 > x2
@@ -330,28 +327,23 @@ class AbstractCircuitComponent
 
   drawDots: (point1, point2, pos, renderContext) ->
     # Don't do anything if the sim is stopped or has dots disabled.
-    return  if @Circuit?.Solver.stopped or pos is 0 or not @Circuit?.Params.dotsCheckItem
+    return if @Circuit?.Solver.stopped or pos is 0 # or not @Circuit?.Params.dotsCheckItem
 
     deltaX = point2.x - point1.x
     deltaY = point2.y - point1.y
-    deltaR = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+    deltaR = Math.sqrt deltaX * deltaX + deltaY * deltaY
     deltaSegment = 16
+
     pos %= deltaSegment
     pos += deltaSegment if pos < 0
     newPos = pos
 
     while newPos < deltaR
-      x0 = (point1.x + newPos * deltaX / deltaR)
-      y0 = (point1.y + newPos * deltaY / deltaR)
+      x0 = point1.x + newPos * deltaX / deltaR
+      y0 = point1.y + newPos * deltaY / deltaR
 
       # Draws each dot:
-      renderContext.beginPath()
-      renderContext.strokeStyle = Settings.DOTS_OUTLINE
-      renderContext.fillStyle = Settings.DOTS_COLOR
-      renderContext.arc x0, y0, Settings.CURRENT_RADIUS, 0, 2 * Math.PI, true
-      renderContext.stroke()
-      renderContext.fill()
-      renderContext.closePath()
+      renderContext.fillCircle(x0, y0, Settings.CURRENT_RADIUS)
       newPos += deltaSegment
 
   ###
@@ -364,7 +356,6 @@ class AbstractCircuitComponent
     ascent = -10 # fm.getAscent() / 2;
     descent = 5  # fm.getAscent() / 2;
 
-    # TODO: CANVAS
     renderContext.fillStyle = Settings.TEXT_COLOR
     renderContext.fillText text, x, y + ascent
 
@@ -377,7 +368,7 @@ class AbstractCircuitComponent
   #  e.g. 500 Ohms, 10V, etc...
   ###
   drawValues: (valueText, hs, renderContext) ->
-    return  unless valueText
+    return unless valueText
     stringWidth = 100 #fm.stringWidth(s);
     ya = -10 #fm.getAscent() / 2;
     if this instanceof RailElm or this instanceof SweepElm
@@ -394,7 +385,8 @@ class AbstractCircuitComponent
       renderContext.fillText valueText, xc - stringWidth / 2 + 3 * offset / 2, yc - Math.abs(dpy) - offset / 3
     else
       xx = xc + Math.abs(dpx) + offset
-      xx = xc - (10 + Math.abs(dpx) + offset)  if this instanceof VoltageElm or (@x1 < @x2 and @y1 > @y2)
+      if this instanceof VoltageElm or (@x1 < @x2 and @y1 > @y2)
+        xx = xc - (10 + Math.abs(dpx) + offset)
       renderContext.fillText valueText, xx, yc + dpy + ya
     return textLabel
 
@@ -416,7 +408,6 @@ class AbstractCircuitComponent
       strokeColor = Settings.POST_COLOR
 
     renderContext.fillCircle x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor
-
 
 
 

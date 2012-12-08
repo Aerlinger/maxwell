@@ -1,6 +1,7 @@
 CircuitLoader = require "../../src/io/circuitLoader"
 Circuit = require "../../src/core/circuit"
 CircuitNode = require("../../src/core/nodeGraph/circuitNode").CircuitNode
+fs = require 'fs'
 
 describe "CircuitLoader", ->
   before () ->
@@ -14,6 +15,13 @@ describe "CircuitLoader", ->
 
     it "have only 7 elements", ->
       @circuit.numElements().should.equal 7
+
+    it "should render circuit", (done) ->
+      @circuit.renderCircuit()
+      @circuit.getRenderer().getCanvas().toBuffer (err, buf) ->
+        throw err if err
+        fs.writeFile(__dirname + '/render/voltDivideSimple.png', buf)
+        done()
 
     describe "should load parameters", ->
       it "should have correct completionStatus", ->
@@ -29,6 +37,7 @@ describe "CircuitLoader", ->
         @circuit.Params.flags.should.equal 1
 
       it "should have correct unique name", ->
+        console.log @circuit.Params.name
         @circuit.Params.name.should.equal "voltdivide.txt"
 
       it "should have correct power range", ->
