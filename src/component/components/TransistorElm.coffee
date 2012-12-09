@@ -5,7 +5,7 @@
 
 #TODO: Fully test transistor
 TransistorElm = (xa, ya, xb, yb, f, st) ->
-  AbstractCircuitComponent.call this, xa, ya, xb, yb, f
+  CircuitComponent.call this, xa, ya, xb, yb, f
   
   # Forward declarations:
   @beta = 100
@@ -46,7 +46,7 @@ TransistorElm = (xa, ya, xb, yb, f, st) ->
   @volts[2] = -@lastvbc
   @setup()
 TransistorElm.FLAG_FLIP = 1
-TransistorElm:: = new AbstractCircuitComponent()
+TransistorElm:: = new CircuitComponent()
 TransistorElm::constructor = TransistorElm
 TransistorElm::setup = ->
   @vcrit = @vt * Math.log(@vt / (Math.sqrt(2) * @leakage))
@@ -64,7 +64,7 @@ TransistorElm::getDumpType = ->
   "t"
 
 TransistorElm::dump = ->
-  AbstractCircuitComponent::dump.call(this) + " " + @pnp + " " + (@volts[0] - @volts[1]) + " " + (@volts[0] - @volts[2]) + " " + @beta
+  CircuitComponent::dump.call(this) + " " + @pnp + " " + (@volts[0] - @volts[1]) + " " + (@volts[0] - @volts[2]) + " " + @beta
 
 TransistorElm::draw = ->
   @setBboxPt @point1, @point2, 16
@@ -72,20 +72,20 @@ TransistorElm::draw = ->
   
   # draw collector
   color = @setVoltageColor(@volts[1])
-  AbstractCircuitComponent.drawThickLinePt @coll[0], @coll[1], color
+  CircuitComponent.drawThickLinePt @coll[0], @coll[1], color
   
   # draw emitter
   color = @setVoltageColor(@volts[2])
-  AbstractCircuitComponent.drawThickLinePt @emit[0], @emit[1], color
+  CircuitComponent.drawThickLinePt @emit[0], @emit[1], color
   
   # draw arrow
   #g.setColor(lightGrayColor);
-  AbstractCircuitComponent.drawThickPolygonP @arrowPoly, Color.CYAN
+  CircuitComponent.drawThickPolygonP @arrowPoly, Color.CYAN
   
   # draw base
   color = @setVoltageColor(@volts[0])
   g.setColor Color.gray  if Circuit.powerCheckItem
-  AbstractCircuitComponent.drawThickLinePt @point1, @base, color
+  CircuitComponent.drawThickLinePt @point1, @base, color
   
   # draw dots
   @curcount_b = @updateDotCount(-@ib, @curcount_b)
@@ -100,12 +100,12 @@ TransistorElm::draw = ->
   @setPowerColor true
   
   #g.fillPolygon(rectPoly);
-  AbstractCircuitComponent.drawThickPolygonP @rectPoly, color
+  CircuitComponent.drawThickPolygonP @rectPoly, color
   if (@needsHighlight() or Circuit.dragElm is this) and @dy is 0
     
     #g.setColor(Color.white);
     #g.setFont(this.unitsFont);
-    AbstractCircuitComponent.setColor Color.white
+    CircuitComponent.setColor Color.white
     ds = sign(@dx)
     @drawCenteredText "B", @base.x1 - 10 * ds, @base.y - 5, Color.WHITE
     @drawCenteredText "C", @coll[0].x1 - 3 + 9 * ds, @coll[0].y + 4, Color.WHITE # x+6 if ds=1, -12 if -1
@@ -122,35 +122,35 @@ TransistorElm::getPower = ->
   (@volts[0] - @volts[2]) * @ib + (@volts[1] - @volts[2]) * @ic
 
 TransistorElm::setPoints = ->
-  AbstractCircuitComponent::setPoints.call this
+  CircuitComponent::setPoints.call this
   hs = 16
   @dsign = -@dsign  unless (@flags & TransistorElm.FLAG_FLIP) is 0
   hs2 = hs * @dsign * @pnp
   
   # calc collector, emitter posts
-  @coll = AbstractCircuitComponent.newPointArray(2)
-  @emit = AbstractCircuitComponent.newPointArray(2)
-  AbstractCircuitComponent.interpPoint2 @point1, @point2, @coll[0], @emit[0], 1, hs2
+  @coll = CircuitComponent.newPointArray(2)
+  @emit = CircuitComponent.newPointArray(2)
+  CircuitComponent.interpPoint2 @point1, @point2, @coll[0], @emit[0], 1, hs2
   
   # calc rectangle edges
-  @rect = AbstractCircuitComponent.newPointArray(4)
-  AbstractCircuitComponent.interpPoint2 @point1, @point2, @rect[0], @rect[1], 1 - 16 / @dn, hs
-  AbstractCircuitComponent.interpPoint2 @point1, @point2, @rect[2], @rect[3], 1 - 13 / @dn, hs
+  @rect = CircuitComponent.newPointArray(4)
+  CircuitComponent.interpPoint2 @point1, @point2, @rect[0], @rect[1], 1 - 16 / @dn, hs
+  CircuitComponent.interpPoint2 @point1, @point2, @rect[2], @rect[3], 1 - 13 / @dn, hs
   
   # calc points where collector/emitter leads contact rectangle
-  AbstractCircuitComponent.interpPoint2 @point1, @point2, @coll[1], @emit[1], 1 - 13 / @dn, 6 * @dsign * @pnp
+  CircuitComponent.interpPoint2 @point1, @point2, @coll[1], @emit[1], 1 - 13 / @dn, 6 * @dsign * @pnp
   
   # calc point where base lead contacts rectangle
   @base = new Point()
-  AbstractCircuitComponent.interpPoint @point1, @point2, @base, 1 - 16 / @dn
+  CircuitComponent.interpPoint @point1, @point2, @base, 1 - 16 / @dn
   
   # rectangle
-  @rectPoly = AbstractCircuitComponent.createPolygon(@rect[0], @rect[2], @rect[3], @rect[1])
+  @rectPoly = CircuitComponent.createPolygon(@rect[0], @rect[2], @rect[3], @rect[1])
   
   # arrow
   unless @pnp is 1
-    pt = AbstractCircuitComponent.interpPoint(@point1, @point2, 1 - 11 / @dn, -5 * @dsign * @pnp)
-    @arrowPoly = AbstractCircuitComponent.calcArrow(@emit[0], pt, 8, 4)
+    pt = CircuitComponent.interpPoint(@point1, @point2, 1 - 11 / @dn, -5 * @dsign * @pnp)
+    @arrowPoly = CircuitComponent.calcArrow(@emit[0], pt, 8, 4)
 
 TransistorElm::limitStep = (vnew, vold) ->
   arg = undefined

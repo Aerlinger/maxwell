@@ -1,6 +1,6 @@
 # TODO: Not yet fully implemented 
 TextElm = (xa, ya, xb, yb, f, st) ->
-  AbstractCircuitComponent.call this, xa, ya, xb, yb, f
+  CircuitComponent.call this, xa, ya, xb, yb, f
   @text = "hello"
   @lines = new Array() # new vector()
   @lines.add text
@@ -10,7 +10,7 @@ TextElm = (xa, ya, xb, yb, f, st) ->
     @size = Math.floor(st.shift())
     @text = st.shift()
     @text += " " + st.shift()  until st.length is 0
-TextElm:: = new AbstractCircuitComponent()
+TextElm:: = new CircuitComponent()
 TextElm::constructor = TextElm
 TextElm.FLAG_CENTER = 1
 TextElm.FLAG_BAR = 2
@@ -58,7 +58,7 @@ TextElm::split = ->
 #     lines.add(sb.toString());
 #     
 TextElm::dump = ->
-  AbstractCircuitComponent::dump.call(this) + " " + @size + " " + @text
+  CircuitComponent::dump.call(this) + " " + @size + " " + @text
 
 TextElm::getDumpType = ->
   "x"
@@ -70,7 +70,7 @@ TextElm::drag = (xx, yy) ->
   @y2 = yy
 
 TextElm::draw = ->
-  color = (if @needsHighlight() then AbstractCircuitComponent.selectColor else Color.LIGHT_GREY)
+  color = (if @needsHighlight() then CircuitComponent.selectColor else Color.LIGHT_GREY)
   f = new Font("SansSerif", 0, size)
   g.setFont f
   fm = g.getFontMetrics()
@@ -91,7 +91,7 @@ TextElm::draw = ->
     g.drawString s, @x1, cury
     unless (@flags & TextElm.FLAG_BAR) is 0
       by_ = cury - fm.getAscent()
-      AbstractCircuitComponent.drawLine @x1, by_, @x1 + fm.stringWidth(s) - 1, by_
+      CircuitComponent.drawLine @x1, by_, @x1 + fm.stringWidth(s) - 1, by_
     @adjustBbox @x1, cury - fm.getAscent(), @x1 + fm.stringWidth(s), cury + fm.getDescent()
     cury += fm.getHeight()
     i++

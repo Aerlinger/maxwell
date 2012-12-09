@@ -1,4 +1,4 @@
-CircuitElement = require('../abstractCircuitComponent')
+CircuitElement = require('../circuitComponent')
 {Polygon, Rectangle, Point} = require('../../util/shapePrimitives')
 DrawHelper = require('../../render/drawHelper')
 
@@ -24,8 +24,8 @@ ResistorElm::draw = (renderContext) ->
   segments = 16
   oldOffset = 0
   hs = 6
-  v1 = @volts[0]
-  v2 = @volts[1]
+  volt1 = @volts[0]
+  volt2 = @volts[1]
 
   @setBboxPt @point1, @point2, hs
   @draw2Leads(renderContext)
@@ -41,15 +41,15 @@ ResistorElm::draw = (renderContext) ->
         newOffset = -1
       else
         newOffset = 0
-    v = v1 + (v2 - v1) * i / segments
+    voltDrop = volt1 + (volt2 - volt1) * i / segments
     DrawHelper.interpPoint @lead1, @lead2, DrawHelper.ps1, i * segf, hs * oldOffset
     DrawHelper.interpPoint @lead1, @lead2, DrawHelper.ps2, (i + 1) * segf, hs * newOffset
-    renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(v)
+    renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(voltDrop)
     oldOffset = newOffset
 
-  if @Circuit?.Params.showValues
-    resistanceVal = DrawHelper.getShortUnitText(@resistance, "ohm")
-    @drawValues resistanceVal, hs, renderContext
+  #if true @Circuit?.Params.showValues
+  resistanceVal = getUnitText(@resistance, "ohm")
+  @drawValues resistanceVal, hs, renderContext
 
   @drawPosts(renderContext)
 
@@ -69,8 +69,8 @@ ResistorElm::setEditValue = (n, ei) ->
 ResistorElm::getInfo = (arr) ->
   arr[0] = "resistor"
   @getBasicInfo arr
-  arr[3] = "R = " + CircuitElement.getUnitText(@resistance, Circuit.ohmString)
-  arr[4] = "P = " + CircuitElement.getUnitText(@getPower(), "W")
+  arr[3] = "R = " + getUnitText(@resistance, Circuit.ohmString)
+  arr[4] = "P = " + getUnitText(@getPower(), "W")
 
 ResistorElm::needsShortcut = ->
   true
@@ -79,7 +79,6 @@ ResistorElm::calculateCurrent = ->
   @current = (@volts[0] - @volts[1]) / @resistance
 
 ResistorElm::setPoints = ->
-  #CircuitElement::setPoints.call this
   super()
   @calcLeads 32
   @ps3 = new Point(0, 0)

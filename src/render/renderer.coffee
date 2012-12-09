@@ -1,8 +1,9 @@
 Circuit = require './../core/circuit'
 CanvasContext = require './canvasContext'
 
-class Renderer
 
+
+class Renderer
   constructor: (@Circuit) ->
     @Context = new CanvasContext()
 
@@ -38,5 +39,8 @@ class Renderer
 
   getCanvas: () ->
     return @Context.getCanvas()
+
+  getBuffer: () ->
+    return @Context.getCanvas().toBuffer
 
 module.exports = Renderer

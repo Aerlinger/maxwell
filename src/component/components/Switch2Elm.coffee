@@ -21,11 +21,11 @@ Switch2Elm::swpoled = new Array()
 Switch2Elm::setPoints = ->
   SwitchElm::setPoints.call this
   @calcLeads 32
-  @swposts = AbstractCircuitComponent.newPointArray(2)
-  @swpoles = AbstractCircuitComponent.newPointArray(3)
-  AbstractCircuitComponent.interpPoint2 @lead1, @lead2, @swpoles[0], @swpoles[1], 1, @openhs
+  @swposts = CircuitComponent.newPointArray(2)
+  @swpoles = CircuitComponent.newPointArray(3)
+  CircuitComponent.interpPoint2 @lead1, @lead2, @swpoles[0], @swpoles[1], 1, @openhs
   @swpoles[2] = @lead2
-  AbstractCircuitComponent.interpPoint2 @point1, @point2, @swposts[0], @swposts[1], 1, @openhs
+  CircuitComponent.interpPoint2 @point1, @point2, @swposts[0], @swposts[1], 1, @openhs
   @posCount = (if @hasCenterOff() then 3 else 2)
 
 Switch2Elm::draw = ->
@@ -33,19 +33,19 @@ Switch2Elm::draw = ->
   
   # draw first lead
   color = @setVoltageColor(@volts[0])
-  AbstractCircuitComponent.drawThickLinePt @point1, @lead1, color
+  CircuitComponent.drawThickLinePt @point1, @lead1, color
   
   # draw second lead
   color = @setVoltageColor(@volts[1])
-  AbstractCircuitComponent.drawThickLinePt @swpoles[0], @swposts[0], color
+  CircuitComponent.drawThickLinePt @swpoles[0], @swposts[0], color
   
   # draw third lead
   @setVoltageColor @volts[2], color
-  AbstractCircuitComponent.drawThickLinePt @swpoles[1], @swposts[1], color
+  CircuitComponent.drawThickLinePt @swpoles[1], @swposts[1], color
   
   # draw switch
   color = Settings.SELECT_COLOR  unless @needsHighlight()
-  AbstractCircuitComponent.drawThickLinePt @lead1, @swpoles[@position], color
+  CircuitComponent.drawThickLinePt @lead1, @swpoles[@position], color
   @updateDotCount()
   @drawDots @point1, @lead1, @curcount
   @drawDots @swpoles[@position], @swposts[@position], @curcount  unless @position is 2

@@ -7,6 +7,9 @@ class CanvasContext extends Context
     @canvas = new Canvas(@width, @height)
     @context = @canvas.getContext('2d')
 
+  fillText: (text, x, y) ->
+    @context.fillText(text, y, y)
+
   fillCircle: (x, y, radius, lineWidth=1, fillColor='#FFFFFF', lineColor="#000000") ->
     @context.fillStyle = fillColor
     @context.strokeStyle = lineColor

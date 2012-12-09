@@ -1,5 +1,5 @@
 DiodeElm = (xa, ya, xb, yb, f, st) ->
-  AbstractCircuitComponent.call this, xa, ya, xb, yb, f
+  CircuitComponent.call this, xa, ya, xb, yb, f
   @diode = new Diode()
   @fwdrop = DiodeElm.DEFAULT_DROP
   @zvoltage = 0
@@ -9,7 +9,7 @@ DiodeElm = (xa, ya, xb, yb, f, st) ->
   @setup()
 DiodeElm.FLAG_FWDROP = 1
 DiodeElm.DEFAULT_DROP = .805904783
-DiodeElm:: = new AbstractCircuitComponent()
+DiodeElm:: = new CircuitComponent()
 DiodeElm::constructor = DiodeElm
 DiodeElm::hs = 8
 DiodeElm::poly
@@ -25,16 +25,16 @@ DiodeElm::getDumpType = ->
 
 DiodeElm::dump = ->
   @flags |= DiodeElm.FLAG_FWDROP
-  AbstractCircuitComponent::dump.call(this) + " " + @fwdrop
+  CircuitComponent::dump.call(this) + " " + @fwdrop
 
 DiodeElm::setPoints = ->
-  AbstractCircuitComponent::setPoints.call this
+  CircuitComponent::setPoints.call this
   @calcLeads 16
-  @cathode = AbstractCircuitComponent.newPointArray(2)
-  pa = AbstractCircuitComponent.newPointArray(2) # Point array
-  AbstractCircuitComponent.interpPoint2 @lead1, @lead2, pa[0], pa[1], 0, @hs
-  AbstractCircuitComponent.interpPoint2 @lead1, @lead2, @cathode[0], @cathode[1], 1, @hs
-  @poly = AbstractCircuitComponent.createPolygon(pa[0], pa[1], @lead2)
+  @cathode = CircuitComponent.newPointArray(2)
+  pa = CircuitComponent.newPointArray(2) # Point array
+  CircuitComponent.interpPoint2 @lead1, @lead2, pa[0], pa[1], 0, @hs
+  CircuitComponent.interpPoint2 @lead1, @lead2, @cathode[0], @cathode[1], 1, @hs
+  @poly = CircuitComponent.createPolygon(pa[0], pa[1], @lead2)
 
 DiodeElm::draw = ->
   @drawDiode()
@@ -54,13 +54,13 @@ DiodeElm::drawDiode = ->
   # draw arrow
   #this.setPowerColor(true);
   color = @setVoltageColor(v1)
-  AbstractCircuitComponent.drawThickPolygonP @poly, color
+  CircuitComponent.drawThickPolygonP @poly, color
   
   #g.fillPolygon(poly);
   
   # draw thing diode plate
   color = @setVoltageColor(v2)
-  AbstractCircuitComponent.drawThickLinePt @cathode[0], @cathode[1], color
+  CircuitComponent.drawThickLinePt @cathode[0], @cathode[1], color
 
 DiodeElm::stamp = ->
   @diode.stamp @nodes[0], @nodes[1]
@@ -73,10 +73,10 @@ DiodeElm::calculateCurrent = ->
 
 DiodeElm::getInfo = (arr) ->
   arr[0] = "diode"
-  arr[1] = "I = " + AbstractCircuitComponent.getCurrentText(@getCurrent())
-  arr[2] = "Vd = " + AbstractCircuitComponent.getVoltageText(@getVoltageDiff())
-  arr[3] = "P = " + AbstractCircuitComponent.getUnitText(@getPower(), "W")
-  arr[4] = "Vf = " + AbstractCircuitComponent.getVoltageText(@fwdrop)
+  arr[1] = "I = " + CircuitComponent.getCurrentText(@getCurrent())
+  arr[2] = "Vd = " + CircuitComponent.getVoltageText(@getVoltageDiff())
+  arr[3] = "P = " + CircuitComponent.getUnitText(@getPower(), "W")
+  arr[4] = "Vf = " + CircuitComponent.getVoltageText(@fwdrop)
 
 DiodeElm::getEditInfo = (n) ->
   return new EditInfo("Fwd Voltage @ 1A", @fwdrop, 10, 1000)  if n is 0
