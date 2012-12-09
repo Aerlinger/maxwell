@@ -1,5 +1,5 @@
 SparkGapElm = (xa, ya, xb, yb, f, st) ->
-  AbstractCircuitComponent.call this, xa, ya, xb, yb, f
+  CircuitComponent.call this, xa, ya, xb, yb, f
   @resistance = 0
   @offresistance = 1e9
   @onresistance = 1e3
@@ -12,7 +12,7 @@ SparkGapElm = (xa, ya, xb, yb, f, st) ->
     @offresistance = parseFloat(st.shift())  if st
     @breakdown = parseFloat(st.shift())  if st
     @holdcurrent = parseFloat(st.shift())  if st
-SparkGapElm:: = new AbstractCircuitComponent()
+SparkGapElm:: = new CircuitComponent()
 SparkGapElm::constructor = SparkGapElm
 SparkGapElm::nonLinear = ->
   true
@@ -21,19 +21,19 @@ SparkGapElm::getDumpType = ->
   187
 
 SparkGapElm::dump = ->
-  AbstractCircuitComponent::dump.call(this) + " " + @onresistance + " " + @offresistance + " " + @breakdown + " " + @holdcurrent
+  CircuitComponent::dump.call(this) + " " + @onresistance + " " + @offresistance + " " + @breakdown + " " + @holdcurrent
 
 SparkGapElm::arrow1 # Polgons
 SparkGapElm::arrow2
 SparkGapElm::setPoints = ->
-  AbstractCircuitComponent::setPoints.call this
+  CircuitComponent::setPoints.call this
   dist = 16
   alen = 8
   @calcLeads dist + alen
-  p1 = AbstractCircuitComponent.interpPointPt(@point1, @point2, (@dn - alen) / (2 * @dn))
-  @arrow1 = AbstractCircuitComponent.calcArrow(@point1, p1, alen, alen)
-  p1 = AbstractCircuitComponent.interpPointPt(@point1, @point2, (@dn + alen) / (2 * @dn))
-  @arrow2 = AbstractCircuitComponent.calcArrow(@point2, p1, alen, alen)
+  p1 = CircuitComponent.interpPointPt(@point1, @point2, (@dn - alen) / (2 * @dn))
+  @arrow1 = CircuitComponent.calcArrow(@point1, p1, alen, alen)
+  p1 = CircuitComponent.interpPointPt(@point1, @point2, (@dn + alen) / (2 * @dn))
+  @arrow2 = CircuitComponent.calcArrow(@point2, p1, alen, alen)
 
 SparkGapElm::draw = ->
   i = undefined
@@ -43,9 +43,9 @@ SparkGapElm::draw = ->
   @draw2Leads()
   @setPowerColor true
   color = @setVoltageColor(@volts[0])
-  AbstractCircuitComponent.drawThickPolygonP @arrow1, color
+  CircuitComponent.drawThickPolygonP @arrow1, color
   color = @setVoltageColor(@volts[1])
-  AbstractCircuitComponent.drawThickPolygonP @arrow2, color
+  CircuitComponent.drawThickPolygonP @arrow2, color
   @doDots()  if @state
   @drawPosts()
 
@@ -54,7 +54,7 @@ SparkGapElm::calculateCurrent = ->
   @current = vd / @resistance
 
 SparkGapElm::reset = ->
-  AbstractCircuitComponent::reset.call this
+  CircuitComponent::reset.call this
   @state = false
 
 SparkGapElm::startIteration = ->
@@ -74,9 +74,9 @@ SparkGapElm::getInfo = (arr) ->
   arr[0] = "spark gap"
   @getBasicInfo arr
   arr[3] = (if @state then "on" else "off")
-  arr[4] = "Ron = " + AbstractCircuitComponent.getUnitText(@onresistance, Circuit.ohmString)
-  arr[5] = "Roff = " + AbstractCircuitComponent.getUnitText(@offresistance, Circuit.ohmString)
-  arr[6] = "Vbreakdown = " + AbstractCircuitComponent.getUnitText(@breakdown, "V")
+  arr[4] = "Ron = " + CircuitComponent.getUnitText(@onresistance, Circuit.ohmString)
+  arr[5] = "Roff = " + CircuitComponent.getUnitText(@offresistance, Circuit.ohmString)
+  arr[6] = "Vbreakdown = " + CircuitComponent.getUnitText(@breakdown, "V")
 
 SparkGapElm::getEditInfo = (n) ->
   

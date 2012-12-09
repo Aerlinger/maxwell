@@ -1,7 +1,7 @@
-CircuitElement = require('../abstractCircuitComponent')
+CircuitComponent = require('../circuitComponent')
 DrawHelper = require('../../render/drawHelper')
 
-class VoltageElm extends CircuitElement
+class VoltageElm extends CircuitComponent
 
   constructor: (xa, ya, xb, yb, f, st) ->
     super xa, ya, xb, yb, f, st
@@ -46,7 +46,7 @@ VoltageElm::getDumpType = ->
   "v"
 
 VoltageElm::dump = ->
-  CircuitElement::dump.call(this) + " " + @waveform + " " + @frequency + " " + @maxVoltage + " " + @bias + " " + @phaseShift + " " + @dutyCycle
+  CircuitComponent::dump.call(this) + " " + @waveform + " " + @frequency + " " + @maxVoltage + " " + @bias + " " + @phaseShift + " " + @dutyCycle
 
 VoltageElm::reset = ->
   @freqTimeZero = 0
@@ -100,9 +100,9 @@ VoltageElm::draw = (renderContext) ->
 
   @updateDotCount()
 
-  if !(@Circuit?.dragElm is this) && !(@waveform is VoltageElm.WF_DC)
-    @drawDots @point1, @lead1, @curcount
-    @drawDots @point2, @lead2, -@curcount
+  if !(@Circuit?.dragElm is this)# && !(@waveform is VoltageElm.WF_DC)
+    @drawDots @point1, @lead1, @curcount, renderContext
+    @drawDots @point2, @lead2, -@curcount, renderContext
 
   @draw2Leads(renderContext)
 
@@ -167,7 +167,6 @@ VoltageElm::drawWaveform = (center, renderContext) ->
       renderContext.drawThickLine xc + xl, yc + wl, xc + xl * 2, yc, color
       break
     when VoltageElm.WF_AC
-      i = undefined
       xl = 10
       ox = -1
       oy = -1
@@ -180,8 +179,8 @@ VoltageElm::drawWaveform = (center, renderContext) ->
         i++
       break
   if Settings.showValuesCheckItem
-    s = CircuitElement.getShortUnitText(@frequency, "Hz")
-    @drawValues s, VoltageElm.circleSize  if @dx is 0 or @dy is 0
+    valueString = CircuitComponent.getShortUnitText(@frequency, "Hz")
+    @drawValues valueString, VoltageElm.circleSize  if @dx is 0 or @dy is 0
 
 VoltageElm::getVoltageSourceCount = ->
   1
@@ -207,17 +206,17 @@ VoltageElm::getInfo = (arr) ->
     when VoltageElm.WF_TRIANGLE
       arr[0] = "triangle gen"
 
-  arr[1] = "I = " + CircuitElement.getCurrentText(@getCurrent())
-  arr[2] = ((if (this instanceof RailElm) then "V = " else "Vd = ")) + CircuitElement.getVoltageText(@getVoltageDiff())
+  arr[1] = "I = " + CircuitComponent.getCurrentText(@getCurrent())
+  arr[2] = ((if (this instanceof RailElm) then "V = " else "Vd = ")) + CircuitComponent.getVoltageText(@getVoltageDiff())
 
   if @waveform isnt VoltageElm.WF_DC and @waveform isnt VoltageElm.WF_VAR
-    arr[3] = "f = " + CircuitElement.getUnitText(@frequency, "Hz")
-    arr[4] = "Vmax = " + CircuitElement.getVoltageText(@maxVoltage)
+    arr[3] = "f = " + CircuitComponent.getUnitText(@frequency, "Hz")
+    arr[4] = "Vmax = " + CircuitComponent.getVoltageText(@maxVoltage)
     i = 5
     unless @bias is 0
       arr[i++] = "Voff = " + @getVoltageText(@bias)
-    else arr[i++] = "wavelength = " + CircuitElement.getUnitText(2.9979e8 / @frequency, "m")  if @frequency > 500
-    arr[i++] = "P = " + CircuitElement.getUnitText(@getPower(), "W")
+    else arr[i++] = "wavelength = " + CircuitComponent.getUnitText(2.9979e8 / @frequency, "m")  if @frequency > 500
+    arr[i++] = "P = " + CircuitComponent.getUnitText(@getPower(), "W")
 
 VoltageElm::getEditInfo = (n) ->
   return new EditInfo((if @waveform is VoltageElm.WF_DC then "Voltage" else "Max Voltage"), @maxVoltage, -20, 20)  if n is 0

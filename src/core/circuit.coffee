@@ -174,7 +174,7 @@ class Circuit
     @Solver.reconstruct()
 
     # If the circuit isn't stopped, solve
-    unless @Solver.stopped
+    unless @Solver.isStopped
       @Solver.solveCircuit()
       @lastTime = @updateTimings()
     else
@@ -308,6 +308,8 @@ class Circuit
     @Solver.reset()
     @Solver.run()
 
+
+
   warn: (message) ->
     Logger.warn message
     @warnMessage = message
@@ -319,6 +321,25 @@ class Circuit
   clearErrors: ->
     @stopMessage = null
     @stopElm = null
+
+  ###
+  Delegations:
+  ###
+  isStopped: ->
+    @Solver.isStopped
+
+  doDots: ->
+    true
+
+  voltageRange: ->
+    return @Params['voltageRange']
+
+  powerRange: ->
+    return @Params['powerRange']
+
+  currentSpeed: ->
+    return @Params['currentMult']
+
 
 
 # The Footer exports class(es) in this file via Node.js, if Node.js is defined.

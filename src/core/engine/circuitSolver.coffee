@@ -56,11 +56,11 @@ class CircuitSolver
 
   stop: (message = "Simulator Stopped") ->
     Logger.log message
-    @stopped = true
+    @isStopped = true
 
 
   run: ->
-    @stopped = false
+    @isStopped = false
 
 
   getSimSpeed: ->

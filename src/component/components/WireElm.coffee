@@ -1,4 +1,4 @@
-CircuitElement = require('../abstractCircuitComponent')
+CircuitElement = require('../circuitComponent')
 {Polygon, Rectangle, Point} = require('../../util/shapePrimitives')
 DrawHelper = require('../../render/drawHelper')
 

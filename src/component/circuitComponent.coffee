@@ -3,8 +3,9 @@ if process.env
   Settings = require('../settings/settings')
   {Polygon, Rectangle, Point} = require('../util/shapePrimitives')
   DrawHelpers = require('../render/drawHelper')
+  #VoltageElm = require('./components/VoltageElm')
 
-class AbstractCircuitComponent
+class CircuitComponent
   constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, st = []) ->
     @current = 0
     @curcount = 0
@@ -83,7 +84,7 @@ class AbstractCircuitComponent
 
   # Steps forward one frame and performs calculation
   doStep: ->
-    throw "Called doStep() on abstract class CircuitComponent"
+    # To be implemented by subclasses
 
   orphaned: ->
     return @Circuit is null or @Circuit is undefined
@@ -93,7 +94,7 @@ class AbstractCircuitComponent
     # TODO: Fully Implement
 
   startIteration: ->
-    throw "Called startIteration() on abstract class CircuitComponent"
+    # Called on reactive elements such as inductors and capacitors.
 
   getPostVoltage: (post_idx) ->
     @volts[post_idx]
@@ -253,8 +254,8 @@ class AbstractCircuitComponent
 
   # Extended by subclasses
   getBasicInfo: (arr) ->
-    arr[1] = "I = " + AbstractCircuitComponent.getCurrentDText(@getCurrent())
-    arr[2] = "Vd = " + AbstractCircuitComponent.getVoltageDText(@getVoltageDiff())
+    arr[1] = "I = " + CircuitComponent.getCurrentDText(@getCurrent())
+    arr[2] = "Vd = " + CircuitComponent.getVoltageDText(@getVoltageDiff())
     3
 
   getPower: ->
@@ -314,8 +315,8 @@ class AbstractCircuitComponent
     renderContext.drawThickLinePt @lead2, @point2, DrawHelpers.getVoltageColor(@volts[1])
 
   updateDotCount: (current=@current, currentCount=@curcount) ->
-    return currentCount if @Circuit?.Solver.stopped
-    currentIncrement = current * @Circuit?.Params.currentMult
+    return currentCount if @Circuit?.isStopped()
+    currentIncrement = current * @Circuit?.currentSpeed()
     currentIncrement %= 8
     @curcount = currentIncrement + currentCount
     return currentCount + currentIncrement
@@ -327,7 +328,7 @@ class AbstractCircuitComponent
 
   drawDots: (point1, point2, pos, renderContext) ->
     # Don't do anything if the sim is stopped or has dots disabled.
-    return if @Circuit?.Solver.stopped or pos is 0 # or not @Circuit?.Params.dotsCheckItem
+    return if @Circuit?.isStopped() or pos is 0 # or not @Circuit?.Params.dotsCheckItem
 
     deltaX = point2.x - point1.x
     deltaY = point2.y - point1.y
@@ -371,12 +372,12 @@ class AbstractCircuitComponent
     return unless valueText
     stringWidth = 100 #fm.stringWidth(s);
     ya = -10 #fm.getAscent() / 2;
-    if this instanceof RailElm or this instanceof SweepElm
-      xc = @x2
-      yc = @y2
-    else
-      xc = (@x2 + @x1) / 2
-      yc = (@y2 + @y1) / 2
+#    if this instanceof RailElm or this instanceof SweepElm
+#      xc = @x2
+#      yc = @y2
+#    else
+    xc = (@x2 + @x1) / 2
+    yc = (@y2 + @y1) / 2
     dpx = Math.floor(@dpx1 * hs)
     dpy = Math.floor(@dpy1 * hs)
     offset = 20
@@ -385,15 +386,15 @@ class AbstractCircuitComponent
       renderContext.fillText valueText, xc - stringWidth / 2 + 3 * offset / 2, yc - Math.abs(dpy) - offset / 3
     else
       xx = xc + Math.abs(dpx) + offset
-      if this instanceof VoltageElm or (@x1 < @x2 and @y1 > @y2)
-        xx = xc - (10 + Math.abs(dpx) + offset)
+      #if this instanceof VoltageElm or (@x1 < @x2 and @y1 > @y2)
+      #  xx = xc - (10 + Math.abs(dpx) + offset)
       renderContext.fillText valueText, xx, yc + dpy + ya
-    return textLabel
+
 
   drawPosts: (renderContext) ->
     for i in [0...@getPostCount()]
-      p = @getPost(i)
-      @drawPost p.x, p.y, @nodes[i], renderContext
+      post = @getPost(i)
+      @drawPost post.x, post.y, @nodes[i], renderContext
 
   drawPost: (x0, y0, node, renderContext) ->
     #if node
@@ -419,4 +420,4 @@ class AbstractCircuitComponent
 #
 # To require this class in another file through Node, write {ClassName} = require(<path_to_coffee_file>)
 root = (exports) ? window
-module.exports = AbstractCircuitComponent
+module.exports = CircuitComponent

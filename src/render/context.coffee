@@ -2,10 +2,10 @@ class Context
   constructor: (width, height) ->
 
   fillCircle: (x, y, radius, lineWidth=1, fillColor='#FFFFFF', lineColor="#000000") ->
-    #throw("Can't call fillCircle on Context, it is an abstract class.")
+    throw("Can't call fillCircle on Context, it is an abstract class.")
 
   drawThickLine: (x, y, x2, y2, color) ->
-    #throw("Can't call drawThickline on Context, it is an abstract class.")
+    throw("Can't call drawThickline on Context, it is an abstract class.")
 
   drawThickLinePt: (pa, pb, color) ->
     @drawThickLine pa.x, pa.y, pb.x, pb.y, color

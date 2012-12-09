@@ -1,5 +1,5 @@
 SweepElm = (xa, ya, xb, yb, f, st) ->
-  AbstractCircuitComponent.call this, xa, ya, xb, yb, f
+  CircuitComponent.call this, xa, ya, xb, yb, f
   if st
     st = st.split(" ")  if typeof st is "string"
     
@@ -11,7 +11,7 @@ SweepElm = (xa, ya, xb, yb, f, st) ->
   @reset()
 SweepElm.FLAG_LOG = 1
 SweepElm.FLAG_BIDIR = 2
-SweepElm:: = new AbstractCircuitComponent()
+SweepElm:: = new CircuitComponent()
 SweepElm::constructor = SweepElm
 SweepElm::getDumpType = ->
   170
@@ -21,21 +21,21 @@ SweepElm::getPostCount = ->
 
 SweepElm::circleSize = 17
 SweepElm::dump = ->
-  AbstractCircuitComponent::dump.call(this) + " " + @minF + " " + @maxF + " " + @maxV + " " + @sweepTime
+  CircuitComponent::dump.call(this) + " " + @minF + " " + @maxF + " " + @maxV + " " + @sweepTime
 
 SweepElm::setPoints = ->
-  AbstractCircuitComponent::setPoints.call this
-  @lead1 = AbstractCircuitComponent.interpPointPt(@point1, @point2, 1 - @circleSize / @dn)
+  CircuitComponent::setPoints.call this
+  @lead1 = CircuitComponent.interpPointPt(@point1, @point2, 1 - @circleSize / @dn)
 
 SweepElm::draw = ->
   @setBboxPt @point1, @point2, @circleSize
   color = @setVoltageColor(@volts[0])
-  AbstractCircuitComponent.drawThickLinePt @point1, @lead1, color
-  @setVoltageColor (if @needsHighlight() then AbstractCircuitComponent.selectColor else Color.GREY)
+  CircuitComponent.drawThickLinePt @point1, @lead1, color
+  @setVoltageColor (if @needsHighlight() then CircuitComponent.selectColor else Color.GREY)
   powerColor = @setPowerColor(false)
   xc = @point2.x1
   yc = @point2.y
-  AbstractCircuitComponent.drawCircle xc, yc, @circleSize
+  CircuitComponent.drawCircle xc, yc, @circleSize
   wl = 8
   @adjustBbox xc - @circleSize, yc - @circleSize, xc + @circleSize, yc + @circleSize
   i = undefined
@@ -51,12 +51,12 @@ SweepElm::draw = ->
   i = -xl
   while i <= xl
     yy = yc + Math.floor(.95 * Math.sin(i * Math.PI * w / xl) * wl)
-    AbstractCircuitComponent.drawThickLine ox, oy, xc + i, yy  unless ox is -1
+    CircuitComponent.drawThickLine ox, oy, xc + i, yy  unless ox is -1
     ox = xc + i
     oy = yy
     i++
   if Circuit.showValuesCheckItem
-    s = AbstractCircuitComponent.getShortUnitText(@frequency, "Hz")
+    s = CircuitComponent.getShortUnitText(@frequency, "Hz")
     @drawValues s, @circleSize  if @dx is 0 or @dy is 0
   @drawPosts()
   @curcount = @updateDotCount(-@current, @curcount)
@@ -123,11 +123,11 @@ SweepElm::hasGroundConnection = (n1) ->
 
 SweepElm::getInfo = (arr) ->
   arr[0] = "sweep " + ((if ((@flags & SweepElm.FLAG_LOG) is 0) then "(linear)" else "(log)"))
-  arr[1] = "I = " + AbstractCircuitComponent.getCurrentDText(@getCurrent())
-  arr[2] = "V = " + AbstractCircuitComponent.getVoltageText(@volts[0])
-  arr[3] = "f = " + AbstractCircuitComponent.getUnitText(@frequency, "Hz")
-  arr[4] = "range = " + AbstractCircuitComponent.getUnitText(@minF, "Hz") + " .. " + AbstractCircuitComponent.getUnitText(@maxF, "Hz")
-  arr[5] = "time = " + AbstractCircuitComponent.getUnitText(@sweepTime, "s")
+  arr[1] = "I = " + CircuitComponent.getCurrentDText(@getCurrent())
+  arr[2] = "V = " + CircuitComponent.getVoltageText(@volts[0])
+  arr[3] = "f = " + CircuitComponent.getUnitText(@frequency, "Hz")
+  arr[4] = "range = " + CircuitComponent.getUnitText(@minF, "Hz") + " .. " + CircuitComponent.getUnitText(@maxF, "Hz")
+  arr[5] = "time = " + CircuitComponent.getUnitText(@sweepTime, "s")
 
 SweepElm::getEditInfo = (n) ->
   return new EditInfo("Min Frequency (Hz)", @minF, 0, 0)  if n is 0

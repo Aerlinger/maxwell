@@ -17,12 +17,12 @@
 
 # Step 3: Now we need to set the constructor to the DepthRectangle instead of Rectangle
 SwitchElm = (xa, ya, xb, yb, f, st) ->
-  AbstractCircuitComponent.call this, xa, ya, xb, yb, f, st
+  CircuitComponent.call this, xa, ya, xb, yb, f, st
   @momentary = false
   @position = 0
   @posCount = 2
   @ps = new Point(0, 0)
-  AbstractCircuitComponent.ps2 = new Point(0, 0)
+  CircuitComponent.ps2 = new Point(0, 0)
   if st
     st = st.split(" ")  if typeof st is "string"
     str = st[0]
@@ -34,19 +34,19 @@ SwitchElm = (xa, ya, xb, yb, f, st) ->
       @position = parseInt(str)
     @momentary = (st[1].toLowerCase() is "true")
   @posCount = 2
-SwitchElm:: = new AbstractCircuitComponent()
+SwitchElm:: = new CircuitComponent()
 SwitchElm::constructor = SwitchElm
 SwitchElm::getDumpType = ->
   "s"
 
 SwitchElm::dump = ->
-  AbstractCircuitComponent::dump.call(this) + " " + @position + " " + @momentary
+  CircuitComponent::dump.call(this) + " " + @position + " " + @momentary
 
 SwitchElm::setPoints = ->
-  AbstractCircuitComponent::setPoints.call this
+  CircuitComponent::setPoints.call this
   @calcLeads 32
   @ps = new Point(0, 0)
-  AbstractCircuitComponent.ps2 = new Point(0, 0)
+  CircuitComponent.ps2 = new Point(0, 0)
 
 SwitchElm::draw = ->
   openhs = 16
@@ -58,9 +58,9 @@ SwitchElm::draw = ->
   
   #if (!needsHighlight())
   #	g.beginFill(Color.WHITE);
-  AbstractCircuitComponent.interpPoint @lead1, @lead2, @ps, 0, hs1
-  AbstractCircuitComponent.interpPoint @lead1, @lead2, AbstractCircuitComponent.ps2, 1, hs2
-  AbstractCircuitComponent.drawThickLinePt @ps, AbstractCircuitComponent.ps2, Settings.FG_COLOR
+  CircuitComponent.interpPoint @lead1, @lead2, @ps, 0, hs1
+  CircuitComponent.interpPoint @lead1, @lead2, CircuitComponent.ps2, 1, hs2
+  CircuitComponent.drawThickLinePt @ps, CircuitComponent.ps2, Settings.FG_COLOR
   @drawPosts()
 
 SwitchElm::calculateCurrent = ->
@@ -83,11 +83,11 @@ SwitchElm::getInfo = (arr) ->
   arr[0] = (if (@momentary) then "push switch (SPST)" else "switch (SPST)")
   if @position is 1
     arr[1] = "open"
-    arr[2] = "Vd = " + AbstractCircuitComponent.getVoltageDText(@getVoltageDiff())
+    arr[2] = "Vd = " + CircuitComponent.getVoltageDText(@getVoltageDiff())
   else
     arr[1] = "closed"
-    arr[2] = "V = " + AbstractCircuitComponent.getVoltageText(@volts[0])
-    arr[3] = "I = " + AbstractCircuitComponent.getCurrentDText(@getCurrent())
+    arr[2] = "V = " + CircuitComponent.getVoltageText(@volts[0])
+    arr[3] = "I = " + CircuitComponent.getCurrentDText(@getCurrent())
 
 SwitchElm::getConnection = (n1, n2) ->
   @position is 0

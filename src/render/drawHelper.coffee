@@ -152,6 +152,7 @@ class DrawHelper
     b = Math.floor 128 * (1 - power)
 
 
+
 # The Footer exports class(es) in this file via Node.js, if Node.js is defined.
 # This is necessary for testing through Mocha in development mode.
 #

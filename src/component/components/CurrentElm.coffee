@@ -1,43 +1,43 @@
 CurrentElm = (xa, ya, xb, yb, f, st) ->
-  AbstractCircuitComponent.call this, xa, ya, xb, yb, f
+  CircuitComponent.call this, xa, ya, xb, yb, f
   try
     st = st.split(" ")  if typeof st is "string"
     @currentValue = parseFloat(st[0])
   catch e
     @currentValue = .01
-CurrentElm:: = new AbstractCircuitComponent()
+CurrentElm:: = new CircuitComponent()
 CurrentElm::constructor = CurrentElm
 CurrentElm::dump = ->
-  AbstractCircuitComponent::dump.call(this) + " " + @currentValue
+  CircuitComponent::dump.call(this) + " " + @currentValue
 
 CurrentElm::getDumpType = ->
   "i"
 
-AbstractCircuitComponent::arrow
-AbstractCircuitComponent::ashaft1
-AbstractCircuitComponent::ashaft2
-AbstractCircuitComponent::center
+CircuitComponent::arrow
+CircuitComponent::ashaft1
+CircuitComponent::ashaft2
+CircuitComponent::center
 CurrentElm::setPoints = ->
-  AbstractCircuitComponent::setPoints.call this
+  CircuitComponent::setPoints.call this
   @calcLeads 26
-  @ashaft1 = AbstractCircuitComponent.interpPointPt(@lead1, @lead2, .25)
-  @ashaft2 = AbstractCircuitComponent.interpPointPt(@lead1, @lead2, .6)
-  @center = AbstractCircuitComponent.interpPointPt(@lead1, @lead2, .5)
-  p2 = AbstractCircuitComponent.interpPointPt(@lead1, @lead2, .75)
-  @arrow = AbstractCircuitComponent.calcArrow(@center, p2, 4, 4)
+  @ashaft1 = CircuitComponent.interpPointPt(@lead1, @lead2, .25)
+  @ashaft2 = CircuitComponent.interpPointPt(@lead1, @lead2, .6)
+  @center = CircuitComponent.interpPointPt(@lead1, @lead2, .5)
+  p2 = CircuitComponent.interpPointPt(@lead1, @lead2, .75)
+  @arrow = CircuitComponent.calcArrow(@center, p2, 4, 4)
 
 CurrentElm::draw = ->
   cr = 12
   @draw2Leads()
   @setVoltageColor (@volts[0] + @volts[1]) / 2
   @setPowerColor false
-  AbstractCircuitComponent.drawCircle @center.x1, @center.y, cr
-  AbstractCircuitComponent.drawCircle @ashaft1, @ashaft2
-  AbstractCircuitComponent.fillPolygon @arrow
-  AbstractCircuitComponent.setBboxPt @point1, @point2, cr
+  CircuitComponent.drawCircle @center.x1, @center.y, cr
+  CircuitComponent.drawCircle @ashaft1, @ashaft2
+  CircuitComponent.fillPolygon @arrow
+  CircuitComponent.setBboxPt @point1, @point2, cr
   @doDots()
   if Circuit.showValuesCheckItem
-    s = AbstractCircuitComponent.getShortUnitText(@currentValue, "A")
+    s = CircuitComponent.getShortUnitText(@currentValue, "A")
     @drawValues s, cr  if @dx is 0 or @dy is 0
   @drawPosts()
 
