@@ -1,3 +1,10 @@
+# <DEFINE>
+define [
+], (
+) ->
+# </DEFINE>
+
+
 DiodeElm = (xa, ya, xb, yb, f, st) ->
   CircuitComponent.call this, xa, ya, xb, yb, f
   @diode = new Diode()

@@ -1,12 +1,15 @@
-# <DEFINE> 
+# <DEFINE>
 define([
   'cs!=',
+# LAST
 ], (
   '=',
+# LAST
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
+Color = require('../util/colorScale')
 
 ###
 Stores Environment-specific settings

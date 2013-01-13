@@ -1,3 +1,10 @@
+# <DEFINE>
+define [
+], (
+) ->
+# </DEFINE>
+
+
 Inductor = ->
   @nodes = new Array(2)
   @flags = 0

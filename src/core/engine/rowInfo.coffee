@@ -1,23 +1,27 @@
-class RowInfo
+# <DEFINE>
+define [], () ->
+# </DEFINE>
 
-  @ROW_NORMAL: 0
-  @ROW_CONST: 1
-  @ROW_EQUAL: 2
+  class RowInfo
 
-  constructor: ->
-    @type = RowInfo.ROW_NORMAL
+    @ROW_NORMAL: 0
+    @ROW_CONST: 1
+    @ROW_EQUAL: 2
 
-    @nodeEq = 0;
-    @mapCol = 0;
-    @mapRow = 0;
+    constructor: ->
+      @type = RowInfo.ROW_NORMAL
 
-    @value = 0;
-    @rsChanges = false;
-    @lsChanges = false;
-    @dropRow = false;
+      @nodeEq = 0;
+      @mapCol = 0;
+      @mapRow = 0;
 
-  toString: () ->
-    "RowInfo: #{@type} #{@nodeEq} #{@mapCol} #{@mapRow} #{@value} #{@rsChanges} #{@lsChanges} #{@dropRow}"
+      @value = 0;
+      @rsChanges = false;
+      @lsChanges = false;
+      @dropRow = false;
+
+    toString: () ->
+      "RowInfo: #{@type} #{@nodeEq} #{@mapCol} #{@mapRow} #{@value} #{@rsChanges} #{@lsChanges} #{@dropRow}"
 
 
-module.exports = RowInfo
+  return RowInfo

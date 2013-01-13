@@ -1,3 +1,8 @@
+# <DEFINE>
+define [], () ->
+# </DEFINE>
+
+
 class Point
   constructor: (@x = 0, @y = 0) ->
 

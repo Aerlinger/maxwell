@@ -1,3 +1,10 @@
+# <DEFINE>
+define [
+], (
+) ->
+# </DEFINE>
+
+
 ProbeElm = (xa, ya, xb, yb, f, st) ->
   CircuitComponent.call this, xa, ya, xb, yb, f
 ProbeElm:: = new CircuitComponent()

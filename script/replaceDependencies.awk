@@ -4,14 +4,14 @@ sudo -v
 files=0;
 for file in $(find ../src/ -name *.coffee)
 do
-  sed -E -i'.txt' '/<DEFINE>/,/<\/DEFINE>/d' $file
+  #sed -E -i'.txt' '/<DEFINE>/,/<\/DEFINE>/d' $file
   fname=$(basename $file)
 
   awk '
   BEGIN {
     print "# <DEFINE>"
 
-    print "define(["
+    print "define ["
   }
   /= +?require\(/ { 
     ++num
@@ -22,12 +22,14 @@ do
   END {
     for (name in modules) {
       print "  \x27" "cs!" name "\x27" ","
+      if (modules[name] == num) { print "# LAST" }
     }
 
     print "], ("
 
     for (name in modules) {
       print "  \x27" name "\x27" ","
+      if (modules[name] == num) { print "# LAST" }
     }
 
     print ") ->"
@@ -40,7 +42,9 @@ do
 
   cat $file >> ./tmp/$fname
 
-  sed -E -i'.txt' '/= *require\(/d' ./tmp/$fname
+  #sed -E -i'/= *require\(/g' ./tmp/$fname
+
+  cp -f ./tmp/$fname $file
 
   echo output written to ./tmp/$fname
 done

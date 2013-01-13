@@ -1,3 +1,8 @@
+# <DEFINE>
+define [], () ->
+# </DEFINE>
+
+
 global.showFormat = (decimalNum) ->
   decimalNum.toFixed(2)
 

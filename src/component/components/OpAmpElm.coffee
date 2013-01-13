@@ -1,3 +1,10 @@
+# <DEFINE>
+define [
+], (
+) ->
+# </DEFINE>
+
+
 OpAmpElm = (xa, ya, xb, yb, f, st) ->
   CircuitComponent.call this, xa, ya, xb, yb, f
   @opsize = 0

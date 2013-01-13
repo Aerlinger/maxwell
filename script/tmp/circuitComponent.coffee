@@ -1,4 +1,4 @@
-# <DEFINE> 
+# <DEFINE>
 define([
   'cs!Rectangle,',
   'cs!=',
@@ -8,11 +8,15 @@ define([
   '=',
   'To',
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
 # If we are in Node.js:
 if process.env
+  Settings = require('../settings/settings')
+  {Polygon, Rectangle, Point} = require('../util/shapePrimitives')
+  DrawHelpers = require('../render/drawHelper')
+  #VoltageElm = require('./components/VoltageElm')
 
 class CircuitComponent
   constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, st = []) ->
@@ -44,7 +48,7 @@ class CircuitComponent
     @dn = Math.sqrt(@dx * @dx + @dy * @dy)
     @dpx1 = @dy / @dn
     @dpy1 = -@dx / @dn
-    @dsign = (if (@dy is 0) then sign(@dx) else sign(@dy))
+    @dsign = (if (@dy is 0) then MathUtils.sign(@dx) else MathUtils.sign(@dy))
 
     printStackTrace() unless @dn
 
@@ -427,5 +431,6 @@ class CircuitComponent
 #
 # see script/test and the /test directory for details.
 #
+# To require this class in another file through Node, write {ClassName} = require(<path_to_coffee_file>)
 root = (exports) ? window
 module.exports = CircuitComponent

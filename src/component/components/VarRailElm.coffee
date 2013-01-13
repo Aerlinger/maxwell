@@ -1,3 +1,10 @@
+# <DEFINE>
+define [
+], (
+) ->
+# </DEFINE>
+
+
 
 # Add the following UI elements
 VarRailElm = (xa, ya, xb, yb, f, st) ->

@@ -1,3 +1,10 @@
+# <DEFINE>
+define [
+], (
+) ->
+# </DEFINE>
+
+
 
 # Step 1: Prototype of DepthRectangle is Rectangle
 
@@ -106,7 +113,7 @@ TransistorElm::draw = ->
     #g.setColor(Color.white);
     #g.setFont(this.unitsFont);
     CircuitComponent.setColor Color.white
-    ds = sign(@dx)
+    ds = MathUtils.sign(@dx)
     @drawCenteredText "B", @base.x1 - 10 * ds, @base.y - 5, Color.WHITE
     @drawCenteredText "C", @coll[0].x1 - 3 + 9 * ds, @coll[0].y + 4, Color.WHITE # x+6 if ds=1, -12 if -1
     @drawCenteredText "E", @emit[0].x1 - 3 + 9 * ds, @emit[0].y + 4, Color.WHITE

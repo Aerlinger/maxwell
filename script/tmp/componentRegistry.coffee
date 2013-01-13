@@ -1,10 +1,10 @@
-# <DEFINE> 
+# <DEFINE>
 define([
   'cs!=',
 ], (
   '=',
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
 # ElementMap
@@ -17,7 +17,12 @@ define([
 #   Elements that are implemented but not tested have their names (key) prefixed with a '#'
 #   Elements that are not yet implemented have their names (key) prefixed with a '-'
 
+WireElm     = require('../component/components/WireElm')
+ResistorElm = require('../component/components/ResistorElm')
+GroundElm   = require('../component/components/GroundElm')
+VoltageElm  = require('../component/components/VoltageElm')
 
+Scope = require('../scope/oscilloscope.coffee')
 
 DumpTypeConversions = {
   'r':'ResistorElm'
