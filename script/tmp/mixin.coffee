@@ -1,8 +1,8 @@
-# <DEFINE> 
+# <DEFINE>
 define([
 ], (
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
 global.extend = (obj, mixin) ->

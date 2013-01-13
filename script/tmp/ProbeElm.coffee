@@ -1,8 +1,8 @@
-# <DEFINE> 
+# <DEFINE>
 define([
 ], (
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
 ProbeElm = (xa, ya, xb, yb, f, st) ->

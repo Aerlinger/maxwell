@@ -1,8 +1,8 @@
-# <DEFINE> 
+# <DEFINE>
 define([
 ], (
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
 # TODO: Not yet fully implemented 

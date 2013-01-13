@@ -1,8 +1,8 @@
-# <DEFINE> 
+# <DEFINE>
 define([
 ], (
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
 class AntennaElm extends CircuitComponent

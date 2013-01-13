@@ -1,12 +1,15 @@
-# <DEFINE> 
+# <DEFINE>
 define([
   'cs!=',
+# LAST
 ], (
   '=',
+# LAST
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
+Settings = require('../settings/settings')
 
 class Grid
   constructor: () ->

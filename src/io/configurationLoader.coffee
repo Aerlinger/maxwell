@@ -1,3 +1,4 @@
+
 ###
 Configures interface from JSON file
 ###

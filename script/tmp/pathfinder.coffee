@@ -1,4 +1,4 @@
-# <DEFINE> 
+# <DEFINE>
 define([
   'cs!=',
   'cs!To',
@@ -6,9 +6,10 @@ define([
   '=',
   'To',
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
+VoltageElm = require('../../component/components/VoltageElm.coffee')
 
 class Pathfinder
 
@@ -86,5 +87,6 @@ class Pathfinder
 #
 # see script/test and the /test directory for details.
 #
+# To require this class in another file through Node, write {ClassName} = require(<path_to_coffee_file>)
 root = exports ? window
 module.exports = Pathfinder

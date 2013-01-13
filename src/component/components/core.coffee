@@ -1,3 +1,10 @@
+# <DEFINE>
+define [
+], (
+) ->
+# </DEFINE>
+
+
 #Inductor.FLAG_BACK_EULER = 2;
 Diode = ->
   @nodes = new Array(2)

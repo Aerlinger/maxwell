@@ -1,14 +1,19 @@
-# <DEFINE> 
+# <DEFINE>
 define([
   'cs!Rectangle,',
   'cs!=',
+# LAST
 ], (
   'Rectangle,',
   '=',
+# LAST
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
+CircuitElement = require('../circuitComponent')
+{Polygon, Rectangle, Point} = require('../../util/shapePrimitives')
+DrawHelper = require('../../render/drawHelper')
 
 #/////////////////////////////////////////////////////////////////////////////
 # Constructor ////////////////////////////////////////////////////////////////

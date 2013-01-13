@@ -1,3 +1,10 @@
+# <DEFINE>
+define [
+], (
+) ->
+# </DEFINE>
+
+
 ###
 Todo: Click functionality does not work
 ###

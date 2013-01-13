@@ -1,12 +1,15 @@
-# <DEFINE> 
+# <DEFINE>
 define([
   'cs!=',
+# LAST
 ], (
   '=',
+# LAST
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
+VoltageElm = require('./VoltageElm')
 
 RailElm = (xa, ya, xb, yb, f, st) ->
   VoltageElm.call this, xa, ya, xb, yb, f, st

@@ -1,41 +1,45 @@
-Color = require('../util/colorScale')
-
 ###
 Stores Environment-specific settings
 
 These are the global settings for Maxwell and should defined by the user.
 Settings do not change by loading a new circuit.
 ###
-class Settings
-  @SPEED = 112
-  @FRACTIONAL_DIGITS: 2
 
-  # Line Widths:
-  @POST_RADIUS: 3
-  @CURRENT_RADIUS: 3
-  @LINE_WIDTH: 2
+# <DEFINE>
+define ['cs!ColorPalette'], (ColorPalette) ->
 
-  # Grid
-  @GRID_SIZE: 16
-  @SMALL_GRID: false
+# </DEFINE>
 
-  # Colors:
-  @SELECT_COLOR: Color.ORANGE
-  @POST_COLOR_SELECTED: Color.ORANGE
-  @POST_COLOR: Color.BLACK
-  @DOTS_COLOR: Color.YELLOW
-  @DOTS_OUTLINE: Color.ORANGE
+  class Settings
+    @SPEED = 112
+    @FRACTIONAL_DIGITS: 2
 
-  @TEXT_COLOR: Color.BLACK
-  @TEXT_ERROR_COLOR: Color.RED
-  @TEXT_WARNING_COLOR: Color.YELLOW
+    # Line Widths:
+    @POST_RADIUS: 3
+    @CURRENT_RADIUS: 3
+    @LINE_WIDTH: 2
 
-  @SELECTION_MARQUEE_COLOR: Color.ORANGE
+    # Grid
+    @GRID_SIZE: 16
+    @SMALL_GRID: false
 
-  @GRID_COLOR: Color.DEEP_YELLOW
-  @BG_COLOR: Color.WHITE
-  @FG_COLOR: Color.DARKGRAY
-  @ERROR_COLOR: Color.DEEPRED
-  @WARNING_COLOR: Color.ORANGE
+    # ColorPalettes:
+    @SELECT_COLOR: ColorPalette.orange
+    @POST_COLOR_SELECTED: ColorPalette.orange
+    @POST_COLOR: ColorPalette.black
+    @DOTS_COLOR: ColorPalette.yellow
+    @DOTS_OUTLINE: ColorPalette.orange
 
-module.exports = Settings
+    @TEXT_COLOR: ColorPalette.black
+    @TEXT_ERROR_COLOR: ColorPalette.red
+    @TEXT_WARNING_COLOR: ColorPalette.yellow
+
+    @SELECTION_MARQUEE_COLOR: ColorPalette.orange
+
+    @GRID_COLOR: ColorPalette.darkyellow
+    @BG_COLOR: ColorPalette.white
+    @FG_COLOR: ColorPalette.darkgray
+    @ERROR_COLOR: ColorPalette.darkred
+    @WARNING_COLOR: ColorPalette.orange
+
+  return Settings

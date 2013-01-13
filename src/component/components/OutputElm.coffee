@@ -1,3 +1,10 @@
+# <DEFINE>
+define [
+], (
+) ->
+# </DEFINE>
+
+
 OutputElm = (xa, ya, xb, yb, f, st) ->
   
   # st not used for OutputElm

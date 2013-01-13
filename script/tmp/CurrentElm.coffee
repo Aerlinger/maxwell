@@ -1,8 +1,8 @@
-# <DEFINE> 
+# <DEFINE>
 define([
 ], (
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
 CurrentElm = (xa, ya, xb, yb, f, st) ->

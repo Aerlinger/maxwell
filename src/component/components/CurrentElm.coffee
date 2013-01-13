@@ -1,3 +1,10 @@
+# <DEFINE>
+define [
+], (
+) ->
+# </DEFINE>
+
+
 CurrentElm = (xa, ya, xb, yb, f, st) ->
   CircuitComponent.call this, xa, ya, xb, yb, f
   try

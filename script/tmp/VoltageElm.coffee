@@ -1,12 +1,16 @@
-# <DEFINE> 
+# <DEFINE>
 define([
   'cs!=',
+# LAST
 ], (
   '=',
+# LAST
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
+CircuitComponent = require('../circuitComponent')
+DrawHelper = require('../../render/drawHelper')
 
 class VoltageElm extends CircuitComponent
 

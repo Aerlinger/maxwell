@@ -1,3 +1,10 @@
+# <DEFINE>
+define([
+], (
+) ->
+# </DEFINE>
+
+
 class ColorScale
   @colorScaleCount = 32
   @colorScale = []

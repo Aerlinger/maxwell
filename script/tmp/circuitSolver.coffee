@@ -1,4 +1,4 @@
-# <DEFINE> 
+# <DEFINE>
 define([
   'cs!=',
   'cs!To',
@@ -6,11 +6,21 @@ define([
   '=',
   'To',
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
+MatrixStamper = require('./matrixStamper')
+GroundElm = require('../../component/components/GroundElm')
+RailElm = require('../../component/components/RailElm')
+VoltageElm = require('../../component/components/VoltageElm')
+WireElm = require('../../component/components/WireElm')
 
+FindPathInfo = require('../nodeGraph/pathfinder')
+CircuitNode = require('../nodeGraph/circuitNode').CircuitNode
+CircuitNodeLink = require('../nodeGraph/circuitNode').CircuitNodeLink
+RowInfo = require('./rowInfo')
 
+Settings = require('../../settings/settings')
 
 
 class CircuitSolver
@@ -707,5 +717,6 @@ class CircuitSolver
 #
 # see script/test and the /test directory for details.
 #
+# To require this class in another file through Node, write {ClassName} = require(<path_to_coffee_file>)
 root = exports ? window
 module.exports = CircuitSolver

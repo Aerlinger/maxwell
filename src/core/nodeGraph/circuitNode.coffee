@@ -1,14 +1,12 @@
-class CircuitNode
-  constructor: (@x=0, @y=0, @intern=false, @links=[]) ->
+# <DEFINE>
+define [], () ->
+# </DEFINE>
 
-  toString: () ->
-    "CircuitNode: #{@x} #{@y} #{@intern} [#{@links.toString()}]"
 
-class CircuitNodeLink
-  constructor: (@num=0, @elm=null) ->
+  class CircuitNode
+    constructor: (@x=0, @y=0, @intern=false, @links=[]) ->
 
-  toString: () ->
-    "#{@num} #{@elm.toString()}"
+    toString: () ->
+      "CircuitNode: #{@x} #{@y} #{@intern} [#{@links.toString()}]"
 
-exports.CircuitNode = CircuitNode
-exports.CircuitNodeLink = CircuitNodeLink
+  return CircuitNode

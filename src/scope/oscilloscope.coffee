@@ -1,6 +1,8 @@
-class Oscilloscope
-  constructor: () ->
+# <DEFINE>
+define [], () ->
+# </DEFINE>
 
+  class Oscilloscope
+    constructor: () ->
 
-root = module ? window
-module.exports = Oscilloscope
+  return Oscilloscope

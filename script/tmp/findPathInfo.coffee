@@ -1,6 +1,17 @@
+# <DEFINE>
+define([
+  'cs!=',
+  'cs!To',
+], (
+  '=',
+  'To',
+) ->
+# </DEFINE>
+
+
 VoltageElm = require('../../component/components/VoltageElm.coffee')
 
-class Pathfinder
+class FindPathInfo
 
   @INDUCT: 1
   @VOLTAGE: 2
@@ -25,11 +36,11 @@ class Pathfinder
       # TODO: Add Current Elm
       #if (element instanceof CurrentElm) and (@type is FindPathInfo.INDUCT)
       #  continue
-      if @type is Pathfinder.VOLTAGE and (element.isWire() or element instanceof VoltageElm)
+      if @type is FindPathInfo.VOLTAGE and (element.isWire() or element instanceof VoltageElm)
         continue
-      if @type is Pathfinder.SHORT and not element.isWire()
+      if @type is FindPathInfo.SHORT and not element.isWire()
         continue
-      if (@type is Pathfinder.CAP_V)
+      if (@type is FindPathInfo.CAP_V)
         continue unless element.isWire() or element instanceof CapacitorElm or element instanceof VoltageElm
 
       if node is 0
@@ -50,9 +61,9 @@ class Pathfinder
         @used[node] = false
         return true   #console.log(element + " has ground");
 
-      if @type is Pathfinder.INDUCT and element instanceof InductorElm
+      if @type is FindPathInfo.INDUCT and element instanceof InductorElm
         current = element.getCurrent()
-        current = -current if terminal_num is 0
+        current = -current  if terminal_num is 0
 
         #console.log(element + " > " + firstElm + " >> matching " + c + " to " + firstElm.getCurrent());
         continue if Math.abs(current - @firstElm.getCurrent()) > 1e-10
@@ -78,4 +89,4 @@ class Pathfinder
 #
 # To require this class in another file through Node, write {ClassName} = require(<path_to_coffee_file>)
 root = exports ? window
-module.exports = Pathfinder
+module.exports = FindPathInfo

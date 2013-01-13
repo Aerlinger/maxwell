@@ -1,10 +1,10 @@
-# <DEFINE> 
+# <DEFINE>
 define([
   'cs!To',
 ], (
   'To',
 ) ->
-# </DEFINE> 
+# </DEFINE>
 
 
 class MatrixStamper
@@ -129,5 +129,6 @@ class MatrixStamper
 #
 # see script/test and the /test directory for details.
 #
+# To require this class in another file through Node, write {ClassName} = require(<path_to_coffee_file>)
 root = exports ? window
 module.exports= MatrixStamper
