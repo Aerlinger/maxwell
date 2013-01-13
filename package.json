@@ -29,6 +29,7 @@
     "start": "node app",
     "test": "script/test",
     "update": "script/update",
-    "build": "script/build"
+    "build": "script/build",
+    "listComponents": "script/listComponents.rb"
   }
 }
