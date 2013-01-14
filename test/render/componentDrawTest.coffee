@@ -1,8 +1,22 @@
 # <DEFINE>
 define [
+  'cs!Wire',
+  'cs!Ground',
+  'cs!Renderer',
+  'cs!fs',
+  'cs!Resistor',
+  'cs!VoltageSource',
 ], (
+  'Wire',
+  'Ground',
+  'Renderer',
+  'fs',
+  'Resistor',
+  'VoltageSource',
 ) ->
 # </DEFINE>
+
+
 
 
 Resistor = require '../../src/component/components/ResistorElm'

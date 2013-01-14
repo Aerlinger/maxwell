@@ -327,7 +327,7 @@ define [
 
     draw2Leads: (renderContext) ->
       renderContext.drawThickLinePt @point1, @lead1, DrawHelper.getVoltageColor(@volts[0])
-      renderContext.drawThickLinePt @lead2, @point2, DrawHelper.sgetVoltageColor(@volts[1])
+      renderContext.drawThickLinePt @lead2, @point2, DrawHelper.getVoltageColor(@volts[1])
 
     updateDotCount: (current=@current, currentCount=@curcount) ->
       return currentCount if @Circuit?.isStopped()

@@ -45,13 +45,38 @@ define [
 # </DEFINE>
 
 
+  #Request Animation Frame polyfill
+  (()->
+    lastTime = 0
+    vendors = ["ms", "moz", "webkit", "o"]
+    x = 0
+
+    while x < vendors.length and not window.requestAnimationFrame
+      window.requestAnimationFrame = window[vendors[x] + "RequestAnimationFrame"]
+      window.cancelAnimationFrame = window[vendors[x] + "CancelAnimationFrame"] or window[vendors[x] + "CancelRequestAnimationFrame"]
+      ++x
+    unless window.requestAnimationFrame
+      window.requestAnimationFrame = (callback, element) =>
+        currTime = new Date().getTime()
+        timeToCall = Math.max(0, 16 - (currTime - lastTime))
+        id = window.setTimeout(->
+          callback currTime + timeToCall
+        , timeToCall)
+        lastTime = currTime + timeToCall
+        id
+    unless window.cancelAnimationFrame
+      window.cancelAnimationFrame = (id) ->
+        clearTimeout id
+  )()
+
+
 
   class Circuit
 
-      constructor: ->
+      constructor: (@Context) ->
         @Params = new CircuitEngineParams()
         @CommandHistory = new CommandHistory()
-        @Renderer = new Renderer(this)
+        @Renderer = new Renderer(this, @Context)
 
         @clearAndReset()
 
@@ -184,7 +209,11 @@ define [
         2. ) Solve Circuit build matrix representation of the circuit solve for the voltage and current for each component.
               Solving is performed via LU factorization.
       ###
-      updateCircuit: ->
+      updateCircuit: (frameTime) ->
+        #@simulation = requestAnimationFrame(Circuit.prototype.updateCircuit, @)
+
+        console.log "TIME: " + frameTime
+
         startTime = (new Date()).getTime()
 
         # Reconstruct circuit
@@ -205,6 +234,30 @@ define [
         frameTime = endTime - startTime
         console.log("Time: " + frameTime);
         @lastFrameTime = @lastTime
+
+      ###
+      Clears current states, graphs, and errors then Restarts the circuit from time zero.
+      ###
+      restartAndStop: ->
+        @restartAndRun()
+        @simulation = cancelAnimationFrame()
+        @Solver.stop("Restarted Circuit from time 0")
+
+
+      restartAndRun: ->
+        if(!@Solver)
+          halt("Solver not initialized!");
+
+        element.reset() for element in @elementList
+        scope.resetGraph() for scope in @scopes
+
+        @Solver.reset()
+
+        for i in [1..100]
+          @updateCircuit(0)
+
+
+
 
 
       # Returns the y position of the bottom of the circuit
@@ -271,7 +324,7 @@ define [
         @mouseElm = @stopElm unless @mouseElm?
 
         if @stopMessage?
-          @printError @stopMessage
+          @halt @stopMessage
         else
           @getCircuitBottom() if @circuitBottom is 0
 
@@ -291,6 +344,7 @@ define [
               @Hint.hintType = -1
             else
               info.push hint
+
           @Renderer.drawInfo(info)
           @mouseElm = realMouseElm
 
@@ -309,21 +363,6 @@ define [
               # Todo: outline bad nodes here
               badNodes.push circuitNode
         return badNodes
-
-
-      ###
-      Clears current states, graphs, and errors then Restarts the circuit from time zero.
-      ###
-      restartAndStop: ->
-        @restartAndRun()
-        @Solver.stop("Restarted Circuit from time 0")
-
-      restartAndRun: ->
-        element.reset() for element in @elementList
-        scope.resetGraph() for scope in @scopes
-
-        @Solver.reset()
-        @Solver.run()
 
 
 

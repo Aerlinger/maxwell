@@ -1,12 +1,3 @@
-# <DEFINE>
-define [
-  'cs!VoltageElm',
-  'cs!Circuit',
-], (
-  'VoltageElm',
-  'Circuit',
-) ->
-# </DEFINE>
 
 
 

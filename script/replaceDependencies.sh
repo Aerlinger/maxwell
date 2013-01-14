@@ -12,32 +12,27 @@ do
 
     print "define ["
   }
-  /= +?require\(/ { 
-    ++num
-    if (NR > last) { last = NR }
-
-    modules[$2] = NR;
+  /= *require/ { 
+    modules[$1] = NR;
   }
   END {
     for (name in modules) {
       print "  \x27" "cs!" name "\x27" ","
-      if (modules[name] == num) { print "# LAST" }
     }
 
     print "], ("
 
     for (name in modules) {
       print "  \x27" name "\x27" ","
-      if (modules[name] == num) { print "# LAST" }
     }
 
     print ") ->"
 
     print "# </DEFINE>"
-    print ""
-    print ""
   }
   ' $file > ./tmp/$fname
+
+  cat ./tmp/$fname
 
   cat $file >> ./tmp/$fname
 

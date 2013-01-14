@@ -81,6 +81,7 @@ require.config({
         // Globals:
         MathUtils:'src/global/mathUtils',
         ArrayUtils:'src/global/arrayUtils',
+        Units:'src/global/units',
 
         HelloCS:'examples/hellocs'
     }
@@ -101,23 +102,26 @@ require([
     'cs!GroundElm',
     'cs!VoltageElm'
 ], function (App, HelloCS, Circuit, $, Resistor, Wire, Ground, Voltage) {
+
     App.initialize();
 
-    canvas = $('canvas');
+    var canvas = $('canvas').get(0);
 
-    circuit = new Circuit();
+    var circuit = new Circuit(canvas);
 
-    resistor       = new Resistor(300, 100, 300, 200, 0, [50]);
-    voltageSource  = new Voltage(100, 100, 100, 200, 0, [50]);
-    wire           = new Wire(100, 100, 300, 100, 0);
-    voltageGround  = new Ground(100, 200, 100, 250, 0);
-    resGround      = new Ground(300, 200, 300, 250, 0);
+    var resistor       = new Resistor(300, 100, 300, 200, 0, [50]);
+    var voltageSource  = new Voltage(100, 100, 100, 200, 0, [50]);
+    var wire           = new Wire(100, 100, 300, 100, 0);
+    var voltageGround  = new Ground(100, 200, 100, 250, 0);
+    var resGround      = new Ground(300, 200, 300, 250, 0);
 
     circuit.solder(resistor);
     circuit.solder(voltageSource);
     circuit.solder(wire);
     circuit.solder(voltageGround);
     circuit.solder(resGround);
+
+    circuit.restartAndRun();
 
     Hello = new HelloCS("Hello!");
     Hello.sayHi();

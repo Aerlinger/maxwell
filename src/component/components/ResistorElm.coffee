@@ -5,6 +5,7 @@ define [
   'cs!Polygon',
   'cs!Rectangle',
   'cs!Point',
+  'cs!Units'
 
   'cs!CircuitComponent'
 ], (
@@ -13,6 +14,7 @@ define [
   Polygon,
   Rectangle,
   Point,
+  Units,
 
   CircuitComponent
 ) ->
@@ -66,7 +68,7 @@ define [
       oldOffset = newOffset
 
     #if true @Circuit?.Params.showValues
-    resistanceVal = getUnitText(@resistance, "ohm")
+    resistanceVal = Units.getUnitText(@resistance, "ohm")
     @drawValues resistanceVal, hs, renderContext
 
     @drawPosts(renderContext)
@@ -87,8 +89,8 @@ define [
   ResistorElm::getInfo = (arr) ->
     arr[0] = "resistor"
     @getBasicInfo arr
-    arr[3] = "R = " + getUnitText(@resistance, Circuit.ohmString)
-    arr[4] = "P = " + getUnitText(@getPower(), "W")
+    arr[3] = "R = " + Units.getUnitText(@resistance, Circuit.ohmString)
+    arr[4] = "P = " + Units.getUnitText(@getPower(), "W")
 
   ResistorElm::needsShortcut = ->
     true

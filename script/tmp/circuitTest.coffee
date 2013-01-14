@@ -1,12 +1,12 @@
 # <DEFINE>
 define [
-  'cs!=',
-# LAST
+  'cs!Circuit',
 ], (
-  '=',
-# LAST
+  'Circuit',
 ) ->
 # </DEFINE>
+
+
 
 
 Circuit = require('../../src/core/circuit')

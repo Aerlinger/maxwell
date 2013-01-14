@@ -1,14 +1,14 @@
 # <DEFINE>
 define [
-  'cs!Rectangle,',
-# LAST
-  'cs!=',
+  'cs!{Polygon,',
+  'cs!CircuitElement',
 ], (
-  'Rectangle,',
-# LAST
-  '=',
+  '{Polygon,',
+  'CircuitElement',
 ) ->
 # </DEFINE>
+
+
 
 
 CircuitElement = require('../../src/component/circuitComponent')

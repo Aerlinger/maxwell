@@ -1,12 +1,14 @@
 # <DEFINE>
 define [
-  'cs!=',
-# LAST
+  'cs!GroundElm',
+  'cs!Circuit',
 ], (
-  '=',
-# LAST
+  'GroundElm',
+  'Circuit',
 ) ->
 # </DEFINE>
+
+
 
 
 GroundElm = require("../../../src/component/components/GroundElm")

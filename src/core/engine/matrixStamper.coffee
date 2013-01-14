@@ -1,5 +1,5 @@
 # <DEFINE>
-define [], () ->
+define ['cs!MathUtils'], (MathUtils) ->
 # </DEFINE>
 
 
@@ -35,7 +35,7 @@ define [], () ->
 
     stampResistor: (n1, n2, r) ->
       r0 = 1 / r
-      if isNaN(r0) or isInfinite(r0)
+      if isNaN(r0) or MathUtils.isInfinite(r0)
         @Circuit.error "bad resistance"
         a = 0
         a /= a

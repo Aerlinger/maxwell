@@ -249,7 +249,7 @@ define [
       for i in [0...@Circuit.numElements()]
         ce = @Circuit.getElmByIdx(i)
   #      if ce instanceof InductorElm
-  #        fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
+  #        fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
   #
   #        # try findPath with maximum depth of 5, to avoid slowdown
   #        if not fpi.findPath(ce.getNode(0), 5) and not fpi.findPath(ce.getNode(0))
@@ -258,28 +258,28 @@ define [
 
         # look for current sources with no current path
   #      if ce instanceof CurrentElm
-  #        fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
+  #        fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
   #        unless fpi.findPath(ce.getNode(0))
   #          @Circuit.halt "No path for current source!", ce
   #          return
 
         # Look for voltage source loops:
         if (ce instanceof VoltageElm and ce.getPostCount() is 2) or ce instanceof WireElm
-          findPathInfo = new FindPathInfo(FindPathInfo.VOLTAGE, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
+          pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
 
-          if findPathInfo.findPath(ce.getNode(0)) is true
+          if pathfinder.findPath(ce.getNode(0)) is true
             console.log "Voltage source/wire loop with no resistance!"
             #@Circuit.halt "Voltage source/wire loop with no resistance!", ce
             #return
 
         # Look for shorted caps or caps with voltage but no resistance
   #      if ce instanceof CapacitorElm
-  #        fpi = new FindPathInfo(FindPathInfo.SHORT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
+  #        fpi = new Pathfinder(Pathfinder.SHORT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
   #        if fpi.findPath(ce.getNode(0))
   #          console.log ce.toString() + " shorted"
   #          ce.clearAndReset()
   #        else
-  #          fpi = new FindPathInfo(FindPathInfo.CAP_V, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
+  #          fpi = new Pathfinder(Pathfinder.CAP_V, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
   #          if fpi.findPath(ce.getNode(0))
   #            @Circuit.halt "Capacitor loop with no resistance!", ce
   #            return
@@ -502,7 +502,7 @@ define [
           printit = debugPrint
           debugPrint = false
 
-          isCleanArray(@circuitMatrix)
+          #isCleanArray(@circuitMatrix)
 
           console.log "Matrix Dump:"
           for j in [0...@circuitMatrixSize]

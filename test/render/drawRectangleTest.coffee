@@ -1,8 +1,14 @@
 # <DEFINE>
 define [
+  'cs!fs',
+  'cs!Canvas',
 ], (
+  'fs',
+  'Canvas',
 ) ->
 # </DEFINE>
+
+
 
 
 Canvas = require 'canvas'

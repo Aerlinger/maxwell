@@ -1,12 +1,16 @@
 # <DEFINE>
 define [
-  'cs!=',
-# LAST
+  'cs!MatrixStamper',
+  'cs!CircuitSolver',
+  'cs!Circuit',
 ], (
-  '=',
-# LAST
+  'MatrixStamper',
+  'CircuitSolver',
+  'Circuit',
 ) ->
 # </DEFINE>
+
+
 
 
 Circuit = require('../../src/core/circuit')

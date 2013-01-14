@@ -9,8 +9,8 @@ define [
 
   class Renderer
 
-    constructor: (@Circuit) ->
-      @Context = new CanvasContext()
+    constructor: (@Circuit, @Canvas) ->
+      @Context = new CanvasContext(@Canvas)
 
     drawComponents: ->
       for component in @Circuit.getElements()

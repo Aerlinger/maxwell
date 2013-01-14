@@ -12,18 +12,13 @@ define [
 
 
   class CanvasContext extends Context
-    constructor: (@width=600, @height=400) ->
-      #@canvas = new Canvas(@width, @height)
-      console.log("loading canvas context")
-      console.log($)
-      @canvas = $('canvas').get(0)
-      @context = @canvas.getContext('2d')
-      console.log("finished")
+    constructor: (@Canvas, @width=600, @height=400) ->
+      @context = @Canvas.getContext('2d')
 
     fillText: (text, x, y) ->
       @context.fillText(text, y, y)
 
-    fillCircle: (x, y, radius, lineWidth=1, fillColor='#FFFFFF', lineColor="#000000") ->
+    fillCircle: (x, y, radius, lineWidth=Settings.LINE_WIDTH, fillColor='#FF0000', lineColor="#000000") ->
       @context.fillStyle = fillColor
       @context.strokeStyle = lineColor
       @context.beginPath()
@@ -36,7 +31,7 @@ define [
     drawThickLinePt: (pa, pb, color) ->
       @drawThickLine pa.x, pa.y, pb.x, pb.y, color
 
-    drawThickLine: (x, y, x2, y2, color=Settings.color) ->
+    drawThickLine: (x, y, x2, y2, color=Settings.FG_COLOR) ->
       @context.strokeStyle = color
       @context.beginPath()
       @context.moveTo x, y
@@ -62,12 +57,10 @@ define [
       return @context
 
     getCanvas: () ->
-      return null
-      #return @canvas
+      return @Canvas
 
     toBuffer: () ->
-      return null
-      #return @canvas.toBuffer
+      return @Canvas.toBuffer
 
 
 

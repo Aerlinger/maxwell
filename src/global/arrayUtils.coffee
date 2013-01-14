@@ -32,7 +32,7 @@ define [], () ->
 
     @zeroArray2: (numRows, numCols) ->
       return [] if numRows < 1
-      (zeroArray(numCols) for i in Array(numRows))
+      (@zeroArray(numCols) for i in Array(numRows))
 
     # Loops through an array, returning false and throwing an error if NaN or Inf values are found.
     #  If no NaN or Inf values are found, this array is determined to be clean and the method returns true.

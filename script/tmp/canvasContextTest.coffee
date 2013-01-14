@@ -1,8 +1,14 @@
 # <DEFINE>
 define [
+  'cs!fs',
+  'cs!CanvasContext',
 ], (
+  'fs',
+  'CanvasContext',
 ) ->
 # </DEFINE>
+
+
 
 
 CanvasContext = require '../../src/render/canvasContext'
