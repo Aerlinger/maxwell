@@ -254,7 +254,7 @@ class Circuit
     @mouseElm = @stopElm unless @mouseElm?
 
     if @stopMessage?
-      @printError @stopMessage
+      @halt @stopMessage
     else
       @getCircuitBottom() if @circuitBottom is 0
 
@@ -339,6 +339,13 @@ class Circuit
 
   currentSpeed: ->
     return @Params['currentMult']
+
+  toString: ->
+    returnStr = ""
+    for element in @elementList
+      returnStr += "#{element.inspect()}\n"
+
+    returnStr
 
 
 

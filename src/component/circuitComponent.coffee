@@ -57,6 +57,9 @@ class CircuitComponent
   getDumpClass: ->
     this.toString()
 
+  inspect: ->
+    "new #{@toString()}(#{@x1}, #{@y1}, #{@x2}, #{@y2}, 0, [])"
+
   isSelected: ->
     @selected
 
@@ -164,9 +167,6 @@ class CircuitComponent
 
   stamp: ->
     throw("Called abstract function stamp() in AbstractCircuitElement")
-
-  toString: ->
-    throw("Called abstract function toString() in AbstractCircuitElement")
 
   getVoltageSourceCount: ->
     0

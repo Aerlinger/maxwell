@@ -52,6 +52,9 @@ GroundElm::needsShortcut = ->
 GroundElm::toString = ->
   "GroundElm"
 
+GroundElm::inspect = ->
+  "new GroundElm(#{@x1}, #{@y1}, #{@x2}, #{@y2}, 0, [])"
+
 
 
 module.exports = GroundElm
