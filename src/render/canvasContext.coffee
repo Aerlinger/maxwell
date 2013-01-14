@@ -1,10 +1,12 @@
 # <DEFINE>
 define [
   'cs!Context',
-  'cs!Settings'],
+  'cs!Settings',
+  'jquery'],
 (
   Context,
-  Settings
+  Settings,
+  $
 ) ->
 # </DEFINE>
 
@@ -12,7 +14,11 @@ define [
   class CanvasContext extends Context
     constructor: (@width=600, @height=400) ->
       #@canvas = new Canvas(@width, @height)
+      console.log("loading canvas context")
+      console.log($)
+      @canvas = $('canvas').get(0)
       @context = @canvas.getContext('2d')
+      console.log("finished")
 
     fillText: (text, x, y) ->
       @context.fillText(text, y, y)

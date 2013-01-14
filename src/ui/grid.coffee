@@ -1,9 +1,5 @@
 # <DEFINE>
-define [
-  'cs!Settings',
-], (
-  Settings
-) ->
+define ['cs!Settings'], (Settings) ->
 # </DEFINE>
 
   class Grid
