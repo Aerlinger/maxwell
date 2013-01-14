@@ -8,6 +8,9 @@ describe "Circuit", ->
   before (done) ->
     @circuit = new Circuit()
     CircuitLoader.readCircuitFromFile @circuit, "./circuits/voltdividesimple.json"
+    console.log "***********************************************"
+    console.log(@circuit.toString())
+    console.log "***********************************************"
     done()
 
   describe "should Analyze voltdividesimple.json and have", ->

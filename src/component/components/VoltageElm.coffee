@@ -124,15 +124,15 @@ VoltageElm::draw = (renderContext) ->
 
 
 VoltageElm::drawWaveform = (center, renderContext) ->
-  color = (if @needsHighlight() then Settings.FG_COLOR)
+  color = (if @needsHighlight() then '0xFF0000')
   
   #g.beginFill();
-  @setPowerColor false
+  #@setPowerColor false
   xc = center.x1
   yc = center.y
   
   # TODO:
-  renderContext.drawCircle xc, yc, VoltageElm.circleSize, color
+  renderContext.fillCircle xc, yc, VoltageElm.circleSize, color
   
   #Main.getMainCanvas().drawThickCircle(xc, yc, circleSize, color);
   wl = 8
@@ -178,9 +178,9 @@ VoltageElm::drawWaveform = (center, renderContext) ->
         oy = yy
         i++
       break
-  if Settings.showValuesCheckItem
-    valueString = CircuitComponent.getShortUnitText(@frequency, "Hz")
-    @drawValues valueString, VoltageElm.circleSize  if @dx is 0 or @dy is 0
+  #if true
+    #valueString = @frequency
+    #@drawValues valueString, VoltageElm.circleSize  if @dx is 0 or @dy is 0
 
 VoltageElm::getVoltageSourceCount = ->
   1

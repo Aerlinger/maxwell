@@ -62,28 +62,28 @@ describe "1V grounded DC Source with 1 ohm grounded resistor", ->
 
     describe "after analyzing circuit", ->
       beforeEach (done) ->
-        #@Circuit.Solver.analyzeCircuit()
+        @Circuit.updateCircuit()
         done()
 
       it "should not need remap", ->
-        #@Circuit.Solver.needsRemap().should.equal false
+        @Circuit.Solver.needsRemap().should.equal false
 
       it "should have 4 nodes", ->
-        #@Circuit.numNodes().should.equal 4
+        @Circuit.numNodes().should.equal 4
 
       it "should be linear", ->
-        #@Circuit.Solver.circuitNonLinear.should.equal false
+        @Circuit.Solver.circuitNonLinear.should.equal false
 
       it "should have correct elements", ->
-        #@Circuit.getElements().toString()
+        @Circuit.getElements().toString()
 
 
     describe "after updating circuit", ->
       beforeEach () ->
-        #@Circuit.updateCircuit()
+        @Circuit.updateCircuit()
 
       it "should have 5 nodes", ->
-        #@Circuit.numNodes().should.equal 7
+        @Circuit.numNodes().should.equal 7
 
       it "should not have any bad nodes", ->
-        #@Circuit.findBadNodes().length.should.equal 0
+        @Circuit.findBadNodes().length.should.equal 0
