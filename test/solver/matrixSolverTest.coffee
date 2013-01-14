@@ -1,12 +1,14 @@
 # <DEFINE>
 define [
-  'cs!=',
-# LAST
+  'cs!CircuitSolver',
+  'cs!Circuit',
 ], (
-  '=',
-# LAST
+  'CircuitSolver',
+  'Circuit',
 ) ->
 # </DEFINE>
+
+
 
 
 Circuit = require('../../src/core/circuit')

@@ -1,12 +1,12 @@
 # <DEFINE>
 define [
-  'cs!Rectangle,',
-# LAST
+  'cs!{Polygon,',
 ], (
-  'Rectangle,',
-# LAST
+  '{Polygon,',
 ) ->
 # </DEFINE>
+
+
 
 
 {Polygon, Rectangle, Point} = require('../../src/util/shapePrimitives')

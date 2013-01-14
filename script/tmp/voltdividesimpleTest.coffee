@@ -1,10 +1,18 @@
 # <DEFINE>
 define [
-  'cs!=',
+  'cs!fs',
+  'cs!CircuitNode',
+  'cs!CircuitLoader',
+  'cs!Circuit',
 ], (
-  '=',
+  'fs',
+  'CircuitNode',
+  'CircuitLoader',
+  'Circuit',
 ) ->
 # </DEFINE>
+
+
 
 
 CircuitLoader = require "../../src/io/circuitLoader"

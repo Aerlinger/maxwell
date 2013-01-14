@@ -143,15 +143,15 @@ define [
 
 
   VoltageElm::drawWaveform = (center, renderContext) ->
-    color = (if @needsHighlight() then Settings.FG_COLOR)
+    color = if @needsHighlight() then Settings.FG_COLOR
 
     #g.beginFill();
-    @setPowerColor false
-    xc = center.x1
+    #@setPowerColor false
+    xc = center.x
     yc = center.y
 
     # TODO:
-    renderContext.drawCircle xc, yc, VoltageElm.circleSize, color
+    renderContext.fillCircle xc, yc, VoltageElm.circleSize, color
 
     #Main.getMainCanvas().drawThickCircle(xc, yc, circleSize, color);
     wl = 8

@@ -1,12 +1,12 @@
 # <DEFINE>
 define [
-  'cs!=',
-# LAST
+  'cs!CircuitElement',
 ], (
-  '=',
-# LAST
+  'CircuitElement',
 ) ->
 # </DEFINE>
+
+
 
 
 CircuitElement = require('../../src/component/circuitComponent.coffee')

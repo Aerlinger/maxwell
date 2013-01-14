@@ -1,12 +1,14 @@
 # <DEFINE>
 define [
-  'cs!=',
-# LAST
+  'cs!ResistorElm',
+  'cs!Circuit',
 ], (
-  '=',
-# LAST
+  'ResistorElm',
+  'Circuit',
 ) ->
 # </DEFINE>
+
+
 
 
 ResistorElm = require("../../../src/component/components/ResistorElm")
