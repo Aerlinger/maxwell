@@ -4,7 +4,7 @@ define([
     var initialize = function() {
         "use strict";
         console.log("initialized app.js");
-    }
+    };
 
     return {
         initialize: initialize

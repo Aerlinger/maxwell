@@ -33,7 +33,6 @@ define [
   Point,
   Rectangle,
   Polygon,
-  Primitives,
   Grid,
   CircuitEngineParams,
   MouseState,
@@ -110,6 +109,7 @@ define [
       solder: (newElement) ->
         newElement.Circuit = this
         newElement.setPoints()
+        console.log("Soldering Element: " + newElement)
         @elementList.push newElement
 
 

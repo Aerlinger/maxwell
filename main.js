@@ -1,6 +1,3 @@
-// Filename: main.js
-console.log("Loading main.js");
-
 // Define shortcut aliases
 require.config({
     paths:{
@@ -10,6 +7,7 @@ require.config({
         'coffee-script':'libs/coffee-script',
         cs:'libs/cs',
         color:'libs/color',
+        mocha:'libs/mocha',
 
         // CORE:
         Circuit:'src/core/circuit',
@@ -89,13 +87,37 @@ require.config({
 
 });
 
+// Filename: main.js
+console.log("Loading main.js");
+
 require([
     // Load our app module and pass it to our definition function
     'app',
     'cs!HelloCS',
-    'cs!Circuit'
-], function (App, HelloCS, Circuit) {
+    'cs!Circuit',
+    'jquery',
+    'cs!ResistorElm',
+    'cs!WireElm',
+    'cs!GroundElm',
+    'cs!VoltageElm'
+], function (App, HelloCS, Circuit, $, Resistor, Wire, Ground, Voltage) {
     App.initialize();
+
+    canvas = $('canvas');
+
+    circuit = new Circuit();
+
+    resistor       = new Resistor(300, 100, 300, 200, 0, [50]);
+    voltageSource  = new Voltage(100, 100, 100, 200, 0, [50]);
+    wire           = new Wire(100, 100, 300, 100, 0);
+    voltageGround  = new Ground(100, 200, 100, 250, 0);
+    resGround      = new Ground(300, 200, 300, 250, 0);
+
+    circuit.solder(resistor);
+    circuit.solder(voltageSource);
+    circuit.solder(wire);
+    circuit.solder(voltageGround);
+    circuit.solder(resGround);
 
     Hello = new HelloCS("Hello!");
     Hello.sayHi();
