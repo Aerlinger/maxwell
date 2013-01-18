@@ -16,7 +16,7 @@ define [
       @context = @Canvas.getContext('2d')
 
     fillText: (text, x, y) ->
-      @context.fillText(text, y, y)
+      @context.fillText(text, x, y)
 
     fillCircle: (x, y, radius, lineWidth=Settings.LINE_WIDTH, fillColor='#FF0000', lineColor="#000000") ->
       @context.fillStyle = fillColor

@@ -4,40 +4,35 @@ define [
   'cs!CircuitSolver',
   'cs!Circuit',
 ], (
-  'MatrixStamper',
-  'CircuitSolver',
-  'Circuit',
+  MatrixStamper,
+  CircuitSolver,
+  Circuit,
 ) ->
 # </DEFINE>
 
 
 
+  describe "matrix stamper", ->
 
-Circuit = require('../../src/core/circuit')
-CircuitSolver = require('../../src/core/engine/circuitSolver')
-MatrixStamper = require('../../src/core/engine/matrixStamper')
+    before () ->
+      @Circuit = new Circuit()
+      @CircuitSolver = new CircuitSolver()
+      @MatrixStamper = new MatrixStamper()
 
-describe "matrix stamper", ->
+    it "should stamp VCVS", ->
 
-  before () ->
-    @Circuit = new Circuit()
-    @CircuitSolver = new CircuitSolver()
-    @MatrixStamper = new MatrixStamper()
+    it "should stamp Voltage Source", ->
 
-  it "should stamp VCVS", ->
+    it "should stamp resistor", ->
 
-  it "should stamp Voltage Source", ->
+    it "should stamp conductance", ->
 
-  it "should stamp resistor", ->
+    it "should stamp VCCurrentSource", ->
 
-  it "should stamp conductance", ->
+    it "should stamp CCCS", ->
 
-  it "should stamp VCCurrentSource", ->
+    it "should stamp Matrix", ->
 
-  it "should stamp CCCS", ->
+    it "should stamp right side", ->
 
-  it "should stamp Matrix", ->
-
-  it "should stamp right side", ->
-
-  it "should stamp nonlinear", ->
+    it "should stamp nonlinear", ->

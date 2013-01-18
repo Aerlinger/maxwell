@@ -1,6 +1,5 @@
 // Filename: app.js
-define([
-], function(){
+define([], function(){
     var initialize = function() {
         "use strict";
         console.log("initialized app.js");

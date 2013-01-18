@@ -23,7 +23,8 @@ define [
   'cs!ComponentRegistry',
   'cs!Hint',
   'cs!CommandHistory',
-  'cs!CircuitSolver'
+  'cs!CircuitSolver',
+  'cs!Units'
 ], (
   KeyboardState,
   Oscilloscope,
@@ -40,7 +41,8 @@ define [
   ComponentRegistry,
   Hint,
   CommandHistory,
-  CircuitSolver
+  CircuitSolver,
+  Units,
 ) ->
 # </DEFINE>
 
@@ -73,10 +75,10 @@ define [
 
   class Circuit
 
-      constructor: (@Context) ->
+      constructor: (Context) ->
         @Params = new CircuitEngineParams()
         @CommandHistory = new CommandHistory()
-        @Renderer = new Renderer(this, @Context)
+        @Renderer = new Renderer(this, Context)
 
         @clearAndReset()
 
@@ -210,6 +212,7 @@ define [
               Solving is performed via LU factorization.
       ###
       updateCircuit: (frameTime) ->
+        @Renderer.clear()
         #@simulation = requestAnimationFrame(Circuit.prototype.updateCircuit, @)
 
         console.log "TIME: " + frameTime
@@ -252,11 +255,6 @@ define [
         scope.resetGraph() for scope in @scopes
 
         @Solver.reset()
-
-        for i in [1..100]
-          @updateCircuit(0)
-
-
 
 
 
@@ -334,10 +332,10 @@ define [
             if @mousePost is -1
               @mouseElm.getInfo info
             else
-              info.push "V = " + getUnitText(@mouseElm.getPostVoltage(@mousePost), "V")
+              info.push "V = " + Units.getUnitText(@mouseElm.getPostVoltage(@mousePost), "V")
           else
             Settings.fractionalDigits = 2
-            info.push "t = " + getUnitText(@Solver.time, "s") + "\nft: " + (@lastTime - @lastFrameTime) + "\n"
+            info.push "t = " + Units.getUnitText(@Solver.time, "s") + "\nft: " + (@lastTime - @lastFrameTime) + "\n"
           unless @Hint.hintType is -1
             hint = @Hint.getHint()
             unless hint

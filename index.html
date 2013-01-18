@@ -4,14 +4,34 @@
 <head>
     <title>Maxwell</title>
     <!-- Load the script "js/main.js" as our entry point -->
+    <script src="libs/chai.js" type="text/javascript"></script>
     <script data-main="./main" src="libs/require.js"></script>
+
+    <script src="libs/mocha.js"></script>
+    <script>
+        window.onload = function () {
+            function assert(expr, msg) {
+                if (!expr) throw new Error(msg || 'failed');
+            }
+
+            mocha.setup('bdd');
+        };
+    </script>
+
+
+    <link rel="stylesheet" type="text/css" href="css/mocha.css" media="all">
 </head>
 <body>
 
     <div id="container">
-        <canvas class="maxwell" width="600" height="400">
+        <canvas class="maxwell" width="800" height="600">
         </canvas>
     </div>
 
+    <div id="mocha"></div>
+
 </body>
+
+
+
 </html>
