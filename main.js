@@ -1,3 +1,5 @@
+// Top-level script:
+
 // Define shortcut aliases
 require.config({
     paths:{
@@ -8,6 +10,7 @@ require.config({
         cs:'libs/cs',
         color:'libs/color',
         mocha:'libs/mocha',
+        chai:'libs/chai',
 
         // CORE:
         Circuit:'src/core/circuit',
@@ -83,7 +86,13 @@ require.config({
         ArrayUtils:'src/global/arrayUtils',
         Units:'src/global/units',
 
-        HelloCS:'examples/hellocs'
+        HelloCS:'examples/hellocs',
+
+        // TESTS:
+        TestHelper: 'test/_helper',
+        CircuitTest: 'test/circuit/circuitTest',
+        ResistorTest: 'test/component/components/resistorTest',
+        voltageTest: 'test/component/components/voltageTest'
     }
 
 });
@@ -100,8 +109,15 @@ require([
     'cs!ResistorElm',
     'cs!WireElm',
     'cs!GroundElm',
-    'cs!VoltageElm'
-], function (App, HelloCS, Circuit, $, Resistor, Wire, Ground, Voltage) {
+    'cs!VoltageElm',
+
+
+    'test/_helper',
+    'cs!CircuitTest',
+    'cs!ResistorTest'
+    //'cs!voltageTest'
+], function (App, HelloCS, Circuit, $, Resistor, Wire, Ground, Voltage,
+             TestHelper, CircuitTest, ResistorTest, VoltageTest ) {
 
     App.initialize();
 
@@ -109,20 +125,39 @@ require([
 
     var circuit = new Circuit(canvas);
 
-    var resistor       = new Resistor(300, 100, 300, 200, 0, [50]);
-    var voltageSource  = new Voltage(100, 100, 100, 200, 0, [50]);
-    var wire           = new Wire(100, 100, 300, 100, 0);
-    var voltageGround  = new Ground(100, 200, 100, 250, 0);
-    var resGround      = new Ground(300, 200, 300, 250, 0);
+    var voltageSource = new Voltage(112, 368, 112, 48, 0, [0, 40.0, 10.0, 0.0]);
+    var wire1 = new Wire(112, 48, 240, 48, 0, []);
+    var res1 = new Resistor(240, 48, 240, 368, 0, [10000]);
+    var wire2 = new Wire(112, 368, 240, 368, 0, []);
+    var wire3 = new Wire(240, 48, 432, 48, 0, []);
+    var wire4 = new Wire(240, 368, 432, 368, 0, []);
+    var re2 = new Resistor(432, 48, 432, 368, 0, [20000]);
 
-    circuit.solder(resistor);
+//    var resistor       = new Resistor(300, 100, 300, 200, 0, [50]);
+//    var voltageSource  = new Voltage(100, 100, 100, 200, 0, [50]);
+//    var wire           = new Wire(100, 100, 300, 100, 0);
+//    var voltageGround  = new Ground(100, 200, 100, 250, 0);
+//    var resGround      = new Ground(300, 200, 300, 250, 0);
+
     circuit.solder(voltageSource);
-    circuit.solder(wire);
-    circuit.solder(voltageGround);
-    circuit.solder(resGround);
+    circuit.solder(wire1);
+    circuit.solder(wire2);
+    circuit.solder(wire3);
+    circuit.solder(wire4);
+    circuit.solder(res1);
+    circuit.solder(re2);
 
     circuit.restartAndRun();
 
-    Hello = new HelloCS("Hello!");
+    setInterval(function() {
+        circuit.updateCircuit();
+    }, 0);
+
+    mocha.setup('bdd');
+
+    mocha.run();
+
+    var Hello = new HelloCS("Hello!");
     Hello.sayHi();
 });
+

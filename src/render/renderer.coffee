@@ -1,20 +1,17 @@
 # <DEFINE>
-define [
-  'cs!CanvasContext'
-], (
-  CanvasContext
-) ->
+define ['cs!CanvasContext'], (CanvasContext) ->
 # </DEFINE>
-
 
   class Renderer
 
-    constructor: (@Circuit, @Canvas) ->
-      @Context = new CanvasContext(@Canvas)
+    constructor: (@Circuit, Canvas) ->
+      if Canvas
+        @Context = new CanvasContext(Canvas)
 
     drawComponents: ->
-      for component in @Circuit.getElements()
-        @drawComponent(component)
+      if @Context
+        for component in @Circuit.getElements()
+          @drawComponent(component)
 
     drawComponent: (component) ->
       component.draw(@Context)

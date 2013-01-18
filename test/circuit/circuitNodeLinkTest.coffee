@@ -1,7 +1,5 @@
 # <DEFINE>
-define [
-], (
-) ->
+define [], () ->
 # </DEFINE>
 
 
