@@ -31,6 +31,11 @@ require.config({
         CircuitLoader:'src/io/circuitLoader',
         ConfigurationLoader:'src/io/configurationLoader',
 
+        // GEOM:
+        Point:'src/geom/point',
+        Polygon:'src/geom/polygon',
+        Rectangle:'src/geom/rectangle',
+
         // RENDERING:
         Renderer:'src/render/renderer',
         CanvasContext:'src/render/canvasContext',
@@ -43,9 +48,6 @@ require.config({
         Grid:'src/ui/grid',
         Oscilloscope:'src/core/circuitParams',
         ColorScale:'src/util/colorScale',
-        Point:'src/util/point',
-        Polygon:'src/util/polygon',
-        Rectangle:'src/util/rectangle',
         KeyboardState:'src/ui/keyboardState',
         MouseState:'src/ui/mouseState',
         ColorMapState:'src/ui/colorMapState',
@@ -81,12 +83,13 @@ require.config({
         VoltageElm:'src/component/components/VoltageElm',
         WireElm:'src/component/components/WireElm',
 
-        // Globals:
-        MathUtils:'src/global/mathUtils',
-        ArrayUtils:'src/global/arrayUtils',
-        Units:'src/global/units',
+        // Utils
+        MathUtils:'src/util/mathUtils',
+        ArrayUtils:'src/util/arrayUtils',
+        FormatUtils:'src/util/formatUtils',
+        ConsoleUtils:'src/util/consoleUtils',
+        Units:'src/util/units',
 
-        HelloCS:'examples/hellocs',
 
         // TESTS:
         TestHelper: 'test/_helper',
@@ -100,6 +103,12 @@ require.config({
         CircuitSolverTest: 'test/solver/circuitSolverTest',
         MatrixSolverTest: 'test/solver/matrixSolverTest',
         CircuitStamperTest: 'test/solver/matrixStamperTest',
+
+        ArraysTest: 'test/util/arraysTest',
+        FormatsTest: 'test/util/formatsTest',
+        MathTest: 'test/util/mathTest',
+        UnitsTest: 'test/util/unitsTest',
+
         PrimitivesTest: 'test/util/primitivesTest'
     }
 
@@ -111,13 +120,15 @@ console.log("Loading main.js");
 require([
     // Load our app module and pass it to our definition function
     'app',
-    'cs!HelloCS',
     'cs!Circuit',
     'jquery',
     'cs!ResistorElm',
     'cs!WireElm',
     'cs!GroundElm',
     'cs!VoltageElm',
+
+    'cs!ArrayUtils',
+    'cs!ConsoleUtils',
 
     'test/_helper',
     'cs!CircuitTest',
@@ -130,9 +141,16 @@ require([
     'cs!CircuitSolverTest',
     'cs!MatrixSolverTest',
     'cs!CircuitStamperTest',
+
+    'cs!ArraysTest',
+    'cs!FormatsTest',
+    'cs!MathTest',
+    'cs!UnitsTest',
+    'cs!UnitsTest',
+
     'cs!PrimitivesTest'
 
-], function (App, HelloCS, Circuit, $, Resistor, Wire, Ground, Voltage) {
+], function (App, Circuit, $, Resistor, Wire, Ground, Voltage) {
 
     App.initialize();
 
@@ -165,8 +183,5 @@ require([
     mocha.setup('bdd');
 
     mocha.run();
-
-    var Hello = new HelloCS("Hello!");
-    Hello.sayHi();
 });
 
