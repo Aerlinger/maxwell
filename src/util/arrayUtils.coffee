@@ -42,9 +42,8 @@ define [], () ->
           valid = arguments.callee element
         else
           if !isFinite(element)
-            if process.env.NODE_ENV == 'development'
-              console.warn("Invalid number found: #{element}")
-              printStackTrace()
+            console.warn("Invalid number found: #{element}")
+            console.printStackTrace()
             return false
 
   return ArrayUtils
