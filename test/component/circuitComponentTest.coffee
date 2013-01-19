@@ -3,28 +3,28 @@ define [
   'cs!Polygon',
   'cs!Rectangle',
   'cs!Point',
-  'cs!CircuitElement',
+  'cs!CircuitComponent'
 ], (
   Polygon,
   Rectangle,
   Point,
-  CircuitElement,
+  CircuitComponent
 ) ->
 # </DEFINE>
 
 
 
-  describe "Base Circuit Element", ->
+  describe "Base Circuit Component", ->
 
     specify "class methods", ->
-      CircuitElement.getScopeUnits(1).should.equal "W"
-      CircuitElement.getScopeUnits().should.equal "V"
+      CircuitComponent.getScopeUnits(1).should.equal "W"
+      CircuitComponent.getScopeUnits().should.equal "V"
 
 
     beforeEach () ->
-      @circuitElement = new CircuitElement(10, 10, 13, 14)
+      @circuitElement = new CircuitComponent(10, 10, 13, 14)
 
-    describe "can instantiate a new Circuit Element", ->
+    describe "can instantiate a new Circuit Component", ->
 
       specify "with correct position", ->
         @circuitElement.x1.should.equal 10
@@ -33,11 +33,11 @@ define [
         @circuitElement.y2.should.equal 14
 
 
-      specify "without flags passed as an argument", ->
+      specify "without flag passed as an argument", ->
         @circuitElement.flags.should.equal 0
 
-      specify "without flags passed as an argument", ->
-        circuitElm = new CircuitElement(0, 3, 0, 4, 5)
+      specify "with flag passed as an argument", ->
+        circuitElm = new CircuitComponent(0, 3, 0, 4, 5)
         circuitElm.flags.should.equal 5
 
       specify "should create default parameters", ->
