@@ -1,13 +1,16 @@
 # <DEFINE>
 define [
   'cs!Circuit',
+  'cs!ArrayUtils',
+
 ], (
   Circuit,
+  ArrayUtils
 ) ->
 # </DEFINE>
 
 
-  describe "Base Circuit Element", ->
+  describe "Circuit Solver", ->
 
     beforeEach () ->
       @Circuit = new Circuit()
@@ -18,7 +21,7 @@ define [
       it "should initiate solver", ->
         @Solver != null
         @Solver.Stamper != null
-        @Solver.scaleFactors.toString().should.equal zeroArray(400).toString()
+        @Solver.scaleFactors.toString().should.equal ArrayUtils.zeroArray(400).toString()
 
       it "solver should belong to @Circuit", ->
         @Solver.Circuit.should.equal @Circuit

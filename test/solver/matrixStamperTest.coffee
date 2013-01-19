@@ -12,7 +12,7 @@ define [
 
 
 
-  describe "matrix stamper", ->
+  describe "Matrix stamper", ->
 
     before () ->
       @Circuit = new Circuit()

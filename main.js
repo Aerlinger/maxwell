@@ -92,7 +92,15 @@ require.config({
         TestHelper: 'test/_helper',
         CircuitTest: 'test/circuit/circuitTest',
         ResistorTest: 'test/component/components/resistorTest',
-        voltageTest: 'test/component/components/voltageTest'
+        VoltageTest: 'test/component/components/voltageTest',
+        GroundTest: 'test/component/components/groundTest',
+        WireTest: 'test/component/components/wireTest',
+        ComponentTest: 'test/component/circuitComponentTest',
+
+        CircuitSolverTest: 'test/solver/circuitSolverTest',
+        MatrixSolverTest: 'test/solver/matrixSolverTest',
+        CircuitStamperTest: 'test/solver/matrixStamperTest',
+        PrimitivesTest: 'test/util/primitivesTest'
     }
 
 });
@@ -111,13 +119,20 @@ require([
     'cs!GroundElm',
     'cs!VoltageElm',
 
-
     'test/_helper',
     'cs!CircuitTest',
-    'cs!ResistorTest'
-    //'cs!voltageTest'
-], function (App, HelloCS, Circuit, $, Resistor, Wire, Ground, Voltage,
-             TestHelper, CircuitTest, ResistorTest, VoltageTest ) {
+    'cs!ResistorTest',
+    'cs!VoltageTest',
+    'cs!GroundTest',
+    'cs!WireTest',
+    'cs!ComponentTest',
+
+    'cs!CircuitSolverTest',
+    'cs!MatrixSolverTest',
+    'cs!CircuitStamperTest',
+    'cs!PrimitivesTest'
+
+], function (App, HelloCS, Circuit, $, Resistor, Wire, Ground, Voltage) {
 
     App.initialize();
 
@@ -132,12 +147,6 @@ require([
     var wire3 = new Wire(240, 48, 432, 48, 0, []);
     var wire4 = new Wire(240, 368, 432, 368, 0, []);
     var re2 = new Resistor(432, 48, 432, 368, 0, [20000]);
-
-//    var resistor       = new Resistor(300, 100, 300, 200, 0, [50]);
-//    var voltageSource  = new Voltage(100, 100, 100, 200, 0, [50]);
-//    var wire           = new Wire(100, 100, 300, 100, 0);
-//    var voltageGround  = new Ground(100, 200, 100, 250, 0);
-//    var resGround      = new Ground(300, 200, 300, 250, 0);
 
     circuit.solder(voltageSource);
     circuit.solder(wire1);
