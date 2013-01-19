@@ -7,7 +7,6 @@ Settings do not change by loading a new circuit.
 
 # <DEFINE>
 define ['cs!ColorPalette'], (ColorPalette) ->
-
 # </DEFINE>
 
   class Settings

@@ -4,9 +4,8 @@ define [], () ->
 
 
   ###
-  Stores Circuit-specific settings.
-
-  Usually loaded from the params object of a .json file
+    Stores Circuit-specific settings.
+    Usually loaded from the params object of a .json file
   ###
   class CircuitParams
     constructor: (paramsObj) ->
