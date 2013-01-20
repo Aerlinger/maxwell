@@ -10,7 +10,7 @@ define [
 
 
 
-  describe "GroundElm", ->
+  describe "Ground Component", ->
     beforeEach () ->
       @Circuit = new Circuit()
       @groundElm = new GroundElm(100, 100, 100, 200, 0, [])
@@ -47,7 +47,7 @@ define [
         @groundElm.orphaned().should.equal false
 
       it "should be stampable", ->
-        @groundElm.stamp()
+        @groundElm.stamp(@Circuit.Solver.Stamper)
 
       it "should be steppable", ->
         @groundElm.doStep()

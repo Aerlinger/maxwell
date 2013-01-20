@@ -91,13 +91,17 @@ require.config({
         Units:'src/util/units',
 
 
+        ////////////////////////////////////////////////////////
         // TESTS:
+        ////////////////////////////////////////////////////////
+
         TestHelper: 'test/_helper',
         CircuitTest: 'test/circuit/circuitTest',
         ResistorTest: 'test/component/components/resistorTest',
         VoltageTest: 'test/component/components/voltageTest',
         GroundTest: 'test/component/components/groundTest',
         WireTest: 'test/component/components/wireTest',
+        CapacitorTest: 'test/component/components/capacitorTest',
         ComponentTest: 'test/component/circuitComponentTest',
 
         CircuitSolverTest: 'test/solver/circuitSolverTest',
@@ -119,9 +123,9 @@ console.log("Loading main.js");
 
 require([
     // Load our app module and pass it to our definition function
-    'app',
-    'cs!Circuit',
     'jquery',
+
+    'cs!Circuit',
     'cs!ResistorElm',
     'cs!WireElm',
     'cs!GroundElm',
@@ -136,6 +140,7 @@ require([
     'cs!VoltageTest',
     'cs!GroundTest',
     'cs!WireTest',
+    'cs!CapacitorTest',
     'cs!ComponentTest',
 
     'cs!CircuitSolverTest',
@@ -150,12 +155,9 @@ require([
 
     'cs!PrimitivesTest'
 
-], function (App, Circuit, $, Resistor, Wire, Ground, Voltage) {
-
-    App.initialize();
+], function ($, Circuit, Resistor, Wire, Ground, Voltage) {
 
     var canvas = $('canvas').get(0);
-
     var circuit = new Circuit(canvas);
 
     var voltageSource = new Voltage(112, 368, 112, 48, 0, [0, 40.0, 10.0, 0.0]);
@@ -180,8 +182,15 @@ require([
         circuit.updateCircuit();
     }, 0);
 
+//    console.log(mocha);
+//
     mocha.setup('bdd');
-
     mocha.run();
+
+//    $('#run_tests').click(function(e) {
+//        "use strict";
+//        mocha.setup('bdd');
+//        mocha.run();
+//    })
 });
 

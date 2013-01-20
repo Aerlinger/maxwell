@@ -5,7 +5,8 @@ define [
   'cs!Polygon',
   'cs!Rectangle',
   'cs!Point',
-  'cs!CircuitComponent'
+  'cs!CircuitComponent',
+  'cs!Units'
 ], (
   Settings,
   DrawHelper,
@@ -13,7 +14,8 @@ define [
   Rectangle,
   Point,
 
-  CircuitComponent
+  CircuitComponent,
+  Units
 ) ->
 # </DEFINE>
 
@@ -47,8 +49,8 @@ define [
     setCurrent: (x, currentVal) ->
       @current = -currentVal
   
-    stamp: ->
-      @Circuit.Solver.Stamper.stampVoltageSource 0, @nodes[0], @voltSource, 0
+    stamp: (stamper) ->
+      stamper.stampVoltageSource 0, @nodes[0], @voltSource, 0
   
     getVoltageDiff: ->
       0
@@ -58,7 +60,7 @@ define [
   
     getInfo: (arr) ->
       arr[0] = "ground"
-      arr[1] = "I = " + CircuitElement.getCurrentText(@getCurrent())
+      arr[1] = "I = " + Units.getCurrentText(@getCurrent())
   
     hasGroundConnection: (n1) ->
       true

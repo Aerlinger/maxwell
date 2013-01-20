@@ -40,4 +40,4 @@ define [
         @resistor.orphaned().should.equal false
 
       it "should be stampable", ->
-        @resistor.stamp()
+        @resistor.stamp(@Circuit.Solver.Stamper)

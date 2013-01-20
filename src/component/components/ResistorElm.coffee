@@ -103,10 +103,10 @@ define [
       @ps3 = new Point(0, 0)
       @ps4 = new Point(0, 0)
 
-    stamp: ->
+    stamp: (stamper) ->
       if @orphaned()
         console.warn "attempting to stamp an orphaned resistor"
-      @Circuit.Solver.Stamper.stampResistor @nodes[0], @nodes[1], @resistance
+      stamper.stampResistor @nodes[0], @nodes[1], @resistance
 
     # Todo replace this:
     toString: ->

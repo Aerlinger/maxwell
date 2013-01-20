@@ -134,7 +134,7 @@ define [
 
       # "Solders" a new element to this circuit (adds it to the element list array).
       solder: (newElement) ->
-        newElement.Circuit = this
+        newElement.setParentCircuit(this)
         newElement.setPoints()
         console.log("Soldering Element: " + newElement)
         @elementList.push newElement
@@ -215,8 +215,6 @@ define [
         @Renderer.clear()
         #@simulation = requestAnimationFrame(Circuit.prototype.updateCircuit, @)
 
-        console.log "TIME: " + frameTime
-
         startTime = (new Date()).getTime()
 
         # Reconstruct circuit
@@ -235,7 +233,6 @@ define [
 
         endTime = (new Date()).getTime()
         frameTime = endTime - startTime
-        console.log("Time: " + frameTime);
         @lastFrameTime = @lastTime
 
       ###
@@ -277,9 +274,6 @@ define [
         inc = Math.floor(sysTime - @lastTime)
         currentSpeed = Math.exp(@Params.currentSpeed / 3.5 - 14.2)
         @Params.currentMult = 1.7 * inc * currentSpeed
-        console.log "timings"
-        console.log inc
-        console.log @Params.currentSpeed
 
         if (sysTime - @secTime) >= 1000
           @framerate = @frames
