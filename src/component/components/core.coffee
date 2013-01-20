@@ -15,7 +15,9 @@ Diode = ->
   @zoffset = 0
   @lastvoltdiff = 0
   @crit = 0
+
 Diode::leakage = 1e-14
+
 Diode::setup = (fw, zv) ->
   @fwdrop = fw
   @zvoltage = zv
@@ -126,6 +128,7 @@ Diode::doStep = (voltdiff) ->
 Diode::calculateCurrent = (voltdiff) ->
   return @leakage * (Math.exp(voltdiff * @vdcoef) - 1)  if voltdiff >= 0 or @zvoltage is 0
   @leakage * (Math.exp(voltdiff * @vdcoef) - Math.exp((-voltdiff - @zoffset) * @vdcoef) - 1)
+
 Inductor = ->
   @nodes = new Array(2)
   @flags = 0
@@ -133,6 +136,7 @@ Inductor = ->
   @compResistance = 0
   @current = 0
   @curSourceValue = 0
+
 Inductor.FLAG_BACK_EULER = 2
 Inductor::setup = (ic, cr, f) ->
   @inductance = ic

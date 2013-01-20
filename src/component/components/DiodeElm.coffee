@@ -14,13 +14,15 @@ DiodeElm = (xa, ya, xb, yb, f, st) ->
     try
       @fwdrop = parseFloat(st)
   @setup()
+
 DiodeElm.FLAG_FWDROP = 1
 DiodeElm.DEFAULT_DROP = .805904783
 DiodeElm:: = new CircuitComponent()
 DiodeElm::constructor = DiodeElm
 DiodeElm::hs = 8
 DiodeElm::poly
-DiodeElm::cathode = []
+DiodeElm::cathode = [
+
 DiodeElm::nonLinear = ->
   true
 

@@ -12,7 +12,9 @@ Inductor = ->
   @compResistance = 0
   @current = 0
   @curSourceValue = 0
+
 Inductor.FLAG_BACK_EULER = 2
+
 Inductor::setup = (ic, cr, f) ->
   @inductance = ic
   @current = cr

@@ -88,8 +88,6 @@ define [
     reconstruct: ->
       return if !@analyzeFlag || @Circuit.numElements() is 0
 
-      console.log "\n :::::: Analyze Circuit ::::::"
-
       @Circuit.getCircuitBottom()
       @Circuit.clearErrors()
       @Circuit.resetNodes()
@@ -205,7 +203,7 @@ define [
       @circuitNeedsMap = false
 
       for circuitElm in @Circuit.getElements()
-        circuitElm.stamp()
+        circuitElm.stamp(@Stamper)
 
       closure = new Array(@Circuit.numNodes())
       closure[0] = true
@@ -253,7 +251,7 @@ define [
   #
   #        # try findPath with maximum depth of 5, to avoid slowdown
   #        if not fpi.findPath(ce.getNode(0), 5) and not fpi.findPath(ce.getNode(0))
-  #          console.log ce.toString() + " no path"
+
   #          ce.clearAndReset()
 
         # look for current sources with no current path
@@ -267,8 +265,8 @@ define [
         if (ce instanceof VoltageElm and ce.getPostCount() is 2) or ce instanceof WireElm
           pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
 
-          if pathfinder.findPath(ce.getNode(0)) is true
-            console.log "Voltage source/wire loop with no resistance!"
+          #if pathfinder.findPath(ce.getNode(0)) is true
+
             #@Circuit.halt "Voltage source/wire loop with no resistance!", ce
             #return
 
@@ -276,7 +274,7 @@ define [
   #      if ce instanceof CapacitorElm
   #        fpi = new Pathfinder(Pathfinder.SHORT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
   #        if fpi.findPath(ce.getNode(0))
-  #          console.log ce.toString() + " shorted"
+
   #          ce.clearAndReset()
   #        else
   #          fpi = new Pathfinder(Pathfinder.CAP_V, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
@@ -380,7 +378,6 @@ define [
             rowInfo.nodeEq = rowNodeEq.nodeEq
         rowInfo.mapCol = -1  if rowInfo.type is RowInfo.ROW_CONST
 
-
       for i in [0...@matrixSize]
         rowInfo  = @circuitRowInfo[i]
         if rowInfo.type is RowInfo.ROW_EQUAL
@@ -393,7 +390,6 @@ define [
             rowInfo.mapCol = -1
           else
             rowInfo.mapCol = rowNodeEq.mapCol
-
 
       # make the new, simplified matrix
       newSize = newMatDim
@@ -456,15 +452,11 @@ define [
 
       # Double-check
       if 1000 >= stepRate * (timeEnd - @lastIterTime)
-        console.log "returned: diff: " + (timeEnd - @lastIterTime)
         return
 
       # Main iteration
       iter = 1
       loop
-        console.log(lastIterTime)
-        console.log(stepRate)
-        console.log("ts: #{timeEnd}")
 
         # Start Iteration for each element in the circuit
         for circuitElm in @Circuit.getElements()
@@ -478,7 +470,7 @@ define [
 
         # Sub iteration
         for subiter in [0...subiterCount]
-          console.log "subiter " + subiter
+
 
           @converged = true
           @subIterations = subiter
@@ -487,8 +479,6 @@ define [
             @circuitRightSide[i] = @origRightSide[i]
 
           if @circuitNonLinear
-            console.log("Nonlinear Circuit")
-
             for i in [0...@circuitMatrixSize]
               for j in [0...@circuitMatrixSize]
                 @circuitMatrix[i][j] = @origMatrix[i][j]
@@ -504,13 +494,6 @@ define [
 
           #isCleanArray(@circuitMatrix)
 
-          console.log "Matrix Dump:"
-          for j in [0...@circuitMatrixSize]
-            for i in [0...@circuitMatrixSize]
-              console.log(@circuitMatrix[j][i] + ",");
-            console.log(" " + @circuitRightSide[j] + "\n");
-          console.log("\n");
-
           if @circuitNonLinear
             break if @converged and subiter > 0
             unless @luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
@@ -518,8 +501,6 @@ define [
               return
 
           @luSolve @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide
-
-          console.log(@circuitPermute)
 
           for j in [0...@circuitMatrixFullSize]
             rowInfo = @circuitRowInfo[j]
@@ -529,25 +510,24 @@ define [
             else
               res = @circuitRightSide[rowInfo.mapCol]
             if isNaN(res)
-              console.log("error: residual isNaN")
+
               @converged = false
               break
             if j < (@Circuit.numNodes() - 1)
               circuitNode = @Circuit.getNode(j + 1)
-              console.log("bridging links")
+
               for cn1 in circuitNode.links
                 cn1.elm.setNodeVoltage cn1.num, res
             else
               ji = j - (@Circuit.numNodes() - 1)
-              console.log("setting vsrc " + ji + " to " + res);
+
               @Circuit.voltageSources[ji].setCurrent ji, res
 
-          console.log(@circuitNonLinear)
           break unless @circuitNonLinear
           subiter++
         # End for
 
-        console.log "converged after " + subiter + " iterations"  if subiter > 5
+
         if subiter >= subiterCount
           @halt "Convergence failed: " + subiter, null
           break
@@ -561,9 +541,6 @@ define [
 
         timeEnd = (new Date()).getTime()
         lastIterTime = timeEnd
-
-        console.log("diff: " + (timeEnd-@lastIterTime) + " iter: " + iter + " ");
-        console.log(iter + " breaking from iteration: " + " sr: " + stepRate + " subiter: " + subiter + " time: " + (timeEnd - @lastIterTime) + " lastFrametime: " + @lastFrameTime );
 
         if iter * 1000 >= stepRate * (timeEnd - @lastIterTime)
           break
@@ -649,8 +626,6 @@ define [
         pivotArray[j] = largestRow
 
         # avoid zeros
-
-        #console.log("avoided zero");
         circuitMatrix[j][j] = 1e-18 if circuitMatrix[j][j] is 0
         unless j is matrixSize - 1
           mult = 1 / circuitMatrix[j][j]

@@ -10,7 +10,7 @@ define [
 
 
 
-  describe "VoltageElm", ->
+  describe "Voltage Component", ->
     beforeEach () ->
       @Circuit = new Circuit()
       @voltageElm = new VoltageElm(100, 100, 100, 200, 0, [0, 40, 5, 1, 90, .45])

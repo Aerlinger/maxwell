@@ -9,8 +9,7 @@ define [
 # </DEFINE>
 
 
-
-  describe "WireElm", ->
+  describe "Wire Component", ->
     beforeEach () ->
       @Circuit = new Circuit()
       @wireElm = new WireElm(100, 100, 100, 200, 0, [])

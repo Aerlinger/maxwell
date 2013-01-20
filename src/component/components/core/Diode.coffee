@@ -4,7 +4,6 @@ define [
 ) ->
 # </DEFINE>
 
-
 #Inductor.FLAG_BACK_EULER = 2;
 Diode = ->
   @nodes = new Array(2)
@@ -16,6 +15,7 @@ Diode = ->
   @lastvoltdiff = 0
   @crit = 0
 Diode::leakage = 1e-14
+
 Diode::setup = (fw, zv) ->
   @fwdrop = fw
   @zvoltage = zv
@@ -85,11 +85,13 @@ Diode::limitStep = (vnew, vold) ->
     vnew = -(vnew + @zoffset)
   vnew
 
+
 Diode::stamp = (n0, n1) ->
   @nodes[0] = n0
   @nodes[1] = n1
   Circuit.stampNonLinear @nodes[0]
   Circuit.stampNonLinear @nodes[1]
+
 
 Diode::doStep = (voltdiff) ->
   

@@ -36,7 +36,7 @@ define ['cs!MathUtils'], (MathUtils) ->
     stampResistor: (n1, n2, r) ->
       r0 = 1 / r
       if isNaN(r0) or MathUtils.isInfinite(r0)
-        @Circuit.error "bad resistance"
+        @Circuit.halt "bad resistance"
         a = 0
         a /= a
       @stampMatrix n1, n1, r0

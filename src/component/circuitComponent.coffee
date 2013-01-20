@@ -26,6 +26,8 @@ define [
       @curcount = 0
       @noDiagonal = false
       @selected = false
+      @dragging = false
+      @parentCircuit = null
 
       if isNaN(flags)
         @flags = @getDefaultFlags()
@@ -36,8 +38,14 @@ define [
       @allocNodes()
       @initBoundingBox()
 
-    setCircuit: (circuit) ->
+    setParentCircuit: (circuit) ->
       @Circuit = circuit
+
+    getParentCircuit: () ->
+      return @Circuit
+
+    isBeingDragged: () ->
+      return @Circuit.dragElm is this
 
     allocNodes: ->
       @nodes = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())

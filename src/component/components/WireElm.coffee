@@ -19,6 +19,7 @@ define [
   # </DEFINE>
 
   class WireElm extends CircuitComponent
+
     constructor: (xa, ya, xb, yb, f, st) ->
       super xa, ya, xb, yb, f, st
 
@@ -58,8 +59,6 @@ define [
       arr[2] = "V = " + CircuitComponent.getVoltageText(@volts[0])
   
     getEditInfo: (n) ->
-  
-  
     # TODO:
     #    if(n==0) {
     #        var ei:EditInfo = new EditInfo("", 0, -1, -1);
@@ -73,8 +72,6 @@ define [
     #    }
     #    return null;
     setEditValue: (n, ei) ->
-  
-  
     # TODO:
     #    if(n==0) {
     #        if(ei.isChecked)
