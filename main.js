@@ -132,28 +132,7 @@ require([
     'cs!VoltageElm',
 
     'cs!ArrayUtils',
-    'cs!ConsoleUtils',
-
-    'test/_helper',
-    'cs!CircuitTest',
-    'cs!ResistorTest',
-    'cs!VoltageTest',
-    'cs!GroundTest',
-    'cs!WireTest',
-    'cs!CapacitorTest',
-    'cs!ComponentTest',
-
-    'cs!CircuitSolverTest',
-    'cs!MatrixSolverTest',
-    'cs!CircuitStamperTest',
-
-    'cs!ArraysTest',
-    'cs!FormatsTest',
-    'cs!MathTest',
-    'cs!UnitsTest',
-    'cs!UnitsTest',
-
-    'cs!PrimitivesTest'
+    'cs!ConsoleUtils'
 
 ], function ($, Circuit, Resistor, Wire, Ground, Voltage) {
 
@@ -182,15 +161,42 @@ require([
         circuit.updateCircuit();
     }, 0);
 
-//    console.log(mocha);
-//
-    mocha.setup('bdd');
-    mocha.run();
+    runTests();
 
-//    $('#run_tests').click(function(e) {
-//        "use strict";
-//        mocha.setup('bdd');
-//        mocha.run();
-//    })
+    $('#run_tests').click(function(e) {
+        "use strict";
+        mocha.setup('bdd');
+        mocha.run();
+    });
 });
 
+function runTests() {
+    "use strict";
+
+    mocha.setup('bdd');
+
+    require([
+        'test/_helper',
+        'cs!CircuitTest',
+        'cs!ResistorTest',
+        'cs!VoltageTest',
+        'cs!GroundTest',
+        'cs!WireTest',
+        //'cs!CapacitorTest',
+        'cs!ComponentTest',
+
+        'cs!CircuitSolverTest',
+        'cs!MatrixSolverTest',
+        'cs!CircuitStamperTest',
+
+        'cs!ArraysTest',
+        'cs!FormatsTest',
+        'cs!MathTest',
+        'cs!UnitsTest',
+        'cs!UnitsTest',
+
+        'cs!PrimitivesTest'], function() {
+        "use strict";
+        mocha.run();
+    });
+}
