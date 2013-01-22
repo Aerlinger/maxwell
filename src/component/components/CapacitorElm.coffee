@@ -14,8 +14,17 @@ define [
 
   class CapacitorElm extends CircuitComponent
 
+    @FLAG_BACK_EULER: 2
+
     constructor: (xa, ya, xb, yb, f, st) ->
       CircuitComponent.call this, xa, ya, xb, yb, f
+
+      @capacitance = 5e-6
+      @compResistance = 0
+      @voltDiff = 10
+      @plate1 = []
+      @plate2 = []
+      @curSourceValue = 0
 
       if st
         st = st.split(" ")  if typeof st is "string"
@@ -23,34 +32,26 @@ define [
         @voltdiff = Number(st[1])
 
 
-    CapacitorElm::capacitance = 5e-6
-    CapacitorElm::compResistance = 0
-    CapacitorElm::voltDiff = 10
-    CapacitorElm::plate1 = []
-    CapacitorElm::plate2 = []
-    CapacitorElm.FLAG_BACK_EULER = 2
-    CapacitorElm::curSourceValue = 0
-
-    CapacitorElm::isTrapezoidal = ->
+    isTrapezoidal: ->
       (@flags & CapacitorElm.FLAG_BACK_EULER) is 0
 
-    CapacitorElm::setNodeVoltage = (n, c) ->
+    setNodeVoltage: (n, c) ->
       CircuitComponent::setNodeVoltage.call this, n, c
       @voltdiff = @volts[0] - @volts[1]
 
-    CapacitorElm::reset = ->
+    reset: ->
       @current = @curcount = 0
 
       # put small charge on caps when reset to start oscillators
       @voltdiff = 1e-3
 
-    CapacitorElm::getDumpType = ->
+    getDumpType: ->
       "c"
 
-    CapacitorElm::dump = ->
+    dump: ->
       CircuitComponent::dump.call(this) + " " + @capacitance + " " + @voltdiff
 
-    CapacitorElm::setPoints = ->
+    setPoints: ->
       CircuitComponent::setPoints.call this
       f = (@dn / 2 - 4) / @dn
 
@@ -64,7 +65,7 @@ define [
       DrawHelper.interpPoint2 @point1, @point2, @plate1[0], @plate1[1], f, 12
       DrawHelper.interpPoint2 @point1, @point2, @plate2[0], @plate2[1], 1 - f, 12
 
-    CapacitorElm::draw = (renderContext) ->
+    draw: (renderContext) ->
       hs = 12
       @setBboxPt @point1, @point2, hs
       @curcount = @updateDotCount()
@@ -91,12 +92,12 @@ define [
       @drawPosts()
 
 
-    CapacitorElm::drawUnits = () ->
+    drawUnits: () ->
       s = Units.getUnitText(@capacitance, "F")
       @drawValues s, hs
 
 
-    CapacitorElm::stamp = (stamper) ->
+    stamp: (stamper) ->
       # capacitor companion model using trapezoidal approximation (Norton equivalent) consists of a current source in
       # parallel with a resistor.  Trapezoidal is more accurate than Backward Euler but can cause oscillatory behavior
       # if RC is small relative to the timestep.
@@ -111,7 +112,7 @@ define [
       stamper.stampRightSide @nodes[0]
       stamper.stampRightSide @nodes[1]
 
-    CapacitorElm::startIteration = ->
+    startIteration: ->
       if @isTrapezoidal()
         @curSourceValue = -@voltdiff / @compResistance - @current
       else
@@ -119,7 +120,7 @@ define [
 
 
     #console.log("cap " + compResistance + " " + curSourceValue + " " + current + " " + voltdiff);
-    CapacitorElm::calculateCurrent = ->
+    calculateCurrent: ->
       voltdiff = @volts[0] - @volts[1]
 
       # we check compResistance because this might get called before stamp(), which sets compResistance, causing
@@ -127,11 +128,11 @@ define [
       @current = voltdiff / @compResistance + @curSourceValue  if @compResistance > 0
 
 
-    CapacitorElm::doStep = ->
+    doStep: ->
       Circuit = @getParentCircuit()
       Circuit.Solver.Stamper.stampCurrentSource @nodes[0], @nodes[1], @curSourceValue
 
-    CapacitorElm::getInfo = (arr) ->
+    getInfo: (arr) ->
       arr[0] = "capacitor"
       @getBasicInfo arr
       arr[3] = "C = " + Units.getUnitText(@capacitance, "F")
@@ -139,7 +140,7 @@ define [
       v = @getVoltageDiff()
       arr[4] = "U = " + Units.getUnitText(.5 * @capacitance * v * v, "J")
 
-    CapacitorElm::getEditInfo = (n) ->
+    getEditInfo: (n) ->
       return new EditInfo("Capacitance (F)", @capacitance, 0, 0)  if n is 0
       if n is 1
         ei = new EditInfo("", 0, -1, -1)
@@ -147,7 +148,7 @@ define [
         return ei
       null
 
-    CapacitorElm::setEditValue = (n, ei) ->
+    setEditValue: (n, ei) ->
       @capacitance = ei.value  if n is 0 and ei.value > 0
       if n is 1
         if ei.isChecked
@@ -155,10 +156,10 @@ define [
         else
           @flags |= CapacitorElm.FLAG_BACK_EULER
 
-    CapacitorElm::needsShortcut = ->
+    needsShortcut: ->
       true
 
-    CapacitorElm::toString = ->
+    toString: ->
       "Capacitor"
 
   return CapacitorElm
