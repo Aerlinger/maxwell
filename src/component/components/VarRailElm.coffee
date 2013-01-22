@@ -1,52 +1,67 @@
 # <DEFINE>
 define [
+  'cs!Settings',
+  'cs!DrawHelper',
+  'cs!Polygon',
+  'cs!Rectangle',
+  'cs!Point',
+  'cs!CircuitComponent',
+  'cs!Units'
 ], (
+  Settings,
+  DrawHelper,
+  Polygon,
+  Rectangle,
+  Point,
+
+  CircuitComponent,
+  Units
 ) ->
 # </DEFINE>
 
+  class VarRailElm extends RailElm
+
+    constructor: (xa, ya, xb, yb, f, st) ->
+      super xa, ya, xb, yb, f, st
+
+      @sliderText = "voltage"
+      @frequency = @maxVoltage
+      @createSlider()
 
 
-# Add the following UI elements
-VarRailElm = (xa, ya, xb, yb, f, st) ->
-  RailElm.call this, xa, ya, xb, yb, f, st
-  @sliderText = "voltage"
-  @frequency = @maxVoltage
-  @createSlider()
-VarRailElm:: = new RailElm()
-VarRailElm::constructor = VarRailElm
-VarRailElm::slider
-VarRailElm::label
-VarRailElm::sliderText
-VarRailElm::dump = ->
-  RailElm::dump.call(this) + " " + @sliderText
 
-VarRailElm::getDumpType = ->
-  172
+    dump: ->
+      RailElm::dump.call(this) + " " + @sliderText
 
-VarRailElm::createSlider = ->
+    getDumpType: ->
+      172
+
+    createSlider: ->
 
 
-# Todo: implement
-VarRailElm.getVoltage = ->
-  frequency = slider.getValue() * (maxVoltage - bias) / 100. + bias
-  frequency
+      # Todo: implement
+    getVoltage: ->
+      frequency = slider.getValue() * (maxVoltage - bias) / 100.0 + bias
+      frequency
 
-VarRailElm::destroy = ->
-  Circuit.main.remove label
-  Circuit.main.remove slider
+    destroy: ->
+      Circuit.main.remove label
+      Circuit.main.remove slider
 
-VarRailElm::getEditInfo = (n) ->
-  return new EditInfo("Min Voltage", bias, -20, 20)  if n is 0
-  return new EditInfo("Max Voltage", maxVoltage, -20, 20)  if n is 1
-  if n is 2
-    ei = new EditInfo("Slider Text", 0, -1, -1)
-    ei.text = sliderText
-    return ei
-  null
+    getEditInfo: (n) ->
+      return new EditInfo("Min Voltage", bias, -20, 20)  if n is 0
+      return new EditInfo("Max Voltage", maxVoltage, -20, 20)  if n is 1
+      if n is 2
+        ei = new EditInfo("Slider Text", 0, -1, -1)
+        ei.text = sliderText
+        return ei
+      null
 
-VarRailElm::setEditValue = (n, ei) ->
-  bias = ei.value  if n is 0
-  maxVoltage = ei.value  if n is 1
-  if n is 2
-    sliderText = ei.textf.getText()
-    label.setText sliderText
+    setEditValue: (n, ei) ->
+      bias = ei.value  if n is 0
+      maxVoltage = ei.value  if n is 1
+      if n is 2
+        sliderText = ei.textf.getText()
+        label.setText sliderText
+
+  return VarRailElm

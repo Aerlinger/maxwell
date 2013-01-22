@@ -16,7 +16,7 @@ define [
 
   CircuitComponent
 ) ->
-  # </DEFINE>
+# </DEFINE>
 
   class WireElm extends CircuitComponent
 

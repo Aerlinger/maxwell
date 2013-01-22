@@ -12,7 +12,7 @@ define [
   VoltageElm,
   Oscilloscope
 ) ->
-  # </DEFINE>
+# </DEFINE>
 
 # ElementMap
 #

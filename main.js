@@ -182,7 +182,7 @@ function runTests() {
         'cs!VoltageTest',
         'cs!GroundTest',
         'cs!WireTest',
-        //'cs!CapacitorTest',
+        'cs!CapacitorTest',
         'cs!ComponentTest',
 
         'cs!CircuitSolverTest',

@@ -1,70 +1,91 @@
 # <DEFINE>
 define [
+  'cs!Settings',
+  'cs!DrawHelper',
+  'cs!Polygon',
+  'cs!Rectangle',
+  'cs!Point',
+  'cs!CircuitComponent',
+  'cs!Units'
 ], (
+Settings,
+DrawHelper,
+Polygon,
+Rectangle,
+Point,
+
+CircuitComponent,
+Units
 ) ->
-# </DEFINE>
+  # </DEFINE>
+
+  class ProbeElm extends CircuitComponent
+
+    @FLAG_SHOWVOLTAGE: 1
+
+    constructor: (xa, ya, xb, yb, f, st) ->
+      super xa, ya, xb, yb, f
 
 
-ProbeElm = (xa, ya, xb, yb, f, st) ->
-  CircuitComponent.call this, xa, ya, xb, yb, f
-ProbeElm:: = new CircuitComponent()
-ProbeElm::constructor = ProbeElm
-ProbeElm.FLAG_SHOWVOLTAGE = 1
-ProbeElm::center
-ProbeElm::getDumpType = ->
-  "p"
 
-ProbeElm::setPoints = ->
-  CircuitComponent::setPoints.call this
-  
-  # swap points so that we subtract higher from lower
-  if @point2.y < @point1.y
-    x = @point1
-    @point1 = @point2
-    @point2 = @x1
-  @center = CircuitComponent.interpPointPt(@point1, @point2, .5)
+    getDumpType: ->
+      "p"
 
-ProbeElm::draw = ->
-  hs = 8
-  CircuitComponent.setBboxPt @point1, @point2, hs
-  selected = (@needsHighlight() or Circuit.plotYElm is this)
-  len = (if (selected or Circuit.dragElm is this) then 16 else @dn - 32)
-  CircuitComponent.calcLeads Math.floor(len)
-  color = @setVoltageColor(@volts[0])
-  color = CircuitComponent.selectColor  if selected
-  CircuitComponent.drawThickLinePt @point1, @lead1, color
-  color = @setVoltageColor(@volts[1])
-  CircuitComponent.setColor @selectColor  if selected
-  CircuitComponent.drawThickLinePt @lead2, @point2
-  f = new Font("SansSerif", Font.BOLD, 14)
-  CircuitComponent.setFont f
-  CircuitComponent.drawCenteredText "X", @center.x1, @center.y, color  if this is Circuit.plotXElm
-  CircuitComponent.drawCenteredText "Y", @center.x1, @center.y, color  if this is Circuit.plotYElm
-  if @mustShowVoltage()
-    s = CircuitComponent.getShortUnitText(volts[0], "V")
-    @drawValues s, 4
-  @drawPosts()
+    setPoints: ->
+      CircuitComponent::setPoints.call this
 
-ProbeElm::mustShowVoltage = ->
-  (@flags & ProbeElm.FLAG_SHOWVOLTAGE) isnt 0
+      # swap points so that we subtract higher from lower
+      if @point2.y < @point1.y
+        x = @point1
+        @point1 = @point2
+        @point2 = @x1
+      @center = CircuitComponent.interpPointPt(@point1, @point2, .5)
 
-ProbeElm::getInfo = (arr) ->
-  arr[0] = "scope probe"
-  arr[1] = "Vd = " + CircuitComponent.getVoltageText(@getVoltageDiff())
+    draw: ->
+      hs = 8
+      CircuitComponent.setBboxPt @point1, @point2, hs
+      selected = (@needsHighlight() or Circuit.plotYElm is this)
+      len = (if (selected or Circuit.dragElm is this) then 16 else @dn - 32)
+      CircuitComponent.calcLeads Math.floor(len)
+      color = @setVoltageColor(@volts[0])
+      color = CircuitComponent.selectColor  if selected
+      CircuitComponent.drawThickLinePt @point1, @lead1, color
+      color = @setVoltageColor(@volts[1])
+      CircuitComponent.setColor @selectColor  if selected
+      CircuitComponent.drawThickLinePt @lead2, @point2
+      f = new Font("SansSerif", Font.BOLD, 14)
+      CircuitComponent.setFont f
+      CircuitComponent.drawCenteredText "X", @center.x1, @center.y, color  if this is Circuit.plotXElm
+      CircuitComponent.drawCenteredText "Y", @center.x1, @center.y, color  if this is Circuit.plotYElm
+      if @mustShowVoltage()
+        s = CircuitComponent.getShortUnitText(volts[0], "V")
+        @drawValues s, 4
+      @drawPosts()
 
-ProbeElm::getConnection = (n1, n2) ->
-  false
+    mustShowVoltage: ->
+      (@flags & ProbeElm.FLAG_SHOWVOLTAGE) isnt 0
 
-ProbeElm::getEditInfo = (n) ->
-  if n is 0
-    ei = new EditInfo("", 0, -1, -1)
-    ei.checkbox = new Checkbox("Show Voltage", @mustShowVoltage())
-    return ei
-  null
+    getInfo: (arr) ->
+      arr[0] = "scope probe"
+      arr[1] = "Vd = " + CircuitComponent.getVoltageText(@getVoltageDiff())
 
-ProbeElm::setEditValue = (n, ei) ->
-  if n is 0
-    if ei.checkbox.getState()
-      flags = ProbeElm.FLAG_SHOWVOLTAGE
-    else
-      flags &= ~ProbeElm.FLAG_SHOWVOLTAGE
+    getConnection: (n1, n2) ->
+      false
+
+    getEditInfo: (n) ->
+      if n is 0
+        ei = new EditInfo("", 0, -1, -1)
+        ei.checkbox = new Checkbox("Show Voltage", @mustShowVoltage())
+        return ei
+      null
+
+    setEditValue: (n, ei) ->
+      if n is 0
+        if ei.checkbox.getState()
+          flags = ProbeElm.FLAG_SHOWVOLTAGE
+        else
+          flags &= ~ProbeElm.FLAG_SHOWVOLTAGE
+
+
+
+  return ProbeElm
