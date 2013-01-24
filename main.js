@@ -97,6 +97,8 @@ require.config({
 
         TestHelper: 'test/_helper',
         CircuitTest: 'test/circuit/circuitTest',
+
+        // Components
         ResistorTest: 'test/component/components/resistorTest',
         VoltageTest: 'test/component/components/voltageTest',
         GroundTest: 'test/component/components/groundTest',
@@ -104,19 +106,26 @@ require.config({
         CapacitorTest: 'test/component/components/capacitorTest',
         ComponentTest: 'test/component/circuitComponentTest',
 
+        // Solvers
         CircuitSolverTest: 'test/solver/circuitSolverTest',
         MatrixSolverTest: 'test/solver/matrixSolverTest',
         CircuitStamperTest: 'test/solver/matrixStamperTest',
 
+        // Utils
         ArraysTest: 'test/util/arraysTest',
         FormatsTest: 'test/util/formatsTest',
         MathTest: 'test/util/mathTest',
         UnitsTest: 'test/util/unitsTest',
 
+        // IO
         AjaxTest: 'test/io/ajaxTest',
         CircuitLoaderTest: 'test/io/circuitLoaderTest',
 
-        PrimitivesTest: 'test/util/primitivesTest'
+        // UI
+        PrimitivesTest: 'test/util/primitivesTest',
+
+        // Integration tests:
+        voltdivideIntegration: 'test/integration/voltdividesimpleTest'
     }
 
 });
@@ -200,7 +209,8 @@ function runTests() {
 
         'cs!PrimitivesTest',
         'cs!AjaxTest',
-        'cs!CircuitLoaderTest'
+        'cs!CircuitLoaderTest',
+        'cs!voltdivideIntegration'
     ], function() {
         "use strict";
         mocha.run();

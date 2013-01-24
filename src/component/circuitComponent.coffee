@@ -7,6 +7,7 @@ define [
   'cs!Point'
   'cs!MathUtils',
   'cs!ArrayUtils'
+
 ], (
   Settings,
   DrawHelper,
@@ -28,11 +29,7 @@ define [
       @selected = false
       @dragging = false
       @parentCircuit = null
-
-      if isNaN(flags)
-        @flags = @getDefaultFlags()
-      else
-        @flags = flags
+      @flags = flags || @getDefaultFlags()
 
       @setPoints()
       @allocNodes()
@@ -58,27 +55,20 @@ define [
       @dn = Math.sqrt(@dx * @dx + @dy * @dy)
       @dpx1 = @dy / @dn
       @dpy1 = -@dx / @dn
-      @dsign = (if (@dy is 0) then MathUtils.sign(@dx) else MathUtils.sign(@dy))
 
-      printStackTrace() unless @dn
+      @dsign = (if (@dy is 0) then MathUtils.sign(@dx) else MathUtils.sign(@dy))
 
       @point1 = new Point(@x1, @y1)
       @point2 = new Point(@x2, @y2)
 
       #TODO: Implement snapping here:
 
+    # As a string
     setColor: (color) ->
       @color = color
 
-    getDefaultFlags: ->
-      0
-
     getDumpType: ->
       0
-
-    # Todo: implement needed
-    getDumpClass: ->
-      this.toString()
 
     isSelected: ->
       @selected
@@ -92,9 +82,6 @@ define [
       @boundingBox.height = Math.abs(@y2 - @y1) + 1;
 
 
-    dump: ->
-      @getDumpType() + " " + @x1 + " " + @y1 + " " + @x2 + " " + @y2 + " " + @flags;
-
     reset: ->
       @volts = ArrayUtils.zeroArray(@volts.length)
       @curcount = 0
@@ -104,6 +91,15 @@ define [
 
     getCurrent: ->
       @current
+
+    getVoltageDiff: ->
+      @volts[0] - @volts[1]
+
+    getPower: ->
+      @getVoltageDiff() * @current
+
+    calculateCurrent: ->
+      # TODO: Implemented by subclasses
 
     # Steps forward one frame and performs calculation
     doStep: ->
@@ -125,9 +121,6 @@ define [
     setNodeVoltage: (node_idx, voltage) ->
       @volts[node_idx] = voltage
       @calculateCurrent()
-
-    calculateCurrent: ->
-      # TODO: Implemented by subclasses
 
     calcLeads: (len) ->
       if @dn < len or len is 0
@@ -188,8 +181,16 @@ define [
     stamp: ->
       throw("Called abstract function stamp() in AbstractCircuitElement")
 
+    # Todo: implement needed
+    getDumpClass: ->
+      this.toString()
+
+    # Returns the class name of this element (e.x. ResistorElm)
     toString: ->
-      throw("Called abstract function toString() in AbstractCircuitElement")
+      return arguments.callee.name
+
+    dump: ->
+      @getDumpType() + " " + @x1 + " " + @y1 + " " + @x2 + " " + @y2 + " " + @flags
 
     getVoltageSourceCount: ->
       0
@@ -202,9 +203,6 @@ define [
 
     setVoltageSource: (node, value) ->
       @voltSource = value
-
-    getVoltageDiff: ->
-      @volts[0] - @volts[1]
 
     nonLinear: ->
       false
@@ -256,10 +254,12 @@ define [
         q = y1
         y1 = y2
         y2 = q
+
       x1 = Math.min(@boundingBox.x, x1)
       y1 = Math.min(@boundingBox.y, y1)
       x2 = Math.max(@boundingBox.x + @boundingBox.width - 1, x2)
       y2 = Math.max(@boundingBox.y + @boundingBox.height - 1, y2)
+
       @boundingBox.x = x1
       @boundingBox.y = y1
       @boundingBox.width = x2 - x1
@@ -275,21 +275,6 @@ define [
     getInfo: (arr) ->
       throw("Called abstract function getInfo() in AbstractCircuitElement")
 
-    # Extended by subclasses
-    getBasicInfo: (arr) ->
-      arr[1] = "I = " + CircuitComponent.getCurrentDText(@getCurrent())
-      arr[2] = "Vd = " + CircuitComponent.getVoltageDText(@getVoltageDiff())
-      3
-
-    getPower: ->
-      @getVoltageDiff() * @current
-
-    getScopeValue: (x) ->
-      (if (x is 1) then @getPower() else @getVoltageDiff())
-
-    @getScopeUnits: (x) ->
-      if (x is 1) then "W" else "V"
-
     # TODO: Implement
     getEditInfo: (n) ->
       throw("Called abstract function getEditInfo() in AbstractCircuitElement")
@@ -297,6 +282,18 @@ define [
     # TODO: Implement
     setEditValue: (n, ei) ->
       throw("Called abstract function setEditInfo() in AbstractCircuitElement")
+
+    # Extended by subclasses
+    getBasicInfo: (arr) ->
+      arr[1] = "I = " + CircuitComponent.getCurrentDText(@getCurrent())
+      arr[2] = "Vd = " + CircuitComponent.getVoltageDText(@getVoltageDiff())
+      3
+
+    getScopeValue: (x) ->
+      (if (x is 1) then @getPower() else @getVoltageDiff())
+
+    @getScopeUnits: (x) ->
+      if (x is 1) then "W" else "V"
 
     getConnection: (n1, n2) ->
       true
@@ -330,19 +327,21 @@ define [
     # RENDERING METHODS
     ### #######################################################################
 
-    draw: ->
+    updateDotCount: (current = @current, currentCount = @curcount) ->
+      return currentCount if @Circuit?.isStopped()
+
+      currentIncrement = current * @Circuit?.currentSpeed()
+      currentIncrement %= 8
+      @curcount = currentIncrement + currentCount
+
+      return currentCount + currentIncrement
+
+    draw: (renderContext) ->
       throw("Called abstract function draw() in AbstractCircuitElement")
 
     draw2Leads: (renderContext) ->
       renderContext.drawThickLinePt @point1, @lead1, DrawHelper.getVoltageColor(@volts[0])
       renderContext.drawThickLinePt @lead2, @point2, DrawHelper.getVoltageColor(@volts[1])
-
-    updateDotCount: (current=@current, currentCount=@curcount) ->
-      return currentCount if @Circuit?.isStopped()
-      currentIncrement = current * @Circuit?.currentSpeed()
-      currentIncrement %= 8
-      @curcount = currentIncrement + currentCount
-      return currentCount + currentIncrement
 
     doDots: (renderContext) ->
       @curcount = @updateDotCount()
@@ -395,10 +394,11 @@ define [
       return unless valueText
       stringWidth = 100 #fm.stringWidth(s);
       ya = -10 #fm.getAscent() / 2;
-  #    if this instanceof RailElm or this instanceof SweepElm
-  #      xc = @x2
-  #      yc = @y2
-  #    else
+
+#      if this instanceof RailElm or this instanceof SweepElm
+#        xc = @x2
+#        yc = @y2
+#      else
       xc = (@x2 + @x1) / 2
       yc = (@y2 + @y1) / 2
       dpx = Math.floor(@dpx1 * hs)
@@ -432,5 +432,6 @@ define [
         strokeColor = Settings.POST_COLOR
 
       renderContext.fillCircle x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor
+
 
   return CircuitComponent

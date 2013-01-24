@@ -14,8 +14,7 @@ define [
 ) ->
 # </DEFINE>
 
-  
-  
+
   describe "1V grounded DC Source with 1 ohm grounded resistor", ->
   
     beforeEach () ->
@@ -48,7 +47,6 @@ define [
   
   
     describe "after soldering to circuit", ->
-  
       beforeEach () ->
         @Circuit.solder(@resistor)
         @Circuit.solder(@voltageSource)

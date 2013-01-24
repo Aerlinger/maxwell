@@ -3,8 +3,6 @@ define [], () ->
 # </DEFINE>
 
 
-
-
 #  == title ==
 #   @description:
 #  

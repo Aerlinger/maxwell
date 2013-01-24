@@ -1,26 +1,23 @@
 # <DEFINE>
 define [
-  'cs!fs',
   'cs!CircuitNode',
   'cs!CircuitLoader',
   'cs!Circuit',
+  'cs!ArrayUtils'
 ], (
-  fs,
   CircuitNode,
   CircuitLoader,
-  Circuit
+  Circuit,
+  ArrayUtils
 ) ->
 # </DEFINE>
 
 
-
-
-
-  describe "Circuit", ->
+  describe "Simple Voltage Divider", ->
     before (done) ->
-      @circuit = new Circuit()
-      CircuitLoader.readCircuitFromFile @circuit, "./circuits/voltdividesimple.json"
-      done()
+      CircuitLoader.createCircuitFromJSON "../circuits/voltdividesimple.json", null, (circuit) =>
+        @circuit = circuit
+        done()
 
     describe "should Analyze voltdividesimple.json and have", ->
       before (done) ->
@@ -31,13 +28,13 @@ define [
         @circuit.numElements().should.equal 7
 
       it "valid origMatrix", ->
-        @circuit.Solver.origMatrix.should.eql zeroArray2(10, 10)
+        @circuit.Solver.origMatrix.should.eql ArrayUtils.zeroArray2(10, 10)
 
       it "valid origRightSide", ->
-        @circuit.Solver.origRightSide.should.eql zeroArray(10)
+        @circuit.Solver.origRightSide.should.eql ArrayUtils.zeroArray(10)
 
       it "valid circuitPermute", ->
-        @circuit.Solver.circuitPermute.should.eql zeroArray(10)
+        @circuit.Solver.circuitPermute.should.eql ArrayUtils.zeroArray(10)
 
       it "valid circuitMatrix", ->
         @circuit.Solver.circuitMatrix.should.eql []
@@ -118,9 +115,3 @@ define [
       before () ->
         @circuit.updateCircuit()
 
-      it "should render circuit", (done) ->
-        @circuit.renderCircuit()
-        @circuit.getRenderer().getCanvas().toBuffer (err, buf) ->
-          throw err if err
-          fs.writeFile(__dirname + '/voltDivideSimple.png', buf)
-          done()

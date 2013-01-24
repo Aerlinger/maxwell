@@ -3,8 +3,8 @@ define [
   'cs!fs',
   'cs!CanvasContext',
 ], (
-  'fs',
-  'CanvasContext'
+  fs,
+  CanvasContext
 ) ->
 # </DEFINE>
 
