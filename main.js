@@ -40,7 +40,6 @@ require.config({
         Renderer:'src/render/renderer',
         CanvasContext:'src/render/canvasContext',
         DrawHelper:'src/render/drawHelper',
-        Context:'src/render/context',
 
         // USER INTERFACE:
         State:'src/ui/circuitStates',

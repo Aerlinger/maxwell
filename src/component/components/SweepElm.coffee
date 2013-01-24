@@ -56,7 +56,7 @@ define [
 
     setPoints: ->
       CircuitComponent::setPoints.call this
-      @lead1 = CircuitComponent.interpPointPt(@point1, @point2, 1 - @circleSize / @dn)
+      @lead1 = DrawHelper.interpPoint(@point1, @point2, 1 - @circleSize / @dn)
 
     draw: ->
       @setBboxPt @point1, @point2, @circleSize

@@ -39,7 +39,7 @@ Units
         x = @point1
         @point1 = @point2
         @point2 = @x1
-      @center = CircuitComponent.interpPointPt(@point1, @point2, .5)
+      @center = DrawHelper.interpPoint(@point1, @point2, .5)
 
     draw: ->
       hs = 8

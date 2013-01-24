@@ -19,7 +19,7 @@ Units
 ) ->
   # </DEFINE>
 
-  class MosfetElm extends CircuitComponent
+  class MosfetElm extends TransistorElm
 
     @FLAG_PNP: 1
     @FLAG_SHOWVT: 2
@@ -49,7 +49,7 @@ Units
 
       try
         if st and st.length > 0
-          st = st.split(" ")  if typeof st is "string"
+          st = st.split(" ") if typeof st is "string"
           @vt = st[0]
 
     getDefaultThreshold: ->
@@ -87,8 +87,8 @@ Units
       while i isnt segments
         v = @volts[1] + (@volts[2] - @volts[1]) * i / segments
         color = @setVoltageColor(v)
-        CircuitComponent.interpPoint @src[1], @drn[1], CircuitComponent.ps1, i * segf
-        CircuitComponent.interpPoint @src[1], @drn[1], CircuitComponent.ps2, (i + 1) * segf
+        DrawHelper.interpPoint @src[1], @drn[1], CircuitComponent.ps1, i * segf
+        DrawHelper.interpPoint @src[1], @drn[1], CircuitComponent.ps2, (i + 1) * segf
         CircuitComponent.drawThickLinePt CircuitComponent.ps1, CircuitComponent.ps2, color
         i++
       color = @setVoltageColor(@volts[1])
@@ -154,21 +154,23 @@ Units
       hs2 = @hs * @dsign
       @src = CircuitComponent.newPointArray(3)
       @drn = CircuitComponent.newPointArray(3)
-      CircuitComponent.interpPoint2 @point1, @point2, @src[0], @drn[0], 1, -hs2
-      CircuitComponent.interpPoint2 @point1, @point2, @src[1], @drn[1], 1 - 22 / @dn, -hs2
-      CircuitComponent.interpPoint2 @point1, @point2, @src[2], @drn[2], 1 - 22 / @dn, -hs2 * 4 / 3
+
+      DrawHelper.interpPoint @point1, @point2, 1, -hs2, @src[0], @drn[0]
+      DrawHelper.interpPoint @point1, @point2, 1 - 22 / @dn, -hs2, @src[1], @drn[1]
+      DrawHelper.interpPoint @point1, @point2, 1 - 22 / @dn, -hs2 * 4 / 3, @src[2], @drn[2]
+
       @gate = CircuitComponent.newPointArray(3)
-      CircuitComponent.interpPoint2 @point1, @point2, @gate[0], @gate[2], 1 - 28 / @dn, hs2 / 2 # was 1-20/dn
-      CircuitComponent.interpPoint @gate[0], @gate[2], @gate[1], .5
+      DrawHelper.interpPoint @point1, @point2, 1 - 28 / @dn, hs2 / 2, @gate[0], @gate[2] # was 1-20/dn
+      DrawHelper.interpPoint @gate[0], @gate[2], @gate[1], .5
       unless @drawDigital()
         if @pnp is 1
-          @arrowPoly = CircuitComponent.calcArrow(@src[1], @src[0], 10, 4)
+          @arrowPoly = DrawHelper.calcArrow(@src[1], @src[0], 10, 4)
         else
-          @arrowPoly = CircuitComponent.calcArrow(@drn[0], @drn[1], 12, 5)
+          @arrowPoly = DrawHelper.calcArrow(@drn[0], @drn[1], 12, 5)
       else if @pnp is -1
-        CircuitComponent.interpPoint @point1, @point2, @gate[1], 1 - 36 / @dn
+        DrawHelper.interpPoint @point1, @point2, @gate[1], 1 - 36 / @dn
         dist = (if (@dsign < 0) then 32 else 31)
-        @pcircle = @interpPointPt(@point1, @point2, 1 - dist / @dn)
+        @pcircle = @interpPoint(@point1, @point2, 1 - dist / @dn)
         @pcircler = 3
 
     stamp: ->

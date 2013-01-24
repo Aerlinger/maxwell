@@ -52,10 +52,10 @@ define [
       dist = 16
       alen = 8
       @calcLeads dist + alen
-      p1 = CircuitComponent.interpPointPt(@point1, @point2, (@dn - alen) / (2 * @dn))
-      @arrow1 = CircuitComponent.calcArrow(@point1, p1, alen, alen)
-      p1 = CircuitComponent.interpPointPt(@point1, @point2, (@dn + alen) / (2 * @dn))
-      @arrow2 = CircuitComponent.calcArrow(@point2, p1, alen, alen)
+      p1 = DrawHelper.interpPoint(@point1, @point2, (@dn - alen) / (2 * @dn))
+      @arrow1 = DrawHelper.calcArrow(@point1, p1, alen, alen)
+      p1 = DrawHelper.interpPoint(@point1, @point2, (@dn + alen) / (2 * @dn))
+      @arrow2 = DrawHelper.calcArrow(@point2, p1, alen, alen)
 
     draw: ->
       i = undefined

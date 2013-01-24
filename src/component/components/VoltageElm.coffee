@@ -126,11 +126,11 @@ define [
   
       if @waveform is VoltageElm.WF_DC
         DrawHelper.getPowerColor @getPower, 1
-        DrawHelper.interpPoint2 @lead1, @lead2, DrawHelper.ps1, DrawHelper.ps2, 0, 10
+        DrawHelper.interpPoint @lead1, @lead2, 0, 10, DrawHelper.ps1, DrawHelper.ps2
         renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(@volts[0])
   
         @setBboxPt @point1, @point2, 16
-        DrawHelper.interpPoint2 @lead1, @lead2, DrawHelper.ps1, DrawHelper.ps2, 1, 16
+        DrawHelper.interpPoint @lead1, @lead2, 1, 16, DrawHelper.ps1, DrawHelper.ps2
         renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(@volts[1])
   
       else

@@ -50,6 +50,7 @@ define [
       @lastvbc = 0
       @lastvbe = 0
       @leakage = 1e-13
+
       if st and st.length > 0
         st = st.split(" ")  if typeof st is "string"
         pnp = st.shift()
@@ -149,27 +150,27 @@ define [
       # calc collector, emitter posts
       @coll = CircuitComponent.newPointArray(2)
       @emit = CircuitComponent.newPointArray(2)
-      CircuitComponent.interpPoint2 @point1, @point2, @coll[0], @emit[0], 1, hs2
+      DrawHelper.interpPoint @point1, @point2, 1, hs2, @coll[0], @emit[0]
 
       # calc rectangle edges
       @rect = CircuitComponent.newPointArray(4)
-      CircuitComponent.interpPoint2 @point1, @point2, @rect[0], @rect[1], 1 - 16 / @dn, hs
-      CircuitComponent.interpPoint2 @point1, @point2, @rect[2], @rect[3], 1 - 13 / @dn, hs
+      DrawHelper.interpPoint @point1, @point2, 1 - 16 / @dn, hs, @rect[0], @rect[1]
+      DrawHelper.interpPoint @point1, @point2, 1 - 13 / @dn, hs, @rect[2], @rect[3]
 
       # calc points where collector/emitter leads contact rectangle
-      CircuitComponent.interpPoint2 @point1, @point2, @coll[1], @emit[1], 1 - 13 / @dn, 6 * @dsign * @pnp
+      DrawHelper.interpPoint @point1, @point2, 1 - 13 / @dn, 6 * @dsign * @pnp, @coll[1], @emit[1]
 
       # calc point where base lead contacts rectangle
       @base = new Point()
-      CircuitComponent.interpPoint @point1, @point2, @base, 1 - 16 / @dn
+      DrawHelper.interpPoint @point1, @point2, @base, 1 - 16 / @dn
 
       # rectangle
       @rectPoly = CircuitComponent.createPolygon(@rect[0], @rect[2], @rect[3], @rect[1])
 
       # arrow
       unless @pnp is 1
-        pt = CircuitComponent.interpPoint(@point1, @point2, 1 - 11 / @dn, -5 * @dsign * @pnp)
-        @arrowPoly = CircuitComponent.calcArrow(@emit[0], pt, 8, 4)
+        pt = DrawHelper.interpPoint(@point1, @point2, 1 - 11 / @dn, -5 * @dsign * @pnp)
+        @arrowPoly = DrawHelper.calcArrow(@emit[0], pt, 8, 4)
 
     limitStep: (vnew, vold) ->
       arg = undefined

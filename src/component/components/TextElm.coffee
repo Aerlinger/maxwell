@@ -37,10 +37,6 @@ define [
         @text += " " + st.shift()  until st.length is 0
 
 
-
-
-
-
     #
     # public TextElm(int xx, int yy) {
     # super(xx, yy);

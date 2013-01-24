@@ -51,10 +51,10 @@ Todo: Click functionality does not work
       @calcLeads 32
       @swposts = CircuitComponent.newPointArray(2)
       @swpoles = CircuitComponent.newPointArray(3)
-      CircuitComponent.interpPoint2 @lead1, @lead2, @swpoles[0], @swpoles[1], 1, @openhs
+      DrawHelper.interpPoint @lead1, @lead2, 1, @openhs, @swpoles[0], @swpoles[1]
       @swpoles[2] = @lead2
-      CircuitComponent.interpPoint2 @point1, @point2, @swposts[0], @swposts[1], 1, @openhs
-      @posCount = (if @hasCenterOff() then 3 else 2)
+      DrawHelper.interpPoint @point1, @point2, 1, @openhs, @swposts[0], @swposts[1]
+      @posCount = @hasCenterOff() ? 3 : 2
 
     draw: ->
       @setBbox @point1, @point2, @openhs

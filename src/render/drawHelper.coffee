@@ -48,38 +48,44 @@ define [
 
     @unitsFont: "Arial, Helvetica, sans-serif"
 
-    @interpPointPt: (a, b, f, g) ->
-      printStackTrace() unless f
-      newPoint = new Point(0, 0)
-      @interpPoint a, b, newPoint, f, g
-      return newPoint
+    @interpPoint: (ptA, ptB, f, g = 0, ptOut1 = null, putOut2 = null) ->
+      gx = ptB.y - ptA.y
+      gy = ptA.x - ptB.x
+      g /= Math.sqrt gx*gx + gy*gy
 
-    @interpPoint: (a, b, c, f, g) ->
-      gx = 0
-      gy = 0
-      if g
-        gx = b.y - a.y
-        gy = a.x - b.x
-        g /= Math.sqrt(gx * gx + gy * gy)
-      else
-        g = 0
-      c.x = Math.floor a.x * (1 - f) + b.x * f + g * gx + 0.48
-      c.y = Math.floor a.y * (1 - f) + b.y * f + g * gy + 0.48
-      return b
+      if ptOut1
+        ptOut1.x = (1 - f) * Math.floor ptA.x + (f * ptB.x) + (g * gx) + 0.48
+        ptOut1.y = (1 - f) * Math.floor ptA.y + (f * ptB.y) + (g * gy) + 0.48
 
-    @interpPoint2: (a, b, c, d, f, g) ->
-      unless g is 0
-        gx = b.y - a.y
-        gy = a.x - b.x
-        g /= Math.sqrt(gx * gx + gy * gy)
-      else
-        g = 0
-      offset = 0.48
+      return ptOut1
 
-      c.x  = Math.floor a.x * (1 - f) + b.x * f + g * gx + offset
-      c.y  = Math.floor a.y  * (1 - f) + b.y  * f + g * gy + offset
-      d.x  = Math.floor a.x * (1 - f) + b.x * f - g * gx + offset
-      d.y  = Math.floor a.y  * (1 - f) + b.y  * f - g * gy + offset
+#    @interpPointPt: (pt1, pt2, f, g) ->
+#      newPoint = new Point(0, 0)
+#      @interpPoint pt1, pt2, newPoint, f, g
+#      return newPoint
+#
+#    @interpPoint: (ptA, ptB, ptOut, f, g) ->
+#      if g
+#        gx = ptB.y - ptA.y
+#        gy = ptA.x - ptB.x
+#        g /= Math.sqrt(gx * gx + gy * gy)
+#      else
+#        gx = 0
+#        gy = 0
+#        g = 0
+#      ptOut.x = Math.floor ptA.x * (1 - f) + ptB.x * f + g * gx + 0.48
+#      ptOut.y = Math.floor ptA.y * (1 - f) + ptB.y * f + g * gy + 0.48
+#      return ptB
+#
+#    @interpPoint2: (ptA, ptB, ptOut1, ptOut2, f, g) ->
+#      if g is not 0
+#        gx = ptB.y - ptA.y
+#        gy = ptA.x - ptB.x
+#        g /= Math.sqrt(gx*gx + gy*gy)
+#
+#      ptOut2.x = ptOut1.x  = (1 - f) * Math.floor ptA.x + (f * ptB.x) + (g * gx) + 0.48
+#      ptOut2.y = ptOut1.y  = (1 - f) * Math.floor ptA.y + (f * ptB.y) + (g * gy) + 0.48
+
 
     @calcArrow: (a, b, al, aw) ->
       poly = new Polygon()
@@ -94,12 +100,12 @@ define [
       poly.addVertex p2.x, p2.y
       return poly
 
-    @createPolygon: (a, b, c, d) ->
+    @createPolygon: (pt1, pt2, pt3, pt4) ->
       newPoly = new Polygon()
-      newPoly.addVertex a.x, a.y
-      newPoly.addVertex b.x, b.y
-      newPoly.addVertex c.x, c.y
-      newPoly.addVertex d.x, d.y  if d
+      newPoly.addVertex pt1.x, pt1.y
+      newPoly.addVertex pt2.x, pt2.y
+      newPoly.addVertex pt3.x, pt3.y
+      newPoly.addVertex pt4.x, pt4.y if pt4
       return newPoly
 
     @createPolygonFromArray: (vertexArray) ->
@@ -124,13 +130,6 @@ define [
         @.drawThickLinePt @ps1, @ps2, color
         @ps1.x = @ps2.x
         @ps1.y = @ps2.y
-
-    @drawCircle: (x0, y0, radius, color) ->
-      paper.beginPath()
-      paper.strokeStyle = color
-      paper.arc x0, y0, radius, 0, 2 * Math.PI, true
-      paper.stroke()
-      paper.closePath()
 
 
     @getVoltageDText: (v) ->

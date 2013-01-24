@@ -39,7 +39,7 @@ define [
       for row in [0...3]
         startPt = 10 - row * 2
         endPt = row * 3
-        DrawHelper.interpPoint2 @point1, @point2, DrawHelper.ps1, DrawHelper.ps2, 1 + endPt / @dn, startPt
+        DrawHelper.interpPoint @point1, @point2, 1 + endPt / @dn, startPt, DrawHelper.ps1, DrawHelper.ps2
         renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, color
   
       DrawHelper.interpPoint @point1, @point2, DrawHelper.ps2, 1 + 11.0 / @dn
