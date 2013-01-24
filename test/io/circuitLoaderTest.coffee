@@ -1,38 +1,30 @@
 # <DEFINE>
 define [
-  'cs!fs',
   'cs!CircuitNode',
-  'cs!CircuitLoader',
-  'cs!Circuit',
+  'cs!CircuitLoader'
+  'cs!Circuit'
 ], (
-  'fs',
-  'CircuitNode',
-  'CircuitLoader',
-  'Circuit',
+  CircuitNode,
+  CircuitLoader
+  Circuit
 ) ->
 # </DEFINE>
 
 
 
   describe "CircuitLoader", ->
-    before () ->
-      @circuit = new Circuit()
 
 
     describe "should read voltdividesimple.json and", ->
       before (done) ->
-        CircuitLoader.readCircuitFromFile @circuit, "./circuits/voltdividesimple.json", () =>
+        Circuit.createFromJSON "../circuits/voltdividesimple.json", null, (circuit) =>
+          console.log "Created Circuit"
+          console.log(circuit)
+          @circuit = circuit
           done()
 
       it "have only 7 elements", ->
         @circuit.numElements().should.equal 7
-
-      it "should render circuit", (done) ->
-        @circuit.renderCircuit()
-        @circuit.getRenderer().getCanvas().toBuffer (err, buf) ->
-          throw err if err
-          fs.writeFile(__dirname + '/render/voltDivideSimple.png', buf)
-          done()
 
       describe "should load parameters", ->
         it "should have correct completionStatus", ->

@@ -75,12 +75,53 @@ define [
 
   class Circuit
 
-      constructor: (Context) ->
+      constructor: (CanvasElm) ->
         @Params = new CircuitEngineParams()
         @CommandHistory = new CommandHistory()
-        @Renderer = new Renderer(this, Context)
+        @Renderer = new Renderer(this, CanvasElm)
 
         @clearAndReset()
+
+      @createFromJSON: (circuitFileName, Context = null, onComplete = null) ->
+
+        $.getJSON circuitFileName, (jsonParsed) ->
+
+          circuit = new Circuit(Context)
+
+          # Circuit Parameters are stored at the header of the .json file (index 0)
+          circuitParams = jsonParsed.shift()
+          circuit.Params = new CircuitEngineParams(circuitParams)
+
+          # Load each Circuit component from JSON data:
+          for elementData in jsonParsed
+            type = elementData['sym']
+            sym = ComponentRegistry.ComponentDefs[type]
+            x1 = parseInt elementData['x1']
+            y1 = parseInt elementData['y1']
+            x2 = parseInt elementData['x2']
+            y2 = parseInt elementData['y2']
+            flags = parseInt elementData['flags']
+            params = elementData['params']
+
+            if type is 'Hint'
+              console.log "Hint found in file!"
+            if type is 'Oscilloscope'
+              console.log "Scope found in file!"
+
+            try
+              if !type
+                circuit.warn "Unrecognized Type"
+              if !sym
+                circuit.warn "Unrecognized dump type: #{type}"
+              else
+                newCircuitElm = new sym(x1, y1, x2, y2, flags, params)
+                circuit.solder newCircuitElm
+            catch e
+              circuit.halt e.message
+
+          onComplete(circuit)
+
+
 
       ###
       Removes all circuit elements and scopes from the workspace and resets time to zero.

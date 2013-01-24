@@ -13,12 +13,18 @@ define [
 
   class CanvasContext extends Context
     constructor: (@Canvas, @width=600, @height=400) ->
-      @context = @Canvas.getContext('2d')
+      @context = @Canvas?.getContext?('2d')
 
     fillText: (text, x, y) ->
+      if !@context
+        return
+
       @context.fillText(text, x, y)
 
     fillCircle: (x, y, radius, lineWidth=Settings.LINE_WIDTH, fillColor='#FF0000', lineColor="#000000") ->
+      if !@context
+        return
+
       @context.fillStyle = fillColor
       @context.strokeStyle = lineColor
       @context.beginPath()
@@ -32,6 +38,9 @@ define [
       @drawThickLine pa.x, pa.y, pb.x, pb.y, color
 
     drawThickLine: (x, y, x2, y2, color=Settings.FG_COLOR) ->
+      if !@context
+        return
+
       @context.strokeStyle = color
       @context.beginPath()
       @context.moveTo x, y
@@ -51,6 +60,9 @@ define [
       @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
 
     clear: () ->
+      if !@context
+        return
+
       @context.clearRect(0, 0, @width, @height)
 
     getContext: () ->
@@ -60,7 +72,7 @@ define [
       return @Canvas
 
     toBuffer: () ->
-      return @Canvas.toBuffer
+      return @Canvas?.toBuffer
 
 
 
