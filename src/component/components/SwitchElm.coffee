@@ -65,8 +65,8 @@ define [
 
       #if (!needsHighlight())
       #	g.beginFill(Color.WHITE);
-      CircuitComponent.interpPoint @lead1, @lead2, @ps, 0, hs1
-      CircuitComponent.interpPoint @lead1, @lead2, CircuitComponent.ps2, 1, hs2
+      DrawHelper.interpPoint @lead1, @lead2, @ps, 0, hs1
+      DrawHelper.interpPoint @lead1, @lead2, CircuitComponent.ps2, 1, hs2
       CircuitComponent.drawThickLinePt @ps, CircuitComponent.ps2, Settings.FG_COLOR
       @drawPosts()
 

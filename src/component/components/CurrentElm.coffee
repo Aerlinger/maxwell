@@ -22,9 +22,7 @@ define [
   class CurrentElm extends CircuitComponent
 
     constructor: (xa, ya, xb, yb, f, st) ->
-    
       super xa, ya, xb, yb, f
-      
       try
         st = st.split(" ")  if typeof st is "string"
         @currentValue = parseFloat(st[0])
@@ -40,11 +38,11 @@ define [
     setPoints: ->
       @setPoints this
       @calcLeads 26
-      @ashaft1 = CircuitComponent.interpPointPt(@lead1, @lead2, .25)
-      @ashaft2 = CircuitComponent.interpPointPt(@lead1, @lead2, .6)
-      @center = CircuitComponent.interpPointPt(@lead1, @lead2, .5)
-      p2 = CircuitComponent.interpPointPt(@lead1, @lead2, .75)
-      @arrow = CircuitComponent.calcArrow(@center, p2, 4, 4)
+      @ashaft1 = DrawHelper.interpPoint(@lead1, @lead2, .25)
+      @ashaft2 = DrawHelper.interpPoint(@lead1, @lead2, .6)
+      @center = DrawHelper.interpPoint(@lead1, @lead2, .5)
+      p2 = DrawHelper.interpPoint(@lead1, @lead2, .75)
+      @arrow = DrawHelper.calcArrow(@center, p2, 4, 4)
 
     draw: ->
       cr = 12

@@ -113,11 +113,13 @@ define [
       @in1p = CircuitComponent.newPointArray(2)
       @in2p = CircuitComponent.newPointArray(2)
       @textp = CircuitComponent.newPointArray(2)
-      CircuitComponent.interpPoint2 @point1, @point2, @in1p[0], @in2p[0], 0, hs
-      CircuitComponent.interpPoint2 @lead1, @lead2, @in1p[1], @in2p[1], 0, hs
-      CircuitComponent.interpPoint2 @lead1, @lead2, @textp[0], @textp[1], .2, hs
+
+      DrawHelper.interpPoint @point1, @point2, 0, hs, @in1p[0], @in2p[0]
+      DrawHelper.interpPoint @lead1, @lead2, 0, hs, @in1p[1], @in2p[1]
+      DrawHelper.interpPoint @lead1, @lead2, .2, hs, @textp[0], @textp[1]
+
       tris = CircuitComponent.newPointArray(2)
-      CircuitComponent.interpPoint2 @lead1, @lead2, tris[0], tris[1], 0, hs * 2
+      DrawHelper.interpPoint @lead1, @lead2, 0, hs * 2, tris[0], tris[1]
       @triangle = CircuitComponent.createPolygon(tris[0], tris[1], @lead2)
 
 

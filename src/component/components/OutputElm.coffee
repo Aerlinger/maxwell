@@ -50,7 +50,7 @@ define [
       #FontMetrics fm = g.getFontMetrics();
       s = "X"  if this is Circuit.plotXElm
       s = "Y"  if this is Circuit.plotYElm
-      CircuitComponent.interpPoint @point1, @point2, @lead1, 1 - (3 * s.length / 2 + 8) / @dn #fm.stringWidth(s)
+      DrawHelper.interpPoint @point1, @point2, @lead1, 1 - (3 * s.length / 2 + 8) / @dn #fm.stringWidth(s)
       @setBboxPt @point1, @lead1, 0
       @drawCenteredText s, @x2, @y2, true
       color = @setVoltageColor(@volts[0])

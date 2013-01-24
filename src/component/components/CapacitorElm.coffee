@@ -56,14 +56,14 @@ define [
       f = (@dn / 2 - 4) / @dn
 
       # calc leads
-      @lead1 = DrawHelper.interpPointPt(@point1, @point2, f)
-      @lead2 = DrawHelper.interpPointPt(@point1, @point2, 1 - f)
+      @lead1 = DrawHelper.interpPoint(@point1, @point2, f)
+      @lead2 = DrawHelper.interpPoint(@point1, @point2, 1 - f)
 
       # calc plates
       @plate1 = [new Point(), new Point()]
       @plate2 = [new Point(), new Point()]
-      DrawHelper.interpPoint2 @point1, @point2, @plate1[0], @plate1[1], f, 12
-      DrawHelper.interpPoint2 @point1, @point2, @plate2[0], @plate2[1], 1 - f, 12
+      DrawHelper.interpPoint @point1, @point2, f, 12, @plate1[0], @plate1[1]
+      DrawHelper.interpPoint @point1, @point2, 1 - f, 12, @plate2[0], @plate2[1]
 
     draw: (renderContext) ->
       hs = 12
