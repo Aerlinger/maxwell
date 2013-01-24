@@ -34,7 +34,7 @@ define [
       1
 
     setPoints: ->
-      VoltageElm::setPoints.call this
+      super()
       @lead1 = CircuitComponent.interpPointPt(@point1, @point2, 1 - VoltageElm.circleSize / @dn)
 
     draw: ->

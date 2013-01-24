@@ -2,24 +2,17 @@
 define [
   'cs!CircuitNode',
   'cs!CircuitLoader'
-  'cs!Circuit'
 ], (
   CircuitNode,
   CircuitLoader
-  Circuit
 ) ->
 # </DEFINE>
 
-
-
   describe "CircuitLoader", ->
-
 
     describe "should read voltdividesimple.json and", ->
       before (done) ->
-        Circuit.createFromJSON "../circuits/voltdividesimple.json", null, (circuit) =>
-          console.log "Created Circuit"
-          console.log(circuit)
+        CircuitLoader.createCircuitFromJSON "../circuits/voltdividesimple.json", null, (circuit) =>
           @circuit = circuit
           done()
 

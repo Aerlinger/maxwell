@@ -1,37 +1,23 @@
 # <DEFINE>
 define [
   'jquery'
-  'cs!CircuitEngineParams',
-  'cs!ComponentRegistry'
+  'cs!ComponentRegistry',
+  'cs!Circuit'
 ], (
   $,
-  ComponentDefs,
-  ComponentRegistry
+  ComponentRegistry,
+  Circuit
 ) ->
 # </DEFINE>
 
 
   class CircuitLoader
 
-
-    ###
-    Retrieves string data from a circuit text file (via AJAX GET)
-    ###
-    @createCircuitFromJSON: (circuitFileName, context = null, onComplete = null) ->
-
-      $.getJSON circuitFileName, (jsonData) ->
-
-        circuit = new Circuit(context)
-        parseJSON(circuit, jsonData)
-
-        onComplete?(circuit)
-
-
-    parseJSON: (circuit, jsonData) ->
+    @parseJSON: (circuit, jsonData) ->
 
       circuitParams = jsonData.shift()
       # Circuit Parameters are stored at the header of the .json file (index 0)
-      circuit.Params = new CircuitEngineParams(circuitParams)
+      circuit.setParamsFromJSON(circuitParams)
 
       # Load each Circuit component from JSON data:
       for elementData in jsonData
@@ -59,6 +45,17 @@ define [
             circuit.solder newCircuitElm
         catch e
           circuit.halt e.message
+
+    ###
+    Retrieves string data from a circuit text file (via AJAX GET)
+    ###
+    @createCircuitFromJSON: (circuitFileName, context = null, onComplete = null) ->
+
+      $.getJSON circuitFileName, (jsonData) =>
+        circuit = new Circuit(context)
+        CircuitLoader.parseJSON(circuit, jsonData)
+
+        onComplete?(circuit)
 
 
   return CircuitLoader
