@@ -1,34 +1,42 @@
-
-fs = require "fs"
-CircuitEngineParams = require('../core/circuitParams')
-
-ComponentDefs = require('../component/componentRegistry').ComponentDefs
-DumpTypeConversions = require('../component/componentRegistry').DumpTypeConversions
-
 # <DEFINE>
-define [], () ->
-  # </DEFINE>
+define [
+  'jquery'
+  'cs!CircuitEngineParams',
+  'cs!ComponentRegistry'
+], (
+  $,
+  ComponentDefs,
+  ComponentRegistry
+) ->
+# </DEFINE>
 
 
   class CircuitLoader
 
+
     ###
     Retrieves string data from a circuit text file (via AJAX GET)
     ###
-    @readCircuitFromFile: (circuit, circuitFileName, onComplete) ->
-      circuit.clearAndReset()
+    @createCircuitFromJSON: (circuitFileName, context = null, onComplete = null) ->
 
-      jsonRawData = fs.readFileSync(circuitFileName)
-      jsonParsed = JSON.parse(jsonRawData)
+      $.getJSON circuitFileName, (jsonData) ->
 
+        circuit = new Circuit(context)
+        parseJSON(circuit, jsonData)
+
+        onComplete?(circuit)
+
+
+    parseJSON: (circuit, jsonData) ->
+
+      circuitParams = jsonData.shift()
       # Circuit Parameters are stored at the header of the .json file (index 0)
-      circuitParams = jsonParsed.shift()
       circuit.Params = new CircuitEngineParams(circuitParams)
 
       # Load each Circuit component from JSON data:
-      for elementData in jsonParsed
+      for elementData in jsonData
         type = elementData['sym']
-        sym = ComponentDefs[type]
+        sym = ComponentRegistry.ComponentDefs[type]
         x1 = parseInt elementData['x1']
         y1 = parseInt elementData['y1']
         x2 = parseInt elementData['x2']
@@ -52,8 +60,5 @@ define [], () ->
         catch e
           circuit.halt e.message
 
-      # Now that we're finished, Call the callback passed to this function if it exists.
-      onComplete?()
 
-
-  return circuitLoader
+  return CircuitLoader

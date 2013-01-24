@@ -113,6 +113,9 @@ require.config({
         MathTest: 'test/util/mathTest',
         UnitsTest: 'test/util/unitsTest',
 
+        AjaxTest: 'test/io/ajaxTest',
+        CircuitLoaderTest: 'test/io/circuitLoaderTest',
+
         PrimitivesTest: 'test/util/primitivesTest'
     }
 
@@ -195,7 +198,10 @@ function runTests() {
         'cs!UnitsTest',
         'cs!UnitsTest',
 
-        'cs!PrimitivesTest'], function() {
+        'cs!PrimitivesTest',
+        'cs!AjaxTest',
+        'cs!CircuitLoaderTest'
+    ], function() {
         "use strict";
         mocha.run();
     });

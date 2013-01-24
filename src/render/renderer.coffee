@@ -14,7 +14,8 @@ define ['cs!CanvasContext'], (CanvasContext) ->
           @drawComponent(component)
 
     drawComponent: (component) ->
-      component.draw(@Context)
+      if @Context
+        component.draw(@Context)
 
     drawInfo: ->
       # TODO: Find where to show data; below circuit, not too high unless we need it
@@ -34,15 +35,15 @@ define ['cs!CanvasContext'], (CanvasContext) ->
       console.error "Simulation Error: " + msg
 
     clear: () ->
-      @Context.clear()
+      @Context?.clear()
 
     getContext: () ->
       return @Context
 
     getCanvas: () ->
-      return @Context.getCanvas()
+      return @Context?.getCanvas()
 
     getBuffer: () ->
-      return @Context.getCanvas().toBuffer
+      return @Context?.getCanvas().toBuffer
 
   return Renderer
