@@ -135,7 +135,7 @@ define [
   
       else
         @setBboxPt @point1, @point2, VoltageElm.circleSize
-        DrawHelper.interpPoint @lead1, @lead2, DrawHelper.ps1, 0.5
+        DrawHelper.interpPoint @lead1, @lead2, 0.5, DrawHelper.ps1
         @drawWaveform DrawHelper.ps1, renderContext
   
       @drawPosts(renderContext)

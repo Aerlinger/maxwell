@@ -36,7 +36,7 @@ define [
       (@flags & CapacitorElm.FLAG_BACK_EULER) is 0
 
     setNodeVoltage: (n, c) ->
-      CircuitComponent::setNodeVoltage.call this, n, c
+      super.setNodeVoltage n, c
       @voltdiff = @volts[0] - @volts[1]
 
     reset: ->

@@ -50,7 +50,6 @@ define [
     Retrieves string data from a circuit text file (via AJAX GET)
     ###
     @createCircuitFromJSON: (circuitFileName, context = null, onComplete = null) ->
-
       $.getJSON circuitFileName, (jsonData) =>
         circuit = new Circuit(context)
         CircuitLoader.parseJSON(circuit, jsonData)

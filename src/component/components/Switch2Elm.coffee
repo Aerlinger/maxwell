@@ -72,7 +72,7 @@ Todo: Click functionality does not work
       CircuitComponent.drawThickLinePt @swpoles[1], @swposts[1], color
 
       # draw switch
-      color = Settings.SELECT_COLOR  unless @needsHighlight()
+      color = Settings.SELECT_COLOR unless @needsHighlight()
       CircuitComponent.drawThickLinePt @lead1, @swpoles[@position], color
       @updateDotCount()
       @drawDots @point1, @lead1, @curcount
@@ -99,7 +99,6 @@ Todo: Click functionality does not work
     Switch2Elm.toggle = ->
       Switch2Elm::toggle()
       unless @link is 0
-        i = undefined
         i = 0
         while i isnt Circuit.elementList.length
           o = Circuit.elementList.elementAt(i)

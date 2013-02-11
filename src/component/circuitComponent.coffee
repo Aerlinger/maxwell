@@ -128,8 +128,8 @@ define [
         @lead2 = @point2
         return
 
-      @lead1 = DrawHelper.interpPointPt(@point1, @point2, (@dn - len) / (2 * @dn));
-      @lead2 = DrawHelper.interpPointPt(@point1, @point2, (@dn + len) / (2 * @dn));
+      @lead1 = DrawHelper.interpPoint(@point1, @point2, (@dn - len) / (2 * @dn));
+      @lead2 = DrawHelper.interpPoint(@point1, @point2, (@dn + len) / (2 * @dn));
 
     getDefaultFlags: ->
       0

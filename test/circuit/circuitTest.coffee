@@ -3,36 +3,77 @@ define ['cs!Circuit'], (Circuit) ->
 # </DEFINE>
 
 
-  describe "Base Circuit Element", ->
+  describe "Circuit", ->
 
     beforeEach () ->
       canvas = $('canvas').get(0);
       @Circuit = new Circuit(canvas)
 
     describe "on initialization", ->
-
-      it "should initiate solver", ->
-        @Circuit.Solver != null
-        @Circuit.Hint != null
-
-      it "should initialize input states", ->
-        @Circuit.mouseState != null
-        @Circuit.keyboardState != null
-        @Circuit.colorMapState != null
-
-      it "should initialize empty collections", ->
-        @Circuit.nodeList.should.be.empty
-        @Circuit.elementList.should.be.empty
-        @Circuit.voltageSources.should.be.empty
-        @Circuit.voltageSourceCount.should.equal 0
-
-      it "should clear all errors", ->
+      it "should have no errors", ->
         @Circuit.stopMessage == null
         @Circuit.stopElm == null
 
+      it "should have correct initial states", ->
+        @Circuit.getState().should.be "RUN"     # Run, Pause, Edit
+        @Circuit.getMouseState().should.be "NO_MOUSE_BUTTON"   # Moving, Dragging,
+        @Circuit.getKeyboardState().should.be "NO_KEY_DOWN"   # Moving, Dragging,
+
+
+    describe "should have event listeners for", ->
+      describe "onMouseMove (x, y)", ->
+
+      describe "onMouseDown (x, y)", ->
+
+      describe "onError (message)", ->
+
+
+    describe "should dispatch events for", ->
+      describe "update", ->
+
+      describe "start", ->
+
+      describe "pause", ->
+
+      describe "complete", ->
+
+      describe "component added (component)", ->
+
+      describe "component removed (component)", ->
+
+      describe "component moved (component)", ->
+
+
+    describe "should have one", ->
+      describe "Canvas", ->
+
+      describe "Solver", ->
+        @Circuit.Solver != null
+
+      describe "Params Object", ->
+
+      describe "Hint Object", ->
+        @Circuit.Hint != null
+
+
+    describe "should have collection of", ->
+      specify "Voltage Sources", ->
+        @Circuit.getVoltageSources().should.be.empty
+
+      specify "Circuit Components", ->
+        @Circuit.getElements().should.be.empty
+
+      specify "GetElmByIdx should return an empty array", ->
+        @Circuit.getElmByIdx(0).should.be.empty
+
+      specify "Nodes", ->
+        @Circuit.getNodes().should.be.empty
+
+      describe "Oscilloscopes", ->
+        @Circuit.getScopes().should.be.empty()
+
 
     describe "apply update", ->
-
       beforeEach () ->
         @Circuit.updateCircuit()
 

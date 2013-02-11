@@ -11,7 +11,6 @@ Configures interface from JSON file
   @createFromJSON: (circuitFileName, Context = null, onComplete = null) ->
 
     $.getJSON circuitFileName, (jsonParsed) ->
-
       circuit = new Circuit(Context)
 
       # Circuit Parameters are stored at the header of the .json file (index 0)

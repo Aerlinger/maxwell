@@ -19,6 +19,7 @@ define [
 ) ->
 # </DEFINE>
 
+
   class TransistorElm
 
     @FLAG_FLIP: 1
