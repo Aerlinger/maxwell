@@ -137,6 +137,7 @@ require([
     'jquery',
 
     'cs!Circuit',
+    'cs!CircuitLoader',
     'cs!ResistorElm',
     'cs!WireElm',
     'cs!GroundElm',
@@ -145,32 +146,39 @@ require([
     'cs!ArrayUtils',
     'cs!ConsoleUtils'
 
-], function ($, Circuit, Resistor, Wire, Ground, Voltage) {
+], function ($, Circuit, CircuitLoader, Resistor, Wire, Ground, Voltage) {
+
+    var circuitName = $('canvas').data('circuit');
+    var circuitFileName = "../circuits/" + circuitName + ".json";
+    console.log("loading: " + circuitFileName);
 
     var canvas = $('canvas').get(0);
-    var circuit = new Circuit(canvas);
+    CircuitLoader.createCircuitFromJSON(circuitFileName, canvas, function(circuit) {
+        "use strict";
 
-    var voltageSource = new Voltage(112, 368, 112, 48, 0, [0, 40.0, 10.0, 0.0]);
-    var wire1 = new Wire(112, 48, 240, 48, 0, []);
-    var res1 = new Resistor(240, 48, 240, 368, 0, [10000]);
-    var wire2 = new Wire(112, 368, 240, 368, 0, []);
-    var wire3 = new Wire(240, 48, 432, 48, 0, []);
-    var wire4 = new Wire(240, 368, 432, 368, 0, []);
-    var re2 = new Resistor(432, 48, 432, 368, 0, [20000]);
+        setInterval(function() {
+            circuit.updateCircuit();
+        }, 0);
+    });
 
-    circuit.solder(voltageSource);
-    circuit.solder(wire1);
-    circuit.solder(wire2);
-    circuit.solder(wire3);
-    circuit.solder(wire4);
-    circuit.solder(res1);
-    circuit.solder(re2);
+//    var voltageSource = new Voltage(112, 368, 112, 48, 0, [0, 40.0, 10.0, 0.0]);
+//    var wire1 = new Wire(112, 48, 240, 48, 0, []);
+//    var res1 = new Resistor(240, 48, 240, 368, 0, [10000]);
+//    var wire2 = new Wire(112, 368, 240, 368, 0, []);
+//    var wire3 = new Wire(240, 48, 432, 48, 0, []);
+//    var wire4 = new Wire(240, 368, 432, 368, 0, []);
+//    var re2 = new Resistor(432, 48, 432, 368, 0, [20000]);
+//
+//    circuit.solder(voltageSource);
+//    circuit.solder(wire1);
+//    circuit.solder(wire2);
+//    circuit.solder(wire3);
+//    circuit.solder(wire4);
+//    circuit.solder(res1);
+//    circuit.solder(re2);
+//
+//    circuit.restartAndRun();
 
-    circuit.restartAndRun();
-
-    setInterval(function() {
-        circuit.updateCircuit();
-    }, 0);
 
     runTests();
 

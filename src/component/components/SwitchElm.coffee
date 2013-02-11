@@ -19,6 +19,7 @@ define [
 ) ->
 # </DEFINE>
 
+
   class SwitchElm extends CircuitComponent
 
     constructor: (xa, ya, xb, yb, f, st) ->

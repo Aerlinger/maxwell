@@ -32,7 +32,6 @@ define [
         @circuitElement.x2.should.equal 13
         @circuitElement.y2.should.equal 14
 
-
       specify "without flag passed as an argument", ->
         @circuitElement.flags.should.equal 0
 
@@ -91,3 +90,10 @@ define [
 
       specify "base elements should be linear by default", ->
         @circuitElement.nonLinear().should.equal false
+
+
+    describe "Should listen for", ->
+
+      specify "onDraw(Context)", ->
+
+

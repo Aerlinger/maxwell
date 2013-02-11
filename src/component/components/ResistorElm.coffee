@@ -61,8 +61,8 @@ define [
           else
             newOffset = 0
         voltDrop = volt1 + (volt2 - volt1) * i / segments
-        DrawHelper.interpPoint @lead1, @lead2, DrawHelper.ps1, i * segf, hs * oldOffset
-        DrawHelper.interpPoint @lead1, @lead2, DrawHelper.ps2, (i + 1) * segf, hs * newOffset
+        DrawHelper.interpPoint @lead1, @lead2, i*segf, hs*oldOffset, DrawHelper.ps1
+        DrawHelper.interpPoint @lead1, @lead2, (i+1)*segf, hs*newOffset, DrawHelper.ps2
         renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(voltDrop)
         oldOffset = newOffset
 

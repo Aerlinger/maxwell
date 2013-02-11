@@ -29,7 +29,6 @@ define [
       @createSlider()
 
 
-
     dump: ->
       RailElm::dump.call(this) + " " + @sliderText
 

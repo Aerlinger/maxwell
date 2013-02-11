@@ -48,14 +48,20 @@ define [
 
     @unitsFont: "Arial, Helvetica, sans-serif"
 
-    @interpPoint: (ptA, ptB, f, g = 0, ptOut1 = null, putOut2 = null) ->
+    @interpPoint: (ptA, ptB, f, g = 0, ptOut1 = null, ptOut2 = null) ->
       gx = ptB.y - ptA.y
       gy = ptA.x - ptB.x
       g /= Math.sqrt gx*gx + gy*gy
 
-      if ptOut1
-        ptOut1.x = (1 - f) * Math.floor ptA.x + (f * ptB.x) + (g * gx) + 0.48
-        ptOut1.y = (1 - f) * Math.floor ptA.y + (f * ptB.y) + (g * gy) + 0.48
+      if !ptOut1
+        ptOut1 = new Point()
+
+      ptOut1.x = Math.floor (1 - f) * ptA.x + (f * ptB.x) + (g * gx) + 0.48
+      ptOut1.y = Math.floor (1 - f) * ptA.y + (f * ptB.y) + (g * gy) + 0.48
+
+      if ptOut2
+        ptOut2.x = ptOut1.x
+        ptOut2.y = ptOut1.y
 
       return ptOut1
 
