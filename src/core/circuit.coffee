@@ -4,6 +4,9 @@
 #
 # @author Anthony Erlinger
 # @year 2012
+#
+# Observes: Render
+#
 # #######################################################################
 
 # <DEFINE>
@@ -12,7 +15,8 @@ define [
   'cs!Oscilloscope',
   'cs!Logger',
   'cs!ColorMapState',
-  'cs!Renderer',
+  'cs!CircuitState',
+  'cs!CircuitRenderer',
   'cs!Point',
   'cs!Rectangle',
   'cs!Polygon',
@@ -30,7 +34,8 @@ define [
   Oscilloscope,
   Logger,
   ColorMapState,
-  Renderer,
+  CircuitState,
+  CircuitRenderer,
   Point,
   Rectangle,
   Polygon,
@@ -52,7 +57,7 @@ define [
       constructor: (CanvasElm) ->
         @Params = new CircuitEngineParams()
         @CommandHistory = new CommandHistory()
-        @Renderer = new Renderer(this, CanvasElm)
+        @Renderer = new CircuitRenderer(this, CanvasElm)
 
         @clearAndReset()
 
@@ -85,6 +90,8 @@ define [
         @mouseState = new MouseState()
         @keyboardState = new KeyboardState()
         @colorMapState = new ColorMapState()
+
+        @state = CircuitState.RUNNING
 
         @clearErrors()
 
@@ -129,6 +136,14 @@ define [
 
       numElements: ->
         return @elementList.length
+
+      #########################
+      # Scopes:
+      #########################
+
+      # Scopes aren't implemented yet
+      getScopes: ->
+        []
 
 
       #########################
@@ -324,6 +339,7 @@ define [
         @stopMessage = null
         @stopElm = null
 
+
       ###
       Delegations:
       ###
@@ -341,5 +357,8 @@ define [
 
       currentSpeed: ->
         return @Params['currentMult']
+
+      getState: ->
+        return @state
 
   return Circuit

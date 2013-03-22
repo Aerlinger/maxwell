@@ -2,7 +2,7 @@
 define ['cs!CanvasContext'], (CanvasContext) ->
 # </DEFINE>
 
-  class Renderer
+  class CircuitRenderer
 
     constructor: (@Circuit, Canvas) ->
       if Canvas
@@ -46,4 +46,4 @@ define ['cs!CanvasContext'], (CanvasContext) ->
     getBuffer: () ->
       return @Context?.getCanvas().toBuffer
 
-  return Renderer
+  return CircuitRenderer

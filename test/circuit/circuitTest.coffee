@@ -1,13 +1,15 @@
 # <DEFINE>
-define ['cs!Circuit'], (Circuit) ->
+define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
 # </DEFINE>
 
+  console.log Circuit
 
   describe "Circuit", ->
-
     beforeEach () ->
       canvas = $('canvas').get(0);
       @Circuit = new Circuit(canvas)
+      console.log "Loading circuit"
+      console.log @Circuit
 
     describe "on initialization", ->
       it "should have no errors", ->
@@ -15,49 +17,46 @@ define ['cs!Circuit'], (Circuit) ->
         @Circuit.stopElm == null
 
       it "should have correct initial states", ->
-        @Circuit.getState().should.be "RUN"     # Run, Pause, Edit
-        @Circuit.getMouseState().should.be "NO_MOUSE_BUTTON"   # Moving, Dragging,
-        @Circuit.getKeyboardState().should.be "NO_KEY_DOWN"   # Moving, Dragging,
+        @Circuit.getState() == State.RUN     # Run, Pause, Edit
 
 
     describe "should observe", ->
-
       specify "UIContext", ->
         @Circuit.observers.should.include @Circuit.Context
 
     describe "should have event listeners for", ->
-      describe "onMouseMove (x, y)", ->
+      specify "onMouseMove (x, y)", ->
 
-      describe "onMouseDown (x, y)", ->
+      specify "onMouseDown (x, y)", ->
 
-      describe "onError (message)", ->
+      specify "onError (message)", ->
 
 
     describe "should dispatch events for", ->
-      describe "update", ->
+      specify "update", ->
 
-      describe "start", ->
+      specify "start", ->
 
-      describe "pause", ->
+      specify "pause", ->
 
-      describe "complete", ->
+      specify "complete", ->
 
-      describe "component added (component)", ->
+      specify "component added (component)", ->
 
-      describe "component removed (component)", ->
+      specify "component removed (component)", ->
 
-      describe "component moved (component)", ->
+      specify "component moved (component)", ->
 
 
     describe "should have one", ->
       describe "Canvas", ->
 
-      describe "Solver", ->
+      specify "Solver", ->
         @Circuit.Solver != null
 
-      describe "Params Object", ->
+      specify "Params Object", ->
 
-      describe "Hint Object", ->
+      specify "Hint Object", ->
         @Circuit.Hint != null
 
 
@@ -69,13 +68,13 @@ define ['cs!Circuit'], (Circuit) ->
         @Circuit.getElements().should.be.empty
 
       specify "GetElmByIdx should return an empty array", ->
-        @Circuit.getElmByIdx(0).should.be.empty
+        @Circuit.getElmByIdx(0) == null
 
       specify "Nodes", ->
         @Circuit.getNodes().should.be.empty
 
-      describe "Oscilloscopes", ->
-        @Circuit.getScopes().should.be.empty()
+      specify "Oscilloscopes", ->
+        @Circuit.getScopes().should.be.empty
 
 
     describe "apply update", ->
