@@ -1,6 +1,6 @@
 # <DEFINE>
 define [
-  'cs!MatrixStamper',
+  'cs!matrixStamper',
   'cs!GroundElm',
   'cs!RailElm',
   'cs!VoltageElm',

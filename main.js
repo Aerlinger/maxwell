@@ -15,13 +15,15 @@ require.config({
         // CORE:
         Circuit:'src/core/circuit',
         CircuitEngineParams:'src/core/circuitParams',
-        Hint:'src/core/hint',
-        CircuitSolver:'src/core/engine/circuitSolver',
-        MatrixStamper:'src/core/engine/matrixStamper',
-        RowInfo:'src/core/engine/rowInfo',
-        CircuitNode:'src/core/nodeGraph/circuitNode',
-        CircuitNodeLink:'src/core/nodeGraph/circuitNodeLink',
-        Pathfinder:'src/core/nodeGraph/pathfinder',
+
+        // ENGINE:
+        MatrixStamper:'src/engine/matrixStamper',
+        RowInfo:'src/engine/rowInfo',
+        CircuitSolver:'src/engine/circuitSolver',
+        Hint:'src/engine/hint',
+        CircuitNode:'src/engine/nodeGraph/circuitNode',
+        CircuitNodeLink:'src/engine/nodeGraph/circuitNodeLink',
+        Pathfinder:'src/engine/nodeGraph/pathfinder',
 
         // SETTINGS:
         Settings:'src/settings/settings',
@@ -41,16 +43,14 @@ require.config({
         CanvasContext:'src/render/canvasContext',
         DrawHelper:'src/render/drawHelper',
 
-        // USER INTERFACE:
-        State:'src/ui/circuitStates',
-        CommandHistory:'src/ui/commandHistory',
-        Grid:'src/ui/grid',
-        Oscilloscope:'src/core/circuitParams',
-        ColorScale:'src/util/colorScale',
-        KeyboardState:'src/ui/keyboardState',
-        MouseState:'src/ui/mouseState',
-        ColorMapState:'src/ui/colorMapState',
-        ColorPalette:'src/ui/colorPalette',
+        // OSCILLOSCOPE:
+        Oscilloscope:'src/scope/oscilloscope',
+
+        // STATE:
+        State:'src/state/circuitStates',
+        ColorMapState:'src/state/colorMapState',
+        KeyboardState:'src/state/keyboardState',
+        MouseState:'src/state/mouseState',
 
         // COMPONENT:
         CircuitComponent:'src/component/circuitComponent',
@@ -82,7 +82,13 @@ require.config({
         VoltageElm:'src/component/components/VoltageElm',
         WireElm:'src/component/components/WireElm',
 
+        // USER INTERFACE:
+        CommandHistory:'src/ui/commandHistory',
+        Grid:'src/ui/grid',
+
         // Utils
+        ColorScale:'src/util/colorScale',
+        ColorPalette:'src/util/colorPalette',
         MathUtils:'src/util/mathUtils',
         ArrayUtils:'src/util/arrayUtils',
         FormatUtils:'src/util/formatUtils',
