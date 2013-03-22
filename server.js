@@ -17,10 +17,6 @@ app.configure(function(){
 
 });
 
-//app.get('/', function(req, res) {
-//    res.sendFile('index.html');
-//});
-
 console.log("Running Maxwell in environment: " + process.argv[2])
 process.env[process.argv[2]] = true
 

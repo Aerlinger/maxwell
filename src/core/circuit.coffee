@@ -47,32 +47,6 @@ define [
 # </DEFINE>
 
 
-  #Request Animation Frame polyfill
-  (()->
-    lastTime = 0
-    vendors = ["ms", "moz", "webkit", "o"]
-    x = 0
-
-    while x < vendors.length and not window.requestAnimationFrame
-      window.requestAnimationFrame = window[vendors[x] + "RequestAnimationFrame"]
-      window.cancelAnimationFrame = window[vendors[x] + "CancelAnimationFrame"] or window[vendors[x] + "CancelRequestAnimationFrame"]
-      ++x
-    unless window.requestAnimationFrame
-      window.requestAnimationFrame = (callback, element) =>
-        currTime = new Date().getTime()
-        timeToCall = Math.max(0, 16 - (currTime - lastTime))
-        id = window.setTimeout(->
-          callback currTime + timeToCall
-        , timeToCall)
-        lastTime = currTime + timeToCall
-        id
-    unless window.cancelAnimationFrame
-      window.cancelAnimationFrame = (id) ->
-        clearTimeout id
-  )()
-
-
-
   class Circuit
 
       constructor: (CanvasElm) ->
@@ -99,7 +73,6 @@ define [
         @elementList = []
 
         @voltageSources = [];
-        @voltageSourceCount = 0;
 
         @Solver = new CircuitSolver(this)
 
@@ -117,7 +90,6 @@ define [
 
         @scopes = []         # Array of scope objects
         @scopeColCount = []  # Array of integers
-        @scopeCount = 0
 
 
       setupScopes: ->
@@ -180,11 +152,6 @@ define [
 
       getGrid: ->
         return @grid
-
-
-      # TODO: This is a stub!
-      getCanvasBounds: ->
-        return new Primitives.Rectangle(0, 0, 500, 400);
 
 
       #########################

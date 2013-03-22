@@ -20,6 +20,11 @@ define ['cs!Circuit'], (Circuit) ->
         @Circuit.getKeyboardState().should.be "NO_KEY_DOWN"   # Moving, Dragging,
 
 
+    describe "should observe", ->
+
+      specify "UIContext", ->
+        @Circuit.observers.should.include @Circuit.Context
+
     describe "should have event listeners for", ->
       describe "onMouseMove (x, y)", ->
 
