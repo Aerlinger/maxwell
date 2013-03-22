@@ -14,7 +14,7 @@ require.config({
 
         // CORE:
         Circuit:'src/core/circuit',
-        CircuitEngineParams:'src/core/circuitParams',
+        CircuitEngineParams:'src/core/simulationParams',
 
         // ENGINE:
         MatrixStamper:'src/engine/matrixStamper',
@@ -39,7 +39,7 @@ require.config({
         Rectangle:'src/geom/rectangle',
 
         // RENDERING:
-        Renderer:'src/render/renderer',
+        CircuitRenderer:'src/render/circuitRenderer',
         CanvasContext:'src/render/canvasContext',
         DrawHelper:'src/render/drawHelper',
 
@@ -47,7 +47,7 @@ require.config({
         Oscilloscope:'src/scope/oscilloscope',
 
         // STATE:
-        State:'src/state/circuitStates',
+        CircuitState:'src/state/circuitState',
         ColorMapState:'src/state/colorMapState',
         KeyboardState:'src/state/keyboardState',
         MouseState:'src/state/mouseState',
