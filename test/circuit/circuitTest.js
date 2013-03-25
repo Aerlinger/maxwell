@@ -16,13 +16,13 @@
           this.Circuit.stopMessage === null;
           return this.Circuit.stopElm === null;
         });
-        return it("should have correct initial states", function() {
+        return it("should have correct initial state", function() {
           return this.Circuit.getState() === State.RUN;
         });
       });
       describe("should observe", function() {
         return specify("UIContext", function() {
-          return this.Circuit.observers.should.include(this.Circuit.Context);
+          return this.Circuit.getObservers().should === [];
         });
       });
       describe("should have event listeners for", function() {

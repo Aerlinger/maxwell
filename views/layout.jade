@@ -1,0 +1,75 @@
+!!! 5
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/css/mocha.css')
+    link(rel='stylesheet', href='/css/bootstrap.css')
+    link(rel='stylesheet', href='/css/bootstrap-responsive.css')
+    link(rel='stylesheet', href='/css/theme.css')
+    link(rel='stylesheet', href='/css/maxwell.css')
+
+
+    script(type="text/javascript", src="/javascripts/chai.js")
+    script(type="text/javascript", src="/javascripts/mocha.js")
+    script(type="text/javascript", data-main="../main", src="/javascripts/require.js")
+
+  body
+    include _header
+
+    p= circuit_name || "voltdividesimple"
+
+    div.row-fluid
+      div.span2
+        ul.nav.nav-list
+
+          li.nav-header Basic
+          li
+            a(href="#") Select
+          li
+            a(href="#") Wire
+          li
+            a(href="#") Wire
+          li
+            a(href="#") Resistor
+          li
+            a(href="#") Inductor
+          li
+            a(href="#") Capacitor
+
+          li.nav-header Analog
+          li
+            a(href="#") Operational Amplifier
+          li
+            a(href="#") Wire
+          li
+            a(href="#") Resistor
+
+          li.nav-header
+
+          li.divider
+
+        ul.nav.nav-list
+          li.nav-header Scope
+          li
+            a(href="#") Select
+
+
+      div.span8
+        #container
+          canvas.maxwell(data-circuit="voltdividesimple", width="800", height="600")
+
+      div.span2
+
+    .row-fluid
+      .span8.offset2
+
+        a.btn
+          i.icon-play
+        a.btn
+          i.icon-pause
+        a.btn
+          i.icon-stop
+        img.img-circle(src="http://placehold.it/30x30")
+
+
+    include _mocha_tests

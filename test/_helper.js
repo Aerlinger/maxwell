@@ -3,7 +3,7 @@ define(['chai'], function(chai) {
     chai.should();
     chai.expect();
 
-    console.log("loading helper.js");
+    console.log("Loading helper.js");
 
     // Simple check to make sure mocha is loaded and working
     describe("Sanity check", function () {
