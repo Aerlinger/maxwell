@@ -70,12 +70,13 @@ define [
       return @analyzeFlag
 
 
-    stop: (message = "Simulator Stopped") ->
+    pause: (message = "Simulator stopped") ->
       Logger.log message
       @isStopped = true
 
 
-    run: ->
+    run: (message = "Simulator running") ->
+      Logger.log message
       @isStopped = false
 
 

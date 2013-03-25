@@ -1,3 +1,21 @@
+# #######################################################################
+# CircuitComponent:
+#   Base class from which all components inherit
+#
+# @author Anthony Erlinger
+# @year 2012
+#
+# Uses the Observer Design Pattern:
+#   Observes: Circuit, CircuitRender
+#   Observed By: CircuitRenderer
+#
+#
+# Events:
+#  <None>
+#
+# #######################################################################
+
+
 # <DEFINE>
 define [
   'cs!Settings',
@@ -6,7 +24,9 @@ define [
   'cs!Rectangle',
   'cs!Point'
   'cs!MathUtils',
-  'cs!ArrayUtils'
+  'cs!ArrayUtils',
+  'cs!Observer',
+  'cs!Module'
 
 ], (
   Settings,
@@ -15,12 +35,14 @@ define [
   Rectangle,
   Point,
   MathUtils,
-  ArrayUtils
+  ArrayUtils,
+  Observer,
+  Module
 ) ->
 # </DEFINE>
 
 
-  class CircuitComponent
+  class CircuitComponent extends Module
 
     constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, st = []) ->
       @current = 0

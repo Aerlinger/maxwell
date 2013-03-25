@@ -16,13 +16,13 @@ define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
         @Circuit.stopMessage == null
         @Circuit.stopElm == null
 
-      it "should have correct initial states", ->
+      it "should have correct initial state", ->
         @Circuit.getState() == State.RUN     # Run, Pause, Edit
 
 
     describe "should observe", ->
       specify "UIContext", ->
-        @Circuit.observers.should.include @Circuit.Context
+        @Circuit.getObservers().should == []
 
     describe "should have event listeners for", ->
       specify "onMouseMove (x, y)", ->

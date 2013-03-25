@@ -1,12 +1,28 @@
+# #######################################################################
+# CircuitRenderer:
+#     Top-level class specification for a circuit
+#
+# @author Anthony Erlinger
+# @year 2012
+#
+# Observes: Circuit
+# Observed By: CircuitComponent>
+#
+# #######################################################################
+
 # <DEFINE>
-define ['cs!CanvasContext'], (CanvasContext) ->
+define ['cs!CanvasContext', 'cs!Observer', 'cs!Circuit'], (CanvasContext, Observer, Circuit) ->
 # </DEFINE>
 
-  class CircuitRenderer
+  class CircuitRenderer extends Observer
 
-    constructor: (@Circuit, Canvas) ->
-      if Canvas
-        @Context = new CanvasContext(Canvas)
+    constructor: (@Circuit, CanvasDomElm) ->
+      @Context = new CanvasContext(CanvasDomElm) if CanvasDomElm
+
+      @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
+      @Circuit.addObserver Circuit.ON_RESET, @clear
+      @Circuit.addObserver Circuit.ON_END_UPDATE, @repaint
+
 
     drawComponents: ->
       if @Context
@@ -14,8 +30,7 @@ define ['cs!CanvasContext'], (CanvasContext) ->
           @drawComponent(component)
 
     drawComponent: (component) ->
-      if @Context
-        component.draw(@Context)
+      component.draw(@Context) if @Context
 
     drawInfo: ->
       # TODO: Find where to show data; below circuit, not too high unless we need it
@@ -34,7 +49,7 @@ define ['cs!CanvasContext'], (CanvasContext) ->
         msg += error + "\n"
       console.error "Simulation Error: " + msg
 
-    clear: () ->
+    clear: ->
       @Context?.clear()
 
     getContext: () ->
@@ -45,5 +60,43 @@ define ['cs!CanvasContext'], (CanvasContext) ->
 
     getBuffer: () ->
       return @Context?.getCanvas().toBuffer
+
+
+    ###
+    # Event Listeners:
+    ###
+
+    # On Circuit update:
+    #   redraw()
+
+    repaint: (Circuit) =>
+      @drawComponents()
+#      realMouseElm = @mouseElm
+#      @mouseElm = @stopElm unless @mouseElm?
+#
+#      if @stopMessage?
+#        @halt @stopMessage
+#      else
+#        @getCircuitBottom() if @circuitBottom is 0
+#
+#        # Array of messages to be displayed at the bottom of the canvas
+#        info = []
+#        if @mouseElm?
+#          if @mousePost is -1
+#            @mouseElm.getInfo info
+#          else
+#            info.push "V = " + Units.getUnitText(@mouseElm.getPostVoltage(@mousePost), "V")
+#        else
+#          Settings.fractionalDigits = 2
+#          info.push "t = " + Units.getUnitText(@Solver.time, "s") + "\nft: " + (@lastTime - @lastFrameTime) + "\n"
+#        unless @Hint.hintType is -1
+#          hint = @Hint.getHint()
+#          unless hint
+#            @Hint.hintType = -1
+#          else
+#            info.push hint
+#
+#        @Renderer.drawInfo(info)
+#        @mouseElm = realMouseElm
 
   return CircuitRenderer

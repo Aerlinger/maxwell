@@ -1,0 +1,39 @@
+body {
+    background-color: #c3c3c3;
+}
+
+.span2, .span3, .span4, .span5, .span6, .span7, .span8, .span9, .span10, .span11, .span12 {
+    background-color: #535353;
+}
+
+a {
+    color: #a4c3ff;
+    text-shadow: none;
+}
+
+a:hover {
+    color: white;
+}
+
+ul.nav li a {
+    color: white;
+    font-size: 1em;
+    font-weight: 200;
+    text-shadow: none !important;
+}
+
+ul.nav li a:hover {
+    background-color: graytext;
+    color: black;
+    text-shadow: none;
+}
+
+ul.nav .nav-header {
+    background-color: black;
+    color: white;
+    text-shadow: none;
+}
+
+#mocha {
+    background: white;
+}

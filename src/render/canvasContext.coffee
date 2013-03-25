@@ -8,10 +8,10 @@ define [
 ) ->
 # </DEFINE>
 
-
   class CanvasContext
     constructor: (@Canvas, @width=600, @height=400) ->
       @context = @Canvas?.getContext?('2d')
+      @drawThickLine 10, 40, 400, 700
 
     fillText: (text, x, y) ->
       return if !@context
