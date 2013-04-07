@@ -254,17 +254,12 @@ define [
       # Reconstruct circuit
       @Solver.reconstruct()
 
-
-      # If the circuit isn't stopped, solve
+      # If the circuit isn't stopped,
       unless @Solver.isStopped
         @Solver.solveCircuit()
         @lastTime = @updateTimings()
       else
         @lastTime = 0
-
-#      @renderCircuit()
-#      @renderScopes()
-#      @renderInfo()
 
       @notifyObservers(@ON_COMPLETE_UPDATE)
 
