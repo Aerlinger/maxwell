@@ -1,3 +1,8 @@
+# <DEFINE>
+define [], () ->
+# </DEFINE>
+
+
 #  == title ==
 #   @description:
 #  

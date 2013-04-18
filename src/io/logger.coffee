@@ -1,15 +1,19 @@
-class Logger
+# <DEFINE>
+define [], () ->
+# </DEFINE>
 
-  errorStack = new Array()
-  warningStack = new Array()
+  class Logger
 
-  @error: (msg) ->
-    console.log "Error: " + msg
-    errorStack.push msg
+    errorStack = new Array()
+    warningStack = new Array()
 
-  @warn: (msg) ->
-    console.error "Warning: " + msg
-    warningStack.push msg
+    @error: (msg) ->
+      console.log "Error: " + msg
+      errorStack.push msg
+
+    @warn: (msg) ->
+      console.error "Warning: " + msg
+      warningStack.push msg
 
 
-module.exports = Logger
+  return Logger

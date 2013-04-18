@@ -1,0 +1,5 @@
+# <DEFINE>
+define [], () ->
+# </DEFINE>
+
+

@@ -1,28 +1,33 @@
-class CommandHistory
+# <DEFINE>
+define [], () ->
+# </DEFINE>
 
-  constructor: ->
-    @reset()
 
-  pushRedo: (action) ->
-    @redoStack.push(action)
+  class CommandHistory
 
-  popRedo: ->
-    @redoStack.pop()
+    constructor: ->
+      @reset()
 
-  pushUndo: (action) ->
-    @undoStack.push(action)
+    pushRedo: (action) ->
+      @redoStack.push(action)
 
-  popUndo: ->
-    @redoStack.pop()
+    popRedo: ->
+      @redoStack.pop()
 
-  clearUndo: ->
-    @undoStack = new Array()
+    pushUndo: (action) ->
+      @undoStack.push(action)
 
-  clearRedo: ->
-    @redoStack = new Array()
+    popUndo: ->
+      @redoStack.pop()
 
-  reset: ->
-    @undoStack = new Array()
-    @redoStack = new Array()
+    clearUndo: ->
+      @undoStack = new Array()
 
-module.exports = CommandHistory
+    clearRedo: ->
+      @redoStack = new Array()
+
+    reset: ->
+      @undoStack = new Array()
+      @redoStack = new Array()
+
+  return CommandHistory

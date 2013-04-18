@@ -1,39 +1,88 @@
-Circuit = require('../../src/core/circuit')
+# <DEFINE>
+define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
+# </DEFINE>
 
-describe "Base Circuit Element", ->
+  console.log Circuit
 
-  beforeEach () ->
-    @Circuit = new Circuit()
-
-  describe "on initialization", ->
-
-    it "should initiate solver", ->
-      @Circuit.Solver != null
-      @Circuit.Hint != null
-
-    it "should initialize input states", ->
-      @Circuit.mouseState != null
-      @Circuit.keyboardState != null
-      @Circuit.colorMapState != null
-
-    it "should initialize empty collections", ->
-      @Circuit.nodeList.should.be.empty
-      @Circuit.elementList.should.be.empty
-      @Circuit.voltageSources.should.be.empty
-      @Circuit.voltageSourceCount.should.equal 0
-
-    it "should clear all errors", ->
-      @Circuit.stopMessage == null
-      @Circuit.stopElm == null
-
-
-  describe "apply update", ->
-
+  describe "Circuit", ->
     beforeEach () ->
-      @Circuit.updateCircuit()
+      canvas = $('canvas').get(0);
+      @Circuit = new Circuit(canvas)
+      console.log "Loading circuit"
+      console.log @Circuit
 
-    it "should call analyze circuit on the solver", ->
+    describe "on initialization", ->
+      it "should have no errors", ->
+        @Circuit.stopMessage == null
+        @Circuit.stopElm == null
 
-    it "should update after modifying solver", ->
-      @Circuit.restartAndRun()
+      it "should have correct initial state", ->
+        @Circuit.getState() == State.RUN     # Run, Pause, Edit
+
+
+    describe "should observe", ->
+      specify "UIContext", ->
+        @Circuit.getObservers().should == []
+
+    describe "should have event listeners for", ->
+      specify "onMouseMove (x, y)", ->
+
+      specify "onMouseDown (x, y)", ->
+
+      specify "onError (message)", ->
+
+
+    describe "should dispatch events for", ->
+      specify "update", ->
+
+      specify "start", ->
+
+      specify "pause", ->
+
+      specify "complete", ->
+
+      specify "component added (component)", ->
+
+      specify "component removed (component)", ->
+
+      specify "component moved (component)", ->
+
+
+    describe "should have one", ->
+      describe "Canvas", ->
+
+      specify "Solver", ->
+        @Circuit.Solver != null
+
+      specify "Params Object", ->
+
+      specify "Hint Object", ->
+        @Circuit.Hint != null
+
+
+    describe "should have collection of", ->
+      specify "Voltage Sources", ->
+        @Circuit.getVoltageSources().should.be.empty
+
+      specify "Circuit Components", ->
+        @Circuit.getElements().should.be.empty
+
+      specify "GetElmByIdx should return an empty array", ->
+        @Circuit.getElmByIdx(0) == null
+
+      specify "Nodes", ->
+        @Circuit.getNodes().should.be.empty
+
+      specify "Oscilloscopes", ->
+        @Circuit.getScopes().should.be.empty
+
+
+    describe "apply update", ->
+      beforeEach () ->
+        @Circuit.updateCircuit()
+
+      it "should call analyze circuit on the solver", ->
+
+      it "should update after modifying solver", ->
+        @Circuit.restartAndRun()
 
