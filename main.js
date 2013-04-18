@@ -39,7 +39,7 @@ require.config({
     Rectangle: 'src/geom/rectangle',
 
     // RENDERING:
-    CircuitRenderer: 'src/render/circuitRenderer',
+    CircuitCanvas: 'src/render/circuitCanvas',
     CanvasContext: 'src/render/canvasContext',
     DrawHelper: 'src/render/drawHelper',
 
@@ -85,6 +85,8 @@ require.config({
     // USER INTERFACE:
     CommandHistory: 'src/ui/commandHistory',
     Grid: 'src/ui/grid',
+    KeyHandler: 'src/ui/keyHandler',
+    MouseHandler: 'src/ui/mouseHandler',
 
     // Utils
     ColorScale: 'src/util/colorScale',
@@ -146,7 +148,7 @@ require([
   'jquery',
 
   'cs!Circuit',
-  'cs!CircuitRenderer',
+  'cs!CircuitCanvas',
   'cs!CircuitLoader',
   'cs!ResistorElm',
   'cs!WireElm',
@@ -156,20 +158,18 @@ require([
   'cs!ArrayUtils',
   'cs!ConsoleUtils'
 
-], function ($, Circuit, CircuitRenderer, CircuitLoader, Resistor, Wire, Ground, Voltage) {
+], function ($, Circuit, CircuitCanvas, CircuitLoader, Resistor, Wire, Ground, Voltage) {
 
   var circuitName = $('canvas').data('circuit');
   var circuitFileName = "../circuits/" + circuitName + ".json";
   console.log("loading: " + circuitFileName);
 
-  var canvas = $('canvas.maxwell').get(0);
-  var ctx = canvas.getContext('2d');
-
+  var canvas = $('canvas.maxwell');
 
   var renderer = null;
   CircuitLoader.createCircuitFromJSON(circuitFileName, canvas, function (circuit) {
     "use strict";
-    renderer = new CircuitRenderer(circuit, canvas);
+    renderer = new CircuitCanvas(circuit, canvas);
 
     setInterval(function () {
       circuit.updateCircuit();
@@ -194,8 +194,7 @@ require([
 //
 //    circuit.restartAndRun();
 
-
-  runTests();
+  //runTests();
 
   $('#run_tests').click(function (e) {
     "use strict";

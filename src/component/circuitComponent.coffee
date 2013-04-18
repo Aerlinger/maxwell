@@ -7,7 +7,7 @@
 #
 # Uses the Observer Design Pattern:
 #   Observes: Circuit, CircuitRender
-#   Observed By: CircuitRenderer
+#   Observed By: CircuitCanvas
 #
 #
 # Events:
@@ -46,16 +46,19 @@ define [
 
     constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, st = []) ->
       @current = 0
-      @curcount = 0
+      @curcount = 5
       @noDiagonal = false
       @selected = false
       @dragging = false
       @parentCircuit = null
+
       @flags = flags || @getDefaultFlags()
 
       @setPoints()
       @allocNodes()
       @initBoundingBox()
+
+      console.log "Instantiating Circuit Component"
 
     setParentCircuit: (circuit) ->
       @Circuit = circuit
@@ -349,8 +352,10 @@ define [
     # RENDERING METHODS
     ### #######################################################################
 
-    updateDotCount: (current = @current, currentCount = @curcount) ->
+    updateDotCount: (current = @current, currentCount = 15) ->
       return currentCount if @Circuit?.isStopped()
+
+      #console.log current, @Circuit?.currentSpeed()
 
       currentIncrement = current * @Circuit?.currentSpeed()
       currentIncrement %= 8
@@ -377,7 +382,7 @@ define [
       deltaX = point2.x - point1.x
       deltaY = point2.y - point1.y
       deltaR = Math.sqrt deltaX * deltaX + deltaY * deltaY
-      deltaSegment = 16
+      deltaSegment = 10
 
       pos %= deltaSegment
       pos += deltaSegment if pos < 0
@@ -388,6 +393,8 @@ define [
         y0 = point1.y + newPos * deltaY / deltaR
 
         # Draws each dot:
+
+        #console.log x0, y0
         renderContext.fillCircle(x0, y0, Settings.CURRENT_RADIUS)
         newPos += deltaSegment
 

@@ -3,14 +3,15 @@ html
   head
     title= title
     link(rel='stylesheet', href='/css/mocha.css')
-    link(rel='stylesheet', href='/css/bootstrap.css')
-    link(rel='stylesheet', href='/css/bootstrap-responsive.css')
+    link(rel='stylesheet', href='/css/foundation.css')
+    link(rel='stylesheet', href='/css/normalize.css')
     link(rel='stylesheet', href='/css/theme.css')
     link(rel='stylesheet', href='/css/maxwell.css')
 
 
     script(type="text/javascript", src="/javascripts/chai.js")
     script(type="text/javascript", src="/javascripts/mocha.js")
+    script(type="text/javascript", src="/javascripts/vendor/custom.modernizr.js")
     script(type="text/javascript", data-main="../main", src="/javascripts/require.js")
 
   body
@@ -18,58 +19,117 @@ html
 
     p= circuit_name || "voltdividesimple"
 
-    div.row-fluid
-      div.span2
-        ul.nav.nav-list
+    div.row.full
+      div.large-2.columns
+        div.section-container.vertical-nav
+          section.section
+            p.title
+              a(href="#") Select
+          section.section
+            p.title
+              a(href="#") Basic Components
+          section.section
+            p.title
+              a(href="#") Basic Components
+          section.section
+            p.title
+              a(href="#") Basic Components
+          section.section
+            p.title
+              a(href="#") Basic Components
+          section.section
+            p.title
+              a(href="#") Basic Components
+          section.section
+            p.title
+              a(href="#") Basic Components
+          section.section
+            p.title
+              a(href="#") Basic Components
+          section.section
+            p.title
+              a(href="#") Basic Components
+          section.section
+            p.title
+              a(href="#") Basic Components
+          section.section
+            p.title
+              a(href="#") Basic Components
 
-          li.nav-header Basic
-          li
-            a(href="#") Select
-          li
-            a(href="#") Wire
-          li
-            a(href="#") Wire
-          li
-            a(href="#") Resistor
-          li
-            a(href="#") Inductor
-          li
-            a(href="#") Capacitor
+        //div.button-bar
+        //  ul.button-group
+        //
+        //    li.nav-header Basic
+        //    li
+        //      a.small.button(href="#") Select
+        //    li
+        //      a.small.button(href="#") Wire
+        //    li
+        //      a.small.button(href="#") Wire
+        //    li
+        //      a.small.button(href="#") Resistor
+        //    li
+        //      a.small.button(href="#") Inductor
+        //    li
+        //      a.small.button(href="#") Capacitor
+        //
+        //    li.nav-header Analog
+        //    li
+        //      a.small.button(href="#") Operational Amplifier
+        //    li
+        //      a.small.button(href="#") Wire
+        //    li
+        //      a.small.button(href="#") Resistor
+        //
+        //    li.nav-header
+        //
+        //    li.divider
+        //
+        //  ul.nav.nav-list
+        //    li.nav-header Scope
+        //    li
+        //      a(href="#") Select
 
-          li.nav-header Analog
-          li
-            a(href="#") Operational Amplifier
-          li
-            a(href="#") Wire
-          li
-            a(href="#") Resistor
 
-          li.nav-header
-
-          li.divider
-
-        ul.nav.nav-list
-          li.nav-header Scope
-          li
-            a(href="#") Select
-
-
-      div.span8
+      div.large-8.columns
         #container
           canvas.maxwell(data-circuit="voltdividesimple", width="800", height="600")
 
-      div.span2
+      div.large-2.columns
 
-    .row-fluid
-      .span8.offset2
+  .row-fluid
+    .span8.offset2
 
-        a.btn
-          i.icon-play
-        a.btn
-          i.icon-pause
-        a.btn
-          i.icon-stop
-        img.img-circle(src="http://placehold.it/30x30")
+      a.btn
+        i.icon-play
+      a.btn
+        i.icon-pause
+      a.btn
+        i.icon-stop
+      img.img-circle(src="http://placehold.it/30x30")
 
 
     include _mocha_tests
+
+    | <script>
+    |   document.write('<script src=' +
+    |   ('__proto__' in {} ? 'javascripts/vendor/zepto' : 'javascripts/vendor/jquery') +
+    |   '.js><\/script>')
+    |   </script>
+    |   <script src="javascripts/foundation/foundation.js"></script>
+    |   <script src="javascripts/foundation/foundation.alerts.js"></script>
+    |   <script src="javascripts/foundation/foundation.clearing.js"></script>
+    |   <script src="javascripts/foundation/foundation.cookie.js"></script>
+    |   <script src="javascripts/foundation/foundation.dropdown.js"></script>
+    |   <script src="javascripts/foundation/foundation.forms.js"></script>
+    |   <script src="javascripts/foundation/foundation.joyride.js"></script>
+    |   <script src="javascripts/foundation/foundation.magellan.js"></script>
+    |   <script src="javascripts/foundation/foundation.orbit.js"></script>
+    |   <script src="javascripts/foundation/foundation.placeholder.js"></script>
+    |   <script src="javascripts/foundation/foundation.reveal.js"></script>
+    |   <script src="javascripts/foundation/foundation.section.js"></script>
+    |   <script src="javascripts/foundation/foundation.tooltips.js"></script>
+    |   <script src="javascripts/foundation/foundation.topbar.js"></script>
+    |   <script>
+    |   //$(document).foundation();
+    | </script>

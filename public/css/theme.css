@@ -1,9 +1,40 @@
+/* Set some colors that will be used in the layout */
+body {background-color:#201A16;}
+
+.color-one {background-color: #4A456C;} /* light purple */
+.color-two {background-color:#353153 ;} /* dark purple */
+.color-three {background-color: #201A16;} /* brown */
+.color-four {background-color:#755F4F ;} /*light brown*/
+.color-five {background-color:#dddddd;} /*dark gray */
+
 body {
     background-color: #c3c3c3;
 }
 
 .span2, .span3, .span4, .span5, .span6, .span7, .span8, .span9, .span10, .span11, .span12 {
     background-color: #535353;
+}
+
+/* `TYPOGRAPHY
+----------------------------------------------------------------------------------------------------*/
+
+h2, h3 {
+    font-family:'Open Sans', sans-serif;
+    text-align:center;
+    color:white;
+    font-size:2em;
+    font-weight:600;
+}
+
+h3 {
+    font-size:1.7em;
+    position: relative;}
+
+p {
+    color:white;
+    font-size: 1.3em;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
 }
 
 a {
@@ -36,4 +67,20 @@ ul.nav .nav-header {
 
 #mocha {
     background: white;
+}
+
+.row.full {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    z-index:9999;
+
+    padding:0 !important;
+    margin:0 !important;
+}
+
+section {
+
+    /* Prevents horizontal scrollling for off-canvas elements */
+    overflow-x: hidden;
 }
