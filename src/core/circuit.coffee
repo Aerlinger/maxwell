@@ -27,7 +27,7 @@ define [
   'cs!Logger',
   'cs!ColorMapState',
   'cs!CircuitState',
-  'cs!CircuitRenderer',
+  'cs!CircuitCanvas',
   'cs!Point',
   'cs!Rectangle',
   'cs!Polygon',
@@ -48,7 +48,7 @@ define [
   Logger,
   ColorMapState,
   CircuitState,
-  CircuitRenderer,
+  CircuitCanvas,
   Point,
   Rectangle,
   Polygon,
@@ -347,7 +347,8 @@ define [
       return @Params['powerRange']
 
     currentSpeed: ->
-      return @Params['currentMult']
+      return 62
+      #return @Params['currentMult']
 
     getState: ->
       return @state

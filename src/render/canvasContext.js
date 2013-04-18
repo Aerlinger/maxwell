@@ -11,7 +11,6 @@
         this.width = width != null ? width : 600;
         this.height = height != null ? height : 400;
         this.context = (_ref = this.Canvas) != null ? typeof _ref.getContext === "function" ? _ref.getContext('2d') : void 0 : void 0;
-        this.drawThickLine(10, 40, 400, 700);
       }
 
       CanvasContext.prototype.fillText = function(text, x, y) {

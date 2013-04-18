@@ -21,7 +21,7 @@
           st = [];
         }
         this.current = 0;
-        this.curcount = 0;
+        this.curcount = 5;
         this.noDiagonal = false;
         this.selected = false;
         this.dragging = false;
@@ -30,6 +30,7 @@
         this.setPoints();
         this.allocNodes();
         this.initBoundingBox();
+        console.log("Instantiating Circuit Component");
       }
 
       CircuitComponent.prototype.setParentCircuit = function(circuit) {
@@ -391,7 +392,7 @@
           current = this.current;
         }
         if (currentCount == null) {
-          currentCount = this.curcount;
+          currentCount = 15;
         }
         if ((_ref = this.Circuit) != null ? _ref.isStopped() : void 0) {
           return currentCount;
@@ -427,7 +428,7 @@
         deltaX = point2.x - point1.x;
         deltaY = point2.y - point1.y;
         deltaR = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        deltaSegment = 16;
+        deltaSegment = 10;
         pos %= deltaSegment;
         if (pos < 0) {
           pos += deltaSegment;

@@ -14,7 +14,6 @@ define [
 
 
   class DrawHelper
-
     @ps1: new Point(0, 0)
     @ps2: new Point(0, 0)
 
@@ -122,7 +121,6 @@ define [
       return newPoly
 
     @drawCoil: (hs, point1, point2, vStart, vEnd) ->
-
       segments = 40
       @ps1.x = point1.x
       @ps1.y = point1.y

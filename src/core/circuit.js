@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['cs!KeyboardState', 'cs!Oscilloscope', 'cs!Logger', 'cs!ColorMapState', 'cs!CircuitState', 'cs!CircuitRenderer', 'cs!Point', 'cs!Rectangle', 'cs!Polygon', 'cs!Grid', 'cs!CircuitEngineParams', 'cs!MouseState', 'cs!Settings', 'cs!ComponentRegistry', 'cs!Hint', 'cs!CommandHistory', 'cs!CircuitSolver', 'cs!Units', 'cs!Module', 'cs!Observer'], function(KeyboardState, Oscilloscope, Logger, ColorMapState, CircuitState, CircuitRenderer, Point, Rectangle, Polygon, Grid, CircuitEngineParams, MouseState, Settings, ComponentRegistry, Hint, CommandHistory, CircuitSolver, Units, Module, Observer) {
+  define(['cs!KeyboardState', 'cs!Oscilloscope', 'cs!Logger', 'cs!ColorMapState', 'cs!CircuitState', 'cs!CircuitCanvas', 'cs!Point', 'cs!Rectangle', 'cs!Polygon', 'cs!Grid', 'cs!CircuitEngineParams', 'cs!MouseState', 'cs!Settings', 'cs!ComponentRegistry', 'cs!Hint', 'cs!CommandHistory', 'cs!CircuitSolver', 'cs!Units', 'cs!Module', 'cs!Observer'], function(KeyboardState, Oscilloscope, Logger, ColorMapState, CircuitState, CircuitCanvas, Point, Rectangle, Polygon, Grid, CircuitEngineParams, MouseState, Settings, ComponentRegistry, Hint, CommandHistory, CircuitSolver, Units, Module, Observer) {
     var Circuit;
     Circuit = (function(_super) {
 
@@ -298,7 +298,7 @@
       };
 
       Circuit.prototype.currentSpeed = function() {
-        return this.Params['currentMult'];
+        return 62;
       };
 
       Circuit.prototype.getState = function() {

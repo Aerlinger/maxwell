@@ -31,7 +31,6 @@ define [
     @WF_PULSE: 5
     @WF_VAR: 6
 
-
     @circleSize: 17
 
     constructor: (xa, ya, xb, yb, f, st) ->
@@ -115,13 +114,13 @@ define [
   
     draw: (renderContext) ->
       @setBbox @x1, @y2, @x2, @y2
-  
+
       @updateDotCount()
-  
-      if !(@Circuit?.dragElm is this)# && !(@waveform is VoltageElm.WF_DC)
-        @drawDots @point1, @lead1, @curcount, renderContext
-        @drawDots @point2, @lead2, -@curcount, renderContext
-  
+
+      #if !(@Circuit?.dragElm is this)# && !(@waveform is VoltageElm.WF_DC)
+      @drawDots @point1, @lead1, @curcount, renderContext
+      @drawDots @point2, @lead2, -@curcount, renderContext
+
       @draw2Leads(renderContext)
   
       if @waveform is VoltageElm.WF_DC
