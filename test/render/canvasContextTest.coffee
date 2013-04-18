@@ -1,5 +1,13 @@
-CanvasContext = require '../../src/render/canvasContext'
-fs = require 'fs'
+# <DEFINE>
+define [
+  'cs!fs',
+  'cs!CanvasContext',
+], (
+  fs,
+  CanvasContext
+) ->
+# </DEFINE>
+
 
 describe "Canvas Context", ->
   beforeEach (done) ->
