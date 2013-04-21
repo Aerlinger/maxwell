@@ -28,7 +28,6 @@
 
       ResistorElm.prototype.draw = function(renderContext) {
         var hs, i, newOffset, oldOffset, resistanceVal, segf, segments, volt1, volt2, voltDrop, _i;
-        this.doDots(renderContext);
         segments = 16;
         oldOffset = 0;
         hs = 6;
@@ -58,6 +57,7 @@
         }
         resistanceVal = Units.getUnitText(this.resistance, "ohm");
         this.drawValues(resistanceVal, hs, renderContext);
+        this.drawDots(this.point1, this.point2, renderContext);
         return this.drawPosts(renderContext);
       };
 

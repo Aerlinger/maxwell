@@ -305,63 +305,6 @@
         return this.state;
       };
 
-      Circuit.prototype.renderInfo = function() {
-        var hint, info, realMouseElm;
-        realMouseElm = this.mouseElm;
-        if (this.mouseElm == null) {
-          this.mouseElm = this.stopElm;
-        }
-        if (this.stopMessage != null) {
-          return this.halt(this.stopMessage);
-        } else {
-          if (this.circuitBottom === 0) {
-            this.getCircuitBottom();
-          }
-          info = [];
-          if (this.mouseElm != null) {
-            if (this.mousePost === -1) {
-              this.mouseElm.getInfo(info);
-            } else {
-              info.push("V = " + Units.getUnitText(this.mouseElm.getPostVoltage(this.mousePost), "V"));
-            }
-          } else {
-            Settings.fractionalDigits = 2;
-            info.push("t = " + Units.getUnitText(this.Solver.time, "s") + "\nft: " + (this.lastTime - this.lastFrameTime) + "\n");
-          }
-          if (this.Hint.hintType !== -1) {
-            hint = this.Hint.getHint();
-            if (!hint) {
-              this.Hint.hintType = -1;
-            } else {
-              info.push(hint);
-            }
-          }
-          this.Renderer.drawInfo(info);
-          return this.mouseElm = realMouseElm;
-        }
-      };
-
-      Circuit.prototype.renderCircuit = function() {
-        var circuitElm, tempMouseMode, _i, _j, _len, _len1, _ref, _ref1, _results;
-        this.powerMult = Math.exp(this.Params.powerRange / 4.762 - 7);
-        _ref = this.elementList;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          circuitElm = _ref[_i];
-          this.Renderer.drawComponent(circuitElm);
-        }
-        tempMouseMode = this.mouseState.tempMouseMode;
-        if (tempMouseMode === MouseState.MODE_DRAG_ROW || tempMouseMode === MouseState.MODE_DRAG_COLUMN || tempMouseMode === MouseState.MODE_DRAG_POST || tempMouseMode === MouseState.MODE_DRAG_SELECTED) {
-          _ref1 = this.elementList;
-          _results = [];
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            circuitElm = _ref1[_j];
-            circuitElm.drawPost(circuitElm.x1, circuitElm.y1);
-            _results.push(circuitElm.drawPost(circuitElm.x2, circuitElm.y2));
-          }
-          return _results;
-        }
-      };
-
       Circuit.prototype.renderScopes = function() {};
 
       Circuit.prototype.getRenderer = function() {

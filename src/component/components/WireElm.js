@@ -23,7 +23,7 @@
 
       WireElm.prototype.draw = function(renderContext) {
         var s;
-        this.doDots(renderContext);
+        this.drawDots(this.point1, this.point2, renderContext);
         renderContext.drawThickLinePt(this.point1, this.point2, DrawHelper.getVoltageColor(this.volts[0]));
         this.setBboxPt(this.point1, this.point2, 3);
         if (this.mustShowCurrent()) {

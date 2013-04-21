@@ -31,11 +31,10 @@ define ['cs!CanvasContext', 'cs!Observer', 'cs!Circuit', 'cs!KeyHandler', 'cs!Mo
         @CanvasJQueryElm.mousedown @onMouseDown
         @CanvasJQueryElm.mouseup @onMouseUp
         @CanvasJQueryElm.click @onMouseClick
-        @CanvasJQueryElm.mousemove @onMouseMove
+        #@CanvasJQueryElm.mousemove @onMouseMove
 
     drawComponents: ->
       @clear()
-
       if @Context
         for component in @Circuit.getElements()
           @drawComponent(component)

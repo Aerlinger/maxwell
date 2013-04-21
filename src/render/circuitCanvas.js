@@ -37,7 +37,6 @@
           this.CanvasJQueryElm.mousedown(this.onMouseDown);
           this.CanvasJQueryElm.mouseup(this.onMouseUp);
           this.CanvasJQueryElm.click(this.onMouseClick);
-          this.CanvasJQueryElm.mousemove(this.onMouseMove);
         }
       }
 

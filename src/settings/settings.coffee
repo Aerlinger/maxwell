@@ -15,8 +15,8 @@ define ['cs!ColorPalette'], (ColorPalette) ->
 
     # Line Widths:
     @POST_RADIUS: 3
-    @CURRENT_RADIUS: 3
-    @LINE_WIDTH: 2
+    @CURRENT_RADIUS: 2
+    @LINE_WIDTH: 1
 
     # Grid
     @GRID_SIZE: 16
