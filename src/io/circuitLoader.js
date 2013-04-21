@@ -50,11 +50,8 @@
       */
 
 
-      CircuitLoader.createCircuitFromJSON = function(circuitFileName, context, onComplete) {
+      CircuitLoader.createCircuitFromJSON = function(circuitFileName, onComplete) {
         var _this = this;
-        if (context == null) {
-          context = null;
-        }
         if (onComplete == null) {
           onComplete = null;
         }
