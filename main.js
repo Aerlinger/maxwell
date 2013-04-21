@@ -162,18 +162,20 @@ require([
 
   var circuitName = $('canvas').data('circuit');
   var circuitFileName = "../circuits/" + circuitName + ".json";
-  console.log("loading: " + circuitFileName);
 
-  var canvas = $('canvas.maxwell');
+  $(document).ready(function (event) {
+    CircuitLoader.createCircuitFromJSON(circuitFileName, function (circuit) {
+      "use strict";
+      console.log("loading: " + circuitFileName);
 
-  var renderer = null;
-  CircuitLoader.createCircuitFromJSON(circuitFileName, canvas, function (circuit) {
-    "use strict";
-    renderer = new CircuitCanvas(circuit, canvas);
+      var canvas = $('canvas.maxwell');
 
-    setInterval(function () {
-      circuit.updateCircuit();
-    }, 0);
+      var renderer = new CircuitCanvas(circuit, canvas);
+
+      setInterval(function () {
+        circuit.updateCircuit();
+      }, 0);
+    });
   });
 
 //    var voltageSource = new Voltage(112, 368, 112, 48, 0, [0, 40.0, 10.0, 0.0]);
@@ -194,7 +196,7 @@ require([
 //
 //    circuit.restartAndRun();
 
-  //runTests();
+  runTests();
 
   $('#run_tests').click(function (e) {
     "use strict";

@@ -28,15 +28,17 @@
         if (this.CanvasJQueryElm) {
           this.Context = new CanvasContext(this.CanvasJQueryElm.get(0));
         }
-        this.CanvasJQueryElm.mousemove(this.onMouseMove);
-        this.CanvasJQueryElm.mousedown(this.onMouseDown);
-        this.CanvasJQueryElm.mouseup(this.onMouseUp);
-        this.CanvasJQueryElm.click(this.onMouseClick);
         this.Circuit.addObserver(Circuit.ON_START_UPDATE, this.clear);
         this.Circuit.addObserver(Circuit.ON_RESET, this.clear);
         this.Circuit.addObserver(Circuit.ON_END_UPDATE, this.repaint);
         this.KeyHandler = new KeyHandler();
         this.MouseHandler = new MouseHandler();
+        if (this.CanvasJQueryElm) {
+          this.CanvasJQueryElm.mousedown(this.onMouseDown);
+          this.CanvasJQueryElm.mouseup(this.onMouseUp);
+          this.CanvasJQueryElm.click(this.onMouseClick);
+          this.CanvasJQueryElm.mousemove(this.onMouseMove);
+        }
       }
 
       CircuitCanvas.prototype.drawComponents = function() {
@@ -126,9 +128,9 @@
       };
 
       CircuitCanvas.prototype.onMouseMove = function(event) {
-        var mousePos;
+        var mousePos, _ref;
         mousePos = this.getMousePos(event);
-        if (this.mouseHandler.isMouseDown()) {
+        if ((_ref = this.mouseHandler) != null ? _ref.isMouseDown() : void 0) {
           return this.mouseHandler.onMouseDrag(mousePos.x, mousePos.y);
         } else {
           return this.mouseHandler.onMouseMove(mousePos.x, mousePos.y);
@@ -136,21 +138,21 @@
       };
 
       CircuitCanvas.prototype.onMouseDown = function(event) {
-        var mousePos;
+        var mousePos, _ref;
         mousePos = this.getMousePos(event);
-        return this.mouseHandler.onMouseDown(mousePos.x, mousePos.y);
+        return (_ref = this.mouseHandler) != null ? _ref.onMouseDown(mousePos.x, mousePos.y) : void 0;
       };
 
       CircuitCanvas.prototype.onMouseUp = function(event) {
-        var mousePos;
+        var mousePos, _ref;
         mousePos = this.getMousePos(event);
-        return this.mouseHandler.onMouseUp(mousePos.x, mousePos.y);
+        return (_ref = this.mouseHandler) != null ? _ref.onMouseUp(mousePos.x, mousePos.y) : void 0;
       };
 
       CircuitCanvas.prototype.onMouseClick = function(event) {
-        var mousePos;
+        var mousePos, _ref;
         mousePos = this.getMousePos(event);
-        return this.mouseHandler.onMouseClick(mousePos.x, mousePos.y);
+        return (_ref = this.mouseHandler) != null ? _ref.onMouseClick(mousePos.x, mousePos.y) : void 0;
       };
 
       CircuitCanvas.prototype.repaint = function(Circuit) {

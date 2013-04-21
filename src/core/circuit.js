@@ -19,7 +19,7 @@
 
       Circuit.ON_RESET = "ON_RESET";
 
-      function Circuit(CanvasElm) {
+      function Circuit() {
         this.Params = new CircuitEngineParams();
         this.CommandHistory = new CommandHistory();
         this.clearAndReset();

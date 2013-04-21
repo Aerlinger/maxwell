@@ -77,7 +77,7 @@ define [
     @ON_RESET = "ON_RESET"
 
 
-    constructor: (CanvasElm) ->
+    constructor: () ->
       @Params = new CircuitEngineParams()
       @CommandHistory = new CommandHistory()
 

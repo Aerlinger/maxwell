@@ -18,17 +18,18 @@ body {
 /* `TYPOGRAPHY
 ----------------------------------------------------------------------------------------------------*/
 
-h2, h3 {
-    font-family:'Open Sans', sans-serif;
-    text-align:center;
-    color:white;
-    font-size:2em;
-    font-weight:600;
-}
+/*h2, h3 {*/
+    /*font-family:'Open Sans', sans-serif;*/
+    /*text-align:center;*/
+    /*color:white;*/
+    /*font-size:2em;*/
+    /*font-weight:600;*/
+/*}*/
 
-h3 {
-    font-size:1.7em;
-    position: relative;}
+/*h3 {*/
+    /*font-size:1.7em;*/
+    /*position: relative;*/
+/*}*/
 
 p {
     color:white;
