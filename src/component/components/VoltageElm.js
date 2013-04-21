@@ -121,9 +121,8 @@
 
       VoltageElm.prototype.draw = function(renderContext) {
         this.setBbox(this.x1, this.y2, this.x2, this.y2);
-        this.updateDotCount();
-        this.drawDots(this.point1, this.lead1, this.curcount, renderContext);
-        this.drawDots(this.point2, this.lead2, -this.curcount, renderContext);
+        this.curcount = this.updateDotCount();
+        this.drawDots(this.point1, this.point2, renderContext);
         this.draw2Leads(renderContext);
         if (this.waveform === VoltageElm.WF_DC) {
           DrawHelper.getPowerColor(this.getPower, 1);

@@ -237,6 +237,6 @@ function runTests() {
     'cs!observerTest'
   ], function () {
     "use strict";
-    mocha.run();
+//    mocha.run();
   });
 }

@@ -19,9 +19,7 @@ define [
 # </DEFINE>
 
 
-
   class VoltageElm extends CircuitComponent
-
     @FLAG_COS: 2
     @WF_DC: 0
     @WF_AC: 1
@@ -58,7 +56,6 @@ define [
         @phaseShift = Math.PI / 2
 
       @reset()
-
 
 
     getDumpType: ->
@@ -115,11 +112,10 @@ define [
     draw: (renderContext) ->
       @setBbox @x1, @y2, @x2, @y2
 
-      @updateDotCount()
+      @curcount = @updateDotCount()
 
       #if !(@Circuit?.dragElm is this)# && !(@waveform is VoltageElm.WF_DC)
-      @drawDots @point1, @lead1, @curcount, renderContext
-      @drawDots @point2, @lead2, -@curcount, renderContext
+      @drawDots @point1, @point2, renderContext
 
       @draw2Leads(renderContext)
   

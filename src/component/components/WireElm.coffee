@@ -31,7 +31,7 @@ define [
     @FLAG_SHOWVOLTAGE: 2
   
     draw: (renderContext) ->
-      @doDots(renderContext)
+      @drawDots(@point1, @point2, renderContext)
       renderContext.drawThickLinePt @point1, @point2, DrawHelper.getVoltageColor(@volts[0])
       @setBboxPt @point1, @point2, 3
       if @mustShowCurrent()

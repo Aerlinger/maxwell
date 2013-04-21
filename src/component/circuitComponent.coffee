@@ -352,17 +352,6 @@ define [
     # RENDERING METHODS
     ### #######################################################################
 
-    updateDotCount: (current = @current, currentCount = 15) ->
-      return currentCount if @Circuit?.isStopped()
-
-      #console.log current, @Circuit?.currentSpeed()
-
-      currentIncrement = current * @Circuit?.currentSpeed()
-      currentIncrement %= 8
-      @curcount = currentIncrement + currentCount
-
-      return currentCount + currentIncrement
-
     draw: (renderContext) ->
       throw("Called abstract function draw() in AbstractCircuitElement")
 
@@ -370,31 +359,40 @@ define [
       renderContext.drawThickLinePt @point1, @lead1, DrawHelper.getVoltageColor(@volts[0])
       renderContext.drawThickLinePt @lead2, @point2, DrawHelper.getVoltageColor(@volts[1])
 
-    doDots: (renderContext) ->
+    updateDotCount: (current = @current, currentCount = 15) ->
+      return currentCount if @Circuit?.isStopped()
+
+      currentIncrement = @current * @Circuit?.currentSpeed()
+      currentIncrement %= 8
+
+      @curcount += currentIncrement
+
+      return @curcount
+
+    doDots: (point1 = @point1, point2 = @point2, renderContext) ->
       @curcount = @updateDotCount()
       unless @Circuit?.dragElm is this
-        @drawDots @point1, @point2, @curcount, renderContext
+        @drawDots point1, point2, @curcount, renderContext
 
-    drawDots: (point1, point2, pos, renderContext) ->
-      # Don't do anything if the sim is stopped or has dots disabled.
-      return if @Circuit?.isStopped() or pos is 0 # or not @Circuit?.Params.dotsCheckItem
+    drawDots: (point1 = @point1, point2 = @point2, renderContext) =>
+      pos = @updateDotCount()
 
-      deltaX = point2.x - point1.x
-      deltaY = point2.y - point1.y
-      deltaR = Math.sqrt deltaX * deltaX + deltaY * deltaY
-      deltaSegment = 10
+      return if @Circuit?.isStopped() or pos is 0
 
+      dx = point2.x - point1.x
+      dy = point2.y - point1.y
+      dn = Math.sqrt dx * dx + dy * dy
+
+      deltaSegment = 16
       pos %= deltaSegment
       pos += deltaSegment if pos < 0
+
       newPos = pos
+      while newPos < dn
+        x0 = point1.x + newPos * dx / dn
+        y0 = point1.y + newPos * dy / dn
 
-      while newPos < deltaR
-        x0 = point1.x + newPos * deltaX / deltaR
-        y0 = point1.y + newPos * deltaY / deltaR
-
-        # Draws each dot:
-
-        #console.log x0, y0
+        #console.log dx, dy, deltaSegment, dn, newPos, newPos * dx / dn, newPos * dy / dn
         renderContext.fillCircle(x0, y0, Settings.CURRENT_RADIUS)
         newPos += deltaSegment
 
