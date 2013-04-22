@@ -6,11 +6,7 @@
       return describe("should read voltdividesimple.json and", function() {
         before(function(done) {
           var _this = this;
-<<<<<<< HEAD
-          return CircuitLoader.createCircuitFromJSON("../circuits/voltdividesimple.json", null, function(circuit) {
-=======
           return CircuitLoader.createCircuitFromJSON("../../circuits/voltdividesimple.json", function(circuit) {
->>>>>>> reorganize_packages
             _this.circuit = circuit;
             return done();
           });

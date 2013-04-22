@@ -76,142 +76,6 @@ define [
       if @waveform is VoltageElm.WF_DC
         @Circuit.Solver.Stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
       else
-<<<<<<< HEAD
-        @bias
-    else
-      0
-
-VoltageElm.circleSize = 17
-
-
-VoltageElm::setPoints = ->
-  super()
-  @calcLeads (if (@waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR) then 8 else VoltageElm.circleSize * 2)
-
-
-VoltageElm::draw = (renderContext) ->
-  @setBbox @x1, @y2, @x2, @y2
-
-  @updateDotCount()
-
-  if !(@Circuit?.dragElm is this)# && !(@waveform is VoltageElm.WF_DC)
-    @drawDots @point1, @lead1, @curcount, renderContext
-    @drawDots @point2, @lead2, -@curcount, renderContext
-
-  @draw2Leads(renderContext)
-
-  if @waveform is VoltageElm.WF_DC
-    DrawHelper.getPowerColor @getPower, 1
-    DrawHelper.interpPoint2 @lead1, @lead2, DrawHelper.ps1, DrawHelper.ps2, 0, 10
-    renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(@volts[0])
-
-    @setBboxPt @point1, @point2, 16
-    DrawHelper.interpPoint2 @lead1, @lead2, DrawHelper.ps1, DrawHelper.ps2, 1, 16
-    renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(@volts[1])
-
-  else
-    @setBboxPt @point1, @point2, VoltageElm.circleSize
-    DrawHelper.interpPoint @lead1, @lead2, DrawHelper.ps1, 0.5
-    @drawWaveform DrawHelper.ps1, renderContext
-
-  @drawPosts(renderContext)
-
-
-VoltageElm::drawWaveform = (center, renderContext) ->
-  color = (if @needsHighlight() then '0xFF0000')
-  
-  #g.beginFill();
-  #@setPowerColor false
-  xc = center.x1
-  yc = center.y
-  
-  # TODO:
-  renderContext.fillCircle xc, yc, VoltageElm.circleSize, color
-  
-  #Main.getMainCanvas().drawThickCircle(xc, yc, circleSize, color);
-  wl = 8
-  @adjustBbox xc - VoltageElm.circleSize, yc - VoltageElm.circleSize, xc + VoltageElm.circleSize, yc + VoltageElm.circleSize
-  xc2 = undefined
-  switch @waveform
-    when VoltageElm.WF_DC
-      break
-    when VoltageElm.WF_SQUARE
-      xc2 = Math.floor(wl * 2 * @dutyCycle - wl + xc)
-      xc2 = Math.max(xc - wl + 3, Math.min(xc + wl - 3, xc2))
-      renderContext.drawThickLine xc - wl, yc - wl, xc - wl, yc, color
-      renderContext.drawThickLine xc - wl, yc - wl, xc2, yc - wl, color
-      renderContext.drawThickLine xc2, yc - wl, xc2, yc + wl, color
-      renderContext.drawThickLine xc + wl, yc + wl, xc2, yc + wl, color
-      renderContext.drawThickLine xc + wl, yc, xc + wl, yc + wl, color
-    when VoltageElm.WF_PULSE
-      yc += wl / 2
-      renderContext.drawThickLine xc - wl, yc - wl, xc - wl, yc, color
-      renderContext.drawThickLine xc - wl, yc - wl, xc - wl / 2, yc - wl, color
-      renderContext.drawThickLine xc - wl / 2, yc - wl, xc - wl / 2, yc, color
-      renderContext.drawThickLine xc - wl / 2, yc, xc + wl, yc, color
-    when VoltageElm.WF_SAWTOOTH
-      renderContext.drawThickLine xc, yc - wl, xc - wl, yc, color
-      renderContext.drawThickLine xc, yc - wl, xc, yc + wl, color
-      renderContext.drawThickLine xc, yc + wl, xc + wl, yc, color
-    when VoltageElm.WF_TRIANGLE
-      xl = 5
-      renderContext.drawThickLine xc - xl * 2, yc, xc - xl, yc - wl, color
-      renderContext.drawThickLine xc - xl, yc - wl, xc, yc, color
-      renderContext.drawThickLine xc, yc, xc + xl, yc + wl, color
-      renderContext.drawThickLine xc + xl, yc + wl, xc + xl * 2, yc, color
-      break
-    when VoltageElm.WF_AC
-      xl = 10
-      ox = -1
-      oy = -1
-      i = -xl
-      while i <= xl
-        yy = yc + Math.floor(0.95 * Math.sin(i * Math.PI / xl) * wl)
-        renderContext.drawThickLine ox, oy, xc + i, yy, color  unless ox is -1
-        ox = xc + i
-        oy = yy
-        i++
-      break
-  #if true
-    #valueString = @frequency
-    #@drawValues valueString, VoltageElm.circleSize  if @dx is 0 or @dy is 0
-
-VoltageElm::getVoltageSourceCount = ->
-  1
-
-VoltageElm::getPower = ->
-  -@getVoltageDiff() * @current
-
-VoltageElm::getVoltageDiff = ->
-  @volts[1] - @volts[0]
-
-VoltageElm::getInfo = (arr) ->
-  switch @waveform
-    when VoltageElm.WF_DC, VoltageElm.WF_VAR
-      arr[0] = "voltage source"
-    when VoltageElm.WF_AC
-      arr[0] = "A/C source"
-    when VoltageElm.WF_SQUARE
-      arr[0] = "square wave gen"
-    when VoltageElm.WF_PULSE
-      arr[0] = "pulse gen"
-    when VoltageElm.WF_SAWTOOTH
-      arr[0] = "sawtooth gen"
-    when VoltageElm.WF_TRIANGLE
-      arr[0] = "triangle gen"
-
-  arr[1] = "I = " + CircuitComponent.getCurrentText(@getCurrent())
-  arr[2] = ((if (this instanceof RailElm) then "V = " else "Vd = ")) + CircuitComponent.getVoltageText(@getVoltageDiff())
-
-  if @waveform isnt VoltageElm.WF_DC and @waveform isnt VoltageElm.WF_VAR
-    arr[3] = "f = " + CircuitComponent.getUnitText(@frequency, "Hz")
-    arr[4] = "Vmax = " + CircuitComponent.getVoltageText(@maxVoltage)
-    i = 5
-    unless @bias is 0
-      arr[i++] = "Voff = " + @getVoltageText(@bias)
-    else arr[i++] = "wavelength = " + CircuitComponent.getUnitText(2.9979e8 / @frequency, "m")  if @frequency > 500
-    arr[i++] = "P = " + CircuitComponent.getUnitText(@getPower(), "W")
-=======
         @Circuit.Solver.Stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource
   
     doStep: ->
@@ -247,17 +111,17 @@ VoltageElm::getInfo = (arr) ->
   
     draw: (renderContext) ->
       @setBbox @x1, @y2, @x2, @y2
-<<<<<<< HEAD
->>>>>>> reorganize_packages
-
-      @updateDotCount()
-
-      #if !(@Circuit?.dragElm is this)# && !(@waveform is VoltageElm.WF_DC)
-      @drawDots @point1, @lead1, @curcount, renderContext
-      @drawDots @point2, @lead2, -@curcount, renderContext
-
-=======
->>>>>>> reorganize_packages
+#<<<<<<< HEAD
+#>>>>>>> reorganize_packages
+#
+#      @updateDotCount()
+#
+#      #if !(@Circuit?.dragElm is this)# && !(@waveform is VoltageElm.WF_DC)
+#      @drawDots @point1, @lead1, @curcount, renderContext
+#      @drawDots @point2, @lead2, -@curcount, renderContext
+#
+#=======
+#>>>>>>> reorganize_packages
       @draw2Leads(renderContext)
   
       if @waveform is VoltageElm.WF_DC

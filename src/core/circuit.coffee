@@ -343,15 +343,8 @@ define [
     voltageRange: ->
       return @Params['voltageRange']
 
-<<<<<<< HEAD
-    if @stopMessage?
-      @halt @stopMessage
-    else
-      @getCircuitBottom() if @circuitBottom is 0
-=======
     powerRange: ->
       return @Params['powerRange']
->>>>>>> reorganize_packages
 
     currentSpeed: ->
       return 62
@@ -416,22 +409,14 @@ define [
         # TODO: Draw selection outline:
 
 
-    renderScopes: () ->
-      # TODO Implement scopes
+  renderScopes: () ->
+    # TODO Implement scopes
 
 
-<<<<<<< HEAD
-  toString: ->
-    returnStr = ""
-    for element in @elementList
-      returnStr += "#{element.inspect()}\n"
 
-    returnStr
+  getRenderer: ->
+    @Renderer
 
-=======
-    getRenderer: ->
-      @Renderer
->>>>>>> reorganize_packages
 
 
   return Circuit

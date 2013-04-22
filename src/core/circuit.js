@@ -312,15 +312,15 @@
         return this.state;
       };
 
-      Circuit.prototype.renderScopes = function() {};
-
-      Circuit.prototype.getRenderer = function() {
-        return this.Renderer;
-      };
-
       return Circuit;
 
     })(Observer);
+    ({
+      renderScopes: function() {},
+      getRenderer: function() {
+        return this.Renderer;
+      }
+    });
     return Circuit;
   });
 
