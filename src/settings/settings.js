@@ -20,13 +20,15 @@ Settings do not change by loading a new circuit.
 
       Settings.FRACTIONAL_DIGITS = 2;
 
+      Settings.CURRENT_SEGMENT_LENGTH = 16;
+
       Settings.POST_RADIUS = 3;
 
       Settings.CURRENT_RADIUS = 2;
 
       Settings.LINE_WIDTH = 1;
 
-      Settings.GRID_SIZE = 16;
+      Settings.GRID_SIZE = 5;
 
       Settings.SMALL_GRID = false;
 

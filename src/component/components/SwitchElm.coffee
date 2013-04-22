@@ -56,7 +56,7 @@ define [
       @ps = new Point(0, 0)
       CircuitComponent.ps2 = new Point(0, 0)
 
-    draw: ->
+    draw: (renderContext) ->
       openhs = 16
       hs1 = (if (@position is 1) then 0 else 2)
       hs2 = (if (@position is 1) then openhs else 2)
@@ -64,8 +64,6 @@ define [
       @draw2Leads()
       @doDots()  if @position is 0
 
-      #if (!needsHighlight())
-      #	g.beginFill(Color.WHITE);
       DrawHelper.interpPoint @lead1, @lead2, @ps, 0, hs1
       DrawHelper.interpPoint @lead1, @lead2, CircuitComponent.ps2, 1, hs2
       CircuitComponent.drawThickLinePt @ps, CircuitComponent.ps2, Settings.FG_COLOR
@@ -80,8 +78,8 @@ define [
     getVoltageSourceCount: ->
       (if (@position is 1) then 0 else 1)
 
-    SwitchElm.mouseUp: ->
-      @toggle()  if @momentary
+    mouseUp: ->
+      @toggle() if @momentary
 
     toggle: ->
       @position++

@@ -23,6 +23,8 @@
         }
         this.drawDots = __bind(this.drawDots, this);
 
+        this.destroy = __bind(this.destroy, this);
+
         this.current = 0;
         this.curcount = 5;
         this.noDiagonal = false;
@@ -76,17 +78,9 @@
         return this.selected;
       };
 
-      CircuitComponent.prototype.initBoundingBox = function() {
-        this.boundingBox = new Rectangle();
-        this.boundingBox.x = Math.min(this.x1, this.x2);
-        this.boundingBox.y = Math.min(this.y1, this.y2);
-        this.boundingBox.width = Math.abs(this.x2 - this.x1) + 1;
-        return this.boundingBox.height = Math.abs(this.y2 - this.y1) + 1;
-      };
-
       CircuitComponent.prototype.reset = function() {
         this.volts = ArrayUtils.zeroArray(this.volts.length);
-        return this.curcount = 0;
+        return this.curcount = 5;
       };
 
       CircuitComponent.prototype.setCurrent = function(x, current) {
@@ -114,7 +108,7 @@
       };
 
       CircuitComponent.prototype.destroy = function() {
-        return this.Circuit.desolder;
+        return this.Circuit.desolder(this);
       };
 
       CircuitComponent.prototype.startIteration = function() {};
@@ -252,6 +246,14 @@
 
       CircuitComponent.prototype.getBoundingBox = function() {
         return this.boundingBox;
+      };
+
+      CircuitComponent.prototype.initBoundingBox = function() {
+        this.boundingBox = new Rectangle();
+        this.boundingBox.x = Math.min(this.x1, this.x2);
+        this.boundingBox.y = Math.min(this.y1, this.y2);
+        this.boundingBox.width = Math.abs(this.x2 - this.x1) + 1;
+        return this.boundingBox.height = Math.abs(this.y2 - this.y1) + 1;
       };
 
       CircuitComponent.prototype.setBbox = function(x1, y1, x2, y2) {
@@ -398,58 +400,27 @@
         return renderContext.drawThickLinePt(this.lead2, this.point2, DrawHelper.getVoltageColor(this.volts[1]));
       };
 
-      CircuitComponent.prototype.updateDotCount = function(current, currentCount) {
-        var currentIncrement, _ref, _ref1;
-        if (current == null) {
-          current = this.current;
-        }
-        if (currentCount == null) {
-          currentCount = 15;
-        }
-        if ((_ref = this.Circuit) != null ? _ref.isStopped() : void 0) {
-          return currentCount;
-        }
-        currentIncrement = this.current * ((_ref1 = this.Circuit) != null ? _ref1.currentSpeed() : void 0);
-        currentIncrement %= 8;
-        this.curcount += currentIncrement;
-        return this.curcount;
-      };
-
-      CircuitComponent.prototype.doDots = function(point1, point2, renderContext) {
-        var _ref;
-        if (point1 == null) {
-          point1 = this.point1;
-        }
-        if (point2 == null) {
-          point2 = this.point2;
-        }
-        this.curcount = this.updateDotCount();
-        if (((_ref = this.Circuit) != null ? _ref.dragElm : void 0) !== this) {
-          return this.drawDots(point1, point2, this.curcount, renderContext);
-        }
-      };
-
       CircuitComponent.prototype.drawDots = function(point1, point2, renderContext) {
-        var deltaSegment, dn, dx, dy, newPos, pos, x0, y0, _ref, _results;
+        var currentIncrement, deltaSegment, dn, dx, dy, newPos, x0, y0, _ref, _ref1, _results;
         if (point1 == null) {
           point1 = this.point1;
         }
         if (point2 == null) {
           point2 = this.point2;
         }
-        pos = this.updateDotCount();
-        if (((_ref = this.Circuit) != null ? _ref.isStopped() : void 0) || pos === 0) {
+        if (((_ref = this.Circuit) != null ? _ref.isStopped() : void 0) || this.current === 0) {
           return;
+        }
+        deltaSegment = 16;
+        currentIncrement = this.current * ((_ref1 = this.Circuit) != null ? _ref1.currentSpeed() : void 0);
+        this.curcount = (this.curcount + currentIncrement) % deltaSegment;
+        if (this.curcount < 0) {
+          this.curcount += deltaSegment;
         }
         dx = point2.x - point1.x;
         dy = point2.y - point1.y;
         dn = Math.sqrt(dx * dx + dy * dy);
-        deltaSegment = 16;
-        pos %= deltaSegment;
-        if (pos < 0) {
-          pos += deltaSegment;
-        }
-        newPos = pos;
+        newPos = this.curcount;
         _results = [];
         while (newPos < dn) {
           x0 = point1.x + newPos * dx / dn;

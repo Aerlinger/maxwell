@@ -31,17 +31,19 @@ define [
     @FLAG_SHOWVOLTAGE: 2
   
     draw: (renderContext) ->
-      @drawDots(@point1, @point2, renderContext)
       renderContext.drawThickLinePt @point1, @point2, DrawHelper.getVoltageColor(@volts[0])
       @setBboxPt @point1, @point2, 3
+
       if @mustShowCurrent()
         s = CircuitComponent.getShortUnitText(Math.abs(@getCurrent()), "A")
         @drawValues s, 4
       else if @mustShowVoltage()
         s = CircuitComponent.getShortUnitText(@volts[0], "V")
-        @drawValues s, 4
+
+      @drawValues s, 4
       @drawPosts(renderContext)
-  
+      @drawDots(@point1, @point2, renderContext)
+
     stamp: ->
       @Circuit.Solver.Stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
   

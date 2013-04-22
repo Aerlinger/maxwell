@@ -23,7 +23,6 @@
 
       WireElm.prototype.draw = function(renderContext) {
         var s;
-        this.drawDots(this.point1, this.point2, renderContext);
         renderContext.drawThickLinePt(this.point1, this.point2, DrawHelper.getVoltageColor(this.volts[0]));
         this.setBboxPt(this.point1, this.point2, 3);
         if (this.mustShowCurrent()) {
@@ -31,9 +30,10 @@
           this.drawValues(s, 4);
         } else if (this.mustShowVoltage()) {
           s = CircuitComponent.getShortUnitText(this.volts[0], "V");
-          this.drawValues(s, 4);
         }
-        return this.drawPosts(renderContext);
+        this.drawValues(s, 4);
+        this.drawPosts(renderContext);
+        return this.drawDots(this.point1, this.point2, renderContext);
       };
 
       WireElm.prototype.stamp = function() {

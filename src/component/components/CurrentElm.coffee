@@ -44,7 +44,7 @@ define [
       p2 = DrawHelper.interpPoint(@lead1, @lead2, .75)
       @arrow = DrawHelper.calcArrow(@center, p2, 4, 4)
 
-    draw: ->
+    draw: (renderContext) ->
       cr = 12
       @draw2Leads()
       @setVoltageColor (@volts[0] + @volts[1]) / 2
@@ -58,6 +58,7 @@ define [
       if Circuit.showValuesCheckItem
         s = CircuitComponent.getShortUnitText(@currentValue, "A")
         @drawValues s, cr  if @dx is 0 or @dy is 0
+
       @drawPosts()
 
     stamp: ->

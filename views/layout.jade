@@ -1,13 +1,12 @@
 !!! 5
 html
   head
-    title= title
+    title=circuit_name
     link(rel='stylesheet', href='/css/mocha.css')
     link(rel='stylesheet', href='/css/foundation.css')
     link(rel='stylesheet', href='/css/normalize.css')
     link(rel='stylesheet', href='/css/theme.css')
     link(rel='stylesheet', href='/css/maxwell.css')
-
 
     script(type="text/javascript", src="/javascripts/chai.js")
     script(type="text/javascript", src="/javascripts/mocha.js")
@@ -17,89 +16,25 @@ html
   body
     include _header
 
-    p= circuit_name || "voltdividesimple"
-
     div.row.full
       div.large-2.columns
         div.section-container.vertical-nav
-          section.section
-            p.title
-              a(href="#") Select
-          section.section
-            p.title
-              a(href="#") Basic Components
-          section.section
-            p.title
-              a(href="#") Basic Components
-          section.section
-            p.title
-              a(href="#") Basic Components
-          section.section
-            p.title
-              a(href="#") Basic Components
-          section.section
-            p.title
-              a(href="#") Basic Components
-          section.section
-            p.title
-              a(href="#") Basic Components
-          section.section
-            p.title
-              a(href="#") Basic Components
-          section.section
-            p.title
-              a(href="#") Basic Components
-          section.section
-            p.title
-              a(href="#") Basic Components
-          section.section
-            p.title
-              a(href="#") Basic Components
-
-        //div.button-bar
-        //  ul.button-group
-        //
-        //    li.nav-header Basic
-        //    li
-        //      a.small.button(href="#") Select
-        //    li
-        //      a.small.button(href="#") Wire
-        //    li
-        //      a.small.button(href="#") Wire
-        //    li
-        //      a.small.button(href="#") Resistor
-        //    li
-        //      a.small.button(href="#") Inductor
-        //    li
-        //      a.small.button(href="#") Capacitor
-        //
-        //    li.nav-header Analog
-        //    li
-        //      a.small.button(href="#") Operational Amplifier
-        //    li
-        //      a.small.button(href="#") Wire
-        //    li
-        //      a.small.button(href="#") Resistor
-        //
-        //    li.nav-header
-        //
-        //    li.divider
-        //
-        //  ul.nav.nav-list
-        //    li.nav-header Scope
-        //    li
-        //      a(href="#") Select
-
+          each circuit in circuits
+            section.section
+              p.title
+                a.circuit-link(href="#") #{circuit}
 
       div.large-8.columns
+        h5= circuit_name || "voltdividesimple"
         #container
           canvas.maxwell(data-circuit="voltdividesimple", width="800", height="500")
 
       div.large-2.columns
 
+  block body
+
   .row-fluid
     .span8.offset2
-
       a.btn
         i.icon-play
       a.btn

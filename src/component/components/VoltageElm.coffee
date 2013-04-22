@@ -111,19 +111,13 @@ define [
   
     draw: (renderContext) ->
       @setBbox @x1, @y2, @x2, @y2
-
-      @curcount = @updateDotCount()
-
-      #if !(@Circuit?.dragElm is this)# && !(@waveform is VoltageElm.WF_DC)
-      @drawDots @point1, @point2, renderContext
-
       @draw2Leads(renderContext)
   
       if @waveform is VoltageElm.WF_DC
-        DrawHelper.getPowerColor @getPower, 1
         DrawHelper.interpPoint @lead1, @lead2, 0, 10, DrawHelper.ps1, DrawHelper.ps2
+        renderContext.drawThickLinePt @lead1, DrawHelper.ps1, DrawHelper.getVoltageColor(@volts[0])
         renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(@volts[0])
-  
+
         @setBboxPt @point1, @point2, 16
         DrawHelper.interpPoint @lead1, @lead2, 1, 16, DrawHelper.ps1, DrawHelper.ps2
         renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(@volts[1])
@@ -134,6 +128,7 @@ define [
         @drawWaveform DrawHelper.ps1, renderContext
   
       @drawPosts(renderContext)
+      @drawDots @point1, @point2, renderContext
   
   
     drawWaveform: (center, renderContext) ->

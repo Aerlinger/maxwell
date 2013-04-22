@@ -10,8 +10,9 @@ define ['cs!ColorPalette'], (ColorPalette) ->
 # </DEFINE>
 
   class Settings
-    @SPEED = 112
+    @SPEED: 112
     @FRACTIONAL_DIGITS: 2
+    @CURRENT_SEGMENT_LENGTH: 16
 
     # Line Widths:
     @POST_RADIUS: 3
@@ -19,7 +20,7 @@ define ['cs!ColorPalette'], (ColorPalette) ->
     @LINE_WIDTH: 1
 
     # Grid
-    @GRID_SIZE: 16
+    @GRID_SIZE: 5
     @SMALL_GRID: false
 
     # ColorPalettes:
