@@ -20,15 +20,6 @@ Settings do not change by loading a new circuit.
 
       Settings.FRACTIONAL_DIGITS = 2;
 
-<<<<<<< HEAD
-      Settings.POST_RADIUS = 3;
-
-      Settings.CURRENT_RADIUS = 3;
-
-      Settings.LINE_WIDTH = 2;
-
-      Settings.GRID_SIZE = 16;
-=======
       Settings.CURRENT_SEGMENT_LENGTH = 16;
 
       Settings.POST_RADIUS = 3;
@@ -38,7 +29,6 @@ Settings do not change by loading a new circuit.
       Settings.LINE_WIDTH = 1;
 
       Settings.GRID_SIZE = 5;
->>>>>>> reorganize_packages
 
       Settings.SMALL_GRID = false;
 

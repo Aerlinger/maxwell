@@ -28,10 +28,6 @@
         specify("should create default parameters", function() {
           this.circuitElement.current.should.equal(0);
           this.circuitElement.getCurrent().should.equal(0);
-<<<<<<< HEAD
-          this.circuitElement.curcount.should.equal(0);
-=======
->>>>>>> reorganize_packages
           this.circuitElement.noDiagonal.should.equal(false);
           return this.circuitElement.selected.should.equal(false);
         });

@@ -18,21 +18,12 @@
       };
     }
     Array.prototype.remove = function() {
-<<<<<<< HEAD
-      var L, a, ax, what;
-      a = arguments;
-      L = a.length;
-      while (L && this.length) {
-        what = a[--L];
-        while ((ax = this.indexOf(what)) !== -1) {
-=======
       var args, ax, item, num_args;
       args = arguments;
       num_args = args.length;
       while (num_args && this.length) {
         item = args[--num_args];
         while ((ax = this.indexOf(item)) !== -1) {
->>>>>>> reorganize_packages
           this.splice(ax, 1);
         }
       }

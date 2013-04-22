@@ -77,17 +77,10 @@ define [
       @dx = @x2 - @x1
       @dy = @y2 - @y1
 
-<<<<<<< HEAD
-  inspect: ->
-    "new #{@toString()}(#{@x1}, #{@y1}, #{@x2}, #{@y2}, 0, [])"
 
-  isSelected: ->
-    @selected
-=======
       @dn = Math.sqrt(@dx * @dx + @dy * @dy)
       @dpx1 = @dy / @dn
       @dpy1 = -@dx / @dn
->>>>>>> reorganize_packages
 
       @dsign = (if (@dy is 0) then MathUtils.sign(@dx) else MathUtils.sign(@dy))
 
@@ -174,43 +167,7 @@ define [
       @y1 += deltaY
       @x2 += deltaX
       @y2 += deltaY
-<<<<<<< HEAD
-    @setPoints()
 
-  stamp: ->
-    throw("Called abstract function stamp() in AbstractCircuitElement")
-
-  getVoltageSourceCount: ->
-    0
-
-  getInternalNodeCount: ->
-    0
-
-  setNode: (nodeIdx, newValue) ->
-    @nodes[nodeIdx] = newValue
-
-  setVoltageSource: (node, value) ->
-    @voltSource = value
-
-  getVoltageDiff: ->
-    @volts[0] - @volts[1]
-
-  nonLinear: ->
-    false
-
-  # Two terminals by default, but likely to be overidden by subclasses
-  getPostCount: ->
-    2
-
-  getNode: (nodeIdx) ->
-    @nodes[nodeIdx]
-
-  getPost: (postIdx) ->
-    if postIdx == 0
-      return @point1
-    else if postIdx == 1
-      return @point2
-=======
       @boundingBox.x += deltaX
       @boundingBox.y += deltaY
       @setPoints()
@@ -279,7 +236,6 @@ define [
         return @point1
       else if postIdx == 1
         return @point2
->>>>>>> reorganize_packages
 
       printStackTrace()
 

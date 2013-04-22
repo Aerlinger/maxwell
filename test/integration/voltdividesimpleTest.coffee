@@ -1,21 +1,4 @@
-<<<<<<< HEAD
-CircuitLoader = require "../../src/io/circuitLoader"
-Circuit = require "../../src/core/circuit"
-CircuitNode = require("../../src/core/nodeGraph/circuitNode").CircuitNode
 
-fs = require 'fs'
-
-describe "Circuit", ->
-  before (done) ->
-    @circuit = new Circuit()
-    CircuitLoader.readCircuitFromFile @circuit, "./circuits/voltdividesimple.json"
-    console.log "***********************************************"
-    console.log(@circuit.toString())
-    console.log "***********************************************"
-    done()
-
-  describe "should Analyze voltdividesimple.json and have", ->
-=======
 # <DEFINE>
 define [
   'cs!CircuitNode',
@@ -30,9 +13,7 @@ define [
 ) ->
 # </DEFINE>
 
-
   describe "Simple Voltage Divider", ->
->>>>>>> reorganize_packages
     before (done) ->
       CircuitLoader.createCircuitFromJSON "../../circuits/voltdividesimple.json", (circuit) =>
         @circuit = circuit

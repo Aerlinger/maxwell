@@ -5,11 +5,7 @@
     return describe("Resistor", function() {
       beforeEach(function() {
         this.Circuit = new Circuit();
-<<<<<<< HEAD
-        return this.resistor = new ResistorElm(100, 100, 100, 200, 0, [50]);
-=======
         return this.resistor = new ResistorElm(100, 300, 100, 200, 0, [50]);
->>>>>>> reorganize_packages
       });
       it("should have correct resistance", function() {
         return this.resistor.resistance.should.equal(50);
@@ -17,18 +13,6 @@
       it("should not have any internal voltage sources", function() {
         return this.resistor.getVoltageSourceCount().should.equal(0);
       });
-<<<<<<< HEAD
-      it("should calculate current when voltage is applied", function() {
-        this.resistor.getPostCount().should.equal(2);
-        return this.resistor.getInternalNodeCount().should.equal(0);
-      });
-      it("should have correct dump type", function() {
-        return this.resistor.getDumpType().should.equal("r");
-      });
-      it("should be orphaned", function() {
-        return this.resistor.orphaned().should.equal(true);
-      });
-=======
       it("calculates current when voltage is applied", function() {
         this.resistor.getPostCount().should.equal(2);
         return this.resistor.getInternalNodeCount().should.equal(0);
@@ -86,19 +70,10 @@
       it("Has no internal nodes", function() {
         return this.resistor.getInternalNodeCount().should.equal(0);
       });
->>>>>>> reorganize_packages
       return describe("after soldering to circuit", function() {
         beforeEach(function() {
           return this.Circuit.solder(this.resistor);
         });
-<<<<<<< HEAD
-        it("should not be orphaned", function() {
-          return this.resistor.orphaned().should.equal(false);
-        });
-        return it("should be stampable", function() {
-          return this.resistor.stamp(this.Circuit.Solver.Stamper);
-        });
-=======
         it("is not be orphaned", function() {
           return this.resistor.orphaned().should.equal(false);
         });
@@ -139,7 +114,6 @@
             return this.Circuit.numElements().should.equal(0);
           });
         });
->>>>>>> reorganize_packages
       });
     });
   });

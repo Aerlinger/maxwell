@@ -23,20 +23,11 @@
         this.ind.setup(this.inductance, this.current, this.flags);
       }
 
-<<<<<<< HEAD
-      InductorElm.prototype.draw = function() {
-        var hs, i, s, v1, v2;
-        this.doDots();
-        v1 = this.volts[0];
-        v2 = this.volts[1];
-        i = void 0;
-=======
       InductorElm.prototype.draw = function(renderContext) {
         var hs, s, v1, v2;
         this.doDots();
         v1 = this.volts[0];
         v2 = this.volts[1];
->>>>>>> reorganize_packages
         hs = 8;
         this.setBboxPt(this.point1, this.point2, hs);
         this.draw2Leads();
