@@ -76,6 +76,13 @@ define [
     @ON_PAUSE = "ON_PAUSE"
     @ON_RESET = "ON_RESET"
 
+    @ON_ADD_COMPONENT = "ON_ADD_COMPONENT"
+    @ON_REMOVE_COMPONENT = "ON_MOVE_COMPONENT"
+    @ON_MOVE_COMPONENT = "ON_MOVE_COMPONENT"
+
+    @ON_ERROR = "ON_ERROR"
+    @ON_WARNING = "ON_WARNING"
+
 
     constructor: () ->
       @Params = new CircuitEngineParams()
@@ -97,7 +104,6 @@ define [
         element.destroy()
 
       @Solver = new CircuitSolver(this)
-      @Hint = new Hint(this)
       @Grid = new Grid()
 
       @nodeList = []
@@ -141,13 +147,14 @@ define [
 
 
     # "Desolders" an existing element to this circuit (removes it to the element list array).
-    desolder: (oldElement, destroy = true) ->
+    desolder: (component, destroy = false) ->
 
       # TODO DISPATCH EVENT
 
-      oldElement.Circuit = null
-      @elementList.remove oldElement
-      oldElement.destroy()
+      component.Circuit = null
+      @elementList.remove component
+      if destroy
+        component.destroy()
 
     getVoltageSources: ->
       @voltageSources
@@ -332,9 +339,6 @@ define [
     ###
     isStopped: ->
       @Solver.isStopped
-
-    doDots: ->
-      true
 
     voltageRange: ->
       return @Params['voltageRange']

@@ -19,6 +19,16 @@
 
       Circuit.ON_RESET = "ON_RESET";
 
+      Circuit.ON_ADD_COMPONENT = "ON_ADD_COMPONENT";
+
+      Circuit.ON_REMOVE_COMPONENT = "ON_MOVE_COMPONENT";
+
+      Circuit.ON_MOVE_COMPONENT = "ON_MOVE_COMPONENT";
+
+      Circuit.ON_ERROR = "ON_ERROR";
+
+      Circuit.ON_WARNING = "ON_WARNING";
+
       function Circuit() {
         this.Params = new CircuitEngineParams();
         this.CommandHistory = new CommandHistory();
@@ -43,7 +53,6 @@
           element.destroy();
         }
         this.Solver = new CircuitSolver(this);
-        this.Hint = new Hint(this);
         this.Grid = new Grid();
         this.nodeList = [];
         this.elementList = [];
@@ -71,13 +80,15 @@
         return this.elementList.push(newElement);
       };
 
-      Circuit.prototype.desolder = function(oldElement, destroy) {
+      Circuit.prototype.desolder = function(component, destroy) {
         if (destroy == null) {
-          destroy = true;
+          destroy = false;
         }
-        oldElement.Circuit = null;
-        this.elementList.remove(oldElement);
-        return oldElement.destroy();
+        component.Circuit = null;
+        this.elementList.remove(component);
+        if (destroy) {
+          return component.destroy();
+        }
       };
 
       Circuit.prototype.getVoltageSources = function() {
@@ -283,10 +294,6 @@
 
       Circuit.prototype.isStopped = function() {
         return this.Solver.isStopped;
-      };
-
-      Circuit.prototype.doDots = function() {
-        return true;
       };
 
       Circuit.prototype.voltageRange = function() {

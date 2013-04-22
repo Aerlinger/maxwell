@@ -6,8 +6,7 @@ define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
 
   describe "Circuit", ->
     beforeEach () ->
-      canvas = $('canvas').get(0);
-      @Circuit = new Circuit(canvas)
+      @Circuit = new Circuit()
       console.log "Loading circuit"
       console.log @Circuit
 
@@ -32,20 +31,32 @@ define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
       specify "onError (message)", ->
 
 
-    describe "should dispatch events for", ->
+    describe "should define events for", ->
       specify "update", ->
+        Circuit.ON_START_UPDATE != null
 
       specify "start", ->
+        Circuit.ON_START != null
 
       specify "pause", ->
+        Circuit.ON_PAUSE != null
 
       specify "complete", ->
 
       specify "component added (component)", ->
+        Circuit.ON_ADD_COMPONENT != null
 
       specify "component removed (component)", ->
+        Circuit.ON_REMOVE_COMPONENT != null
 
       specify "component moved (component)", ->
+        Circuit.ON_MOVE_COMPONENT != null
+
+      specify "component moved (component)", ->
+        Circuit.ON_WARNING != null
+
+      specify "component moved (component)", ->
+        Circuit.ON_ERROR != null
 
 
     describe "should have one", ->
@@ -56,8 +67,6 @@ define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
 
       specify "Params Object", ->
 
-      specify "Hint Object", ->
-        @Circuit.Hint != null
 
 
     describe "should have collection of", ->
@@ -67,14 +76,14 @@ define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
       specify "Circuit Components", ->
         @Circuit.getElements().should.be.empty
 
-      specify "GetElmByIdx should return an empty array", ->
-        @Circuit.getElmByIdx(0) == null
-
       specify "Nodes", ->
         @Circuit.getNodes().should.be.empty
 
       specify "Oscilloscopes", ->
         @Circuit.getScopes().should.be.empty
+
+        specify "GetElmByIdx should return an empty array", ->
+        @Circuit.getElmByIdx(0) == null
 
 
     describe "apply update", ->

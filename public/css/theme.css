@@ -80,6 +80,17 @@ ul.nav .nav-header {
     margin:0 !important;
 }
 
+a.circuit-link {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+}
+
+.top-bar {
+    margin-bottom: 0;
+}
+
 section {
 
     /* Prevents horizontal scrollling for off-canvas elements */

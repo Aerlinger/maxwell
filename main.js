@@ -109,11 +109,15 @@ require.config({
 
     // Components
     ResistorTest: 'test/component/components/resistorTest',
-    VoltageTest: 'test/component/components/voltageTest',
+    VoltageElmTest: 'test/component/components/voltageTest',
     GroundTest: 'test/component/components/groundTest',
     WireTest: 'test/component/components/wireTest',
     CapacitorTest: 'test/component/components/capacitorTest',
     ComponentTest: 'test/component/circuitComponentTest',
+
+    // Engine:
+    ComponentNodeLinkTest: 'test/circuit/circuitNodeLinkTest',
+    ComponentNodeTest: 'test/circuit/circuitNodeTest',
 
     // Solvers
     CircuitSolverTest: 'test/solver/circuitSolverTest',
@@ -214,11 +218,13 @@ function runTests() {
     'test/_helper',
     'cs!CircuitTest',
     'cs!ResistorTest',
-    'cs!VoltageTest',
+    'cs!VoltageElmTest',
     'cs!GroundTest',
     'cs!WireTest',
     'cs!CapacitorTest',
     'cs!ComponentTest',
+    'cs!ComponentNodeLinkTest',
+    'cs!ComponentNodeTest',
 
     'cs!CircuitSolverTest',
     'cs!MatrixSolverTest',
@@ -237,6 +243,6 @@ function runTests() {
     'cs!observerTest'
   ], function () {
     "use strict";
-//    mocha.run();
+      mocha.run();
   });
 }

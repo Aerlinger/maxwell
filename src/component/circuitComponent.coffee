@@ -98,18 +98,9 @@ define [
     isSelected: ->
       @selected
 
-    initBoundingBox: ->
-      @boundingBox = new Rectangle()
-
-      @boundingBox.x = Math.min(@x1, @x2);
-      @boundingBox.y = Math.min(@y1, @y2);
-      @boundingBox.width = Math.abs(@x2 - @x1) + 1;
-      @boundingBox.height = Math.abs(@y2 - @y1) + 1;
-
-
     reset: ->
       @volts = ArrayUtils.zeroArray(@volts.length)
-      @curcount = 0
+      @curcount = 5
 
     setCurrent: (x, current) ->
       @current = current
@@ -133,9 +124,8 @@ define [
     orphaned: ->
       return @Circuit is null or @Circuit is undefined
 
-    destroy: ->
-      @Circuit.desolder
-      # TODO: Fully Implement
+    destroy: =>
+      @Circuit.desolder(this)
 
     startIteration: ->
       # Called on reactive elements such as inductors and capacitors.
@@ -250,6 +240,14 @@ define [
     getBoundingBox: ->
       @boundingBox
 
+    initBoundingBox: ->
+      @boundingBox = new Rectangle()
+
+      @boundingBox.x = Math.min(@x1, @x2);
+      @boundingBox.y = Math.min(@y1, @y2);
+      @boundingBox.width = Math.abs(@x2 - @x1) + 1;
+      @boundingBox.height = Math.abs(@y2 - @y1) + 1;
+
     setBbox: (x1, y1, x2, y2) ->
       if x1 > x2
         temp = x1
@@ -359,40 +357,28 @@ define [
       renderContext.drawThickLinePt @point1, @lead1, DrawHelper.getVoltageColor(@volts[0])
       renderContext.drawThickLinePt @lead2, @point2, DrawHelper.getVoltageColor(@volts[1])
 
-    updateDotCount: (current = @current, currentCount = 15) ->
-      return currentCount if @Circuit?.isStopped()
-
-      currentIncrement = @current * @Circuit?.currentSpeed()
-      currentIncrement %= 8
-
-      @curcount += currentIncrement
-
-      return @curcount
-
-    doDots: (point1 = @point1, point2 = @point2, renderContext) ->
-      @curcount = @updateDotCount()
-      unless @Circuit?.dragElm is this
-        @drawDots point1, point2, @curcount, renderContext
+#    doDots: (point1 = @point1, point2 = @point2, renderContext) ->
+#      #@curcount = @updateDotCount()
+#      unless @Circuit?.dragElm is this
+#        @drawDots point1, point2, renderContext
 
     drawDots: (point1 = @point1, point2 = @point2, renderContext) =>
-      pos = @updateDotCount()
+      return if @Circuit?.isStopped() or @current is 0
+      deltaSegment = 16
 
-      return if @Circuit?.isStopped() or pos is 0
+      currentIncrement = (@current * @Circuit?.currentSpeed())
+      @curcount = (@curcount + currentIncrement) % deltaSegment
+      @curcount += deltaSegment if @curcount < 0
 
       dx = point2.x - point1.x
       dy = point2.y - point1.y
       dn = Math.sqrt dx * dx + dy * dy
 
-      deltaSegment = 16
-      pos %= deltaSegment
-      pos += deltaSegment if pos < 0
-
-      newPos = pos
+      newPos = @curcount
       while newPos < dn
         x0 = point1.x + newPos * dx / dn
         y0 = point1.y + newPos * dy / dn
 
-        #console.log dx, dy, deltaSegment, dn, newPos, newPos * dx / dn, newPos * dy / dn
         renderContext.fillCircle(x0, y0, Settings.CURRENT_RADIUS)
         newPos += deltaSegment
 
