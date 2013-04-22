@@ -47,6 +47,7 @@ define [
 
     @unitsFont: "Arial, Helvetica, sans-serif"
 
+    # TODO: BUGGY
     @interpPoint: (ptA, ptB, f, g = 0, ptOut1 = null, ptOut2 = null) ->
       gx = ptB.y - ptA.y
       gy = ptA.x - ptB.x

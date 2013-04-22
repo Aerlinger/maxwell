@@ -60,9 +60,14 @@
         return this.arrow2 = DrawHelper.calcArrow(this.point2, p1, alen, alen);
       };
 
+<<<<<<< HEAD
       SparkGapElm.prototype.draw = function() {
         var color, i, v1, v2;
         i = void 0;
+=======
+      SparkGapElm.prototype.draw = function(renderContext) {
+        var color, v1, v2;
+>>>>>>> reorganize_packages
         v1 = this.volts[0];
         v2 = this.volts[1];
         this.setBboxPt(this.point1, this.point2, 8);

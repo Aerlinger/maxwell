@@ -455,10 +455,11 @@ define [
       if 1000 >= stepRate * (timeEnd - @lastIterTime)
         return
 
+      #console.log debugPrint, stepRate, lastIterTime, @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide,
+
       # Main iteration
       iter = 1
       loop
-
         # Start Iteration for each element in the circuit
         for circuitElm in @Circuit.getElements()
           circuitElm.startIteration()
@@ -471,8 +472,6 @@ define [
 
         # Sub iteration
         for subiter in [0...subiterCount]
-
-
           @converged = true
           @subIterations = subiter
 
@@ -490,9 +489,7 @@ define [
 
           return if @stopMessage?
 
-          printit = debugPrint
           debugPrint = false
-
           #isCleanArray(@circuitMatrix)
 
           if @circuitNonLinear
@@ -511,23 +508,19 @@ define [
             else
               res = @circuitRightSide[rowInfo.mapCol]
             if isNaN(res)
-
               @converged = false
               break
             if j < (@Circuit.numNodes() - 1)
               circuitNode = @Circuit.getNode(j + 1)
-
               for cn1 in circuitNode.links
                 cn1.elm.setNodeVoltage cn1.num, res
             else
               ji = j - (@Circuit.numNodes() - 1)
-
               @Circuit.voltageSources[ji].setCurrent ji, res
 
           break unless @circuitNonLinear
           subiter++
         # End for
-
 
         if subiter >= subiterCount
           @halt "Convergence failed: " + subiter, null
@@ -535,10 +528,8 @@ define [
 
         @time += @timeStep
 
-        i = 0
-        while i < @Circuit.scopeCount
-          @Circuit.scopes[i].timeStep()
-          ++i
+        for scope in @Circuit.scopes
+          scope.timeStep()
 
         timeEnd = (new Date()).getTime()
         lastIterTime = timeEnd

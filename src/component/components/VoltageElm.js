@@ -121,13 +121,10 @@
 
       VoltageElm.prototype.draw = function(renderContext) {
         this.setBbox(this.x1, this.y2, this.x2, this.y2);
-        this.updateDotCount();
-        this.drawDots(this.point1, this.lead1, this.curcount, renderContext);
-        this.drawDots(this.point2, this.lead2, -this.curcount, renderContext);
         this.draw2Leads(renderContext);
         if (this.waveform === VoltageElm.WF_DC) {
-          DrawHelper.getPowerColor(this.getPower, 1);
           DrawHelper.interpPoint(this.lead1, this.lead2, 0, 10, DrawHelper.ps1, DrawHelper.ps2);
+          renderContext.drawThickLinePt(this.lead1, DrawHelper.ps1, DrawHelper.getVoltageColor(this.volts[0]));
           renderContext.drawThickLinePt(DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(this.volts[0]));
           this.setBboxPt(this.point1, this.point2, 16);
           DrawHelper.interpPoint(this.lead1, this.lead2, 1, 16, DrawHelper.ps1, DrawHelper.ps2);
@@ -137,7 +134,8 @@
           DrawHelper.interpPoint(this.lead1, this.lead2, 0.5, DrawHelper.ps1);
           this.drawWaveform(DrawHelper.ps1, renderContext);
         }
-        return this.drawPosts(renderContext);
+        this.drawPosts(renderContext);
+        return this.drawDots(this.point1, this.point2, renderContext);
       };
 
       VoltageElm.prototype.drawWaveform = function(center, renderContext) {

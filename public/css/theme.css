@@ -18,17 +18,18 @@ body {
 /* `TYPOGRAPHY
 ----------------------------------------------------------------------------------------------------*/
 
-h2, h3 {
-    font-family:'Open Sans', sans-serif;
-    text-align:center;
-    color:white;
-    font-size:2em;
-    font-weight:600;
-}
+/*h2, h3 {*/
+    /*font-family:'Open Sans', sans-serif;*/
+    /*text-align:center;*/
+    /*color:white;*/
+    /*font-size:2em;*/
+    /*font-weight:600;*/
+/*}*/
 
-h3 {
-    font-size:1.7em;
-    position: relative;}
+/*h3 {*/
+    /*font-size:1.7em;*/
+    /*position: relative;*/
+/*}*/
 
 p {
     color:white;
@@ -77,6 +78,17 @@ ul.nav .nav-header {
 
     padding:0 !important;
     margin:0 !important;
+}
+
+a.circuit-link {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+}
+
+.top-bar {
+    margin-bottom: 0;
 }
 
 section {

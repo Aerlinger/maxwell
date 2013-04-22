@@ -76,8 +76,15 @@ define [
     @ON_PAUSE = "ON_PAUSE"
     @ON_RESET = "ON_RESET"
 
+    @ON_ADD_COMPONENT = "ON_ADD_COMPONENT"
+    @ON_REMOVE_COMPONENT = "ON_MOVE_COMPONENT"
+    @ON_MOVE_COMPONENT = "ON_MOVE_COMPONENT"
 
-    constructor: (CanvasElm) ->
+    @ON_ERROR = "ON_ERROR"
+    @ON_WARNING = "ON_WARNING"
+
+
+    constructor: () ->
       @Params = new CircuitEngineParams()
       @CommandHistory = new CommandHistory()
 
@@ -97,7 +104,6 @@ define [
         element.destroy()
 
       @Solver = new CircuitSolver(this)
-      @Hint = new Hint(this)
       @Grid = new Grid()
 
       @nodeList = []
@@ -141,13 +147,14 @@ define [
 
 
     # "Desolders" an existing element to this circuit (removes it to the element list array).
-    desolder: (oldElement, destroy = true) ->
+    desolder: (component, destroy = false) ->
 
       # TODO DISPATCH EVENT
 
-      oldElement.Circuit = null
-      @elementList.remove oldElement
-      oldElement.destroy()
+      component.Circuit = null
+      @elementList.remove component
+      if destroy
+        component.destroy()
 
     getVoltageSources: ->
       @voltageSources
@@ -246,9 +253,7 @@ define [
     ###
     updateCircuit: () ->
       @notifyObservers(@ON_START_UPDATE)
-
       #@simulation = requestAnimationFrame(Circuit.prototype.updateCircuit, @)
-
       startTime = (new Date()).getTime()
 
       # Reconstruct circuit
@@ -299,7 +304,6 @@ define [
       return sysTime
 
 
-
     findBadNodes: ->
       badNodes = []
       for circuitNode in @nodeList
@@ -315,7 +319,6 @@ define [
             # Todo: outline bad nodes here
             badNodes.push circuitNode
       return badNodes
-
 
 
     warn: (message) ->
@@ -336,9 +339,6 @@ define [
     ###
     isStopped: ->
       @Solver.isStopped
-
-    doDots: ->
-      true
 
     voltageRange: ->
       return @Params['voltageRange']
@@ -365,53 +365,53 @@ define [
     # RENDERINGS:
     #####################################
 
-    renderInfo: () ->
-      realMouseElm = @mouseElm
-      @mouseElm = @stopElm unless @mouseElm?
-
-      if @stopMessage?
-        @halt @stopMessage
-      else
-        @getCircuitBottom() if @circuitBottom is 0
-
-        # Array of messages to be displayed at the bottom of the canvas
-        info = []
-        if @mouseElm?
-          if @mousePost is -1
-            @mouseElm.getInfo info
-          else
-            info.push "V = " + Units.getUnitText(@mouseElm.getPostVoltage(@mousePost), "V")
-        else
-          Settings.fractionalDigits = 2
-          info.push "t = " + Units.getUnitText(@Solver.time, "s") + "\nft: " + (@lastTime - @lastFrameTime) + "\n"
-        unless @Hint.hintType is -1
-          hint = @Hint.getHint()
-          unless hint
-            @Hint.hintType = -1
-          else
-            info.push hint
-
-        @Renderer.drawInfo(info)
-        @mouseElm = realMouseElm
-
-
-    renderCircuit: () ->
-      @powerMult = Math.exp(@Params.powerRange / 4.762 - 7)
-
-      # Draw each circuit element
-      for circuitElm in @elementList
-        @Renderer.drawComponent(circuitElm)
-
-      # Draw the posts for each circuit
-      tempMouseMode = @mouseState.tempMouseMode
-      if tempMouseMode is MouseState.MODE_DRAG_ROW or
-      tempMouseMode is MouseState.MODE_DRAG_COLUMN or
-      tempMouseMode is MouseState.MODE_DRAG_POST or
-      tempMouseMode is MouseState.MODE_DRAG_SELECTED
-
-        for circuitElm in @elementList
-          circuitElm.drawPost circuitElm.x1, circuitElm.y1
-          circuitElm.drawPost circuitElm.x2, circuitElm.y2
+#    renderInfo: () ->
+#      realMouseElm = @mouseElm
+#      @mouseElm = @stopElm unless @mouseElm?
+#
+#      if @stopMessage?
+#        @halt @stopMessage
+#      else
+#        @getCircuitBottom() if @circuitBottom is 0
+#
+#        # Array of messages to be displayed at the bottom of the canvas
+#        info = []
+#        if @mouseElm?
+#          if @mousePost is -1
+#            @mouseElm.getInfo info
+#          else
+#            info.push "V = " + Units.getUnitText(@mouseElm.getPostVoltage(@mousePost), "V")
+#        else
+#          Settings.fractionalDigits = 2
+#          info.push "t = " + Units.getUnitText(@Solver.time, "s") + "\nft: " + (@lastTime - @lastFrameTime) + "\n"
+#        unless @Hint.hintType is -1
+#          hint = @Hint.getHint()
+#          unless hint
+#            @Hint.hintType = -1
+#          else
+#            info.push hint
+#
+#        @Renderer.drawInfo(info)
+#        @mouseElm = realMouseElm
+#
+#
+#    renderCircuit: () ->
+#      @powerMult = Math.exp(@Params.powerRange / 4.762 - 7)
+#
+#      # Draw each circuit element
+#      for circuitElm in @elementList
+#        @Renderer.drawComponent(circuitElm)
+#
+#      # Draw the posts for each circuit
+#      tempMouseMode = @mouseState.tempMouseMode
+#      if tempMouseMode is MouseState.MODE_DRAG_ROW or
+#      tempMouseMode is MouseState.MODE_DRAG_COLUMN or
+#      tempMouseMode is MouseState.MODE_DRAG_POST or
+#      tempMouseMode is MouseState.MODE_DRAG_SELECTED
+#
+#        for circuitElm in @elementList
+#          circuitElm.drawPost circuitElm.x1, circuitElm.y1
+#          circuitElm.drawPost circuitElm.x2, circuitElm.y2
 
         # TODO: Draw selection outline:
 

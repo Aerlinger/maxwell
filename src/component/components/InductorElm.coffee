@@ -35,19 +35,20 @@ define [
 
       @ind.setup @inductance, @current, @flags
 
-    draw: ->
+    draw: (renderContext) ->
       @doDots()
       v1 = @volts[0]
       v2 = @volts[1]
-      i = undefined
       hs = 8
       @setBboxPt @point1, @point2, hs
       @draw2Leads()
       @setPowerColor false
       @drawCoil 8, @lead1, @lead2, v1, v2
+
       if Circuit.showValuesCheckItem
         s = CircuitComponent.getShortUnitText(@inductance, "H")
         @drawValues s, hs
+
       @drawPosts()
 
     dump: ->

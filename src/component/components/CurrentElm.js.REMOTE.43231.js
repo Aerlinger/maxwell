@@ -40,11 +40,7 @@
         return this.arrow = DrawHelper.calcArrow(this.center, p2, 4, 4);
       };
 
-<<<<<<< HEAD
-      CurrentElm.prototype.draw = function() {
-=======
       CurrentElm.prototype.draw = function(renderContext) {
->>>>>>> reorganize_packages
         var cr, s;
         cr = 12;
         this.draw2Leads();

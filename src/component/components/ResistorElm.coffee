@@ -20,8 +20,6 @@ define [
 ) ->
 # </DEFINE>
 
-
-
   #/////////////////////////////////////////////////////////////////////////////
   # Constructor ////////////////////////////////////////////////////////////////
   class ResistorElm extends CircuitComponent
@@ -38,8 +36,6 @@ define [
       @ps4 = new Point(100, 150)
 
     draw: (renderContext) ->
-      @doDots(renderContext)
-
       segments = 16
       oldOffset = 0
       hs = 6
@@ -70,6 +66,7 @@ define [
       resistanceVal = Units.getUnitText(@resistance, "ohm")
       @drawValues resistanceVal, hs, renderContext
 
+      @drawDots(@point1, @point2, renderContext)
       @drawPosts(renderContext)
 
     dump: ->

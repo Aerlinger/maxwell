@@ -19,9 +19,7 @@ define [
 # </DEFINE>
 
 
-
   class VoltageElm extends CircuitComponent
-
     @FLAG_COS: 2
     @WF_DC: 0
     @WF_AC: 1
@@ -58,7 +56,6 @@ define [
         @phaseShift = Math.PI / 2
 
       @reset()
-
 
 
     getDumpType: ->
@@ -250,6 +247,7 @@ VoltageElm::getInfo = (arr) ->
   
     draw: (renderContext) ->
       @setBbox @x1, @y2, @x2, @y2
+<<<<<<< HEAD
 >>>>>>> reorganize_packages
 
       @updateDotCount()
@@ -258,13 +256,15 @@ VoltageElm::getInfo = (arr) ->
       @drawDots @point1, @lead1, @curcount, renderContext
       @drawDots @point2, @lead2, -@curcount, renderContext
 
+=======
+>>>>>>> reorganize_packages
       @draw2Leads(renderContext)
   
       if @waveform is VoltageElm.WF_DC
-        DrawHelper.getPowerColor @getPower, 1
         DrawHelper.interpPoint @lead1, @lead2, 0, 10, DrawHelper.ps1, DrawHelper.ps2
+        renderContext.drawThickLinePt @lead1, DrawHelper.ps1, DrawHelper.getVoltageColor(@volts[0])
         renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(@volts[0])
-  
+
         @setBboxPt @point1, @point2, 16
         DrawHelper.interpPoint @lead1, @lead2, 1, 16, DrawHelper.ps1, DrawHelper.ps2
         renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(@volts[1])
@@ -275,6 +275,7 @@ VoltageElm::getInfo = (arr) ->
         @drawWaveform DrawHelper.ps1, renderContext
   
       @drawPosts(renderContext)
+      @drawDots @point1, @point2, renderContext
   
   
     drawWaveform: (center, renderContext) ->

@@ -20,11 +20,6 @@ define ['cs!CanvasContext', 'cs!Observer', 'cs!Circuit', 'cs!KeyHandler', 'cs!Mo
     constructor: (@Circuit, @CanvasJQueryElm) ->
       @Context = new CanvasContext(@CanvasJQueryElm.get(0)) if @CanvasJQueryElm
 
-      @CanvasJQueryElm.mousemove @onMouseMove
-      @CanvasJQueryElm.mousedown @onMouseDown
-      @CanvasJQueryElm.mouseup @onMouseUp
-      @CanvasJQueryElm.click @onMouseClick
-
       @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
       @Circuit.addObserver Circuit.ON_RESET, @clear
       @Circuit.addObserver Circuit.ON_END_UPDATE, @repaint
@@ -32,10 +27,14 @@ define ['cs!CanvasContext', 'cs!Observer', 'cs!Circuit', 'cs!KeyHandler', 'cs!Mo
       @KeyHandler = new KeyHandler()
       @MouseHandler = new MouseHandler()
 
+      if @CanvasJQueryElm
+        @CanvasJQueryElm.mousedown @onMouseDown
+        @CanvasJQueryElm.mouseup @onMouseUp
+        @CanvasJQueryElm.click @onMouseClick
+        #@CanvasJQueryElm.mousemove @onMouseMove
 
     drawComponents: ->
       @clear()
-
       if @Context
         for component in @Circuit.getElements()
           @drawComponent(component)
@@ -90,22 +89,22 @@ define ['cs!CanvasContext', 'cs!Observer', 'cs!Circuit', 'cs!KeyHandler', 'cs!Mo
 
     onMouseMove: (event) =>
       mousePos = @getMousePos(event)
-      if @mouseHandler.isMouseDown()
+      if @mouseHandler?.isMouseDown()
         @mouseHandler.onMouseDrag(mousePos.x, mousePos.y)
       else
         @mouseHandler.onMouseMove(mousePos.x, mousePos.y)
 
     onMouseDown: (event) =>
       mousePos = @getMousePos(event)
-      @mouseHandler.onMouseDown(mousePos.x, mousePos.y)
+      @mouseHandler?.onMouseDown(mousePos.x, mousePos.y)
 
     onMouseUp: (event) =>
       mousePos = @getMousePos(event)
-      @mouseHandler.onMouseUp(mousePos.x, mousePos.y)
+      @mouseHandler?.onMouseUp(mousePos.x, mousePos.y)
 
     onMouseClick: (event) =>
       mousePos = @getMousePos(event)
-      @mouseHandler.onMouseClick(mousePos.x, mousePos.y)
+      @mouseHandler?.onMouseClick(mousePos.x, mousePos.y)
 
     # Called on Circuit update:
     repaint: (Circuit) =>
