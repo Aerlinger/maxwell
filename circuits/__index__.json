@@ -87,7 +87,7 @@
       "coupled1.json": "LC Modes (2)",
       "coupled2.json": "Weak Coupling",
       "coupled3.json": "LC Modes (3)",
-      "ladder.json": "LC Ladder",
+      "ladder.json": "LC Ladder"
     },
 
     "phaseseq.json": "Phase-Sequence Network",
@@ -105,19 +105,19 @@
     "Zener Diodes": {
       "zeneriv.json": "I/V Curve",
       "zenerref.json": "Voltage Reference",
-      "zenerreffollow.json": "Voltage Reference w/ Follower",
+      "zenerreffollow.json": "Voltage Reference w/ Follower"
+    },
 
-      "dcrestoration.json": "DC Restoration",
-      "inductkick-block.json": "Blocking Inductive Kickback",
-      "spikegen.json": "Spike Generator"
-    }
-  },
+    "dcrestoration.json": "DC Restoration",
+    "inductkick-block.json": "Blocking Inductive Kickback",
+    "spikegen.json": "Spike Generator",
 
-  "Voltage Multipliers": {
-    "voltdouble.json": "Voltage Doubler",
-    "voltdouble2.json": "Voltage Doubler 2",
-    "volttriple.json": "Voltage Tripler",
-    "voltquad.json": "Voltage Quadrupler",
+    "Voltage Multipliers": {
+      "voltdouble.json": "Voltage Doubler",
+      "voltdouble2.json": "Voltage Doubler 2",
+      "volttriple.json": "Voltage Tripler",
+      "voltquad.json": "Voltage Quadrupler"
+    },
 
     "amdetect.json": "AM Detector",
     "diodeclip.json": "Waveform Clipper",
@@ -127,27 +127,28 @@
 
   "Op-Amps": {
     "opamp.json": "Op-Amp",
-    "opampfeedback.json": "Op-Amp Feedback"
-  },
+    "opampfeedback.json": "Op-Amp Feedback",
 
-  "Amplifiers": {
-    "amp-invert.json": "Inverting Amplifier",
-    "amp-noninvert.json": "Noninverting Amplifier",
-    "amp-follower.json": "Follower",
-    "amp-diff.json": "Differential Amplifier",
-    "amp-sum.json": "Summing Amplifier",
-    "logconvert.json": "Log Amplifier",
-    "classd.json": "Class-D Amplifier"
-  },
 
-  "Oscillators": {
-    "relaxosc.json": "Relaxation Oscillator",
-    "phaseshiftosc.json": "Phase-Shift Oscillator",
-    "triangle.json": "Triangle Wave Generator",
-    "sine.json": "Sine Wave Generator",
-    "sawtooth.json": "Sawtooth Wave Generator",
-    "vco.json": "Voltage-Controlled Oscillator",
-    "rossler.json": "Rossler Circuit",
+    "Amplifiers": {
+      "amp-invert.json": "Inverting Amplifier",
+      "amp-noninvert.json": "Noninverting Amplifier",
+      "amp-follower.json": "Follower",
+      "amp-diff.json": "Differential Amplifier",
+      "amp-sum.json": "Summing Amplifier",
+      "logconvert.json": "Log Amplifier",
+      "classd.json": "Class-D Amplifier"
+    },
+
+    "Oscillators": {
+      "relaxosc.json": "Relaxation Oscillator",
+      "phaseshiftosc.json": "Phase-Shift Oscillator",
+      "triangle.json": "Triangle Wave Generator",
+      "sine.json": "Sine Wave Generator",
+      "sawtooth.json": "Sawtooth Wave Generator",
+      "vco.json": "Voltage-Controlled Oscillator",
+      "rossler.json": "Rossler Circuit"
+    },
 
     "amp-rect.json": "Half-Wave Rectifier (inverting)",
     "amp-fullrect.json": "Full-Wave Rectifier",
@@ -171,13 +172,14 @@
     "npn.json": "NPN Transistor",
     "pnp.json": "PNP Transistor",
     "transswitch.json": "Switch",
-    "follower.json": "Emitter Follower"
-  },
+    "follower.json": "Emitter Follower",
 
-  "Multivibrators": {
-    "multivib-a.json": "Astable Multivib",
-    "multivib-bi.json": "Bistable Multivib (Flip-Flop)",
-    "multivib-mono.json": "Monostable Multivib (One-Shot)",
+
+    "Multivibrators": {
+      "multivib-a.json": "Astable Multivib",
+      "multivib-bi.json": "Bistable Multivib (Flip-Flop)",
+      "multivib-mono.json": "Monostable Multivib (One-Shot)"
+    },
 
     "ceamp.json": "Common-Emitter Amplifier",
     "phasesplit.json": "Unity-Gain Phase Splitter",
@@ -185,24 +187,24 @@
     "currentsrc.json": "Current Source",
     "currentsrcramp.json": "Current Source Ramp",
     "mirror.json": "Current Mirror",
-    "darlington.json": "Darlington Pair"
-  },
+    "darlington.json": "Darlington Pair",
 
-  "Differential Amplifiers": {
-    "trans-diffamp.json": "Differential Input",
-    "trans-diffamp-common.json": "Common-Mode Input",
-    "trans-diffamp-cursrc.json": "Common-Mode w/Current Source"
-  },
+    "Differential Amplifiers": {
+      "trans-diffamp.json": "Differential Input",
+      "trans-diffamp-common.json": "Common-Mode Input",
+      "trans-diffamp-cursrc.json": "Common-Mode w/Current Source"
+    },
 
-  "Push-Pull Follower": {
-    "pushpullxover.json": "Simple, with distortion",
-    "pushpull.json": "Improved"
-  },
+    "Push-Pull Follower": {
+      "pushpullxover.json": "Simple, with distortion",
+      "pushpull.json": "Improved"
+    },
 
-  "Oscillators": {
-    "colpitts.json": "Colpitts Oscillator",
-    "hartley.json": "Hartley Oscillator",
-    "eclosc.json": "Emitter-Coupled LC Oscillator"
+    "Oscillators": {
+      "colpitts.json": "Colpitts Oscillator",
+      "hartley.json": "Hartley Oscillator",
+      "eclosc.json": "Emitter-Coupled LC Oscillator"
+    }
   },
 
 
@@ -323,16 +325,15 @@
       "synccounter.json": "Synchronous Counter",
       "deccounter.json": "Decimal Counter",
       "graycode.json": "Gray Code Counter",
-      "johnsonctr.json": "Johnson Counter",
+      "johnsonctr.json": "Johnson Counter"
+    },
 
-      "divideby2.json": "Divide-by-2",
-      "divideby3.json": "Divide-by-3",
-      "ledflasher.json": "LED Flasher",
-      "traffic.json": "Traffic Light",
-      "dram.json": "Dynamic RAM"
-    }
+    "divideby2.json": "Divide-by-2",
+    "divideby3.json": "Divide-by-3",
+    "ledflasher.json": "LED Flasher",
+    "traffic.json": "Traffic Light",
+    "dram.json": "Dynamic RAM"
   },
-
 
   "Analog/Digital": {
     "flashadc.json": "Flash ADC",
