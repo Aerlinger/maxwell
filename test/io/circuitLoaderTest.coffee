@@ -12,7 +12,7 @@ define [
 
     describe "should read voltdividesimple.json and", ->
       before (done) ->
-        CircuitLoader.createCircuitFromJSON "../circuits/voltdividesimple.json", null, (circuit) =>
+        CircuitLoader.createCircuitFromJSON "../../circuits/voltdividesimple.json", (circuit) =>
           @circuit = circuit
           done()
 

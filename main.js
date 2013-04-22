@@ -109,11 +109,15 @@ require.config({
 
     // Components
     ResistorTest: 'test/component/components/resistorTest',
-    VoltageTest: 'test/component/components/voltageTest',
+    VoltageElmTest: 'test/component/components/voltageTest',
     GroundTest: 'test/component/components/groundTest',
     WireTest: 'test/component/components/wireTest',
     CapacitorTest: 'test/component/components/capacitorTest',
     ComponentTest: 'test/component/circuitComponentTest',
+
+    // Engine:
+    ComponentNodeLinkTest: 'test/circuit/circuitNodeLinkTest',
+    ComponentNodeTest: 'test/circuit/circuitNodeTest',
 
     // Solvers
     CircuitSolverTest: 'test/solver/circuitSolverTest',
@@ -162,18 +166,20 @@ require([
 
   var circuitName = $('canvas').data('circuit');
   var circuitFileName = "../circuits/" + circuitName + ".json";
-  console.log("loading: " + circuitFileName);
 
-  var canvas = $('canvas.maxwell');
+  $(document).ready(function (event) {
+    CircuitLoader.createCircuitFromJSON(circuitFileName, function (circuit) {
+      "use strict";
+      console.log("loading: " + circuitFileName);
 
-  var renderer = null;
-  CircuitLoader.createCircuitFromJSON(circuitFileName, canvas, function (circuit) {
-    "use strict";
-    renderer = new CircuitCanvas(circuit, canvas);
+      var canvas = $('canvas.maxwell');
 
-    setInterval(function () {
-      circuit.updateCircuit();
-    }, 0);
+      var renderer = new CircuitCanvas(circuit, canvas);
+
+      setInterval(function () {
+        circuit.updateCircuit();
+      }, 0);
+    });
   });
 
 //    var voltageSource = new Voltage(112, 368, 112, 48, 0, [0, 40.0, 10.0, 0.0]);
@@ -194,7 +200,7 @@ require([
 //
 //    circuit.restartAndRun();
 
-  //runTests();
+  runTests();
 
   $('#run_tests').click(function (e) {
     "use strict";
@@ -212,11 +218,13 @@ function runTests() {
     'test/_helper',
     'cs!CircuitTest',
     'cs!ResistorTest',
-    'cs!VoltageTest',
+    'cs!VoltageElmTest',
     'cs!GroundTest',
     'cs!WireTest',
     'cs!CapacitorTest',
     'cs!ComponentTest',
+    'cs!ComponentNodeLinkTest',
+    'cs!ComponentNodeTest',
 
     'cs!CircuitSolverTest',
     'cs!MatrixSolverTest',
@@ -235,6 +243,6 @@ function runTests() {
     'cs!observerTest'
   ], function () {
     "use strict";
-    mocha.run();
+      mocha.run();
   });
 }

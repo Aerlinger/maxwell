@@ -393,7 +393,7 @@
       };
 
       CircuitSolver.prototype.solveCircuit = function() {
-        var circuitElm, circuitNode, cn1, debugPrint, i, iter, j, ji, lastIterTime, printit, res, rowInfo, stepRate, subiter, subiterCount, timeEnd, _i, _j, _k, _l, _len, _len1, _len2, _m, _n, _o, _p, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
+        var circuitElm, circuitNode, cn1, debugPrint, i, iter, j, ji, lastIterTime, res, rowInfo, scope, stepRate, subiter, subiterCount, timeEnd, _i, _j, _k, _l, _len, _len1, _len2, _len3, _m, _n, _o, _p, _q, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7;
         if (!(this.circuitMatrix != null) || this.Circuit.numElements() === 0) {
           this.circuitMatrix = null;
           return;
@@ -436,7 +436,6 @@
             if (this.stopMessage != null) {
               return;
             }
-            printit = debugPrint;
             debugPrint = false;
             if (this.circuitNonLinear) {
               if (this.converged && subiter > 0) {
@@ -482,10 +481,10 @@
             break;
           }
           this.time += this.timeStep;
-          i = 0;
-          while (i < this.Circuit.scopeCount) {
-            this.Circuit.scopes[i].timeStep();
-            ++i;
+          _ref7 = this.Circuit.scopes;
+          for (_q = 0, _len3 = _ref7.length; _q < _len3; _q++) {
+            scope = _ref7[_q];
+            scope.timeStep();
           }
           timeEnd = (new Date()).getTime();
           lastIterTime = timeEnd;

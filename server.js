@@ -12,6 +12,7 @@ app.configure(function () {
   }));
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+  app.set('view options', { layout: false });
   app.set('port', process.env.PORT || 4004);  // In honor of the Intel 4004.
   app.use(express.favicon());
   app.use(express.logger('dev'));

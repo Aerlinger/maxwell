@@ -2,7 +2,6 @@
 define [], () ->
 # </DEFINE>
 
-
   # Add indexOf to Array prototype (useful for IE <= 8)
   unless Array::indexOf
     Array::indexOf = (searchItem, i = 0) ->
@@ -11,15 +10,15 @@ define [], () ->
         ++i
       -1
 
-  # Add a utility function (bound to the Array prototype) allowing
+  # Utility function (bound to the Array prototype) allowing
   #  elements to be removed from the array
   #  NOTE: remove() is not idempotent. Modifies the original array!
   Array::remove = ->
-    a = arguments
-    L = a.length
-    while L and @length
-      what = a[--L]
-      while (ax = @indexOf(what)) isnt -1
+    args = arguments
+    num_args = args.length
+    while num_args and @length
+      item = args[--num_args]
+      while (ax = @indexOf(item)) isnt -1
         @splice ax, 1
     this
 

@@ -42,7 +42,7 @@ define [
       specify "should create default parameters", ->
         @circuitElement.current.should.equal 0
         @circuitElement.getCurrent().should.equal 0
-        @circuitElement.curcount.should.equal 0
+        #@circuitElement.curcount.should.equal 0
         @circuitElement.noDiagonal.should.equal false
         @circuitElement.selected.should.equal false
 

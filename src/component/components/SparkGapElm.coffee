@@ -57,8 +57,7 @@ define [
       p1 = DrawHelper.interpPoint(@point1, @point2, (@dn + alen) / (2 * @dn))
       @arrow2 = DrawHelper.calcArrow(@point2, p1, alen, alen)
 
-    draw: ->
-      i = undefined
+    draw: (renderContext) ->
       v1 = @volts[0]
       v2 = @volts[1]
       @setBboxPt @point1, @point2, 8
@@ -68,7 +67,7 @@ define [
       CircuitComponent.drawThickPolygonP @arrow1, color
       color = @setVoltageColor(@volts[1])
       CircuitComponent.drawThickPolygonP @arrow2, color
-      @doDots()  if @state
+      @doDots() if @state
       @drawPosts()
 
     calculateCurrent: ->

@@ -5,9 +5,7 @@
     console.log(Circuit);
     return describe("Circuit", function() {
       beforeEach(function() {
-        var canvas;
-        canvas = $('canvas').get(0);
-        this.Circuit = new Circuit(canvas);
+        this.Circuit = new Circuit();
         console.log("Loading circuit");
         return console.log(this.Circuit);
       });
@@ -30,24 +28,39 @@
         specify("onMouseDown (x, y)", function() {});
         return specify("onError (message)", function() {});
       });
-      describe("should dispatch events for", function() {
-        specify("update", function() {});
-        specify("start", function() {});
-        specify("pause", function() {});
+      describe("should define events for", function() {
+        specify("update", function() {
+          return Circuit.ON_START_UPDATE !== null;
+        });
+        specify("start", function() {
+          return Circuit.ON_START !== null;
+        });
+        specify("pause", function() {
+          return Circuit.ON_PAUSE !== null;
+        });
         specify("complete", function() {});
-        specify("component added (component)", function() {});
-        specify("component removed (component)", function() {});
-        return specify("component moved (component)", function() {});
+        specify("component added (component)", function() {
+          return Circuit.ON_ADD_COMPONENT !== null;
+        });
+        specify("component removed (component)", function() {
+          return Circuit.ON_REMOVE_COMPONENT !== null;
+        });
+        specify("component moved (component)", function() {
+          return Circuit.ON_MOVE_COMPONENT !== null;
+        });
+        specify("component moved (component)", function() {
+          return Circuit.ON_WARNING !== null;
+        });
+        return specify("component moved (component)", function() {
+          return Circuit.ON_ERROR !== null;
+        });
       });
       describe("should have one", function() {
         describe("Canvas", function() {});
         specify("Solver", function() {
           return this.Circuit.Solver !== null;
         });
-        specify("Params Object", function() {});
-        return specify("Hint Object", function() {
-          return this.Circuit.Hint !== null;
-        });
+        return specify("Params Object", function() {});
       });
       describe("should have collection of", function() {
         specify("Voltage Sources", function() {
@@ -56,14 +69,13 @@
         specify("Circuit Components", function() {
           return this.Circuit.getElements().should.be.empty;
         });
-        specify("GetElmByIdx should return an empty array", function() {
-          return this.Circuit.getElmByIdx(0) === null;
-        });
         specify("Nodes", function() {
           return this.Circuit.getNodes().should.be.empty;
         });
         return specify("Oscilloscopes", function() {
-          return this.Circuit.getScopes().should.be.empty;
+          this.Circuit.getScopes().should.be.empty;
+          specify("GetElmByIdx should return an empty array", function() {});
+          return this.Circuit.getElmByIdx(0) === null;
         });
       });
       return describe("apply update", function() {
