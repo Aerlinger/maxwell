@@ -60,9 +60,6 @@ define [
 
       console.log "Instantiating Circuit Component"
 
-    setParentCircuit: (circuit) ->
-      @Circuit = circuit
-
     getParentCircuit: () ->
       return @Circuit
 
@@ -196,7 +193,7 @@ define [
       @setPoints()
 
     stamp: ->
-      throw("Called abstract function stamp() in AbstractCircuitElement")
+      throw("Called abstract function stamp() in Circuit")
 
     # Todo: implement needed
     getDumpClass: ->
@@ -358,11 +355,6 @@ define [
     draw2Leads: (renderContext) ->
       renderContext.drawThickLinePt @point1, @lead1, DrawHelper.getVoltageColor(@volts[0])
       renderContext.drawThickLinePt @lead2, @point2, DrawHelper.getVoltageColor(@volts[1])
-
-#    doDots: (point1 = @point1, point2 = @point2, renderContext) ->
-#      #@curcount = @updateDotCount()
-#      unless @Circuit?.dragElm is this
-#        @drawDots point1, point2, renderContext
 
     drawDots: (point1 = @point1, point2 = @point2, renderContext) =>
       return if @Circuit?.isStopped() or @current is 0

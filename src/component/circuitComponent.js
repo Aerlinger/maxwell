@@ -38,10 +38,6 @@
         console.log("Instantiating Circuit Component");
       }
 
-      CircuitComponent.prototype.setParentCircuit = function(circuit) {
-        return this.Circuit = circuit;
-      };
-
       CircuitComponent.prototype.getParentCircuit = function() {
         return this.Circuit;
       };
@@ -192,7 +188,7 @@
       };
 
       CircuitComponent.prototype.stamp = function() {
-        throw "Called abstract function stamp() in AbstractCircuitElement";
+        throw "Called abstract function stamp() in Circuit";
       };
 
       CircuitComponent.prototype.getDumpClass = function() {

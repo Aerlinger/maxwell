@@ -158,10 +158,7 @@ define [
             circuitElm.setNodeVoltage(j, 0) if k is 0
 
         for j in [0...internalNodeCount]
-          circuitNode = new CircuitNode()
-          circuitNode.x = -1
-          circuitNode.y = -1
-          circuitNode.intern = true
+          circuitNode = new CircuitNode(-1, -1, true)
           circuitNodeLink = new CircuitNodeLink()
           circuitNodeLink.num = j + postCount
           circuitNodeLink.elm = circuitElm

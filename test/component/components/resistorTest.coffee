@@ -79,7 +79,6 @@ define [
       @resistor.getInternalNodeCount().should.equal 0
 
 
-
     describe "after soldering to circuit", ->
       beforeEach () ->
         @Circuit.solder(@resistor)
@@ -95,6 +94,14 @@ define [
 
       it "belongs to @Circuit", ->
         @Circuit.numElements() == 1
+
+      it "has two unconnected nodes", ->
+        @Circuit.updateCircuit()
+        @Circuit.findBadNodes().should == []
+
+      it "has two unconnected nodes", ->
+        @Circuit.updateCircuit()
+        @Circuit.numNodes().should == 2
 
       describe "then destroying the resistor", ->
         beforeEach () ->
@@ -121,5 +128,3 @@ define [
 
         it "belongs to @Circuit", ->
           @Circuit.numElements().should.equal 0
-
-
