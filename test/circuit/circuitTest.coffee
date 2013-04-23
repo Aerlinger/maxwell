@@ -32,41 +32,40 @@ define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
 
 
     describe "should define events for", ->
-      specify "update", ->
+      it "update", ->
         Circuit.ON_START_UPDATE != null
 
-      specify "start", ->
+      it "start", ->
         Circuit.ON_START != null
 
-      specify "pause", ->
+      it "pause", ->
         Circuit.ON_PAUSE != null
 
-      specify "complete", ->
+      it "complete", ->
 
-      specify "component added (component)", ->
+      it " added (component)", ->
         Circuit.ON_ADD_COMPONENT != null
 
-      specify "component removed (component)", ->
+      it "component removed (component)", ->
         Circuit.ON_REMOVE_COMPONENT != null
 
-      specify "component moved (component)", ->
+      it " moved (component)", ->
         Circuit.ON_MOVE_COMPONENT != null
 
-      specify "component moved (component)", ->
+      it " moved (component)", ->
         Circuit.ON_WARNING != null
 
-      specify "component moved (component)", ->
+      it " moved (component)", ->
         Circuit.ON_ERROR != null
 
 
     describe "should have one", ->
       describe "Canvas", ->
 
-      specify "Solver", ->
+      it "has Solver", ->
         @Circuit.Solver != null
 
-      specify "Params Object", ->
-
+      it "has Params Object", ->
 
 
     describe "should have collection of", ->

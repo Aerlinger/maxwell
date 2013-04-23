@@ -134,10 +134,7 @@
             }
           }
           for (j = _m = 0; 0 <= internalNodeCount ? _m < internalNodeCount : _m > internalNodeCount; j = 0 <= internalNodeCount ? ++_m : --_m) {
-            circuitNode = new CircuitNode();
-            circuitNode.x = -1;
-            circuitNode.y = -1;
-            circuitNode.intern = true;
+            circuitNode = new CircuitNode(-1, -1, true);
             circuitNodeLink = new CircuitNodeLink();
             circuitNodeLink.num = j + postCount;
             circuitNodeLink.elm = circuitElm;

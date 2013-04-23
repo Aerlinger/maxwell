@@ -86,6 +86,14 @@
         it("belongs to @Circuit", function() {
           return this.Circuit.numElements() === 1;
         });
+        it("has two unconnected nodes", function() {
+          this.Circuit.updateCircuit();
+          return this.Circuit.findBadNodes().should === [];
+        });
+        it("has two unconnected nodes", function() {
+          this.Circuit.updateCircuit();
+          return this.Circuit.numNodes().should === 2;
+        });
         describe("then destroying the resistor", function() {
           beforeEach(function() {
             return this.resistor.destroy();

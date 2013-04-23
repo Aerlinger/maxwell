@@ -29,38 +29,38 @@
         return specify("onError (message)", function() {});
       });
       describe("should define events for", function() {
-        specify("update", function() {
+        it("update", function() {
           return Circuit.ON_START_UPDATE !== null;
         });
-        specify("start", function() {
+        it("start", function() {
           return Circuit.ON_START !== null;
         });
-        specify("pause", function() {
+        it("pause", function() {
           return Circuit.ON_PAUSE !== null;
         });
-        specify("complete", function() {});
-        specify("component added (component)", function() {
+        it("complete", function() {});
+        it(" added (component)", function() {
           return Circuit.ON_ADD_COMPONENT !== null;
         });
-        specify("component removed (component)", function() {
+        it("component removed (component)", function() {
           return Circuit.ON_REMOVE_COMPONENT !== null;
         });
-        specify("component moved (component)", function() {
+        it(" moved (component)", function() {
           return Circuit.ON_MOVE_COMPONENT !== null;
         });
-        specify("component moved (component)", function() {
+        it(" moved (component)", function() {
           return Circuit.ON_WARNING !== null;
         });
-        return specify("component moved (component)", function() {
+        return it(" moved (component)", function() {
           return Circuit.ON_ERROR !== null;
         });
       });
       describe("should have one", function() {
         describe("Canvas", function() {});
-        specify("Solver", function() {
+        it("has Solver", function() {
           return this.Circuit.Solver !== null;
         });
-        return specify("Params Object", function() {});
+        return it("has Params Object", function() {});
       });
       describe("should have collection of", function() {
         specify("Voltage Sources", function() {

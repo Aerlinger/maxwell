@@ -3,50 +3,54 @@ define [
   'cs!Polygon',
   'cs!Rectangle',
   'cs!Point',
-  'cs!CircuitComponent'
+  'cs!CircuitComponent',
+  'cs!Circuit'
 ], (
   Polygon,
   Rectangle,
   Point,
-  CircuitComponent
+  CircuitComponent,
+  Circuit
 ) ->
 # </DEFINE>
 
 
-
   describe "Base Circuit Component", ->
+
+    beforeEach () ->
+      @Circuit = new Circuit()
+      @circuitElement = new CircuitComponent(10, 10, 13, 14)
 
     specify "class methods", ->
       CircuitComponent.getScopeUnits(1).should.equal "W"
       CircuitComponent.getScopeUnits().should.equal "V"
 
-
-    beforeEach () ->
-      @circuitElement = new CircuitComponent(10, 10, 13, 14)
-
-    describe "can instantiate a new Circuit Component", ->
-
-      specify "with correct position", ->
+    describe "arfter instantiating a new Circuit Component", ->
+      it "has correct initial position", ->
         @circuitElement.x1.should.equal 10
         @circuitElement.y1.should.equal 10
         @circuitElement.x2.should.equal 13
         @circuitElement.y2.should.equal 14
 
-      specify "without flag passed as an argument", ->
+      it "has correct dx and dy", ->
+        @circuitElement.dx.should.eq 3
+        @circuitElement.dy.should.eq 4
+        @circuitElement.dn.should.eq 5
+
+      it "had default flag", ->
         @circuitElement.flags.should.equal 0
 
-      specify "with flag passed as an argument", ->
+      it "has flag passed as an argument", ->
         circuitElm = new CircuitComponent(0, 3, 0, 4, 5)
         circuitElm.flags.should.equal 5
 
-      specify "should create default parameters", ->
+      it "creates default parameters", ->
         @circuitElement.current.should.equal 0
         @circuitElement.getCurrent().should.equal 0
-        #@circuitElement.curcount.should.equal 0
         @circuitElement.noDiagonal.should.equal false
         @circuitElement.selected.should.equal false
 
-      specify "default method return values", ->
+      it "default method return values", ->
         @circuitElement.getPostCount().should.equal 2
         @circuitElement.isSelected().should.equal false
         @circuitElement.isWire().should.equal false
@@ -85,15 +89,69 @@ define [
         bBox.width.should.equal 4
         bBox.height.should.equal 5
 
+      it "Has 0 current at its terminals", ->
+        @circuitElement.getCurrent().should.equal 0
+
+      it "Has 0 power", ->
+        @circuitElement.getPower().should.equal 0
+
+      it "Has the correct number of posts", ->
+        @circuitElement.getPostCount().should.equal 2
+
+      it "Has no internal nodes", ->
+        @circuitElement.getInternalNodeCount().should.equal 0
+
       it "should have correct dump type", ->
         @circuitElement.dump().should.equal '0 10 10 13 14 0'
 
       specify "base elements should be linear by default", ->
         @circuitElement.nonLinear().should.equal false
 
+      describe "after soldering to circuit", ->
+        beforeEach () ->
+          @Circuit.solder(@circuitElement)
+
+        it "is not be orphaned", ->
+          @circuitElement.orphaned().should.equal false
+
+        it "should be stampable", ->
+#          try {
+#            @circuitElement.stamp(@Circuit.Solver.Stamper)
+#          } catch() {}
+
+        it "belongs to @Circuit", ->
+          @Circuit.getElmByIdx(0) == @circuitElement
+
+        it "belongs to @Circuit", ->
+          @Circuit.numElements() == 1
+
+        describe "then destroying the component", ->
+          beforeEach () ->
+            @circuitElement.destroy()
+
+          it "is orphaned", ->
+            @circuitElement.orphaned().should.equal true
+
+          it "no longer belongs to @Circuit", ->
+            @Circuit.getElmByIdx(0) == null
+
+          it "belongs to @Circuit", ->
+            @Circuit.numElements().should.equal 0
+
+        describe "then desoldering the component", ->
+          beforeEach () ->
+            @Circuit.desolder(@circuitElement)
+
+          it "is orphaned", ->
+            @circuitElement.orphaned().should.equal true
+
+          it "no longer belongs to @Circuit", ->
+            @Circuit.getElmByIdx(0) == null
+
+          it "belongs to @Circuit", ->
+            @Circuit.numElements().should.equal 0
+
+
 
     describe "Should listen for", ->
-
       specify "onDraw(Context)", ->
-
-

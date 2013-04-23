@@ -19,6 +19,10 @@
 
       Circuit.ON_RESET = "ON_RESET";
 
+      Circuit.ON_SOLDER = "ON_SOLDER";
+
+      Circuit.ON_DESOLDER = "ON_DESOLDER";
+
       Circuit.ON_ADD_COMPONENT = "ON_ADD_COMPONENT";
 
       Circuit.ON_REMOVE_COMPONENT = "ON_MOVE_COMPONENT";
@@ -39,11 +43,6 @@
       Circuit.prototype.setParamsFromJSON = function(jsonData) {
         return this.Params = new CircuitEngineParams(jsonData);
       };
-
-      /*
-          Removes all circuit elements and scopes from the workspace and resets time to zero.
-      */
-
 
       Circuit.prototype.clearAndReset = function() {
         var element, _i, _len, _ref;
@@ -71,10 +70,9 @@
 
       Circuit.prototype.bindListeners = function() {};
 
-      Circuit.prototype.setupScopes = function() {};
-
       Circuit.prototype.solder = function(newElement) {
-        newElement.setParentCircuit(this);
+        this.notifyObservers(this.ON_SOLDER);
+        newElement.Circuit = this;
         newElement.setPoints();
         console.log("Soldering Element: " + newElement);
         return this.elementList.push(newElement);
@@ -84,6 +82,7 @@
         if (destroy == null) {
           destroy = false;
         }
+        this.notifyObservers(this.ON_DESOLDER);
         component.Circuit = null;
         this.elementList.remove(component);
         if (destroy) {
@@ -95,9 +94,15 @@
         return this.voltageSources;
       };
 
-      Circuit.prototype.getElements = function() {
-        return this.elementList;
+      Circuit.prototype.getScopes = function() {
+        return [];
       };
+
+      Circuit.prototype.setupScopes = function() {};
+
+      /* Circuit Element Accessors:
+      */
+
 
       Circuit.prototype.findElm = function(searchElm) {
         var circuitElm, _i, _len, _ref;
@@ -111,6 +116,10 @@
         return false;
       };
 
+      Circuit.prototype.getElements = function() {
+        return this.elementList;
+      };
+
       Circuit.prototype.getElmByIdx = function(elmIdx) {
         return this.elementList[elmIdx];
       };
@@ -119,16 +128,17 @@
         return this.elementList.length;
       };
 
-      Circuit.prototype.getScopes = function() {
-        return [];
-      };
+      /* Circuit Nodes:
+      */
+
 
       Circuit.prototype.resetNodes = function() {
         return this.nodeList = [];
       };
 
       Circuit.prototype.addCircuitNode = function(circuitNode) {
-        return this.nodeList.push(circuitNode);
+        var _ref;
+        return (_ref = this.nodeList) != null ? _ref.push(circuitNode) : void 0;
       };
 
       Circuit.prototype.getNode = function(idx) {
@@ -140,12 +150,42 @@
       };
 
       Circuit.prototype.numNodes = function() {
-        return this.nodeList.length;
+        var _ref;
+        return (_ref = this.nodeList) != null ? _ref.length : void 0;
       };
 
       Circuit.prototype.getGrid = function() {
         return this.Grid;
       };
+
+      Circuit.prototype.findBadNodes = function() {
+        var circuitElm, circuitNode, firstCircuitNode, numBadPoints, _i, _j, _len, _len1, _ref, _ref1;
+        this.badNodes = [];
+        _ref = this.nodeList;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          circuitNode = _ref[_i];
+          if (!circuitNode.intern && circuitNode.links.length === 1) {
+            numBadPoints = 0;
+            firstCircuitNode = circuitNode.links[0];
+            _ref1 = this.elementList;
+            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+              circuitElm = _ref1[_j];
+              console.log("Compare: " + (firstCircuitNode.elm.toString()) + "  " + (circuitElm.toString()) + " " + (circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)));
+              if (firstCircuitNode.elm.toString() !== circuitElm.toString() && circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)) {
+                numBadPoints++;
+              }
+            }
+            if (numBadPoints > 0) {
+              this.badNodes.push(circuitNode);
+            }
+          }
+        }
+        return this.badNodes;
+      };
+
+      /* Simulation Frame Computation
+      */
+
 
       Circuit.prototype.run = function() {
         this.notifyObservers(this.ON_START);
@@ -183,6 +223,10 @@
         }
         return this.Solver.reset();
       };
+
+      /* Simulation Frame Computation
+      */
+
 
       /*
           UpdateCircuit:
@@ -230,6 +274,34 @@
         return this.circuitBottom;
       };
 
+      Circuit.prototype.recalculateCircuitBounds = function() {
+        var bounds, element, maxX, maxY, minX, minY, _i, _len, _ref, _results;
+        maxX = Number.MIN_VALUE;
+        maxY = Number.MIN_VALUE;
+        minX = Number.MAX_VALUE;
+        minY = Number.MAX_VALUE;
+        _ref = this.elementList;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          element = _ref[_i];
+          bounds = element.boundingBox;
+          if (bounds.x < minX) {
+            minX = bounds.x;
+          }
+          if (bounds.y < minY) {
+            minY = bounds.y;
+          }
+          if ((bounds.width + bounds.x) > maxX) {
+            maxX = bounds.height + bounds.x;
+          }
+          if ((bounds.height + bounds.y) > maxY) {
+            maxY = bounds.height + bounds.y;
+          }
+          _results.push(this.circuitBounds = new Rectangle(minX, minY, maxX - minX, maxY - minY));
+        }
+        return _results;
+      };
+
       Circuit.prototype.updateTimings = function() {
         var currentSpeed, inc, sysTime;
         sysTime = (new Date()).getTime();
@@ -247,31 +319,6 @@
         return sysTime;
       };
 
-      Circuit.prototype.findBadNodes = function() {
-        var badNodes, circuitElm, circuitNode, firstCircuitNode, numBadPoints, _i, _j, _len, _len1, _ref, _ref1;
-        badNodes = [];
-        _ref = this.nodeList;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          circuitNode = _ref[_i];
-          if (!circuitNode.intern && circuitNode.links.length === 1) {
-            numBadPoints = 0;
-            firstCircuitNode = circuitNode.links[0];
-            _ref1 = this.elementList;
-            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-              circuitElm = _ref1[_j];
-              console.log("Compare: " + (firstCircuitNode.elm.toString()) + "  " + (circuitElm.toString()));
-              if (firstCircuitNode.elm.toString() !== circuitElm.toString() && circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)) {
-                numBadPoints++;
-              }
-            }
-            if (numBadPoints > 0) {
-              badNodes.push(circuitNode);
-            }
-          }
-        }
-        return badNodes;
-      };
-
       Circuit.prototype.warn = function(message) {
         Logger.warn(message);
         return this.warnMessage = message;
@@ -287,8 +334,7 @@
         return this.stopElm = null;
       };
 
-      /*
-          Delegations:
+      /* Simulation Accessor Methods
       */
 
 
@@ -315,12 +361,6 @@
       return Circuit;
 
     })(Observer);
-    ({
-      renderScopes: function() {},
-      getRenderer: function() {
-        return this.Renderer;
-      }
-    });
     return Circuit;
   });
 

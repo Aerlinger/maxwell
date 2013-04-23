@@ -1,16 +1,18 @@
-# #######################################################################
+####################################################################################################################
+
 # Circuit:
-#     Top-level class specification for a circuit
+#     Top-level class for defining a Circuit. An array of components, and nodes are managed by a central
+#     solver that updates and recalculates the conductance matrix every frame.
 #
 # @author Anthony Erlinger
-# @year 2012
+# @date 2011-2013
 #
 # Uses the Observer Design Pattern:
 #   Observes: <none>
 #   Observed By: Solver, Render
 #
 #
-# Events:
+# Event Message Passing interface:
 #   ON_UPDATE
 #   ON_PAUSE
 #   ON_RESUME
@@ -18,7 +20,7 @@
 #   ON_ADD_COMPONENT
 #   ON_REMOVE_COMPONENT
 #
-# #######################################################################
+####################################################################################################################
 
 # <DEFINE>
 define [
@@ -69,12 +71,17 @@ define [
   class Circuit extends Observer
 
     # Messages Dispatched to listeners:
+    ####################################################################################################################
+
     @ON_START_UPDATE = "ON_START_UPDATE"
     @ON_COMPLETE_UPDATE = "ON_END_UPDATE"
 
     @ON_START = "ON_START"
     @ON_PAUSE = "ON_PAUSE"
     @ON_RESET = "ON_RESET"
+
+    @ON_SOLDER = "ON_SOLDER"
+    @ON_DESOLDER = "ON_DESOLDER"
 
     @ON_ADD_COMPONENT = "ON_ADD_COMPONENT"
     @ON_REMOVE_COMPONENT = "ON_MOVE_COMPONENT"
@@ -91,13 +98,15 @@ define [
       @clearAndReset()
       @bindListeners()
 
-
+    # Simulator
     setParamsFromJSON: (jsonData) ->
       @Params = new CircuitEngineParams(jsonData)
 
-    ###
-    Removes all circuit elements and scopes from the workspace and resets time to zero.
-    ###
+
+    ###################################################################################################################
+    ## Removes all circuit elements and scopes from the workspace and resets time to zero.
+    ##   Called on initialization and reset.
+    ###################################################################################################################
     clearAndReset: ->
       # TODO: Prompt to save before destroying components
       for element in @elementList?
@@ -122,9 +131,7 @@ define [
       @colorMapState = new ColorMapState()
 
       @state = CircuitState.RUNNING
-
       @clearErrors()
-
       @notifyObservers @ON_RESET
 
 
@@ -132,41 +139,52 @@ define [
 #      @Solver
       #bind(@Solver.completeStep, )
 
-    setupScopes: ->
-
-
     # "Solders" a new element to this circuit (adds it to the element list array).
     solder: (newElement) ->
+      @notifyObservers @ON_SOLDER
 
-      # TODO DISPATCH EVENT
-
-      newElement.setParentCircuit(this)
+      newElement.Circuit = this
       newElement.setPoints()
       console.log("Soldering Element: " + newElement)
       @elementList.push newElement
 
-
     # "Desolders" an existing element to this circuit (removes it to the element list array).
     desolder: (component, destroy = false) ->
-
-      # TODO DISPATCH EVENT
+      @notifyObservers @ON_DESOLDER
 
       component.Circuit = null
       @elementList.remove component
       if destroy
         component.destroy()
 
+    #TODO: It may be worthwhile to return a defensive copy here
     getVoltageSources: ->
       @voltageSources
 
-    #It may be worthwhile to return a defensive copy here
-    getElements: ->
-      @elementList
+
+    ####################################################################################################################
+    # Oscilloscope Accessor:
+    ####################################################################################################################
+
+    # TODO: Scopes aren't implemented yet
+    getScopes: ->
+      []
+
+    setupScopes: ->
+
+
+    ####################################################################################################################
+    ### Circuit Element Accessors:
+    ####################################################################################################################
 
     findElm: (searchElm) ->
       for circuitElm in @elementList
         return circuitElm if searchElm == circuitElm
       return false
+
+    #TODO: It may be worthwhile to return a defensive copy here
+    getElements: ->
+      @elementList
 
     getElmByIdx: (elmIdx) ->
       return @elementList[elmIdx]
@@ -175,42 +193,50 @@ define [
       return @elementList.length
 
 
-    #########################
-    # Scopes:
-    #########################
-
-    # Scopes aren't implemented yet
-    getScopes: ->
-      []
-
-
-    #########################
-    # Nodes:
-    #########################
+    ####################################################################################################################
+    ### Circuit Nodes:
+    ####################################################################################################################
 
     resetNodes: ->
       @nodeList = []
 
     addCircuitNode: (circuitNode) ->
-      @nodeList.push circuitNode
+      @nodeList?.push circuitNode
 
     getNode: (idx) ->
       @nodeList[idx]
 
+    #TODO: It may be worthwhile to return a defensive copy here
     getNodes: ->
       @nodeList
 
     numNodes: ->
-      @nodeList.length
+      @nodeList?.length
 
     getGrid: ->
       return @Grid
 
+    findBadNodes: ->
+      @badNodes = []
+      for circuitNode in @nodeList
+        if not circuitNode.intern and circuitNode.links.length is 1
+          numBadPoints = 0
+          firstCircuitNode = circuitNode.links[0]
+          for circuitElm in @elementList
+            console.log "Compare: #{firstCircuitNode.elm.toString()}  #{circuitElm.toString()} #{circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)}"
+            # If firstCircuitNode isn't the same as the second
+            if firstCircuitNode.elm.toString() != circuitElm.toString()\
+                and circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)
+              numBadPoints++
+          if numBadPoints > 0
+            # Todo: outline bad nodes here
+            @badNodes.push circuitNode
+      return @badNodes
 
 
-    #########################
-    # Simulation state
-    #########################
+    ####################################################################################################################
+    ### Simulation Frame Computation
+    ####################################################################################################################
 
     run: ->
       @notifyObservers @ON_START
@@ -236,10 +262,9 @@ define [
       @Solver.reset()
 
 
-
-    #########################
-    # Computation
-    #########################
+    ####################################################################################################################
+    ### Simulation Frame Computation
+    ####################################################################################################################
 
     ###
     UpdateCircuit:
@@ -285,6 +310,25 @@ define [
 
       return @circuitBottom
 
+    recalculateCircuitBounds: ->
+      maxX = Number.MIN_VALUE
+      maxY = Number.MIN_VALUE
+      minX = Number.MAX_VALUE
+      minY = Number.MAX_VALUE
+
+      for element in @elementList
+        bounds = element.boundingBox
+        if bounds.x < minX
+          minX = bounds.x
+        if bounds.y < minY
+          minY = bounds.y
+        if (bounds.width + bounds.x) > maxX
+          maxX = (bounds.height + bounds.x)
+        if (bounds.height + bounds.y) > maxY
+          maxY = (bounds.height + bounds.y)
+
+        @circuitBounds = new Rectangle(minX, minY, maxX-minX, maxY-minY)
+
 
     updateTimings: () ->
       sysTime = (new Date()).getTime()
@@ -304,23 +348,6 @@ define [
       return sysTime
 
 
-    findBadNodes: ->
-      badNodes = []
-      for circuitNode in @nodeList
-        if not circuitNode.intern and circuitNode.links.length is 1
-          numBadPoints = 0
-          firstCircuitNode = circuitNode.links[0]
-          for circuitElm in @elementList
-            console.log "Compare: #{firstCircuitNode.elm.toString()}  #{circuitElm.toString()}"
-            if firstCircuitNode.elm.toString() != circuitElm.toString() and circuitElm.boundingBox.contains(circuitNode.x,
-                                                                                                            circuitNode.y)
-              numBadPoints++
-          if numBadPoints > 0
-            # Todo: outline bad nodes here
-            badNodes.push circuitNode
-      return badNodes
-
-
     warn: (message) ->
       Logger.warn message
       @warnMessage = message
@@ -334,9 +361,10 @@ define [
       @stopElm = null
 
 
-    ###
-    Delegations:
-    ###
+    ####################################################################################################################
+    ### Simulation Accessor Methods
+    ####################################################################################################################
+
     isStopped: ->
       @Solver.isStopped
 
@@ -352,71 +380,6 @@ define [
 
     getState: ->
       return @state
-
-
-    #####################################
-    # RENDERINGS:
-    #####################################
-
-#    renderInfo: () ->
-#      realMouseElm = @mouseElm
-#      @mouseElm = @stopElm unless @mouseElm?
-#
-#      if @stopMessage?
-#        @halt @stopMessage
-#      else
-#        @getCircuitBottom() if @circuitBottom is 0
-#
-#        # Array of messages to be displayed at the bottom of the canvas
-#        info = []
-#        if @mouseElm?
-#          if @mousePost is -1
-#            @mouseElm.getInfo info
-#          else
-#            info.push "V = " + Units.getUnitText(@mouseElm.getPostVoltage(@mousePost), "V")
-#        else
-#          Settings.fractionalDigits = 2
-#          info.push "t = " + Units.getUnitText(@Solver.time, "s") + "\nft: " + (@lastTime - @lastFrameTime) + "\n"
-#        unless @Hint.hintType is -1
-#          hint = @Hint.getHint()
-#          unless hint
-#            @Hint.hintType = -1
-#          else
-#            info.push hint
-#
-#        @Renderer.drawInfo(info)
-#        @mouseElm = realMouseElm
-#
-#
-#    renderCircuit: () ->
-#      @powerMult = Math.exp(@Params.powerRange / 4.762 - 7)
-#
-#      # Draw each circuit element
-#      for circuitElm in @elementList
-#        @Renderer.drawComponent(circuitElm)
-#
-#      # Draw the posts for each circuit
-#      tempMouseMode = @mouseState.tempMouseMode
-#      if tempMouseMode is MouseState.MODE_DRAG_ROW or
-#      tempMouseMode is MouseState.MODE_DRAG_COLUMN or
-#      tempMouseMode is MouseState.MODE_DRAG_POST or
-#      tempMouseMode is MouseState.MODE_DRAG_SELECTED
-#
-#        for circuitElm in @elementList
-#          circuitElm.drawPost circuitElm.x1, circuitElm.y1
-#          circuitElm.drawPost circuitElm.x2, circuitElm.y2
-
-        # TODO: Draw selection outline:
-
-
-  renderScopes: () ->
-    # TODO Implement scopes
-
-
-
-  getRenderer: ->
-    @Renderer
-
 
 
   return Circuit
