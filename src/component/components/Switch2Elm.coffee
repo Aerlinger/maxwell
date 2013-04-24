@@ -49,11 +49,10 @@ Todo: Click functionality does not work
     setPoints: ->
       SwitchElm::setPoints.call this
       @calcLeads 32
-      @swposts = CircuitComponent.newPointArray(2)
-      @swpoles = CircuitComponent.newPointArray(3)
-      DrawHelper.interpPoint @lead1, @lead2, 1, @openhs, @swpoles[0], @swpoles[1]
+
+      @swpoles = DrawHelper.interpPoint @lead1, @lead2, 1, @openhs
       @swpoles[2] = @lead2
-      DrawHelper.interpPoint @point1, @point2, 1, @openhs, @swposts[0], @swposts[1]
+      @swposts = DrawHelper.interpPoint @point1, @point2, 1, @openhs
       @posCount = @hasCenterOff() ? 3 : 2
 
     draw: ->
@@ -80,7 +79,7 @@ Todo: Click functionality does not work
       @drawPosts()
 
     getPost: (n) ->
-      (if (n is 0) then @point1 else @swposts[n - 1])
+      if (n is 0) then @point1 else @swposts[n - 1]
 
     getPostCount: ->
       3

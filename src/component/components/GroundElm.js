@@ -22,18 +22,18 @@
       };
 
       GroundElm.prototype.draw = function(renderContext) {
-        var color, endPt, row, startPt, _i;
+        var color, endPt, pt1, pt2, row, startPt, _i, _ref;
         color = DrawHelper.getVoltageColor(0);
         this.doDots(renderContext);
         renderContext.drawThickLinePt(this.point1, this.point2, color);
         for (row = _i = 0; _i < 3; row = ++_i) {
           startPt = 10 - row * 2;
           endPt = row * 3;
-          DrawHelper.interpPoint(this.point1, this.point2, 1 + endPt / this.dn, startPt, DrawHelper.ps1, DrawHelper.ps2);
-          renderContext.drawThickLinePt(DrawHelper.ps1, DrawHelper.ps2, color);
+          _ref = DrawHelper.interpPoint(this.point1, this.point2, 1 + endPt / this.dn, startPt), pt1 = _ref[0], pt2 = _ref[1];
+          renderContext.drawThickLinePt(pt1, pt2, color);
         }
-        DrawHelper.interpPoint(this.point1, this.point2, DrawHelper.ps2, 1 + 11.0 / this.dn);
-        this.setBboxPt(this.point1, DrawHelper.ps2, 11);
+        DrawHelper.interpPoint(this.point1, this.point2, pt2, 1 + 11.0 / this.dn);
+        this.setBboxPt(this.point1, pt2, 11);
         return this.drawPost(this.x1, this.y1, this.nodes[0], renderContext);
       };
 

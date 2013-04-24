@@ -26,8 +26,6 @@ Units
     constructor: (xa, ya, xb, yb, f, st) ->
       super xa, ya, xb, yb, f
 
-
-
     getDumpType: ->
       "p"
 
@@ -45,21 +43,34 @@ Units
       hs = 8
       CircuitComponent.setBboxPt @point1, @point2, hs
       selected = (@needsHighlight() or Circuit.plotYElm is this)
-      len = (if (selected or Circuit.dragElm is this) then 16 else @dn - 32)
+
+      if selected or Circuit.dragElm is this
+        len = 16
+      else
+        len = @dn - 32
+
       CircuitComponent.calcLeads Math.floor(len)
+
       color = @setVoltageColor(@volts[0])
-      color = CircuitComponent.selectColor  if selected
+      if selected
+        color = CircuitComponent.selectColor
+
       CircuitComponent.drawThickLinePt @point1, @lead1, color
+
       color = @setVoltageColor(@volts[1])
-      CircuitComponent.setColor @selectColor  if selected
+      if selected
+        CircuitComponent.setColor @selectColor
+
       CircuitComponent.drawThickLinePt @lead2, @point2
-      f = new Font("SansSerif", Font.BOLD, 14)
-      CircuitComponent.setFont f
-      CircuitComponent.drawCenteredText "X", @center.x1, @center.y, color  if this is Circuit.plotXElm
-      CircuitComponent.drawCenteredText "Y", @center.x1, @center.y, color  if this is Circuit.plotYElm
+
+      CircuitComponent.setFont new Font("SansSerif", Font.BOLD, 14)
+      CircuitComponent.drawCenteredText("X", @center.x1, @center.y, color) if this is Circuit.plotXElm
+      CircuitComponent.drawCenteredText("Y", @center.x1, @center.y, color) if this is Circuit.plotYElm
+
       if @mustShowVoltage()
         s = CircuitComponent.getShortUnitText(volts[0], "V")
         @drawValues s, 4
+
       @drawPosts()
 
     mustShowVoltage: ->
@@ -77,7 +88,7 @@ Units
         ei = new EditInfo("", 0, -1, -1)
         ei.checkbox = new Checkbox("Show Voltage", @mustShowVoltage())
         return ei
-      null
+      return null
 
     setEditValue: (n, ei) ->
       if n is 0
@@ -85,7 +96,6 @@ Units
           flags = ProbeElm.FLAG_SHOWVOLTAGE
         else
           flags &= ~ProbeElm.FLAG_SHOWVOLTAGE
-
 
 
   return ProbeElm

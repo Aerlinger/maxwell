@@ -67,8 +67,6 @@ define [
       @volts[2] = -@lastvbc
       @setup()
 
-
-
     setup: ->
       @vcrit = @vt * Math.log(@vt / (Math.sqrt(2) * @leakage))
       @fgain = @beta / (@beta + 1)
@@ -123,7 +121,6 @@ define [
       #g.fillPolygon(rectPoly);
       CircuitComponent.drawThickPolygonP @rectPoly, color
       if (@needsHighlight() or Circuit.dragElm is this) and @dy is 0
-
         #g.setColor(Color.white);
         #g.setFont(this.unitsFont);
         CircuitComponent.setColor Color.white
@@ -234,12 +231,12 @@ define [
       gce = -gee * @fgain
       gcc = -gec * (1 / @rgain)
 
-      #console.log("gee = " + gee + "\n");
-      #     console.log("gec = " + gec + "\n");
-      #     console.log("gce = " + gce + "\n");
-      #     console.log("gcc = " + gcc + "\n");
-      #     console.log("gce+gcc = " + (gce+gcc) + "\n");
-      #     console.log("gee+gec = " + (gee+gec) + "\n");
+      # console.log("gee = " + gee + "\n");
+      # console.log("gec = " + gec + "\n");
+      # console.log("gce = " + gce + "\n");
+      # console.log("gcc = " + gcc + "\n");
+      # console.log("gce+gcc = " + (gce+gcc) + "\n");
+      # console.log("gee+gec = " + (gee+gec) + "\n");
 
       # stamps from page 302 of Pillage.  Node 0 is the base, node 1 the collector, node 2 the emitter.  Also stamp
       # minimum conductance (gmin) between b,e and b,c

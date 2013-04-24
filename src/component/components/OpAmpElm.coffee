@@ -61,7 +61,6 @@ define [
 
 
     setGain: ->
-
       # gain of 100000 breaks e-amp-dfdx.txt
       # gain was 1000, but it broke amp-schmitt.txt
       @gain = (if ((@flags & OpAmpElm.FLAG_LOWGAIN) isnt 0) then 1000 else 100000)
@@ -84,7 +83,6 @@ define [
       CircuitComponent.drawThickPolygonP @triangle, (if @needsHighlight() then CircuitComponent.selectColor else CircuitComponent.lightGrayColor)
 
       #g.setFont(plusFont);
-
       #this.drawCenteredText("-", this.textp[0].x + 3, this.textp[0].y + 8, true).attr({'font-weight':'bold', 'font-size':17});
       #this.drawCenteredText("+", this.textp[1].x + 3, this.textp[1].y + 10, true).attr({'font-weight':'bold', 'font-size':14});
       color = @setVoltageColor(@volts[2])
@@ -167,7 +165,6 @@ define [
         dx = @gain
 
       #console.log("opamp " + vd + " " + volts[2] + " " + dx + " "  + x + " " + lastvd + " " + sim.converged);
-
       # newton's method:
       Circuit.stampMatrix vn, @nodes[0], dx
       Circuit.stampMatrix vn, @nodes[1], -dx
@@ -200,7 +197,6 @@ define [
     setEditValue: (n, ei) ->
       @maxOut = ei.value  if n is 0
       @minOut = ei.value  if n is 1
-
 
 
   return OpAmpElm

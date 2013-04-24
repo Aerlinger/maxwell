@@ -118,7 +118,6 @@ define [
       else
         @curSourceValue = -@voltdiff / @compResistance
 
-
     #console.log("cap " + compResistance + " " + curSourceValue + " " + current + " " + voltdiff);
     calculateCurrent: ->
       voltdiff = @volts[0] - @volts[1]
@@ -126,7 +125,6 @@ define [
       # we check compResistance because this might get called before stamp(), which sets compResistance, causing
       # infinite current
       @current = voltdiff / @compResistance + @curSourceValue  if @compResistance > 0
-
 
     doStep: ->
       Circuit = @getParentCircuit()

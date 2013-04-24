@@ -90,7 +90,6 @@ define [
       null
 
     setEditValue: (n, ei) ->
-
       # TODO Auto Generated method stub
       @inductance = ei.value  if n is 0
       if n is 1

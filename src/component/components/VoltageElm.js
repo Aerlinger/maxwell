@@ -270,21 +270,21 @@
           ei.choice.push("Pulse");
           ei.choice.push(this.waveform);
           return ei;
-        }
-        if (this.waveform === VoltageElm.WF_DC) {
-          return null;
-        }
-        if (n === 2) {
-          return new EditInfo("Frequency (Hz)", this.frequency, 4, 500);
-        }
-        if (n === 3) {
-          return new EditInfo("DC Offset (V)", this.bias, -20, 20);
-        }
-        if (n === 4) {
-          return new EditInfo("Phase Offset (degrees)", this.phaseShift * 180 / Math.PI, -180, 180).setDimensionless();
-        }
-        if (n === 5 && this.waveform === VoltageElm.WF_SQUARE) {
-          return new EditInfo("Duty Cycle", this.dutyCycle * 100, 0, 100).setDimensionless();
+          if (this.waveform === VoltageElm.WF_DC) {
+            return null;
+          }
+          if (n === 2) {
+            return new EditInfo("Frequency (Hz)", this.frequency, 4, 500);
+          }
+          if (n === 3) {
+            return new EditInfo("DC Offset (V)", this.bias, -20, 20);
+          }
+          if (n === 4) {
+            return new EditInfo("Phase Offset (degrees)", this.phaseShift * 180 / Math.PI, -180, 180).setDimensionless();
+          }
+          if (n === 5 && this.waveform === VoltageElm.WF_SQUARE) {
+            return new EditInfo("Duty Cycle", this.dutyCycle * 100, 0, 100).setDimensionless();
+          }
         }
       };
 
