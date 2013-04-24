@@ -38,30 +38,32 @@
 
       DrawHelper.unitsFont = "Arial, Helvetica, sans-serif";
 
-      DrawHelper.interpPoint = function(ptA, ptB, f, g, ptOut1, ptOut2) {
-        var gx, gy;
+      DrawHelper.interpPoint = function(ptA, ptB, f, g) {
+        var gx, gy, ptOut;
         if (g == null) {
           g = 0;
-        }
-        if (ptOut1 == null) {
-          ptOut1 = null;
-        }
-        if (ptOut2 == null) {
-          ptOut2 = null;
         }
         gx = ptB.y - ptA.y;
         gy = ptA.x - ptB.x;
         g /= Math.sqrt(gx * gx + gy * gy);
-        if (!ptOut1) {
-          ptOut1 = new Point();
-        }
-        ptOut1.x = Math.floor((1 - f) * ptA.x + (f * ptB.x) + (g * gx) + 0.48);
-        ptOut1.y = Math.floor((1 - f) * ptA.y + (f * ptB.y) + (g * gy) + 0.48);
-        if (ptOut2) {
-          ptOut2.x = ptOut1.x;
-          ptOut2.y = ptOut1.y;
-        }
-        return ptOut1;
+        ptOut = new Point();
+        ptOut.x = Math.floor((1 - f) * ptA.x + (f * ptB.x) + (g * gx + 0.48));
+        ptOut.y = Math.floor((1 - f) * ptA.y + (f * ptB.y) + (g * gy + 0.48));
+        return ptOut;
+      };
+
+      DrawHelper.interpPoint2 = function(ptA, ptB, f, g) {
+        var gx, gy, ptOut1, ptOut2;
+        gx = ptB.y - ptA.y;
+        gy = ptA.x - ptB.x;
+        g /= Math.sqrt(gx * gx + gy * gy);
+        ptOut1 = new Point();
+        ptOut2 = new Point();
+        ptOut1.x = Math.floor((1 - f) * ptA.x + (f * ptB.x) + (g * gx + 0.48));
+        ptOut1.y = Math.floor((1 - f) * ptA.y + (f * ptB.y) + (g * gy + 0.48));
+        ptOut2.x = Math.floor((1 - f) * ptA.x + (f * ptB.x) - (g * gx + 0.48));
+        ptOut2.y = Math.floor((1 - f) * ptA.y + (f * ptB.y) - (g * gy + 0.48));
+        return [ptOut1, ptOut2];
       };
 
       DrawHelper.calcArrow = function(a, b, al, aw) {

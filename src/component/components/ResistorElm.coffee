@@ -57,9 +57,9 @@ define [
           else
             newOffset = 0
         voltDrop = volt1 + (volt2 - volt1) * i / segments
-        DrawHelper.interpPoint @lead1, @lead2, i*segf, hs*oldOffset, DrawHelper.ps1
-        DrawHelper.interpPoint @lead1, @lead2, (i+1)*segf, hs*newOffset, DrawHelper.ps2
-        renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(voltDrop)
+        pt1 = DrawHelper.interpPoint @lead1, @lead2, i*segf, hs*oldOffset
+        pt2 = DrawHelper.interpPoint @lead1, @lead2, (i+1)*segf, hs*newOffset
+        renderContext.drawThickLinePt pt1, pt2, DrawHelper.getVoltageColor(voltDrop)
         oldOffset = newOffset
 
       #if true @Circuit?.Params.showValues

@@ -76,9 +76,9 @@ define [
       @rect.equals(congruentRect).should.equal false
   
     it "should not be able to detect points on its border", ->
-      @rect.contains(5, 6).should.equal false
+      @rect.contains(5, 6).should.equal true
       @rect.contains(106, 156).should.equal false
-      @rect.contains(6, 6).should.equal false
+      @rect.contains(6, 6).should.equal true
   
     it "should be able to detect points within its border", ->
       @rect.contains(100, 151).should.equal true

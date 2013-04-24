@@ -170,8 +170,7 @@
             _ref1 = this.elementList;
             for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
               circuitElm = _ref1[_j];
-              console.log("Compare: " + (firstCircuitNode.elm.toString()) + "  " + (circuitElm.toString()) + " " + (circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)));
-              if (firstCircuitNode.elm.toString() !== circuitElm.toString() && circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)) {
+              if (firstCircuitNode.elm.equal_to(circuitElm) === false && circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)) {
                 numBadPoints++;
               }
             }
