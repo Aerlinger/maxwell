@@ -31,6 +31,15 @@
           circuitElm = new CircuitComponent(0, 3, 0, 4, 5);
           return circuitElm.flags.should.equal(5);
         });
+        it("should have component_id", function() {
+          return this.circuitElement.component_id > 0;
+        });
+        it("should equal itself", function() {
+          return this.circuitElement.equal_to(this.circuitElement).should.equal(true);
+        });
+        it("should not equal another component", function() {
+          return this.circuitElement.equal_to(new CircuitComponent()).should.equal(false);
+        });
         it("creates default parameters", function() {
           this.circuitElement.current.should.equal(0);
           this.circuitElement.getCurrent().should.equal(0);

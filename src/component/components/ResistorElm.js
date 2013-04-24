@@ -27,7 +27,7 @@
       }
 
       ResistorElm.prototype.draw = function(renderContext) {
-        var hs, i, newOffset, oldOffset, resistanceVal, segf, segments, volt1, volt2, voltDrop, _i;
+        var hs, i, newOffset, oldOffset, pt1, pt2, resistanceVal, segf, segments, volt1, volt2, voltDrop, _i;
         segments = 16;
         oldOffset = 0;
         hs = 6;
@@ -50,9 +50,9 @@
               newOffset = 0;
           }
           voltDrop = volt1 + (volt2 - volt1) * i / segments;
-          DrawHelper.interpPoint(this.lead1, this.lead2, i * segf, hs * oldOffset, DrawHelper.ps1);
-          DrawHelper.interpPoint(this.lead1, this.lead2, (i + 1) * segf, hs * newOffset, DrawHelper.ps2);
-          renderContext.drawThickLinePt(DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(voltDrop));
+          pt1 = DrawHelper.interpPoint(this.lead1, this.lead2, i * segf, hs * oldOffset);
+          pt2 = DrawHelper.interpPoint(this.lead1, this.lead2, (i + 1) * segf, hs * newOffset);
+          renderContext.drawThickLinePt(pt1, pt2, DrawHelper.getVoltageColor(voltDrop));
           oldOffset = newOffset;
         }
         resistanceVal = Units.getUnitText(this.resistance, "ohm");

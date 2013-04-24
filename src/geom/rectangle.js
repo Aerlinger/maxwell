@@ -13,7 +13,7 @@
       }
 
       Rectangle.prototype.contains = function(x, y) {
-        return x > this.x && x < (this.x + this.width) && y > this.y && (y < this.y + this.height);
+        return x >= this.x && x <= (this.x + this.width) && y >= this.y && (y <= this.y + this.height);
       };
 
       Rectangle.prototype.equals = function(otherRect) {

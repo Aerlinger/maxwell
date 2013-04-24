@@ -69,9 +69,9 @@
         return this.rect.equals(congruentRect).should.equal(false);
       });
       it("should not be able to detect points on its border", function() {
-        this.rect.contains(5, 6).should.equal(false);
+        this.rect.contains(5, 6).should.equal(true);
         this.rect.contains(106, 156).should.equal(false);
-        return this.rect.contains(6, 6).should.equal(false);
+        return this.rect.contains(6, 6).should.equal(true);
       });
       it("should be able to detect points within its border", function() {
         this.rect.contains(100, 151).should.equal(true);

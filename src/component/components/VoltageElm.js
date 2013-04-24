@@ -120,15 +120,16 @@
       };
 
       VoltageElm.prototype.draw = function(renderContext) {
+        var ptA, ptB, _ref, _ref1;
         this.setBbox(this.x1, this.y2, this.x2, this.y2);
         this.draw2Leads(renderContext);
         if (this.waveform === VoltageElm.WF_DC) {
-          DrawHelper.interpPoint(this.lead1, this.lead2, 0, 10, DrawHelper.ps1, DrawHelper.ps2);
-          renderContext.drawThickLinePt(this.lead1, DrawHelper.ps1, DrawHelper.getVoltageColor(this.volts[0]));
-          renderContext.drawThickLinePt(DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(this.volts[0]));
+          _ref = DrawHelper.interpPoint2(this.lead1, this.lead2, 0, 10), ptA = _ref[0], ptB = _ref[1];
+          renderContext.drawThickLinePt(this.lead1, ptA, DrawHelper.getVoltageColor(this.volts[0]));
+          renderContext.drawThickLinePt(ptA, ptB, DrawHelper.getVoltageColor(this.volts[0]));
           this.setBboxPt(this.point1, this.point2, 16);
-          DrawHelper.interpPoint(this.lead1, this.lead2, 1, 16, DrawHelper.ps1, DrawHelper.ps2);
-          renderContext.drawThickLinePt(DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(this.volts[1]));
+          _ref1 = DrawHelper.interpPoint2(this.lead1, this.lead2, 1, 16), ptA = _ref1[0], ptB = _ref1[1];
+          renderContext.drawThickLinePt(ptA, ptB, DrawHelper.getVoltageColor(this.volts[1]));
         } else {
           this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
           DrawHelper.interpPoint(this.lead1, this.lead2, 0.5, DrawHelper.ps1);

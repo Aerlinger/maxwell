@@ -57,6 +57,7 @@ define [
       @setPoints()
       @allocNodes()
       @initBoundingBox()
+      @component_id = (new Date()).getTime()
 
       console.log "Instantiating Circuit Component"
 
@@ -146,6 +147,9 @@ define [
 
     getDefaultFlags: ->
       0
+
+    equal_to: (otherComponent) ->
+      return @component_id == otherComponent.component_id
 
     drag: (newX, newY) ->
       newX = @Circuit.snapGrid(newX)

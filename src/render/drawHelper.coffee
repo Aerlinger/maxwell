@@ -48,50 +48,30 @@ define [
     @unitsFont: "Arial, Helvetica, sans-serif"
 
     # TODO: BUGGY
-    @interpPoint: (ptA, ptB, f, g = 0, ptOut1 = null, ptOut2 = null) ->
+    @interpPoint: (ptA, ptB, f, g = 0) ->
       gx = ptB.y - ptA.y
       gy = ptA.x - ptB.x
       g /= Math.sqrt gx*gx + gy*gy
 
-      if !ptOut1
-        ptOut1 = new Point()
+      ptOut = new Point()
+      ptOut.x = Math.floor (1-f)*ptA.x + (f*ptB.x) + (g*gx+0.48)
+      ptOut.y = Math.floor (1-f)*ptA.y + (f*ptB.y) + (g*gy+0.48)
 
-      ptOut1.x = Math.floor (1 - f) * ptA.x + (f * ptB.x) + (g * gx) + 0.48
-      ptOut1.y = Math.floor (1 - f) * ptA.y + (f * ptB.y) + (g * gy) + 0.48
+      return ptOut
 
-      if ptOut2
-        ptOut2.x = ptOut1.x
-        ptOut2.y = ptOut1.y
+    @interpPoint2: (ptA, ptB, f, g) ->
+      gx = ptB.y - ptA.y
+      gy = ptA.x - ptB.x
+      g /= Math.sqrt gx*gx + gy*gy
 
-      return ptOut1
+      ptOut1 = new Point()
+      ptOut2 = new Point()
+      ptOut1.x = Math.floor (1-f)*ptA.x + (f*ptB.x) + (g*gx+0.48)
+      ptOut1.y = Math.floor (1-f)*ptA.y + (f*ptB.y) + (g*gy+0.48)
+      ptOut2.x = Math.floor (1-f)*ptA.x + (f*ptB.x) - (g*gx+0.48)
+      ptOut2.y = Math.floor (1-f)*ptA.y + (f*ptB.y) - (g*gy+0.48)
 
-#    @interpPointPt: (pt1, pt2, f, g) ->
-#      newPoint = new Point(0, 0)
-#      @interpPoint pt1, pt2, newPoint, f, g
-#      return newPoint
-#
-#    @interpPoint: (ptA, ptB, ptOut, f, g) ->
-#      if g
-#        gx = ptB.y - ptA.y
-#        gy = ptA.x - ptB.x
-#        g /= Math.sqrt(gx * gx + gy * gy)
-#      else
-#        gx = 0
-#        gy = 0
-#        g = 0
-#      ptOut.x = Math.floor ptA.x * (1 - f) + ptB.x * f + g * gx + 0.48
-#      ptOut.y = Math.floor ptA.y * (1 - f) + ptB.y * f + g * gy + 0.48
-#      return ptB
-#
-#    @interpPoint2: (ptA, ptB, ptOut1, ptOut2, f, g) ->
-#      if g is not 0
-#        gx = ptB.y - ptA.y
-#        gy = ptA.x - ptB.x
-#        g /= Math.sqrt(gx*gx + gy*gy)
-#
-#      ptOut2.x = ptOut1.x  = (1 - f) * Math.floor ptA.x + (f * ptB.x) + (g * gx) + 0.48
-#      ptOut2.y = ptOut1.y  = (1 - f) * Math.floor ptA.y + (f * ptB.y) + (g * gy) + 0.48
-
+      return [ptOut1, ptOut2]
 
     @calcArrow: (a, b, al, aw) ->
       poly = new Polygon()

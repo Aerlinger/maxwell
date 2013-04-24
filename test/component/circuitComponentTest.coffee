@@ -44,6 +44,16 @@ define [
         circuitElm = new CircuitComponent(0, 3, 0, 4, 5)
         circuitElm.flags.should.equal 5
 
+      it "should have component_id", ->
+        @circuitElement.component_id > 0
+
+      it "should equal itself", ->
+        @circuitElement.equal_to(@circuitElement).should.equal true
+
+
+      it "should not equal another component", ->
+        @circuitElement.equal_to(new CircuitComponent()).should.equal false
+
       it "creates default parameters", ->
         @circuitElement.current.should.equal 0
         @circuitElement.getCurrent().should.equal 0

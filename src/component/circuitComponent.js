@@ -35,6 +35,7 @@
         this.setPoints();
         this.allocNodes();
         this.initBoundingBox();
+        this.component_id = (new Date()).getTime();
         console.log("Instantiating Circuit Component");
       }
 
@@ -130,6 +131,10 @@
 
       CircuitComponent.prototype.getDefaultFlags = function() {
         return 0;
+      };
+
+      CircuitComponent.prototype.equal_to = function(otherComponent) {
+        return this.component_id === otherComponent.component_id;
       };
 
       CircuitComponent.prototype.drag = function(newX, newY) {

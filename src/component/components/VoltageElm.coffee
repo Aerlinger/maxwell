@@ -111,27 +111,17 @@ define [
   
     draw: (renderContext) ->
       @setBbox @x1, @y2, @x2, @y2
-#<<<<<<< HEAD
-#>>>>>>> reorganize_packages
-#
-#      @updateDotCount()
-#
-#      #if !(@Circuit?.dragElm is this)# && !(@waveform is VoltageElm.WF_DC)
-#      @drawDots @point1, @lead1, @curcount, renderContext
-#      @drawDots @point2, @lead2, -@curcount, renderContext
-#
-#=======
-#>>>>>>> reorganize_packages
+
       @draw2Leads(renderContext)
   
       if @waveform is VoltageElm.WF_DC
-        DrawHelper.interpPoint @lead1, @lead2, 0, 10, DrawHelper.ps1, DrawHelper.ps2
-        renderContext.drawThickLinePt @lead1, DrawHelper.ps1, DrawHelper.getVoltageColor(@volts[0])
-        renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(@volts[0])
+        [ptA, ptB] = DrawHelper.interpPoint2 @lead1, @lead2, 0, 10
+        renderContext.drawThickLinePt @lead1, ptA, DrawHelper.getVoltageColor(@volts[0])
+        renderContext.drawThickLinePt ptA, ptB, DrawHelper.getVoltageColor(@volts[0])
 
         @setBboxPt @point1, @point2, 16
-        DrawHelper.interpPoint @lead1, @lead2, 1, 16, DrawHelper.ps1, DrawHelper.ps2
-        renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, DrawHelper.getVoltageColor(@volts[1])
+        [ptA, ptB] = DrawHelper.interpPoint2 @lead1, @lead2, 1, 16
+        renderContext.drawThickLinePt ptA, ptB, DrawHelper.getVoltageColor(@volts[1])
   
       else
         @setBboxPt @point1, @point2, VoltageElm.circleSize

@@ -223,9 +223,9 @@ define [
           numBadPoints = 0
           firstCircuitNode = circuitNode.links[0]
           for circuitElm in @elementList
-            console.log "Compare: #{firstCircuitNode.elm.toString()}  #{circuitElm.toString()} #{circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)}"
+            #console.log "Compare: #{firstCircuitNode.elm.equal_to(circuitElm)} #{circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)}"
             # If firstCircuitNode isn't the same as the second
-            if firstCircuitNode.elm.toString() != circuitElm.toString()\
+            if firstCircuitNode.elm.equal_to(circuitElm) is false\
                 and circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)
               numBadPoints++
           if numBadPoints > 0
