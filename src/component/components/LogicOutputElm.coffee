@@ -8,14 +8,14 @@ define [
   'cs!CircuitComponent',
   'cs!Units'
 ], (
-Settings,
-DrawHelper,
-Polygon,
-Rectangle,
-Point,
+  Settings,
+  DrawHelper,
+  Polygon,
+  Rectangle,
+  Point,
 
-CircuitComponent,
-Units
+  CircuitComponent,
+  Units
 ) ->
   # </DEFINE>
 

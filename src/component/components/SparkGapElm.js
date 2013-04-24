@@ -22,16 +22,16 @@
             st = st.split(" ");
           }
           if (st) {
-            this.onresistance = parseFloat(st.shift());
+            this.onresistance = parseFloat(st != null ? st.shift() : void 0);
           }
           if (st) {
-            this.offresistance = parseFloat(st.shift());
+            this.offresistance = parseFloat(st != null ? st.shift() : void 0);
           }
           if (st) {
-            this.breakdown = parseFloat(st.shift());
+            this.breakdown = parseFloat(st != null ? st.shift() : void 0);
           }
           if (st) {
-            this.holdcurrent = parseFloat(st.shift());
+            this.holdcurrent = parseFloat(st != null ? st.shift() : void 0);
           }
         }
       }

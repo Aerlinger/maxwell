@@ -78,7 +78,6 @@
         color = this.setVoltageColor(this.volts[2]);
         CircuitComponent.drawThickLinePt(this.drn[0], this.drn[1], color);
         segments = 6;
-        i = void 0;
         this.setPowerColor(true);
         segf = 1.0 / segments;
         i = 0;

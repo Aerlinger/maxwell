@@ -39,11 +39,11 @@ define [
       for row in [0...3]
         startPt = 10 - row * 2
         endPt = row * 3
-        DrawHelper.interpPoint @point1, @point2, 1 + endPt / @dn, startPt, DrawHelper.ps1, DrawHelper.ps2
-        renderContext.drawThickLinePt DrawHelper.ps1, DrawHelper.ps2, color
+        [pt1, pt2] = DrawHelper.interpPoint @point1, @point2, 1 + endPt / @dn, startPt
+        renderContext.drawThickLinePt pt1, pt2, color
   
-      DrawHelper.interpPoint @point1, @point2, DrawHelper.ps2, 1 + 11.0 / @dn
-      @setBboxPt @point1, DrawHelper.ps2, 11
+      DrawHelper.interpPoint @point1, @point2, pt2, 1 + 11.0 / @dn
+      @setBboxPt @point1, pt2, 11
       @drawPost @x1, @y1, @nodes[0], renderContext
   
     setCurrent: (x, currentVal) ->
@@ -71,6 +71,4 @@ define [
     toString: ->
       "GroundElm"
 
-
   return GroundElm
-

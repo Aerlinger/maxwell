@@ -51,8 +51,7 @@
         DiodeElm.__super__.setPoints.call(this);
         this.calcLeads(16);
         this.cathode = CircuitComponent.newPointArray(2);
-        pa = CircuitComponent.newPointArray(2);
-        DrawHelper.interpPoint(this.lead1, this.lead2, 0, this.hs, pa[0], pa[1]);
+        pa = DrawHelper.interpPoint(this.lead1, this.lead2, 0, this.hs);
         DrawHelper.interpPoint(this.lead1, this.lead2, 1, this.hs, this.cathode[0], this.cathode[1]);
         return this.poly = CircuitComponent.createPolygon(pa[0], pa[1], this.lead2);
       };

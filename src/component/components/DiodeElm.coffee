@@ -41,7 +41,6 @@ Units
 
       @setup()
 
-
     nonLinear: ->
       true
 
@@ -59,10 +58,9 @@ Units
       super()
       @calcLeads 16
       @cathode = CircuitComponent.newPointArray(2)
-      pa = CircuitComponent.newPointArray(2) # Point array
-      DrawHelper.interpPoint @lead1, @lead2, 0, @hs, pa[0], pa[1]
-      DrawHelper.interpPoint @lead1, @lead2, 1, @hs, @cathode[0], @cathode[1]
-      @poly = CircuitComponent.createPolygon(pa[0], pa[1], @lead2)
+      [pa pb] = DrawHelper.interpPoint @lead1, @lead2, 0, @hs
+      [ca, cb] = DrawHelper.interpPoint @lead1, @lead2, 1, @hs
+      @poly = CircuitComponent.createPolygon(pa, pb, @lead2)
 
     draw: ->
       @drawDiode()
@@ -116,7 +114,6 @@ Units
 
     # TODO: fix
     needsShortcut: ->
-      #return getClass() == DiodeElm.class;
       return true
 
   return DiodeElm

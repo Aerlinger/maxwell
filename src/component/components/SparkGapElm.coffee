@@ -13,7 +13,6 @@ define [
   Polygon,
   Rectangle,
   Point,
-
   CircuitComponent,
   Units
 ) ->
@@ -30,13 +29,13 @@ define [
       @breakdown = 1e3
       @holdcurrent = 0.001
       @state = false
+
       if st
         st = st.split(" ")  if typeof st is "string"
-        @onresistance = parseFloat(st.shift())  if st
-        @offresistance = parseFloat(st.shift())  if st
-        @breakdown = parseFloat(st.shift())  if st
-        @holdcurrent = parseFloat(st.shift())  if st
-
+        @onresistance = parseFloat(st?.shift())  if st
+        @offresistance = parseFloat(st?.shift())  if st
+        @breakdown = parseFloat(st?.shift())  if st
+        @holdcurrent = parseFloat(st?.shift())  if st
 
     nonLinear: ->
       true

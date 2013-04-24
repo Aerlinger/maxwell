@@ -80,7 +80,7 @@ Units
       color = @setVoltageColor(@volts[2])
       CircuitComponent.drawThickLinePt @drn[0], @drn[1], color
       segments = 6
-      i = undefined
+
       @setPowerColor true
       segf = 1.0 / segments
       i = 0

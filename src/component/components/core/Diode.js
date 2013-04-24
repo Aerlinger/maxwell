@@ -3,7 +3,17 @@
 
   define([], function() {
     var Diode;
+    Diode = (function() {
+
+      function Diode() {}
+
+      Diode.leakage = 1e-14;
+
+      return Diode;
+
+    })();
     Diode = function() {
+      construc;
       this.nodes = new Array(2);
       this.vt = 0;
       this.vdcoef = 0;
@@ -13,7 +23,6 @@
       this.lastvoltdiff = 0;
       return this.crit = 0;
     };
-    Diode.prototype.leakage = 1e-14;
     Diode.prototype.setup = function(fw, zv) {
       var i;
       this.fwdrop = fw;

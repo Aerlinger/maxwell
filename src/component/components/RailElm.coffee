@@ -42,8 +42,8 @@ define [
       color = @setVoltageColor(@volts[0])
       CircuitComponent.drawThickLinePt @point1, @lead1, color
       clock = @waveform is VoltageElm.WF_SQUARE and (@flags & VoltageElm.FLAG_CLOCK) isnt 0
-      if @waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR or clock
 
+      if @waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR or clock
         #Font f = new Font("SansSerif", 0, 12);
         #g.setFont(f);
         color = ((if @needsHighlight() then Settings.selectColor else Settings.whiteColor))
@@ -51,10 +51,10 @@ define [
         #this.setPowerColor(g, false);
         v = @getVoltage()
         s = CircuitComponent.getShortUnitText(v, "V")
-        s = v + "V"  if Math.abs(v) < 1 #showFormat.format(v)
-        s = "+" + s  if @getVoltage() > 0
-        s = "Ant"  if this instanceof AntennaElm
-        s = "CLK"  if clock
+        s = v + "V" if Math.abs(v) < 1 #showFormat.format(v)
+        s = "+" + s if @getVoltage() > 0
+        s = "Ant" if this instanceof AntennaElm
+        s = "CLK" if clock
         @drawCenteredText s, @x2, @y2, true
       else
         @drawWaveform @point2
@@ -72,7 +72,7 @@ define [
         Circuit.stampVoltageSource 0, @nodes[0], @voltSource
 
     doStep: ->
-      Circuit.updateVoltageSource 0, @nodes[0], @voltSource, @getVoltage()  unless @waveform is VoltageElm.WF_DC
+      Circuit.updateVoltageSource 0, @nodes[0], @voltSource, @getVoltage() unless @waveform is VoltageElm.WF_DC
 
     hasGroundConnection: (n1) ->
       true

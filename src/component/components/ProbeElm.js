@@ -31,11 +31,15 @@
       };
 
       ProbeElm.prototype.draw = function() {
-        var color, f, hs, len, s, selected;
+        var color, hs, len, s, selected;
         hs = 8;
         CircuitComponent.setBboxPt(this.point1, this.point2, hs);
         selected = this.needsHighlight() || Circuit.plotYElm === this;
-        len = (selected || Circuit.dragElm === this ? 16 : this.dn - 32);
+        if (selected || Circuit.dragElm === this) {
+          len = 16;
+        } else {
+          len = this.dn - 32;
+        }
         CircuitComponent.calcLeads(Math.floor(len));
         color = this.setVoltageColor(this.volts[0]);
         if (selected) {
@@ -47,8 +51,7 @@
           CircuitComponent.setColor(this.selectColor);
         }
         CircuitComponent.drawThickLinePt(this.lead2, this.point2);
-        f = new Font("SansSerif", Font.BOLD, 14);
-        CircuitComponent.setFont(f);
+        CircuitComponent.setFont(new Font("SansSerif", Font.BOLD, 14));
         if (this === Circuit.plotXElm) {
           CircuitComponent.drawCenteredText("X", this.center.x1, this.center.y, color);
         }

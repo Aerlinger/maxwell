@@ -150,6 +150,7 @@ define [
       switch @waveform
         when VoltageElm.WF_DC
           break
+
         when VoltageElm.WF_SQUARE
           xc2 = Math.floor(wl * 2 * @dutyCycle - wl + xc)
           xc2 = Math.max(xc - wl + 3, Math.min(xc + wl - 3, xc2))
@@ -158,16 +159,19 @@ define [
           renderContext.drawThickLine xc2, yc - wl, xc2, yc + wl, color
           renderContext.drawThickLine xc + wl, yc + wl, xc2, yc + wl, color
           renderContext.drawThickLine xc + wl, yc, xc + wl, yc + wl, color
+
         when VoltageElm.WF_PULSE
           yc += wl / 2
           renderContext.drawThickLine xc - wl, yc - wl, xc - wl, yc, color
           renderContext.drawThickLine xc - wl, yc - wl, xc - wl / 2, yc - wl, color
           renderContext.drawThickLine xc - wl / 2, yc - wl, xc - wl / 2, yc, color
           renderContext.drawThickLine xc - wl / 2, yc, xc + wl, yc, color
+
         when VoltageElm.WF_SAWTOOTH
           renderContext.drawThickLine xc, yc - wl, xc - wl, yc, color
           renderContext.drawThickLine xc, yc - wl, xc, yc + wl, color
           renderContext.drawThickLine xc, yc + wl, xc + wl, yc, color
+
         when VoltageElm.WF_TRIANGLE
           xl = 5
           renderContext.drawThickLine xc - xl * 2, yc, xc - xl, yc - wl, color
@@ -175,6 +179,7 @@ define [
           renderContext.drawThickLine xc, yc, xc + xl, yc + wl, color
           renderContext.drawThickLine xc + xl, yc + wl, xc + xl * 2, yc, color
           break
+
         when VoltageElm.WF_AC
           xl = 10
           ox = -1
@@ -187,6 +192,7 @@ define [
             oy = yy
             i++
           break
+
       if Settings.showValuesCheckItem
         valueString = CircuitComponent.getShortUnitText(@frequency, "Hz")
         @drawValues valueString, VoltageElm.circleSize  if @dx is 0 or @dy is 0
@@ -228,7 +234,9 @@ define [
         arr[i++] = "P = " + CircuitComponent.getUnitText(@getPower(), "W")
   
     getEditInfo: (n) ->
-      return new EditInfo((if @waveform is VoltageElm.WF_DC then "Voltage" else "Max Voltage"), @maxVoltage, -20, 20)  if n is 0
+      if n is 0
+        return new EditInfo((if @waveform is VoltageElm.WF_DC then "Voltage" else "Max Voltage"), @maxVoltage, -20, 20)
+
       if n is 1
         ei = new EditInfo("Waveform", @waveform, -1, -1)
         ei.choice = new Array()
@@ -240,17 +248,23 @@ define [
         ei.choice.push "Pulse"
         ei.choice.push @waveform
         return ei
-      return null  if @waveform is VoltageElm.WF_DC
-      return new EditInfo("Frequency (Hz)", @frequency, 4, 500)  if n is 2
-      return new EditInfo("DC Offset (V)", @bias, -20, 20)  if n is 3
-      return new EditInfo("Phase Offset (degrees)", @phaseShift * 180 / Math.PI, -180, 180).setDimensionless()  if n is 4
-      return new EditInfo("Duty Cycle", @dutyCycle * 100, 0, 100).setDimensionless()  if n is 5 and @waveform is VoltageElm.WF_SQUARE
+
+        if @waveform is VoltageElm.WF_DC
+          return null
+        if n is 2
+          return new EditInfo("Frequency (Hz)", @frequency, 4, 500)
+        if n is 3
+          return new EditInfo("DC Offset (V)", @bias, -20, 20)
+        if n is 4
+          return new EditInfo("Phase Offset (degrees)", @phaseShift * 180 / Math.PI, -180, 180).setDimensionless()
+        if n is 5 and @waveform is VoltageElm.WF_SQUARE
+          return new EditInfo("Duty Cycle", @dutyCycle * 100, 0, 100).setDimensionless()
   
     setEditValue: (n, ei) ->
       @maxVoltage = ei.value  if n is 0
       @bias = ei.value  if n is 3
+
       if n is 2
-  
         # adjust time zero to maintain continuity in the waveform even though the frequency has changed.
         oldfreq = @frequency
         @frequency = ei.value
@@ -258,16 +272,14 @@ define [
         @frequency = maxfreq  if @frequency > maxfreq
         adj = @frequency - oldfreq
         @freqTimeZero = @Circuit?.time - oldfreq * (@Circuit?.time - @freqTimeZero) / @frequency
+
       if n is 1
         waveform = @waveform
-  
         #waveform = ei.choice.getSelectedIndex();
         if @waveform is VoltageElm.WF_DC and waveform isnt VoltageElm.WF_DC
-  
           #ei.newDialog = true;
           @bias = 0
         else @waveform isnt VoltageElm.WF_DC and waveform is VoltageElm.WF_DC
-  
         #ei.newDialog = true;
         @setPoints()  if (@waveform is VoltageElm.WF_SQUARE or waveform is VoltageElm.WF_SQUARE) and @waveform isnt waveform
       @phaseShift = ei.value * Math.PI / 180  if n is 4
@@ -275,7 +287,6 @@ define [
   
     toString: ->
       "VoltageElm"
-
 
 
   return VoltageElm
