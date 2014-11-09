@@ -289,8 +289,7 @@ define [
 
     getScopeUnits: (x) ->
       switch x
-        when Oscilloscope.VAL_IB, Oscilloscope.VAL_IC
-      , Oscilloscope.VAL_IE
+        when Oscilloscope.VAL_IB, Oscilloscope.VAL_IC, Oscilloscope.VAL_IE
           "A"
         else
           "V"

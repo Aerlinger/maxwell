@@ -1,6 +1,6 @@
 # <DEFINE>
-define([
-  'cs!VoltageElm',
+define [
+  'cs!VoltageElm'
 ], (
   VoltageElm,
 ) ->

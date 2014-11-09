@@ -1,0 +1,27 @@
+{
+  "name": "Circuit",
+  "version": "0.0.1",
+  "hompage": "maxwell",
+  "authors": [
+    "Anthony Erlinger"
+  ],
+  "description": "Interactive Circuit Simulation",
+  "license": "BSD",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "example"
+  ],
+  "devDependencies": {
+    "chai": "~1.8.1",
+    "mocha": "~1.15.1",
+    "sinonjs": "~1.7.3",
+    "require-cs": "~0.5.0"
+  },
+  "dependencies": {
+    "requirejs": "~2.1.9"
+  }
+}

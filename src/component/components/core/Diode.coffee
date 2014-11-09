@@ -1,12 +1,11 @@
 # <DEFINE>
 define [], () ->
-# </DEFINE>
 
   class Diode
     @leakage = 1e-14
     #Inductor.FLAG_BACK_EULER = 2;
 
-    constructor:
+    constructor: () ->
       @nodes = new Array(2)
       @vt = 0
       @vdcoef = 0

@@ -6,6 +6,8 @@
   console.log("Loading RequireJS configuration...");
 
   var Config = {
+    // deps: [],
+    // baseUrl: ""
     'paths': {
       // LIBRARIES:
       jquery: 'libs/jquery-1.8.3.min',

@@ -20,10 +20,9 @@ define [
 # </DEFINE>
 
 
-###
-Todo: Click functionality does not work
-###
-
+  ###
+  Todo: Click functionality does not work
+  ###
   class Switch2Elm
 
     @FLAG_CENTER_OFF: 1

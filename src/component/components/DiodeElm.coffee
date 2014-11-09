@@ -58,7 +58,7 @@ Units
       super()
       @calcLeads 16
       @cathode = CircuitComponent.newPointArray(2)
-      [pa pb] = DrawHelper.interpPoint @lead1, @lead2, 0, @hs
+      [pa, pb] = DrawHelper.interpPoint @lead1, @lead2, 0, @hs
       [ca, cb] = DrawHelper.interpPoint @lead1, @lead2, 1, @hs
       @poly = CircuitComponent.createPolygon(pa, pb, @lead2)
 
