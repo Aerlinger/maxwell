@@ -1,5 +1,6 @@
 # <DEFINE>
 define [
+  'cs!Diode',
   'cs!Settings',
   'cs!DrawHelper',
   'cs!Polygon',
@@ -7,15 +8,17 @@ define [
   'cs!Point',
   'cs!CircuitComponent',
   'cs!Units'
-], (
-Settings,
-DrawHelper,
-Polygon,
-Rectangle,
-Point,
 
-CircuitComponent,
-Units
+], (
+  Diode,
+  Settings,
+  DrawHelper,
+  Polygon,
+  Rectangle,
+  Point,
+
+  CircuitComponent,
+  Units
 ) ->
   # </DEFINE>
 
@@ -31,7 +34,7 @@ Units
       @poly
       @cathode = []
 
-      @diode = new Diode()
+      @diode = new Diode(self)
       @fwdrop = DiodeElm.DEFAULT_DROP
       @zvoltage = 0
 
@@ -58,41 +61,43 @@ Units
       super()
       @calcLeads 16
       @cathode = CircuitComponent.newPointArray(2)
-      [pa, pb] = DrawHelper.interpPoint @lead1, @lead2, 0, @hs
-      [ca, cb] = DrawHelper.interpPoint @lead1, @lead2, 1, @hs
-      @poly = CircuitComponent.createPolygon(pa, pb, @lead2)
+      [pa, pb] = DrawHelper.interpPoint2 @lead1, @lead2, 0, @hs
+      [ca, cb] = DrawHelper.interpPoint2 @lead1, @lead2, 1, @hs
+      @poly = DrawHelper.createPolygonFromArray([pa, pb, @lead2])
 
-    draw: ->
-      @drawDiode()
-      @doDots()
-      @drawPosts()
+    draw: (renderContext) ->
+      @drawDiode(renderContext)
+      @drawDots(renderContext)
+      @drawPosts(renderContext)
 
     reset: ->
       @diode.reset()
       @volts[0] = @volts[1] = @curcount = 0
 
-    drawDiode: ->
+    drawDiode: (renderContext) ->
       @setBboxPt @point1, @point2, @hs
       v1 = @volts[0]
       v2 = @volts[1]
-      @draw2Leads()
+      @draw2Leads(renderContext)
+
+      # TODO: RENDER DIODE
 
       # draw arrow
       #this.setPowerColor(true);
-      color = @setVoltageColor(v1)
-      CircuitComponent.drawThickPolygonP @poly, color
+#      color = @setVoltageColor(v1)
+#      renderContext.drawThickPolygonP @poly, color
 
       #g.fillPolygon(poly);
 
       # draw thing diode plate
-      color = @setVoltageColor(v2)
-      CircuitComponent.drawThickLinePt @cathode[0], @cathode[1], color
+#      color = @setVoltageColor(v2)
+#      renderContext.drawThickLinePt @cathode[0], @cathode[1], color
 
-    stamp: ->
-      @diode.stamp @nodes[0], @nodes[1]
+    stamp: (stamper) ->
+      @diode.stamp @nodes[0], @nodes[1], stamper
 
-    doStep: ->
-      @diode.doStep @volts[0] - @volts[1]
+    doStep: (Stamper) ->
+      @diode.doStep @volts[0] - @volts[1], Stamper
 
     calculateCurrent: ->
       @current = @diode.calculateCurrent(@volts[0] - @volts[1])

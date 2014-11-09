@@ -11,7 +11,7 @@ define [
   describe "Capacitor Component", ->
     beforeEach () ->
       @Circuit = new Circuit()
-      @capacitor = new CapacitorElm(100, 100, 100, 200, 0, [1e-9, 1.1])
+      @capacitor = new CapacitorElm(100, 100, 100, 200, 0.1, [1e-9, 1.1])
 
     it "should have correct defaults", ->
       @capacitor.capacitance.should.equal 1e-9

@@ -4,12 +4,16 @@ define [
   'cs!ResistorElm',
   'cs!GroundElm',
   'cs!VoltageElm',
+  'cs!DiodeElm',
+  'cs!OutputElm',
   'cs!Oscilloscope'
 ], (
   WireElm,
   ResistorElm,
   GroundElm,
   VoltageElm,
+  DiodeElm,
+  OutputElm,
   Oscilloscope
 ) ->
 # </DEFINE>
@@ -32,6 +36,8 @@ define [
       'w':'WireElm'
       'g':'GroundElm'
       'v':'VoltageElm'
+      'd':'DiodeElm'
+      'o':'OutputElm'
 
 
     @ComponentDefs:
@@ -39,6 +45,8 @@ define [
       'r': ResistorElm
       'g': GroundElm
       'v': VoltageElm
+      'd': DiodeElm
+      'o': OutputElm
 
 
 
@@ -58,11 +66,17 @@ define [
     #   This method is called by <code>register</code>
     # ##########`
     @register: (componentConstructor) ->
+      if !componentConstructor?
+        console.error("nil constructor")
+
       try
       # Create this component by its className
-        newComponent = new componentConstructor 0, 0, 0, 0, 0, null
+        newComponent = new componentConstructor(0, 0, 0, 0, 0, null)
         dumpType = newComponent.getDumpType()
         dumpClass = componentConstructor
+
+        if !newComponent?
+          console.error("Component is nil!")
 
         if @dumpTypes[dumpType] is dumpClass
           console.log "#{componentConstructor} is a dump class"
@@ -73,8 +87,7 @@ define [
 
         @dumpTypes[dumpType] = componentConstructor
       catch e
-        if process.env.NODE_ENV == 'development'
-          Logger.warn "Element: #{componentConstructor.prototype} Not yet implemented: [#{e.message}]"
+        Logger.warn "Element: #{componentConstructor.prototype} Not yet implemented: [#{e.message}]"
 
 
 

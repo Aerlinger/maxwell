@@ -39,24 +39,27 @@ define [
       CircuitComponent::setPoints.call this
       @lead1 = new Point()
 
-    draw: ->
-      selected = (@needsHighlight() or Circuit.plotYElm is this)
+    draw: (renderContext) ->
+#      selected = (@needsHighlight() or Circuit.plotYElm is this)
+      selected = @needsHighlight()
 
       #Font f = new Font("SansSerif", selected ? Font.BOLD : 0, 14);
       #g.setFont(f);
       color = (if selected then CircuitComponent.selectColor else CircuitComponent.whiteColor)
-      s = (if (@flags & OutputElm.FLAG_VALUE) isnt 0 then CircuitComponent.getVoltageText(@volts[0]) else "out")
+#      s = (if (@flags & OutputElm.FLAG_VALUE) isnt 0 then CircuitComponent.getVoltageText(@volts[0]) else "out")
 
       #FontMetrics fm = g.getFontMetrics();
-      s = "X"  if this is Circuit.plotXElm
-      s = "Y"  if this is Circuit.plotYElm
+#      s = "X"  if this is Circuit.plotXElm
+#      s = "Y"  if this is Circuit.plotYElm
+
       DrawHelper.interpPoint @point1, @point2, @lead1, 1 - (3 * s.length / 2 + 8) / @dn #fm.stringWidth(s)
+
       @setBboxPt @point1, @lead1, 0
-      @drawCenteredText s, @x2, @y2, true
-      color = @setVoltageColor(@volts[0])
+      @drawCenteredText s, @x2, @y2, true, renderContext
+#      color = @setVoltageColor(@volts[0])
       color = Settings.SELECT_COLOR  if selected
-      CircuitComponent.drawThickLinePt @point1, @lead1, color
-      @drawPosts()
+#      CircuitComponent.drawThickLinePt @point1, @lead1, color
+#      @drawPosts(renderContext)
 
     getVoltageDiff: ->
       @volts[0]
@@ -73,6 +76,9 @@ define [
         ei.checkbox = "Show Voltage"
         return ei
       null
+
+    stamp: () ->
+
 
     setEditValue: (n, ei) ->
 

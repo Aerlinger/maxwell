@@ -1,5 +1,8 @@
 # <DEFINE>
-define ['cs!MathUtils'], (MathUtils) ->
+define [
+  'cs!MathUtils',
+  'cs!RowInfo'
+], (MathUtils, RowInfo) ->
 # </DEFINE>
 
 

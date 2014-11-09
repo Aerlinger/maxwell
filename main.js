@@ -62,6 +62,8 @@
       ComponentRegistry: 'src/component/componentRegistry',
 
       // COMPONENTS:
+      Diode: 'src/component/components/core/Diode',
+
       AntennaElm: 'src/component/components/AntennaElm',
       CapacitorElm: 'src/component/components/CapacitorElm',
       CurrentElm: 'src/component/components/CurrentElm',
@@ -170,9 +172,9 @@
   // If 'define' exists as a function, run main.
   if (typeof define === 'function') {
     require.config(Config);
-    require(['main'], function (Main) {
-      Main.main();
-    });
+//    require(['main'], function (Main) {
+//      Main.main();
+//    });
     return true;
   }
   // If exports exists as an object, CommonJS.
@@ -189,85 +191,86 @@
 
 
 
-//require([
-//  // Load our app module and pass it to our definition function
-//  'jquery',
-//
-//  'cs!Circuit',
-//  'cs!CircuitCanvas',
-//  'cs!CircuitLoader',
-//  'cs!ResistorElm',
-//  'cs!WireElm',
-//  'cs!GroundElm',
-//  'cs!VoltageElm',
-//
-//  'cs!ArrayUtils',
-//  'cs!ConsoleUtils'
-//
-//], function ($, Circuit, CircuitCanvas, CircuitLoader, Resistor, Wire, Ground, Voltage) {
-//
-//  var circuitName = $('canvas').data('circuit');
-//  var circuitFileName = "../circuits/" + circuitName + ".json";
-//
-//  $(document).ready(function (event) {
-//    CircuitLoader.createCircuitFromJSON(circuitFileName, function (circuit) {
-//      "use strict";
-//      console.log("loading: " + circuitFileName);
-//
-//      var canvas = $('canvas.maxwell');
-//
-//      var renderer = new CircuitCanvas(circuit, canvas);
-//
-//      setInterval(function () {
-//        circuit.updateCircuit();
-//      }, 0);
-//    });
-//  });
-//
-//  runTests();
-//
+require([
+  // Load our app module and pass it to our definition function
+  'jquery',
+
+  'cs!Circuit',
+  'cs!CircuitCanvas',
+  'cs!CircuitLoader',
+  'cs!ResistorElm',
+  'cs!WireElm',
+  'cs!GroundElm',
+  'cs!VoltageElm',
+
+  'cs!ArrayUtils',
+  'cs!ConsoleUtils'
+
+], function ($, Circuit, CircuitCanvas, CircuitLoader, Resistor, Wire, Ground, Voltage) {
+
+  var circuitName = $('canvas').data('circuit');
+  var circuitFileName = "../circuits/" + circuitName + ".json";
+
+  $(document).ready(function (event) {
+    CircuitLoader.createCircuitFromJSON(circuitFileName, function (circuit) {
+      "use strict";
+      console.log("loading: " + circuitFileName);
+
+      var canvas = $('canvas.maxwell');
+
+      var renderer = new CircuitCanvas(circuit, canvas);
+
+      setInterval(function () {
+        circuit.updateCircuit();
+      }, 0);
+    });
+  });
+
+
+  runTests();
+
 //  $('#run_tests').click(function (e) {
 //    "use strict";
 //    mocha.setup('bdd');
 //    mocha.run();
 //  });
-//});
-//
-//
-//function runTests() {
-//  "use strict";
-//
-//  mocha.setup('bdd');
-//
-//  require([
-//    'test/_helper',
-//    'cs!CircuitTest',
-//    'cs!ResistorTest',
-//    'cs!VoltageElmTest',
-//    'cs!GroundTest',
-//    'cs!WireTest',
-//    'cs!CapacitorTest',
-//    'cs!ComponentTest',
-//    'cs!ComponentNodeLinkTest',
-//    'cs!ComponentNodeTest',
-//
-//    'cs!CircuitSolverTest',
-//    'cs!MatrixSolverTest',
-//    'cs!CircuitStamperTest',
-//
-//    'cs!ArraysTest',
-//    'cs!FormatsTest',
-//    'cs!MathTest',
-//    'cs!UnitsTest',
-//    'cs!UnitsTest',
-//
-//    'cs!PrimitivesTest',
-//    'cs!AjaxTest',
-//    'cs!CircuitLoaderTest',
-//    'cs!voltdivideIntegration',
-//    'cs!observerTest'
-//  ], function () {
-//    "use strict";
+});
+
+
+function runTests() {
+  "use strict";
+
+  mocha.setup('bdd');
+
+  require([
+    'test/_helper',
+    'cs!CircuitTest',
+    'cs!ResistorTest',
+    'cs!VoltageElmTest',
+    'cs!GroundTest',
+    'cs!WireTest',
+    'cs!CapacitorTest',
+    'cs!ComponentTest',
+    'cs!ComponentNodeLinkTest',
+    'cs!ComponentNodeTest',
+
+    'cs!CircuitSolverTest',
+    'cs!MatrixSolverTest',
+    'cs!CircuitStamperTest',
+
+    'cs!ArraysTest',
+    'cs!FormatsTest',
+    'cs!MathTest',
+    'cs!UnitsTest',
+    'cs!UnitsTest',
+
+    'cs!PrimitivesTest',
+    'cs!AjaxTest',
+    'cs!CircuitLoaderTest',
+    'cs!voltdivideIntegration',
+    'cs!observerTest'
+  ], function () {
+    "use strict";
 //    mocha.run();
-//  });
-//}
+  });
+}

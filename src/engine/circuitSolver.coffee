@@ -300,7 +300,7 @@ define [
             # Keep a running total of const values that have been removed already
             rsadd -= @circuitRowInfo[j].value * matrix_ij
             continue
-          if matrix_ij is 0
+#          if matrix_ij is 0
             continue
           if qp is -1
             qp = j
@@ -313,6 +313,7 @@ define [
 
         if j is @matrixSize
           if qp is -1
+            # BUG: @circuitRowInfo[j] is undefined
             @circuitRowInfo[j].type
             @Circuit.halt "Matrix error qp", null
             return
@@ -482,7 +483,7 @@ define [
 
           # Step each element this iteration
           for circuitElm in @Circuit.getElements()
-            circuitElm.doStep()
+            circuitElm.doStep(@Stamper)
 
           return if @stopMessage?
 

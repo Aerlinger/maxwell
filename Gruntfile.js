@@ -65,7 +65,7 @@
     grunt.loadNpmTasks("grunt-contrib-requirejs");
     grunt.registerTask("test", "Run Mocha tests.", function() {
       var test_case;
-      test_case = grunt.option("test") || "**/*";
+      grunt.option("test") || "**/*";
 //      grunt.config.set("mocha.browser", ["test/" + test_case + ".html"]);
 //      grunt.task.run("coffee");
       grunt.task.run("mocha");

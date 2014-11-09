@@ -197,7 +197,7 @@ define [
       @setPoints()
 
     stamp: ->
-      throw("Called abstract function stamp() in Circuit")
+      throw("Called abstract function stamp() in Circuit #{@getDumpType()}")
 
     # Todo: implement needed
     getDumpClass: ->
@@ -444,5 +444,12 @@ define [
 
       renderContext.fillCircle x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor
 
+    # @deprecated
+    @newPointArray = (n) ->
+      a = new Array(n)
+      while (n > 0)
+        a[--n] = new Point(0, 0);
+
+      return a
 
   return CircuitComponent

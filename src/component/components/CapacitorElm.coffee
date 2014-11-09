@@ -20,7 +20,7 @@ define [
       CircuitComponent.call this, xa, ya, xb, yb, f
 
       @capacitance = 5e-6
-      @compResistance = 0
+      @compResistance = 11
       @voltDiff = 10
       @plate1 = []
       @plate2 = []

@@ -5,7 +5,7 @@ define [], () ->
     @leakage = 1e-14
     #Inductor.FLAG_BACK_EULER = 2;
 
-    constructor: () ->
+    constructor: (circuit) ->
       @nodes = new Array(2)
       @vt = 0
       @vdcoef = 0
@@ -14,6 +14,8 @@ define [], () ->
       @zoffset = 0
       @lastvoltdiff = 0
       @crit = 0
+      @circuit = circuit
+      @leakage = 1e-14
 
     setup: (fw, zv) ->
       @fwdrop = fw
@@ -56,7 +58,7 @@ define [], () ->
           # as in linearized model from previous iteration.
           # (1/vt = slope of load line)
           vnew = @vt * Math.log(vnew / @vt)
-        Circuit.converged = false
+        @circuit.converged = false
 
       else if vnew < 0 and @zoffset isnt 0
         # for Zener breakdown, use the same logic but translate the values
@@ -74,47 +76,49 @@ define [], () ->
               vnew = @vcrit
           else
             vnew = @vt * Math.log(vnew / @vt)
-          Circuit.converged = false
+          @circuit.converged = false
         vnew = -(vnew + @zoffset)
       vnew
 
 
-  stamp: (n0, n1) ->
-    @nodes[0] = n0
-    @nodes[1] = n1
-    Circuit.stampNonLinear @nodes[0]
-    Circuit.stampNonLinear @nodes[1]
+    stamp: (n0, n1, stamper) ->
+      @nodes[0] = n0
+      @nodes[1] = n1
+      stamper.stampNonLinear @nodes[0]
+      stamper.stampNonLinear @nodes[1]
 
 
-  doStep: (voltdiff) ->
-    # used to have .1 here, but needed .01 for peak detector
-    Circuit.converged = false  if Math.abs(voltdiff - Circuit.lastvoltdiff) > .01
-    voltdiff = @limitStep(voltdiff, Circuit.lastvoltdiff)
-    Circuit.lastvoltdiff = voltdiff
+    doStep: (voltdiff, stamper) ->
+      # used to have .1 here, but needed .01 for peak detector
+      @circuit.converged = false  if Math.abs(voltdiff - @circuit.lastvoltdiff) > .01
+      voltdiff = @limitStep(voltdiff, @circuit.lastvoltdiff)
+      @circuit.lastvoltdiff = voltdiff
 
-    if voltdiff >= 0 or @zvoltage is 0
-      # regular diode or forward-biased zener
-      eval_ = Math.exp(voltdiff * @vdcoef)
+      if voltdiff >= 0 or @zvoltage is 0
+        # regular diode or forward-biased zener
+        eval_ = Math.exp(voltdiff * @vdcoef)
 
-      # make diode linear with negative voltages; aids convergence
-      eval_ = 1  if voltdiff < 0
-      geq = @vdcoef * @leakage * eval_
-      nc = (eval_ - 1) * @leakage - geq * voltdiff
-      Circuit.stampConductance @nodes[0], @nodes[1], geq
-      Circuit.stampCurrentSource @nodes[0], @nodes[1], nc
-    else
-      # Zener diode
-      #* I(Vd) = Is * (exp[Vd*C] - exp[(-Vd-Vz)*C] - 1 )
-      #*
-      #* geq is I'(Vd)
-      #* nc is I(Vd) + I'(Vd)*(-Vd)
-      geq = @leakage * @vdcoef * (Math.exp(voltdiff * @vdcoef) + Math.exp((-voltdiff - @zoffset) * @vdcoef))
-      nc = @leakage * (Math.exp(voltdiff * @vdcoef) - Math.exp((-voltdiff - @zoffset) * @vdcoef) - 1) + geq * (-voltdiff)
-      Circuit.stampConductance @nodes[0], @nodes[1], geq
-      Circuit.stampCurrentSource @nodes[0], @nodes[1], nc
+        # make diode linear with negative voltages; aids convergence
+        eval_ = 1  if voltdiff < 0
+        geq = @vdcoef * @leakage * eval_
+        nc = (eval_ - 1) * @leakage - geq * voltdiff
+        stamper.stampConductance @nodes[0], @nodes[1], geq
+        stamper.stampCurrentSource @nodes[0], @nodes[1], nc
+      else
+        # Zener diode
+        #* I(Vd) = Is * (exp[Vd*C] - exp[(-Vd-Vz)*C] - 1 )
+        #*
+        #* geq is I'(Vd)
+        #* nc is I(Vd) + I'(Vd)*(-Vd)
+        geq = @leakage * @vdcoef * (Math.exp(voltdiff * @vdcoef) + Math.exp((-voltdiff - @zoffset) * @vdcoef))
+        nc = @leakage * (Math.exp(voltdiff * @vdcoef) - Math.exp((-voltdiff - @zoffset) * @vdcoef) - 1) + geq * (-voltdiff)
+        stamper.stampConductance @nodes[0], @nodes[1], geq
+        stamper.stampCurrentSource @nodes[0], @nodes[1], nc
 
-  calculateCurrent: (voltdiff) ->
-    if voltdiff >= 0 or @zvoltage is 0
-      return @leakage * (Math.exp(voltdiff * @vdcoef) - 1)
+    calculateCurrent: (voltdiff) ->
+      if voltdiff >= 0 or @zvoltage is 0
+        return @leakage * (Math.exp(voltdiff * @vdcoef) - 1)
 
-    return @leakage * (Math.exp(voltdiff * @vdcoef) - Math.exp((-voltdiff - @zoffset) * @vdcoef) - 1)
+      return @leakage * (Math.exp(voltdiff * @vdcoef) - Math.exp((-voltdiff - @zoffset) * @vdcoef) - 1)
+
+  return Diode

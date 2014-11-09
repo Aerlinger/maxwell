@@ -30,6 +30,9 @@ define [
         flags = parseInt elementData['flags']
         params = elementData['params']
 
+        if sym is null
+          circuit.halt "Element: #{JSON.stringify(elementData)}"
+
         if type is 'Hint'
           console.log "Hint found in file!"
         if type is 'Oscilloscope'
@@ -44,7 +47,8 @@ define [
             newCircuitElm = new sym(x1, y1, x2, y2, flags, params)
             circuit.solder newCircuitElm
         catch e
-          circuit.halt e.message
+#          circuit.halt e.message + "#{elementData["sym"]}"
+          console.error e.message + "#{elementData["sym"]}"
 
     ###
     Retrieves string data from a circuit text file (via AJAX GET)

@@ -8,7 +8,7 @@ define [], () ->
     warningStack = new Array()
 
     @error: (msg) ->
-      console.log "Error: " + msg
+      console.error "Error: " + msg
       errorStack.push msg
 
     @warn: (msg) ->
