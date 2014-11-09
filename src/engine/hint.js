@@ -5,15 +5,15 @@
     var Hint;
     Hint = (function() {
 
-      Hint.HINT_LC = "@HINT_LC";
+      Hint.HINT_LC = "HINT_LC";
 
-      Hint.HINT_RC = "@HINT_RC";
+      Hint.HINT_RC = "HINT_RC";
 
-      Hint.HINT_3DB_C = "@HINT_3DB_C";
+      Hint.HINT_3DB_C = "HINT_3DB_C";
 
-      Hint.HINT_TWINT = "@HINT_TWINT";
+      Hint.HINT_TWINT = "HINT_TWINT";
 
-      Hint.HINT_3DB_L = "@HINT_3DB_L";
+      Hint.HINT_3DB_L = "HINT_3DB_L";
 
       Hint.hintType = -1;
 

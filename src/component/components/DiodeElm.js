@@ -101,7 +101,7 @@
 
       DiodeElm.prototype.getEditInfo = function(n) {
         if (n === 0) {
-          return new EditInfo("Fwd Voltage @ 1A", this.fwdrop, 10, 1000);
+          return new EditInfo("Fwd Voltage 1A", this.fwdrop, 10, 1000);
         }
       };
 

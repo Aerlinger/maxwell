@@ -497,17 +497,7 @@
         return this.lastIterTime = lastIterTime;
       };
 
-      /*
-          luFactor: finds a solution to a factored matrix through LU (Lower-Upper) factorization
-      
-          Called once each frame for resistive circuits, otherwise called many times each frame
-      
-          @param circuitMatrix 2D matrix to be solved
-          @param matrixSize number or rows/columns in the matrix
-          @param pivotArray pivot index
-      
-          References:
-      */
+
 
 
       CircuitSolver.prototype.luFactor = function(circuitMatrix, matrixSize, pivotArray) {
@@ -593,12 +583,7 @@
           finds a solution to a factored matrix through LU (Lower-Upper) factorization
       
           Called once each frame for resistive circuits, otherwise called many times each frame
-      
-          @param circuitMatrix matrix to be solved
-          @param numRows dimension
-          @param pivotVector pivot index
-          @param circuitRightSide Right-side (dependent) matrix
-      
+
           References:
       */
 

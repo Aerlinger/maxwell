@@ -1,3 +1,15 @@
+# <DEFINE>
+define [
+  'jquery'
+  'cs!ComponentRegistry',
+  'cs!Circuit'
+], (
+  $,
+  ComponentRegistry,
+  Circuit
+) ->
+# </DEFINE>
+
 
 ###
 Configures interface from JSON file
