@@ -1,8 +1,10 @@
 {
   "name": "Maxwell",
+  "description": "Maxwell Circuit Simulator",
   "version": "0.0.2",
   "main": "server.js",
   "private": true,
+  "license": "MIT",
   "directories": {
     "test": "test"
   },
@@ -41,7 +43,5 @@
     "listComponents": "script/listComponents.rb",
     "postinstall": "bower install; grunt dist",
     "test": "./node_modules/grunt-cli/bin/grunt test"
-  },
-  "license": "MIT",
-  "description": "Maxwell Web Architecture"
+  }
 }
