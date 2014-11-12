@@ -2,7 +2,7 @@
 define [], () ->
 # </DEFINE>
 
-
+  # @deprecated
   class Inductor
     @FLAG_BACK_EULER = 2
 
@@ -22,10 +22,12 @@ define [], () ->
     isTrapezoidal: ->
       (@flags & Inductor.FLAG_BACK_EULER) is 0
 
+    # @deprecated
     reset: ->
       @current = 0
 
-    stamp: (n0, n1) ->
+    # @deprecated
+    stamp: (stamper, n0, n1) ->
       # Inductor companion model using trapezoidal or backward euler
       # approximations (Norton equivalent) consists of a current
       # source in parallel with a resistor.  Trapezoidal is more
@@ -33,14 +35,16 @@ define [], () ->
       # The oscillation is a real problem in circuits with switches.
       @nodes[0] = n0
       @nodes[1] = n1
+
       if @isTrapezoidal()
         @compResistance = 2 * @inductance / Circuit.timeStep
       # backward euler
       else
         @compResistance = @inductance / Circuit.timeStep
-      Circuit.stampResistor @nodes[0], @nodes[1], @compResistance
-      Circuit.stampRightSide @nodes[0]
-      Circuit.stampRightSide @nodes[1]
+
+      stamper.stampResistor @nodes[0], @nodes[1], @compResistance
+      stamper.stampRightSide @nodes[0]
+      stamper.stampRightSide @nodes[1]
 
     nonLinear: ->
       false
@@ -59,5 +63,5 @@ define [], () ->
       @current = voltdiff / @compResistance + @curSourceValue  if @compResistance > 0
       @current
 
-    doStep: (voltdiff) ->
-      Circuit.stampCurrentSource @nodes[0], @nodes[1], @curSourceValue
+    doStep: (stamper, voltdiff) ->
+      stamper.stampCurrentSource @nodes[0], @nodes[1], @curSourceValue

@@ -17,7 +17,7 @@ define [
     @FLAG_BACK_EULER: 2
 
     constructor: (xa, ya, xb, yb, f, st) ->
-      CircuitComponent.call this, xa, ya, xb, yb, f
+      super this, xa, ya, xb, yb, f
 
       @capacitance = 5e-6
       @compResistance = 11
@@ -29,7 +29,7 @@ define [
       if st
         st = st.split(" ")  if typeof st is "string"
         @capacitance = Number(st[0])
-        @voltdiff = Number(st[1])
+        @voltDiff = Number(st[1])
 
 
     isTrapezoidal: ->
@@ -37,22 +37,22 @@ define [
 
     setNodeVoltage: (n, c) ->
       super.setNodeVoltage n, c
-      @voltdiff = @volts[0] - @volts[1]
+      @voltDiff = @volts[0] - @volts[1]
 
     reset: ->
       @current = @curcount = 0
 
       # put small charge on caps when reset to start oscillators
-      @voltdiff = 1e-3
+      @voltDiff = 1e-3
 
     getDumpType: ->
       "c"
 
     dump: ->
-      CircuitComponent::dump.call(this) + " " + @capacitance + " " + @voltdiff
+      "#{super} #{@capacitance} #{@voltDiff}"
 
     setPoints: ->
-      CircuitComponent::setPoints.call this
+      super()
       f = (@dn / 2 - 4) / @dn
 
       # calc leads
@@ -96,6 +96,8 @@ define [
       s = Units.getUnitText(@capacitance, "F")
       @drawValues s, hs
 
+    doStep: (stamper) ->
+      stamper.stampCurrentSource(@nodes[0], @nodes[1], @curSourceValue)
 
     stamp: (stamper) ->
       # capacitor companion model using trapezoidal approximation (Norton equivalent) consists of a current source in
@@ -114,21 +116,16 @@ define [
 
     startIteration: ->
       if @isTrapezoidal()
-        @curSourceValue = -@voltdiff / @compResistance - @current
+        @curSourceValue = -@voltDiff / @compResistance - @current
       else
-        @curSourceValue = -@voltdiff / @compResistance
+        @curSourceValue = -@voltDiff / @compResistance
 
-    #console.log("cap " + compResistance + " " + curSourceValue + " " + current + " " + voltdiff);
     calculateCurrent: ->
-      voltdiff = @volts[0] - @volts[1]
+      vdiff = @volts[0] - @volts[1]
 
       # we check compResistance because this might get called before stamp(), which sets compResistance, causing
       # infinite current
-      @current = voltdiff / @compResistance + @curSourceValue  if @compResistance > 0
-
-    doStep: ->
-      Circuit = @getParentCircuit()
-      Circuit.Solver.Stamper.stampCurrentSource @nodes[0], @nodes[1], @curSourceValue
+      @current = vdiff / @compResistance + @curSourceValue  if @compResistance > 0
 
     getInfo: (arr) ->
       arr[0] = "capacitor"
