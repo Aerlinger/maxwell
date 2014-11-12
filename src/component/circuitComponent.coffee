@@ -75,7 +75,6 @@ define [
       @dx = @x2 - @x1
       @dy = @y2 - @y1
 
-
       @dn = Math.sqrt(@dx * @dx + @dy * @dy)
       @dpx1 = @dy / @dn
       @dpy1 = -@dx / @dn

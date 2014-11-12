@@ -104,10 +104,10 @@ define [
 
     getInfo: (arr) ->
       arr[0] = "diode"
-      arr[1] = "I = " + CircuitComponent.getCurrentText(@getCurrent())
-      arr[2] = "Vd = " + CircuitComponent.getVoltageText(@getVoltageDiff())
-      arr[3] = "P = " + CircuitComponent.getUnitText(@getPower(), "W")
-      arr[4] = "Vf = " + CircuitComponent.getVoltageText(@fwdrop)
+      arr[1] = "I = " + DrawHelper.getCurrentText(@getCurrent())
+      arr[2] = "Vd = " + DrawHelper.getVoltageText(@getVoltageDiff())
+      arr[3] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
+      arr[4] = "Vf = " + DrawHelper.getVoltageText(@fwdrop)
 
     getEditInfo: (n) ->
       return new EditInfo("Fwd Voltage @ 1A", @fwdrop, 10, 1000)  if n is 0

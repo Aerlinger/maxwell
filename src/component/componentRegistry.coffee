@@ -6,7 +6,10 @@ define [
   'cs!VoltageElm',
   'cs!DiodeElm',
   'cs!OutputElm',
-  'cs!Oscilloscope'
+  'cs!CapacitorElm',
+  'cs!InductorElm',
+  'cs!SparkGapElm',
+  'cs!Oscilloscope',
 ], (
   WireElm,
   ResistorElm,
@@ -14,6 +17,9 @@ define [
   VoltageElm,
   DiodeElm,
   OutputElm,
+  CapacitorElm,
+  InductorElm,
+  SparkGapElm,
   Oscilloscope
 ) ->
 # </DEFINE>
@@ -38,6 +44,8 @@ define [
       'v':'VoltageElm'
       'd':'DiodeElm'
       'o':'OutputElm'
+      '187':'SparkGapElm'
+      187:'SparkGapElm'
 
 
     @ComponentDefs:
@@ -47,6 +55,8 @@ define [
       'v': VoltageElm
       'd': DiodeElm
       'o': OutputElm
+      '187':SparkGapElm
+      187:SparkGapElm
 
 
 
