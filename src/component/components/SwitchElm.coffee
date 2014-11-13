@@ -48,13 +48,16 @@ define [
       "s"
 
     dump: ->
-      CircuitComponent::dump.call(this) + " " + @position + " " + @momentary
+      "#{super()} #{@position} #{@momentary}"
 
     setPoints: ->
-      CircuitComponent::setPoints.call this
+      super()
       @calcLeads 32
       @ps = new Point(0, 0)
       CircuitComponent.ps2 = new Point(0, 0)
+
+    stamp: (stamper) ->
+      stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0  if @position is 0
 
     draw: (renderContext) ->
       openhs = 16
@@ -72,9 +75,6 @@ define [
     calculateCurrent: ->
       @current = 0  if @position is 1
 
-    stamp: ->
-      Circuit.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0  if @position is 0
-
     getVoltageSourceCount: ->
       (if (@position is 1) then 0 else 1)
 
@@ -89,11 +89,11 @@ define [
       arr[0] = (if (@momentary) then "push switch (SPST)" else "switch (SPST)")
       if @position is 1
         arr[1] = "open"
-        arr[2] = "Vd = " + CircuitComponent.getVoltageDText(@getVoltageDiff())
+        arr[2] = "Vd = " + DrawHelper.getVoltageDText(@getVoltageDiff())
       else
         arr[1] = "closed"
-        arr[2] = "V = " + CircuitComponent.getVoltageText(@volts[0])
-        arr[3] = "I = " + CircuitComponent.getCurrentDText(@getCurrent())
+        arr[2] = "V = " + DrawHelper.getVoltageText(@volts[0])
+        arr[3] = "I = " + DrawHelper.getCurrentDText(@getCurrent())
 
     getConnection: (n1, n2) ->
       @position is 0

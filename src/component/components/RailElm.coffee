@@ -40,7 +40,7 @@ define [
     draw: ->
       @setBboxPt @point1, @point2, @circleSize
       color = @setVoltageColor(@volts[0])
-      CircuitComponent.drawThickLinePt @point1, @lead1, color
+      DrawHelper.drawThickLinePt @point1, @lead1, color
       clock = @waveform is VoltageElm.WF_SQUARE and (@flags & VoltageElm.FLAG_CLOCK) isnt 0
 
       if @waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR or clock
@@ -50,7 +50,7 @@ define [
 
         #this.setPowerColor(g, false);
         v = @getVoltage()
-        s = CircuitComponent.getShortUnitText(v, "V")
+        s = DrawHelper.getShortUnitText(v, "V")
         s = v + "V" if Math.abs(v) < 1 #showFormat.format(v)
         s = "+" + s if @getVoltage() > 0
         s = "Ant" if this instanceof AntennaElm
@@ -65,14 +65,14 @@ define [
     getVoltageDiff: ->
       @volts[0]
 
-    stamp: ->
+    stamp: (stamper) ->
       if @waveform is VoltageElm.WF_DC
-        Circuit.stampVoltageSource 0, @nodes[0], @voltSource, @getVoltage()
+        stamper.stampVoltageSource 0, @nodes[0], @voltSource, @getVoltage()
       else
-        Circuit.stampVoltageSource 0, @nodes[0], @voltSource
+        stamper.stampVoltageSource 0, @nodes[0], @voltSource
 
-    doStep: ->
-      Circuit.updateVoltageSource 0, @nodes[0], @voltSource, @getVoltage() unless @waveform is VoltageElm.WF_DC
+    doStep: (stamper) ->
+      stamper.updateVoltageSource 0, @nodes[0], @voltSource, @getVoltage() unless @waveform is VoltageElm.WF_DC
 
     hasGroundConnection: (n1) ->
       true

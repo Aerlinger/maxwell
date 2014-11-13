@@ -30,7 +30,7 @@ Units
       "p"
 
     setPoints: ->
-      CircuitComponent::setPoints.call this
+      super()
 
       # swap points so that we subtract higher from lower
       if @point2.y < @point1.y
@@ -41,7 +41,7 @@ Units
 
     draw: ->
       hs = 8
-      CircuitComponent.setBboxPt @point1, @point2, hs
+      DrawHelper.setBboxPt @point1, @point2, hs
       selected = (@needsHighlight() or Circuit.plotYElm is this)
 
       if selected or Circuit.dragElm is this
@@ -49,26 +49,26 @@ Units
       else
         len = @dn - 32
 
-      CircuitComponent.calcLeads Math.floor(len)
+      DrawHelper.calcLeads Math.floor(len)
 
       color = @setVoltageColor(@volts[0])
       if selected
-        color = CircuitComponent.selectColor
+        color = DrawHelper.selectColor
 
-      CircuitComponent.drawThickLinePt @point1, @lead1, color
+      DrawHelper.drawThickLinePt @point1, @lead1, color
 
       color = @setVoltageColor(@volts[1])
       if selected
-        CircuitComponent.setColor @selectColor
+        DrawHelper.setColor @selectColor
 
-      CircuitComponent.drawThickLinePt @lead2, @point2
+      DrawHelper.drawThickLinePt @lead2, @point2
 
-      CircuitComponent.setFont new Font("SansSerif", Font.BOLD, 14)
-      CircuitComponent.drawCenteredText("X", @center.x1, @center.y, color) if this is Circuit.plotXElm
-      CircuitComponent.drawCenteredText("Y", @center.x1, @center.y, color) if this is Circuit.plotYElm
+      DrawHelper.setFont new Font("SansSerif", Font.BOLD, 14)
+      DrawHelper.drawCenteredText("X", @center.x1, @center.y, color) if this is Circuit.plotXElm
+      DrawHelper.drawCenteredText("Y", @center.x1, @center.y, color) if this is Circuit.plotYElm
 
       if @mustShowVoltage()
-        s = CircuitComponent.getShortUnitText(volts[0], "V")
+        s = DrawHelper.getShortUnitText(volts[0], "V")
         @drawValues s, 4
 
       @drawPosts()
@@ -78,7 +78,7 @@ Units
 
     getInfo: (arr) ->
       arr[0] = "scope probe"
-      arr[1] = "Vd = " + CircuitComponent.getVoltageText(@getVoltageDiff())
+      arr[1] = "Vd = " + DrawHelper.getVoltageText(@getVoltageDiff())
 
     getConnection: (n1, n2) ->
       false

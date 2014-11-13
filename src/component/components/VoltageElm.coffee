@@ -62,7 +62,7 @@ define [
       "v"
   
     dump: ->
-      CircuitComponent::dump.call(this) + " " + @waveform + " " + @frequency + " " + @maxVoltage + " " + @bias + " " + @phaseShift + " " + @dutyCycle
+      "#{super()} #{@waveform} #{@frequency} #{@maxVoltage} #{@bias} #{@phaseShift} #{@dutyCycle}"
   
     reset: ->
       @freqTimeZero = 0
@@ -72,15 +72,15 @@ define [
       return x * (2 / Math.PI) - 1  if x < Math.PI
       1 - (x - Math.PI) * (2 / Math.PI)
   
-    stamp: ->
+    stamp: (stamper) ->
       if @waveform is VoltageElm.WF_DC
-        @Circuit.Solver.Stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
+        stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
       else
-        @Circuit.Solver.Stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource
+        stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource
   
     doStep: ->
       unless @waveform is VoltageElm.WF_DC
-        @Circuit.Solver.updateVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
+        @getParentCircuit().Solver.updateVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
   
     getVoltage: ->
       omega = 2 * Math.PI * (@Circuit.Solver.time - @freqTimeZero) * @frequency + @phaseShift

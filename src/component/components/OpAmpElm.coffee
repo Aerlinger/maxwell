@@ -66,7 +66,7 @@ define [
       @gain = (if ((@flags & OpAmpElm.FLAG_LOWGAIN) isnt 0) then 1000 else 100000)
 
     dump: ->
-      CircuitComponent::dump.call(this) + " " + @maxOut + " " + @minOut + " " + @gbw
+      "#{super()} #{@maxOut} #{@minOut} #{@gbw}"
 
     nonLinear: ->
       true
@@ -74,19 +74,19 @@ define [
     draw: ->
       @setBboxPt @point1, @point2, @opheight * 2
       color = @setVoltageColor(@volts[0])
-      CircuitComponent.drawThickLinePt @in1p[0], @in1p[1], color
+      DrawHelper.drawThickLinePt @in1p[0], @in1p[1], color
       color = @setVoltageColor(@volts[1])
-      CircuitComponent.drawThickLinePt @in2p[0], @in2p[1], color
+      DrawHelper.drawThickLinePt @in2p[0], @in2p[1], color
 
       #g.setColor(this.needsHighlight() ? this.selectColor : this.lightGrayColor);
       @setPowerColor true
-      CircuitComponent.drawThickPolygonP @triangle, (if @needsHighlight() then CircuitComponent.selectColor else CircuitComponent.lightGrayColor)
+      DrawHelper.drawThickPolygonP @triangle, (if @needsHighlight() then DrawHelper.selectColor else DrawHelper.lightGrayColor)
 
       #g.setFont(plusFont);
       #this.drawCenteredText("-", this.textp[0].x + 3, this.textp[0].y + 8, true).attr({'font-weight':'bold', 'font-size':17});
       #this.drawCenteredText("+", this.textp[1].x + 3, this.textp[1].y + 10, true).attr({'font-weight':'bold', 'font-size':14});
       color = @setVoltageColor(@volts[2])
-      CircuitComponent.drawThickLinePt @lead2, @point2, color
+      DrawHelper.drawThickLinePt @lead2, @point2, color
       @curcount = @updateDotCount(@current, @curcount)
       @drawDots @point2, @lead2, @curcount
       @drawPosts()
@@ -101,7 +101,7 @@ define [
       @flags = (@flags & ~OpAmpElm.FLAG_SMALL) | ((if (s is 1) then OpAmpElm.FLAG_SMALL else 0))
 
     setPoints: ->
-      CircuitComponent::setPoints.call this
+      super()
       @setSize 2  if @dn > 150 and this is Circuit.dragElm
       ww = Math.floor(@opwidth)
       ww = Math.floor(@dn / 2)  if ww > @dn / 2
@@ -133,21 +133,21 @@ define [
 
     getInfo: (arr) ->
       arr[0] = "op-amp"
-      arr[1] = "V+ = " + CircuitComponent.getVoltageText(@volts[1])
-      arr[2] = "V- = " + CircuitComponent.getVoltageText(@volts[0])
+      arr[1] = "V+ = " + DrawHelper.getVoltageText(@volts[1])
+      arr[2] = "V- = " + DrawHelper.getVoltageText(@volts[0])
 
       # sometimes the voltage goes slightly outside range, to make convergence easier.  so we hide that here.
       vo = Math.max(Math.min(@volts[2], @maxOut), @minOut)
-      arr[3] = "Vout = " + CircuitComponent.getVoltageText(vo)
-      arr[4] = "Iout = " + CircuitComponent.getCurrentText(@getCurrent())
-      arr[5] = "range = " + CircuitComponent.getVoltageText(@minOut) + " to " + CircuitComponent.getVoltageText(@maxOut)
+      arr[3] = "Vout = " + DrawHelper.getVoltageText(vo)
+      arr[4] = "Iout = " + DrawHelper.getCurrentText(@getCurrent())
+      arr[5] = "range = " + DrawHelper.getVoltageText(@minOut) + " to " + CircuitComponent.getVoltageText(@maxOut)
 
-    stamp: ->
+    stamp: (stamper) ->
       vn = Circuit.nodeList.length + @voltSource
       Circuit.stampNonLinear vn
       Circuit.stampMatrix @nodes[2], vn, 1
 
-    doStep: ->
+    doStep: (stamper) ->
       vd = @volts[1] - @volts[0]
       if Math.abs(@lastvd - vd) > .1
         Circuit.converged = false
@@ -166,10 +166,10 @@ define [
 
       #console.log("opamp " + vd + " " + volts[2] + " " + dx + " "  + x + " " + lastvd + " " + sim.converged);
       # newton's method:
-      Circuit.stampMatrix vn, @nodes[0], dx
-      Circuit.stampMatrix vn, @nodes[1], -dx
-      Circuit.stampMatrix vn, @nodes[2], 1
-      Circuit.stampRightSide vn, x
+      stamper.stampMatrix vn, @nodes[0], dx
+      stamper.stampMatrix vn, @nodes[1], -dx
+      stamper.stampMatrix vn, @nodes[2], 1
+      stamper.stampRightSide vn, x
       @lastvd = vd
 
 

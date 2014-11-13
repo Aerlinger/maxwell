@@ -77,7 +77,7 @@ define [
         return ei
       null
 
-    stamp: () ->
+    stamp: (stamper) ->
 
 
     setEditValue: (n, ei) ->

@@ -35,17 +35,17 @@ define [
       @setBboxPt @point1, @point2, 3
 
       if @mustShowCurrent()
-        s = CircuitComponent.getShortUnitText(Math.abs(@getCurrent()), "A")
+        s = DrawHelper.getShortUnitText(Math.abs(@getCurrent()), "A")
         @drawValues s, 4
       else if @mustShowVoltage()
-        s = CircuitComponent.getShortUnitText(@volts[0], "V")
+        s = DrawHelper.getShortUnitText(@volts[0], "V")
 
       @drawValues s, 4
       @drawPosts(renderContext)
       @drawDots(@point1, @point2, renderContext)
 
-    stamp: ->
-      @Circuit.Solver.Stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
+    stamp: (stamper) ->
+      stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
   
     mustShowCurrent: ->
       (@flags & WireElm.FLAG_SHOWCURRENT) isnt 0
@@ -58,8 +58,8 @@ define [
   
     getInfo: (arr) ->
       arr[0] = "Wire"
-      arr[1] = "I = " + CircuitComponent.getCurrentDText(@getCurrent())
-      arr[2] = "V = " + CircuitComponent.getVoltageText(@volts[0])
+      arr[1] = "I = " + DrawHelper.getCurrentDText(@getCurrent())
+      arr[2] = "V = " + DrawHelper.getVoltageText(@volts[0])
   
     getEditInfo: (n) ->
     # TODO:

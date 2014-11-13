@@ -86,10 +86,8 @@ define [
       "l"
 
     startIteration: ->
-      voltdiff = @volts[0] - @volts[1]
-
       if @isTrapezoidal()
-        @curSourceValue = voltdiff / @compResistance + @current
+        @curSourceValue = getVoltageDiff() / @compResistance + @current
         # backward euler
       else
         @curSourceValue = @current
@@ -101,10 +99,8 @@ define [
       (@flags & Inductor.FLAG_BACK_EULER) is 0
 
     calculateCurrent: ->
-      voltdiff = @volts[0] - @volts[1]
-
       if @compResistance > 0
-        @current = voltdiff / @compResistance + @curSourceValue
+        @current = @getVoltageDiff() / @compResistance + @curSourceValue
 
       @current
 
@@ -120,6 +116,10 @@ define [
       @volts[1] = 0
       @curcount = 0
 #      @ind.reset()
+
+    getVoltageDiff: ->
+      @volts[0] - @volts[1]
+
 
     getEditInfo: (n) ->
       return new EditInfo("Inductance (H)", @inductance, 0, 0)  if n is 0
