@@ -124,6 +124,7 @@ define [
 
       @time = 0
       @lastTime = 0
+      @timeStep = 0.01
 
       # State Handlers
       @mouseState = new MouseState()
@@ -161,6 +162,8 @@ define [
     getVoltageSources: ->
       @voltageSources
 
+    toString: ->
+      @Params
 
     ####################################################################################################################
     # Oscilloscope Accessor:

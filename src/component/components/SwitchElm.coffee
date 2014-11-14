@@ -34,12 +34,13 @@ define [
       if st
         st = st.split(" ")  if typeof st is "string"
         str = st[0]
-        if str is ("true")
-          @position = (if (this instanceof LogicInputElm) then 0 else 1)
-        else if str is ("false")
-          @position = (if (this instanceof LogicInputElm) then 1 else 0)
-        else
-          @position = parseInt(str)
+#        @position = 1
+#        if str is ("true")
+#          @position = (if (this instanceof LogicInputElm) then 0 else 1)
+#        else if str is ("false")
+#          @position = (if (this instanceof LogicInputElm) then 1 else 0)
+#        else
+        @position = parseInt(str)
         @momentary = (st[1].toLowerCase() is "true")
       @posCount = 2
 
@@ -64,13 +65,13 @@ define [
       hs1 = (if (@position is 1) then 0 else 2)
       hs2 = (if (@position is 1) then openhs else 2)
       @setBboxPt @point1, @point2, openhs
-      @draw2Leads()
-      @doDots()  if @position is 0
+      @draw2Leads(renderContext)
+      @doDots(renderContext)  if @position is 0
 
       DrawHelper.interpPoint @lead1, @lead2, @ps, 0, hs1
       DrawHelper.interpPoint @lead1, @lead2, CircuitComponent.ps2, 1, hs2
-      CircuitComponent.drawThickLinePt @ps, CircuitComponent.ps2, Settings.FG_COLOR
-      @drawPosts()
+      renderContext.drawThickLinePt @ps, CircuitComponent.ps2, Settings.FG_COLOR
+      @drawPosts(renderContext)
 
     calculateCurrent: ->
       @current = 0  if @position is 1
@@ -102,8 +103,6 @@ define [
       true
 
     getEditInfo: (n) ->
-
-
     # TODO: Implement
     #    if (n == 0) {
     #        var ei:EditInfo = new EditInfo("", 0, -1, -1);

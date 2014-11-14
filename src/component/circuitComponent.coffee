@@ -59,7 +59,7 @@ define [
       @initBoundingBox()
       @component_id = (new Date()).getTime()
 
-      console.log "Instantiating Circuit Component"
+      console.log @dump()
 
     getParentCircuit: () ->
       return @Circuit
@@ -143,6 +143,15 @@ define [
 
       @lead1 = DrawHelper.interpPoint(@point1, @point2, (@dn - len) / (2 * @dn));
       @lead2 = DrawHelper.interpPoint(@point1, @point2, (@dn + len) / (2 * @dn));
+
+    updateDotCount: (cur, cc) ->
+      cur = @current  if isNaN(cur)
+      cc = @curcount  if isNaN(cc)
+#      return cc  if CirSim.stoppedCheck
+      cadd = cur * 48
+      cadd %= 8
+      @curcount = cadd + cc
+      @curcount
 
     getDefaultFlags: ->
       0
@@ -353,7 +362,9 @@ define [
     ### #######################################################################
 
     draw: (renderContext) ->
-      throw("Called abstract function draw() in AbstractCircuitElement")
+      @drawPosts(renderContext)
+
+#      throw("Called abstract function draw() in AbstractCircuitElement")
 
     draw2Leads: (renderContext) ->
       renderContext.drawThickLinePt @point1, @lead1, DrawHelper.getVoltageColor(@volts[0])

@@ -24,4 +24,22 @@ define [], () ->
       @title = paramsObj?['title']
       @topic = paramsObj?['topic']
 
+    toString: ->
+      [
+        "status: " + @completionStatus,
+        "Created at:" + @createdAt,
+        "Cur Speed: " + @currentSpeed,
+        "Updated At: " + @updatedAt,
+        "Description: " + @description,
+        "Flags: " + @flags,
+        "Id: " + @id,
+        "Name: " + @name,
+        "Pwr Range: " + @powerRange,
+        "Volt. Range: " + @voltageRange,
+        "Sim Speed: " + @simSpeed,
+        "TimeStep: " + @timeStep,
+        "Title: " + @title,
+        "Topic: " + @topic
+      ].join("\n")
+
   return CircuitParams

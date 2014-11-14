@@ -49,6 +49,8 @@ define [
 
 
     stampConductance: (n1, n2, r0) ->
+      if isNaN(r0) or MathUtils.isInfinite(r0)
+        @Circuit.halt "bad conductance"
       @stampMatrix n1, n1, r0
       @stampMatrix n2, n2, r0
       @stampMatrix n1, n2, -r0
@@ -58,11 +60,14 @@ define [
     ###
     current from cn1 to cn2 is equal to voltage from vn1 to 2, divided by g
     ###
-    stampVCCurrentSource: (cn1, cn2, vn1, vn2, g) ->
-      @stampMatrix cn1, vn1, g
-      @stampMatrix cn2, vn2, g
-      @stampMatrix cn1, vn2, -g
-      @stampMatrix cn2, vn1, -g
+    stampVCCurrentSource: (cn1, cn2, vn1, vn2, value) ->
+      if isNaN(gain) or MathUtils.isInfinite(gain)
+        @Circuit.halt "Invalid gain on voltage controlled current source"
+
+      @stampMatrix cn1, vn1, value
+      @stampMatrix cn2, vn2, value
+      @stampMatrix cn1, vn2, -value
+      @stampMatrix cn2, vn1, -value
 
 
     stampCurrentSource: (n1, n2, value) ->
@@ -74,6 +79,9 @@ define [
     stamp a current source from n1 to n2 depending on current through vs
     ###
     stampCCCS: (n1, n2, vs, gain) ->
+      if isNaN(gain) or MathUtils.isInfinite(gain)
+        @Circuit.halt "Invalid gain on current source"
+
       vn = @Circuit.numNodes() + vs
       @stampMatrix n1, vn, gain
       @stampMatrix n2, vn, -gain
@@ -85,6 +93,9 @@ define [
     (Unless i or j is a voltage source node.)
     ###
     stampMatrix: (row, col, value) ->
+      if isNaN(value) or MathUtils.isInfinite(value)
+        @Circuit.halt "attempted to stamp invalid value"
+
       if row > 0 and col > 0
         if @Circuit.Solver.circuitNeedsMap
           row = @Circuit.Solver.circuitRowInfo[row - 1].mapRow

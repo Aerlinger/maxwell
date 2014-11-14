@@ -16,6 +16,7 @@ define [
     Units) ->
 # </DEFINE>
   class InductorElm extends CircuitComponent
+    @FLAG_BACK_EULER = 2
 
     constructor: (xa, ya, xb, yb, f, st) ->
       super xa, ya, xb, yb, f
@@ -41,8 +42,13 @@ define [
       # source in parallel with a resistor.  Trapezoidal is more
       # accurate than backward euler but can cause oscillatory behavior.
       # The oscillation is a real problem in circuits with switches.
-      @nodes[0] = n0
-      @nodes[1] = n1
+#      @nodes[0] = n0
+#      @nodes[1] = n1
+
+      ts = @getParentCircuit().timeStep
+
+      console.log ts
+      console.log @inductance
 
       if @isTrapezoidal()
         @compResistance = 2 * @inductance / ts
@@ -63,21 +69,22 @@ define [
 #      @ind.doStep stamper, voltdiff
 
     draw: (renderContext) ->
-      @doDots()
+#      @doDots()
+      @drawDots(renderContext)
       v1 = @volts[0]
       v2 = @volts[1]
       hs = 8
 
       @setBboxPt @point1, @point2, hs
-      @draw2Leads()
-      @setPowerColor false
-      @drawCoil 8, @lead1, @lead2, v1, v2
+      @draw2Leads(renderContext)
+#      @setPowerColor false
+#      DrawHelper.drawCoil 8, @lead1, @lead2, v1, v2
 
-      if Circuit.showValuesCheckItem
+      if @getParentCircuit().showValuesCheckItem
         unit_text = DrawHelper.getShortUnitText(@inductance, "H")
         @drawValues unit_text, hs
 
-      @drawPosts()
+      @drawPosts(renderContext)
 
     dump: ->
       "#{super()} #{@inductance} #{@current}"
@@ -87,7 +94,7 @@ define [
 
     startIteration: ->
       if @isTrapezoidal()
-        @curSourceValue = getVoltageDiff() / @compResistance + @current
+        @curSourceValue = @getVoltageDiff() / @compResistance + @current
         # backward euler
       else
         @curSourceValue = @current
@@ -96,7 +103,7 @@ define [
       false
 
     isTrapezoidal: ->
-      (@flags & Inductor.FLAG_BACK_EULER) is 0
+      (@flags & InductorElm.FLAG_BACK_EULER) is 0
 
     calculateCurrent: ->
       if @compResistance > 0

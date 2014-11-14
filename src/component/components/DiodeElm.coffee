@@ -28,7 +28,7 @@ define [
     @DEFAULT_DROP: .805904783
 
     constructor: (xa, ya, xb, yb, f, st) ->
-      super xa, ya, xb, yb, f
+      super xa, ya, xb, yb, f, st
 
       @hs = 8
       @poly

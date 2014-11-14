@@ -220,9 +220,11 @@ require([
 
       var renderer = new CircuitCanvas(circuit, canvas);
 
-      setInterval(function () {
-        circuit.updateCircuit();
-      }, 0);
+      circuit.updateCircuit();
+
+      //setInterval(function () {
+      //  circuit.updateCircuit();
+      //}, 0);
     });
   });
 

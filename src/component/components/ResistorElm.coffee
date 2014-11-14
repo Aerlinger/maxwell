@@ -70,7 +70,7 @@ define [
       @drawPosts(renderContext)
 
     dump: ->
-      CircuitElement::dump.call(this) + " " + @resistance
+      super() + " " + @resistance
 
     getDumpType: ->
       "r"

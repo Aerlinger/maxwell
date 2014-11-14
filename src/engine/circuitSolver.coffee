@@ -10,7 +10,13 @@ define [
   'cs!CircuitNodeLink',
   'cs!RowInfo',
   'cs!Settings',
-  'cs!ArrayUtils'
+  'cs!ArrayUtils',
+
+
+  # Components
+  'cs!CapacitorElm',
+  'cs!InductorElm',
+  'cs!CurrentElm',
 ], (
   MatrixStamper,
   GroundElm,
@@ -22,7 +28,13 @@ define [
   CircuitNodeLink,
   RowInfo,
   Settings,
-  ArrayUtils
+  ArrayUtils,
+
+
+  CapacitorElm,
+  InductorElm,
+  CurrentElm
+
 ) ->
 # </DEFINE>
 
@@ -31,6 +43,7 @@ define [
   class CircuitSolver
 
     constructor: (@Circuit) ->
+      @timeStep = @Circuit.timeStep
       @scaleFactors = ArrayUtils.zeroArray(400)
       @reset()
       @Stamper = new MatrixStamper(@Circuit)
@@ -87,7 +100,7 @@ define [
 
 
     reconstruct: ->
-      return if !@analyzeFlag || @Circuit.numElements() is 0
+      return if !@analyzeFlag || (@Circuit.numElements() is 0)
 
       @Circuit.getCircuitBottom()
       @Circuit.clearErrors()
@@ -101,12 +114,12 @@ define [
 
       # Check if this circuit has a voltage rail and if it has a voltage element.
       for circuitElm in @Circuit.getElements()
-        if circuitElm.toString() is 'GroundElm'
+        if circuitElm instanceof GroundElm
           @gotGround = true
           break
-        if circuitElm.toString is 'RailElm'
+        if circuitElm instanceof RailElm
           gotRail = true
-        if not volt? and circuitElm.toString() is 'VoltageElm'
+        if not volt? and circuitElm instanceof VoltageElm
           volt = circuitElm
 
       circuitNode = new CircuitNode()
@@ -242,43 +255,41 @@ define [
             break
 
       # Todo: use 'of' iterator
-      for i in [0...@Circuit.numElements()]
-        ce = @Circuit.getElmByIdx(i)
-  #      if ce instanceof InductorElm
-  #        fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
-  #
-  #        # try findPath with maximum depth of 5, to avoid slowdown
-  #        if not fpi.findPath(ce.getNode(0), 5) and not fpi.findPath(ce.getNode(0))
-
-  #          ce.clearAndReset()
-
-        # look for current sources with no current path
-  #      if ce instanceof CurrentElm
-  #        fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
-  #        unless fpi.findPath(ce.getNode(0))
-  #          @Circuit.halt "No path for current source!", ce
-  #          return
-
-        # Look for voltage source loops:
-        if (ce instanceof VoltageElm and ce.getPostCount() is 2) or ce instanceof WireElm
-          pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
-
-          #if pathfinder.findPath(ce.getNode(0)) is true
-
-            #@Circuit.halt "Voltage source/wire loop with no resistance!", ce
-            #return
-
-        # Look for shorted caps or caps with voltage but no resistance
-  #      if ce instanceof CapacitorElm
-  #        fpi = new Pathfinder(Pathfinder.SHORT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
-  #        if fpi.findPath(ce.getNode(0))
-
-  #          ce.clearAndReset()
-  #        else
-  #          fpi = new Pathfinder(Pathfinder.CAP_V, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
-  #          if fpi.findPath(ce.getNode(0))
-  #            @Circuit.halt "Capacitor loop with no resistance!", ce
-  #            return
+#      for i in [0...@Circuit.numElements()]
+#        ce = @Circuit.getElmByIdx(i)
+#        if ce instanceof InductorElm
+#          fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
+#
+#          # try findPath with maximum depth of 5, to avoid slowdown
+#          if not fpi.findPath(ce.getNode(0), 5) and not fpi.findPath(ce.getNode(0))
+#            ce.reset()
+#
+#        # look for current sources with no current path
+#        if ce instanceof CurrentElm
+#          fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
+#          unless fpi.findPath(ce.getNode(0))
+#            @Circuit.halt "No path for current source!", ce
+#            return
+#
+#        # Look for voltage source loops:
+#        if (ce instanceof VoltageElm and ce.getPostCount() is 2) or ce instanceof WireElm
+#          console.log("Examining Loop: #{ce.dump()} #{@Circuit.numNodes()}")
+#          pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
+#
+#          if pathfinder.findPath(ce.getNode(0)) is true
+#            @Circuit.halt "Voltage source/wire loop with no resistance!", ce
+#            return
+#
+#        # Look for shorted caps or caps with voltage but no resistance
+#        if ce instanceof CapacitorElm
+#          fpi = new Pathfinder(Pathfinder.SHORT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
+#          if fpi.findPath(ce.getNode(0))
+#            ce.reset()
+#          else
+#            fpi = new Pathfinder(Pathfinder.CAP_V, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
+#            if fpi.findPath(ce.getNode(0))
+#              @Circuit.halt "Capacitor loop with no resistance!", ce
+#              return
 
       iter = 0
       while iter < @matrixSize
@@ -291,7 +302,6 @@ define [
           iter++
           continue
 
-
         rsadd = 0
         # look for rows that can be removed
         for j in [0...@matrixSize]
@@ -300,7 +310,7 @@ define [
             # Keep a running total of const values that have been removed already
             rsadd -= @circuitRowInfo[j].value * matrix_ij
             continue
-#          if matrix_ij is 0
+          if matrix_ij is 0
             continue
           if qp is -1
             qp = j
@@ -330,6 +340,7 @@ define [
             if elt.type is RowInfo.ROW_EQUAL
               # break equal chains
               elt.type = RowInfo.ROW_NORMAL
+              # Todo, don't advance on continue
               iter++
               continue
             unless elt.type is RowInfo.ROW_NORMAL
@@ -402,7 +413,7 @@ define [
         circuitRowInfo = @circuitRowInfo[i]
         if circuitRowInfo.dropRow
           circuitRowInfo.mapRow = -1
-          i++
+#          i++
           continue
         newRS[ii] = @circuitRightSide[i]
         circuitRowInfo.mapRow = ii
@@ -434,7 +445,7 @@ define [
       # if a matrix is linear, we can do the lu_factor here instead of needing to do it every frame
       unless @circuitNonLinear
         if !@luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
-          @Circuit.halt "Singular matrix!", null
+          @Circuit.halt "Singular matrix in linear circuit!", null
           return
 
 
@@ -493,7 +504,7 @@ define [
           if @circuitNonLinear
             break if @converged and subiter > 0
             unless @luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
-              @Circuit.halt "Singular matrix!", null
+              @Circuit.halt "Singular matrix in nonlinear circuit!", null
               return
 
           @luSolve @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide

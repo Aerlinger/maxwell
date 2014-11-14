@@ -7,6 +7,7 @@ define [
   'cs!Point',
   'cs!CircuitComponent',
   'cs!Units'
+#  'cs!EditInfo',
 ], (Settings,
     DrawHelper,
     Polygon,
@@ -80,7 +81,7 @@ define [
       @state = true  if Math.abs(vd) > @breakdown
 
     doStep: (stamper) ->
-      @resistance = @state ? @onresistance : @offresistance
+      @resistance = if @state then @onresistance else @offresistance
 
       stamper.stampResistor @nodes[0], @nodes[1], @resistance
 
@@ -96,27 +97,27 @@ define [
       arr[5] = "Roff = " + DrawHelper.getUnitText(@offresistance, Circuit.ohmString)
       arr[6] = "Vbreakdown = " + DrawHelper.getUnitText(@breakdown, "V")
 
-    getEditInfo: (n) ->
+#    getEditInfo: (n) ->
       # ohmString doesn't work here on linux
-      return new EditInfo("On resistance (ohms)", @onresistance, 0, 0)  if n is 0
-      return new EditInfo("Off resistance (ohms)", @offresistance, 0, 0)  if n is 1
-      return new EditInfo("Breakdown voltage", @breakdown, 0, 0)  if n is 2
-      return new EditInfo("Holding current (A)", @holdcurrent, 0, 0)  if n is 3
-      null
+#      return new EditInfo("On resistance (ohms)", @onresistance, 0, 0)  if n is 0
+#      return new EditInfo("Off resistance (ohms)", @offresistance, 0, 0)  if n is 1
+#      return new EditInfo("Breakdown voltage", @breakdown, 0, 0)  if n is 2
+#      return new EditInfo("Holding current (A)", @holdcurrent, 0, 0)  if n is 3
+#      null
 
     # TODO: Double-check
-    getEditInfo: (n, edit_info) ->
-      return if edit_info.value <= 0
-
-      switch n
-        when 0
-          @onresistance = edit_info.value
-        when 1
-          @offresistance = edit_info.value
-        when 2
-          @breakdown = edit_info.value
-        when 3
-          @holdcurrent = edit_info.value
+#    getEditInfo: (n, edit_info) ->
+#      return if edit_info.value <= 0
+#
+#      switch n
+#        when 0
+#          @onresistance = edit_info.value
+#        when 1
+#          @offresistance = edit_info.value
+#        when 2
+#          @breakdown = edit_info.value
+#        when 3
+#          @holdcurrent = edit_info.value
 
     needsShortcut: ->
       false

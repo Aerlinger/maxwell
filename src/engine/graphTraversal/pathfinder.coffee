@@ -1,13 +1,16 @@
 # <DEFINE>
 define [
   'cs!VoltageElm',
+  'cs!CurrentElm',
+  'cs!ResistorElm'
 ], (
-VoltageElm
+VoltageElm,
+CurrentElm,
+ResistorElm
 ) ->
 # </DEFINE>
 
   class Pathfinder
-
     @INDUCT: 1
     @VOLTAGE: 2
     @SHORT: 3
@@ -18,10 +21,9 @@ VoltageElm
 
 
     findPath: (node, depth) ->
-      if node is @dest
-        return true
-      if (depth-- is 0) or @used[node]
-        return false
+      return true if node is @dest
+      return false if (depth-- is 0)
+      return false if @used[node]
 
       @used[node] = true
 
@@ -29,8 +31,8 @@ VoltageElm
         if element is @firstElm
           continue
         # TODO: Add Current Elm
-        #if (element instanceof CurrentElm) and (@type is FindPathInfo.INDUCT)
-        #  continue
+        if (element instanceof CurrentElm) and (@type is FindPathInfo.INDUCT)
+          continue
         if @type is Pathfinder.VOLTAGE and (element.isWire() or element instanceof VoltageElm)
           continue
         if @type is Pathfinder.SHORT and not element.isWire()
@@ -47,33 +49,38 @@ VoltageElm
 
         terminal_num = 0
         for terminal_num in Array(element.getPostCount())
-          break if element.getNode(terminal_num) is node    #console.log(element + " " + ce.getNode(j));
+          console.log(element + " " + element.getNode(terminal_num));
+          break if element.getNode(terminal_num) is node
 
         # TODO: ENSURE EQUALITY HERE
         continue if terminal_num is element.getPostCount()
 
         if element.hasGroundConnection(terminal_num) and @findPath(0, depth)
           @used[node] = false
-          return true   #console.log(element + " has ground");
+          console.log(element + " has ground");
+          return true
 
         if @type is Pathfinder.INDUCT and element instanceof InductorElm
           current = element.getCurrent()
           current = -current if terminal_num is 0
 
-          #console.log(element + " > " + firstElm + " >> matching " + c + " to " + firstElm.getCurrent());
+          console.log(element + " > " + @firstElm + " >> matching " + element + " to " + @firstElm.getCurrent());
           continue if Math.abs(current - @firstElm.getCurrent()) > 1e-10
 
         for next_terminal_num in [0...element.getPostCount()]
           continue if terminal_num is next_terminal_num
 
-          #console.log(ce + " " + ce.getNode(j) + "-" + ce.getNode(k));
+          console.log(element + " " + element.getNode(terminal_num) + " - " + element.getNode(next_terminal_num));
           if element.getConnection(terminal_num, next_terminal_num) and @findPath(element.getNode(next_terminal_num), depth)
             @used[node] = false
-            return true #console.log("got findpath " + n1);
+            console.log("got findpath " + node + " on element " + element);
+            return true
 
-      @used[node] = false   #console.log("back on findpath " + n1);
+      console.log("back on findpath " + node);
+      @used[node] = false
 
-      return false   #console.log(n1 + " failed");
+      console.log(node + " failed");
+      return false
 
 
   return Pathfinder

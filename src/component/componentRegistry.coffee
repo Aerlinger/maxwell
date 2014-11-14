@@ -6,9 +6,12 @@ define [
   'cs!VoltageElm',
   'cs!DiodeElm',
   'cs!OutputElm',
+  'cs!SwitchElm',
   'cs!CapacitorElm',
   'cs!InductorElm',
   'cs!SparkGapElm',
+  'cs!CurrentElm',
+
   'cs!Oscilloscope',
 ], (
   WireElm,
@@ -17,9 +20,12 @@ define [
   VoltageElm,
   DiodeElm,
   OutputElm,
+  SwitchElm,
   CapacitorElm,
   InductorElm,
   SparkGapElm,
+  CurrentElm,
+
   Oscilloscope
 ) ->
 # </DEFINE>
@@ -41,9 +47,12 @@ define [
       'r':'ResistorElm'
       'w':'WireElm'
       'g':'GroundElm'
+      'c':'CapacitorElm'
+      'l':'InductorElm'
       'v':'VoltageElm'
       'd':'DiodeElm'
       'o':'OutputElm'
+      's':'SwitchElm'
       '187':'SparkGapElm'
       187:'SparkGapElm'
 
@@ -52,9 +61,12 @@ define [
       'w': WireElm
       'r': ResistorElm
       'g': GroundElm
+      'l': InductorElm
+      'c': CapacitorElm
       'v': VoltageElm
       'd': DiodeElm
       'o': OutputElm
+      's': SwitchElm
       '187':SparkGapElm
       187:SparkGapElm
 

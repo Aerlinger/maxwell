@@ -23,7 +23,7 @@ define [
   ###
   Todo: Click functionality does not work
   ###
-  class Switch2Elm
+  class Switch2Elm extends CircuitComponent
 
     @FLAG_CENTER_OFF: 1
 
@@ -42,11 +42,11 @@ define [
       "S"
 
     dump: ->
-      SwitchElm::dump.call(this) + @link
+      super() + @link
 
 
     setPoints: ->
-      SwitchElm::setPoints.call this
+      super()
       @calcLeads 32
 
       @swpoles = DrawHelper.interpPoint @lead1, @lead2, 1, @openhs
@@ -59,19 +59,19 @@ define [
 
       # draw first lead
       color = @setVoltageColor(@volts[0])
-      CircuitComponent.drawThickLinePt @point1, @lead1, color
+      DrawHelper.drawThickLinePt @point1, @lead1, color
 
       # draw second lead
       color = @setVoltageColor(@volts[1])
-      CircuitComponent.drawThickLinePt @swpoles[0], @swposts[0], color
+      DrawHelper.drawThickLinePt @swpoles[0], @swposts[0], color
 
       # draw third lead
       @setVoltageColor @volts[2], color
-      CircuitComponent.drawThickLinePt @swpoles[1], @swposts[1], color
+      DrawHelper.drawThickLinePt @swpoles[1], @swposts[1], color
 
       # draw switch
       color = Settings.SELECT_COLOR unless @needsHighlight()
-      CircuitComponent.drawThickLinePt @lead1, @swpoles[@position], color
+      DrawHelper.drawThickLinePt @lead1, @swpoles[@position], color
       @updateDotCount()
       @drawDots @point1, @lead1, @curcount
       @drawDots @swpoles[@position], @swposts[@position], @curcount  unless @position is 2
@@ -86,16 +86,16 @@ define [
     calculateCurrent: ->
       @current = 0  if @position is 2
 
-    Switch2Elm.stamp = ->
+    stamp: (stamper) ->
       # in center?
       return  if @position is 2
       Circuit.stampVoltageSource @nodes[0], @nodes[@position + 1], @voltSource, 0
 
-    Switch2Elm.getVoltageSourceCount = ->
-      (if (@position is 2) then 0 else 1)
+    getVoltageSourceCount: ->
+      if (@position is 2) then 0 else 1
 
-    Switch2Elm.toggle = ->
-      Switch2Elm::toggle()
+    toggle: ->
+      super()
       unless @link is 0
         i = 0
         while i isnt Circuit.elementList.length
@@ -109,25 +109,25 @@ define [
       return false  if @position is 2
       @comparePair n1, n2, 0, 1 + @position
 
-    getInfo: (arr) ->
-      arr[0] = (if (@link is 0) then "switch (SPDT)" else "switch (DPDT)")
-      arr[1] = "I = " + @getCurrentDText(@getCurrent())
+#    getInfo: (arr) ->
+#      arr[0] = (if (@link is 0) then "switch (SPDT)" else "switch (DPDT)")
+#      arr[1] = "I = " + @getCurrentDText(@getCurrent())
 
-    getEditInfo: (n) ->
-      if n is 1
-        ei = new EditInfo("", 0, -1, -1)
-        ei.checkbox = new Checkbox("Center Off", @hasCenterOff())
-        return ei
-      SwitchElm::getEditInfo.call this, n
+#    getEditInfo: (n) ->
+#      if n is 1
+#        ei = new EditInfo("", 0, -1, -1)
+#        ei.checkbox = new Checkbox("Center Off", @hasCenterOff())
+#        return ei
+#      SwitchElm::getEditInfo.call this, n
 
-    setEditValue: (n, ei) ->
-      if n is 1
-        @flags &= ~Switch2Elm.FLAG_CENTER_OFF
-        @flags |= Switch2Elm.FLAG_CENTER_OFF  if ei.checkbox.getState()
-        @momentary = false  if @hasCenterOff()
-        @setPoints()
-      else
-        Switch2Elm::setEditValue.call this, n, ei
+#    setEditValue: (n, ei) ->
+#      if n is 1
+#        @flags &= ~Switch2Elm.FLAG_CENTER_OFF
+#        @flags |= Switch2Elm.FLAG_CENTER_OFF  if ei.checkbox.getState()
+#        @momentary = false  if @hasCenterOff()
+#        @setPoints()
+#      else
+#        Switch2Elm::setEditValue.call this, n, ei
 
     hasCenterOff: ->
       (@flags & Switch2Elm.FLAG_CENTER_OFF) isnt 0
