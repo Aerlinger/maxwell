@@ -11,6 +11,7 @@
     'paths': {
       // LIBRARIES:
       jquery: 'libs/jquery-1.8.3.min',
+      _: 'libs/jquery-1.8.3.min',
       'coffee-script': 'libs/coffee-script',
       cs: 'libs/cs',
       color: 'libs/color',
@@ -148,6 +149,14 @@
       voltdivideIntegration: 'test/integration/voltdividesimpleTest',
       observerTest: 'test/observers/observerTest'
     },
+    shim: {
+      'underscore': {
+        exports: '_'
+      },
+      'jquery': {
+        exports: '$'
+      }
+    },
     packages: [
       {
         name: 'cs',
@@ -222,9 +231,9 @@ require([
 
       circuit.updateCircuit();
 
-      //setInterval(function () {
-      //  circuit.updateCircuit();
-      //}, 0);
+      setInterval(function () {
+        circuit.updateCircuit();
+      }, 0);
     });
   });
 

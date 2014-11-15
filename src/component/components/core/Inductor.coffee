@@ -37,7 +37,7 @@ define [], () ->
       @nodes[1] = n1
 
       if @isTrapezoidal()
-        @compResistance = 2 * @inductance / Circuit.timeStep
+        @compResistance = 2 * @inductance / @simParams().timeStep
       # backward euler
       else
         @compResistance = @inductance / Circuit.timeStep

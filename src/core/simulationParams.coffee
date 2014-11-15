@@ -20,9 +20,12 @@ define [], () ->
       @powerRange = paramsObj?['power_range']
       @voltageRange = paramsObj?['voltage_range']
       @simSpeed = paramsObj?['sim_speed']
-      @timeStep = paramsObj?['time_step']
+      @timeStep = paramsObj['time_step']
       @title = paramsObj?['title']
       @topic = paramsObj?['topic']
+
+      unless @timeStep?
+        throw new Error("Circuit params is missing its time step (was null)!")
 
     toString: ->
       [

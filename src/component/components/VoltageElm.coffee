@@ -268,7 +268,7 @@ define [
         # adjust time zero to maintain continuity in the waveform even though the frequency has changed.
         oldfreq = @frequency
         @frequency = ei.value
-        maxfreq = 1 / (8 * @Circuit?.timeStep)
+        maxfreq = 1 / (8 * simParams)
         @frequency = maxfreq  if @frequency > maxfreq
         adj = @frequency - oldfreq
         @freqTimeZero = @Circuit?.time - oldfreq * (@Circuit?.time - @freqTimeZero) / @frequency

@@ -462,4 +462,15 @@ define [
 
       return a
 
+    simParams: ->
+      @Circuit.Params
+
+    timeStep: ->
+      ts = @Circuit.timeStep()
+
+      console.log "ts = #{ts}"
+      return ts
+
+
+
   return CircuitComponent

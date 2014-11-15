@@ -291,15 +291,16 @@ define [
 #              @Circuit.halt "Capacitor loop with no resistance!", ce
 #              return
 
-      iter = 0
-      while iter < @matrixSize
+#      iter = 0
+#      while iter < @matrixSize
+      for iter in [0...@matrixSize]
         qm = -1
         qp = -1
         qv = 0
 
         re = @circuitRowInfo[iter]
         if re.lsChanges or re.dropRow or re.rsChanges
-          iter++
+#          iter++
           continue
 
         rsadd = 0
@@ -341,10 +342,10 @@ define [
               # break equal chains
               elt.type = RowInfo.ROW_NORMAL
               # Todo, don't advance on continue
-              iter++
+#              iter++
               continue
             unless elt.type is RowInfo.ROW_NORMAL
-              iter++
+#              iter++
               continue
 
             elt.type = RowInfo.ROW_CONST
@@ -364,12 +365,12 @@ define [
               elt = @circuitRowInfo[qp]
               unless elt.type is RowInfo.ROW_NORMAL
                 # we should follow the chain here, but this hardly ever happens so it's not worth worrying about
-                iter++
+#                iter++
                 continue
             elt.type = RowInfo.ROW_EQUAL
             elt.nodeEq = qm
             @circuitRowInfo[iter].dropRow = true
-        iter++
+#        iter++
 
 
       # find size of new matrix:
@@ -408,8 +409,9 @@ define [
 
       ArrayUtils.zeroArray newRS
       ii = 0
-      i = 0
-      while i isnt @matrixSize
+#      i = 0
+#      while i isnt @matrixSize
+      for i in [0...@matrixSize]
         circuitRowInfo = @circuitRowInfo[i]
         if circuitRowInfo.dropRow
           circuitRowInfo.mapRow = -1
@@ -425,7 +427,7 @@ define [
           else
             newMatx[ii][rowInfo.mapCol] += @circuitMatrix[i][j]
         ii++
-        i++
+#        i++
 
       @circuitMatrix = newMatx
       @circuitRightSide = newRS

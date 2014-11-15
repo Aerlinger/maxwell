@@ -31,7 +31,7 @@ define [
         @capacitance = Number(st[0])
         @voltDiff = Number(st[1])
 
-      console.log("CAP: #{st}");
+#      console.log("CAP: #{st}");
 
 
     isTrapezoidal: ->
@@ -41,7 +41,7 @@ define [
       false
 
     setNodeVoltage: (n, c) ->
-      super.setNodeVoltage n, c
+      super n, c
       @voltDiff = @volts[0] - @volts[1]
 
     reset: ->
@@ -70,20 +70,20 @@ define [
       DrawHelper.interpPoint @point1, @point2, f, 12, @plate1[0], @plate1[1]
       DrawHelper.interpPoint @point1, @point2, 1 - f, 12, @plate2[0], @plate2[1]
 
-      console.log("Set points: (@dn = (#{@x1}, #{@y1}) (#{@x2}, #{@y2}) #{@dn}) leads: #{@lead1.toString()} #{@lead2.toString()} - #{@plate1.toString()} #{@plate2.toString()}")
+#      console.log("Set points: (@dn = (#{@x1}, #{@y1}) (#{@x2}, #{@y2}) #{@dn}) leads: #{@lead1.toString()} #{@lead2.toString()} - #{@plate1.toString()} #{@plate2.toString()}")
 
     draw: (renderContext) ->
       hs = 12
       @setBboxPt @point1, @point2, hs
       @curcount = @updateDotCount()
 
-      console.log @point1
-      console.log @point2
-      console.log @lead2
+#      console.log @point1
+#      console.log @point2
+#      console.log @lead2
 
       unless @isBeingDragged()
-        @drawDots @point1, @lead1, @curcount
-        @drawDots @point2, @lead2, -@curcount
+        @drawDots @point1, @lead1, renderContext
+        @drawDots @point2, @lead2, renderContext
 
       # draw first lead and plate
 #      color = DrawHelper.setVoltageColor(@volts[0])
@@ -108,6 +108,7 @@ define [
       @drawValues s, hs
 
     doStep: (stamper) ->
+      console.log("Vd_cap: " + @getVoltageDiff());
       stamper.stampCurrentSource(@nodes[0], @nodes[1], @curSourceValue)
 
     stamp: (stamper) ->
@@ -115,12 +116,12 @@ define [
       # parallel with a resistor.  Trapezoidal is more accurate than Backward Euler but can cause oscillatory behavior
       # if RC is small relative to the timestep.
 #      Solver = @getParentCircuit().Solver
-      console.log("Stamping with #{@nodes[0]} #{@nodes[1]}");
+      console.log("Stamping with #{@nodes[0]} #{@nodes[1]} -> #{@capacitance} ts: #{@timeStep()}");
 
       if @isTrapezoidal()
-        @compResistance = @getParentCircuit().timeStep / (2 * @capacitance)
+        @compResistance = @timeStep() / (2 * @capacitance)
       else
-        @compResistance = @getParentCircuit().timeStep / @capacitance
+        @compResistance = @timeStep() / @capacitance
 
       stamper.stampResistor @nodes[0], @nodes[1], @compResistance
       stamper.stampRightSide @nodes[0]
@@ -171,6 +172,6 @@ define [
       true
 
     toString: ->
-      "Capacitor"
+      "CapacitorElm"
 
   return CapacitorElm

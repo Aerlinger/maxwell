@@ -92,15 +92,23 @@ define [
 
 
     constructor: () ->
-      @Params = new CircuitEngineParams()
+#      @Params = new CircuitEngineParams()
       @CommandHistory = new CommandHistory()
 
       @clearAndReset()
       @bindListeners()
 
+
+    timeStep: ->
+      @Params.timeStep
+
     # Simulator
     setParamsFromJSON: (jsonData) ->
       @Params = new CircuitEngineParams(jsonData)
+
+      console.log("---- LOADED ----")
+      console.log(@Params.toString())
+      console.log(@timeStep())
 
 
     ###################################################################################################################
@@ -124,7 +132,7 @@ define [
 
       @time = 0
       @lastTime = 0
-      @timeStep = 0.01
+#      @timeStep = 0.01
 
       # State Handlers
       @mouseState = new MouseState()

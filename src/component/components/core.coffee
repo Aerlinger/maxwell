@@ -160,10 +160,10 @@ define [], () ->
       @nodes[0] = n0
       @nodes[1] = n1
       if @isTrapezoidal()
-        @compResistance = 2 * @inductance / Circuit.timeStep
+        @compResistance = 2 * @inductance / @simParams.timeStep
       # backward euler
       else
-        @compResistance = @inductance / Circuit.timeStep
+        @compResistance = @inductance / @simParams.timeStep
       Circuit.stampResistor @nodes[0], @nodes[1], @compResistance
       Circuit.stampRightSide @nodes[0]
       Circuit.stampRightSide @nodes[1]
