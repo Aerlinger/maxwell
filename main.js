@@ -10,8 +10,8 @@
     // baseUrl: ""
     'paths': {
       // LIBRARIES:
-      jquery: 'libs/jquery-1.8.3.min',
-      _: 'libs/jquery-1.8.3.min',
+      jquery: 'bower_components/jquery/dist/jquery.min',
+      underscore: 'bower_components/underscore/underscore-min',
       'coffee-script': 'libs/coffee-script',
       cs: 'libs/cs',
       color: 'libs/color',
@@ -181,9 +181,6 @@
   // If 'define' exists as a function, run main.
   if (typeof define === 'function') {
     require.config(Config);
-//    require(['main'], function (Main) {
-//      Main.main();
-//    });
     return true;
   }
   // If exports exists as an object, CommonJS.
@@ -202,20 +199,14 @@
 
 require([
   // Load our app module and pass it to our definition function
-  'jquery',
-
   'cs!Circuit',
   'cs!CircuitCanvas',
   'cs!CircuitLoader',
-  'cs!ResistorElm',
-  'cs!WireElm',
-  'cs!GroundElm',
-  'cs!VoltageElm',
 
   'cs!ArrayUtils',
   'cs!ConsoleUtils'
 
-], function ($, Circuit, CircuitCanvas, CircuitLoader, Resistor, Wire, Ground, Voltage) {
+], function (Circuit, CircuitCanvas, CircuitLoader) {
 
   var circuitName = $('canvas').data('circuit');
   var circuitFileName = "../circuits/" + circuitName + ".json";
@@ -227,7 +218,7 @@ require([
 
       var canvas = $('canvas.maxwell');
 
-      var renderer = new CircuitCanvas(circuit, canvas);
+      new CircuitCanvas(circuit, canvas);
 
       circuit.updateCircuit();
 
@@ -237,14 +228,7 @@ require([
     });
   });
 
-
   runTests();
-
-//  $('#run_tests').click(function (e) {
-//    "use strict";
-//    mocha.setup('bdd');
-//    mocha.run();
-//  });
 });
 
 
@@ -282,6 +266,6 @@ function runTests() {
     'cs!observerTest'
   ], function () {
     "use strict";
-//    mocha.run();
+    mocha.run();
   });
 }

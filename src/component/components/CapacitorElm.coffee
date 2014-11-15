@@ -31,8 +31,6 @@ define [
         @capacitance = Number(st[0])
         @voltDiff = Number(st[1])
 
-#      console.log("CAP: #{st}");
-
 
     isTrapezoidal: ->
       (@flags & CapacitorElm.FLAG_BACK_EULER) is 0
@@ -70,16 +68,11 @@ define [
       DrawHelper.interpPoint @point1, @point2, f, 12, @plate1[0], @plate1[1]
       DrawHelper.interpPoint @point1, @point2, 1 - f, 12, @plate2[0], @plate2[1]
 
-#      console.log("Set points: (@dn = (#{@x1}, #{@y1}) (#{@x2}, #{@y2}) #{@dn}) leads: #{@lead1.toString()} #{@lead2.toString()} - #{@plate1.toString()} #{@plate2.toString()}")
 
     draw: (renderContext) ->
       hs = 12
       @setBboxPt @point1, @point2, hs
       @curcount = @updateDotCount()
-
-#      console.log @point1
-#      console.log @point2
-#      console.log @lead2
 
       unless @isBeingDragged()
         @drawDots @point1, @lead1, renderContext
@@ -108,15 +101,12 @@ define [
       @drawValues s, hs
 
     doStep: (stamper) ->
-      console.log("Vd_cap: " + @getVoltageDiff());
       stamper.stampCurrentSource(@nodes[0], @nodes[1], @curSourceValue)
 
     stamp: (stamper) ->
       # capacitor companion model using trapezoidal approximation (Norton equivalent) consists of a current source in
       # parallel with a resistor.  Trapezoidal is more accurate than Backward Euler but can cause oscillatory behavior
       # if RC is small relative to the timestep.
-#      Solver = @getParentCircuit().Solver
-      console.log("Stamping with #{@nodes[0]} #{@nodes[1]} -> #{@capacitance} ts: #{@timeStep()}");
 
       if @isTrapezoidal()
         @compResistance = @timeStep() / (2 * @capacitance)
