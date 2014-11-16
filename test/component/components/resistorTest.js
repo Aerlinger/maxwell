@@ -6,10 +6,10 @@
         this.Circuit = new Circuit();
         return this.resistor = new ResistorElm(100, 300, 100, 200, 0, [50]);
       });
-      it("should have correct resistance", function() {
+      it("has correct resistance", function() {
         return this.resistor.resistance.should.equal(50);
       });
-      it("should not have any internal voltage sources", function() {
+      it("is not have any internal voltage sources", function() {
         return this.resistor.getVoltageSourceCount().should.equal(0);
       });
       it("calculates current when voltage is applied", function() {

@@ -6,24 +6,24 @@
         this.Circuit = new Circuit();
         return this.groundElm = new GroundElm(100, 100, 100, 200, 0, []);
       });
-      it("should have correct defaults", function() {
+      it("has correct defaults", function() {
         this.groundElm.x1 === 100;
         this.groundElm.y1 === 100;
         this.groundElm.x2 === 100;
         this.groundElm.y2 === 200;
         return this.groundElm.flags = 0;
       });
-      it("should have correct number of posts", function() {
+      it("has correct number of posts", function() {
         this.groundElm.getPostCount().should.equal(1);
         return this.groundElm.getInternalNodeCount().should.equal(0);
       });
-      it("should not have any internal voltage sources", function() {
+      it("is not have any internal voltage sources", function() {
         return this.groundElm.getVoltageSourceCount().should.equal(1);
       });
-      it("should have correct dump type", function() {
+      it("has correct dump type", function() {
         return this.groundElm.getDumpType().should.equal("g");
       });
-      it("should have correct toString()", function() {
+      it("has correct toString()", function() {
         return this.groundElm.toString().should.equal("GroundElm");
       });
       it("should be orphaned", function() {
@@ -33,7 +33,7 @@
         beforeEach(function() {
           return this.Circuit.solder(this.groundElm);
         });
-        it("should not be orphaned", function() {
+        it("is not be orphaned", function() {
           return this.groundElm.orphaned().should.equal(false);
         });
         it("should be stampable", function() {

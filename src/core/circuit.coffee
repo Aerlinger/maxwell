@@ -95,6 +95,9 @@ define [
 #      @Params = new CircuitEngineParams()
       @CommandHistory = new CommandHistory()
 
+      # Use default params if none specified
+      @Params = new CircuitEngineParams()
+
       @clearAndReset()
       @bindListeners()
 
@@ -106,7 +109,6 @@ define [
     setParamsFromJSON: (jsonData) ->
       @Params = new CircuitEngineParams(jsonData)
 
-      console.log("---- LOADED ----")
       console.log(@Params.toString())
       console.log(@timeStep())
 
@@ -222,7 +224,7 @@ define [
       @nodeList
 
     numNodes: ->
-      @nodeList?.length
+      @nodeList.length
 
     getGrid: ->
       return @Grid
@@ -391,6 +393,18 @@ define [
 
     getState: ->
       return @state
+
+    getStamper: ->
+      @Solver.getStamper()
+
+    getNode: (idx) ->
+      console.error("getNode() is deprecated!")
+      @nodeList[idx]
+
+    getElm: (idx) ->
+      console.error("getElm() is deprecated!")
+      @getElmByIdx(idx)
+
 
 
   return Circuit

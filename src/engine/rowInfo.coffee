@@ -21,7 +21,6 @@ define [], () ->
       @dropRow = false;
 
     toString: () ->
-      "RowInfo: #{@type} #{@nodeEq} #{@mapCol} #{@mapRow} #{@value} #{@rsChanges} #{@lsChanges} #{@dropRow}"
-
+      "RowInfo: type: #{@type}, nodeEq: #{@nodeEq}, mapCol: #{@mapCol}, mapRow: #{@mapRow}, value: #{@value}, rsChanges: #{@rsChanges}, lsChanges: #{@lsChanges}, dropRow: #{@dropRow}"
 
   return RowInfo

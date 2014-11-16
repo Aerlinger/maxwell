@@ -33,10 +33,10 @@
         it("valid right side", function() {
           return this.circuit.Solver.circuitRightSide.should.eql([]);
         });
-        it("should need map", function() {
+        it("Circuit Solver should need map", function() {
           return this.circuit.Solver.circuitNeedsMap.should.equal(true);
         });
-        it("correct voltage sources", function() {
+        it("has correct voltage sources", function() {
           var voltageSources;
           voltageSources = "VoltageElm,WireElm,WireElm,WireElm,WireElm";
           return this.circuit.getVoltageSources().toString().should.equal(voltageSources);
@@ -44,21 +44,21 @@
         it("current rowInfos", function() {
           var rowInfo;
           rowInfo = this.circuit.Solver.circuitRowInfo;
-          rowInfo[0].toString().should.equal("RowInfo: 1 0 -1 -1 10 false false true");
-          rowInfo[1].toString().should.equal("RowInfo: 1 0 -1 -1 10 false false true");
-          rowInfo[2].toString().should.equal("RowInfo: 1 0 -1 -1 0 false false true");
-          rowInfo[3].toString().should.equal("RowInfo: 1 0 -1 -1 10 false false true");
-          rowInfo[4].toString().should.equal("RowInfo: 1 0 -1 -1 0 false false true");
-          rowInfo[5].toString().should.equal("RowInfo: 1 6 -1 -1 0.0015 false false true");
-          rowInfo[6].toString().should.equal("RowInfo: 1 0 -1 -1 0.0015 false false true");
-          rowInfo[7].toString().should.equal("RowInfo: 1 0 -1 -1 -0.0015 false false true");
-          rowInfo[8].toString().should.equal("RowInfo: 1 0 -1 -1 0.0005 false false true");
-          return rowInfo[9].toString().should.equal("RowInfo: 1 0 -1 -1 -0.0005 false false true");
+          rowInfo[0].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true");
+          rowInfo[1].toString().should.equal("         RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true");
+          rowInfo[2].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0, rsChanges: false, lsChanges: false, dropRow: true");
+          rowInfo[3].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, false false true");
+          rowInfo[4].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0, false false true");
+          rowInfo[5].toString().should.equal("RowInfo: type: 1, nodeEq: 6, mapCol: -1, mapRow: -1, value: 0.0015, false false true");
+          rowInfo[6].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0.0015, false false true");
+          rowInfo[7].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: -0.0015, false false true");
+          rowInfo[8].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0.0005, rsChanges: false, lsChanges: false, dropRow: true");
+          return rowInfo[9].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: -0.0005, rsChanges: false, lsChanges: false, dropRow: true");
         });
         it("10 elements in circuitRowInfo", function() {
           return this.circuit.Solver.circuitRowInfo.length.should.equal(10);
         });
-        it("correct nodes", function() {
+        it("has correct nodes", function() {
           this.circuit.getNode(0).toString().should.equal("CircuitNode: 112 368 false [0 VoltageElm,0 WireElm]");
           this.circuit.getNode(1).toString().should.equal("CircuitNode: 112 48 false [1 VoltageElm,0 WireElm]");
           this.circuit.getNode(2).toString().should.equal("CircuitNode: 240 48 false [1 WireElm,0 ResistorElm,0 WireElm]");
@@ -66,7 +66,7 @@
           this.circuit.getNode(4).toString().should.equal("CircuitNode: 432 48 false [1 WireElm,0 ResistorElm]");
           return this.circuit.getNode(5).toString().should.equal("CircuitNode: 432 368 false [1 WireElm,1 ResistorElm]");
         });
-        it("6 nodes", function() {
+        it("has 6 nodes", function() {
           return this.circuit.numNodes().should.equal(6);
         });
         it("should be linear", function() {
@@ -79,23 +79,23 @@
             this.resistor10k = this.circuit.getElmByIdx(2);
             return this.resistor20k = this.circuit.getElmByIdx(6);
           });
-          return describe("components should have correct values", function() {
-            specify("Voltage Source should have correct voltage", function() {
+          return describe("components have correct values", function() {
+            specify("Voltage Source has correct voltage", function() {
               return this.voltageCompnt.volts.should.eql([0, 10]);
             });
-            specify("Voltage Source should have correct current", function() {
+            specify("Voltage Source has correct current", function() {
               return this.voltageCompnt.current.should.eql(0.0015);
             });
-            specify("10k Resistor should have correct voltage", function() {
+            specify("10k Resistor has correct voltage", function() {
               return this.resistor10k.volts.should.eql([10, 0]);
             });
-            specify("10k Resistor should have correct current", function() {
+            specify("10k Resistor has correct current", function() {
               return this.resistor10k.current.should.equal(0.001);
             });
-            specify("20k Resistor should have correct voltage", function() {
+            specify("20k Resistor has correct voltage", function() {
               return this.resistor20k.volts.should.eql([10, 0]);
             });
-            specify("20k Resistor should have correct current", function() {
+            specify("20k Resistor has correct current", function() {
               return this.resistor20k.current.should.equal(0.0005);
             });
             return it("0 bad nodes", function() {
@@ -104,7 +104,7 @@
           });
         });
       });
-      return describe("should updateCircuit", function() {
+      return describe("Running updateCircuit", function() {
         return before(function() {
           return this.circuit.updateCircuit();
         });

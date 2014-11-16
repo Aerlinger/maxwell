@@ -25,5 +25,5 @@ define ['cs!MathUtils'], (MathUtils) ->
       it "should return true for a value larger than 1e18", ->
         MathUtils.isInfinite(1.01e18).should.equal true
 
-      it "should not be infinite", ->
+      it "is not be infinite", ->
         MathUtils.isInfinite(1.99e17).should.equal false

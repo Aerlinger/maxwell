@@ -1,4 +1,4 @@
-[{"completion_status":"under_development",		"created_at":null,		"current_speed":66.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"spark-marx.txt",		"power_range":50.0,		"sim_speed":13.097415321081861,		"time_step":1.9999999999999998e-05,		"title":"Marx Generator",		"topic":"Spark Gap",		"updated_at":null,		"voltage_range":2000.0},		
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":66.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"spark-marx.txt",		"power_range":50.0,		"sim_speed":13.097415321081861,		"time_step":1.9999999999999998e-05,		"title":"Marx Generator",		"topic":"Spark Gap",		"updated_at":null,		"voltage_range":2000.0},
 {"sym":"r",		"x1":"160",		"y1":"144",		"x2":"256",		"y2":"144",		"flags":"0",		"params":["4000000.0"]},		
 {"sym":"c",		"x1":"256",		"y1":"144",		"x2":"256",		"y2":"256",		"flags":"0",		"params":["2.4E-8",		"0"]},		
 {"sym":"r",		"x1":"256",		"y1":"144",		"x2":"352",		"y2":"144",		"flags":"0",		"params":["1000000.0"]},		

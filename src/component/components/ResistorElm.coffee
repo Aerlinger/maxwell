@@ -20,8 +20,6 @@ define [
 ) ->
 # </DEFINE>
 
-  #/////////////////////////////////////////////////////////////////////////////
-  # Constructor ////////////////////////////////////////////////////////////////
   class ResistorElm extends CircuitComponent
 
     constructor: (xa, ya, xb, yb, f = 0, st = null) ->
@@ -103,6 +101,7 @@ define [
     stamp: (stamper) ->
       if @orphaned()
         console.warn "attempting to stamp an orphaned resistor"
+
       stamper.stampResistor @nodes[0], @nodes[1], @resistance
 
     # Todo replace this:

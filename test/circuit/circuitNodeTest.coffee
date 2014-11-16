@@ -9,7 +9,7 @@ define ['cs!CircuitNode'], (CircuitNode) ->
 
     it "Has the correct defaults"
 
-    it "should have position, links and an internal flag.", ->
+    it "has position, links and an internal flag.", ->
       @CircuitNode.x.should == 4
       @CircuitNode.y.should == 5
       @CircuitNode.intern.should == false

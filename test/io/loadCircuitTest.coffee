@@ -24,36 +24,36 @@ describe "CircuitLoader", ->
         done()
 
     describe "should load parameters", ->
-      it "should have correct completionStatus", ->
+      it "has correct completionStatus", ->
         @circuit.Params.completionStatus.should.equal "complete"
 
-      it "should have correct currentSpeed", ->
+      it "has correct currentSpeed", ->
         @circuit.Params.currentSpeed.should.equal 63.0
 
-      it "should have correct description", ->
+      it "has correct description", ->
         @circuit.Params.description.should.equal "A simple voltage divider circuit"
 
-      it "should have correct flags", ->
+      it "has correct flags", ->
         @circuit.Params.flags.should.equal 1
 
-      it "should have correct unique name", ->
+      it "has correct unique name", ->
         console.log @circuit.Params.name
         @circuit.Params.name.should.equal "voltdivide.txt"
 
-      it "should have correct power range", ->
+      it "has correct power range", ->
         @circuit.Params.powerRange.should.equal 62.0
 
-      it "should have correct simSpeed", ->
+      it "has correct simSpeed", ->
         @circuit.Params.simSpeed.should.equal 10.0
 
-      it "should have correct timeStep", ->
+      it "has correct timeStep", ->
         @circuit.Params.timeStep.should.equal 5.0e-6
 
-      it "should have correct title", ->
+      it "has correct title", ->
         @circuit.Params.title.should.equal "Voltage Divider"
 
-      it "should have correct topic", ->
+      it "has correct topic", ->
         @circuit.Params.topic.should.equal "Basics"
 
-      it "should have correct voltage_range", ->
+      it "has correct voltage_range", ->
         @circuit.Params.voltageRange.should.equal 10.0

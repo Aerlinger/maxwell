@@ -36,31 +36,31 @@ define [
     setPoints: ->
       super()
       @lead1 = DrawHelper.interpPoint(@point1, @point2, 1 - VoltageElm.circleSize / @dn)
-
-    draw: ->
-      @setBboxPt @point1, @point2, @circleSize
-      color = @setVoltageColor(@volts[0])
-      DrawHelper.drawThickLinePt @point1, @lead1, color
-      clock = @waveform is VoltageElm.WF_SQUARE and (@flags & VoltageElm.FLAG_CLOCK) isnt 0
-
-      if @waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR or clock
-        #Font f = new Font("SansSerif", 0, 12);
-        #g.setFont(f);
-        color = ((if @needsHighlight() then Settings.selectColor else Settings.whiteColor))
-
-        #this.setPowerColor(g, false);
-        v = @getVoltage()
-        s = DrawHelper.getShortUnitText(v, "V")
-        s = v + "V" if Math.abs(v) < 1 #showFormat.format(v)
-        s = "+" + s if @getVoltage() > 0
-        s = "Ant" if this instanceof AntennaElm
-        s = "CLK" if clock
-        @drawCenteredText s, @x2, @y2, true
-      else
-        @drawWaveform @point2
-      @drawPosts()
-      @curcount = @updateDotCount(-@current, @curcount)
-      @drawDots @point1, @lead1, @curcount  unless Circuit.dragElm is this
+#
+#    draw: ->
+#      @setBboxPt @point1, @point2, @circleSize
+#      color = @setVoltageColor(@volts[0])
+#      DrawHelper.drawThickLinePt @point1, @lead1, color
+#      clock = @waveform is VoltageElm.WF_SQUARE and (@flags & VoltageElm.FLAG_CLOCK) isnt 0
+#
+#      if @waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR or clock
+#        #Font f = new Font("SansSerif", 0, 12);
+#        #g.setFont(f);
+#        color = ((if @needsHighlight() then Settings.selectColor else Settings.whiteColor))
+#
+#        #this.setPowerColor(g, false);
+#        v = @getVoltage()
+#        s = DrawHelper.getShortUnitText(v, "V")
+#        s = v + "V" if Math.abs(v) < 1 #showFormat.format(v)
+#        s = "+" + s if @getVoltage() > 0
+#        s = "Ant" if this instanceof AntennaElm
+#        s = "CLK" if clock
+#        @drawCenteredText s, @x2, @y2, true
+#      else
+#        @drawWaveform @point2
+#      @drawPosts()
+#      @curcount = @updateDotCount(-@current, @curcount)
+#      @drawDots @point1, @lead1, @curcount  unless Circuit.dragElm is this
 
     getVoltageDiff: ->
       @volts[0]

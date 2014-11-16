@@ -34,7 +34,6 @@ define [
   CapacitorElm,
   InductorElm,
   CurrentElm
-
 ) ->
 # </DEFINE>
 
@@ -43,7 +42,7 @@ define [
   class CircuitSolver
 
     constructor: (@Circuit) ->
-      @timeStep = @Circuit.timeStep
+      @timeStep = @Circuit.timeStep()
       @scaleFactors = ArrayUtils.zeroArray(400)
       @reset()
       @Stamper = new MatrixStamper(@Circuit)
@@ -208,6 +207,8 @@ define [
       @circuitRowInfo = ArrayUtils.zeroArray @matrixSize
       @circuitPermute = ArrayUtils.zeroArray @matrixSize
 
+      vs = 0
+
       for i in [0...@matrixSize]
         @circuitRowInfo[i] = new RowInfo()
 
@@ -216,25 +217,25 @@ define [
       for circuitElm in @Circuit.getElements()
         circuitElm.stamp(@Stamper)
 
+      # Determine nodes that are unconnected
       closure = new Array(@Circuit.numNodes())
       closure[0] = true
+      tempclosure = new Array(@Circuit.numNodes())
+      changed = true
 
       while changed
         changed = false
-        i = 0
-        while i isnt @Circuit.numElements()
-          circuitElm = @Circuit.getElm(i)
+        for i in [0...@Circuit.numElements()]
+          circuitElm = @Circuit.getElmByIdx(i)
 
-          # Loop through all ce's nodes to see if theya are connected to otehr nodes not in closure
-          j = 0
-          while j < circuitElm.getPostCount()
+          # Loop through all ce's nodes to see if they are connected to other nodes not in closure
+          for j in [0...circuitElm.getPostCount()]
             unless closure[circuitElm.getNode(j)]
               if circuitElm.hasGroundConnection(j)
                 changed = true
                 closure[circuitElm.getNode(j)] = true
               continue
-            k = 0
-            while k isnt circuitElm.getPostCount()
+            for k in [0..circuitElm.getPostCount()]
               continue if j is k
               kn = circuitElm.getNode(k)
               if circuitElm.getConnection(j, k) and not closure[kn]
@@ -248,7 +249,7 @@ define [
 
         # connect unconnected nodes
         for i in [0...@Circuit.numNodes()]
-          if not closure[i] and not @Circuit.getCircuitNode(i).intern
+          if not closure[i] and not @Circuit.nodeList[i].intern
             @Stamper.stampResistor 0, i, 1e8
             closure[i] = true
             changed = true
@@ -291,8 +292,6 @@ define [
 #              @Circuit.halt "Capacitor loop with no resistance!", ce
 #              return
 
-#      iter = 0
-#      while iter < @matrixSize
       for iter in [0...@matrixSize]
         qm = -1
         qp = -1
@@ -300,7 +299,6 @@ define [
 
         re = @circuitRowInfo[iter]
         if re.lsChanges or re.dropRow or re.rsChanges
-#          iter++
           continue
 
         rsadd = 0
@@ -324,14 +322,14 @@ define [
 
         if j is @matrixSize
           if qp is -1
-            # BUG: @circuitRowInfo[j] is undefined
+            # FIXME: @circuitRowInfo[j] is undefined in nonlinear circuits
             @circuitRowInfo[j].type
             @Circuit.halt "Matrix error qp", null
             return
 
           elt = @circuitRowInfo[qp]
           if qm is -1
-            # We found a row with only one nonzero entry, that value instanceof constant
+            # We found a row with only one nonzero entry, that value is constant
             k = 0
             while elt.type is RowInfo.ROW_EQUAL and k < 100
               # Follow the chain
@@ -341,11 +339,8 @@ define [
             if elt.type is RowInfo.ROW_EQUAL
               # break equal chains
               elt.type = RowInfo.ROW_NORMAL
-              # Todo, don't advance on continue
-#              iter++
               continue
             unless elt.type is RowInfo.ROW_NORMAL
-#              iter++
               continue
 
             elt.type = RowInfo.ROW_CONST
@@ -353,24 +348,24 @@ define [
             @circuitRowInfo[iter].dropRow = true
 
             #Todo: Checkbug!
+            console.error("iter = 0 # start over from scratch");
             iter = -1 # start over from scratch
 
           else if (@circuitRightSide[iter] + rsadd) is 0
             # we found a row with only two nonzero entries, and one
             # instanceof the negative of the other; the values are equal
-            unless elt.type is RowInfo.ROW_NORMAL
+            if elt.type != RowInfo.ROW_NORMAL
               qq = qm
               qm = qp
               qp = qq
               elt = @circuitRowInfo[qp]
-              unless elt.type is RowInfo.ROW_NORMAL
-                # we should follow the chain here, but this hardly ever happens so it's not worth worrying about
-#                iter++
+              if elt.type != RowInfo.ROW_NORMAL
+                # We should follow the chain here, but this hardly ever happens so it's not worth worrying about
+                console.error("Swap failed!")
                 continue
             elt.type = RowInfo.ROW_EQUAL
             elt.nodeEq = qm
             @circuitRowInfo[iter].dropRow = true
-#        iter++
 
 
       # find size of new matrix:
@@ -395,7 +390,7 @@ define [
           rowNodeEq = @circuitRowInfo[rowInfo.nodeEq]
           if rowNodeEq.type is RowInfo.ROW_CONST
 
-            # if something instanceof equal to a const, it's a const
+            # if something is equal to a const, it's a const
             rowInfo.type = rowNodeEq.type
             rowInfo.value = rowNodeEq.value
             rowInfo.mapCol = -1
@@ -409,13 +404,10 @@ define [
 
       ArrayUtils.zeroArray newRS
       ii = 0
-#      i = 0
-#      while i isnt @matrixSize
       for i in [0...@matrixSize]
         circuitRowInfo = @circuitRowInfo[i]
         if circuitRowInfo.dropRow
           circuitRowInfo.mapRow = -1
-#          i++
           continue
         newRS[ii] = @circuitRightSide[i]
         circuitRowInfo.mapRow = ii
@@ -427,7 +419,6 @@ define [
           else
             newMatx[ii][rowInfo.mapCol] += @circuitMatrix[i][j]
         ii++
-#        i++
 
       @circuitMatrix = newMatx
       @circuitRightSide = newRS
@@ -443,7 +434,6 @@ define [
       @circuitNeedsMap = true
       @analyzeFlag = false
 
-
       # if a matrix is linear, we can do the lu_factor here instead of needing to do it every frame
       unless @circuitNonLinear
         if !@luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
@@ -454,6 +444,7 @@ define [
     solveCircuit: ->
       if not @circuitMatrix? or @Circuit.numElements() is 0
         @circuitMatrix = null
+        console.log("Called solve circuit when circuit Matrix not initialized")
         return
 
       debugPrint = @dumpMatrix
@@ -522,7 +513,7 @@ define [
               @converged = false
               break
             if j < (@Circuit.numNodes() - 1)
-              circuitNode = @Circuit.getNode(j + 1)
+              circuitNode = @Circuit.nodeList[j + 1]
               for cn1 in circuitNode.links
                 cn1.elm.setNodeVoltage cn1.num, res
             else
@@ -539,8 +530,8 @@ define [
 
         @time += @timeStep
 
-        for scope in @Circuit.scopes
-          scope.timeStep()
+#        for scope in @Circuit.scopes
+#          scope.timeStep()
 
         timeEnd = (new Date()).getTime()
         lastIterTime = timeEnd
@@ -693,6 +684,10 @@ define [
     updateVoltageSource: (n1, n2, vs, voltage) ->
       vn = @Circuit.numNodes() + vs
       @Stamper.stampRightSide(vn, voltage)
+
+    getStamper: ->
+      return @Stamper
+
 
   return CircuitSolver
 

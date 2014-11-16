@@ -13,22 +13,22 @@ define [
       @Circuit = new Circuit()
       @capacitor = new CapacitorElm(100, 100, 100, 200, 0.1, [1e-9, 1.1])
 
-    it "should have correct defaults", ->
+    it "has correct defaults", ->
       @capacitor.capacitance.should.equal 1e-9
-      @capacitor.voltdiff.should.equal 1.1
+      @capacitor.voltDiff.should.equal 1.1
 
-    it "should have correct number of posts", ->
+    it "has correct number of posts", ->
       @capacitor.getPostCount().should.equal 2
       @capacitor.getInternalNodeCount().should.equal 0
 
-    it "should not have any internal voltage sources", ->
+    it "is not have any internal voltage sources", ->
       @capacitor.getVoltageSourceCount().should.equal 0
 
-    it "should have correct dump type", ->
+    it "has correct dump type", ->
       @capacitor.getDumpType().should.equal "c"
 
-    it "should have correct toString()", ->
-      @capacitor.toString().should.equal "Capacitor"
+    it "has correct toString()", ->
+      @capacitor.toString().should.equal "CapacitorElm"
 
     it "should be orphaned", ->
       @capacitor.orphaned().should.equal true
@@ -41,14 +41,14 @@ define [
       it "should get voltage correctly", ->
         @capacitor.getVoltageDiff().should.equal 0
 
-      it "should not be orphaned", ->
+      it "is not be orphaned", ->
         @capacitor.orphaned().should.equal false
 
       it "should be stampable", ->
-        @capacitor.stamp(@Circuit.Solver.Stamper)
+        @capacitor.stamp(@Circuit.Solver.getStamper())
 
       it "should be steppable", ->
-        @capacitor.doStep()
+        @capacitor.doStep(@Circuit.getStamper())
 
       it "should be drawable", ->
         #@capacitor.draw()

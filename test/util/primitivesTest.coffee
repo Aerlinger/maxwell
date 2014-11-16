@@ -71,11 +71,11 @@ define [
       congruentRect = new Rectangle(5, 6, 100, 150)
       @rect.equals(congruentRect).should.equal true
   
-    it "should not equal a rectangle of different dimension", ->
+    it "is not equal a rectangle of different dimension", ->
       congruentRect = new Rectangle(5, 6, 100, 151)
       @rect.equals(congruentRect).should.equal false
   
-    it "should not be able to detect points on its border", ->
+    it "is not be able to detect points on its border", ->
       @rect.contains(5, 6).should.equal true
       @rect.contains(106, 156).should.equal false
       @rect.contains(6, 6).should.equal true
@@ -85,7 +85,7 @@ define [
       @rect.contains(75, 75).should.equal true
       @rect.contains(4, 6).should.equal false
   
-    it "should not detect intersections with other rectangles with non-intersecting borders", ->
+    it "is not detect intersections with other rectangles with non-intersecting borders", ->
       inside_intersect = new Rectangle(40, 40, 20, 20)
       tl_intersect = new Rectangle(0, 0, 4, 5)
       tr_intersect = new Rectangle(106, 4, 100, 100)

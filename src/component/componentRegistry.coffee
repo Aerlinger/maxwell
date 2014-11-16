@@ -11,6 +11,7 @@ define [
   'cs!InductorElm',
   'cs!SparkGapElm',
   'cs!CurrentElm',
+  'cs!RailElm',
 
   'cs!Oscilloscope',
 ], (
@@ -25,6 +26,7 @@ define [
   InductorElm,
   SparkGapElm,
   CurrentElm,
+  RailElm,
 
   Oscilloscope
 ) ->
@@ -55,6 +57,7 @@ define [
       's':'SwitchElm'
       '187':'SparkGapElm'
       187:'SparkGapElm'
+      'R': 'RailElm'
 
 
     @ComponentDefs:
@@ -69,6 +72,7 @@ define [
       's': SwitchElm
       '187':SparkGapElm
       187:SparkGapElm
+      'R':RailElm
 
 
 

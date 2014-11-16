@@ -45,7 +45,7 @@
         it("should have correct elements", function() {
           return this.Circuit.getElements().should.eql([this.resistor, this.voltageSource, this.wire, this.voltageGround, this.resGround]);
         });
-        it("should not be orphaned", function() {
+        it("is not be orphaned", function() {
           this.wire.orphaned().should.equal(false);
           this.resGround.orphaned().should.equal(false);
           this.voltageGround.orphaned().should.equal(false);
@@ -56,7 +56,7 @@
           beforeEach(function(done) {
             return done();
           });
-          it("should not need remap", function() {});
+          it("is not need remap", function() {});
           it("should have 4 nodes", function() {});
           it("should be linear", function() {});
           return it("should have correct elements", function() {});
@@ -64,7 +64,7 @@
         return describe("after updating circuit", function() {
           beforeEach(function() {});
           it("should have 5 nodes", function() {});
-          return it("should not have any bad nodes", function() {});
+          return it("is not have any bad nodes", function() {});
         });
       });
     });

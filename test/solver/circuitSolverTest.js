@@ -16,14 +16,14 @@
           this.Solver.Circuit.should.equal(this.Circuit);
           return this.Circuit.Solver.should.equal(this.Solver);
         });
-        it("should have correct default values", function() {
+        it("has correct default values", function() {
           this.Solver.time.should.equal(0);
           this.Solver.converged.should.equal(true);
           this.Solver.circuitNonLinear.should.equal(false);
           this.Solver.subIterations === 5000;
           return this.Solver.analyzeFlag.should.equal(true);
         });
-        return it("should have empty default matrix values", function() {
+        return it("has empty default matrix values", function() {
           this.Solver.circuitMatrix.should.be.empty;
           this.Solver.circuitRightSide.should.be.empty;
           this.Solver.origMatrix.should.be.empty;

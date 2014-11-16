@@ -4,17 +4,18 @@
     console.log(Circuit);
     return describe("Circuit", function() {
       beforeEach(function() {
-        this.Circuit = new Circuit();
-        console.log("Loading circuit");
-        return console.log(this.Circuit);
+        return this.Circuit = new Circuit();
       });
       describe("on initialization", function() {
-        it("should have no errors", function() {
+        it("has no errors", function() {
           this.Circuit.stopMessage === null;
           return this.Circuit.stopElm === null;
         });
-        return it("should have correct initial state", function() {
+        it("has correct initial state", function() {
           return this.Circuit.getState() === State.RUN;
+        });
+        return it("has a default timestep", function() {
+          return this.Circuit.timeStep().should.equal(0.000005);
         });
       });
       describe("should observe", function() {
@@ -22,7 +23,7 @@
           return this.Circuit.getObservers().should === [];
         });
       });
-      describe("should have event listeners for", function() {
+      describe("has event listeners for", function() {
         specify("onMouseMove (x, y)", function() {});
         specify("onMouseDown (x, y)", function() {});
         return specify("onError (message)", function() {});
@@ -54,14 +55,14 @@
           return Circuit.ON_ERROR !== null;
         });
       });
-      describe("should have one", function() {
+      describe("has one", function() {
         describe("Canvas", function() {});
         it("has Solver", function() {
           return this.Circuit.Solver !== null;
         });
         return it("has Params Object", function() {});
       });
-      describe("should have collection of", function() {
+      describe("has collection of", function() {
         specify("Voltage Sources", function() {
           return this.Circuit.getVoltageSources().should.be.empty;
         });

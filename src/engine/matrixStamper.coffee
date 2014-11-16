@@ -19,9 +19,7 @@ define [
       @stampMatrix vn, n2, -coef
 
 
-    ###
-    stamp independent voltage source #vs, from n1 to n2, amount v
-    ###
+    # stamp independent voltage source #vs, from n1 to n2, amount v
     stampVoltageSource: (n1, n2, vs, v) ->
       vn = @Circuit.numNodes() + vs
       @stampMatrix vn, n1, -1

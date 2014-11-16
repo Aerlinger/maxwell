@@ -228,10 +228,10 @@ require([
     });
   });
 
-  runTests();
+  //runTests();
 });
 
-
+//
 function runTests() {
   "use strict";
 

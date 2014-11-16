@@ -57,7 +57,7 @@ define [
       @setPoints()
       @allocNodes()
       @initBoundingBox()
-      @component_id = (new Date()).getTime()
+      @component_id = MathUtils.getRand(100000000) + (new Date()).getTime()
 
       console.log @dump()
 
@@ -466,10 +466,8 @@ define [
       @Circuit.Params
 
     timeStep: ->
-      ts = @Circuit.timeStep()
+      @Circuit.timeStep()
 
-      console.log "ts = #{ts}"
-      return ts
 
 
 

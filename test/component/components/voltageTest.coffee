@@ -2,9 +2,11 @@
 define [
   'cs!VoltageElm',
   'cs!Circuit',
+  'cs!MatrixStamper',
 ], (
   VoltageElm,
   Circuit,
+  MatrixStamper
 ) ->
 # </DEFINE>
 
@@ -13,10 +15,11 @@ define [
   describe "Voltage Component", ->
     beforeEach () ->
       @Circuit = new Circuit()
+      @Stamper = new MatrixStamper(@Circuit)
       @voltageElm = new VoltageElm(100, 100, 100, 200, 0, [0, 40, 5, 1, 90, .45])
 
 
-    it "should have correct defaults", ->
+    it "has correct defaults", ->
       @voltageElm.waveform.should.equal VoltageElm.WF_DC
       @voltageElm.frequency.should.equal 40
       @voltageElm.maxVoltage.should.equal 5
@@ -24,17 +27,17 @@ define [
       @voltageElm.phaseShift.should.equal 90
       @voltageElm.dutyCycle.should.equal 0.45
 
-    it "should have correct number of posts", ->
+    it "has correct number of posts", ->
       @voltageElm.getPostCount().should.equal 2
       @voltageElm.getInternalNodeCount().should.equal 0
 
-    it "should not have any internal voltage sources", ->
+    it "is not have any internal voltage sources", ->
       @voltageElm.getVoltageSourceCount().should.equal 1
 
-    it "should have correct dump type", ->
+    it "has correct dump type", ->
       @voltageElm.getDumpType().should.equal "v"
 
-    it "should have correct toString()", ->
+    it "has correct toString()", ->
       @voltageElm.toString().should.equal "VoltageElm"
 
     it "should be orphaned", ->
@@ -48,11 +51,11 @@ define [
       it "should get voltage correctly", ->
         @voltageElm.getVoltage().should.equal 6
 
-      it "should not be orphaned", ->
+      it "is not be orphaned", ->
         @voltageElm.orphaned().should.equal false
 
       it "should be stampable", ->
-        @voltageElm.stamp()
+        @voltageElm.stamp(@Stamper)
 
       it "should be steppable", ->
         @voltageElm.doStep()

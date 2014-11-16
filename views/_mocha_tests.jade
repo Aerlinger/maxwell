@@ -2,3 +2,11 @@
   .span12
     #mocha
     a#run_tests(href="") Rerun Tests
+
+    script
+      mocha.setup('bdd');
+
+      require([], function () {
+      "use strict";
+        mocha.run();
+      });

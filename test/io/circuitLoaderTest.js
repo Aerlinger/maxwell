@@ -15,38 +15,38 @@
           return this.circuit.numElements().should.equal(7);
         });
         return describe("should load parameters", function() {
-          it("should have correct completionStatus", function() {
+          it("has correct completionStatus", function() {
             return this.circuit.Params.completionStatus.should.equal("complete");
           });
-          it("should have correct currentSpeed", function() {
+          it("has correct currentSpeed", function() {
             return this.circuit.Params.currentSpeed.should.equal(63.0);
           });
-          it("should have correct description", function() {
+          it("has correct description", function() {
             return this.circuit.Params.description.should.equal("A simple voltage divider circuit");
           });
-          it("should have correct flags", function() {
+          it("has correct flags", function() {
             return this.circuit.Params.flags.should.equal(1);
           });
-          it("should have correct unique name", function() {
+          it("has correct unique name", function() {
             console.log(this.circuit.Params.name);
             return this.circuit.Params.name.should.equal("voltdivide.txt");
           });
-          it("should have correct power range", function() {
+          it("has correct power range", function() {
             return this.circuit.Params.powerRange.should.equal(62.0);
           });
-          it("should have correct simSpeed", function() {
+          it("has correct simSpeed", function() {
             return this.circuit.Params.simSpeed.should.equal(10.0);
           });
-          it("should have correct timeStep", function() {
+          it("has correct timeStep", function() {
             return this.circuit.Params.timeStep.should.equal(5.0e-6);
           });
-          it("should have correct title", function() {
+          it("has correct title", function() {
             return this.circuit.Params.title.should.equal("Voltage Divider");
           });
-          it("should have correct topic", function() {
+          it("has correct topic", function() {
             return this.circuit.Params.topic.should.equal("Basics");
           });
-          return it("should have correct voltage_range", function() {
+          return it("has correct voltage_range", function() {
             return this.circuit.Params.voltageRange.should.equal(10.0);
           });
         });

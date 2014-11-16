@@ -30,13 +30,13 @@
           circuitElm = new CircuitComponent(0, 3, 0, 4, 5);
           return circuitElm.flags.should.equal(5);
         });
-        it("should have component_id", function() {
+        it("has component_id", function() {
           return this.circuitElement.component_id > 0;
         });
         it("should equal itself", function() {
           return this.circuitElement.equal_to(this.circuitElement).should.equal(true);
         });
-        it("should not equal another component", function() {
+        it("is not equal another component", function() {
           return this.circuitElement.equal_to(new CircuitComponent()).should.equal(false);
         });
         it("creates default parameters", function() {
@@ -94,7 +94,7 @@
         it("Has no internal nodes", function() {
           return this.circuitElement.getInternalNodeCount().should.equal(0);
         });
-        it("should have correct dump type", function() {
+        it("has correct dump type", function() {
           return this.circuitElement.dump().should.equal('0 10 10 13 14 0');
         });
         specify("base elements should be linear by default", function() {

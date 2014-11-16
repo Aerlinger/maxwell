@@ -53,7 +53,7 @@ define [
     ###
     @createCircuitFromJSON: (circuitFileName, onComplete = null) ->
       $.getJSON circuitFileName, (jsonData) =>
-        circuit = new Circuit(context)
+        circuit = new Circuit()
         CircuitLoader.parseJSON(circuit, jsonData)
 
         onComplete?(circuit)

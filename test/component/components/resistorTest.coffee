@@ -15,10 +15,10 @@ define [
       @Circuit = new Circuit()
       @resistor = new ResistorElm(100, 300, 100, 200, 0, [50])
 
-    it "should have correct resistance", ->
+    it "has correct resistance", ->
       @resistor.resistance.should.equal 50
 
-    it "should not have any internal voltage sources", ->
+    it "is not have any internal voltage sources", ->
       @resistor.getVoltageSourceCount().should.equal 0
 
     it "calculates current when voltage is applied", ->

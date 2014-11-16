@@ -27,14 +27,14 @@ define [
         @Solver.Circuit.should.equal @Circuit
         @Circuit.Solver.should.equal @Solver
 
-      it "should have correct default values", ->
+      it "has correct default values", ->
         @Solver.time.should.equal 0
         @Solver.converged.should.equal true
         @Solver.circuitNonLinear.should.equal false
         @Solver.subIterations == 5000
         @Solver.analyzeFlag.should.equal true
 
-      it "should have empty default matrix values", ->
+      it "has empty default matrix values", ->
         @Solver.circuitMatrix.should.be.empty
         @Solver.circuitRightSide.should.be.empty
         @Solver.origMatrix.should.be.empty

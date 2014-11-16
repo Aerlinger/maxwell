@@ -6,22 +6,22 @@
         this.Circuit = new Circuit();
         return this.capacitor = new CapacitorElm(100, 100, 100, 200, 0.1, [1e-9, 1.1]);
       });
-      it("should have correct defaults", function() {
+      it("has correct defaults", function() {
         this.capacitor.capacitance.should.equal(1e-9);
-        return this.capacitor.voltdiff.should.equal(1.1);
+        return this.capacitor.voltDiff.should.equal(1.1);
       });
-      it("should have correct number of posts", function() {
+      it("has correct number of posts", function() {
         this.capacitor.getPostCount().should.equal(2);
         return this.capacitor.getInternalNodeCount().should.equal(0);
       });
-      it("should not have any internal voltage sources", function() {
+      it("is not have any internal voltage sources", function() {
         return this.capacitor.getVoltageSourceCount().should.equal(0);
       });
-      it("should have correct dump type", function() {
+      it("has correct dump type", function() {
         return this.capacitor.getDumpType().should.equal("c");
       });
-      it("should have correct toString()", function() {
-        return this.capacitor.toString().should.equal("Capacitor");
+      it("has correct toString()", function() {
+        return this.capacitor.toString().should.equal("CapacitorElm");
       });
       it("should be orphaned", function() {
         return this.capacitor.orphaned().should.equal(true);
@@ -33,14 +33,14 @@
         it("should get voltage correctly", function() {
           return this.capacitor.getVoltageDiff().should.equal(0);
         });
-        it("should not be orphaned", function() {
+        it("is not be orphaned", function() {
           return this.capacitor.orphaned().should.equal(false);
         });
         it("should be stampable", function() {
-          return this.capacitor.stamp(this.Circuit.Solver.Stamper);
+          return this.capacitor.stamp(this.Circuit.Solver.getStamper());
         });
         it("should be steppable", function() {
-          return this.capacitor.doStep();
+          return this.capacitor.doStep(this.Circuit.getStamper());
         });
         it("should be drawable", function() {});
         return it("should setPoints", function() {

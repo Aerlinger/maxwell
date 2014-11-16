@@ -16,24 +16,24 @@ define [
       @groundElm = new GroundElm(100, 100, 100, 200, 0, [])
 
 
-    it "should have correct defaults", ->
+    it "has correct defaults", ->
       @groundElm.x1 == 100
       @groundElm.y1 == 100
       @groundElm.x2 == 100
       @groundElm.y2 == 200
       @groundElm.flags = 0
 
-    it "should have correct number of posts", ->
+    it "has correct number of posts", ->
       @groundElm.getPostCount().should.equal 1
       @groundElm.getInternalNodeCount().should.equal 0
 
-    it "should not have any internal voltage sources", ->
+    it "is not have any internal voltage sources", ->
       @groundElm.getVoltageSourceCount().should.equal 1
 
-    it "should have correct dump type", ->
+    it "has correct dump type", ->
       @groundElm.getDumpType().should.equal "g"
 
-    it "should have correct toString()", ->
+    it "has correct toString()", ->
       @groundElm.toString().should.equal "GroundElm"
 
     it "should be orphaned", ->
@@ -43,7 +43,7 @@ define [
       beforeEach () ->
         @Circuit.solder(@groundElm)
 
-      it "should not be orphaned", ->
+      it "is not be orphaned", ->
         @groundElm.orphaned().should.equal false
 
       it "should be stampable", ->

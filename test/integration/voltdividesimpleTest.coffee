@@ -42,30 +42,30 @@ define [
       it "valid right side", ->
         @circuit.Solver.circuitRightSide.should.eql []
 
-      it "should need map", ->
+      it "Circuit Solver should need map", ->
         @circuit.Solver.circuitNeedsMap.should.equal true
 
-      it "correct voltage sources", ->
+      it "has correct voltage sources", ->
         voltageSources = "VoltageElm,WireElm,WireElm,WireElm,WireElm"
         @circuit.getVoltageSources().toString().should.equal voltageSources
 
       it "current rowInfos", ->
         rowInfo = @circuit.Solver.circuitRowInfo
-        rowInfo[0].toString().should.equal "RowInfo: 1 0 -1 -1 10 false false true"
-        rowInfo[1].toString().should.equal "RowInfo: 1 0 -1 -1 10 false false true"
-        rowInfo[2].toString().should.equal "RowInfo: 1 0 -1 -1 0 false false true"
-        rowInfo[3].toString().should.equal "RowInfo: 1 0 -1 -1 10 false false true"
-        rowInfo[4].toString().should.equal "RowInfo: 1 0 -1 -1 0 false false true"
-        rowInfo[5].toString().should.equal "RowInfo: 1 6 -1 -1 0.0015 false false true"
-        rowInfo[6].toString().should.equal "RowInfo: 1 0 -1 -1 0.0015 false false true"
-        rowInfo[7].toString().should.equal "RowInfo: 1 0 -1 -1 -0.0015 false false true"
-        rowInfo[8].toString().should.equal "RowInfo: 1 0 -1 -1 0.0005 false false true"
-        rowInfo[9].toString().should.equal "RowInfo: 1 0 -1 -1 -0.0005 false false true"
+        rowInfo[0].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true"
+        rowInfo[1].toString().should.equal "         RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true"
+        rowInfo[2].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0, rsChanges: false, lsChanges: false, dropRow: true"
+        rowInfo[3].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, false false true"
+        rowInfo[4].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0, false false true"
+        rowInfo[5].toString().should.equal "RowInfo: type: 1, nodeEq: 6, mapCol: -1, mapRow: -1, value: 0.0015, false false true"
+        rowInfo[6].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0.0015, false false true"
+        rowInfo[7].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: -0.0015, false false true"
+        rowInfo[8].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0.0005, rsChanges: false, lsChanges: false, dropRow: true"
+        rowInfo[9].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: -0.0005, rsChanges: false, lsChanges: false, dropRow: true"
 
       it "10 elements in circuitRowInfo", ->
         @circuit.Solver.circuitRowInfo.length.should.equal 10
 
-      it "correct nodes", ->
+      it "has correct nodes", ->
         @circuit.getNode(0).toString().should.equal "CircuitNode: 112 368 false [0 VoltageElm,0 WireElm]"
         @circuit.getNode(1).toString().should.equal "CircuitNode: 112 48 false [1 VoltageElm,0 WireElm]"
         @circuit.getNode(2).toString().should.equal "CircuitNode: 240 48 false [1 WireElm,0 ResistorElm,0 WireElm]"
@@ -73,7 +73,7 @@ define [
         @circuit.getNode(4).toString().should.equal "CircuitNode: 432 48 false [1 WireElm,0 ResistorElm]"
         @circuit.getNode(5).toString().should.equal "CircuitNode: 432 368 false [1 WireElm,1 ResistorElm]"
 
-      it "6 nodes", ->
+      it "has 6 nodes", ->
         @circuit.numNodes().should.equal 6
 
       it "should be linear", ->
@@ -87,31 +87,31 @@ define [
           @resistor10k = @circuit.getElmByIdx(2)
           @resistor20k = @circuit.getElmByIdx(6)
 
-        describe "components should have correct values", ->
+        describe "components have correct values", ->
 
-          specify "Voltage Source should have correct voltage", ->
+          specify "Voltage Source has correct voltage", ->
             @voltageCompnt.volts.should.eql [0, 10]
 
-          specify "Voltage Source should have correct current", ->
+          specify "Voltage Source has correct current", ->
             @voltageCompnt.current.should.eql 0.0015
 
-          specify "10k Resistor should have correct voltage", ->
+          specify "10k Resistor has correct voltage", ->
             @resistor10k.volts.should.eql [10, 0]
 
-          specify "10k Resistor should have correct current", ->
+          specify "10k Resistor has correct current", ->
             @resistor10k.current.should.equal 0.001
 
-          specify "20k Resistor should have correct voltage", ->
+          specify "20k Resistor has correct voltage", ->
             @resistor20k.volts.should.eql [10, 0]
 
-          specify "20k Resistor should have correct current", ->
+          specify "20k Resistor has correct current", ->
             @resistor20k.current.should.equal 0.0005
 
           it "0 bad nodes", ->
             @circuit.findBadNodes().length.should.equal 0
 
 
-    describe "should updateCircuit", ->
+    describe "Running updateCircuit", ->
       before () ->
         @circuit.updateCircuit()
 

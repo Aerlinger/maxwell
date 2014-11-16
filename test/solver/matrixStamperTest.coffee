@@ -16,8 +16,8 @@ define [
 
     before () ->
       @Circuit = new Circuit()
-      @CircuitSolver = new CircuitSolver()
-      @MatrixStamper = new MatrixStamper()
+      @CircuitSolver = new CircuitSolver(@Circuit)
+      @MatrixStamper = new MatrixStamper(@Circuit)
 
     it "should stamp VCVS", ->
 

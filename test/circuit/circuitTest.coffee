@@ -7,23 +7,24 @@ define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
   describe "Circuit", ->
     beforeEach () ->
       @Circuit = new Circuit()
-      console.log "Loading circuit"
-      console.log @Circuit
 
     describe "on initialization", ->
-      it "should have no errors", ->
+      it "has no errors", ->
         @Circuit.stopMessage == null
         @Circuit.stopElm == null
 
-      it "should have correct initial state", ->
+      it "has correct initial state", ->
         @Circuit.getState() == State.RUN     # Run, Pause, Edit
+
+      it "has a default timestep", ->
+        @Circuit.timeStep().should.equal 0.000005
 
 
     describe "should observe", ->
       specify "UIContext", ->
         @Circuit.getObservers().should == []
 
-    describe "should have event listeners for", ->
+    describe "has event listeners for", ->
       specify "onMouseMove (x, y)", ->
 
       specify "onMouseDown (x, y)", ->
@@ -59,7 +60,7 @@ define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
         Circuit.ON_ERROR != null
 
 
-    describe "should have one", ->
+    describe "has one", ->
       describe "Canvas", ->
 
       it "has Solver", ->
@@ -68,7 +69,7 @@ define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
       it "has Params Object", ->
 
 
-    describe "should have collection of", ->
+    describe "has collection of", ->
       specify "Voltage Sources", ->
         @Circuit.getVoltageSources().should.be.empty
 
