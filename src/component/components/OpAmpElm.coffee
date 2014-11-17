@@ -54,9 +54,9 @@ define [
       if st and st.length > 0
         st = st.split(" ")  if typeof st is "string"
         try
-          @maxOut = parseFloat(st[0])
-          @minOut = parseFloat(st[1])
-          @gbw = parseFloat(st[2])
+          @maxOut ||= parseFloat(st[0])
+          @minOut ||= parseFloat(st[1])
+          @gbw ||= parseFloat(st[2])
 
       @noDiagonal = true
       @setSize(if (f & OpAmpElm.FLAG_SMALL) isnt 0 then 1 else 2)
@@ -101,7 +101,7 @@ define [
       @volts[2] * @current
 
     setSize: (s) ->
-      console.log("s = #{s}")
+#      console.log("s = #{s}")
       @opsize = s
       @opheight = 8 * s
       @opwidth = 13 * s
@@ -161,7 +161,7 @@ define [
       arr[5] = "range = " + DrawHelper.getVoltageText(@minOut) + " to " + CircuitComponent.getVoltageText(@maxOut)
 
     stamp: (stamper) ->
-      console.log("\nStamping OpAmpElm")
+#      console.log("\nStamping OpAmpElm")
       vn = @Circuit.numNodes() + @voltSource
       stamper.stampNonLinear vn
       stamper.stampMatrix @nodes[2], vn, 1

@@ -102,7 +102,7 @@ define [
 #      if Settings.SPEED is 0
 #        return 0
 #      sim_speed = @Circuit.simSpeed()
-      sim_speed = 50
+      sim_speed = 80
       return 0.1 * Math.exp((sim_speed - 61.0) / 24.0)
 
 
@@ -156,9 +156,6 @@ define [
         postCount = circuitElm.getPostCount()
 
         # allocate a node for each post and match postCount to nodes
-#        console.log("----------------------------------------------------");
-
-
         for j in [0...postCount]
           postPt = circuitElm.getPost(j)
 
@@ -177,8 +174,6 @@ define [
 
           console.log("NUM NODES: #{i} " + @Circuit.numNodes())
 
-#          k = Math.max(k, @Circuit.numNodes())
-
           if k is @Circuit.numNodes()
             cn = new CircuitNode()
             cn.x = postPt.x
@@ -189,19 +184,15 @@ define [
             cn.links.push circuitNodeLink
             circuitElm.setNode j, @Circuit.numNodes()
             @Circuit.addCircuitNode cn
-
-#            console.log("j = #{j} (k=#{k})")
           else
             cnl = new CircuitNodeLink()
             cnl.num = j
             cnl.elm = circuitElm
-            @Circuit.getNode(k).links.push circuitNodeLink
+            @Circuit.getNode(k).links.push cnl
             circuitElm.setNode(j, k)
             # If it's the ground node, make sure the node voltage is 0, because it may not get set later.
             if k is 0
               circuitElm.setNodeVoltage(j, 0)
-
-#            console.log("j2 = #{j}, (k=#{k})")
 
         for j in [0...internalNodeCount]
           cn = new CircuitNode(null, null, true)
@@ -209,7 +200,6 @@ define [
           cnl.num = j + postCount
           cnl.elm = circuitElm
           cn.links.push cnl
-          console.log("circuitNodeLink.num = #{circuitNodeLink.num}")
           circuitElm.setNode cnl.num, @Circuit.numNodes()
           @Circuit.addCircuitNode cn
 
@@ -281,29 +271,30 @@ define [
 
         # connect unconnected nodes
         for i in [0...@Circuit.numNodes()]
-          if not closure[i] and not @Circuit.nodeList[i].intern
+          if !closure[i] and !@Circuit.nodeList[i].intern
             console.warn("Node #{i} unconnected!")
             @Stamper.stampResistor 0, i, 1e8
             closure[i] = true
             changed = true
             break
 
+
+      # Check paths:
       for i in [0...@Circuit.numElements()]
         ce = @Circuit.getElmByIdx(i)
         if ce instanceof InductorElm
           fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
 
-#          # try findPath with maximum depth of 5, to avoid slowdown
+          # try findPath with maximum depth of 5, to avoid slowdown
           if not fpi.findPath(ce.getNode(0), 5) and not fpi.findPath(ce.getNode(0))
             ce.reset()
 
-#        # look for current sources with no current path
+        # look for current sources with no current path
         if ce instanceof CurrentElm
           fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
           unless fpi.findPath(ce.getNode(0))
             @Circuit.halt "No path for current source!", ce
             return
-#
         # Look for voltage source loops:
         if (ce instanceof VoltageElm and ce.getPostCount() is 2) or ce instanceof WireElm
           console.log("Examining Loop: #{ce.dump()}")
@@ -324,40 +315,34 @@ define [
               @Circuit.halt "Capacitor loop with no resistance!", ce
               return
 
-      for iter in [0...@matrixSize]
+      # Simplify the matrix to improve performance
+      for i in [0...@matrixSize]
         qm = -1
         qp = -1
         qv = 0
 
-        re = @circuitRowInfo[iter]
+        re = @circuitRowInfo[i]
         if re.lsChanges or re.dropRow or re.rsChanges
           continue
 
         rsadd = 0
-#        console.log("Start iteration")
+
         # look for rows that can be removed
         for j in [0...@matrixSize]
-          q = @circuitMatrix[iter][j]
+          q = @circuitMatrix[i][j]
           # *
           if @circuitRowInfo[j].type is RowInfo.ROW_CONST
             # Keep a running total of const values that have been removed already
             rsadd -= @circuitRowInfo[j].value * q
-
-#            console.log("rsadd -= @circuitRowInfo[j].value * matrix_ij =", @circuitRowInfo[j].value * q)
             continue
-          # *
           if q is 0
-#            console.log("q = 0")
             continue
           if qp is -1
             qp = j
             qv = q
-
-#            console.log("qv = #{qv}, qp = #{qp}")
             continue
           if qm is -1 and (q is -qv)
             qm = j
-#            console.log("qm = #{qm}")
             continue
           break
 
@@ -376,7 +361,7 @@ define [
             ArrayUtils.printArray @circuitRightSide
             console.log("Sim speed: #{@getIterCount()}")
             console.log("Current speed: #{@Circuit.currentSpeed()}")
-            console.log(iter)
+            console.log(i)
             console.log("ROWINFO: ")
             console.log(@circuitRowInfo)
             console.log("------------------------------------------------")
@@ -400,13 +385,13 @@ define [
               continue
 
             elt.type = RowInfo.ROW_CONST
-            elt.value = (@circuitRightSide[iter] + rsadd) / qv
-            @circuitRowInfo[iter].dropRow = true
+            elt.value = (@circuitRightSide[i] + rsadd) / qv
+            @circuitRowInfo[i].dropRow = true
 
             console.error("iter = 0 # start over from scratch");
-            iter = -1 # start over from scratch
+            i = -1 # start over from scratch
 
-          else if (@circuitRightSide[iter] + rsadd) is 0
+          else if (@circuitRightSide[i] + rsadd) is 0
             # We found a row with only two nonzero entries, and one is the negative of the other -> the values are equal
             if elt.type != RowInfo.ROW_NORMAL
               qq = qm
@@ -419,7 +404,7 @@ define [
                 continue
             elt.type = RowInfo.ROW_EQUAL
             elt.nodeEq = qm
-            @circuitRowInfo[iter].dropRow = true
+            @circuitRowInfo[i].dropRow = true
 
 
       # find size of new matrix:
@@ -493,6 +478,23 @@ define [
         if !@luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
           @Circuit.halt "Singular matrix in linear circuit!", null
           return
+
+      # For debugging only:
+      console.log("Frame 0 Dump: ----------------------------------")
+      console.log("Circuit Matrix size: #{@circuitMatrixSize}")
+      console.log("Circuit Matrix size: #{@matrixSize}")
+      console.log("Circuit Matrix:")
+      ArrayUtils.printArray @circuitMatrix
+      console.log("Circuit Permute:")
+      ArrayUtils.printArray @circuitPermute
+      console.log("Circuit Right Side:")
+      ArrayUtils.printArray @circuitRightSide
+      console.log("Sim speed: #{@getIterCount()}")
+      console.log("Current speed: #{@Circuit.currentSpeed()}")
+      console.log(i)
+      console.log("ROWINFO: ")
+      console.log(@circuitRowInfo)
+      console.log("------------------------------------------------")
 
 
     solveCircuit: ->

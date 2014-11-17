@@ -19,6 +19,8 @@ define [
 
     fillCircle: (x, y, radius, lineWidth=Settings.LINE_WIDTH, fillColor='#FF0000', lineColor="#000000") ->
       return if !@context
+
+      orig_linewidth = @context.lineWidth
       @context.fillStyle = fillColor
       @context.strokeStyle = lineColor
       @context.beginPath()
@@ -27,9 +29,11 @@ define [
       @context.stroke()
       @context.fill()
       @context.closePath()
+      @context.lineWidth = orig_linewidth
 
     drawCircle: (x, y, radius, lineWidth=Settings.LINE_WIDTH, lineColor="#000000") ->
       return if !@context
+      orig_linewidth = @context.lineWidth
       @context.strokeStyle = lineColor
       @context.beginPath()
       @context.lineWidth = lineWidth
@@ -37,6 +41,7 @@ define [
       @context.stroke()
 #      @context.fill()
       @context.closePath()
+      @context.lineWidth = orig_linewidth
 
     drawThickLinePt: (pa, pb, color) ->
       @drawThickLine pa.x, pa.y, pb.x, pb.y, color

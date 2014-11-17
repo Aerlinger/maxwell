@@ -26,7 +26,7 @@ CapacitorElm
 
     findPath: (n1, depth) ->
       if n1 is @dest
-#        console.log("n1 is @dest")
+        console.log("n1 is @dest")
         return true
       if (depth-- is 0)
         return false
@@ -39,28 +39,30 @@ CapacitorElm
 
       for ce in @elementList
         if ce is @firstElm
+          console.log("ce is @firstElm")
           continue
-        if (ce instanceof CurrentElm) and (@type is FindPathInfo.INDUCT)
+        if (ce instanceof CurrentElm) and (@type is Pathfinder.INDUCT)
           continue
         if @type is Pathfinder.VOLTAGE
           if !(ce.isWire() or ce instanceof VoltageElm)
             console.log("type == VOLTAGE")
             continue
         if @type is Pathfinder.SHORT and !ce.isWire()
+          console.log("(type == SHORT && !ce.isWire())");
           continue
         if (@type is Pathfinder.CAP_V)
           if !(ce.isWire() or ce instanceof CapacitorElm or ce instanceof VoltageElm)
+            console.log("if !(ce.isWire() or ce instanceof CapacitorElm or ce instanceof VoltageElm)")
             continue
 
         if n1 is 0
           # Look for posts which have a ground connection. Our path can go through ground!
           for j in [0...ce.getPostCount()]
             if ce.hasGroundConnection(j) and @findPath(ce.getNode(j), depth)
-#              console.log(ce + " has ground (n1 is 0)");
+              console.log(ce + " has ground (n1 is 0)");
               @used[n1] = false
               return true
 
-        j = 0
         for j in [0...ce.getPostCount()]
           console.log("get post " + ce.dump() + " " + ce.getNode(j));
           if ce.getNode(j) is n1

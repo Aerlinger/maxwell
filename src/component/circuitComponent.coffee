@@ -145,7 +145,6 @@ define [
       @lead1 = DrawHelper.interpPoint(@point1, @point2, (@dn - len) / (2 * @dn));
       @lead2 = DrawHelper.interpPoint(@point1, @point2, (@dn + len) / (2 * @dn));
 
-      console.log("CalcLeads: " + @lead1 + ", " + @lead2);
 
     # TODO: Validate consistency
     updateDotCount: (cur, cc) ->
@@ -386,8 +385,6 @@ define [
 
 
     drawDots: (point1 = @point1, point2 = @point2, renderContext) =>
-      console.log(@dump())
-      console.log("Current: " + @current)
       return if @Circuit?.isStopped() or @current is 0
 
       dx = point2.x - point1.x
@@ -404,9 +401,6 @@ define [
 
       newPos = @curcount
 
-      console.log("Curcount: " + @curcount)
-
-#      console.log(@curcount)
       while newPos < dn
         x0 = point1.x + newPos * dx / dn
         y0 = point1.y + newPos * dy / dn

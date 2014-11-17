@@ -217,13 +217,13 @@ require([
         "use strict";
         console.log("Loading: " + circuitFileName);
 
-        new CircuitCanvas(circuit, canvas);
+        new CircuitCanvas(circuit, canvas, canvas.width(), canvas.height());
 
         circuit.updateCircuit();
 
-        //setInterval(function () {
-        //  circuit.updateCircuit();
-        //}, 0);
+        setInterval(function () {
+          circuit.updateCircuit();
+        }, 0);
       });
     } else {
       console.error("No circuit definition provided");

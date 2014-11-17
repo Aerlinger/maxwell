@@ -31,8 +31,8 @@ define [
 
   class CircuitCanvas extends Observer
 
-    constructor: (@Circuit, @CanvasJQueryElm) ->
-      @Context = new CanvasContext(@CanvasJQueryElm.get(0)) if @CanvasJQueryElm
+    constructor: (@Circuit, @CanvasJQueryElm, @width, @height) ->
+      @Context = new CanvasContext(@CanvasJQueryElm.get(0), @width, @height) if @CanvasJQueryElm
 
       @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
       @Circuit.addObserver Circuit.ON_RESET, @clear

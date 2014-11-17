@@ -11,14 +11,14 @@ define [], () ->
     constructor: ->
       @type = RowInfo.ROW_NORMAL
 
-      @nodeEq = null;
-      @mapCol = null;
-      @mapRow = null;
+      @nodeEq = 0;
+      @mapCol = 0;
+      @mapRow = 0;
 
-      @value = null;
-      @rsChanges = null;
-      @lsChanges = null;
-      @dropRow = null;
+      @value = 0;
+      @rsChanges = false;
+      @lsChanges = false;
+      @dropRow = false;
 
     toString: () ->
       "RowInfo: type: #{@type}, nodeEq: #{@nodeEq}, mapCol: #{@mapCol}, mapRow: #{@mapRow}, value: #{@value}, rsChanges: #{@rsChanges}, lsChanges: #{@lsChanges}, dropRow: #{@dropRow}"
