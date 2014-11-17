@@ -20,7 +20,7 @@ define [
     @colorScaleCount = 32
     @colorScale = []
 
-    EPSILON = 0.0001
+    EPSILON = 0.48
 
     # Creates the color scale
     @initializeColorScale: ->
@@ -56,8 +56,8 @@ define [
       g /= Math.sqrt gx*gx + gy*gy
 
       ptOut = new Point()
-      ptOut.x = Math.floor (1-f)*ptA.x + (f*ptB.x) + (g*gx+EPSILON)
-      ptOut.y = Math.floor (1-f)*ptA.y + (f*ptB.y) + (g*gy+EPSILON)
+      ptOut.x = Math.floor((1-f)*ptA.x + (f*ptB.x) + g*gx + EPSILON)
+      ptOut.y = Math.floor((1-f)*ptA.y + (f*ptB.y) + g*gy + EPSILON)
 
       return ptOut
 
@@ -68,10 +68,10 @@ define [
 
       ptOut1 = new Point()
       ptOut2 = new Point()
-      ptOut1.x = Math.floor (1-f)*ptA.x + (f*ptB.x) + (g*gx+EPSILON)
-      ptOut1.y = Math.floor (1-f)*ptA.y + (f*ptB.y) + (g*gy+EPSILON)
-      ptOut2.x = Math.floor (1-f)*ptA.x + (f*ptB.x) - (g*gx+EPSILON)
-      ptOut2.y = Math.floor (1-f)*ptA.y + (f*ptB.y) - (g*gy+EPSILON)
+      ptOut1.x = Math.floor((1-f)*ptA.x + (f*ptB.x) + g*gx + EPSILON)
+      ptOut1.y = Math.floor((1-f)*ptA.y + (f*ptB.y) + g*gy + EPSILON)
+      ptOut2.x = Math.floor((1-f)*ptA.x + (f*ptB.x) - g*gx + EPSILON)
+      ptOut2.y = Math.floor((1-f)*ptA.y + (f*ptB.y) - g*gy + EPSILON)
 
       return [ptOut1, ptOut2]
 

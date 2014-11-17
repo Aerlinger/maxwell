@@ -49,6 +49,7 @@ define [
 
 
     stamp: (stamper) ->
+      console.log("\nStamping Wire Elm")
       stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
   
     mustShowCurrent: ->

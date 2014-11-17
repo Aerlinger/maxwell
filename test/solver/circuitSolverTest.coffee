@@ -18,17 +18,17 @@ define [
 
     describe "on initialization", ->
 
-      it "should initiate solver", ->
+      it "initiates solver", ->
         @Solver != null
         @Solver.Stamper != null
         @Solver.scaleFactors.toString().should.equal ArrayUtils.zeroArray(400).toString()
 
-      it "solver should belong to @Circuit", ->
+      it "solver belongs to @Circuit", ->
         @Solver.Circuit.should.equal @Circuit
         @Circuit.Solver.should.equal @Solver
 
       it "has correct default values", ->
-        @Solver.time.should.equal 0
+        @Solver.Circuit.time.should.equal 0
         @Solver.converged.should.equal true
         @Solver.circuitNonLinear.should.equal false
         @Solver.subIterations == 5000

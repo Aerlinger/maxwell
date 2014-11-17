@@ -7,7 +7,8 @@ define [
   'cs!Point',
   'cs!CircuitComponent',
   'cs!Units',
-  'cs!MathUtils'
+  'cs!MathUtils',
+  'cs!ConsoleUtils'
 ], (
   Settings,
   DrawHelper,
@@ -58,7 +59,7 @@ define [
           @gbw = parseFloat(st[2])
 
       @noDiagonal = true
-      @setSize (if (f & OpAmpElm.FLAG_SMALL) isnt 0 then 1 else 2)
+      @setSize(if (f & OpAmpElm.FLAG_SMALL) isnt 0 then 1 else 2)
       @setGain()
 
 
@@ -100,6 +101,7 @@ define [
       @volts[2] * @current
 
     setSize: (s) ->
+      console.log("s = #{s}")
       @opsize = s
       @opheight = 8 * s
       @opwidth = 13 * s
@@ -107,13 +109,18 @@ define [
 
     setPoints: ->
       super()
-      if @dn > 150 and this is Circuit.dragElm
-        @setSize 2
+#      if @dn > 150 and this is Circuit.dragElm
+      @setSize 2
 
       if ww > @dn / 2
+#        console.log("1")
         ww = Math.floor(@dn / 2)
       else
+#        console.log("2")
+#        throw("error")
         ww = Math.floor(@opwidth)
+
+#      console.log("ww = #{ww}")
 
       @calcLeads ww * 2
       hs = Math.floor(@opheight * @dsign)
@@ -154,6 +161,7 @@ define [
       arr[5] = "range = " + DrawHelper.getVoltageText(@minOut) + " to " + CircuitComponent.getVoltageText(@maxOut)
 
     stamp: (stamper) ->
+      console.log("\nStamping OpAmpElm")
       vn = @Circuit.numNodes() + @voltSource
       stamper.stampNonLinear vn
       stamper.stampMatrix @nodes[2], vn, 1

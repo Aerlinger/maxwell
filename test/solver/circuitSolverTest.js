@@ -7,17 +7,17 @@
         return this.Solver = this.Circuit.Solver;
       });
       return describe("on initialization", function() {
-        it("should initiate solver", function() {
+        it("initiates solver", function() {
           this.Solver !== null;
           this.Solver.Stamper !== null;
           return this.Solver.scaleFactors.toString().should.equal(ArrayUtils.zeroArray(400).toString());
         });
-        it("solver should belong to @Circuit", function() {
+        it("solver belongs to @Circuit", function() {
           this.Solver.Circuit.should.equal(this.Circuit);
           return this.Circuit.Solver.should.equal(this.Solver);
         });
         it("has correct default values", function() {
-          this.Solver.time.should.equal(0);
+          this.Solver.Circuit.time.should.equal(0);
           this.Solver.converged.should.equal(true);
           this.Solver.circuitNonLinear.should.equal(false);
           this.Solver.subIterations === 5000;

@@ -6,6 +6,7 @@ define [], () ->
     constructor: (@x=0, @y=0, @intern=false, @links=[]) ->
 
     toString: () ->
-      "CircuitNode: #{@x} #{@y} #{@intern} [#{@links.toString()}]"
+#      "cn: [#{@x},\t#{@y}] #{@intern} [#{@links.toString()}]"
+      "cn: [#{@x},\t#{@y}] #{@intern}]"
 
   return CircuitNode

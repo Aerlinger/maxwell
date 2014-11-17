@@ -53,7 +53,7 @@ define [
 
       @flags = flags || @getDefaultFlags()
 
-      @setPoints()
+#      @setPoints()
       @allocNodes()
       @initBoundingBox()
       @component_id = MathUtils.getRand(100000000) + (new Date()).getTime()
@@ -138,11 +138,14 @@ define [
       if @dn < len or len is 0
         @lead1 = @point1
         @lead2 = @point2
+        console.log("Len: " + len);
         return
 
 #      console.log("Calc leads: #{@toString()}");
       @lead1 = DrawHelper.interpPoint(@point1, @point2, (@dn - len) / (2 * @dn));
       @lead2 = DrawHelper.interpPoint(@point1, @point2, (@dn + len) / (2 * @dn));
+
+      console.log("CalcLeads: " + @lead1 + ", " + @lead2);
 
     # TODO: Validate consistency
     updateDotCount: (cur, cc) ->

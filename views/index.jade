@@ -19,15 +19,14 @@ block body
 
         // Buggy/Not working: ---------------------------------------------------------
         // qp == -1 (Has one row with all zero values)
-        //canvas.maxwell(data-circuit="amp-invert", width="1600", height="3000")
         //canvas.maxwell(data-circuit="amp-follower", width="1600", height="3000")
         //canvas.maxwell(data-circuit="amp-noninvert", width="1600", height="3000")
 
-        // Pathfinder detects "Loop with no resistance)
+        // Pathfinder detects "Loop with no resistance"
         //canvas.maxwell(data-circuit="relaxosc", width="1600", height="3000")
         //canvas.maxwell(data-circuit="amp-schmitt", width="1600", height="3000")
         //canvas.maxwell(data-circuit="howland", width="1600", height="3000")
-        //canvas.maxwell(data-circuit="dcrestoration", width="1600", height="3000")  # DIODE!
+        canvas.maxwell(data-circuit="dcrestoration", width="1600", height="3000")
 
         // Needs testing/validation: -----------------------------------------------------
         //canvas.maxwell(data-circuit="zeneriv", width="1600", height="3000")
@@ -41,6 +40,7 @@ block body
 
         // Working: ------------------------------------------------------------
 
+        //canvas.maxwell(data-circuit="amp-invert", width="1600", height="3000")
         //canvas.maxwell(data-circuit="fullrectf", width="1600", height="3000")
         //canvas.maxwell(data-circuit="triangle", width="1600", height="3000")
         //canvas.maxwell(data-circuit="phaseshiftosc", width="1600", height="3000")

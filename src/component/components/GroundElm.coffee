@@ -52,7 +52,8 @@ define [
       @current = -currentVal
   
     stamp: (stamper) ->
-      console.log("vs: #{@voltSource}")
+      console.log("\nStamping Ground Elm")
+#      console.log("vs: #{@voltSource}")
       stamper.stampVoltageSource 0, @nodes[0], @voltSource, 0
   
     getVoltageDiff: ->

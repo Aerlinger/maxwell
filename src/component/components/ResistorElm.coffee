@@ -99,6 +99,7 @@ define [
       @ps4 = new Point(0, 0)
 
     stamp: (stamper) ->
+      console.log("\nStamping Resistor Elm")
       if @orphaned()
         console.warn "attempting to stamp an orphaned resistor"
 

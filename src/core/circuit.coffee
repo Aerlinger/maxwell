@@ -210,7 +210,8 @@ define [
       @nodeList = []
 
     addCircuitNode: (circuitNode) ->
-      @nodeList?.push circuitNode
+#      console.log("Adding: #{circuitNode}");
+      @nodeList.push circuitNode
 
     getNode: (idx) ->
       @nodeList[idx]

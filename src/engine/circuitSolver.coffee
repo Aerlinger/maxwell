@@ -120,27 +120,33 @@ define [
       volt = null
 
       # Check if this circuit has a voltage rail and if it has a voltage element.
-      for circuitElm in @Circuit.getElements()
-        if circuitElm instanceof GroundElm
-          @gotGround = true
+      for ce in @Circuit.getElements()
+        if ce instanceof GroundElm
+          console.log("Found ground")
+          gotGround = true
           break
-        if circuitElm instanceof RailElm
+        if ce instanceof RailElm
+          console.log("Got rail")
           gotRail = true
-        if !volt? and circuitElm instanceof VoltageElm
-          volt = circuitElm
-
-      circuitNode = new CircuitNode()
+        if !volt? and ce instanceof VoltageElm
+          console.log("Ve")
+          volt = ce
 
       # If no ground and no rails then voltage element's first terminal is referenced to ground:
-      if !gotGround and volt? and not gotRail
-        terminalPt = volt.getPost(0)
-        circuitNode.x = terminalPt.x
-        circuitNode.y = terminalPt.y
+      if !gotGround and volt? and !gotRail
+        cn = new CircuitNode()
+        pt = volt.getPost(0)
+        console.log("GOT GROUND cn=#{cn}, pt=#{pt}")
+        cn.x = pt.x
+        cn.y = pt.y
+        @Circuit.addCircuitNode cn
+
+
       # Else allocate extra node for ground
       else
-        circuitNode.x = circuitNode.y = -1
-
-      @Circuit.addCircuitNode circuitNode
+        cn = new CircuitNode()
+        cn.x = cn.y = -1
+        @Circuit.addCircuitNode cn
 
       # Allocate nodes and voltage sources
       for i in [0...@Circuit.numElements()]
@@ -150,41 +156,62 @@ define [
         postCount = circuitElm.getPostCount()
 
         # allocate a node for each post and match postCount to nodes
+#        console.log("----------------------------------------------------");
+
+
         for j in [0...postCount]
           postPt = circuitElm.getPost(j)
 
+          console.log("D: " + circuitElm.dump())
+#          console.log("P: " + postPt)
+
           k = 0
-          for node in @Circuit.getNodes()
-            break if postPt.x is node.x and postPt.y is node.y
+          while k < @Circuit.numNodes()
+            cn = @Circuit.getNode(k)
+            console.log("j=" + j + "  k=" + k + "  pt=" + postPt + "  " + cn);
+            if postPt.x is cn.x and postPt.y is cn.y
+              console.log("#{i} Break!")
+              break
+
             k++
 
+          console.log("NUM NODES: #{i} " + @Circuit.numNodes())
+
+#          k = Math.max(k, @Circuit.numNodes())
+
           if k is @Circuit.numNodes()
-            circuitNode = new CircuitNode()
-            circuitNode.x = postPt.x
-            circuitNode.y = postPt.y
+            cn = new CircuitNode()
+            cn.x = postPt.x
+            cn.y = postPt.y
             circuitNodeLink = new CircuitNodeLink()
             circuitNodeLink.num = j
             circuitNodeLink.elm = circuitElm
-            circuitNode.links.push circuitNodeLink
+            cn.links.push circuitNodeLink
             circuitElm.setNode j, @Circuit.numNodes()
-            @Circuit.addCircuitNode circuitNode
+            @Circuit.addCircuitNode cn
+
+#            console.log("j = #{j} (k=#{k})")
           else
-            circuitNodeLink = new CircuitNodeLink()
-            circuitNodeLink.num = j
-            circuitNodeLink.elm = circuitElm
+            cnl = new CircuitNodeLink()
+            cnl.num = j
+            cnl.elm = circuitElm
             @Circuit.getNode(k).links.push circuitNodeLink
             circuitElm.setNode(j, k)
-            # If it's the ground node, make sure the node voltage instanceof 0, because it may not get set later.
-            circuitElm.setNodeVoltage(j, 0) if k is 0
+            # If it's the ground node, make sure the node voltage is 0, because it may not get set later.
+            if k is 0
+              circuitElm.setNodeVoltage(j, 0)
+
+#            console.log("j2 = #{j}, (k=#{k})")
 
         for j in [0...internalNodeCount]
-          circuitNode = new CircuitNode(-1, -1, true)
-          circuitNodeLink = new CircuitNodeLink()
-          circuitNodeLink.num = j + postCount
-          circuitNodeLink.elm = circuitElm
-          circuitNode.links.push circuitNodeLink
-          circuitElm.setNode circuitNodeLink.num, @Circuit.numNodes()
-          @Circuit.addCircuitNode circuitNode
+          cn = new CircuitNode(null, null, true)
+          cnl = new CircuitNodeLink()
+          cnl.num = j + postCount
+          cnl.elm = circuitElm
+          cn.links.push cnl
+          console.log("circuitNodeLink.num = #{circuitNodeLink.num}")
+          circuitElm.setNode cnl.num, @Circuit.numNodes()
+          @Circuit.addCircuitNode cn
 
         voltageSourceCount += internalVSCount
 
@@ -243,7 +270,7 @@ define [
                 changed = true
                 closure[circuitElm.getNode(j)] = true
               continue
-            for k in [0..circuitElm.getPostCount()]
+            for k in [0...circuitElm.getPostCount()]
               continue if j is k
               kn = circuitElm.getNode(k)
               if circuitElm.getConnection(j, k) and !closure[kn]
@@ -255,7 +282,7 @@ define [
         # connect unconnected nodes
         for i in [0...@Circuit.numNodes()]
           if not closure[i] and not @Circuit.nodeList[i].intern
-            console.log("Node #{i} unconnected!")
+            console.warn("Node #{i} unconnected!")
             @Stamper.stampResistor 0, i, 1e8
             closure[i] = true
             changed = true
@@ -278,11 +305,11 @@ define [
             return
 #
         # Look for voltage source loops:
-        if (ce.toString() == "VoltageElm" and ce.getPostCount() is 2) or ce.toString() == "WireElm"
-          console.log("Examining Loop: #{ce.dump()} #{@Circuit.numNodes()}")
+        if (ce instanceof VoltageElm and ce.getPostCount() is 2) or ce instanceof WireElm
+          console.log("Examining Loop: #{ce.dump()}")
           pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
 
-          if pathfinder.findPath(ce.getNode(0)) is true
+          if pathfinder.findPath(ce.getNode(0))
             @Circuit.halt "Voltage source/wire loop with no resistance!", ce
 #            return
 
@@ -307,7 +334,7 @@ define [
           continue
 
         rsadd = 0
-        console.log("Start iteration")
+#        console.log("Start iteration")
         # look for rows that can be removed
         for j in [0...@matrixSize]
           q = @circuitMatrix[iter][j]
@@ -316,21 +343,21 @@ define [
             # Keep a running total of const values that have been removed already
             rsadd -= @circuitRowInfo[j].value * q
 
-            console.log("rsadd -= @circuitRowInfo[j].value * matrix_ij =", @circuitRowInfo[j].value * q)
+#            console.log("rsadd -= @circuitRowInfo[j].value * matrix_ij =", @circuitRowInfo[j].value * q)
             continue
           # *
           if q is 0
-            console.log("q = 0")
+#            console.log("q = 0")
             continue
           if qp is -1
             qp = j
             qv = q
 
-            console.log("qv = #{qv}, qp = #{qp}")
+#            console.log("qv = #{qv}, qp = #{qp}")
             continue
           if qm is -1 and (q is -qv)
             qm = j
-            console.log("qm = #{qm}")
+#            console.log("qm = #{qm}")
             continue
           break
 

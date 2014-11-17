@@ -30,7 +30,6 @@
       });
       it("has correct initial values", function() {
         this.resistor.current.should.eq(0);
-        this.resistor.curcount.should.eq(5);
         this.resistor.noDiagonal = false;
         this.resistor.dragging = false;
         return this.resistor.parentCircuit = null;
