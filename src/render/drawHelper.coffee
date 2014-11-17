@@ -20,6 +20,9 @@ define [
     @colorScaleCount = 32
     @colorScale = []
 
+    @muString: "u"
+    @ohmString: "ohm"
+
     EPSILON = 0.48
 
     # Creates the color scale
@@ -59,6 +62,8 @@ define [
       ptOut.x = Math.floor((1-f)*ptA.x + (f*ptB.x) + g*gx + EPSILON)
       ptOut.y = Math.floor((1-f)*ptA.y + (f*ptB.y) + g*gy + EPSILON)
 
+#      console.log("ptOut: #{ptOut}")
+
       return ptOut
 
     @interpPoint2: (ptA, ptB, f, g) ->
@@ -72,6 +77,8 @@ define [
       ptOut1.y = Math.floor((1-f)*ptA.y + (f*ptB.y) + g*gy + EPSILON)
       ptOut2.x = Math.floor((1-f)*ptA.x + (f*ptB.x) - g*gx + EPSILON)
       ptOut2.y = Math.floor((1-f)*ptA.y + (f*ptB.y) - g*gy + EPSILON)
+
+#      console.log("ptOut: #{ptOut1} #{ptOut2}")
 
       return [ptOut1, ptOut2]
 
@@ -118,6 +125,18 @@ define [
         @ps1.x = @ps2.x
         @ps1.y = @ps2.y
 
+    @getUnitText: (value, unit, decimalPoints = 2) ->
+      absValue = Math.abs(value)
+      return "0 " + unit  if absValue < 1e-18
+      return (value * 1e15).toFixed(decimalPoints) + " f" + unit  if absValue < 1e-12
+      return (value * 1e12).toFixed(decimalPoints) + " p" + unit  if absValue < 1e-9
+      return (value * 1e9).toFixed(decimalPoints) + " n" + unit  if absValue < 1e-6
+      return (value * 1e6).toFixed(decimalPoints) + " " + Units.muString + unit  if absValue < 1e-3
+      return (value * 1e3).toFixed(decimalPoints) + " m" + unit  if absValue < 1
+      return (value).toFixed(decimalPoints) + " " + unit  if absValue < 1e3
+      return (value * 1e-3).toFixed(decimalPoints) + " k" + unit  if absValue < 1e6
+      return (value * 1e-6).toFixed(decimalPoints) + " M" + unit  if absValue < 1e9
+      (value * 1e-9).toFixed(decimalPoints) + " G" + unit
 
     @getVoltageDText: (v) ->
       getUnitText Math.abs(v), "V"
@@ -148,7 +167,6 @@ define [
       power = 1 if power > 1
       rg = 128 + Math.floor power * 127
       b = Math.floor 128 * (1 - power)
-
 
 
   return DrawHelper

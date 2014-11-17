@@ -386,6 +386,8 @@ define [
 
 
     drawDots: (point1 = @point1, point2 = @point2, renderContext) =>
+      console.log(@dump())
+      console.log("Current: " + @current)
       return if @Circuit?.isStopped() or @current is 0
 
       dx = point2.x - point1.x
@@ -401,6 +403,8 @@ define [
       @curcount += ds if @curcount < 0
 
       newPos = @curcount
+
+      console.log("Curcount: " + @curcount)
 
 #      console.log(@curcount)
       while newPos < dn

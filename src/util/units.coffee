@@ -2,11 +2,13 @@
 define [], () ->
 # </DEFINE>
 
+  # @deprecated: Moved to DrawHelper
   class Units
 
     @muString: "u"
     @ohmString: "ohm"
 
+    # @Deprecated
     @getUnitText: (value, unit, decimalPoints = 2) ->
       absValue = Math.abs(value)
       return "0 " + unit  if absValue < 1e-18

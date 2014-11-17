@@ -221,9 +221,9 @@ require([
 
         circuit.updateCircuit();
 
-        setInterval(function () {
-          circuit.updateCircuit();
-        }, 0);
+        //setInterval(function () {
+        //  circuit.updateCircuit();
+        //}, 0);
       });
     } else {
       console.error("No circuit definition provided");
