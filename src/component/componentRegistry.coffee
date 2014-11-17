@@ -13,6 +13,7 @@ define [
   'cs!CurrentElm',
   'cs!RailElm',
   'cs!OpAmpElm',
+  'cs!ZenerElm',
 
   'cs!Oscilloscope',
 ], (
@@ -29,6 +30,7 @@ define [
   CurrentElm,
   RailElm,
   OpAmpElm,
+  ZenerElm,
 
   Oscilloscope
 ) ->
@@ -60,6 +62,7 @@ define [
       187: SparkGapElm
       'R': RailElm
       'a': OpAmpElm
+      'z': ZenerElm
 
 
 

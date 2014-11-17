@@ -87,6 +87,7 @@
       VarRailElm: 'src/component/components/VarRailElm',
       VoltageElm: 'src/component/components/VoltageElm',
       WireElm: 'src/component/components/WireElm',
+      ZenerElm: 'src/component/components/ZenerElm',
 
       // USER INTERFACE:
       CommandHistory: 'src/ui/commandHistory',
