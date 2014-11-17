@@ -34,7 +34,7 @@ define [
   'cs!Rectangle',
   'cs!Polygon',
   'cs!Grid',
-  'cs!CircuitEngineParams',
+  'cs!SimulationParams',
   'cs!MouseState',
   'cs!Settings',
   'cs!ComponentRegistry',
@@ -55,7 +55,7 @@ define [
   Rectangle,
   Polygon,
   Grid,
-  CircuitEngineParams,
+  SimulationParams,
   MouseState,
   Settings,
   ComponentRegistry,
@@ -92,25 +92,20 @@ define [
 
 
     constructor: () ->
-#      @Params = new CircuitEngineParams()
       @CommandHistory = new CommandHistory()
 
       # Use default params if none specified
-      @Params = new CircuitEngineParams()
+      @Params = new SimulationParams()
 
       @clearAndReset()
       @bindListeners()
 
 
-    timeStep: ->
-      @Params.timeStep
-
     # Simulator
     setParamsFromJSON: (jsonData) ->
-      @Params = new CircuitEngineParams(jsonData)
+      @Params = new SimulationParams(jsonData)
 
       console.log(@Params.toString())
-      console.log(@timeStep())
 
 
     ###################################################################################################################
@@ -134,7 +129,6 @@ define [
 
       @time = 0
       @lastTime = 0
-#      @timeStep = 0.01
 
       # State Handlers
       @mouseState = new MouseState()
@@ -152,11 +146,11 @@ define [
 
     # "Solders" a new element to this circuit (adds it to the element list array).
     solder: (newElement) ->
+      console.log("\tSoldering #{newElement}: #{newElement.dump()}")
       @notifyObservers @ON_SOLDER
 
       newElement.Circuit = this
       newElement.setPoints()
-      console.log("Soldering Element: " + newElement)
       @elementList.push newElement
 
     # "Desolders" an existing element to this circuit (removes it to the element list array).
@@ -280,10 +274,7 @@ define [
     ####################################################################################################################
 
     ###
-    UpdateCircuit:
-
-     Updates the circuit each frame.
-
+    UpdateCircuit: Updates the circuit each frame.
       1. ) Reconstruct Circuit:
             Rebuilds a data representation of the circuit (only applied when circuit changes)
       2. ) Solve Circuit build matrix representation of the circuit solve for the voltage and current for each component.
@@ -381,15 +372,20 @@ define [
     isStopped: ->
       @Solver.isStopped
 
+    simSpeed: ->
+      return @Params.simSpeed
+
+    timeStep: ->
+      @Params.timeStep
+
     voltageRange: ->
-      return @Params['voltageRange']
+      return @Params.voltageRange
 
     powerRange: ->
-      return @Params['powerRange']
+      return @Params.powerRange
 
     currentSpeed: ->
-      return 62
-      #return @Params['currentMult']
+      return @Params.currentSpeed
 
     getState: ->
       return @state
@@ -398,13 +394,11 @@ define [
       @Solver.getStamper()
 
     getNode: (idx) ->
-      console.error("getNode() is deprecated!")
       @nodeList[idx]
 
     getElm: (idx) ->
       console.error("getElm() is deprecated!")
       @getElmByIdx(idx)
-
 
 
   return Circuit

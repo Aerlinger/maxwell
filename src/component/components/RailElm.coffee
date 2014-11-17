@@ -21,7 +21,6 @@ define [
 
 
   class RailElm extends VoltageElm
-
     @FLAG_CLOCK: 1
 
     constructor: (xa, ya, xb, yb, f, st) ->

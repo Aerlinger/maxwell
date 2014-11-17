@@ -6,8 +6,6 @@
   console.log("Loading RequireJS configuration...");
 
   var Config = {
-    // deps: [],
-    // baseUrl: ""
     'paths': {
       // LIBRARIES:
       jquery: 'bower_components/jquery/dist/jquery.min',
@@ -20,7 +18,7 @@
 
       // CORE:
       Circuit: 'src/core/circuit',
-      CircuitEngineParams: 'src/core/simulationParams',
+      SimulationParams: 'src/core/simulationParams',
 
       // ENGINE:
       MatrixStamper: 'src/engine/matrixStamper',
@@ -207,14 +205,13 @@ require([
   'cs!ConsoleUtils'
 
 ], function (Circuit, CircuitCanvas, CircuitLoader) {
-
   var circuitName = $('canvas').data('circuit');
   var circuitFileName = "../circuits/" + circuitName + ".json";
 
   $(document).ready(function (event) {
     CircuitLoader.createCircuitFromJSON(circuitFileName, function (circuit) {
       "use strict";
-      console.log("loading: " + circuitFileName);
+      console.log("Loading: " + circuitFileName);
 
       var canvas = $('canvas.maxwell');
 
@@ -222,13 +219,15 @@ require([
 
       circuit.updateCircuit();
 
-      setInterval(function () {
-        circuit.updateCircuit();
-      }, 0);
+      //setInterval(function () {
+      //  circuit.updateCircuit();
+      //}, 0);
     });
   });
 
-  //runTests();
+  if (window.location.toString().match("/test")) {
+    runTests();
+  }
 });
 
 //

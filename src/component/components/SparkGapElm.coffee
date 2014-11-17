@@ -85,6 +85,9 @@ define [
 
       stamper.stampResistor @nodes[0], @nodes[1], @resistance
 
+    toString: ->
+      "SparkGapElm"
+
     stamp: (stamper) ->
       stamper.stampNonLinear @nodes[0]
       stamper.stampNonLinear @nodes[1]

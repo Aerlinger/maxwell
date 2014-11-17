@@ -2,11 +2,15 @@
 define [
   'jquery'
   'cs!ComponentRegistry',
-  'cs!Circuit'
+  'cs!Circuit',
+  'cs!Oscilloscope',
+  'cs!Hint'
 ], (
   $,
   ComponentRegistry,
-  Circuit
+  Circuit,
+  Oscilloscope,
+  Hint
 ) ->
 # </DEFINE>
 
@@ -20,6 +24,9 @@ define [
         circuit.setParamsFromJSON(circuitParams)
 
         # Load each Circuit component from JSON data:
+        console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+        console.log("Soldering Components:");
+        console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         for elementData in jsonData
           type = elementData['sym']
           sym = ComponentRegistry.ComponentDefs[type]
@@ -31,13 +38,12 @@ define [
           params = elementData['params']
 
           if sym is null
-            circuit.halt "Element: #{JSON.stringify(elementData)}"
-          if type is 'Hint'
+            circuit.halt "Element: #{JSON.stringify(elementData)} is null"
+          if type is Hint
             console.log "Hint found in file!"
-          if type is 'Oscilloscope'
+          if type is Oscilloscope
             console.log "Scope found in file!"
 
-#          try
           if !type
             circuit.warn "Unrecognized Type"
           if !sym

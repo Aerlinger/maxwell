@@ -78,6 +78,13 @@ define [
       @analyzeFlag = true
 
 
+    updateVoltageSource: (n1, n2, vs, voltage) ->
+      vn = @Circuit.numNodes() + vs
+      @Stamper.stampRightSide(vn, voltage)
+
+    getStamper: ->
+      return @Stamper
+
     needsRemap: ->
       return @analyzeFlag
 
@@ -255,7 +262,6 @@ define [
             changed = true
             break
 
-      # Todo: use 'of' iterator
 #      for i in [0...@Circuit.numElements()]
 #        ce = @Circuit.getElmByIdx(i)
 #        if ce instanceof InductorElm
@@ -347,13 +353,11 @@ define [
             elt.value = (@circuitRightSide[iter] + rsadd) / qv
             @circuitRowInfo[iter].dropRow = true
 
-            #Todo: Checkbug!
             console.error("iter = 0 # start over from scratch");
             iter = -1 # start over from scratch
 
           else if (@circuitRightSide[iter] + rsadd) is 0
-            # we found a row with only two nonzero entries, and one
-            # instanceof the negative of the other; the values are equal
+            # We found a row with only two nonzero entries, and one is the negative of the other -> the values are equal
             if elt.type != RowInfo.ROW_NORMAL
               qq = qm
               qm = qp
@@ -444,13 +448,15 @@ define [
     solveCircuit: ->
       if not @circuitMatrix? or @Circuit.numElements() is 0
         @circuitMatrix = null
-        console.log("Called solve circuit when circuit Matrix not initialized")
+#        console.log("Called solve circuit when circuit Matrix not initialized")
         return
 
       debugPrint = @dumpMatrix
       @dumpMatrix = false
       stepRate = Math.floor(160 * @getSimSpeed())
+
       timeEnd = (new Date()).getTime()
+
       lastIterTime = @lastIterTime
 
       # Double-check
@@ -470,7 +476,7 @@ define [
         ++@steps
 
         # The number of maximum allowable iterations
-        subiterCount = 500
+        subiterCount = 5000
 
         # Sub iteration
         for subiter in [0...subiterCount]
@@ -492,13 +498,24 @@ define [
           return if @stopMessage?
 
           debugPrint = false
-          #isCleanArray(@circuitMatrix)
+#          isCleanArray(@circuitMatrix)
 
           if @circuitNonLinear
             break if @converged and subiter > 0
             unless @luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
               @Circuit.halt "Singular matrix in nonlinear circuit!", null
               return
+
+          if @frames == 0
+            console.log("Frame 0 Dump: ----------------------------------")
+            console.log("Circuit Matrix size: #{@circuitMatrixSize}")
+            console.log("Circuit Matrix:")
+            ArrayUtils.printArray @circuitMatrix
+            console.log("Circuit Permute:")
+            ArrayUtils.printArray @circuitPermute
+            console.log("Circuit Right Side:")
+            ArrayUtils.printArray @circuitRightSide
+            console.log("------------------------------------------------")
 
           @luSolve @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide
 
@@ -524,6 +541,8 @@ define [
           subiter++
         # End for
 
+        if (subiter > 5)
+          console.log("converged after " + subiter + " iterations\n");
         if subiter >= subiterCount
           @halt "Convergence failed: " + subiter, null
           break
@@ -538,25 +557,23 @@ define [
 
         if iter * 1000 >= stepRate * (timeEnd - @lastIterTime)
           break
-        else
-          break if timeEnd - @lastFrameTime > 500
+        else if timeEnd - @lastFrameTime > 500
+          break
 
         ++iter
 
+      @frames++
+
       @lastIterTime = lastIterTime
 
-
-
     ###
-    luFactor: finds a solution to a factored matrix through LU (Lower-Upper) factorization
+      luFactor: finds a solution to a factored matrix through LU (Lower-Upper) factorization
 
-    Called once each frame for resistive circuits, otherwise called many times each frame
+      Called once each frame for resistive circuits, otherwise called many times each frame
 
-    @param circuitMatrix 2D matrix to be solved
-    @param matrixSize number or rows/columns in the matrix
-    @param pivotArray pivot index
-
-    References:
+      @param circuitMatrix 2D matrix to be solved
+      @param matrixSize number or rows/columns in the matrix
+      @param pivotArray pivot index
     ###
     luFactor: (circuitMatrix, matrixSize, pivotArray) ->
       # Divide each row by largest element in that row and remember scale factors
@@ -632,18 +649,15 @@ define [
 
 
     ###
-    Step 2: lu_solve: Called by lu_factor
+      Step 2: `lu_solve`: (Called by lu_factor)
+      finds a solution to a factored matrix through LU (Lower-Upper) factorization
 
-    finds a solution to a factored matrix through LU (Lower-Upper) factorization
+      Called once each frame for resistive circuits, otherwise called many times each frame
 
-    Called once each frame for resistive circuits, otherwise called many times each frame
-
-    @param circuitMatrix matrix to be solved
-    @param numRows dimension
-    @param pivotVector pivot index
-    @param circuitRightSide Right-side (dependent) matrix
-
-    References:
+      @param circuitMatrix matrix to be solved
+      @param numRows dimension
+      @param pivotVector pivot index
+      @param circuitRightSide Right-side (dependent) matrix
     ###
     luSolve: (circuitMatrix, numRows, pivotVector, circuitRightSide) ->
       # Find first nonzero element of circuitRightSide
@@ -679,14 +693,6 @@ define [
           ++j
         circuitRightSide[i] = total / circuitMatrix[i][i]
         i--
-
-
-    updateVoltageSource: (n1, n2, vs, voltage) ->
-      vn = @Circuit.numNodes() + vs
-      @Stamper.stampRightSide(vn, voltage)
-
-    getStamper: ->
-      return @Stamper
 
 
   return CircuitSolver

@@ -7,7 +7,7 @@ define [], () ->
     Stores Circuit-specific settings.
     Usually loaded from the params object of a .json file
   ###
-  class CircuitParams
+  class SimulationParams
     constructor: (paramsObj) ->
       @completionStatus = paramsObj?['completion_status'] || "in development"
       @createdAt = paramsObj?['created_at']
@@ -29,20 +29,25 @@ define [], () ->
 
     toString: ->
       [
-        "status: " + @completionStatus,
-        "Created at:" + @createdAt,
-        "Cur Speed: " + @currentSpeed,
-        "Updated At: " + @updatedAt,
-        "Description: " + @description,
-        "Flags: " + @flags,
-        "Id: " + @id,
-        "Name: " + @name,
-        "Pwr Range: " + @powerRange,
-        "Volt. Range: " + @voltageRange,
-        "Sim Speed: " + @simSpeed,
-        "TimeStep: " + @timeStep,
-        "Title: " + @title,
-        "Topic: " + @topic
+        "",
+        "#{@title} SIMULATION PARAMS:",
+        "----------------------------------------------------------------",
+        "\tName:        " + @name,
+        "\tTopic:       " + @topic,
+        "\tStatus:      " + @completionStatus,
+        "\tCreated at:  " + @createdAt,
+        "\tUpdated At:  " + @updatedAt,
+        "\tDescription: " + @description,
+        "\tId:          " + @id,
+        "\tTitle:       " + @title,
+        "----------------------------------------------------------------",
+        "\tFlags:       " + @flags,
+        "\tTimeStep:    " + @timeStep,
+        "\tSim Speed:   " + @simSpeed,
+        "\tCur Speed:   " + @currentSpeed,
+        "\tVolt. Range: " + @voltageRange,
+        "\tPwr Range:   " + @powerRange,
+        ""
       ].join("\n")
 
-  return CircuitParams
+  return SimulationParams

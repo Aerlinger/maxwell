@@ -45,4 +45,7 @@ define [], () ->
             console.printStackTrace()
             return false
 
+    @printArray: (arr) ->
+      console.log(subarr) for subarr in arr
+
   return ArrayUtils

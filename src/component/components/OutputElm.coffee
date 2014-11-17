@@ -79,6 +79,8 @@ define [
 
     stamp: (stamper) ->
 
+    toString: ->
+      "OutputElm"
 
     setEditValue: (n, ei) ->
 

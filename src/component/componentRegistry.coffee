@@ -44,22 +44,6 @@ define [
 
 
   class ComponentRegistry
-
-    @DumpTypeConversions:
-      'r':'ResistorElm'
-      'w':'WireElm'
-      'g':'GroundElm'
-      'c':'CapacitorElm'
-      'l':'InductorElm'
-      'v':'VoltageElm'
-      'd':'DiodeElm'
-      'o':'OutputElm'
-      's':'SwitchElm'
-      '187':'SparkGapElm'
-      187:'SparkGapElm'
-      'R': 'RailElm'
-
-
     @ComponentDefs:
       'w': WireElm
       'r': ResistorElm

@@ -14,9 +14,7 @@ define [
 ) ->
 # </DEFINE>
 
-
   describe "Base Circuit Component", ->
-
     beforeEach () ->
       @Circuit = new Circuit()
       @circuitElement = new CircuitComponent(10, 10, 13, 14)
@@ -124,7 +122,7 @@ define [
         it "is not be orphaned", ->
           @circuitElement.orphaned().should.equal false
 
-        it "should be stampable", ->
+        it "is be stampable", ->
 #          try {
 #            @circuitElement.stamp(@Circuit.Solver.Stamper)
 #          } catch() {}
@@ -160,7 +158,6 @@ define [
 
           it "belongs to @Circuit", ->
             @Circuit.numElements().should.equal 0
-
 
 
     describe "Should listen for", ->

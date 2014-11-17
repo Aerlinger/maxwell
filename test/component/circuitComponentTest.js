@@ -107,7 +107,7 @@
           it("is not be orphaned", function() {
             return this.circuitElement.orphaned().should.equal(false);
           });
-          it("should be stampable", function() {});
+          it("is be stampable", function() {});
           it("belongs to @Circuit", function() {
             return this.Circuit.getElmByIdx(0) === this.circuitElement;
           });

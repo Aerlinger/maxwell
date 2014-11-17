@@ -9,7 +9,6 @@
 #   Observes: Circuit, CircuitRender
 #   Observed By: CircuitCanvas
 #
-#
 # Events:
 #  <None>
 #
@@ -46,7 +45,7 @@ define [
 
     constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, st = []) ->
       @current = 0
-      @curcount = 5
+      @curcount = 0
       @noDiagonal = false
       @selected = false
       @dragging = false
@@ -58,8 +57,6 @@ define [
       @allocNodes()
       @initBoundingBox()
       @component_id = MathUtils.getRand(100000000) + (new Date()).getTime()
-
-      console.log @dump()
 
     getParentCircuit: () ->
       return @Circuit
@@ -84,6 +81,8 @@ define [
       @point1 = new Point(@x1, @y1)
       @point2 = new Point(@x2, @y2)
 
+      console.log("Setting points: #{this.toString()} - #{this.dump()}")
+
       #TODO: Implement snapping here:
 
     # As a string
@@ -98,7 +97,7 @@ define [
 
     reset: ->
       @volts = ArrayUtils.zeroArray(@volts.length)
-      @curcount = 5
+      @curcount = 0
 
     setCurrent: (x, current) ->
       @current = current
@@ -141,16 +140,20 @@ define [
         @lead2 = @point2
         return
 
+      console.log("Calc leads: #{@toString()}");
       @lead1 = DrawHelper.interpPoint(@point1, @point2, (@dn - len) / (2 * @dn));
       @lead2 = DrawHelper.interpPoint(@point1, @point2, (@dn + len) / (2 * @dn));
 
+    # TODO: Validate consistency
     updateDotCount: (cur, cc) ->
-      cur = @current  if isNaN(cur)
-      cc = @curcount  if isNaN(cc)
-#      return cc  if CirSim.stoppedCheck
-      cadd = cur * 48
+      #      return cc  if CirSim.stoppedCheck
+      cur = @current  if (isNaN(cur) || !cur?)
+      cc = @curcount  if (isNaN(cc) || !cc?)
+
+      cadd = cur * @Circuit.Params.currentMult
+#      cadd = cur * 48
       cadd %= 8
-      @curcount = cadd + cc
+      @curcount = cc + cadd
       @curcount
 
     getDefaultFlags: ->
@@ -213,7 +216,8 @@ define [
 
     # Returns the class name of this element (e.x. ResistorElm)
     toString: ->
-      return arguments.callee.name
+      console.error("Virtual call on toString in circuitComponent was #{@dump()}");
+#      return arguments.callee.name
 
     dump: ->
       @getDumpType() + " " + @x1 + " " + @y1 + " " + @x2 + " " + @y2 + " " + @flags
@@ -363,24 +367,31 @@ define [
 
     draw: (renderContext) ->
       @drawPosts(renderContext)
+      @draw2Leads(renderContext)
 
 #      throw("Called abstract function draw() in AbstractCircuitElement")
 
     draw2Leads: (renderContext) ->
-      renderContext.drawThickLinePt @point1, @lead1, DrawHelper.getVoltageColor(@volts[0])
-      renderContext.drawThickLinePt @lead2, @point2, DrawHelper.getVoltageColor(@volts[1])
+      console.log("Draw2Leads #{this}: [#{@point1}, #{@point2}] [#{@lead1}, #{@lead2}]");
+      if @point1? and @lead1?
+        renderContext.drawThickLinePt @point1, @lead1, DrawHelper.getVoltageColor(@volts[0])
+      if @point2? and @lead2?
+        renderContext.drawThickLinePt @lead2, @point2, DrawHelper.getVoltageColor(@volts[1])
 
     drawDots: (point1 = @point1, point2 = @point2, renderContext) =>
       return if @Circuit?.isStopped() or @current is 0
-      deltaSegment = 16
-
-      currentIncrement = (@current * @Circuit?.currentSpeed())
-      @curcount = (@curcount + currentIncrement) % deltaSegment
-      @curcount += deltaSegment if @curcount < 0
 
       dx = point2.x - point1.x
       dy = point2.y - point1.y
       dn = Math.sqrt dx * dx + dy * dy
+
+      ds = 16
+
+#      pos %= ds
+
+      currentIncrement = @current * @Circuit.currentSpeed()
+      @curcount = (@curcount + currentIncrement) % ds
+      @curcount += ds if @curcount < 0
 
       newPos = @curcount
       while newPos < dn
@@ -388,7 +399,7 @@ define [
         y0 = point1.y + newPos * dy / dn
 
         renderContext.fillCircle(x0, y0, Settings.CURRENT_RADIUS)
-        newPos += deltaSegment
+        newPos += ds
 
     ###
     Todo: Not yet implemented
@@ -467,8 +478,6 @@ define [
 
     timeStep: ->
       @Circuit.timeStep()
-
-
 
 
   return CircuitComponent
