@@ -10,14 +10,13 @@ define ['cs!ColorPalette'], (ColorPalette) ->
 # </DEFINE>
 
   class Settings
-    @SPEED: 112
     @FRACTIONAL_DIGITS: 2
     @CURRENT_SEGMENT_LENGTH: 16
 
     # Line Widths:
-    @POST_RADIUS: 3
-    @CURRENT_RADIUS: 2
-    @LINE_WIDTH: 1
+    @POST_RADIUS: 1
+    @CURRENT_RADIUS: 1
+    @LINE_WIDTH: 2
 
     # Grid
     @GRID_SIZE: 5

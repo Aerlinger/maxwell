@@ -19,10 +19,11 @@ define [], () ->
       @name = paramsObj?['name_unique'] || "default"
       @powerRange = paramsObj?['power_range'] || 62.0
       @voltageRange = paramsObj?['voltage_range'] || 10.0
-      @simSpeed = paramsObj?['sim_speed'] || 10.0
+      @simSpeed = @convertSimSpeed(paramsObj?['sim_speed'] || 10.0)
       @timeStep = paramsObj?['time_step'] || 5.0e-06
       @title = paramsObj?['title'] || "Default"
       @topic = paramsObj?['topic'] || null
+#      @currentMult = 1
 
       unless @timeStep?
         throw new Error("Circuit params is missing its time step (was null)!")
@@ -49,5 +50,14 @@ define [], () ->
         "\tPwr Range:   " + @powerRange,
         ""
       ].join("\n")
+
+    convertSimSpeed: (speed) ->
+      Math.floor(Math.log(10 * speed) * 24.0 + 61.5)
+
+    setCurrentMult: (mult) ->
+      @currentMult = mult
+
+    getCurrentMult: ->
+      @currentMult
 
   return SimulationParams

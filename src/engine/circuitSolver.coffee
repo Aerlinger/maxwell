@@ -50,7 +50,7 @@ define [
 
     reset: ->
       # simulation variables
-      @time = 0             # simulation time (in seconds)
+      @Circuit.resetTimings()
       @converged = true     # true if numerical analysis has converged
       @subIterations = 5000
 
@@ -65,10 +65,10 @@ define [
 
       @circuitNonLinear = false
 
-      @lastFrameTime = 0
+#      @lastFrameTime = 0
       @lastIterTime = 0
-      @frames = 0
-      @lastTime = 0
+#      @lastTime = 0
+#      @secTime = 0
 
       @invalidate()
 
@@ -79,8 +79,7 @@ define [
 
 
     updateVoltageSource: (n1, n2, vs, voltage) ->
-      vn = @Circuit.numNodes() + vs
-      @Stamper.stampRightSide(vn, voltage)
+      @Stamper.updateVoltageSource(n1, n2, vs, voltage)
 
     getStamper: ->
       return @Stamper
@@ -99,10 +98,12 @@ define [
       @isStopped = false
 
 
-    getSimSpeed: ->
-      if Settings.SPEED is 0
-        return 0
-      return 0.1 * Math.exp((Settings.SPEED - 61) / 24)
+    getIterCount: ->
+#      if Settings.SPEED is 0
+#        return 0
+#      sim_speed = @Circuit.simSpeed()
+      sim_speed = 200
+      return 0.1 * Math.exp((sim_speed - 61.0) / 24.0)
 
 
     reconstruct: ->
@@ -248,9 +249,9 @@ define [
               if circuitElm.getConnection(j, k) and not closure[kn]
                 closure[kn] = true
                 changed = true
-              ++k
-            ++j
-          ++i
+#              ++k
+#            ++j
+#          ++i
 
         continue if changed
 
@@ -453,14 +454,18 @@ define [
 
       debugPrint = @dumpMatrix
       @dumpMatrix = false
-      stepRate = Math.floor(160 * @getSimSpeed())
+      stepRate = Math.floor(160 * @getIterCount())
 
-      timeEnd = (new Date()).getTime()
+      tm = (new Date()).getTime()
 
-      lastIterTime = @lastIterTime
+      lit = @lastIterTime
 
       # Double-check
-      if 1000 >= stepRate * (timeEnd - @lastIterTime)
+#      console.log("Step Rate: ", stepRate)
+#      console.log("timeEnd - @lastIterTime", tm - @lastIterTime)
+#      console.log(stepRate * (tm - @lastIterTime))
+      if 1000 >= stepRate * (tm - @lastIterTime)
+#        console.log("Return!")
         return
 
       #console.log debugPrint, stepRate, lastIterTime, @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide,
@@ -506,16 +511,18 @@ define [
               @Circuit.halt "Singular matrix in nonlinear circuit!", null
               return
 
-          if @frames == 0
-            console.log("Frame 0 Dump: ----------------------------------")
-            console.log("Circuit Matrix size: #{@circuitMatrixSize}")
-            console.log("Circuit Matrix:")
-            ArrayUtils.printArray @circuitMatrix
-            console.log("Circuit Permute:")
-            ArrayUtils.printArray @circuitPermute
-            console.log("Circuit Right Side:")
-            ArrayUtils.printArray @circuitRightSide
-            console.log("------------------------------------------------")
+#          if @Circuit.frames == 0
+#            console.log("Frame 0 Dump: ----------------------------------")
+#            console.log("Circuit Matrix size: #{@circuitMatrixSize}")
+#            console.log("Circuit Matrix:")
+#            ArrayUtils.printArray @circuitMatrix
+#            console.log("Circuit Permute:")
+#            ArrayUtils.printArray @circuitPermute
+#            console.log("Circuit Right Side:")
+#            ArrayUtils.printArray @circuitRightSide
+#            console.log("Sim speed: #{@getIterCount()}")
+#            console.log("Current speed: #{@Circuit.currentSpeed()}")
+#            console.log("------------------------------------------------")
 
           @luSolve @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide
 
@@ -547,24 +554,28 @@ define [
           @halt "Convergence failed: " + subiter, null
           break
 
-        @time += @timeStep
+        @Circuit.time += @timeStep
 
 #        for scope in @Circuit.scopes
 #          scope.timeStep()
 
-        timeEnd = (new Date()).getTime()
-        lastIterTime = timeEnd
+        tm = (new Date()).getTime()
+        lit = tm
 
-        if iter * 1000 >= stepRate * (timeEnd - @lastIterTime)
+        if iter * 1000 >= stepRate * (tm - @lastIterTime)
+#          console.log("BREAK: iter * 1000 >= stepRate * (timeEnd - @lastIterTime)!")
           break
-        else if timeEnd - @lastFrameTime > 500
+        else if (tm - @Circuit.getLastFrameTime()) > 500
+#          console.log("BREAK: timeEnd - @Circuit.getLastFrameTime() > 500!")
           break
 
         ++iter
 
-      @frames++
+        # End Iteration Loop
 
-      @lastIterTime = lastIterTime
+      @Circuit.incrementFrames()
+
+      @lastIterTime = lit
 
     ###
       luFactor: finds a solution to a factored matrix through LU (Lower-Upper) factorization

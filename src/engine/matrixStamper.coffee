@@ -29,9 +29,9 @@ define [
       @stampMatrix n2, vn, -1
 
 
-    updateVoltageSource: (n1, n2, vs, v) ->
+    updateVoltageSource: (n1, n2, vs, voltage) ->
       vn = @Circuit.numNodes() + vs
-      @stampRightSide vn, v
+      @stampRightSide vn, voltage
 
 
     stampResistor: (n1, n2, r) ->

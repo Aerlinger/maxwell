@@ -71,25 +71,26 @@ define [
     nonLinear: ->
       true
 
-    draw: ->
+    draw: (renderContext) ->
       @setBboxPt @point1, @point2, @opheight * 2
-      color = @setVoltageColor(@volts[0])
-      DrawHelper.drawThickLinePt @in1p[0], @in1p[1], color
-      color = @setVoltageColor(@volts[1])
-      DrawHelper.drawThickLinePt @in2p[0], @in2p[1], color
+      color = DrawHelper.getVoltageColor(@volts[0])
+      renderContext.drawThickLinePt @in1p[0], @in1p[1], color, renderContext
+      color = DrawHelper.getVoltageColor(@volts[1])
+      renderContext.drawThickLinePt @in2p[0], @in2p[1], color, renderContext
 
-      #g.setColor(this.needsHighlight() ? this.selectColor : this.lightGrayColor);
-      @setPowerColor true
-      DrawHelper.drawThickPolygonP @triangle, (if @needsHighlight() then DrawHelper.selectColor else DrawHelper.lightGrayColor)
-
-      #g.setFont(plusFont);
-      #this.drawCenteredText("-", this.textp[0].x + 3, this.textp[0].y + 8, true).attr({'font-weight':'bold', 'font-size':17});
-      #this.drawCenteredText("+", this.textp[1].x + 3, this.textp[1].y + 10, true).attr({'font-weight':'bold', 'font-size':14});
-      color = @setVoltageColor(@volts[2])
-      DrawHelper.drawThickLinePt @lead2, @point2, color
-      @curcount = @updateDotCount(@current, @curcount)
-      @drawDots @point2, @lead2, @curcount
-      @drawPosts()
+#      #g.setColor(this.needsHighlight() ? this.selectColor : this.lightGrayColor);
+#      @setPowerColor true
+      renderContext.drawThickPolygonP @triangle, (if @needsHighlight() then DrawHelper.selectColor else DrawHelper.lightGrayColor)
+#
+#      #g.setFont(plusFont);
+#      #this.drawCenteredText("-", this.textp[0].x + 3, this.textp[0].y + 8, true).attr({'font-weight':'bold', 'font-size':17});
+#      #this.drawCenteredText("+", this.textp[1].x + 3, this.textp[1].y + 10, true).attr({'font-weight':'bold', 'font-size':14});
+      color = DrawHelper.getVoltageColor(@volts[2])
+      renderContext.drawThickLinePt @lead2, @point2, color
+#      @curcount = @updateDotCount(@current, @curcount)
+      @drawDots @point2, @lead2, renderContext
+      @drawPosts(renderContext)
+#      @(renderContext)
 
     getPower: ->
       @volts[2] * @current
@@ -102,23 +103,29 @@ define [
 
     setPoints: ->
       super()
-      @setSize 2  if @dn > 150 and this is Circuit.dragElm
-      ww = Math.floor(@opwidth)
-      ww = Math.floor(@dn / 2)  if ww > @dn / 2
+      if @dn > 150 and this is Circuit.dragElm
+        @setSize 2
+
+      if ww > @dn / 2
+        ww = Math.floor(@dn / 2)
+      else
+        ww = Math.floor(@opwidth)
+
       @calcLeads ww * 2
       hs = Math.floor(@opheight * @dsign)
       hs = -hs  unless (@flags & OpAmpElm.FLAG_SWAP) is 0
+
       @in1p = CircuitComponent.newPointArray(2)
       @in2p = CircuitComponent.newPointArray(2)
       @textp = CircuitComponent.newPointArray(2)
 
-      DrawHelper.interpPoint @point1, @point2, 0, hs, @in1p[0], @in2p[0]
-      DrawHelper.interpPoint @lead1, @lead2, 0, hs, @in1p[1], @in2p[1]
-      DrawHelper.interpPoint @lead1, @lead2, .2, hs, @textp[0], @textp[1]
+      [@in1p[0], @in2p[0]] = DrawHelper.interpPoint2 @point1, @point2, 0, hs
+      [@in1p[1], @in2p[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 0, hs
+      [@textp[0], @textp[1]] = DrawHelper.interpPoint2 @lead1, @lead2, .2, hs
 
       tris = CircuitComponent.newPointArray(2)
-      DrawHelper.interpPoint @lead1, @lead2, 0, hs * 2, tris[0], tris[1]
-      @triangle = CircuitComponent.createPolygon(tris[0], tris[1], @lead2)
+      [tris[0], tris[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 0, hs * 2
+      @triangle = DrawHelper.createPolygonFromArray([tris[0], tris[1], @lead2])
 
 
     #this.plusFont = new Font("SansSerif", 0, opsize == 2 ? 14 : 10);
@@ -143,18 +150,19 @@ define [
       arr[5] = "range = " + DrawHelper.getVoltageText(@minOut) + " to " + CircuitComponent.getVoltageText(@maxOut)
 
     stamp: (stamper) ->
-      vn = Circuit.nodeList.length + @voltSource
-      Circuit.stampNonLinear vn
-      Circuit.stampMatrix @nodes[2], vn, 1
+      vn = @Circuit.nodeList.length + @voltSource
+      stamper.stampNonLinear vn
+      stamper.stampMatrix @nodes[2], vn, 1
 
     doStep: (stamper) ->
       vd = @volts[1] - @volts[0]
       if Math.abs(@lastvd - vd) > .1
-        Circuit.converged = false
-      else Circuit.converged = false  if @volts[2] > @maxOut + .1 or @volts[2] < @minOut - .1
+        @Circuit.converged = false
+      else @Circuit.converged = false  if @volts[2] > @maxOut + .1 or @volts[2] < @minOut - .1
       x = 0
-      vn = Circuit.nodeList.length + @voltSource
+      vn = @Circuit.nodeList.length + @voltSource
       dx = 0
+
       if vd >= @maxOut / @gain and (@lastvd >= 0 or getRand(4) is 1)
         dx = 1e-4
         x = @maxOut - dx * @maxOut / @gain
@@ -165,7 +173,7 @@ define [
         dx = @gain
 
       #console.log("opamp " + vd + " " + volts[2] + " " + dx + " "  + x + " " + lastvd + " " + sim.converged);
-      # newton's method:
+      # Newton's method:
       stamper.stampMatrix vn, @nodes[0], dx
       stamper.stampMatrix vn, @nodes[1], -dx
       stamper.stampMatrix vn, @nodes[2], 1
@@ -179,6 +187,9 @@ define [
     # there is no current path through the op-amp inputs, but there is an indirect path through the output to ground.
     getConnection: (n1, n2) ->
       false
+
+    toString: ->
+      "OpAmpElm"
 
     hasGroundConnection: (n1) ->
       n1 is 2

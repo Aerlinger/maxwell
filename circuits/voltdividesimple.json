@@ -11,8 +11,8 @@
     "topic": "Basics",
     "flags": 1,
     "time_step": 5.0e-06,
-    "sim_speed": 10.0,
-    "current_speed": 63.0,
+    "sim_speed": 1,
+    "current_speed": 103.0,
     "voltage_range": 10.0,
     "power_range": 62.0
   },

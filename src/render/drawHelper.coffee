@@ -20,6 +20,8 @@ define [
     @colorScaleCount = 32
     @colorScale = []
 
+    EPSILON = 0.0001
+
     # Creates the color scale
     @initializeColorScale: ->
       @colorScale = new Array(@colorScaleCount)
@@ -47,17 +49,16 @@ define [
 
     @unitsFont: "Arial, Helvetica, sans-serif"
 
-    # TODO: BUGGY
+    # Fixme: Reverses direction if epsilon is 0?
     @interpPoint: (ptA, ptB, f, g = 0) ->
       gx = ptB.y - ptA.y
       gy = ptA.x - ptB.x
       g /= Math.sqrt gx*gx + gy*gy
 
       ptOut = new Point()
-      ptOut.x = Math.floor (1-f)*ptA.x + (f*ptB.x) + (g*gx+0.48)
-      ptOut.y = Math.floor (1-f)*ptA.y + (f*ptB.y) + (g*gy+0.48)
+      ptOut.x = Math.floor (1-f)*ptA.x + (f*ptB.x) + (g*gx+EPSILON)
+      ptOut.y = Math.floor (1-f)*ptA.y + (f*ptB.y) + (g*gy+EPSILON)
 
-#      console.log("InterpPoint:" + ptOut);
       return ptOut
 
     @interpPoint2: (ptA, ptB, f, g) ->
@@ -67,13 +68,10 @@ define [
 
       ptOut1 = new Point()
       ptOut2 = new Point()
-      ptOut1.x = Math.floor (1-f)*ptA.x + (f*ptB.x) + (g*gx+0.48)
-      ptOut1.y = Math.floor (1-f)*ptA.y + (f*ptB.y) + (g*gy+0.48)
-      ptOut2.x = Math.floor (1-f)*ptA.x + (f*ptB.x) - (g*gx+0.48)
-      ptOut2.y = Math.floor (1-f)*ptA.y + (f*ptB.y) - (g*gy+0.48)
-
-#      console.log("interpPoint2: #{ptOut1} #{ptOut2}");
-
+      ptOut1.x = Math.floor (1-f)*ptA.x + (f*ptB.x) + (g*gx+EPSILON)
+      ptOut1.y = Math.floor (1-f)*ptA.y + (f*ptB.y) + (g*gy+EPSILON)
+      ptOut2.x = Math.floor (1-f)*ptA.x + (f*ptB.x) - (g*gx+EPSILON)
+      ptOut2.y = Math.floor (1-f)*ptA.y + (f*ptB.y) - (g*gy+EPSILON)
 
       return [ptOut1, ptOut2]
 
@@ -85,7 +83,7 @@ define [
       ady = b.y - a.y
       l = Math.sqrt(adx * adx + ady * ady)
       poly.addVertex b.x, b.y
-      @.interpPoint2 a, b, p1, p2, 1 - al / l, aw
+      [p1, p2] = @.interpPoint2 a, b, p11 - al / l, aw
       poly.addVertex p1.x, p1.y
       poly.addVertex p2.x, p2.y
       return poly
@@ -115,7 +113,7 @@ define [
         hsx = Math.sqrt(1 - cx * cx)
         @.interpPoint point1, point2, @ps2, i / segments, hsx * hs
         voltageLevel = vStart + (vEnd - vStart) * i / segments
-        color = @setVoltageColor(voltageLevel)
+        color = @getVoltageColor(voltageLevel)
         @.drawThickLinePt @ps1, @ps2, color
         @ps1.x = @ps2.x
         @ps1.y = @ps2.y

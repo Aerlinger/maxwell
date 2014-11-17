@@ -81,7 +81,7 @@ define [
       @point1 = new Point(@x1, @y1)
       @point2 = new Point(@x2, @y2)
 
-      console.log("Setting points: #{this.toString()} - #{this.dump()}")
+#      console.log("Setting points: #{this.toString()} - #{this.dump()}")
 
       #TODO: Implement snapping here:
 
@@ -140,7 +140,7 @@ define [
         @lead2 = @point2
         return
 
-      console.log("Calc leads: #{@toString()}");
+#      console.log("Calc leads: #{@toString()}");
       @lead1 = DrawHelper.interpPoint(@point1, @point2, (@dn - len) / (2 * @dn));
       @lead2 = DrawHelper.interpPoint(@point1, @point2, (@dn + len) / (2 * @dn));
 
@@ -150,7 +150,7 @@ define [
       cur = @current  if (isNaN(cur) || !cur?)
       cc = @curcount  if (isNaN(cc) || !cc?)
 
-      cadd = cur * @Circuit.Params.currentMult
+      cadd = cur * @Circuit.Params.getCurrentMult()
 #      cadd = cur * 48
       cadd %= 8
       @curcount = cc + cadd
@@ -366,6 +366,7 @@ define [
     ### #######################################################################
 
     draw: (renderContext) ->
+      @curcount = @updateDotCount()
       @drawPosts(renderContext)
       @draw2Leads(renderContext)
 
@@ -378,6 +379,9 @@ define [
       if @point2? and @lead2?
         renderContext.drawThickLinePt @lead2, @point2, DrawHelper.getVoltageColor(@volts[1])
 
+    updateDotCount: ->
+
+
     drawDots: (point1 = @point1, point2 = @point2, renderContext) =>
       return if @Circuit?.isStopped() or @current is 0
 
@@ -386,14 +390,16 @@ define [
       dn = Math.sqrt dx * dx + dy * dy
 
       ds = 16
-
 #      pos %= ds
 
       currentIncrement = @current * @Circuit.currentSpeed()
       @curcount = (@curcount + currentIncrement) % ds
+#      @curcount = 3
       @curcount += ds if @curcount < 0
 
       newPos = @curcount
+
+#      console.log(@curcount)
       while newPos < dn
         x0 = point1.x + newPos * dx / dn
         y0 = point1.y + newPos * dy / dn

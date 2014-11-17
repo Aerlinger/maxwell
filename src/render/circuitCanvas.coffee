@@ -11,8 +11,22 @@
 # #######################################################################
 
 # <DEFINE>
-define ['cs!CanvasContext', 'cs!Observer', 'cs!Circuit', 'cs!KeyHandler', 'cs!MouseHandler'],
-(CanvasContext, Observer, Circuit, KeyHandler, MouseHandler) ->
+define [
+    'cs!CanvasContext',
+    'cs!Observer',
+    'cs!Circuit',
+    'cs!KeyHandler',
+    'cs!MouseHandler',
+    'cs!FormatUtils'
+  ],
+(
+  CanvasContext,
+  Observer,
+  Circuit,
+  KeyHandler,
+  MouseHandler,
+  FormatUtils
+) ->
 # </DEFINE>
 
   class CircuitCanvas extends Observer
@@ -46,6 +60,10 @@ define ['cs!CanvasContext', 'cs!Observer', 'cs!Circuit', 'cs!KeyHandler', 'cs!Mo
       # TODO: Find where to show data; below circuit, not too high unless we need it
       bottomTextOffset = 100
       ybase = @Circuit.getCircuitBottom - (15 * 1) - bottomTextOffset
+      @Context.fillText("t = #{FormatUtils.longFormat(@Circuit.time)} s", 10, 10)
+#      @Context.fillText("frames = #{@Circuit.time} s", 10, 20)
+      @Context.fillText("F.T. = #{@Circuit.frames}", 10, 20)
+      @Context.fillText("F.T. = #{@Circuit.frames}", 10, 30)
 
     drawWarning: (context) ->
       msg = ""
@@ -109,5 +127,6 @@ define ['cs!CanvasContext', 'cs!Observer', 'cs!Circuit', 'cs!KeyHandler', 'cs!Mo
     # Called on Circuit update:
     repaint: (Circuit) =>
       @drawComponents()
+      @drawInfo()
 
   return CircuitCanvas

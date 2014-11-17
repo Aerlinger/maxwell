@@ -65,21 +65,19 @@ define [
       # calc plates
       @plate1 = [new Point(), new Point()]
       @plate2 = [new Point(), new Point()]
-      DrawHelper.interpPoint @point1, @point2, f, 12, @plate1[0], @plate1[1]
-      DrawHelper.interpPoint @point1, @point2, 1 - f, 12, @plate2[0], @plate2[1]
+      [@plate1[0], @plate1[1]] = DrawHelper.interpPoint2 @point1, @point2, f, 12
+      [@plate2[0], @plate2[1]] = DrawHelper.interpPoint2 @point1, @point2, 1 - f, 12
 
 
     draw: (renderContext) ->
       hs = 12
       @setBboxPt @point1, @point2, hs
-      @curcount = @updateDotCount()
+#      @curcount = @updateDotCount()
 
-      unless @isBeingDragged()
-        @drawDots @point1, @lead1, renderContext
-        @drawDots @point2, @lead2, renderContext
+#      unless @isBeingDragged()
 
       # draw first lead and plate
-#      color = DrawHelper.setVoltageColor(@volts[0])
+      color = DrawHelper.getVoltageColor(@volts[0])
       renderContext.drawThickLinePt @point1, @lead1, color
 #      @setPowerColor false
       renderContext.drawThickLinePt @plate1[0], @plate1[1], color
@@ -93,6 +91,11 @@ define [
       renderContext.drawThickLinePt @point2, @lead2, color
 #      @setPowerColor false
       renderContext.drawThickLinePt @plate2[0], @plate2[1], color
+
+      @drawDots @point1, @lead1, renderContext
+#      @drawDots @point2, @lead2, renderContext
+      @drawDots @lead2, @point2, renderContext
+
       @drawPosts(renderContext)
 
 

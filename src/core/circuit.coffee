@@ -128,7 +128,9 @@ define [
       @scopeColCount = []  # Array of integers
 
       @time = 0
+      @secTime = 0
       @lastTime = 0
+      @lastFrameTime = 0
 
       # State Handlers
       @mouseState = new MouseState()
@@ -268,6 +270,10 @@ define [
 
       @Solver.reset()
 
+    resetTimings: ->
+      @time
+      @frames = 0
+
 
     ####################################################################################################################
     ### Simulation Frame Computation
@@ -283,22 +289,24 @@ define [
     updateCircuit: () ->
       @notifyObservers(@ON_START_UPDATE)
       #@simulation = requestAnimationFrame(Circuit.prototype.updateCircuit, @)
-      startTime = (new Date()).getTime()
+#      startTime = (new Date()).getTime()
 
       # Reconstruct circuit
       @Solver.reconstruct()
 
       # If the circuit isn't stopped,
-      unless @Solver.isStopped
-        @Solver.solveCircuit()
-        @lastTime = @updateTimings()
-      else
+      if @Solver.isStopped
         @lastTime = 0
+      else
+        @sysTime = (new Date()).getTime();
+        @Solver.solveCircuit()
+        # FIXME:
+        @lastTime = @updateTimings()
 
       @notifyObservers(@ON_COMPLETE_UPDATE)
 
-      endTime = (new Date()).getTime()
-      frameTime = endTime - startTime
+#      endTime = (new Date()).getTime()
+#      frameTime = endTime - startTime
       @lastFrameTime = @lastTime
 
 
@@ -336,19 +344,22 @@ define [
 
     updateTimings: () ->
       sysTime = (new Date()).getTime()
-      #if @lastTime != 0
-      inc = Math.floor(sysTime - @lastTime)
-      currentSpeed = Math.exp(@Params.currentSpeed / 3.5 - 14.2)
-      @Params.currentMult = 1.7 * inc * currentSpeed
+      # FIXME: Out of order?
+      if @lastTime != 0
+        inc = Math.floor(sysTime - @lastTime)
+        currentSpeed = Math.exp(@Params.currentSpeed / 3.5 - 14.2)
+        @Params.setCurrentMult(1.7 * inc * currentSpeed)
 
       if (sysTime - @secTime) >= 1000
         @framerate = @frames
         @steprate = @Solver.steps
-        @frames = 0
+        @frames = 0 # Fixme
         @steps = 0
         @secTime = sysTime
 
-      @frames++
+      @lastTime = sysTime
+
+#      @frames++
       return sysTime
 
 
@@ -368,6 +379,17 @@ define [
     ####################################################################################################################
     ### Simulation Accessor Methods
     ####################################################################################################################
+
+
+
+    incrementFrames: ->
+      @frames++
+
+    setLastFrameTime: (time) ->
+      @lastFrameTime = time
+
+    getLastFrameTime: ->
+      @lastFrameTime
 
     isStopped: ->
       @Solver.isStopped

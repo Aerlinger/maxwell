@@ -78,12 +78,12 @@ define [
       else
         stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource
   
-    doStep: ->
+    doStep: (solver) ->
       unless @waveform is VoltageElm.WF_DC
-        @getParentCircuit().Solver.updateVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
+        solver.updateVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
   
     getVoltage: ->
-      omega = 2 * Math.PI * (@Circuit.Solver.time - @freqTimeZero) * @frequency + @phaseShift
+      omega = 2 * Math.PI * (@Circuit.time - @freqTimeZero) * @frequency + @phaseShift
       switch @waveform
         when VoltageElm.WF_DC
           @maxVoltage + @bias
@@ -106,13 +106,22 @@ define [
   
     setPoints: ->
       super()
-      @calcLeads (if (@waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR) then 8 else VoltageElm.circleSize * 2)
-  
+      if(@waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR)
+        @calcLeads 8
+      else
+        @calcLeads(VoltageElm.circleSize * 2)
   
     draw: (renderContext) ->
       @setBbox @x1, @y2, @x2, @y2
 
       @draw2Leads(renderContext)
+
+      unless @isBeingDragged()
+        if @waveform is VoltageElm.WF_DC
+          @drawDots @point1, @point2, renderContext
+        else
+          @drawDots @lead1, @point1, renderContext
+      #          @drawDots @point2, @lead2, renderContext
   
       if @waveform is VoltageElm.WF_DC
         [ptA, ptB] = DrawHelper.interpPoint2 @lead1, @lead2, 0, 10
@@ -122,14 +131,16 @@ define [
         @setBboxPt @point1, @point2, 16
         [ptA, ptB] = DrawHelper.interpPoint2 @lead1, @lead2, 1, 16
         renderContext.drawThickLinePt ptA, ptB, DrawHelper.getVoltageColor(@volts[1])
-  
+
       else
         @setBboxPt @point1, @point2, VoltageElm.circleSize
-        DrawHelper.interpPoint @lead1, @lead2, 0.5, DrawHelper.ps1
-        @drawWaveform DrawHelper.ps1, renderContext
-  
+        ps1 = DrawHelper.interpPoint @lead1, @lead2, 0.5
+        @drawWaveform ps1, renderContext
+
+
+
       @drawPosts(renderContext)
-      @drawDots @point1, @point2, renderContext
+
   
   
     drawWaveform: (center, renderContext) ->
@@ -141,7 +152,7 @@ define [
       yc = center.y
   
       # TODO:
-      renderContext.fillCircle xc, yc, VoltageElm.circleSize, color
+      renderContext.fillCircle xc, yc, VoltageElm.circleSize, 2, "#FFFFFF"
   
       #Main.getMainCanvas().drawThickCircle(xc, yc, circleSize, color);
       wl = 8
@@ -154,12 +165,13 @@ define [
         when VoltageElm.WF_SQUARE
           xc2 = Math.floor(wl * 2 * @dutyCycle - wl + xc)
           xc2 = Math.max(xc - wl + 3, Math.min(xc + wl - 3, xc2))
+#
           renderContext.drawThickLine xc - wl, yc - wl, xc - wl, yc, color
           renderContext.drawThickLine xc - wl, yc - wl, xc2, yc - wl, color
           renderContext.drawThickLine xc2, yc - wl, xc2, yc + wl, color
           renderContext.drawThickLine xc + wl, yc + wl, xc2, yc + wl, color
           renderContext.drawThickLine xc + wl, yc, xc + wl, yc + wl, color
-
+#
         when VoltageElm.WF_PULSE
           yc += wl / 2
           renderContext.drawThickLine xc - wl, yc - wl, xc - wl, yc, color

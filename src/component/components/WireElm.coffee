@@ -42,7 +42,9 @@ define [
 
       @drawValues s, 4
       @drawPosts(renderContext)
+
       @drawDots(@point1, @point2, renderContext)
+
 
     stamp: (stamper) ->
       stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0

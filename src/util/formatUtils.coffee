@@ -5,10 +5,14 @@ define [], () ->
     class FormatUtils
 
       @showFormat: (decimalNum) ->
-        decimalNum.toFixed(2)
+        decimalNum.toPrecision(2)
       
       @shortFormat: (decimalNum) ->
-        return decimalNum.toFixed(1);
+        return decimalNum.toPrecision(1);
+
+      @longFormat: (decimalNum) ->
+        decimalNum.toPrecision(4)
+
       
       ###
       Removes commas from a number containing a string:

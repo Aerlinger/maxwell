@@ -31,20 +31,22 @@ define [
     getPostCount: ->
       1
   
-#    draw: (renderContext) ->
-#      color = DrawHelper.getVoltageColor(0)
-#      @doDots(renderContext)
-#      renderContext.drawThickLinePt @point1, @point2, color
-#
-#      for row in [0...3]
-#        startPt = 10 - row * 2
-#        endPt = row * 3
-#        [pt1, pt2] = DrawHelper.interpPoint @point1, @point2, 1 + endPt / @dn, startPt
-#        renderContext.drawThickLinePt pt1, pt2, color
-#
-#      DrawHelper.interpPoint @point1, @point2, pt2, 1 + 11.0 / @dn
-#      @setBboxPt @point1, pt2, 11
-#      @drawPost @x1, @y1, @nodes[0], renderContext
+    draw: (renderContext) ->
+      color = DrawHelper.getVoltageColor(0)
+
+      renderContext.drawThickLinePt @point1, @point2, color
+
+      for row in [0...3]
+        startPt = 10 - row * 2
+        endPt = row * 3
+        [pt1, pt2] = DrawHelper.interpPoint2 @point1, @point2, 1 + endPt / @dn, startPt
+        renderContext.drawThickLinePt pt1, pt2, color
+
+      pt2 = DrawHelper.interpPoint @point1, @point2, 1 + 11.0 / @dn
+      @setBboxPt @point1, pt2, 11
+      @drawPost @x1, @y1, @nodes[0], renderContext
+
+      @drawDots(renderContext)
   
     setCurrent: (x, currentVal) ->
       @current = -currentVal

@@ -67,7 +67,7 @@ define [
 
     draw: (renderContext) ->
       @drawDiode(renderContext)
-      @drawDots(renderContext)
+      @drawDots(@point1, @point2, renderContext)
       @drawPosts(renderContext)
 
     reset: ->
