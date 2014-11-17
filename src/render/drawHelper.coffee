@@ -103,7 +103,7 @@ define [
 
       return newPoly
 
-    @drawCoil: (hs, point1, point2, vStart, vEnd) ->
+    @drawCoil: (hs, point1, point2, vStart, vEnd, renderContext) ->
       segments = 40
       @ps1.x = point1.x
       @ps1.y = point1.y
@@ -111,10 +111,10 @@ define [
       for i in [0...segments]
         cx = (((i + 1) * 8 / segments) % 2) - 1
         hsx = Math.sqrt(1 - cx * cx)
-        @.interpPoint point1, point2, @ps2, i / segments, hsx * hs
+        @ps2 = @.interpPoint point1, point2, i / segments, hsx * hs
         voltageLevel = vStart + (vEnd - vStart) * i / segments
-        color = @getVoltageColor(voltageLevel)
-        @.drawThickLinePt @ps1, @ps2, color
+        color = @.getVoltageColor(voltageLevel)
+        renderContext.drawThickLinePt @ps1, @ps2, color
         @ps1.x = @ps2.x
         @ps1.y = @ps2.y
 

@@ -69,8 +69,6 @@ define [
 #      @ind.doStep stamper, voltdiff
 
     draw: (renderContext) ->
-#      @doDots()
-      @drawDots(renderContext)
       v1 = @volts[0]
       v2 = @volts[1]
       hs = 8
@@ -78,13 +76,14 @@ define [
       @setBboxPt @point1, @point2, hs
       @draw2Leads(renderContext)
 #      @setPowerColor false
-#      DrawHelper.drawCoil 8, @lead1, @lead2, v1, v2
+      DrawHelper.drawCoil 8, @lead1, @lead2, v1, v2, renderContext
 
-      if @getParentCircuit().showValuesCheckItem
-        unit_text = DrawHelper.getShortUnitText(@inductance, "H")
-        @drawValues unit_text, hs
+#      if @getParentCircuit().showValuesCheckItem
+      unit_text = Units.getUnitText(@inductance, "H")
+      @drawValues unit_text, hs, renderContext
 
       @drawPosts(renderContext)
+      @drawDots(@point1, @point2, renderContext)
 
     dump: ->
       "#{super()} #{@inductance} #{@current}"
@@ -126,6 +125,9 @@ define [
 
     getVoltageDiff: ->
       @volts[0] - @volts[1]
+
+    toString: ->
+      "InductorElm"
 
 
     getEditInfo: (n) ->
