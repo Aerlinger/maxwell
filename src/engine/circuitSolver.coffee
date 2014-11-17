@@ -265,19 +265,19 @@ define [
 
       for i in [0...@Circuit.numElements()]
         ce = @Circuit.getElmByIdx(i)
-#        if ce instanceof InductorElm
-#          fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
-#
+        if ce instanceof InductorElm
+          fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
+
 #          # try findPath with maximum depth of 5, to avoid slowdown
-#          if not fpi.findPath(ce.getNode(0), 5) and not fpi.findPath(ce.getNode(0))
-#            ce.reset()
-#
+          if not fpi.findPath(ce.getNode(0), 5) and not fpi.findPath(ce.getNode(0))
+            ce.reset()
+
 #        # look for current sources with no current path
-#        if ce instanceof CurrentElm
-#          fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
-#          unless fpi.findPath(ce.getNode(0))
-#            @Circuit.halt "No path for current source!", ce
-#            return
+        if ce instanceof CurrentElm
+          fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
+          unless fpi.findPath(ce.getNode(0))
+            @Circuit.halt "No path for current source!", ce
+            return
 #
         # Look for voltage source loops:
         if (ce.toString() == "VoltageElm" and ce.getPostCount() is 2) or ce.toString() == "WireElm"
@@ -287,17 +287,17 @@ define [
           if pathfinder.findPath(ce.getNode(0)) is true
             @Circuit.halt "Voltage source/wire loop with no resistance!", ce
             return
-#
+
 #        # Look for shorted caps or caps with voltage but no resistance
-#        if ce instanceof CapacitorElm
-#          fpi = new Pathfinder(Pathfinder.SHORT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
-#          if fpi.findPath(ce.getNode(0))
-#            ce.reset()
-#          else
-#            fpi = new Pathfinder(Pathfinder.CAP_V, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
-#            if fpi.findPath(ce.getNode(0))
-#              @Circuit.halt "Capacitor loop with no resistance!", ce
-#              return
+        if ce instanceof CapacitorElm
+          fpi = new Pathfinder(Pathfinder.SHORT, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
+          if fpi.findPath(ce.getNode(0))
+            ce.reset()
+          else
+            fpi = new Pathfinder(Pathfinder.CAP_V, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
+            if fpi.findPath(ce.getNode(0))
+              @Circuit.halt "Capacitor loop with no resistance!", ce
+              return
 
       for iter in [0...@matrixSize]
         qm = -1

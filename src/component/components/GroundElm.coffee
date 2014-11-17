@@ -46,7 +46,7 @@ define [
       @setBboxPt @point1, pt2, 11
       @drawPost @x1, @y1, @nodes[0], renderContext
 
-      @drawDots(@point2, @point1, renderContext)
+      @drawDots(@point1, @point2, renderContext)
   
     setCurrent: (x, currentVal) ->
       @current = -currentVal

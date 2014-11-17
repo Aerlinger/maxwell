@@ -2,11 +2,15 @@
 define [
   'cs!VoltageElm',
   'cs!CurrentElm',
-  'cs!ResistorElm'
+  'cs!ResistorElm',
+  'cs!InductorElm',
+  'cs!CapacitorElm'
 ], (
 VoltageElm,
 CurrentElm,
-ResistorElm
+ResistorElm,
+InductorElm,
+CapacitorElm
 ) ->
 # </DEFINE>
 

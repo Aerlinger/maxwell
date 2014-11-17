@@ -177,7 +177,7 @@ define [
       stamper.stampMatrix vn, @nodes[0], dx
       stamper.stampMatrix vn, @nodes[1], -dx
       stamper.stampMatrix vn, @nodes[2], 1
-      console.log("X: " + x)
+#      console.log("X: " + x)
       stamper.stampRightSide vn, x
       @lastvd = vd
 
