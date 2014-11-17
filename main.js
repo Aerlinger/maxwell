@@ -209,20 +209,24 @@ require([
   var circuitFileName = "../circuits/" + circuitName + ".json";
 
   $(document).ready(function (event) {
-    CircuitLoader.createCircuitFromJSON(circuitFileName, function (circuit) {
-      "use strict";
-      console.log("Loading: " + circuitFileName);
+    var canvas = $('canvas.maxwell');
 
-      var canvas = $('canvas.maxwell');
+    if (canvas && circuitName) {
+      CircuitLoader.createCircuitFromJSON(circuitFileName, function (circuit) {
+        "use strict";
+        console.log("Loading: " + circuitFileName);
 
-      new CircuitCanvas(circuit, canvas);
+        new CircuitCanvas(circuit, canvas);
 
-      circuit.updateCircuit();
-
-      setInterval(function () {
         circuit.updateCircuit();
-      }, 0);
-    });
+
+        setInterval(function () {
+          circuit.updateCircuit();
+        }, 0);
+      });
+    } else {
+      console.error("No circuit definition provided");
+    }
   });
 
   if (window.location.toString().match("/test")) {

@@ -31,17 +31,16 @@ define [
       @opheight = 0
       @opwidth = 0
       @opaddtext = 0
-      @maxOut = 0
-      @minOut = 0
-      @nOut = 0
+      @maxOut = 15
+      @minOut = -15
+#      @nOut = 0
       @gain = 1e6
-      @gbw = 0
       @reset = false
       @in1p = []
       @in2p = []
       @textp = []
 
-      @lastvd = 0
+#      @lastvd = 0
 
       #Font plusFont;
       @maxOut = 15
@@ -55,6 +54,7 @@ define [
           @maxOut = parseFloat(st[0])
           @minOut = parseFloat(st[1])
           @gbw = parseFloat(st[2])
+
       @noDiagonal = true
       @setSize (if (f & OpAmpElm.FLAG_SMALL) isnt 0 then 1 else 2)
       @setGain()
@@ -177,6 +177,7 @@ define [
       stamper.stampMatrix vn, @nodes[0], dx
       stamper.stampMatrix vn, @nodes[1], -dx
       stamper.stampMatrix vn, @nodes[2], 1
+      console.log("X: " + x)
       stamper.stampRightSide vn, x
       @lastvd = vd
 

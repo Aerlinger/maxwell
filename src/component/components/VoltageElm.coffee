@@ -120,7 +120,7 @@ define [
         if @waveform is VoltageElm.WF_DC
           @drawDots @point1, @point2, renderContext
         else
-          @drawDots @lead1, @point1, renderContext
+          @drawDots @point1, @lead1, renderContext
       #          @drawDots @point2, @lead2, renderContext
   
       if @waveform is VoltageElm.WF_DC
@@ -136,8 +136,6 @@ define [
         @setBboxPt @point1, @point2, VoltageElm.circleSize
         ps1 = DrawHelper.interpPoint @lead1, @lead2, 0.5
         @drawWaveform ps1, renderContext
-
-
 
       @drawPosts(renderContext)
 

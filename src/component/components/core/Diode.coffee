@@ -90,9 +90,11 @@ define [], () ->
 
     doStep: (voltdiff, stamper) ->
       # used to have .1 here, but needed .01 for peak detector
-      @circuit.converged = false  if Math.abs(voltdiff - @circuit.lastvoltdiff) > .01
-      voltdiff = @limitStep(voltdiff, @circuit.lastvoltdiff)
-      @circuit.lastvoltdiff = voltdiff
+      if Math.abs(voltdiff - @lastvoltdiff) > .01
+        @circuit.converged = false
+      voltdiff = @limitStep(voltdiff, @lastvoltdiff)
+
+      @lastvoltdiff = voltdiff
 
       if voltdiff >= 0 or @zvoltage is 0
         # regular diode or forward-biased zener
@@ -102,6 +104,7 @@ define [], () ->
         eval_ = 1  if voltdiff < 0
         geq = @vdcoef * @leakage * eval_
         nc = (eval_ - 1) * @leakage - geq * voltdiff
+
         stamper.stampConductance @nodes[0], @nodes[1], geq
         stamper.stampCurrentSource @nodes[0], @nodes[1], nc
       else
@@ -112,6 +115,7 @@ define [], () ->
         #* nc is I(Vd) + I'(Vd)*(-Vd)
         geq = @leakage * @vdcoef * (Math.exp(voltdiff * @vdcoef) + Math.exp((-voltdiff - @zoffset) * @vdcoef))
         nc = @leakage * (Math.exp(voltdiff * @vdcoef) - Math.exp((-voltdiff - @zoffset) * @vdcoef) - 1) + geq * (-voltdiff)
+
         stamper.stampConductance @nodes[0], @nodes[1], geq
         stamper.stampCurrentSource @nodes[0], @nodes[1], nc
 

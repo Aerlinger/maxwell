@@ -14,6 +14,8 @@ define [
     control voltage source vs with voltage from n1 to n2 (must also call stampVoltageSource())
     ###
     stampVCVS: (n1, n2, coef, vs) ->
+      if isNaN(vs) or isNaN(coef)
+        console.log("NaN in stampVCVS")
       vn = @Circuit.numNodes() + vs
       @stampMatrix vn, n1, coef
       @stampMatrix vn, n2, -coef
@@ -22,6 +24,7 @@ define [
     # stamp independent voltage source #vs, from n1 to n2, amount v
     stampVoltageSource: (n1, n2, vs, v) ->
       vn = @Circuit.numNodes() + vs
+      console.log("v = #{v}")
       @stampMatrix vn, n1, -1
       @stampMatrix vn, n2, 1
       @stampRightSide vn, v
@@ -92,7 +95,7 @@ define [
     ###
     stampMatrix: (row, col, value) ->
       if isNaN(value) or MathUtils.isInfinite(value)
-        @Circuit.halt "attempted to stamp invalid value"
+        @Circuit.halt "attempted to stamp Matrix invalid value"
 
       if row > 0 and col > 0
         if @Circuit.Solver.circuitNeedsMap
@@ -114,8 +117,11 @@ define [
     independent current source flowing into node i
     ###
     stampRightSide: (row, value) ->
-      if isNaN(value)
-        @Circuit.Solver.circuitRowInfo[row - 1].rsChanges = true if row > 0
+      if isNaN(value) or value == null
+#        gibberish
+#        console.warn("NaN in stampRightSide")
+        if row > 0
+          @Circuit.Solver.circuitRowInfo[row - 1].rsChanges = true
       else
         if row > 0
           if @Circuit.Solver.circuitNeedsMap
@@ -129,6 +135,8 @@ define [
     Indicate that the values on the left side of row i change in doStep()
     ###
     stampNonLinear: (row) ->
+      if isNaN(row) or (row == null)
+        console.error("null/NaN in stampNonlinear")
       @Circuit.Solver.circuitRowInfo[row - 1].lsChanges = true  if row > 0
 
 

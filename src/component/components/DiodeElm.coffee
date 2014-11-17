@@ -62,7 +62,7 @@ define [
       @calcLeads 16
       @cathode = CircuitComponent.newPointArray(2)
       [pa, pb] = DrawHelper.interpPoint2 @lead1, @lead2, 0, @hs
-      [ca, cb] = DrawHelper.interpPoint2 @lead1, @lead2, 1, @hs
+      [@cathode[0], @cathode[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 1, @hs
       @poly = DrawHelper.createPolygonFromArray([pa, pb, @lead2])
 
     draw: (renderContext) ->
@@ -84,20 +84,20 @@ define [
 
       # draw arrow
       #this.setPowerColor(true);
-#      color = @setVoltageColor(v1)
-#      renderContext.drawThickPolygonP @poly, color
+      color = DrawHelper.getVoltageColor(v1)
+      renderContext.drawThickPolygonP @poly, color
 
       #g.fillPolygon(poly);
 
-      # draw thing diode plate
-#      color = @setVoltageColor(v2)
-#      renderContext.drawThickLinePt @cathode[0], @cathode[1], color
+      # draw the diode plate
+      color = DrawHelper.getVoltageColor(v2)
+      renderContext.drawThickLinePt @cathode[0], @cathode[1], color
 
     stamp: (stamper) ->
       @diode.stamp @nodes[0], @nodes[1], stamper
 
-    doStep: (Stamper) ->
-      @diode.doStep @volts[0] - @volts[1], Stamper
+    doStep: (stamper) ->
+      @diode.doStep @volts[0] - @volts[1], stamper
 
     calculateCurrent: ->
       @current = @diode.calculateCurrent(@volts[0] - @volts[1])

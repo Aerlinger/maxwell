@@ -38,14 +38,14 @@ define [
       @Circuit.addObserver Circuit.ON_RESET, @clear
       @Circuit.addObserver Circuit.ON_END_UPDATE, @repaint
 
-      @KeyHandler = new KeyHandler()
-      @MouseHandler = new MouseHandler()
+      @KeyHandler = new KeyHandler(@Circuit)
+      @MouseHandler = new MouseHandler(@Context, @Circuit)
 
       if @CanvasJQueryElm
         @CanvasJQueryElm.mousedown @onMouseDown
         @CanvasJQueryElm.mouseup @onMouseUp
         @CanvasJQueryElm.click @onMouseClick
-        #@CanvasJQueryElm.mousemove @onMouseMove
+        @CanvasJQueryElm.mousemove @onMouseMove
 
     drawComponents: ->
       @clear()
@@ -54,7 +54,10 @@ define [
           @drawComponent(component)
 
     drawComponent: (component) ->
-      component.draw(@Context) if @Context
+      if component.isSelected()
+        console.log("Hi!")
+        @Context.context.strokeStyle = "#FF0"
+      component.draw(@Context)
 
     drawInfo: ->
       # TODO: Find where to show data; below circuit, not too high unless we need it
@@ -63,7 +66,7 @@ define [
       @Context.fillText("t = #{FormatUtils.longFormat(@Circuit.time)} s", 10, 10)
 #      @Context.fillText("frames = #{@Circuit.time} s", 10, 20)
       @Context.fillText("F.T. = #{@Circuit.frames}", 10, 20)
-      @Context.fillText("F.T. = #{@Circuit.frames}", 10, 30)
+#      @Context.fillText("F.T. = #{@Circuit.frames}", 10, 30)
 
     drawWarning: (context) ->
       msg = ""
@@ -90,7 +93,7 @@ define [
       return @Context?.getCanvas().toBuffer
 
     getMouseHandler: () ->
-      return @mouseHandler
+      return @MouseHandler
 
     getKeyHandler: () ->
       return @keyHandler
@@ -107,22 +110,23 @@ define [
 
     onMouseMove: (event) =>
       mousePos = @getMousePos(event)
-      if @mouseHandler?.isMouseDown()
-        @mouseHandler.onMouseDrag(mousePos.x, mousePos.y)
+
+      if @MouseHandler.mouseDown
+        @MouseHandler.onMouseDrag(mousePos.x, mousePos.y)
       else
-        @mouseHandler.onMouseMove(mousePos.x, mousePos.y)
+        @MouseHandler.onMouseMove(mousePos.x, mousePos.y)
 
     onMouseDown: (event) =>
       mousePos = @getMousePos(event)
-      @mouseHandler?.onMouseDown(mousePos.x, mousePos.y)
+      @MouseHandler?.onMouseDown(mousePos.x, mousePos.y)
 
     onMouseUp: (event) =>
       mousePos = @getMousePos(event)
-      @mouseHandler?.onMouseUp(mousePos.x, mousePos.y)
+      @MouseHandler?.onMouseUp(mousePos.x, mousePos.y)
 
     onMouseClick: (event) =>
       mousePos = @getMousePos(event)
-      @mouseHandler?.onMouseClick(mousePos.x, mousePos.y)
+      @MouseHandler?.onMouseClick(mousePos.x, mousePos.y)
 
     # Called on Circuit update:
     repaint: (Circuit) =>

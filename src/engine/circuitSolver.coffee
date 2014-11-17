@@ -102,7 +102,7 @@ define [
 #      if Settings.SPEED is 0
 #        return 0
 #      sim_speed = @Circuit.simSpeed()
-      sim_speed = 200
+      sim_speed = 160
       return 0.1 * Math.exp((sim_speed - 61.0) / 24.0)
 
 

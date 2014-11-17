@@ -362,6 +362,12 @@ define [
 #      @frames++
       return sysTime
 
+    setSelected: (component) ->
+      for elm in @elementList
+        if elm == component
+          console.log("Selected: #{component.dump()}")
+          @selectedElm = component
+          component.setSelected(true)
 
     warn: (message) ->
       Logger.warn message

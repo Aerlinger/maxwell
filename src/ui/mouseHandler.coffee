@@ -13,7 +13,7 @@ define ['cs!Point'], (Point) ->
 
   class MouseHandler
 
-    constructor: (@Circuit) ->
+    constructor: (@Context, @Circuit) ->
       @mouseDown = false
       @mouseUp = false
       @mouseDownLocation = new Point()
@@ -40,6 +40,22 @@ define ['cs!Point'], (Point) ->
       @mouseDown = false
       @dragging = false
       console.log "UP: #{x}, #{y}"
+
+    onMouseMove: (x, y) ->
+      @Context.context.fillStyle = "#FFFFFF"
+      @Context.context.fillRect(150, 0, 200, 20)
+      @Context.context.fillStyle = "#000"
+      @Context.fillText("Mouse: (#{Math.floor(x)}, #{Math.floor(y)})", 150, 10)
+
+      for component in @Circuit.elementList
+        x1 = component.boundingBox.x
+        x2 = component.boundingBox.x + component.boundingBox.width
+        y1 = component.boundingBox.y
+        y2 = component.boundingBox.y + component.boundingBox.height
+#        console.log(x1, x2, y1, y2)
+        if (x > x1 and x < x2) and (y > y1 and y < y2)
+          @Circuit.setSelected(component)
+#          console.log("Hit: #{component.dump()}")
 
     onMouseDrag: (x, y) ->
       @mouseLocation = new Point(x, y)

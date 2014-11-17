@@ -278,10 +278,10 @@ define [
       @boundingBox.height = y2 - y1 + 1
 
     setBboxPt: (p1, p2, width) ->
-      @setBbox p1.x1, p1.y, p2.x1, p2.y
+      @setBbox p1.x, p1.y, p2.x, p2.y
       deltaX = (@dpx1 * width)
       deltaY = (@dpy1 * width)
-      @adjustBbox p1.x1 + deltaX, p1.y + deltaY, p1.x1 - deltaX, p1.y - deltaY
+      @adjustBbox p1.x + deltaX, p1.y + deltaY, p1.x - deltaX, p1.y - deltaY
 
     adjustBbox: (x1, y1, x2, y2) ->
       if x1 > x2
@@ -347,9 +347,6 @@ define [
 
     needsHighlight: ->
       @Circuit?.mouseElm is this or @selected
-
-    isSelected: ->
-      @selected
 
     setSelected: (selected) ->
       @selected = selected

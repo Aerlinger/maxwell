@@ -49,7 +49,7 @@ define [
       @draw2Leads()
       @setVoltageColor (@volts[0] + @volts[1]) / 2
       @setPowerColor false
-      CircuitComponent.drawCircle @center.x1, @center.y, cr
+      CircuitComponent.drawCircle @center.x, @center.y, cr
       CircuitComponent.drawCircle @ashaft1, @ashaft2
       CircuitComponent.fillPolygon @arrow
       CircuitComponent.setBboxPt @point1, @point2, cr
