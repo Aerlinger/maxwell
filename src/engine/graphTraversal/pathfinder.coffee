@@ -20,66 +20,73 @@ ResistorElm
       @used = new Array(numNodes)
 
 
-    findPath: (node, depth) ->
-      return true if node is @dest
+    findPath: (n1, depth) ->
+      return true if n1 is @dest
       return false if (depth-- is 0)
-      return false if @used[node]
 
-      @used[node] = true
+      if @used[n1]
+        return false
 
-      for element in @elementList
-        if element is @firstElm
+      @used[n1] = true
+
+      for ce in @elementList
+        if ce is @firstElm
           continue
-        # TODO: Add Current Elm
-        if (element instanceof CurrentElm) and (@type is FindPathInfo.INDUCT)
+        if (ce instanceof CurrentElm) and (@type is FindPathInfo.INDUCT)
           continue
-        if @type is Pathfinder.VOLTAGE and (element.isWire() or element instanceof VoltageElm)
-          continue
-        if @type is Pathfinder.SHORT and not element.isWire()
-          continue
+        if @type is Pathfinder.VOLTAGE
+          if (ce.isWire() or ce instanceof VoltageElm)
+            continue
+        if @type is Pathfinder.SHORT and not ce.isWire()
+          continue 
         if (@type is Pathfinder.CAP_V)
-          continue unless element.isWire() or element instanceof CapacitorElm or element instanceof VoltageElm
+          if !(ce.isWire() or ce instanceof CapacitorElm or ce instanceof VoltageElm)
+            continue
 
-        if node is 0
+        if n1 is 0
           # Look for posts which have a ground connection. Our path can go through ground!
-          for j in Array(element.getPostCount())
-            if element.hasGroundConnection(j) and @findPath(element.getNode(j), depth)
-              @used[node] = false
+          for j in [0...ce.getPostCount()]
+            if ce.hasGroundConnection(j) and @findPath(ce.getNode(j), depth)
+              @used[n1] = false
               return true
 
-        terminal_num = 0
-        for terminal_num in Array(element.getPostCount())
-          console.log(element + " " + element.getNode(terminal_num));
-          break if element.getNode(terminal_num) is node
+        j = 0
+        for j in [0...ce.getPostCount()]
+          console.log(ce + " " + ce.getNode(j));
+          if ce.getNode(j) is n1
+            break
 
         # TODO: ENSURE EQUALITY HERE
-        continue if terminal_num is element.getPostCount()
+        if j is ce.getPostCount()
+          continue
 
-        if element.hasGroundConnection(terminal_num) and @findPath(0, depth)
-          @used[node] = false
-          console.log(element + " has ground");
+        if ce.hasGroundConnection(j) and @findPath(0, depth)
+          console.log(ce + " has ground");
+          @used[n1] = false
           return true
 
-        if @type is Pathfinder.INDUCT and element instanceof InductorElm
-          current = element.getCurrent()
-          current = -current if terminal_num is 0
+        if @type is Pathfinder.INDUCT and ce instanceof InductorElm
+          c = ce.getCurrent()
+          if j is 0
+            c = -c
 
-          console.log(element + " > " + @firstElm + " >> matching " + element + " to " + @firstElm.getCurrent());
-          continue if Math.abs(current - @firstElm.getCurrent()) > 1e-10
+          console.log(ce + " > " + @firstElm + " >> matching " + ce + " to " + @firstElm.getCurrent());
+          if Math.abs(c - @firstElm.getCurrent()) > 1e-10
+            continue
 
-        for next_terminal_num in [0...element.getPostCount()]
-          continue if terminal_num is next_terminal_num
+        for k in [0...ce.getPostCount()]
+          continue if j is k
 
-          console.log(element + " " + element.getNode(terminal_num) + " - " + element.getNode(next_terminal_num));
-          if element.getConnection(terminal_num, next_terminal_num) and @findPath(element.getNode(next_terminal_num), depth)
-            @used[node] = false
-            console.log("got findpath " + node + " on element " + element);
+          console.log(ce + " " + ce.getNode(j) + " - " + ce.getNode(k));
+          if ce.getConnection(j, k) and @findPath(ce.getNode(k), depth)
+            @used[n1] = false
+            console.log("got findpath " + n1 + " on element " + ce);
             return true
 
-      console.log("back on findpath " + node);
-      @used[node] = false
+      @used[n1] = false
 
-      console.log(node + " failed");
+      console.log(n1 + " failed");
+
       return false
 
 

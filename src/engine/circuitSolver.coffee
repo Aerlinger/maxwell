@@ -263,8 +263,8 @@ define [
             changed = true
             break
 
-#      for i in [0...@Circuit.numElements()]
-#        ce = @Circuit.getElmByIdx(i)
+      for i in [0...@Circuit.numElements()]
+        ce = @Circuit.getElmByIdx(i)
 #        if ce instanceof InductorElm
 #          fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.elmList, @Circuit.nodeList.length)
 #
@@ -279,14 +279,14 @@ define [
 #            @Circuit.halt "No path for current source!", ce
 #            return
 #
-#        # Look for voltage source loops:
-#        if (ce instanceof VoltageElm and ce.getPostCount() is 2) or ce instanceof WireElm
-#          console.log("Examining Loop: #{ce.dump()} #{@Circuit.numNodes()}")
-#          pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
-#
-#          if pathfinder.findPath(ce.getNode(0)) is true
-#            @Circuit.halt "Voltage source/wire loop with no resistance!", ce
-#            return
+        # Look for voltage source loops:
+        if (ce.toString() == "VoltageElm" and ce.getPostCount() is 2) or ce.toString() == "WireElm"
+          console.log("Examining Loop: #{ce.dump()} #{@Circuit.numNodes()}")
+          pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
+
+          if pathfinder.findPath(ce.getNode(0)) is true
+            @Circuit.halt "Voltage source/wire loop with no resistance!", ce
+            return
 #
 #        # Look for shorted caps or caps with voltage but no resistance
 #        if ce instanceof CapacitorElm
@@ -309,29 +309,53 @@ define [
           continue
 
         rsadd = 0
+        console.log("Start iteratoin")
         # look for rows that can be removed
         for j in [0...@matrixSize]
-          matrix_ij = @circuitMatrix[iter][j]
+          q = @circuitMatrix[iter][j]
+          # *
           if @circuitRowInfo[j].type is RowInfo.ROW_CONST
             # Keep a running total of const values that have been removed already
-            rsadd -= @circuitRowInfo[j].value * matrix_ij
+            rsadd -= @circuitRowInfo[j].value * q
+
+            console.log("rsadd -= @circuitRowInfo[j].value * matrix_ij =", @circuitRowInfo[j].value * q)
             continue
-          if matrix_ij is 0
+          # *
+          if q is 0
+            console.log("q = 0")
             continue
           if qp is -1
             qp = j
-            qv = matrix_ij
+            qv = q
+
+            console.log("qv = #{qv}, qp = #{qp}")
             continue
-          if qm is -1 and (matrix_ij is -qv)
+          if qm is -1 and (q is -qv)
             qm = j
+            console.log("qm = #{qm}")
             continue
           break
 
         if j is @matrixSize
           if qp is -1
-            # FIXME: @circuitRowInfo[j] is undefined in nonlinear circuits
+            # FIXME: @circuitRowInfo[j] is undefined in some circuits
+            @Circuit.halt "Matrix error qp (rsadd = #{rsadd})", null
+            console.log("Frame 0 Dump: ----------------------------------")
+            console.log("Circuit Matrix size: #{@circuitMatrixSize}")
+            console.log("Circuit Matrix size: #{@matrixSize}")
+            console.log("Circuit Matrix:")
+            ArrayUtils.printArray @circuitMatrix
+            console.log("Circuit Permute:")
+            ArrayUtils.printArray @circuitPermute
+            console.log("Circuit Right Side:")
+            ArrayUtils.printArray @circuitRightSide
+            console.log("Sim speed: #{@getIterCount()}")
+            console.log("Current speed: #{@Circuit.currentSpeed()}")
+            console.log(iter)
+            console.log("ROWINFO: ")
+            console.log(@circuitRowInfo)
+            console.log("------------------------------------------------")
             @circuitRowInfo[j].type
-            @Circuit.halt "Matrix error qp", null
             return
 
           elt = @circuitRowInfo[qp]
