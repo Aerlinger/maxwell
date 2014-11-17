@@ -4,7 +4,8 @@ define [
   'cs!DrawHelper',
   'cs!Polygon',
   'cs!Rectangle',
-  'cs!Point'
+  'cs!Point',
+  'cs!Units',
 
   'cs!CircuitComponent'
 ], (
@@ -13,6 +14,7 @@ define [
   Polygon,
   Rectangle,
   Point,
+  Units,
 
   CircuitComponent
 ) ->
@@ -35,12 +37,12 @@ define [
       @setBboxPt @point1, @point2, 3
 
       if @mustShowCurrent()
-        s = DrawHelper.getShortUnitText(Math.abs(@getCurrent()), "A")
-        @drawValues s, 4
+        s = Units.getUnitText(Math.abs(@getCurrent()), "A")
+        @drawValues s, 4, renderContext
       else if @mustShowVoltage()
-        s = DrawHelper.getShortUnitText(@volts[0], "V")
+        s = Units.getUnitText(@volts[0], "V")
 
-      @drawValues s, 4
+      @drawValues s, 4, renderContext
       @drawPosts(renderContext)
 
       @drawDots(@point1, @point2, renderContext)

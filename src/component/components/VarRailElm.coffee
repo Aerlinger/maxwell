@@ -6,6 +6,7 @@ define [
   'cs!Rectangle',
   'cs!Point',
   'cs!CircuitComponent',
+  'cs!RailElm',
   'cs!Units'
 ], (
   Settings,
@@ -15,6 +16,7 @@ define [
   Point,
 
   CircuitComponent,
+  RailElm,
   Units
 ) ->
 # </DEFINE>
@@ -24,13 +26,13 @@ define [
     constructor: (xa, ya, xb, yb, f, st) ->
       super xa, ya, xb, yb, f, st
 
-      @sliderText = "voltage"
+#      @sliderText = "voltage"
       @frequency = @maxVoltage
-      @createSlider()
+#      @createSlider()
 
 
     dump: ->
-      RailElm::dump.call(this) + " " + @sliderText
+      super()
 
     getDumpType: ->
       172
@@ -40,12 +42,13 @@ define [
 
       # Todo: implement
     getVoltage: ->
-      frequency = slider.getValue() * (maxVoltage - bias) / 100.0 + bias
-      frequency
+      super()
+#      frequency = slider.getValue() * (maxVoltage - bias) / 100.0 + bias
+#      frequency
 
     destroy: ->
-      Circuit.main.remove label
-      Circuit.main.remove slider
+#      Circuit.main.remove label
+#      Circuit.main.remove slider
 
     getEditInfo: (n) ->
       return new EditInfo("Min Voltage", bias, -20, 20)  if n is 0

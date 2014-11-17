@@ -55,29 +55,34 @@ define [
       super()
       @calcLeads 32
       @ps = new Point(0, 0)
-      CircuitComponent.ps2 = new Point(0, 0)
+      @ps2 = new Point(0, 0)
 
     stamp: (stamper) ->
-      stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0  if @position is 0
+      if @position is 0
+        stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
 
     draw: (renderContext) ->
       openhs = 16
       hs1 = (if (@position is 1) then 0 else 2)
       hs2 = (if (@position is 1) then openhs else 2)
+
       @setBboxPt @point1, @point2, openhs
       @draw2Leads(renderContext)
+
       @doDots(renderContext)  if @position is 0
 
-      DrawHelper.interpPoint @lead1, @lead2, @ps, 0, hs1
-      DrawHelper.interpPoint @lead1, @lead2, CircuitComponent.ps2, 1, hs2
-      renderContext.drawThickLinePt @ps, CircuitComponent.ps2, Settings.FG_COLOR
+      @ps = DrawHelper.interpPoint @lead1, @lead2, 0, hs1
+      @ps2 = DrawHelper.interpPoint @lead1, @lead2, 1, hs2
+
+      renderContext.drawThickLinePt @ps, @ps2, Settings.FG_COLOR
+
       @drawPosts(renderContext)
 
     calculateCurrent: ->
       @current = 0  if @position is 1
 
     getVoltageSourceCount: ->
-      (if (@position is 1) then 0 else 1)
+      if (@position is 1) then 0 else 1
 
     mouseUp: ->
       @toggle() if @momentary
