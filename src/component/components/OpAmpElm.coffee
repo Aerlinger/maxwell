@@ -6,7 +6,8 @@ define [
   'cs!Rectangle',
   'cs!Point',
   'cs!CircuitComponent',
-  'cs!Units'
+  'cs!Units',
+  'cs!MathUtils'
 ], (
   Settings,
   DrawHelper,
@@ -15,7 +16,8 @@ define [
   Point,
 
   CircuitComponent,
-  Units
+  Units,
+  MathUtils
 ) ->
   # </DEFINE>
 
@@ -28,7 +30,7 @@ define [
     constructor: (xa, ya, xb, yb, f, st) ->
       super xa, ya, xb, yb, f
       @opsize = 0
-      @opheight = 0
+#      @opheight = 0
       @opwidth = 0
       @opaddtext = 0
       @maxOut = 15
@@ -73,14 +75,16 @@ define [
 
     draw: (renderContext) ->
       @setBboxPt @point1, @point2, @opheight * 2
+
       color = DrawHelper.getVoltageColor(@volts[0])
-      renderContext.drawThickLinePt @in1p[0], @in1p[1], color, renderContext
+      renderContext.drawThickLinePt @in1p[0], @in1p[1], color
+
       color = DrawHelper.getVoltageColor(@volts[1])
-      renderContext.drawThickLinePt @in2p[0], @in2p[1], color, renderContext
+      renderContext.drawThickLinePt @in2p[0], @in2p[1], color
 
 #      #g.setColor(this.needsHighlight() ? this.selectColor : this.lightGrayColor);
 #      @setPowerColor true
-      renderContext.drawThickPolygonP @triangle, (if @needsHighlight() then DrawHelper.selectColor else DrawHelper.lightGrayColor)
+      renderContext.drawThickPolygonP @triangle, (if @needsHighlight() then Settings.SELECT_COLOR else Settings.FG_COLOR)
 #
 #      #g.setFont(plusFont);
 #      #this.drawCenteredText("-", this.textp[0].x + 3, this.textp[0].y + 8, true).attr({'font-weight':'bold', 'font-size':17});
@@ -95,7 +99,7 @@ define [
     getPower: ->
       @volts[2] * @current
 
-    OpAmpElm::setSize = (s) ->
+    setSize: (s) ->
       @opsize = s
       @opheight = 8 * s
       @opwidth = 13 * s
@@ -150,7 +154,7 @@ define [
       arr[5] = "range = " + DrawHelper.getVoltageText(@minOut) + " to " + CircuitComponent.getVoltageText(@maxOut)
 
     stamp: (stamper) ->
-      vn = @Circuit.nodeList.length + @voltSource
+      vn = @Circuit.numNodes() + @voltSource
       stamper.stampNonLinear vn
       stamper.stampMatrix @nodes[2], vn, 1
 
@@ -158,15 +162,17 @@ define [
       vd = @volts[1] - @volts[0]
       if Math.abs(@lastvd - vd) > .1
         @Circuit.converged = false
-      else @Circuit.converged = false  if @volts[2] > @maxOut + .1 or @volts[2] < @minOut - .1
+      else if @volts[2] > @maxOut + .1 or @volts[2] < @minOut - .1
+        @Circuit.converged = false
+
       x = 0
-      vn = @Circuit.nodeList.length + @voltSource
+      vn = @Circuit.numNodes() + @voltSource
       dx = 0
 
-      if vd >= @maxOut / @gain and (@lastvd >= 0 or getRand(4) is 1)
+      if vd >= @maxOut / @gain and (@lastvd >= 0 or MathUtils.getRand(4) is 1)
         dx = 1e-4
         x = @maxOut - dx * @maxOut / @gain
-      else if vd <= @minOut / @gain and (@lastvd <= 0 or getRand(4) is 1)
+      else if vd <= @minOut / @gain and (@lastvd <= 0 or MathUtils.getRand(4) is 1)
         dx = 1e-4
         x = @minOut - dx * @minOut / @gain
       else
@@ -177,7 +183,6 @@ define [
       stamper.stampMatrix vn, @nodes[0], dx
       stamper.stampMatrix vn, @nodes[1], -dx
       stamper.stampMatrix vn, @nodes[2], 1
-#      console.log("X: " + x)
       stamper.stampRightSide vn, x
       @lastvd = vd
 

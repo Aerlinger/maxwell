@@ -102,7 +102,7 @@ define [
 #      if Settings.SPEED is 0
 #        return 0
 #      sim_speed = @Circuit.simSpeed()
-      sim_speed = 160
+      sim_speed = 50
       return 0.1 * Math.exp((sim_speed - 61.0) / 24.0)
 
 
@@ -126,13 +126,13 @@ define [
           break
         if circuitElm instanceof RailElm
           gotRail = true
-        if not volt? and circuitElm instanceof VoltageElm
+        if !volt? and circuitElm instanceof VoltageElm
           volt = circuitElm
 
       circuitNode = new CircuitNode()
 
       # If no ground and no rails then voltage element's first terminal is referenced to ground:
-      if not gotGround and volt? and not gotRail
+      if !gotGround and volt? and not gotRail
         terminalPt = volt.getPost(0)
         circuitNode.x = terminalPt.x
         circuitNode.y = terminalPt.y
@@ -227,8 +227,8 @@ define [
 
       # Determine nodes that are unconnected
       closure = new Array(@Circuit.numNodes())
-      closure[0] = true
       tempclosure = new Array(@Circuit.numNodes())
+      closure[0] = true
       changed = true
 
       while changed
@@ -246,18 +246,16 @@ define [
             for k in [0..circuitElm.getPostCount()]
               continue if j is k
               kn = circuitElm.getNode(k)
-              if circuitElm.getConnection(j, k) and not closure[kn]
+              if circuitElm.getConnection(j, k) and !closure[kn]
                 closure[kn] = true
                 changed = true
-#              ++k
-#            ++j
-#          ++i
 
         continue if changed
 
         # connect unconnected nodes
         for i in [0...@Circuit.numNodes()]
           if not closure[i] and not @Circuit.nodeList[i].intern
+            console.log("Node #{i} unconnected!")
             @Stamper.stampResistor 0, i, 1e8
             closure[i] = true
             changed = true
@@ -286,7 +284,7 @@ define [
 
           if pathfinder.findPath(ce.getNode(0)) is true
             @Circuit.halt "Voltage source/wire loop with no resistance!", ce
-            return
+#            return
 
 #        # Look for shorted caps or caps with voltage but no resistance
         if ce instanceof CapacitorElm
@@ -309,7 +307,7 @@ define [
           continue
 
         rsadd = 0
-        console.log("Start iteratoin")
+        console.log("Start iteration")
         # look for rows that can be removed
         for j in [0...@matrixSize]
           q = @circuitMatrix[iter][j]
@@ -355,7 +353,7 @@ define [
             console.log("ROWINFO: ")
             console.log(@circuitRowInfo)
             console.log("------------------------------------------------")
-            @circuitRowInfo[j].type
+#            @circuitRowInfo[j].type
             return
 
           elt = @circuitRowInfo[qp]

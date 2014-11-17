@@ -104,7 +104,6 @@ define [
 
       stamper.stampResistor @nodes[0], @nodes[1], @resistance
 
-    # Todo replace this:
     toString: ->
       "ResistorElm"
 

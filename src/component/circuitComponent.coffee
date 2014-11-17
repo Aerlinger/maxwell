@@ -234,6 +234,9 @@ define [
     setVoltageSource: (node, value) ->
       @voltSource = value
 
+    getVoltageSource: ->
+      @voltSource
+
     nonLinear: ->
       false
 

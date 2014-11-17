@@ -95,7 +95,7 @@ define [
     ###
     stampMatrix: (row, col, value) ->
       if isNaN(value) or MathUtils.isInfinite(value)
-        @Circuit.halt "attempted to stamp Matrix invalid value"
+        @Circuit.halt "attempted to stamp Matrix with invalid value"
 
       if row > 0 and col > 0
         if @Circuit.Solver.circuitNeedsMap
