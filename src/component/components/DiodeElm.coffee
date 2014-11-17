@@ -116,6 +116,8 @@ define [
       @fwdrop = ei.value
       @setup()
 
+    toString: ->
+      "DiodeElm"
 
     # TODO: fix
     needsShortcut: ->

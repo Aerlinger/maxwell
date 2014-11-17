@@ -40,6 +40,7 @@ define [
     getDumpType: ->
       187
 
+
     dump: ->
       "#{super()} #{@onresistance} #{@offresistance} #{@breakdown} #{@holdcurrent}"
 
@@ -81,7 +82,11 @@ define [
       @state = true  if Math.abs(vd) > @breakdown
 
     doStep: (stamper) ->
-      @resistance = if @state then @onresistance else @offresistance
+      if @state
+        console.log("SPARK!")
+        @resistance = @onresistance
+      else
+        @resistance = @offresistance
 
       stamper.stampResistor @nodes[0], @nodes[1], @resistance
 

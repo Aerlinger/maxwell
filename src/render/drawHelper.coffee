@@ -57,7 +57,7 @@ define [
       ptOut.x = Math.floor (1-f)*ptA.x + (f*ptB.x) + (g*gx+0.48)
       ptOut.y = Math.floor (1-f)*ptA.y + (f*ptB.y) + (g*gy+0.48)
 
-      console.log("InterpPoint:" + ptOut);
+#      console.log("InterpPoint:" + ptOut);
       return ptOut
 
     @interpPoint2: (ptA, ptB, f, g) ->
@@ -72,7 +72,8 @@ define [
       ptOut2.x = Math.floor (1-f)*ptA.x + (f*ptB.x) - (g*gx+0.48)
       ptOut2.y = Math.floor (1-f)*ptA.y + (f*ptB.y) - (g*gy+0.48)
 
-      console.log("interpPoint2: #{ptOut1} #{ptOut2}");
+#      console.log("interpPoint2: #{ptOut1} #{ptOut2}");
+
 
       return [ptOut1, ptOut2]
 

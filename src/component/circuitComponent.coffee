@@ -372,7 +372,7 @@ define [
 #      throw("Called abstract function draw() in AbstractCircuitElement")
 
     draw2Leads: (renderContext) ->
-      console.log("Draw2Leads #{this}: [#{@point1}, #{@point2}] [#{@lead1}, #{@lead2}]");
+#      console.log("Draw2Leads #{this}: [#{@point1}, #{@point2}] [#{@lead1}, #{@lead2}]");
       if @point1? and @lead1?
         renderContext.drawThickLinePt @point1, @lead1, DrawHelper.getVoltageColor(@volts[0])
       if @point2? and @lead2?
