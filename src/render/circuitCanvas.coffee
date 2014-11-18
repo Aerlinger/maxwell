@@ -55,7 +55,6 @@ define [
 
     drawComponent: (component) ->
       if component.isSelected()
-        console.log("Hi!")
         @Context.context.strokeStyle = "#FF0"
       component.draw(@Context)
 
