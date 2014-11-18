@@ -9,31 +9,13 @@ html
     link(rel='stylesheet', href='/css/maxwell.css')
 
     script(type="text/javascript", src="./bower_components/dat.gui/dat.gui.js")
+    script(type="text/javascript", src="./bower_components/dat.gui/dat.gui.js")
+    script(type="text/javascript", src="./bower_components/sketch.js/js/sketch.js")
 
     script(type="text/javascript", src="/libs/chai.js")
     script(type="text/javascript", src="/libs/mocha.js")
     //script(type="text/javascript", src="/javascripts/vendor/custom.modernizr.js")
     script(type="text/javascript", data-main="../main", src="/javascripts/require.js")
-
-    script
-      var FizzyText = function() {
-        this.message = 'dat.gui';
-        this.speed = 0.8;
-        this.displayOutline = false;
-        //this.explode = function() {
-        //
-        //};
-        // Define render logic ...
-      };
-
-      window.onload = function() {
-        var text = new FizzyText();
-        var gui = new dat.GUI();
-        gui.add(text, 'message');
-        gui.add(text, 'speed', -5, 5);
-        gui.add(text, 'displayOutline');
-        gui.add(text, 'explode');
-      };
 
   body
     include _header

@@ -1,6 +1,6 @@
 // This script gets run before any other Javascript in the library:
 
-(function() {
+(function () {
   "use strict";
 
   console.log("Loading RequireJS configuration...");
@@ -195,7 +195,6 @@
 }());
 
 
-
 require([
   // Load our app module and pass it to our definition function
   'cs!Circuit',
@@ -273,3 +272,37 @@ function runTests() {
     mocha.run();
   });
 }
+
+require([
+  // Load our app module and pass it to our definition function
+  'jquery'
+], function () {
+
+  $(document).ready(function () {
+    Sketch.create({
+      container: document.getElementById("#container"),
+      draw: function () {
+        this.beginPath();
+        this.arc(random(this.width), random(this.height), 10, 0, 2 * Math.PI);
+        this.fill();
+      }
+    });
+
+    var FizzyText = function () {
+      this.message = 'dat.gui';
+      this.speed = 0.8;
+      this.displayOutline = false;
+      //this.explode = function() {
+      //
+      //};
+      // Define render logic ...
+    };
+
+    var text = new FizzyText();
+    var gui = new dat.GUI();
+    gui.add(text, 'message');
+    gui.add(text, 'speed', -5, 5);
+    gui.add(text, 'displayOutline');
+    //gui.add(text, 'explode');
+  });
+});
