@@ -12,6 +12,7 @@ define [
   'cs!SparkGapElm',
   'cs!CurrentElm',
   'cs!RailElm',
+  'cs!MosfetElm',
   'cs!VarRailElm',
   'cs!OpAmpElm',
   'cs!ZenerElm',
@@ -30,6 +31,7 @@ define [
   SparkGapElm,
   CurrentElm,
   RailElm,
+  MosfetElm,
   VarRailElm,
   OpAmpElm,
   ZenerElm,
@@ -67,6 +69,7 @@ define [
       '172': VarRailElm
       'a': OpAmpElm
       'z': ZenerElm
+      'f': MosfetElm
 
 
 
