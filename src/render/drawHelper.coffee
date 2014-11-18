@@ -82,17 +82,20 @@ define [
 
       return [ptOut1, ptOut2]
 
-    @calcArrow: (a, b, al, aw) ->
+    @calcArrow: (point1, point2, al, aw) ->
       poly = new Polygon()
-      p1 = new Point(0, 0)
-      p2 = new Point(0, 0)
-      adx = b.x - a.x
-      ady = b.y - a.y
-      l = Math.sqrt(adx * adx + ady * ady)
-      poly.addVertex b.x, b.y
-      [p1, p2] = @.interpPoint2 a, b, p11 - al / l, aw
+
+      dx = point2.x - point1.x
+      dy = point2.y - point1.y
+      dist = Math.sqrt(dx * dx + dy * dy)
+
+      poly.addVertex point2.x, point2.y
+
+      [p1, p2] = @.interpPoint2 point1, point2, 1 - al / dist, aw
+
       poly.addVertex p1.x, p1.y
       poly.addVertex p2.x, p2.y
+
       return poly
 
     @createPolygon: (pt1, pt2, pt3, pt4) ->

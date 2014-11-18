@@ -11,15 +11,11 @@ define [
   class CanvasContext
     constructor: (@Canvas, @width=600, @height=400) ->
       @context = @Canvas?.getContext?('2d')
-      #@drawThickLine 10, 40, 400, 700
 
     fillText: (text, x, y) ->
-      return if !@context
       @context.fillText(text, x, y)
 
     fillCircle: (x, y, radius, lineWidth=Settings.LINE_WIDTH, fillColor='#FF0000', lineColor="#000000") ->
-      return if !@context
-
       orig_linewidth = @context.lineWidth
       @context.fillStyle = fillColor
       @context.strokeStyle = lineColor
@@ -32,22 +28,21 @@ define [
       @context.lineWidth = orig_linewidth
 
     drawCircle: (x, y, radius, lineWidth=Settings.LINE_WIDTH, lineColor="#000000") ->
-      return if !@context
-      orig_linewidth = @context.lineWidth
+      origLineWidth = @context.lineWidth
+      origStrokeStyle = @context.strokeStyle
       @context.strokeStyle = lineColor
       @context.beginPath()
       @context.lineWidth = lineWidth
       @context.arc x, y, radius, 0, 2 * Math.PI, true
       @context.stroke()
-#      @context.fill()
       @context.closePath()
-      @context.lineWidth = orig_linewidth
+      @context.lineWidth = origLineWidth
+      @context.lineWidth = origStrokeStyle
 
     drawThickLinePt: (pa, pb, color) ->
       @drawThickLine pa.x, pa.y, pb.x, pb.y, color
 
     drawThickLine: (x, y, x2, y2, color=Settings.FG_COLOR) ->
-      return if !@context
       @context.strokeStyle = color
       @context.beginPath()
       @context.moveTo x, y
@@ -78,7 +73,6 @@ define [
 
     toBuffer: () ->
       return @Canvas?.toBuffer
-
 
 
   return CanvasContext
