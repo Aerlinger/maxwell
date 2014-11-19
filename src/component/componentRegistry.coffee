@@ -33,6 +33,7 @@ define [
   CurrentElm,
   RailElm,
   MosfetElm,
+  TransistorElm,
   VarRailElm,
   OpAmpElm,
   ZenerElm,
@@ -41,17 +42,15 @@ define [
 ) ->
 # </DEFINE>
 
-# ElementMap
-#
-#   A Hash Map of circuit components within Maxwell
-#
-#   Each hash element is a key-value pair of the format {"ElementName": "ElementDescription"}
-#
-#   Elements that are tested working are prefixed with a '+'
-#   Elements that are implemented but not tested have their names (key) prefixed with a '#'
-#   Elements that are not yet implemented have their names (key) prefixed with a '-'
-
-
+  # ElementMap
+  #
+  #   A Hash Map of circuit components within Maxwell
+  #
+  #   Each hash element is a key-value pair of the format {"ElementName": "ElementDescription"}
+  #
+  #   Elements that are tested working are prefixed with a '+'
+  #   Elements that are implemented but not tested have their names (key) prefixed with a '#'
+  #   Elements that are not yet implemented have their names (key) prefixed with a '-'
   class ComponentRegistry
     @ComponentDefs:
       'w': WireElm
@@ -72,6 +71,7 @@ define [
       'a': OpAmpElm
       'z': ZenerElm
       'f': MosfetElm
+      't': TransistorElm
 
 
 

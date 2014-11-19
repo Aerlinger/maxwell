@@ -34,37 +34,43 @@ define [
       @emit = [] # Array of points
       @base = new Point() # Single point
       @pnp = 0
-      @fgain = 0
       @gmin = 0
       @ie = 0
       @ic = 0
       @ib = 0
-      @curcount_c = 0
-      @curcount_e = 0
-      @curcount_b = 0
+
+#      @curcount_c = 0
+#      @curcount_e = 0
+#      @curcount_b = 0
+
       @rectPoly = 0
       @arrowPoly = 0
       @vt = .025
       @vdcoef = 1 / @vt
       @rgain = .5
-      @vcrit = 0
       @lastvbc = 0
       @lastvbe = 0
       @leakage = 1e-13
 
       if st and st.length > 0
         st = st.split(" ")  if typeof st is "string"
+
         pnp = st.shift()
         @pnp = parseInt(pnp)  if pnp
+
         lastvbe = st.shift()
         @lastvbe = parseFloat(lastvbe)  if lastvbe
+
         lastvbc = st.shift()
         @lastvbc = parseFloat(lastvbc)  if lastvbc
+
         beta = st.shift()
         @beta = parseFloat(beta)  if beta
+
       @volts[0] = 0
       @volts[1] = -@lastvbe
       @volts[2] = -@lastvbc
+
       @setup()
 
     setup: ->
@@ -83,52 +89,60 @@ define [
       "t"
 
     dump: ->
-      CircuitComponent::dump.call(this) + " " + @pnp + " " + (@volts[0] - @volts[1]) + " " + (@volts[0] - @volts[2]) + " " + @beta
+      super() + " " + @pnp + " " + (@volts[0] - @volts[1]) + " " + (@volts[0] - @volts[2]) + " " + @beta
 
-    draw: ->
+    draw: (renderContext) ->
       @setBboxPt @point1, @point2, 16
-      @setPowerColor true
+#      @setPowerColor true
 
       # draw collector
       color = @setVoltageColor(@volts[1])
-      CircuitComponent.drawThickLinePt @coll[0], @coll[1], color
+      renderContext.drawThickLinePt @coll[0], @coll[1], color
 
       # draw emitter
       color = @setVoltageColor(@volts[2])
-      CircuitComponent.drawThickLinePt @emit[0], @emit[1], color
+      renderContext.drawThickLinePt @emit[0], @emit[1], color
 
       # draw arrow
       #g.setColor(lightGrayColor);
-      CircuitComponent.drawThickPolygonP @arrowPoly, Color.CYAN
+      renderContext.drawThickPolygonP @arrowPoly
 
       # draw base
-      color = @setVoltageColor(@volts[0])
-      g.setColor Color.gray  if Circuit.powerCheckItem
-      CircuitComponent.drawThickLinePt @point1, @base, color
+      color = DrawHelper.getVoltageColor(@volts[0])
+#      g.setColor Color.gray  if Circuit.powerCheckItem
+      renderContext.drawThickLinePt @point1, @base, color
 
       # draw dots
-      @curcount_b = @updateDotCount(-@ib, @curcount_b)
-      @drawDots @base, @point1, @curcount_b
-      @curcount_c = @updateDotCount(-@ic, @curcount_c)
-      @drawDots @coll[1], @coll[0], @curcount_c
-      @curcount_e = @updateDotCount(-@ie, @curcount_e)
-      @drawDots @emit[1], @emit[0], @curcount_e
+#      @curcount_b = @updateDotCount(-@ib, @curcount_b)
+#      @drawDots @base, @point1, @curcount_b
+#      @curcount_c = @updateDotCount(-@ic, @curcount_c)
+#      @drawDots @coll[1], @coll[0], @curcount_c
+#      @curcount_e = @updateDotCount(-@ie, @curcount_e)
+#      @drawDots @emit[1], @emit[0], @curcount_e
+
+      # draw dots
+      @drawDots @base, @point1, renderContext
+      @drawDots @coll[1], @coll[0], renderContext
+      @drawDots @emit[1], @emit[0], renderContext
 
       # draw base rectangle
-      color = @setVoltageColor(@volts[0])
-      @setPowerColor true
+      color = DrawHelper.getVoltageColor(@volts[0])
+#      @setPowerColor true
 
       #g.fillPolygon(rectPoly);
-      CircuitComponent.drawThickPolygonP @rectPoly, color
-      if (@needsHighlight() or Circuit.dragElm is this) and @dy is 0
-        #g.setColor(Color.white);
-        #g.setFont(this.unitsFont);
-        CircuitComponent.setColor Color.white
-        ds = MathUtils.sign(@dx)
-        @drawCenteredText "B", @base.x1 - 10 * ds, @base.y - 5, Color.WHITE
-        @drawCenteredText "C", @coll[0].x1 - 3 + 9 * ds, @coll[0].y + 4, Color.WHITE # x+6 if ds=1, -12 if -1
-        @drawCenteredText "E", @emit[0].x1 - 3 + 9 * ds, @emit[0].y + 4, Color.WHITE
-      @drawPosts()
+      renderContext.drawThickPolygonP @rectPoly, color
+
+#      if (@needsHighlight() or Circuit.dragElm is this) and @dy is 0
+#        g.setColor(Color.white);
+#        g.setFont(this.unitsFont);
+#        CircuitComponent.setColor Color.white
+#
+#        ds = MathUtils.sign(@dx)
+#        @drawCenteredText "B", @base.x1 - 10 * ds, @base.y - 5, Color.WHITE
+#        @drawCenteredText "C", @coll[0].x1 - 3 + 9 * ds, @coll[0].y + 4, Color.WHITE # x+6 if ds=1, -12 if -1
+#        @drawCenteredText "E", @emit[0].x1 - 3 + 9 * ds, @emit[0].y + 4, Color.WHITE
+
+      @drawPosts(renderContext)
 
     getPost: (n) ->
       (if (n is 0) then @point1 else (if (n is 1) then @coll[0] else @emit[0]))
@@ -139,8 +153,9 @@ define [
     getPower: ->
       (@volts[0] - @volts[2]) * @ib + (@volts[1] - @volts[2]) * @ic
 
-    setPoints: ->
-      CircuitComponent::setPoints.call this
+    setPoints: (stamper) ->
+      super()
+
       hs = 16
       @dsign = -@dsign  unless (@flags & TransistorElm.FLAG_FLIP) is 0
       hs2 = hs * @dsign * @pnp
@@ -148,22 +163,22 @@ define [
       # calc collector, emitter posts
       @coll = CircuitComponent.newPointArray(2)
       @emit = CircuitComponent.newPointArray(2)
-      DrawHelper.interpPoint @point1, @point2, 1, hs2, @coll[0], @emit[0]
+      [@coll[0], @emit[0]] = DrawHelper.interpPoint2 @point1, @point2, 1, hs2
 
       # calc rectangle edges
       @rect = CircuitComponent.newPointArray(4)
-      DrawHelper.interpPoint @point1, @point2, 1 - 16 / @dn, hs, @rect[0], @rect[1]
-      DrawHelper.interpPoint @point1, @point2, 1 - 13 / @dn, hs, @rect[2], @rect[3]
+      [@rect[0], @rect[1]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 16 / @dn, hs
+      [@rect[2], @rect[3]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 13 / @dn, hs
 
       # calc points where collector/emitter leads contact rectangle
-      DrawHelper.interpPoint @point1, @point2, 1 - 13 / @dn, 6 * @dsign * @pnp, @coll[1], @emit[1]
+      [@coll[1], @emit[1]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 13 / @dn, 6 * @dsign * @pnp
 
       # calc point where base lead contacts rectangle
       @base = new Point()
-      DrawHelper.interpPoint @point1, @point2, @base, 1 - 16 / @dn
+      @base = DrawHelper.interpPoint @point1, @point2, 1 - 16 / @dn
 
       # rectangle
-      @rectPoly = CircuitComponent.createPolygon(@rect[0], @rect[2], @rect[3], @rect[1])
+      @rectPoly = DrawHelper.createPolygon(@rect[0], @rect[2], @rect[3], @rect[1])
 
       # arrow
       unless @pnp is 1
@@ -171,8 +186,9 @@ define [
         @arrowPoly = DrawHelper.calcArrow(@emit[0], pt, 8, 4)
 
     limitStep: (vnew, vold) ->
-      arg = undefined
+      arg = 0  # TODO
       oo = vnew
+
       if vnew > @vcrit and Math.abs(vnew - vold) > (@vt + @vt)
         if vold > 0
           arg = 1 + (vnew - vold) / @vt
@@ -187,22 +203,25 @@ define [
       #console.log(vnew + " " + oo + " " + vold);
       vnew
 
-    stamp: (solver) ->
-      Circuit.stampNonLinear @nodes[0]
-      Circuit.stampNonLinear @nodes[1]
-      Circuit.stampNonLinear @nodes[2]
+    stamp: (stamper) ->
+      stamper.stampNonLinear @nodes[0]
+      stamper.stampNonLinear @nodes[1]
+      stamper.stampNonLinear @nodes[2]
 
-    doStep: () ->
+    doStep: (stamper) ->
+      subIterations = getParentCircuit().Solver.subIterations
+
       vbc = @volts[0] - @volts[1] # typically negative
       vbe = @volts[0] - @volts[2] # typically positive
       # .01
-      Circuit.converged = false  if Math.abs(vbc - @lastvbc) > .01 or Math.abs(vbe - @lastvbe) > .01
+      if Math.abs(vbc - @lastvbc) > .01 or Math.abs(vbe - @lastvbe) > .01
+        @getParentCircuit.converged = false
       @gmin = 0
-      if Circuit.subIterations > 100
+      if subIterations > 100
 
         # if we have trouble converging, put a conductance in parallel with all P-N junctions.
         # Gradually increase the conductance value for each iteration.
-        @gmin = Math.exp(-9 * Math.log(10) * (1 - Circuit.subIterations / 3000.0))
+        @gmin = Math.exp(-9 * Math.log(10) * (1 - subIterations / 3000.0))
         @gmin = .1  if @gmin > .1
 
       #console.log("T " + vbc + " " + vbe + "\n");
@@ -240,21 +259,21 @@ define [
 
       # stamps from page 302 of Pillage.  Node 0 is the base, node 1 the collector, node 2 the emitter.  Also stamp
       # minimum conductance (gmin) between b,e and b,c
-      Circuit.stampMatrix @nodes[0], @nodes[0], -gee - gec - gce - gcc + @gmin * 2
-      Circuit.stampMatrix @nodes[0], @nodes[1], gec + gcc - @gmin
-      Circuit.stampMatrix @nodes[0], @nodes[2], gee + gce - @gmin
-      Circuit.stampMatrix @nodes[1], @nodes[0], gce + gcc - @gmin
-      Circuit.stampMatrix @nodes[1], @nodes[1], -gcc + @gmin
-      Circuit.stampMatrix @nodes[1], @nodes[2], -gce
-      Circuit.stampMatrix @nodes[2], @nodes[0], gee + gec - @gmin
-      Circuit.stampMatrix @nodes[2], @nodes[1], -gec
-      Circuit.stampMatrix @nodes[2], @nodes[2], -gee + @gmin
+      stamper.stampMatrix @nodes[0], @nodes[0], -gee - gec - gce - gcc + @gmin * 2
+      stamper.stampMatrix @nodes[0], @nodes[1], gec + gcc - @gmin
+      stamper.stampMatrix @nodes[0], @nodes[2], gee + gce - @gmin
+      stamper.stampMatrix @nodes[1], @nodes[0], gce + gcc - @gmin
+      stamper.stampMatrix @nodes[1], @nodes[1], -gcc + @gmin
+      stamper.stampMatrix @nodes[1], @nodes[2], -gce
+      stamper.stampMatrix @nodes[2], @nodes[0], gee + gec - @gmin
+      stamper.stampMatrix @nodes[2], @nodes[1], -gec
+      stamper.stampMatrix @nodes[2], @nodes[2], -gee + @gmin
 
       # we are solving for v(k+1), not delta v, so we use formula
       # 10.5.13, multiplying J by v(k)
-      Circuit.stampRightSide @nodes[0], -@ib - (gec + gcc) * vbc - (gee + gce) * vbe
-      Circuit.stampRightSide @nodes[1], -@ic + gce * vbe + gcc * vbc
-      Circuit.stampRightSide @nodes[2], -@ie + gee * vbe + gec * vbc
+      stamper.stampRightSide @nodes[0], -@ib - (gec + gcc) * vbc - (gee + gce) * vbe
+      stamper.stampRightSide @nodes[1], -@ic + gce * vbe + gcc * vbc
+      stamper.stampRightSide @nodes[2], -@ie + gee * vbe + gec * vbc
 
     getInfo: (arr) ->
       arr[0] = "transistor (" + ((if (@pnp is -1) then "PNP)" else "NPN)")) + " beta=" + showFormat.format(@beta)

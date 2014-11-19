@@ -90,6 +90,9 @@ define [
     setColor: (color) ->
       @color = color
 
+    setPowerColor: (color) ->
+      console.warn("Set power color not yet implemented")
+
     getDumpType: ->
       0
 
