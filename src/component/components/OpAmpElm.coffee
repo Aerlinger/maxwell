@@ -150,6 +150,7 @@ define [
       1
 
     getInfo: (arr) ->
+      super()
       arr[0] = "op-amp"
       arr[1] = "V+ = " + DrawHelper.getVoltageText(@volts[1])
       arr[2] = "V- = " + DrawHelper.getVoltageText(@volts[0])
@@ -158,7 +159,7 @@ define [
       vo = Math.max(Math.min(@volts[2], @maxOut), @minOut)
       arr[3] = "Vout = " + DrawHelper.getVoltageText(vo)
       arr[4] = "Iout = " + DrawHelper.getCurrentText(@getCurrent())
-      arr[5] = "range = " + DrawHelper.getVoltageText(@minOut) + " to " + CircuitComponent.getVoltageText(@maxOut)
+      arr[5] = "range = " + DrawHelper.getVoltageText(@minOut) + " to " + DrawHelper.getVoltageText(@maxOut)
 
     stamp: (stamper) ->
 #      console.log("\nStamping OpAmpElm")

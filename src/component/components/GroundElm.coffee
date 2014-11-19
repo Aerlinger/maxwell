@@ -63,8 +63,9 @@ define [
       1
   
     getInfo: (arr) ->
+      super()
       arr[0] = "ground"
-      arr[1] = "I = " + Units.getCurrentText(@getCurrent())
+      arr[1] = "I = " + DrawHelper.getCurrentText(@getCurrent())
   
     hasGroundConnection: (n1) ->
       true

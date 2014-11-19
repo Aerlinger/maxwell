@@ -14,6 +14,7 @@
 define [
     'cs!Observer',
     'cs!Circuit',
+    'cs!CircuitComponent',
     'cs!KeyHandler',
     'cs!MouseHandler',
     'cs!FormatUtils',
@@ -23,6 +24,7 @@ define [
 (
   Observer,
   Circuit,
+  CircuitComponent,
   KeyHandler,
   MouseHandler,
   FormatUtils,
@@ -66,8 +68,7 @@ define [
   class CircuitCanvas extends Observer
 
     constructor: (@Circuit, @Canvas) ->
-#      @marquee = new SelectionMarquee()
-
+      @focusedComponent = null
       @width = @Canvas.width
       @height = @Canvas.height
       @context = Sketch.augment @Canvas.getContext("2d"), {
@@ -94,8 +95,17 @@ define [
 
 
     mousemove: (event) =>
-      @marquee?.reposition(event.offsetX, event.offsetY)
-      @marquee?.draw(this)
+      x = event.offsetX
+      y = event.offsetY
+
+      if @marquee?
+        @marquee?.reposition(x, y)
+      else
+        for component in @Circuit.getElements()
+          if component.getBoundingBox().contains(x, y)
+            @focusedComponent = component
+
+
 
     mousedown: (event) =>
       @marquee = new SelectionMarquee(event.offsetX, event.offsetY)
@@ -104,8 +114,17 @@ define [
       @marquee = null
 
     draw: =>
+      @infoText()
       @marquee?.draw(this)
       @Circuit.updateCircuit()
+
+    infoText: ->
+      if @focusedComponent?
+        arr = []
+        @focusedComponent.getInfo(arr)
+
+        for idx in [0...arr.length]
+          @context.fillText(arr[idx], 500, idx*10 + 15)
 
     drawComponents: ->
       @clear()

@@ -61,7 +61,7 @@ define [
         oldOffset = newOffset
 
       #if true @Circuit?.Params.showValues
-      resistanceVal = Units.getUnitText(@resistance, "ohm")
+      resistanceVal = DrawHelper.getUnitText(@resistance, "ohm")
       @drawValues resistanceVal, hs, renderContext
 
       @drawDots(@point1, @point2, renderContext)
@@ -83,8 +83,10 @@ define [
     getInfo: (arr) ->
       arr[0] = "resistor"
       @getBasicInfo arr
-      arr[3] = "R = " + Units.getUnitText(@resistance, Circuit.ohmString)
-      arr[4] = "P = " + Units.getUnitText(@getPower(), "W")
+      arr[3] = "R = " + DrawHelper.getUnitText(@resistance, DrawHelper.ohmString)
+      arr[4] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
+
+      return arr
 
     needsShortcut: ->
       true

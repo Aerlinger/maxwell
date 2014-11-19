@@ -103,6 +103,7 @@ define [
       @current = @diode.calculateCurrent(@volts[0] - @volts[1])
 
     getInfo: (arr) ->
+      super()
       arr[0] = "diode"
       arr[1] = "I = " + DrawHelper.getCurrentText(@getCurrent())
       arr[2] = "Vd = " + DrawHelper.getVoltageText(@getVoltageDiff())

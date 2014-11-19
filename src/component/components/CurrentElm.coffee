@@ -72,6 +72,7 @@ define [
       @currentValue = ei.value
 
     getInfo: (arr) ->
+      super()
       arr[0] = "current source"
       @getBasicInfo arr
 

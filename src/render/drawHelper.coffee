@@ -134,7 +134,7 @@ define [
       return (value * 1e15).toFixed(decimalPoints) + " f" + unit  if absValue < 1e-12
       return (value * 1e12).toFixed(decimalPoints) + " p" + unit  if absValue < 1e-9
       return (value * 1e9).toFixed(decimalPoints) + " n" + unit  if absValue < 1e-6
-      return (value * 1e6).toFixed(decimalPoints) + " " + Units.muString + unit  if absValue < 1e-3
+      return (value * 1e6).toFixed(decimalPoints) + " " + @muString + unit  if absValue < 1e-3
       return (value * 1e3).toFixed(decimalPoints) + " m" + unit  if absValue < 1
       return (value).toFixed(decimalPoints) + " " + unit  if absValue < 1e3
       return (value * 1e-3).toFixed(decimalPoints) + " k" + unit  if absValue < 1e6
@@ -142,16 +142,16 @@ define [
       (value * 1e-9).toFixed(decimalPoints) + " G" + unit
 
     @getVoltageDText: (v) ->
-      getUnitText Math.abs(v), "V"
+      @getUnitText Math.abs(v), "V"
 
     @getVoltageText: (v) ->
-      getUnitText v, "V"
+      @getUnitText v, "V"
 
     @getCurrentText: (value) ->
-      getUnitText value, "A"
+      @getUnitText value, "A"
 
     @getCurrentDText: (value) ->
-      getUnitText Math.abs(value), "A"
+      @getUnitText Math.abs(value), "A"
 
     @getVoltageColor: (volts, fullScaleVRange=10) ->
       value = Math.floor (volts + fullScaleVRange) * (@colorScaleCount - 1) / (2 * fullScaleVRange)

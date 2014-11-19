@@ -316,7 +316,7 @@ define [
 
     # Extended by subclasses
     getInfo: (arr) ->
-      throw("Called abstract function getInfo() in AbstractCircuitElement")
+      arr = new Array(15)
 
     # TODO: Implement
     getEditInfo: (n) ->
@@ -328,8 +328,8 @@ define [
 
     # Extended by subclasses
     getBasicInfo: (arr) ->
-      arr[1] = "I = " + CircuitComponent.getCurrentDText(@getCurrent())
-      arr[2] = "Vd = " + CircuitComponent.getVoltageDText(@getVoltageDiff())
+      arr[1] = "I = " + DrawHelper.getCurrentDText(@getCurrent())
+      arr[2] = "Vd = " + DrawHelper.getVoltageDText(@getVoltageDiff())
       3
 
     getScopeValue: (x) ->

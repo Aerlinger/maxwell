@@ -299,7 +299,6 @@ define [
       else
         @sysTime = (new Date()).getTime();
         @Solver.solveCircuit()
-        # FIXME:
         @lastTime = @updateTimings()
 
       @notifyObservers(@ON_COMPLETE_UPDATE)

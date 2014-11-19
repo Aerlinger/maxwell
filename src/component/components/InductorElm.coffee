@@ -79,7 +79,7 @@ define [
       DrawHelper.drawCoil 8, @lead1, @lead2, v1, v2, renderContext
 
 #      if @getParentCircuit().showValuesCheckItem
-      unit_text = Units.getUnitText(@inductance, "H")
+      unit_text = DrawHelper.getUnitText(@inductance, "H")
       @drawValues unit_text, hs, renderContext
 
       @drawPosts(renderContext)

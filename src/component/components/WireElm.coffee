@@ -37,10 +37,10 @@ define [
       @setBboxPt @point1, @point2, 3
 
       if @mustShowCurrent()
-        s = Units.getUnitText(Math.abs(@getCurrent()), "A")
+        s = DrawHelper.getUnitText(Math.abs(@getCurrent()), "A")
         @drawValues s, 4, renderContext
       else if @mustShowVoltage()
-        s = Units.getUnitText(@volts[0], "V")
+        s = DrawHelper.getUnitText(@volts[0], "V")
 
       @drawValues s, 4, renderContext
       @drawPosts(renderContext)
@@ -62,6 +62,8 @@ define [
       1
   
     getInfo: (arr) ->
+      super()
+
       arr[0] = "Wire"
       arr[1] = "I = " + DrawHelper.getCurrentDText(@getCurrent())
       arr[2] = "V = " + DrawHelper.getVoltageText(@volts[0])

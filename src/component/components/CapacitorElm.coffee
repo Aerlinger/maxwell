@@ -100,7 +100,7 @@ define [
 
 
     drawUnits: () ->
-      s = Units.getUnitText(@capacitance, "F")
+      s = DrawHelper.getUnitText(@capacitance, "F")
       @drawValues s, hs
 
     doStep: (stamper) ->
@@ -138,12 +138,14 @@ define [
       @current = vdiff / @compResistance + @curSourceValue  if @compResistance > 0
 
     getInfo: (arr) ->
+      super()
+
       arr[0] = "capacitor"
       @getBasicInfo arr
-      arr[3] = "C = " + Units.getUnitText(@capacitance, "F")
-      arr[4] = "P = " + Units.getUnitText(@getPower(), "W")
+      arr[3] = "C = " + DrawHelper.getUnitText(@capacitance, "F")
+      arr[4] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
       v = @getVoltageDiff()
-      arr[4] = "U = " + Units.getUnitText(.5 * @capacitance * v * v, "J")
+      arr[4] = "U = " + DrawHelper.getUnitText(.5 * @capacitance * v * v, "J")
 
     getEditInfo: (n) ->
       return new EditInfo("Capacitance (F)", @capacitance, 0, 0)  if n is 0
