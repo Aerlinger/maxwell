@@ -23,7 +23,6 @@ define [
   ResistorElm,
   GroundElm,
   VoltageElm,
-  CurrentElm,
   DiodeElm,
   OutputElm,
   SwitchElm,

@@ -67,6 +67,7 @@ define [
 
     constructor: (@Circuit, @Canvas) ->
       @focusedComponent = null
+      @dragComponent = null
       @width = @Canvas.width
       @height = @Canvas.height
       @context = Sketch.augment @Canvas.getContext("2d"), {
@@ -107,12 +108,26 @@ define [
             @focusedComponent = component
             @focusedComponent.focused = true
 
-
-
     mousedown: (event) =>
-      @marquee = new SelectionMarquee(event.offsetX, event.offsetY)
+      x = event.offsetX
+      y = event.offsetY
+      @marquee = new SelectionMarquee(x, y)
+
+      for component in @Circuit.getElements()
+        if component.getBoundingBox().contains(x, y)
+          @dragComponent = component
+          component.beingDragged(true)
+
+          @focusedComponent = component
+          @focusedComponent.focused = true
+
+          if @dragComponent.toggle?
+            @dragComponent.toggle()
+
 
     mouseup: (event) =>
+      @dragComponent?.beingDragged false
+      @dragComponent = null
       @marquee = null
 
     draw: =>

@@ -30,7 +30,7 @@ define [
       @posCount = 2
       @ps = new Point(0, 0)
 
-      CircuitComponent.ps2 = new Point(0, 0)
+      @ps2 = new Point(0, 0)
       if st
         st = st.split(" ")  if typeof st is "string"
         str = st[0]
@@ -58,6 +58,7 @@ define [
       @ps2 = new Point(0, 0)
 
     stamp: (stamper) ->
+      console.log(@voltSource)
       if @position is 0
         stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
 
@@ -69,7 +70,7 @@ define [
       @setBboxPt @point1, @point2, openhs
       @draw2Leads(renderContext)
 
-      @doDots(renderContext)  if @position is 0
+      @drawDots(renderContext)  if @position is 0
 
       @ps = DrawHelper.interpPoint @lead1, @lead2, 0, hs1
       @ps2 = DrawHelper.interpPoint @lead1, @lead2, 1, hs2
@@ -90,6 +91,7 @@ define [
     toggle: ->
       @position++
       @position = 0  if @position >= @posCount
+      @Circuit.Solver.analyzeFlag = true
 
     getInfo: (arr) ->
       arr[0] = (if (@momentary) then "push switch (SPST)" else "switch (SPST)")

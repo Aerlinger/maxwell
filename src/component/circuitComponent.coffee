@@ -63,7 +63,12 @@ define [
       return @Circuit
 
     isBeingDragged: () ->
-      return @Circuit.dragElm is this
+#      return @Circuit.dragElm is this
+      @dragging
+
+    beingDragged: (dragging) ->
+      @dragging = dragging
+
 
     allocNodes: ->
       @nodes = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
