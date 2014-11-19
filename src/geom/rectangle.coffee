@@ -15,13 +15,16 @@ define [], () ->
       return false
 
     intersects: (otherRect) ->
-      topLeftIntersects = @.contains(otherRect.x, otherRect.y)
-      topRightIntersects = @.contains(otherRect.x + otherRect.width, otherRect.y)
-      bottomRightIntersects = @.contains(otherRect.x + otherRect.width, otherRect.y + otherRect.height)
-      bottomLeftIntersects = @.contains(otherRect.x, otherRect.y + otherRect.height);
+      @x2 = @x + @width
+      @y2 = @y + @height
 
-      return (topLeftIntersects or topRightIntersects or bottomRightIntersects or bottomLeftIntersects)
+      otherX = otherRect.x
+      otherY = otherRect.y
+      otherX2 = otherRect.x + otherRect.width
+      otherY2 = otherRect.y + otherRect.height
 
+      @x < otherX2 && @x2 > otherX && @y < otherY2 && @y2 > otherY
+      
     collidesWithComponent: (circuitComponent) ->
       @intersects(circuitComponent.getBoundingBox())
 

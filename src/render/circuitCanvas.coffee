@@ -135,8 +135,8 @@ define [
       @clear()
       if @context
         for component in @Circuit.getElements()
-#          if @marquee?.collidesWithComponent(component)
-#            console.log("COLLIDE: " + component.dump())
+          if @marquee?.collidesWithComponent(component)
+            console.log("COLLIDE: " + component.dump())
           @drawComponent(component)
 
     snapGrid: (x) ->
