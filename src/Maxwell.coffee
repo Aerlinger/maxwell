@@ -20,11 +20,11 @@ define [
 
           new CircuitCanvas(@Circuit, canvas)
 
-          @Circuit.updateCircuit()
-
-          setInterval =>
-            @Circuit.updateCircuit()
-          , 0
+#          @Circuit.updateCircuit()
+#
+#          setInterval =>
+#            @Circuit.updateCircuit()
+#          , 0
 
 #    start: ->
 #      @Circuit.updateCircuit()

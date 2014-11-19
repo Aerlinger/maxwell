@@ -218,20 +218,6 @@ require([
       maxwell = new Maxwell(canvas.get(0), {
         circuitName: circuitFileName
       });
-      //CircuitLoader.createCircuitFromJSON(circuitFileName, function (circuit) {
-      //  "use strict";
-      //  console.log("Loading: " + circuitFileName);
-      //
-      //  new CircuitCanvas(circuit, canvas.get(0), canvas.width(), canvas.height());
-      //
-      //  circuit.updateCircuit();
-      //
-      //  setInterval(function () {
-      //    circuit.updateCircuit();
-      //  }, 0);
-      //});
-
-      //maxwell.start()
     } else {
       console.error("No circuit definition provided");
     }

@@ -3,7 +3,7 @@ define [], () ->
 # </DEFINE>
 
   class Rectangle
-    constructor: (@x = 0, @y = 0, @width = 0, @height = 0) ->
+    constructor: (@x, @y, @width, @height) ->
 
     contains: (x, y) ->
       return (x >= @x && x <= (@x + @width) && y >= @y && (y <= @y + @height))
@@ -21,5 +21,8 @@ define [], () ->
       bottomLeftIntersects = @.contains(otherRect.x, otherRect.y + otherRect.height);
 
       return (topLeftIntersects or topRightIntersects or bottomRightIntersects or bottomLeftIntersects)
+
+    collidesWithComponent: (circuitComponent) ->
+      @intersects(circuitComponent.getBoundingBox())
 
   return Rectangle

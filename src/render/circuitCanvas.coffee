@@ -29,25 +29,78 @@ define [
 ) ->
 # </DEFINE>
 
+
+  class SelectionMarquee
+    constructor: ->
+      @reset()
+
+    reset: ->
+      @x1 = null
+      @y1 = null
+      @x2 = null
+      @y2 = null
+
+    anchor: (x, y) ->
+      @x1 = x
+      @y1 = y
+
+    reposition: (x, y) ->
+      @x2 = x
+      @y2 = y
+
+    draw: (renderContext) ->
+      renderContext.lineWidth = 0.1
+      if @x1? && @x2? && @y1? && @y2?
+        renderContext.drawThickLine @x1, @y1, @x2, @y1
+        renderContext.drawThickLine @x1, @y2, @x2, @y2
+
+        renderContext.drawThickLine @x1, @y1, @x1, @y2
+        renderContext.drawThickLine @x2, @y1, @x2, @y2
+
+
   class CircuitCanvas extends Observer
 
     constructor: (@Circuit, @Canvas) ->
+      @marquee = new SelectionMarquee()
+
       @width = @Canvas.width
       @height = @Canvas.height
-      @context = @Canvas.getContext("2d")
-#      @Context = new CanvasContext(@Canvas.getContext("2d"), @Canvas.width, @Canvas.height)
+      @context = Sketch.augment @Canvas.getContext("2d"), {
+        # setup
+        # update
+        draw: @draw
+        # touchstart
+        # touchmove
+        # touchend
+        # mouseover
+        # mouseout
+        # click
+        # keydown
+        # keyup
+        # resize
+        mousemove: @mousemove
+        mousedown: @mousedown
+        mouseup: @mouseup
+      }
 
       @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
       @Circuit.addObserver Circuit.ON_RESET, @clear
       @Circuit.addObserver Circuit.ON_END_UPDATE, @repaint
 
-#      @KeyHandler = new KeyHandler(@Circuit)
-#      @MouseHandler = new MouseHandler(@Context, @Circuit)
 
-      #      @Canvas.mousedown @onMouseDown
-      #@Canvas.mouseup @onMouseUp
-      #      @Canvas.click @onMouseClick
-      #@Canvas.mousemove @onMouseMove
+    mousemove: (event) =>
+      @marquee.reposition(event.offsetX, event.offsetY)
+      @marquee.draw(this)
+
+    mousedown: (event) =>
+      @marquee.anchor(event.offsetX, event.offsetY)
+
+    mouseup: (event) =>
+      @marquee.reset()
+
+    draw: =>
+      @marquee.draw(this)
+      @Circuit.updateCircuit()
 
     drawComponents: ->
       @clear()
@@ -63,7 +116,7 @@ define [
     drawInfo: ->
       # TODO: Find where to show data; below circuit, not too high unless we need it
       bottomTextOffset = 100
-      ybase = @Circuit.getCircuitBottom - (1 * 15) - bottomTextOffset
+      ybase = @Circuit.getCircuitBottom - (1*15) - bottomTextOffset
       @context.fillText("t = #{FormatUtils.longFormat(@Circuit.time)} s", 10, 10)
       @context.fillText("F.T. = #{@Circuit.frames}", 10, 20)
 
@@ -78,7 +131,6 @@ define [
       for error in errorStack
         msg += error + "\n"
       console.error "Simulation Error: " + msg
-
 
     fillText: (text, x, y) ->
       @context.fillText(text, x, y)
@@ -142,8 +194,8 @@ define [
       @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
 
     clear: ->
-      return if !@context
-      @context.clearRect(0, 0, @width, @height)
+#      return if !@context
+#      @context.clearRect(0, 0, @width, @height)
 
     # Called on Circuit update:
     repaint: (Circuit) =>
