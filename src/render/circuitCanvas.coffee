@@ -52,8 +52,6 @@ define [
       @width = _x2 - _x1
       @height = _y2 - _y1
 
-#      console.log("W: #{@width}", @x1, @x2)
-#      console.log("H: #{@height}", @y1, @y2)
 
     draw: (renderContext) ->
       renderContext.lineWidth = 0.1
@@ -91,12 +89,15 @@ define [
 
       @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
       @Circuit.addObserver Circuit.ON_RESET, @clear
-      @Circuit.addObserver Circuit.ON_END_UPDATE, @repaint
+#      @Circuit.addObserver Circuit.ON_END_UPDATE, @repaint
 
 
     mousemove: (event) =>
       x = event.offsetX
       y = event.offsetY
+
+      @snapX = @snapGrid(x)
+      @snapY = @snapGrid(y)
 
       if @marquee?
         @marquee?.reposition(x, y)
@@ -114,9 +115,13 @@ define [
       @marquee = null
 
     draw: =>
+      if @snapX? && @snapY?
+        @drawCircle(@snapX, @snapY, 3, "#F00")
+
       @infoText()
       @marquee?.draw(this)
       @Circuit.updateCircuit()
+      @drawComponents()
 
     infoText: ->
       if @focusedComponent?
@@ -130,9 +135,12 @@ define [
       @clear()
       if @context
         for component in @Circuit.getElements()
-          if @marquee?.collidesWithComponent(component)
-            console.log("COLLIDE: " + component.dump())
+#          if @marquee?.collidesWithComponent(component)
+#            console.log("COLLIDE: " + component.dump())
           @drawComponent(component)
+
+    snapGrid: (x) ->
+      (x + (Settings.GRID_SIZE/2-1)) & ~(Settings.GRID_SIZE-1)
 
     drawComponent: (component) ->
       if component.isSelected()
@@ -224,8 +232,8 @@ define [
 #      @context.clearRect(0, 0, @width, @height)
 
     # Called on Circuit update:
-    repaint: (Circuit) =>
-      @drawComponents()
-      @drawInfo()
+#    repaint: (Circuit) =>
+#      @drawComponents()
+#      @drawInfo()
 
   return CircuitCanvas

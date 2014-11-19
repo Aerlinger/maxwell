@@ -19,7 +19,7 @@ define ['cs!ColorPalette'], (ColorPalette) ->
     @LINE_WIDTH: 2
 
     # Grid
-    @GRID_SIZE: 5
+    @GRID_SIZE: 16
     @SMALL_GRID: false
 
     # ColorPalettes:
