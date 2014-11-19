@@ -31,21 +31,23 @@ define [
 
   class CircuitCanvas extends Observer
 
-    constructor: (@Circuit, @CanvasJQueryElm, @width, @height) ->
-      @Context = new CanvasContext(@CanvasJQueryElm.get(0), @width, @height) if @CanvasJQueryElm
+    constructor: (@Circuit, @Canvas, @width, @height) ->
+      @Context = new CanvasContext(@Canvas.getContext("2d"), @width, @height)
+#      Sketch.augment(@Canvas.getContext("2d"), {
+#
+#      });
 
       @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
       @Circuit.addObserver Circuit.ON_RESET, @clear
       @Circuit.addObserver Circuit.ON_END_UPDATE, @repaint
 
-      @KeyHandler = new KeyHandler(@Circuit)
-      @MouseHandler = new MouseHandler(@Context, @Circuit)
+#      @KeyHandler = new KeyHandler(@Circuit)
+#      @MouseHandler = new MouseHandler(@Context, @Circuit)
 
-      if @CanvasJQueryElm
-        @CanvasJQueryElm.mousedown @onMouseDown
-        @CanvasJQueryElm.mouseup @onMouseUp
-        @CanvasJQueryElm.click @onMouseClick
-        @CanvasJQueryElm.mousemove @onMouseMove
+      #      @Canvas.mousedown @onMouseDown
+      #@Canvas.mouseup @onMouseUp
+      #      @Canvas.click @onMouseClick
+      #@Canvas.mousemove @onMouseMove
 
     drawComponents: ->
       @clear()
@@ -61,11 +63,9 @@ define [
     drawInfo: ->
       # TODO: Find where to show data; below circuit, not too high unless we need it
       bottomTextOffset = 100
-      ybase = @Circuit.getCircuitBottom - (15 * 1) - bottomTextOffset
+      ybase = @Circuit.getCircuitBottom - (1 * 15) - bottomTextOffset
       @Context.fillText("t = #{FormatUtils.longFormat(@Circuit.time)} s", 10, 10)
-#      @Context.fillText("frames = #{@Circuit.time} s", 10, 20)
       @Context.fillText("F.T. = #{@Circuit.frames}", 10, 20)
-#      @Context.fillText("F.T. = #{@Circuit.frames}", 10, 30)
 
     drawWarning: (context) ->
       msg = ""
@@ -85,12 +85,6 @@ define [
     getContext: () ->
       return @Context
 
-    getCanvas: () ->
-      return @Context?.getCanvas()
-
-    getBuffer: () ->
-      return @Context?.getCanvas().toBuffer
-
     getMouseHandler: () ->
       return @MouseHandler
 
@@ -101,19 +95,22 @@ define [
     ####################################################################################################################
 
     getMousePos: (event) =>
-      rect = @CanvasJQueryElm.get(0).getBoundingClientRect()
+      rect = @Canvas.getBoundingClientRect()
       return {
-      x: event.clientX - rect.left
-      y: event.clientY - rect.top
+        x: event.clientX - rect.left
+        y: event.clientY - rect.top
       }
 
-    onMouseMove: (event) =>
-      mousePos = @getMousePos(event)
+    mousemove: ->
+      console.log("event!");
 
-      if @MouseHandler.mouseDown
-        @MouseHandler.onMouseDrag(mousePos.x, mousePos.y)
-      else
-        @MouseHandler.onMouseMove(mousePos.x, mousePos.y)
+#    onMouseMove: (event) =>
+#      mousePos = @getMousePos(event)
+#
+#      if @MouseHandler.mouseDown
+#        @MouseHandler.onMouseDrag(mousePos.x, mousePos.y)
+#      else
+#        @MouseHandler.onMouseMove(mousePos.x, mousePos.y)
 
     onMouseDown: (event) =>
       mousePos = @getMousePos(event)
