@@ -1,8 +1,9 @@
 extends layout
 
 block body
+
   div.row.full
-    div.large-2.columns
+    //div.large-2.columns
       div.section-container.vertical-nav
       each circuit in circuits
         section.section
@@ -13,6 +14,8 @@ block body
       h5= circuit_name || "voltdividesimple"
       #container
 
+
+
         // Missing Components or Functionality: -----------------------------------------------------
         //canvas.maxwell(data-circuit="ohms", width="1600", height="3000")
         //canvas.maxwell(data-circuit="induct", width="1600", height="3000")
@@ -20,7 +23,7 @@ block body
         // Buggy/Not working: ---------------------------------------------------------
         // qp == -1 (Has one row with all zero values)
         //canvas.maxwell(data-circuit="amp-follower", width="1600", height="3000")
-        canvas.maxwell(data-circuit="nmosfet", width="1600", height="3000")
+        //canvas.maxwell(data-circuit="nmosfet", width="1600", height="3000")
         //canvas.maxwell(data-circuit="amp-noninvert", width="1600", height="3000")
 
 
@@ -43,7 +46,7 @@ block body
         //canvas.maxwell(data-circuit="amp-invert", width="1600", height="3000")
         //canvas.maxwell(data-circuit="fullrectf", width="1600", height="3000")
         //canvas.maxwell(data-circuit="triangle", width="1600", height="3000")
-        //canvas.maxwell(data-circuit="phaseshiftosc", width="1600", height="3000")
+        canvas.maxwell(data-circuit="phaseshiftosc", width="1600", height="3000")
         //canvas.maxwell(data-circuit="amp-diff", width="1600", height="3000")
         //canvas.maxwell(data-circuit="inductac", width="1600", height="3000")
         //canvas.maxwell(data-circuit="amp-integ", width="1600", height="3000")

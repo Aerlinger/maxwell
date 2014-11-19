@@ -1,6 +1,6 @@
 // This script gets run before any other Javascript in the library:
 
-(function() {
+(function () {
   "use strict";
 
   console.log("Loading RequireJS configuration...");
@@ -15,6 +15,8 @@
       color: 'libs/color',
       mocha: 'libs/mocha',
       chai: 'libs/chai',
+
+      Maxwell: 'src/Maxwell',
 
       // CORE:
       Circuit: 'src/core/circuit',
@@ -195,9 +197,9 @@
 }());
 
 
-
 require([
   // Load our app module and pass it to our definition function
+  'cs!Maxwell',
   'cs!Circuit',
   'cs!CircuitCanvas',
   'cs!CircuitLoader',
@@ -205,7 +207,7 @@ require([
   'cs!ArrayUtils',
   'cs!ConsoleUtils'
 
-], function (Circuit, CircuitCanvas, CircuitLoader) {
+], function (Maxwell, Circuit, CircuitCanvas, CircuitLoader) {
   var circuitName = $('canvas').data('circuit');
   var circuitFileName = "../circuits/" + circuitName + ".json";
 
@@ -213,18 +215,23 @@ require([
     var canvas = $('canvas.maxwell');
 
     if (canvas && circuitName) {
-      CircuitLoader.createCircuitFromJSON(circuitFileName, function (circuit) {
-        "use strict";
-        console.log("Loading: " + circuitFileName);
-
-        new CircuitCanvas(circuit, canvas, canvas.width(), canvas.height());
-
-        circuit.updateCircuit();
-
-        setInterval(function () {
-          circuit.updateCircuit();
-        }, 0);
+      maxwell = new Maxwell(canvas.get(0), {
+        circuitName: circuitFileName
       });
+      //CircuitLoader.createCircuitFromJSON(circuitFileName, function (circuit) {
+      //  "use strict";
+      //  console.log("Loading: " + circuitFileName);
+      //
+      //  new CircuitCanvas(circuit, canvas.get(0), canvas.width(), canvas.height());
+      //
+      //  circuit.updateCircuit();
+      //
+      //  setInterval(function () {
+      //    circuit.updateCircuit();
+      //  }, 0);
+      //});
+
+      maxwell.start()
     } else {
       console.error("No circuit definition provided");
     }
@@ -273,3 +280,56 @@ function runTests() {
     mocha.run();
   });
 }
+
+require([
+  // Load our app module and pass it to our definition function
+  'jquery'
+], function () {
+  "use strict";
+
+  $(document).ready(function () {
+  //  Sketch.augment(
+  //      $('.maxwell')[0].getContext('2d'),
+  //      {
+  //        Available methods:
+  //        setup
+  //        update
+  //        draw
+  //        touchstart
+  //        touchmove
+  //        touchend
+  //        mouseover
+  //        mousedown
+  //        mousemove
+  //        mouseout
+  //        mouseup
+  //        click
+  //        keydown
+  //        keyup
+  //        resize
+          //
+          //draw: function () {
+          //  this.beginPath();
+          //  this.arc(Math.random(this.width), Math.random(this.height), 10, 0, 2 * Math.PI);
+          //  this.fill();
+          //},
+          //
+          //click: function(evt) {
+          //
+          //}
+        //}
+    //);
+
+    var FizzyText = function () {
+      this.message = 'dat.gui';
+      this.speed = 0.8;
+      this.displayOutline = false;
+    };
+
+    var text = new FizzyText();
+    var gui = new dat.GUI();
+    gui.add(text, 'message');
+    gui.add(text, 'speed', -5, 5);
+    gui.add(text, 'displayOutline');
+  });
+});

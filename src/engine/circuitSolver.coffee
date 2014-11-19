@@ -42,7 +42,6 @@ define [
   class CircuitSolver
 
     constructor: (@Circuit) ->
-      @timeStep = @Circuit.timeStep()
       @scaleFactors = ArrayUtils.zeroArray(400)
       @reset()
       @Stamper = new MatrixStamper(@Circuit)
@@ -605,7 +604,7 @@ define [
           @halt "Convergence failed: " + subiter, null
           break
 
-        @Circuit.time += @timeStep
+        @Circuit.time += @Circuit.timeStep()
 
 #        for scope in @Circuit.scopes
 #          scope.timeStep()
