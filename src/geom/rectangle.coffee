@@ -24,7 +24,7 @@ define [], () ->
       otherY2 = otherRect.y + otherRect.height
 
       @x < otherX2 && @x2 > otherX && @y < otherY2 && @y2 > otherY
-      
+
     collidesWithComponent: (circuitComponent) ->
       @intersects(circuitComponent.getBoundingBox())
 

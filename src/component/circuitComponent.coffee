@@ -50,6 +50,7 @@ define [
       @selected = false
       @dragging = false
       @parentCircuit = null
+      @focused = false
 
       @flags = flags || @getDefaultFlags()
 
@@ -351,7 +352,8 @@ define [
       return @getPostCount() <= 2
 
     needsHighlight: ->
-      @Circuit?.mouseElm is this or @selected
+      @focused
+      #      @Circuit?.mouseElm is this or @selected
 
     setSelected: (selected) ->
       @selected = selected

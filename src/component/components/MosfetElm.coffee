@@ -19,6 +19,8 @@ Units
 ) ->
   # </DEFINE>
 
+  class JFetElm
+
   class MosfetElm extends CircuitComponent
 
     @FLAG_PNP: 1
@@ -165,8 +167,9 @@ Units
 
       @gate = CircuitComponent.newPointArray(3)
 
-      [@gate[0], @gate[2]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 28 / @dn, hs2 / 2,  # was 1-20/dn
+      [@gate[0], @gate[2]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 28 / @dn, hs2 / 2  #,  # was 1-20/dn
       @gate[1] = DrawHelper.interpPoint @gate[0], @gate[2], .5
+      console.log("GATE: #{@gate[1]}")
 
       if !@drawDigital()
         if @pnp is 1
@@ -268,12 +271,12 @@ Units
 
     getFetInfo: (arr, n) ->
       arr[0] = ((if (@pnp is -1) then "p-" else "n-")) + n
-      arr[0] += " (Vt = " + CircuitComponent.getVoltageText(@pnp * @vt) + ")"
-      arr[1] = ((if (@pnp is 1) then "Ids = " else "Isd = ")) + CircuitComponent.getCurrentText(@ids)
-      arr[2] = "Vgs = " + CircuitComponent.getVoltageText(@volts[0] - @volts[(if @pnp is -1 then 2 else 1)])
-      arr[3] = ((if (@pnp is 1) then "Vds = " else "Vsd = ")) + CircuitComponent.getVoltageText(@volts[2] - @volts[1])
+      arr[0] += " (Vt = " + DrawHelper.getVoltageText(@pnp * @vt) + ")"
+      arr[1] = ((if (@pnp is 1) then "Ids = " else "Isd = ")) + DrawHelper.getCurrentText(@ids)
+      arr[2] = "Vgs = " + DrawHelper.getVoltageText(@volts[0] - @volts[(if @pnp is -1 then 2 else 1)])
+      arr[3] = ((if (@pnp is 1) then "Vds = " else "Vsd = ")) + DrawHelper.getVoltageText(@volts[2] - @volts[1])
       arr[4] = (if (@mode is 0) then "off" else (if (@mode is 1) then "linear" else "saturation"))
-      arr[5] = "gm = " + CircuitComponent.getUnitText(@gm, "A/V")
+      arr[5] = "gm = " + DrawHelper.getUnitText(@gm, "A/V")
 
     getInfo: (arr) ->
       @getFetInfo arr, "MOSFET"

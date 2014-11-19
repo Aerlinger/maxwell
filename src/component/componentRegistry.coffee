@@ -23,6 +23,7 @@ define [
   ResistorElm,
   GroundElm,
   VoltageElm,
+  CurrentElm,
   DiodeElm,
   OutputElm,
   SwitchElm,
@@ -59,6 +60,7 @@ define [
       'l': InductorElm
       'c': CapacitorElm
       'v': VoltageElm
+      'i': CurrentElm
       'd': DiodeElm
       'o': OutputElm
       's': SwitchElm

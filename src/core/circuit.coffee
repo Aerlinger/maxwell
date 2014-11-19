@@ -384,7 +384,9 @@ define [
     ### Simulation Accessor Methods
     ####################################################################################################################
 
-
+    eachComponent: (callback) ->
+      for component in @elementList
+        callback(component)
 
     incrementFrames: ->
       @frames++

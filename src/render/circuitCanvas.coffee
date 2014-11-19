@@ -87,9 +87,9 @@ define [
         mouseup: @mouseup
       }
 
-      @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
-      @Circuit.addObserver Circuit.ON_RESET, @clear
-#      @Circuit.addObserver Circuit.ON_END_UPDATE, @repaint
+#      @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
+#      @Circuit.addObserver Circuit.ON_RESET, @clear
+      @Circuit.addObserver Circuit.ON_END_UPDATE, @clear
 
 
     mousemove: (event) =>
@@ -105,6 +105,7 @@ define [
         for component in @Circuit.getElements()
           if component.getBoundingBox().contains(x, y)
             @focusedComponent = component
+            @focusedComponent.focused = true
 
 
 
@@ -136,6 +137,7 @@ define [
       if @context
         for component in @Circuit.getElements()
           if @marquee?.collidesWithComponent(component)
+            component.focused = true
             console.log("COLLIDE: " + component.dump())
           @drawComponent(component)
 
@@ -228,6 +230,10 @@ define [
       @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
 
     clear: ->
+#      if @Circuit?
+#        @Circuit.eachComponent (component) ->
+#          component.focused = false
+
 #      return if !@context
 #      @context.clearRect(0, 0, @width, @height)
 

@@ -5,6 +5,7 @@ define [
   'cs!Polygon',
   'cs!Rectangle',
   'cs!Point',
+#  'cs!RailElm',
 
   'cs!CircuitComponent'
 ], (
@@ -13,6 +14,7 @@ define [
   Polygon,
   Rectangle,
   Point,
+#  RailElm,
 
   CircuitComponent
 ) ->
@@ -205,7 +207,7 @@ define [
           break
 
       if Settings.showValuesCheckItem
-        valueString = CircuitComponent.getShortUnitText(@frequency, "Hz")
+        valueString = DrawHelper.getShortUnitText(@frequency, "Hz")
         @drawValues valueString, VoltageElm.circleSize  if @dx is 0 or @dy is 0
   
     getVoltageSourceCount: ->
@@ -232,17 +234,17 @@ define [
         when VoltageElm.WF_TRIANGLE
           arr[0] = "triangle gen"
   
-      arr[1] = "I = " + CircuitComponent.getCurrentText(@getCurrent())
-      arr[2] = ((if (this instanceof RailElm) then "V = " else "Vd = ")) + CircuitComponent.getVoltageText(@getVoltageDiff())
+      arr[1] = "I = " + DrawHelper.getCurrentText(@getCurrent())
+#      arr[2] = ((if (this instanceof RailElm) then "V = " else "Vd = ")) + DrawHelper.getVoltageText(@getVoltageDiff())
   
       if @waveform isnt VoltageElm.WF_DC and @waveform isnt VoltageElm.WF_VAR
-        arr[3] = "f = " + CircuitComponent.getUnitText(@frequency, "Hz")
-        arr[4] = "Vmax = " + CircuitComponent.getVoltageText(@maxVoltage)
+        arr[3] = "f = " + DrawHelper.getUnitText(@frequency, "Hz")
+        arr[4] = "Vmax = " + DrawHelper.getVoltageText(@maxVoltage)
         i = 5
         unless @bias is 0
           arr[i++] = "Voff = " + @getVoltageText(@bias)
-        else arr[i++] = "wavelength = " + CircuitComponent.getUnitText(2.9979e8 / @frequency, "m")  if @frequency > 500
-        arr[i++] = "P = " + CircuitComponent.getUnitText(@getPower(), "W")
+        else arr[i++] = "wavelength = " + DrawHelper.getUnitText(2.9979e8 / @frequency, "m")  if @frequency > 500
+        arr[i++] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
   
     getEditInfo: (n) ->
       if n is 0
