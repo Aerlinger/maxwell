@@ -274,38 +274,6 @@ require([
   "use strict";
 
   $(document).ready(function () {
-  //  Sketch.augment(
-  //      $('.maxwell')[0].getContext('2d'),
-  //      {
-  //        Available methods:
-  //        setup
-  //        update
-  //        draw
-  //        touchstart
-  //        touchmove
-  //        touchend
-  //        mouseover
-  //        mousedown
-  //        mousemove
-  //        mouseout
-  //        mouseup
-  //        click
-  //        keydown
-  //        keyup
-  //        resize
-          //
-          //draw: function () {
-          //  this.beginPath();
-          //  this.arc(Math.random(this.width), Math.random(this.height), 10, 0, 2 * Math.PI);
-          //  this.fill();
-          //},
-          //
-          //click: function(evt) {
-          //
-          //}
-        //}
-    //);
-
     var FizzyText = function () {
       this.message = 'dat.gui';
       this.speed = 0.8;

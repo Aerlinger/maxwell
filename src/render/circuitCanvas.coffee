@@ -17,7 +17,8 @@ define [
     'cs!KeyHandler',
     'cs!MouseHandler',
     'cs!FormatUtils',
-    'cs!Settings'
+    'cs!Settings',
+    'cs!Rectangle'
   ],
 (
   Observer,
@@ -25,28 +26,32 @@ define [
   KeyHandler,
   MouseHandler,
   FormatUtils,
-  Settings
+  Settings,
+  Rectangle
 ) ->
 # </DEFINE>
 
-
-  class SelectionMarquee
-    constructor: ->
-      @reset()
-
-    reset: ->
-      @x1 = null
-      @y1 = null
-      @x2 = null
-      @y2 = null
-
-    anchor: (x, y) ->
-      @x1 = x
-      @y1 = y
+  class SelectionMarquee extends Rectangle
+    constructor: (@x1, @y1) ->
+      console.log("x1, y1 = #{@x1}, #{@y1}")
 
     reposition: (x, y) ->
-      @x2 = x
-      @y2 = y
+      _x1 = Math.min(x, @x1)
+      _x2 = Math.max(x, @x1)
+      _y1 = Math.min(y, @y1)
+      _y2 = Math.max(y, @y1)
+
+      @x2 = _x2
+      @y2 = _y2
+
+      @x = @x1 = _x1
+      @y = @y1 = _y1
+
+      @width = _x2 - _x1
+      @height = _y2 - _y1
+
+#      console.log("W: #{@width}", @x1, @x2)
+#      console.log("H: #{@height}", @y1, @y2)
 
     draw: (renderContext) ->
       renderContext.lineWidth = 0.1
@@ -61,7 +66,7 @@ define [
   class CircuitCanvas extends Observer
 
     constructor: (@Circuit, @Canvas) ->
-      @marquee = new SelectionMarquee()
+#      @marquee = new SelectionMarquee()
 
       @width = @Canvas.width
       @height = @Canvas.height
@@ -89,23 +94,25 @@ define [
 
 
     mousemove: (event) =>
-      @marquee.reposition(event.offsetX, event.offsetY)
-      @marquee.draw(this)
+      @marquee?.reposition(event.offsetX, event.offsetY)
+      @marquee?.draw(this)
 
     mousedown: (event) =>
-      @marquee.anchor(event.offsetX, event.offsetY)
+      @marquee = new SelectionMarquee(event.offsetX, event.offsetY)
 
     mouseup: (event) =>
-      @marquee.reset()
+      @marquee = null
 
     draw: =>
-      @marquee.draw(this)
+      @marquee?.draw(this)
       @Circuit.updateCircuit()
 
     drawComponents: ->
       @clear()
       if @context
         for component in @Circuit.getElements()
+          if @marquee?.collidesWithComponent(component)
+            console.log("COLLIDE: " + component.dump())
           @drawComponent(component)
 
     drawComponent: (component) ->
