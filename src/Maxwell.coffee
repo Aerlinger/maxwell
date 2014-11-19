@@ -18,13 +18,17 @@ define [
 
           console.log("Loading: " + @circuitName)
 
-          new CircuitCanvas(@Circuit, canvas, canvas.width, canvas.height)
+          new CircuitCanvas(@Circuit, canvas)
 
-          @start()
+          @Circuit.updateCircuit()
 
-    start: ->
-      @Circuit.updateCircuit()
+          setInterval =>
+            @Circuit.updateCircuit()
+          , 0
 
-      setInterval =>
-        @Circuit.updateCircuit()
-      , 0
+#    start: ->
+#      @Circuit.updateCircuit()
+#
+#      setInterval =>
+#        @Circuit.updateCircuit()
+#      , 0

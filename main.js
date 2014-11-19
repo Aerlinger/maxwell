@@ -231,7 +231,7 @@ require([
       //  }, 0);
       //});
 
-      maxwell.start()
+      //maxwell.start()
     } else {
       console.error("No circuit definition provided");
     }
