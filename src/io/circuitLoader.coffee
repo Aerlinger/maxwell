@@ -50,6 +50,7 @@ define [
           circuit.warn "Unrecognized dump type: #{type}"
         else
           newCircuitElm = new sym(x1, y1, x2, y2, flags, params)
+          console.log(sym)
           circuit.solder newCircuitElm
 #      catch e
 #        console.error "Failed to parse json #{e.message}"

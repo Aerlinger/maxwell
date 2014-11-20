@@ -54,7 +54,7 @@ define [
 
       @flags = flags || @getDefaultFlags()
 
-#      @setPoints()
+      @setPoints()
       @allocNodes()
       @initBoundingBox()
       @component_id = MathUtils.getRand(100000000) + (new Date()).getTime()
@@ -490,7 +490,9 @@ define [
 
       return a
 
-    simParams: ->
+    comparePair: (x1, x2, y1, y2)->
+      (x1 == y1 && x2 == y2) || (x1 == y2 && x2 == y1)
+
       @Circuit.Params
 
     timeStep: ->

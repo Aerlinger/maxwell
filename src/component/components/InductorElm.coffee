@@ -45,7 +45,7 @@ define [
 #      @nodes[0] = n0
 #      @nodes[1] = n1
 
-      ts = @simParams().timeStep
+      ts = @getParentCircuit().timeStep()
 
       console.log ts
       console.log @inductance

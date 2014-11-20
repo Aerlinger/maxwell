@@ -6,7 +6,8 @@ define [
   'cs!Rectangle',
   'cs!Point',
   'cs!CircuitComponent',
-  'cs!Units'
+  'cs!Units',
+  'cs!SwitchElm'
 ], (
   Settings,
   DrawHelper,
@@ -15,7 +16,8 @@ define [
   Point,
 
   CircuitComponent,
-  Units
+  Units,
+  SwitchElm
 ) ->
 # </DEFINE>
 
@@ -23,19 +25,17 @@ define [
   ###
   Todo: Click functionality does not work
   ###
-  class Switch2Elm extends CircuitComponent
+  class Switch2Elm extends SwitchElm
 
     @FLAG_CENTER_OFF: 1
 
-    constructor: ->
+    constructor: (xa, ya, xb, yb, f, st) ->
       super(xa, ya, xb, yb, f, st)
 
       @openhs = 16
-      @swpoled = new Array()
-      @swposts = new Array()
 
       @noDiagonal = true
-      @link = parseInt(st[0])  if st and st[0]
+      @link = parseInt(st[st.length - 1])  if st
 
 
     getDumpType: ->
@@ -49,33 +49,38 @@ define [
       super()
       @calcLeads 32
 
-      @swpoles = DrawHelper.interpPoint @lead1, @lead2, 1, @openhs
+      @swpoles = CircuitComponent.newPointArray(3)
+      @swposts = CircuitComponent.newPointArray(2)
+
+      [@swpoles[0], @swpoles[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 1, @openhs
       @swpoles[2] = @lead2
-      @swposts = DrawHelper.interpPoint @point1, @point2, 1, @openhs
+
+      [@swposts[0], @swposts[1]] = DrawHelper.interpPoint2 @point1, @point2, 1, @openhs
       @posCount = @hasCenterOff() ? 3 : 2
 
-    draw: ->
+    draw: (renderContext) ->
       @setBbox @point1, @point2, @openhs
 
       # draw first lead
-      color = @setVoltageColor(@volts[0])
-      DrawHelper.drawThickLinePt @point1, @lead1, color
+      color = DrawHelper.getVoltageColor(@volts[0])
+      renderContext.drawThickLinePt @point1, @lead1, color
 
       # draw second lead
-      color = @setVoltageColor(@volts[1])
-      DrawHelper.drawThickLinePt @swpoles[0], @swposts[0], color
+      color = DrawHelper.getVoltageColor(@volts[1])
+      renderContext.drawThickLinePt @swpoles[0], @swposts[0], color
 
       # draw third lead
-      @setVoltageColor @volts[2], color
-      DrawHelper.drawThickLinePt @swpoles[1], @swposts[1], color
+      color = DrawHelper.getVoltageColor @volts[2]
+      renderContext.drawThickLinePt @swpoles[1], @swposts[1], color
 
       # draw switch
       color = Settings.SELECT_COLOR unless @needsHighlight()
-      DrawHelper.drawThickLinePt @lead1, @swpoles[@position], color
-      @updateDotCount()
-      @drawDots @point1, @lead1, @curcount
-      @drawDots @swpoles[@position], @swposts[@position], @curcount  unless @position is 2
-      @drawPosts()
+      renderContext.drawThickLinePt @lead1, @swpoles[@position], color
+
+#      @updateDotCount()
+      @drawDots @point1, @lead1, renderContext
+      @drawDots @swpoles[@position], @swposts[@position], renderContext  unless @position is 2
+      @drawPosts(renderContext)
 
     getPost: (n) ->
       if (n is 0) then @point1 else @swposts[n - 1]
@@ -89,7 +94,7 @@ define [
     stamp: (stamper) ->
       # in center?
       return  if @position is 2
-      Circuit.stampVoltageSource @nodes[0], @nodes[@position + 1], @voltSource, 0
+      stamper.stampVoltageSource @nodes[0], @nodes[@position + 1], @voltSource, 0
 
     getVoltageSourceCount: ->
       if (@position is 2) then 0 else 1
@@ -98,12 +103,17 @@ define [
       super()
       unless @link is 0
         i = 0
-        while i isnt Circuit.elementList.length
-          o = Circuit.elementList.elementAt(i)
-          if o instanceof Switch2Elm
-            s2 = o
+        getParentCircuit().eachComponent (component) ->
+          if component instanceof Switch2Elm
+            s2 = component
             s2.position = @position  if s2.link is @link
-          i++
+
+#        while i isnt getCircuit().elementList.length
+#          o = Circuit.elementList.elementAt(i)
+#          if o instanceof Switch2Elm
+#            s2 = o
+#            s2.position = @position  if s2.link is @link
+#          i++
 
     getConnection: (n1, n2) ->
       return false  if @position is 2

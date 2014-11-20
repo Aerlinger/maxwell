@@ -28,21 +28,21 @@ define [
       @momentary = false
       @position = 0
       @posCount = 2
-      @ps = new Point(0, 0)
 
+      @ps = new Point(0, 0)
       @ps2 = new Point(0, 0)
+
       if st
         st = st.split(" ")  if typeof st is "string"
-        str = st[0]
-#        @position = 1
-#        if str is ("true")
+        str = st.shift()
+        @position = 0
+#        if str is "true"
 #          @position = (if (this instanceof LogicInputElm) then 0 else 1)
-#        else if str is ("false")
+#        else if str is "false"
 #          @position = (if (this instanceof LogicInputElm) then 1 else 0)
 #        else
-        @position = parseInt(str)
-        @momentary = (st[1].toLowerCase() is "true")
-      @posCount = 2
+#          @position = parseInt(str)
+#          @momentary = (st.shift().toLowerCase() is "true")
 
 
     getDumpType: ->

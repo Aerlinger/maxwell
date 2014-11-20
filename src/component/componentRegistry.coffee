@@ -13,11 +13,12 @@ define [
   'cs!CurrentElm',
   'cs!RailElm',
   'cs!MosfetElm',
+  'cs!TransistorElm',
   'cs!VarRailElm',
   'cs!OpAmpElm',
   'cs!ZenerElm',
+  'cs!Switch2Elm'
 
-  'cs!Oscilloscope',
 ], (
   WireElm,
   ResistorElm,
@@ -36,8 +37,8 @@ define [
   VarRailElm,
   OpAmpElm,
   ZenerElm,
+  Switch2Elm
 
-  Oscilloscope
 ) ->
 # </DEFINE>
 
@@ -71,6 +72,7 @@ define [
       'z': ZenerElm
       'f': MosfetElm
       't': TransistorElm
+      'S': Switch2Elm
 
 
 
