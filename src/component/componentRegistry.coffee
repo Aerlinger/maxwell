@@ -17,7 +17,11 @@ define [
   'cs!VarRailElm',
   'cs!OpAmpElm',
   'cs!ZenerElm',
-  'cs!Switch2Elm'
+  'cs!Switch2Elm',
+  'cs!TextElm',
+  'cs!ProbeElm',
+  'cs!OutputElm'
+
 
 ], (
   WireElm,
@@ -37,7 +41,10 @@ define [
   VarRailElm,
   OpAmpElm,
   ZenerElm,
-  Switch2Elm
+  Switch2Elm,
+  TextElm,
+  ProbeElm,
+  OutputElm
 
 ) ->
 # </DEFINE>
@@ -53,26 +60,33 @@ define [
   #   Elements that are not yet implemented have their names (key) prefixed with a '-'
   class ComponentRegistry
     @ComponentDefs:
+      # Working
       'w': WireElm
       'r': ResistorElm
       'g': GroundElm
       'l': InductorElm
       'c': CapacitorElm
       'v': VoltageElm
-      'i': CurrentElm
       'd': DiodeElm
-      'o': OutputElm
       's': SwitchElm
       '187': SparkGapElm
       187: SparkGapElm
+      'a': OpAmpElm
+      'f': MosfetElm
+
+      # Testing
       'R': RailElm
       172: VarRailElm
       '172': VarRailElm
-      'a': OpAmpElm
       'z': ZenerElm
-      'f': MosfetElm
+      'i': CurrentElm
       't': TransistorElm
-      'S': Switch2Elm
+
+      # In progress:
+      'S': Switch2Elm  # Needs interaction
+      'x': TextElm
+      'o': ProbeElm
+      'O': OutputElm
 
 
 

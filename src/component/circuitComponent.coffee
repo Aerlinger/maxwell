@@ -101,9 +101,6 @@ define [
     getDumpType: ->
       0
 
-    isSelected: ->
-      @selected
-
     reset: ->
       @volts = ArrayUtils.zeroArray(@volts.length)
       @curcount = 0
@@ -183,6 +180,7 @@ define [
           newY = @y1
       @x2 = newX
       @y2 = newY
+
       @setPoints()
 
     move: (deltaX, deltaY) ->
@@ -193,6 +191,7 @@ define [
 
       @boundingBox.x += deltaX
       @boundingBox.y += deltaY
+
       @setPoints()
 
     allowMove: (deltaX, deltaY) ->
@@ -216,6 +215,7 @@ define [
       else
         @x2 += deltaX
         @y2 += deltaY
+
       @setPoints()
 
     stamp: ->
@@ -365,6 +365,9 @@ define [
 
     setSelected: (selected) ->
       @selected = selected
+
+    isSelected: ->
+      @selected
 
     selectRect: (rect) ->
       @selected = rect.intersects(@boundingBox)

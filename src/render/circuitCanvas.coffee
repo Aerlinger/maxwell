@@ -35,7 +35,6 @@ define [
 
   class SelectionMarquee extends Rectangle
     constructor: (@x1, @y1) ->
-      console.log("x1, y1 = #{@x1}, #{@y1}")
 
     reposition: (x, y) ->
       _x1 = Math.min(x, @x1)
@@ -107,6 +106,7 @@ define [
           if component.getBoundingBox().contains(x, y)
             @focusedComponent = component
             @focusedComponent.focused = true
+
 
     mousedown: (event) =>
       x = event.offsetX

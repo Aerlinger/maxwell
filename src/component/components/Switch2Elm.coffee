@@ -119,9 +119,9 @@ define [
       return false  if @position is 2
       @comparePair n1, n2, 0, 1 + @position
 
-#    getInfo: (arr) ->
-#      arr[0] = (if (@link is 0) then "switch (SPDT)" else "switch (DPDT)")
-#      arr[1] = "I = " + @getCurrentDText(@getCurrent())
+    getInfo: (arr) ->
+      arr[0] = (if (@link is 0) then "switch (SPDT)" else "switch (DPDT)")
+      arr[1] = "I = " + @getCurrentDText(@getCurrent())
 
 #    getEditInfo: (n) ->
 #      if n is 1
