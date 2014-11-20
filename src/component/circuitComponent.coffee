@@ -87,10 +87,6 @@ define [
       @point1 = new Point(@x1, @y1)
       @point2 = new Point(@x2, @y2)
 
-#      console.log("Setting points: #{this.toString()} - #{this.dump()}")
-
-      #TODO: Implement snapping here:
-
     # As a string
     setColor: (color) ->
       @color = color

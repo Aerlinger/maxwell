@@ -87,6 +87,7 @@ define [
   
     getVoltage: ->
       omega = 2 * Math.PI * (@Circuit.time - @freqTimeZero) * @frequency + @phaseShift
+
       switch @waveform
         when VoltageElm.WF_DC
           @maxVoltage + @bias
@@ -166,13 +167,13 @@ define [
         when VoltageElm.WF_SQUARE
           xc2 = Math.floor(wl * 2 * @dutyCycle - wl + xc)
           xc2 = Math.max(xc - wl + 3, Math.min(xc + wl - 3, xc2))
-#
+
           renderContext.drawThickLine xc - wl, yc - wl, xc - wl, yc, color
           renderContext.drawThickLine xc - wl, yc - wl, xc2, yc - wl, color
           renderContext.drawThickLine xc2, yc - wl, xc2, yc + wl, color
           renderContext.drawThickLine xc + wl, yc + wl, xc2, yc + wl, color
           renderContext.drawThickLine xc + wl, yc, xc + wl, yc + wl, color
-#
+
         when VoltageElm.WF_PULSE
           yc += wl / 2
           renderContext.drawThickLine xc - wl, yc - wl, xc - wl, yc, color
@@ -191,24 +192,26 @@ define [
           renderContext.drawThickLine xc - xl, yc - wl, xc, yc, color
           renderContext.drawThickLine xc, yc, xc + xl, yc + wl, color
           renderContext.drawThickLine xc + xl, yc + wl, xc + xl * 2, yc, color
-          break
 
         when VoltageElm.WF_AC
           xl = 10
           ox = -1
           oy = -1
+
           i = -xl
           while i <= xl
             yy = yc + Math.floor(0.95 * Math.sin(i * Math.PI / xl) * wl)
-            renderContext.drawThickLine ox, oy, xc + i, yy, color  unless ox is -1
+            if ox != -1
+              renderContext.drawThickLine ox, oy, xc + i, yy, color
             ox = xc + i
             oy = yy
             i++
-          break
 
-      if Settings.showValuesCheckItem
+      if Settings.SHOW_VALUES
         valueString = DrawHelper.getShortUnitText(@frequency, "Hz")
-        @drawValues valueString, VoltageElm.circleSize  if @dx is 0 or @dy is 0
+
+        if @dx is 0 or @dy is 0
+          @drawValues valueString, VoltageElm.circleSize
   
     getVoltageSourceCount: ->
       1

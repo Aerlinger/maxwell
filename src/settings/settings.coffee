@@ -22,6 +22,8 @@ define ['cs!ColorPalette'], (ColorPalette) ->
     @GRID_SIZE: 16
     @SMALL_GRID: false
 
+    @SHOW_VALUES: false
+
     # ColorPalettes:
     @SELECT_COLOR: ColorPalette.orange
     @POST_COLOR_SELECTED: ColorPalette.orange

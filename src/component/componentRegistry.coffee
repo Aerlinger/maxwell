@@ -19,8 +19,7 @@ define [
   'cs!ZenerElm',
   'cs!Switch2Elm',
   'cs!TextElm',
-  'cs!ProbeElm',
-  'cs!OutputElm'
+  'cs!ProbeElm'
 
 
 ], (
@@ -43,8 +42,7 @@ define [
   ZenerElm,
   Switch2Elm,
   TextElm,
-  ProbeElm,
-  OutputElm
+  ProbeElm
 
 ) ->
 # </DEFINE>

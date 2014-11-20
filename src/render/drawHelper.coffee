@@ -128,6 +128,9 @@ define [
         @ps1.x = @ps2.x
         @ps1.y = @ps2.y
 
+    @getShortUnitText: (value, unit) ->
+      @getUnitText value, unit, 1
+
     @getUnitText: (value, unit, decimalPoints = 2) ->
       absValue = Math.abs(value)
       return "0 " + unit  if absValue < 1e-18

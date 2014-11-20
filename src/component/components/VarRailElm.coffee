@@ -39,6 +39,8 @@ define [
 
     createSlider: ->
 
+    getVoltageDiff: ->
+      @volts[0]
 
       # Todo: implement
     getVoltage: ->
