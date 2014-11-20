@@ -14,16 +14,15 @@ block body
       h5= circuit_name || "voltdividesimple"
       #container
 
-
-
         // Missing Components or Functionality: ---------------------------------------
         //canvas.maxwell(data-circuit="ohms", width="1600", height="3000")
         //canvas.maxwell(data-circuit="induct", width="1600", height="3000")
 
+
         // Buggy/Not working: ---------------------------------------------------------
         // qp == -1 (Has one row with all zero values)
         //canvas.maxwell(data-circuit="amp-follower", width="1600", height="3000")
-        canvas.maxwell(data-circuit="nmosfet", width="1600", height="3000")
+        //canvas.maxwell(data-circuit="nmosfet", width="1600", height="3000")
         //canvas.maxwell(data-circuit="amp-noninvert", width="1600", height="3000")
 
 
@@ -33,6 +32,8 @@ block body
         //canvas.maxwell(data-circuit="amp-schmitt", width="1600", height="3000")
         //canvas.maxwell(data-circuit="howland", width="1600", height="3000")
         //canvas.maxwell(data-circuit="dcrestoration", width="1600", height="3000")
+        //canvas.maxwell(data-circuit="dram", width="1600", height="3000")
+
 
         // Runs, but invalid result:
         //canvas.maxwell(data-circuit="amp-fullrect", width="1600", height="3000")
@@ -40,9 +41,14 @@ block body
         //canvas.maxwell(data-circuit="sawtooth", width="1600", height="3000")
         //canvas.maxwell(data-circuit="sawtooth", width="1600", height="3000")
 
+        canvas.maxwell(data-circuit="transswitch", width="1600", height="3000")
+
 
         // Working: ------------------------------------------------------------------
-
+        //canvas.maxwell(data-circuit="ladder", width="1600", height="3000")
+        //canvas.maxwell(data-circuit="phaseseq", width="1600", height="3000")
+        //canvas.maxwell(data-circuit="grid", width="1600", height="3000")
+        //canvas.maxwell(data-circuit="grid2", width="1600", height="3000")
         //canvas.maxwell(data-circuit="amp-invert", width="1600", height="3000")
         //canvas.maxwell(data-circuit="fullrectf", width="1600", height="3000")
         //canvas.maxwell(data-circuit="triangle", width="1600", height="3000")

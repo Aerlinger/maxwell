@@ -20,7 +20,7 @@ define [
 # </DEFINE>
 
 
-  class TransistorElm
+  class TransistorElm extends CircuitComponent
 
     @FLAG_FLIP: 1
 
@@ -96,16 +96,16 @@ define [
 #      @setPowerColor true
 
       # draw collector
-      color = @setVoltageColor(@volts[1])
+      color = DrawHelper.getVoltageColor(@volts[1])
       renderContext.drawThickLinePt @coll[0], @coll[1], color
 
       # draw emitter
-      color = @setVoltageColor(@volts[2])
+      color = DrawHelper.getVoltageColor(@volts[2])
       renderContext.drawThickLinePt @emit[0], @emit[1], color
 
       # draw arrow
       #g.setColor(lightGrayColor);
-      renderContext.drawThickPolygonP @arrowPoly
+#      renderContext.drawThickPolygonP @arrowPoly
 
       # draw base
       color = DrawHelper.getVoltageColor(@volts[0])
@@ -198,7 +198,7 @@ define [
             vnew = @vcrit
         else
           vnew = @vt * Math.log(vnew / @vt)
-        Circuit.converged = false
+        @getParentCircuit().converged = false
 
       #console.log(vnew + " " + oo + " " + vold);
       vnew
@@ -209,7 +209,7 @@ define [
       stamper.stampNonLinear @nodes[2]
 
     doStep: (stamper) ->
-      subIterations = getParentCircuit().Solver.subIterations
+      subIterations = @getParentCircuit().Solver.subIterations
 
       vbc = @volts[0] - @volts[1] # typically negative
       vbe = @volts[0] - @volts[2] # typically positive
@@ -276,7 +276,8 @@ define [
       stamper.stampRightSide @nodes[2], -@ie + gee * vbe + gec * vbc
 
     getInfo: (arr) ->
-      arr[0] = "transistor (" + ((if (@pnp is -1) then "PNP)" else "NPN)")) + " beta=" + showFormat.format(@beta)
+      arr[0] = "transistor (" + ((if (@pnp is -1) then "PNP)" else "NPN)")) + " beta=" + @beta.toFixed(4)
+      arr[0] = ""
       vbc = @volts[0] - @volts[1]
       vbe = @volts[0] - @volts[2]
       vce = @volts[1] - @volts[2]
@@ -284,11 +285,11 @@ define [
         arr[1] = (if vbe * @pnp > .2 then "saturation" else "reverse active")
       else
         arr[1] = (if vbe * @pnp > .2 then "fwd active" else "cutoff")
-      arr[2] = "Ic = " + @getCurrentText(@ic)
-      arr[3] = "Ib = " + @getCurrentText(@ib)
-      arr[4] = "Vbe = " + @getVoltageText(vbe)
-      arr[5] = "Vbc = " + @getVoltageText(vbc)
-      arr[6] = "Vce = " + @getVoltageText(vce)
+      arr[2] = "Ic = " + DrawHelper.getCurrentText(@ic)
+      arr[3] = "Ib = " + DrawHelper.getCurrentText(@ib)
+      arr[4] = "Vbe = " + DrawHelper.getVoltageText(vbe)
+      arr[5] = "Vbc = " + DrawHelper.getVoltageText(vbc)
+      arr[6] = "Vce = " + DrawHelper.getVoltageText(vce)
 
     getScopeValue: (x) ->
       switch x
