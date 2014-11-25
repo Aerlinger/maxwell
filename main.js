@@ -462,8 +462,6 @@ require([
       ]
     });
 
-
-
     graph.render();
 
     var hoverDetail = new Rickshaw.Graph.HoverDetail({
@@ -473,10 +471,10 @@ require([
       }
     });
 
-    var annotator = new Rickshaw.Graph.Annotate({
-      graph: graph,
-      element: document.getElementById('timeline')
-    });
+    //var annotator = new Rickshaw.Graph.Annotate({
+    //  graph: graph,
+    //  element: document.getElementById('timeline')
+    //});
 
     var legend = new Rickshaw.Graph.Legend({
       graph: graph,
@@ -499,11 +497,6 @@ require([
       legend: legend
     });
 
-//var smoother = new Rickshaw.Graph.Smoother( {
-//  graph: graph,
-//  element: document.querySelector('#smoother')
-//} );
-
     var ticksTreatment = 'glow';
 
     var xAxis = new Rickshaw.Graph.Axis.Time({
@@ -522,7 +515,6 @@ require([
 
     yAxis.render();
 
-
     var controls = new RenderControls({
       element: document.querySelector('form'),
       graph: graph
@@ -530,16 +522,16 @@ require([
 
 // add some data every so often
 
-    var messages = [
-      "Changed home page welcome message",
-      "Minified JS and CSS",
-      "Changed button color from blue to green",
-      "Refactored SQL query to use indexed columns",
-      "Added additional logging for debugging",
-      "Fixed typo",
-      "Rewrite conditional logic for clarity",
-      "Added documentation for new methods"
-    ];
+    //var messages = [
+    //  "Changed home page welcome message",
+    //  "Minified JS and CSS",
+    //  "Changed button color from blue to green",
+    //  "Refactored SQL query to use indexed columns",
+    //  "Added additional logging for debugging",
+    //  "Fixed typo",
+    //  "Rewrite conditional logic for clarity",
+    //  "Added documentation for new methods"
+    //];
 
     var i = 0;
 
@@ -565,17 +557,17 @@ require([
 
     }, 50);
 
-    function addAnnotation(force) {
-      if (messages.length > 0 && (force || Math.random() >= 0.95)) {
-        //annotator.add(scope.seriesData[2][seriesData[2].length - 1].x, messages.shift());
-        annotator.update();
-      }
-    }
+    //function addAnnotation(force) {
+    //  if (messages.length > 0 && (force || Math.random() >= 0.95)) {
+    //    annotator.add(scope.seriesData[2][seriesData[2].length - 1].x, messages.shift());
+        //annotator.update();
+      //}
+    //}
 
-    addAnnotation(true);
-    setTimeout(function () {
-      setInterval(addAnnotation, 1000)
-    }, 1000);
+    //addAnnotation(true);
+    //setTimeout(function () {
+    //  setInterval(addAnnotation, 1000)
+    //}, 1000);
 
     var previewXAxis = new Rickshaw.Graph.Axis.Time({
       //graph: preview.previews[0],
@@ -588,16 +580,8 @@ require([
 
   var scope = new OScope(10);
 
-
-
-
-
-
-
 //var preview = new Rickshaw.Graph.RangeSlider( {
 //  graph: graph,
 //  element: document.getElementById('preview')
 //} );
-
-
 });
