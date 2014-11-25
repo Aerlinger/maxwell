@@ -77,8 +77,6 @@ define [
       ptOut2.x = Math.floor((1-f)*ptA.x + (f*ptB.x) - g*gx + EPSILON)
       ptOut2.y = Math.floor((1-f)*ptA.y + (f*ptB.y) - g*gy + EPSILON)
 
-#      console.log("ptOut: #{ptOut1} #{ptOut2}")
-
       return [ptOut1, ptOut2]
 
     @calcArrow: (point1, point2, al, aw) ->

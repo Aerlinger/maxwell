@@ -18,7 +18,6 @@ define [
   class CircuitLoader
 
     @parseJSON: (circuit, jsonData) ->
-#      try
       circuitParams = jsonData.shift()
       # Circuit Parameters are stored at the header of the .json file (index 0)
       circuit.setParamsFromJSON(circuitParams)
@@ -27,6 +26,8 @@ define [
       console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
       console.log("Soldering Components:");
       console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+      elms = []
+
       for elementData in jsonData
         type = elementData['sym']
         sym = ComponentRegistry.ComponentDefs[type]
@@ -50,10 +51,15 @@ define [
           circuit.warn "Unrecognized dump type: #{type}"
         else
           newCircuitElm = new sym(x1, y1, x2, y2, flags, params)
-          console.log(sym)
+
+          elms.push(newCircuitElm)
+
           circuit.solder newCircuitElm
-#      catch e
-#        console.error "Failed to parse json #{e.message}"
+
+      if elms.length == 0
+        console.error "No elements loaded JSON most likely malformed"
+
+
 
     ###
     Retrieves string data from a circuit text file (via AJAX GET)

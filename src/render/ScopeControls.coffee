@@ -3,7 +3,12 @@ define ['jquery'], ($) ->
 # </DEFINE>
   class ScopeControls
 
-    constructor: (@element, @graph) ->
+    constructor: (@graph) ->
+      @element = document.querySelector("form")
+      chartDiv = document.getElementById("chart")
+      legendDiv = document.getElementById("legend")
+      timelineDiv = document.getElementById("timeline")
+
       @settings = @serialize()
 
       @inputs = {
@@ -11,6 +16,52 @@ define ['jquery'], ($) ->
         interpolation: @element.elements.interpolation,
         offset: @element.elements.offset
       }
+
+      new Rickshaw.Graph.HoverDetail({
+        graph: @graph,
+        xFormatter: (x) ->
+          x.toString()
+      })
+
+      legend = new Rickshaw.Graph.Legend({
+        graph: @graph,
+        element: legendDiv
+      })
+
+      shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+        graph: @graph,
+        legend: legend
+      })
+
+      order = new Rickshaw.Graph.Behavior.Series.Order({
+        graph: @graph,
+        legend: legend
+      })
+
+
+      #      @annotator = new Rickshaw.Graph.Annotate graph: graph,
+      #        element: document.getElementById("timeline")
+
+      highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
+        graph: @graph,
+        legend: legend
+      })
+
+      ticksTreatment = "glow"
+
+      xAxis = new Rickshaw.Graph.Axis.Time({
+        graph: @graph,
+        ticksTreatment: ticksTreatment,
+        timeFixture: new Rickshaw.Fixtures.Time.Local()
+      })
+      xAxis.render()
+
+      yAxis = new Rickshaw.Graph.Axis.Y({
+        graph: @graph,
+        tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+        ticksTreatment: ticksTreatment
+      })
+      yAxis.render()
 
       @element.addEventListener "change", ((e) =>
         @settings = @serialize()
@@ -38,7 +89,6 @@ define ['jquery'], ($) ->
           config.offset = @settings.offset
 
         @graph.configure config
-#        @graph.render()
 
         return
       ), false

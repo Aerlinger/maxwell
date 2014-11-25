@@ -287,8 +287,3 @@ require [
   scope = new OScope(10)
   return
 
-
-#var preview = new Rickshaw.Graph.RangeSlider( {
-#  graph: graph,
-#  element: document.getElementById('preview')
-#} );

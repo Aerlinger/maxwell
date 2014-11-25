@@ -29,6 +29,24 @@ define [
 ) ->
 # </DEFINE>
 
+
+  # X components
+  # Y nodes
+  # Z Active Components
+  # Timestep:
+  # Frametime:
+  # Active power consumption:
+  # Nonlinear circuit (2nd order)
+  # DE Solver: Symplectic Euler
+  # Matrix Solver: LU Factorization/Crout
+  # Converged in X subiterations using Newton's method
+  # Residual: 0
+  # Norm(Q):
+  # Stability margin:
+
+  # Traversal depth:
+
+
   class SelectionMarquee extends Rectangle
     constructor: (@x1, @y1) ->
 
@@ -241,6 +259,10 @@ define [
         @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(i + 1), polygon.getY(i + 1), color
       @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
 
+    clear: ->
+#      if @Circuit?
+#        @Circuit.eachComponent (component) ->
+#          component.focused = false
 
 
   return CircuitCanvas

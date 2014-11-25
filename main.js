@@ -12,12 +12,12 @@
       jquery: 'bower_components/jquery/dist/jquery.min',
       jqueryui: 'bower_components/jquery-ui/jquery-ui',
       Rickshaw: 'bower_components/rickshaw/rickshaw',
-      underscore: 'bower_components/underscore/underscore-min',
-      'coffee-script': 'libs/coffee-script',
-      cs: 'libs/cs',
-      color: 'libs/color',
-      mocha: 'libs/mocha',
-      chai: 'libs/chai',
+      underscore: 'bower_components/underscore/underscore',
+      'coffee-script': 'bower_components/coffee-script/extras/coffee-script',
+      cs: 'bower_components/require-cs/cs',
+      color: 'bower_components/one-color',
+      mocha: 'bower_components/mocha/mocha',
+      chai: 'bower_components/chai/chai',
 
       Maxwell: 'src/Maxwell',
 
@@ -152,13 +152,13 @@
       observerTest: 'test/observers/observerTest'
     },
     shim: {
-      'underscore': {
-        exports: '_'
-      },
       'd3': 'd3',
       'jqueryui': 'jquery',
       'jquery': {
         exports: '$'
+      },
+      'underscore': {
+        exports: '_'
       }
     },
     packages: [
@@ -169,8 +169,8 @@
       },
       {
         name: 'coffee-script',
-        location: 'bower_components/coffeescript/',
-        main: 'extras/coffee-script'
+        location: 'bower_components/coffee-script/extras',
+        main: 'coffee-script'
       }
     ]
   };
@@ -202,7 +202,7 @@
 
 require([
   // Load our app module and pass it to our definition function
-  'cs!Maxwell',
+  'cs!Maxwell'
 ], function (Maxwell) {
   var circuitName = $('canvas').data('circuit');
   var circuitFileName = "../circuits/" + circuitName + ".json";
@@ -265,9 +265,8 @@ function runTests() {
 
 
 require([
-    'cs!Oscilloscope',
-    'Rickshaw'
-], function(Oscilloscope, Rickshaw) {
+  'cs!Oscilloscope'
+], function (Oscilloscope) {
   "use strict";
 
   var scope = new Oscilloscope();
@@ -528,3 +527,7 @@ require([
 //
 //  var scope = new OScope(10);
 //});
+
+
+
+
