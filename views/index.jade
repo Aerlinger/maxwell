@@ -4,7 +4,6 @@ block body
 
   #content
     form#side_panel
-      h1 Random Data in the Future
       section
         #legend
       section
@@ -31,6 +30,7 @@ block body
           label(for='value')
             input#value(type='radio', name='offset', value='value')
             span value
+
         #interpolation_form
           label(for='cardinal')
             input#cardinal(type='radio', name='interpolation', value='cardinal', checked='checked')
@@ -41,10 +41,10 @@ block body
           label(for='step')
             input#step(type='radio', name='interpolation', value='step-after')
             span step
-      section
-        h6 Smoothing
-        #smoother
-      section
+      //section
+      //  h6 Smoothing
+      //  #smoother
+      //section
     #chart_container
       #chart
       #timeline

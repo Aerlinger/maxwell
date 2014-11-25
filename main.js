@@ -11,6 +11,7 @@
       d3: 'bower_components/d3/d3',
       jquery: 'bower_components/jquery/dist/jquery.min',
       jqueryui: 'bower_components/jquery-ui/jquery-ui',
+      Rickshaw: 'bower_components/rickshaw/rickshaw',
       underscore: 'bower_components/underscore/underscore-min',
       'coffee-script': 'libs/coffee-script',
       cs: 'libs/cs',
@@ -271,6 +272,8 @@ function runTests() {
   });
 }
 
+
+
 //require([
 //  // Load our app module and pass it to our definition function
 //  'jquery',
@@ -281,278 +284,315 @@ function runTests() {
 
 // set up our data series with 150 random data points
 
-var RenderControls = function (args) {
+  var RenderControls = function(args) {
 
-  var $ = jQuery;
+    var $ = jQuery;
 
-  this.initialize = function () {
+    this.initialize = function() {
 
-    this.element = args.element;
-    this.graph = args.graph;
-    this.settings = this.serialize();
-
-    this.inputs = {
-      renderer: this.element.elements.renderer,
-      interpolation: this.element.elements.interpolation,
-      offset: this.element.elements.offset
-    };
-
-    this.element.addEventListener('change', function (e) {
-
+      this.element = args.element;
+      this.graph = args.graph;
       this.settings = this.serialize();
 
-      if (e.target.name == 'renderer') {
-        this.setDefaultOffset(e.target.value);
-      }
-
-      this.syncOptions();
-      this.settings = this.serialize();
-
-      var config = {
-        renderer: this.settings.renderer,
-        interpolation: this.settings.interpolation
+      this.inputs = {
+        renderer: this.element.elements.renderer,
+        interpolation: this.element.elements.interpolation,
+        offset: this.element.elements.offset
       };
 
-      if (this.settings.offset == 'value') {
-        config.unstack = true;
-        config.offset = 'zero';
-      } else if (this.settings.offset == 'expand') {
-        config.unstack = false;
-        config.offset = this.settings.offset;
-      } else {
-        config.unstack = false;
-        config.offset = this.settings.offset;
-      }
+      this.element.addEventListener('change', function(e) {
 
-      this.graph.configure(config);
-      this.graph.render();
+        this.settings = this.serialize();
 
-    }.bind(this), false);
-  }
+        if (e.target.name == 'renderer') {
+          this.setDefaultOffset(e.target.value);
+        }
 
-  this.serialize = function () {
+        this.syncOptions();
+        this.settings = this.serialize();
 
-    var values = {};
-    var pairs = $(this.element).serializeArray();
+        var config = {
+          renderer: this.settings.renderer,
+          interpolation: this.settings.interpolation
+        };
 
-    pairs.forEach(function (pair) {
-      values[pair.name] = pair.value;
-    });
-
-    return values;
-  };
-
-  this.syncOptions = function () {
-
-    var options = this.rendererOptions[this.settings.renderer];
-
-    Array.prototype.forEach.call(this.inputs.interpolation, function (input) {
-
-      if (options.interpolation) {
-        input.disabled = false;
-        input.parentNode.classList.remove('disabled');
-      } else {
-        input.disabled = true;
-        input.parentNode.classList.add('disabled');
-      }
-    });
-
-    Array.prototype.forEach.call(this.inputs.offset, function (input) {
-
-      if (options.offset.filter(function (o) {
-            return o == input.value
-          }).length) {
-        input.disabled = false;
-        input.parentNode.classList.remove('disabled');
-
-      } else {
-        input.disabled = true;
-        input.parentNode.classList.add('disabled');
-      }
-
-    }.bind(this));
-
-  };
-
-  this.setDefaultOffset = function (renderer) {
-
-    var options = this.rendererOptions[renderer];
-
-    if (options.defaults && options.defaults.offset) {
-
-      Array.prototype.forEach.call(this.inputs.offset, function (input) {
-        if (input.value == options.defaults.offset) {
-          input.checked = true;
+        if (this.settings.offset == 'value') {
+          config.unstack = true;
+          config.offset = 'zero';
+        } else if (this.settings.offset == 'expand') {
+          config.unstack = false;
+          config.offset = this.settings.offset;
         } else {
-          input.checked = false;
+          config.unstack = false;
+          config.offset = this.settings.offset;
+        }
+
+        this.graph.configure(config);
+        this.graph.render();
+
+      }.bind(this), false);
+    };
+
+    this.serialize = function() {
+
+      var values = {};
+      var pairs = $(this.element).serializeArray();
+
+      pairs.forEach( function(pair) {
+        values[pair.name] = pair.value;
+      } );
+
+      return values;
+    };
+
+    this.syncOptions = function() {
+
+      var options = this.rendererOptions[this.settings.renderer];
+
+      Array.prototype.forEach.call(this.inputs.interpolation, function(input) {
+
+        if (options.interpolation) {
+          input.disabled = false;
+          input.parentNode.classList.remove('disabled');
+        } else {
+          input.disabled = true;
+          input.parentNode.classList.add('disabled');
+        }
+      });
+
+      Array.prototype.forEach.call(this.inputs.offset, function(input) {
+
+        if (options.offset.filter( function(o) { return o == input.value } ).length) {
+          input.disabled = false;
+          input.parentNode.classList.remove('disabled');
+
+        } else {
+          input.disabled = true;
+          input.parentNode.classList.add('disabled');
         }
 
       }.bind(this));
+
+    };
+
+    this.setDefaultOffset = function(renderer) {
+
+      var options = this.rendererOptions[renderer];
+
+      if (options.defaults && options.defaults.offset) {
+
+        Array.prototype.forEach.call(this.inputs.offset, function(input) {
+          if (input.value == options.defaults.offset) {
+            input.checked = true;
+          } else {
+            input.checked = false;
+          }
+
+        }.bind(this));
+      }
+    };
+
+    this.rendererOptions = {
+
+      area: {
+        interpolation: true,
+        offset: ['zero', 'wiggle', 'expand', 'value'],
+        defaults: { offset: 'zero' }
+      },
+      line: {
+        interpolation: true,
+        offset: ['expand', 'value'],
+        defaults: { offset: 'value' }
+      },
+      bar: {
+        interpolation: false,
+        offset: ['zero', 'wiggle', 'expand', 'value'],
+        defaults: { offset: 'zero' }
+      },
+      scatterplot: {
+        interpolation: false,
+        offset: ['value'],
+        defaults: { offset: 'value' }
+      }
+    };
+
+    this.initialize();
+  };
+
+  var OScope = function (timeInterval) {
+    this.addData = function (data, value) {
+      var amplitude = Math.cos(timeBase / 50);
+      var index = data[0].length;
+
+      data.forEach(function (series) {
+        series.push({x: (index * timeInterval) + timeBase, y: value + amplitude});
+      });
+    };
+
+    this.removeData = function (data) {
+      data.forEach(function (series) {
+        series.shift();
+      });
+      timeBase += timeInterval;
+    };
+
+    this.seriesData = [[], [], [], [], [], [], [], [], []];
+    this.timeInterval = timeInterval || 1;
+
+    var timeBase = Math.floor(new Date().getTime() / 1000);
+
+    for (var i = 0; i < 150; i++) {
+      this.addData(this.seriesData, 1);
     }
   };
 
-  this.rendererOptions = {
+  var scope = new OScope(10);
 
-    area: {
-      interpolation: true,
-      offset: ['zero', 'wiggle', 'expand', 'value'],
-      defaults: {offset: 'zero'}
-    },
-    line: {
-      interpolation: true,
-      offset: ['expand', 'value'],
-      defaults: {offset: 'value'}
-    },
-    bar: {
-      interpolation: false,
-      offset: ['zero', 'wiggle', 'expand', 'value'],
-      defaults: {offset: 'zero'}
-    },
-    scatterplot: {
-      interpolation: false,
-      offset: ['value'],
-      defaults: {offset: 'value'}
+
+
+  var palette = new Rickshaw.Color.Palette({scheme: 'classic9'});
+
+  var graph = new Rickshaw.Graph({
+    element: document.getElementById("chart"),
+    width: 900,
+    height: 500,
+    renderer: 'area',
+    stroke: true,
+    preserve: true,
+    series: [
+      {
+        color: palette.color(),
+        data: scope.seriesData[0],
+        name: 'Moscow'
+      }
+      //}, {
+      //  color: palette.color(),
+      //  data: seriesData[1],
+      //  name: 'Shanghai'
+      //}
+    ]
+  });
+
+  graph.render();
+
+//var preview = new Rickshaw.Graph.RangeSlider( {
+//  graph: graph,
+//  element: document.getElementById('preview')
+//} );
+
+  var hoverDetail = new Rickshaw.Graph.HoverDetail({
+    graph: graph,
+    xFormatter: function (x) {
+      return new Date(x * 1000).toString();
     }
-  };
+  });
 
-  this.initialize();
-};
+  var annotator = new Rickshaw.Graph.Annotate({
+    graph: graph,
+    element: document.getElementById('timeline')
+  });
 
+  var legend = new Rickshaw.Graph.Legend({
+    graph: graph,
+    element: document.getElementById('legend')
 
-var seriesData = [[], [], [], [], [], [], [], [], []];
-var random = new Rickshaw.Fixtures.RandomData(150);
+  });
 
-for (var i = 0; i < 150; i++) {
-  random.addData(seriesData);
-}
+  var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+    graph: graph,
+    legend: legend
+  });
 
-var palette = new Rickshaw.Color.Palette({scheme: 'classic9'});
+  var order = new Rickshaw.Graph.Behavior.Series.Order({
+    graph: graph,
+    legend: legend
+  });
 
-// instantiate our graph!
+  var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
+    graph: graph,
+    legend: legend
+  });
 
-var graph = new Rickshaw.Graph({
-  element: document.getElementById("chart"),
-  width: 900,
-  height: 500,
-  renderer: 'area',
-  stroke: true,
-  preserve: true,
-  series: [
-    {
-      color: palette.color(),
-      data: seriesData[6],
-      name: 'New York'
-    }
-  ]
-});
+//var smoother = new Rickshaw.Graph.Smoother( {
+//  graph: graph,
+//  element: document.querySelector('#smoother')
+//} );
 
-graph.render();
+  var ticksTreatment = 'glow';
 
-var preview = new Rickshaw.Graph.RangeSlider({
-  graph: graph,
-  element: document.getElementById('preview'),
-});
+  var xAxis = new Rickshaw.Graph.Axis.Time({
+    graph: graph,
+    ticksTreatment: ticksTreatment,
+    timeFixture: new Rickshaw.Fixtures.Time.Local()
+  });
 
-var hoverDetail = new Rickshaw.Graph.HoverDetail({
-  graph: graph,
-  xFormatter: function (x) {
-    return new Date(x * 1000).toString();
-  }
-});
+  xAxis.render();
 
-var annotator = new Rickshaw.Graph.Annotate({
-  graph: graph,
-  element: document.getElementById('timeline')
-});
+  var yAxis = new Rickshaw.Graph.Axis.Y({
+    graph: graph,
+    tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+    ticksTreatment: ticksTreatment
+  });
 
-var legend = new Rickshaw.Graph.Legend({
-  graph: graph,
-  element: document.getElementById('legend')
-
-});
-
-var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
-  graph: graph,
-  legend: legend
-});
-
-var order = new Rickshaw.Graph.Behavior.Series.Order({
-  graph: graph,
-  legend: legend
-});
-
-var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
-  graph: graph,
-  legend: legend
-});
-
-var smoother = new Rickshaw.Graph.Smoother({
-  graph: graph,
-  element: document.querySelector('#smoother')
-});
-
-var ticksTreatment = 'glow';
-
-var xAxis = new Rickshaw.Graph.Axis.Time({
-  graph: graph,
-  ticksTreatment: ticksTreatment,
-  timeFixture: new Rickshaw.Fixtures.Time.Local()
-});
-
-xAxis.render();
-
-var yAxis = new Rickshaw.Graph.Axis.Y({
-  graph: graph,
-  tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
-  ticksTreatment: ticksTreatment
-});
-
-yAxis.render();
+  yAxis.render();
 
 
-var controls = new RenderControls({
-  element: document.querySelector('form'),
-  graph: graph
-});
+  var controls = new RenderControls({
+    element: document.querySelector('form'),
+    graph: graph
+  });
 
 // add some data every so often
 
-var messages = [
-  "Changed home page welcome message",
-  "Minified JS and CSS",
-  "Changed button color from blue to green",
-  "Refactored SQL query to use indexed columns",
-  "Added additional logging for debugging",
-  "Fixed typo",
-  "Rewrite conditional logic for clarity",
-  "Added documentation for new methods"
-];
+  var messages = [
+    "Changed home page welcome message",
+    "Minified JS and CSS",
+    "Changed button color from blue to green",
+    "Refactored SQL query to use indexed columns",
+    "Added additional logging for debugging",
+    "Fixed typo",
+    "Rewrite conditional logic for clarity",
+    "Added documentation for new methods"
+  ];
 
-setInterval(function () {
-  random.removeData(seriesData);
-  random.addData(seriesData);
-  graph.update();
+  var i = 0;
+  setInterval(function () {
+    //seriesData.shift();
 
-}, 50);
+    //data.forEach( function(series) {
+    //  var amplitude = Math.random() * 20;
+    //  var v = randomValue / 25  + counter++ +
+    //      (Math.cos((index * counter * 11) / 960) + 2) * 15 +
+    //      (Math.cos(index / 7) + 2) * 7 +
+    //      (Math.cos(index / 17) + 2) * 1;
+    //
+    //  series.push( { x: (index * timeInterval) + timeBase, y: v + amplitude } );
+    //} );
 
-function addAnnotation(force) {
-  if (messages.length > 0 && (force || Math.random() >= 0.95)) {
-    annotator.add(seriesData[2][seriesData[2].length - 1].x, messages.shift());
-    annotator.update();
+    //seriesData.push(100 * Math.sin(i / 10));
+    scope.removeData(scope.seriesData, 1);
+    scope.addData(scope.seriesData, 1);
+    graph.update();
+
+  }, 50);
+
+  function addAnnotation(force) {
+    if (messages.length > 0 && (force || Math.random() >= 0.95)) {
+      //annotator.add(scope.seriesData[2][seriesData[2].length - 1].x, messages.shift());
+      annotator.update();
+    }
   }
-}
 
-addAnnotation(true);
-setTimeout(function () {
-  setInterval(addAnnotation, 1000)
-}, 1000);
+  addAnnotation(true);
+  setTimeout(function () {
+    setInterval(addAnnotation, 1000)
+  }, 1000);
 
-var previewXAxis = new Rickshaw.Graph.Axis.Time({
-  graph: preview.previews[0],
-  timeFixture: new Rickshaw.Fixtures.Time.Local(),
-  ticksTreatment: ticksTreatment
-});
+  var previewXAxis = new Rickshaw.Graph.Axis.Time({
+    graph: preview.previews[0],
+    timeFixture: new Rickshaw.Fixtures.Time.Local(),
+    ticksTreatment: ticksTreatment
+  });
 
-previewXAxis.render();
-
+  previewXAxis.render();
 //});
