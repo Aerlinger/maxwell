@@ -6,7 +6,6 @@ require [
 
   # set up our data series with 150 random data points
   RenderControls = (args) ->
-    $ = jQuery
     @initialize = ->
       @element = args.element
       @graph = args.graph
@@ -232,6 +231,7 @@ require [
       graph: graph
       legend: legend
     )
+
     ticksTreatment = "glow"
     xAxis = new Rickshaw.Graph.Axis.Time(
       graph: graph
@@ -239,12 +239,14 @@ require [
       timeFixture: new Rickshaw.Fixtures.Time.Local()
     )
     xAxis.render()
+
     yAxis = new Rickshaw.Graph.Axis.Y(
       graph: graph
       tickFormat: Rickshaw.Fixtures.Number.formatKMBT
       ticksTreatment: ticksTreatment
     )
     yAxis.render()
+
     controls = new RenderControls(
       element: document.querySelector("form")
       graph: graph

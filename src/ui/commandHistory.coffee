@@ -4,7 +4,6 @@ define [], () ->
 
 
   class CommandHistory
-
     constructor: ->
       @reset()
 

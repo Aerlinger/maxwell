@@ -32,7 +32,6 @@ define [
   'cs!Point',
   'cs!Rectangle',
   'cs!Polygon',
-  'cs!Grid',
   'cs!SimulationParams',
   'cs!MouseState',
   'cs!Settings',
@@ -52,7 +51,6 @@ define [
   Point,
   Rectangle,
   Polygon,
-  Grid,
   SimulationParams,
   MouseState,
   Settings,
@@ -116,7 +114,7 @@ define [
         element.destroy()
 
       @Solver = new CircuitSolver(this)
-      @Grid = new Grid()
+#      @Grid = new Grid()
 
       @nodeList = []
       @elementList = []
@@ -221,8 +219,8 @@ define [
     numNodes: ->
       @nodeList.length
 
-    getGrid: ->
-      return @Grid
+#    getGrid: ->
+#      return @Grid
 
     findBadNodes: ->
       @badNodes = []

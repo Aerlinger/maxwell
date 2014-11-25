@@ -15,8 +15,6 @@ define [
     'cs!Observer',
     'cs!Circuit',
     'cs!CircuitComponent',
-    'cs!KeyHandler',
-    'cs!MouseHandler',
     'cs!FormatUtils',
     'cs!Settings',
     'cs!Rectangle'
@@ -25,8 +23,6 @@ define [
   Observer,
   Circuit,
   CircuitComponent,
-  KeyHandler,
-  MouseHandler,
   FormatUtils,
   Settings,
   Rectangle
@@ -50,6 +46,7 @@ define [
 
       @width = _x2 - _x1
       @height = _y2 - _y1
+
 
 
     draw: (renderContext) ->
@@ -244,17 +241,6 @@ define [
         @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(i + 1), polygon.getY(i + 1), color
       @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
 
-    clear: ->
-#      if @Circuit?
-#        @Circuit.eachComponent (component) ->
-#          component.focused = false
 
-#      return if !@context
-#      @context.clearRect(0, 0, @width, @height)
-
-    # Called on Circuit update:
-#    repaint: (Circuit) =>
-#      @drawComponents()
-#      @drawInfo()
 
   return CircuitCanvas

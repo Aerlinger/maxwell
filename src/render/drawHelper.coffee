@@ -52,7 +52,6 @@ define [
 
     @unitsFont: "Arial, Helvetica, sans-serif"
 
-    # Fixme: Reverses direction if epsilon is 0?
     @interpPoint: (ptA, ptB, f, g = 0) ->
       gx = ptB.y - ptA.y
       gy = ptA.x - ptB.x
