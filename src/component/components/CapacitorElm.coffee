@@ -2,12 +2,10 @@
 define [
   'cs!CircuitComponent',
   'cs!DrawHelper',
-  'cs!Units',
   'cs!Point'
 ], (
   CircuitComponent,
   DrawHelper,
-  Units,
   Point
 ) ->
 # </DEFINE>

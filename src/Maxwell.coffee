@@ -16,19 +16,4 @@ define [
         CircuitLoader.createCircuitFromJSON @circuitName, (circuit) =>
           @Circuit = circuit
 
-          console.log("Loading: " + @circuitName)
-
           new CircuitCanvas(@Circuit, canvas)
-
-#          @Circuit.updateCircuit()
-#
-#          setInterval =>
-#            @Circuit.updateCircuit()
-#          , 0
-
-#    start: ->
-#      @Circuit.updateCircuit()
-#
-#      setInterval =>
-#        @Circuit.updateCircuit()
-#      , 0

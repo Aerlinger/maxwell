@@ -41,7 +41,6 @@
       // IO:
       Logger: 'src/io/logger',
       CircuitLoader: 'src/io/circuitLoader',
-      ConfigurationLoader: 'src/io/configurationLoader',
 
       // GEOM:
       Point: 'src/geom/point',
@@ -107,7 +106,6 @@
       ArrayUtils: 'src/util/arrayUtils',
       FormatUtils: 'src/util/formatUtils',
       ConsoleUtils: 'src/util/consoleUtils',
-      Units: 'src/util/units',
 
 
       ////////////////////////////////////////////////////////

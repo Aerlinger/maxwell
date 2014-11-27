@@ -5,16 +5,15 @@ define [
   'cs!Polygon',
   'cs!Rectangle',
   'cs!Point',
-  'cs!CircuitComponent',
-  'cs!Units'
+  'cs!CircuitComponent'
 #  'cs!EditInfo',
 ], (Settings,
     DrawHelper,
     Polygon,
     Rectangle,
     Point,
-    CircuitComponent,
-    Units) ->
+    CircuitComponent
+    ) ->
   # </DEFINE>
   class SparkGapElm extends CircuitComponent
 

@@ -5,8 +5,7 @@ define [
   'cs!Polygon',
   'cs!Rectangle',
   'cs!Point',
-  'cs!CircuitComponent',
-  'cs!Units'
+  'cs!CircuitComponent'
 ], (
 Settings,
 DrawHelper,
@@ -14,8 +13,7 @@ Polygon,
 Rectangle,
 Point,
 
-CircuitComponent,
-Units
+CircuitComponent
 ) ->
   # </DEFINE>
 

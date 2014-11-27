@@ -6,7 +6,6 @@ define [
   'cs!Rectangle',
   'cs!Point',
   'cs!CircuitComponent',
-  'cs!Units',
   'cs!MathUtils',
   'cs!ConsoleUtils'
 ], (
@@ -17,8 +16,8 @@ define [
   Point,
 
   CircuitComponent,
-  Units,
-  MathUtils
+  MathUtils,
+  ConsoleUtils
 ) ->
   # </DEFINE>
 

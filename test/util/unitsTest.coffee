@@ -1,5 +1,5 @@
 # <DEFINE>
-define ['cs!Units'], (Units) ->
+define ['cs!DrawHelper'], (DrawHelper) ->
 # </DEFINE>
 
 

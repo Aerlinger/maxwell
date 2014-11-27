@@ -7,8 +7,7 @@ define [
   'cs!Polygon',
   'cs!Rectangle',
   'cs!Point',
-  'cs!CircuitComponent',
-  'cs!Units'
+  'cs!CircuitComponent'
 
 ], (
   Diode,
@@ -19,8 +18,7 @@ define [
   Rectangle,
   Point,
 
-  CircuitComponent,
-  Units
+  CircuitComponent
 ) ->
   # </DEFINE>
 

@@ -1,5 +1,0 @@
-# <DEFINE>
-define [], () ->
-# </DEFINE>
-
-

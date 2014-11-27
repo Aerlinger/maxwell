@@ -39,7 +39,6 @@ define [
   'cs!Hint',
   'cs!CommandHistory',
   'cs!CircuitSolver',
-  'cs!Units',
   'cs!Module',
   'cs!Observer'
 ], (
@@ -58,7 +57,6 @@ define [
   Hint,
   CommandHistory,
   CircuitSolver,
-  Units,
   Module,
   Observer
 ) ->

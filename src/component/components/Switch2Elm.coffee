@@ -6,7 +6,6 @@ define [
   'cs!Rectangle',
   'cs!Point',
   'cs!CircuitComponent',
-  'cs!Units',
   'cs!SwitchElm'
 ], (
   Settings,
@@ -16,7 +15,6 @@ define [
   Point,
 
   CircuitComponent,
-  Units,
   SwitchElm
 ) ->
 # </DEFINE>

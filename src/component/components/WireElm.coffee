@@ -5,7 +5,6 @@ define [
   'cs!Polygon',
   'cs!Rectangle',
   'cs!Point',
-  'cs!Units',
 
   'cs!CircuitComponent'
 ], (
@@ -14,7 +13,6 @@ define [
   Polygon,
   Rectangle,
   Point,
-  Units,
 
   CircuitComponent
 ) ->

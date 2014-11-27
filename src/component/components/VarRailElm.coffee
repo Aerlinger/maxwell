@@ -6,8 +6,7 @@ define [
   'cs!Rectangle',
   'cs!Point',
   'cs!CircuitComponent',
-  'cs!RailElm',
-  'cs!Units'
+  'cs!RailElm'
 ], (
   Settings,
   DrawHelper,
@@ -16,8 +15,7 @@ define [
   Point,
 
   CircuitComponent,
-  RailElm,
-  Units
+  RailElm
 ) ->
 # </DEFINE>
 
