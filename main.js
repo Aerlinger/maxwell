@@ -22,7 +22,7 @@
       Maxwell: 'src/Maxwell',
 
       // CORE:
-      ScopeControls: 'src/render/ScopeControls',
+      ScopeCanvas: 'src/render/ScopeCanvas',
       Circuit: 'src/core/circuit',
       SimulationParams: 'src/core/simulationParams',
 

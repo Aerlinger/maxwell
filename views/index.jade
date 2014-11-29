@@ -9,7 +9,54 @@ block body
         p.title
           a.circuit-link(href="#") #{circuit}
   div.large-8.columns
-    h5= circuit_name || "voltdividesimple"
+    // Scope:
+    #content.scope
+      //form#side_panel
+        section
+          #legend
+        hr
+        #renderer_form.toggler
+          input#area(type='radio', name='renderer', value='area', checked='checked')
+          label(for='area') area
+          input#bar(type='radio', name='renderer', value='bar')
+          label(for='bar') bar
+          input#line(type='radio', name='renderer', value='line')
+          label(for='line') line
+          input#scatter(type='radio', name='renderer', value='scatterplot')
+          label(for='scatter') scatter
+        hr
+        #offset_form
+          label(for='stack')
+            input#stack(type='radio', name='offset', value='zero', checked='checked')
+            span stack
+          label(for='stream')
+            input#stream(type='radio', name='offset', value='wiggle')
+            span stream
+          label(for='pct')
+            input#pct(type='radio', name='offset', value='expand')
+            span pct
+          label(for='value')
+            input#value(type='radio', name='offset', value='value')
+            span value
+        #interpolation_form
+          label(for='cardinal')
+            input#cardinal(type='radio', name='interpolation', value='cardinal', checked='checked')
+            span cardinal
+          label(for='linear')
+            input#linear(type='radio', name='interpolation', value='linear')
+            span linear
+          label(for='step')
+            input#step(type='radio', name='interpolation', value='step-after')
+            span step
+        section
+          h6 Smoothing
+          #smoother
+      #chart_container
+        #chart
+        #timeline
+        #preview
+
+
     #container
       // Missing Components or Functionality: ---------------------------------------
       //canvas.maxwell(data-circuit="ohms", width="1600", height="3000")
@@ -52,51 +99,3 @@ block body
       //canvas.maxwell(data-circuit="gyrator", width="1600", height="3000")
       //canvas.maxwell(data-circuit="voltdividesimple", width="1600", height="3000")
 
-    // Scope:
-    #content
-      form#side_panel
-        section
-          #legend
-        section
-          #renderer_form.toggler
-            input#area(type='radio', name='renderer', value='area', checked='checked')
-            label(for='area') area
-            input#bar(type='radio', name='renderer', value='bar')
-            label(for='bar') bar
-            input#line(type='radio', name='renderer', value='line')
-            label(for='line') line
-            input#scatter(type='radio', name='renderer', value='scatterplot')
-            label(for='scatter') scatter
-        section
-          #offset_form
-            label(for='stack')
-              input#stack(type='radio', name='offset', value='zero', checked='checked')
-              span stack
-            label(for='stream')
-              input#stream(type='radio', name='offset', value='wiggle')
-              span stream
-            label(for='pct')
-              input#pct(type='radio', name='offset', value='expand')
-              span pct
-            label(for='value')
-              input#value(type='radio', name='offset', value='value')
-              span value
-
-          #interpolation_form
-            label(for='cardinal')
-              input#cardinal(type='radio', name='interpolation', value='cardinal', checked='checked')
-              span cardinal
-            label(for='linear')
-              input#linear(type='radio', name='interpolation', value='linear')
-              span linear
-            label(for='step')
-              input#step(type='radio', name='interpolation', value='step-after')
-              span step
-        //section
-        //  h6 Smoothing
-        //  #smoother
-        //section
-      #chart_container
-        #chart
-        #timeline
-        #preview

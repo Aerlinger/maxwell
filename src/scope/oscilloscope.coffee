@@ -1,10 +1,10 @@
 # <DEFINE>
 define [
   'Rickshaw'
-  'cs!ScopeControls'
+  'cs!ScopeCanvas'
   'jqueryui'
 ], (Rickshaw,
-    ScopeControls) ->
+    ScopeCanvas) ->
 # </DEFINE>
   class Oscilloscope
     constructor: (@timeStep = 1) ->
@@ -36,7 +36,7 @@ define [
         ],
       })
 
-      new ScopeControls(graph)
+      new ScopeCanvas(graph)
 
       setInterval =>
         @step()

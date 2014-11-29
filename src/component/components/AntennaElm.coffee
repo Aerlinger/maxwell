@@ -7,13 +7,12 @@ define [
   'cs!Point',
   'cs!CircuitComponent'
 ], (
-Settings,
-DrawHelper,
-Polygon,
-Rectangle,
-Point,
-
-CircuitComponent,
+  Settings,
+  DrawHelper,
+  Polygon,
+  Rectangle,
+  Point,
+  CircuitComponent
 ) ->
 # </DEFINE>
 

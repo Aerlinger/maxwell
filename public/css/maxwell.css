@@ -2,3 +2,26 @@
     background-color: white;
     /*width: 100%;*/
 }
+
+.scope {
+
+}
+
+#renderer_form input {
+    display: block;
+}
+
+#renderer_form label {
+    display: inline-block;
+}
+
+#chart_container {
+    background: white;
+    padding-top: 15px;
+    width: 400px;
+}
+
+#chart {
+    background: #EEE;
+    width: 400px;
+}
