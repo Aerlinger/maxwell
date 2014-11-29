@@ -24,6 +24,9 @@ define ['cs!ColorPalette'], (ColorPalette) ->
 
     @SHOW_VALUES: false
 
+    @SCOPE_WIDTH: 200
+    @SCOPE_HEIGHT: 150
+
     # ColorPalettes:
     @SELECT_COLOR: ColorPalette.orange
     @POST_COLOR_SELECTED: ColorPalette.orange

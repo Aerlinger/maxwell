@@ -1,15 +1,37 @@
 # <DEFINE>
-define ['jquery'], ($) ->
+define ['jquery', 'cs!Settings'], ($, Settings) ->
 # </DEFINE>
   class ScopeCanvas
 
-    constructor: (@graph) ->
-      @element = document.querySelector("form")
-      chartDiv = document.getElementById("chart")
-      legendDiv = document.getElementById("legend")
-      timelineDiv = document.getElementById("timeline")
+    constructor: (parentScope) ->
+      scopeContainer = $('#content.scope')
 
-      $("#chart_container").draggable({ grid: [20, 20] })
+      scopeFrame = $(scopeContainer).wrapInner("<div class='maxwell-oscope'></div>")   #.wrapInner("<div class='maxwell-scope-frame'></div>")
+      scopeCanvas = scopeFrame.find('.maxwell-oscope')
+
+      #      legendDiv = document.getElementById("legend")
+      #      timelineDiv = document.getElementById("timeline")
+      palette = new Rickshaw.Color.Palette scheme: 'classic9'
+      scopeCanvas.css "width": Settings.SCOPE_WIDTH + "px", "height": Settings.SCOPE_HEIGHT + "px"
+
+
+      options = {
+        element: scopeCanvas.get(0),
+        width: Settings.SCOPE_WIDTH,
+        height: Settings.SCOPE_HEIGHT,
+        renderer: "line",
+        stroke: true,
+        preserve: true,
+        series: [
+          color: palette.color()
+          data: parentScope.seriesData[0]
+          name: "Voltage"
+        ]
+      }
+
+      @graph = new Rickshaw.Graph(options)
+
+      scopeCanvas.draggable({grid: [20, 20]})
 
       @settings = @serialize()
 
@@ -26,7 +48,7 @@ define ['jquery'], ($) ->
           x.toString()
       })
 
-      if legendDiv
+      if legendDiv?
         legend = new Rickshaw.Graph.Legend({
           graph: @graph,
           element: legendDiv
@@ -41,8 +63,8 @@ define ['jquery'], ($) ->
           graph: @graph,
           legend: legend
         })
-      #      @annotator = new Rickshaw.Graph.Annotate graph: graph,
-      #        element: document.getElementById("timeline")
+        #      @annotator = new Rickshaw.Graph.Annotate graph: graph,
+        #        element: document.getElementById("timeline")
 
         highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
           graph: @graph,
@@ -105,6 +127,9 @@ define ['jquery'], ($) ->
         return
 
       values
+
+    update: ->
+      @graph.update()
 
     syncOptions: ->
       options = @rendererOptions[@settings.renderer]
