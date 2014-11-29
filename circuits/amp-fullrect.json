@@ -1,4 +1,4 @@
-[{"completion_status":"under_development",		"created_at":null,		"current_speed":60.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"amp-fullrect.txt",		"power_range":50.0,		"sim_speed":16.0,		"time_step":5.0e-06,		"title":"Full-Wave Rectifier",		"topic":"Op-Amps",		"updated_at":null,		"voltage_range":1.0},
+[{"completion_status":"under_development",		"created_at":null,		"current_speed":62.0,		"description":null,		"flags":1,		"id":null,		"name_unique":"amp-fullrect.txt",		"power_range":50.0,		"sim_speed":16.0,		"time_step":5.0e-06,		"title":"Full-Wave Rectifier",		"topic":"Op-Amps",		"updated_at":null,		"voltage_range":1.0},		
 {"sym":"a",		"x1":"176",		"y1":"288",		"x2":"272",		"y2":"288",		"flags":"0",		"params":["15.0",		"-15.0"]},		
 {"sym":"g",		"x1":"176",		"y1":"304",		"x2":"176",		"y2":"336",		"flags":"0",		"params":[]},		
 {"sym":"w",		"x1":"272",		"y1":"288",		"x2":"272",		"y2":"240",		"flags":"0",		"params":[]},		
