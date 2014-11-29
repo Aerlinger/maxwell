@@ -41,14 +41,8 @@ define [
 #      selected = (@needsHighlight() or Circuit.plotYElm is this)
       selected = @needsHighlight()
 
-      #Font f = new Font("SansSerif", selected ? Font.BOLD : 0, 14);
-      #g.setFont(f);
       color = (if selected then Settings.SELECT_COLOR else "#FFF")
       s = (if (@flags & OutputElm.FLAG_VALUE) isnt 0 then DrawHelper.getVoltageText(@volts[0]) else "out")
-
-      #FontMetrics fm = g.getFontMetrics();
-#      s = "X"  if this is Circuit.plotXElm
-#      s = "Y"  if this is Circuit.plotYElm
 
       @lead1 = DrawHelper.interpPoint @point1, @point2, 1 - (3 * s.length / 2 + 8) / @dn
 
@@ -85,7 +79,6 @@ define [
       "OutputElm"
 
     setEditValue: (n, ei) ->
-
     # Todo: fix
     #if (n == 0)
     #   this.flags = (ei.checkbox.getState()) ? (this.flags | OutputElm.FLAG_VALUE) : (this.flags & ~OutputElm.FLAG_VALUE);

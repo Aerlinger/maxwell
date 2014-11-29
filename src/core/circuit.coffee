@@ -171,7 +171,7 @@ define [
 
     # TODO: Scopes aren't implemented yet
     getScopes: ->
-      []
+      @scopes
 
     setupScopes: ->
 

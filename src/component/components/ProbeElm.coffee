@@ -13,7 +13,8 @@ define [
     Point,
     CircuitComponent
   ) ->
-  # </DEFINE>
+# </DEFINE>
+
   class ProbeElm extends CircuitComponent
 
     @FLAG_SHOWVOLTAGE: 1
@@ -64,10 +65,8 @@ define [
 
       renderContext.drawThickLinePt @lead2, @point2, color
 
-      #      renderContext.setFont new Font("SansSerif", Font.BOLD, 14)
-
-      #      renderContext.drawCenteredText("X", @center.x1, @center.y, color) if this is Circuit.plotXElm
-      #      renderContext.drawCenteredText("Y", @center.x1, @center.y, color) if this is Circuit.plotYElm
+      @drawCenteredText("X", @center.x, @center.y, true, renderContext)# if this is Circuit.plotXElm
+      @drawCenteredText("Y", @center.x, @center.y, true, renderContext)# if this is Circuit.plotYElm
 
       if @mustShowVoltage()
         unit_text = DrawHelper.getShortUnitText(@volts[0], "V")

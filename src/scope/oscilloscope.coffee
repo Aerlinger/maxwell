@@ -7,11 +7,14 @@ define [
     ScopeCanvas) ->
 # </DEFINE>
   class Oscilloscope
-    constructor: (@timeStep = 1) ->
+    constructor: (@Circuit, @targetComponent = null) ->
+      @Circuit.scopes.push(self)
+
       @timeBase = 0
       @frames = 0
+      @targetComponent = null
 
-      @seriesData = [[], [], [], [], [], [], [], [], []];
+      @seriesData = [[], []];
 
       xbuffer_size = 150
 
@@ -20,14 +23,12 @@ define [
 
       @scopeCanvas = new ScopeCanvas(this)
 
-      setInterval =>
-        @step()
-      , 40
-
     step: ->
       @frames += 1
       @removeData(1);
-      @addData 0.5 * Math.sin(@frames/10) + 0.5
+      if @targetComponent
+        @addData @targetComponent.getScopeValue()
+
       @scopeCanvas.update()
 
     addData: (value) ->
@@ -41,6 +42,9 @@ define [
         item.shift()
 
       @timeBase += @timeStep
+
+    setTargetComponent: (component) ->
+      @targetComponent = component
 
 
   return Oscilloscope
