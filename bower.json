@@ -30,6 +30,6 @@
     "rickshaw": "1.5.0",
     "jquery": "*",
     "jquery-ui": "*",
-    "underscore": "*"
+    "lodash": "~2.4.1"
   }
 }
