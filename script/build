@@ -1,7 +1,0 @@
-#!/usr/bin/env sh
-# TODO: update dependencies in /src/lib directory.
-#
-# Current client-side dependencies:
-#   backbone.js
-#   jQuery
-#   color.js  (https://github.com/harthur/color.git)
