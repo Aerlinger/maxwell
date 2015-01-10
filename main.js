@@ -267,7 +267,7 @@ require([
 ], function (Oscilloscope) {
   "use strict";
 
-  var scope = new Oscilloscope();
+  //var scope = new Oscilloscope();
 });
 
 //

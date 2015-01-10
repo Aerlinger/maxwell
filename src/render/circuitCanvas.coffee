@@ -82,6 +82,8 @@ define [
     constructor: (@Circuit, @Canvas) ->
       @focusedComponent = null
       @dragComponent = null
+
+      # TODO: Width and height are undefined
       @width = @Canvas.width
       @height = @Canvas.height
       @context = Sketch.augment @Canvas.getContext("2d"), {
