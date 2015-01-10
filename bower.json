@@ -32,6 +32,7 @@
     "jquery": "*",
     "jquery-ui": "*",
     "underscore": "*",
+    "lodash": "*",
     "dat.gui": "*",
     "sketch.js": "*"
   }
