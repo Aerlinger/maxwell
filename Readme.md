@@ -157,11 +157,15 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
 
     // Show circuit initially:
     circuitRenderer.redraw(schmittTrigger);
+  ```
 
-    // Update frame each time a :
-    // schmittTrigger.onstep(function() {
-    //  circuitRenderer.redraw(schmittTrigger);
-    // });
+  It's also possible to update the view externally:
+
+  ```javascript
+  // Trigger a render each frame:
+  schmittTrigger.onstep(function() {
+    circuitRenderer.redraw(schmittTrigger);
+  });
   ```
 
   The Maxwell Rendering API is an extension of Soulwire's Sketch.js framework. You can find find a list of additional
@@ -177,8 +181,7 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
 
     options = {
       interval: 10,
-
-
+      position: 'bottom'
     }
 
     circuitRenderer.addScope(node1, node2, ["voltage"], [opts])
@@ -213,6 +216,7 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
 
   Width and height attributes can be used with the positional attributes. For instance, if we wanted a scope taking up
   half the canvas we could combine the attrubutes
+
   ```javascript
     options = {
       ...
@@ -222,6 +226,6 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
     }
   ```
 
-### Acknowledgements
+## Acknowledgements
 
-### License
+## License
