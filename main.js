@@ -88,12 +88,8 @@
       WireElm: 'src/component/components/WireElm',
       ZenerElm: 'src/component/components/ZenerElm',
 
-      // USER INTERFACE:
-      CommandHistory: 'src/ui/commandHistory',
-
       // Utils
       ColorScale: 'src/util/colorScale',
-      Module: 'src/util/module',
       Observer: 'src/util/observer',
       ColorPalette: 'src/util/colorPalette',
       MathUtils: 'src/util/mathUtils',

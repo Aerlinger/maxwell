@@ -26,18 +26,16 @@
 define [
   'cs!Oscilloscope',
   'cs!Logger',
-  'cs!Rectangle',
+#  'cs!Rectangle',
   'cs!SimulationParams',
   'cs!CircuitSolver',
-  'cs!Module',
   'cs!Observer'
 ], (
   Oscilloscope,
   Logger,
-  Rectangle,
+#  Rectangle,
   SimulationParams,
   CircuitSolver,
-  Module,
   Observer
 ) ->
 # </DEFINE>
@@ -66,8 +64,6 @@ define [
 
 
     constructor: () ->
-      @CommandHistory = new CommandHistory()
-
       # Use default params if none specified
       @Params = new SimulationParams()
 
@@ -264,24 +260,24 @@ define [
       return @circuitBottom
 
     # @deprecated
-    recalculateCircuitBounds: ->
-      maxX = Number.MIN_VALUE
-      maxY = Number.MIN_VALUE
-      minX = Number.MAX_VALUE
-      minY = Number.MAX_VALUE
-
-      for element in @elementList
-        bounds = element.boundingBox
-        if bounds.x < minX
-          minX = bounds.x
-        if bounds.y < minY
-          minY = bounds.y
-        if (bounds.width + bounds.x) > maxX
-          maxX = (bounds.height + bounds.x)
-        if (bounds.height + bounds.y) > maxY
-          maxY = (bounds.height + bounds.y)
-
-      new Rectangle(minX, minY, maxX-minX, maxY-minY)
+#    recalculateCircuitBounds: ->
+#      maxX = Number.MIN_VALUE
+#      maxY = Number.MIN_VALUE
+#      minX = Number.MAX_VALUE
+#      minY = Number.MAX_VALUE
+#
+#      for element in @elementList
+#        bounds = element.boundingBox
+#        if bounds.x < minX
+#          minX = bounds.x
+#        if bounds.y < minY
+#          minY = bounds.y
+#        if (bounds.width + bounds.x) > maxX
+#          maxX = (bounds.height + bounds.x)
+#        if (bounds.height + bounds.y) > maxY
+#          maxY = (bounds.height + bounds.y)
+#
+#      new Rectangle(minX, minY, maxX-minX, maxY-minY)
 
 
     _updateTimings: () ->

@@ -23,10 +23,7 @@ define [
   'cs!Rectangle',
   'cs!Point'
   'cs!MathUtils',
-  'cs!ArrayUtils',
-  'cs!Observer',
-  'cs!Module'
-
+  'cs!ArrayUtils'
 ], (
   Settings,
   DrawHelper,
@@ -34,14 +31,12 @@ define [
   Rectangle,
   Point,
   MathUtils,
-  ArrayUtils,
-  Observer,
-  Module
+  ArrayUtils
 ) ->
 # </DEFINE>
 
 
-  class CircuitComponent extends Module
+  class CircuitComponent
 
     constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, st = []) ->
       @current = 0
