@@ -61,6 +61,8 @@ define [
       if elms.length == 0
         console.error "No elements loaded. JSON most likely malformed"
 
+      return circuit
+
 
 
     ###

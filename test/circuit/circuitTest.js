@@ -61,7 +61,7 @@
         });
         return it("has Params Object", function() {});
       });
-      describe("has collection of", function() {
+      return describe("has collection of", function() {
         specify("Voltage Sources", function() {
           return this.Circuit.getVoltageSources().should.be.empty;
         });
@@ -75,15 +75,6 @@
           this.Circuit.getScopes().should.be.empty;
           specify("GetElmByIdx should return an empty array", function() {});
           return this.Circuit.getElmByIdx(0) === null;
-        });
-      });
-      return describe("apply update", function() {
-        beforeEach(function() {
-          return this.Circuit.updateCircuit();
-        });
-        it("should call analyze circuit on the solver", function() {});
-        return it("should update after modifying solver", function() {
-          return this.Circuit.restartAndRun();
         });
       });
     });

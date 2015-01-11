@@ -84,12 +84,3 @@ define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
         @Circuit.getElmByIdx(0) == null
 
 
-    describe "apply update", ->
-      beforeEach () ->
-        @Circuit.updateCircuit()
-
-      it "should call analyze circuit on the solver", ->
-
-      it "should update after modifying solver", ->
-        @Circuit.restartAndRun()
-

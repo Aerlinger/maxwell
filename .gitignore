@@ -1,5 +1,7 @@
 .idea
 bower_components
+test/**/*.js.map
+test/**/*.js
 src/**/*.js.map
 src/**/*.js
 .bower-cache
