@@ -216,7 +216,7 @@ function runTests() {
   mocha.setup('bdd');
 
   require([
-    'test/_helper',
+    'chai',
     'cs!MaxwellTest',
     'cs!CircuitTest',
     'cs!ResistorTest',
@@ -241,10 +241,11 @@ function runTests() {
     'cs!PrimitivesTest',
     'cs!AjaxTest',
     'cs!CircuitLoaderTest',
-    'cs!voltdivideIntegration',
-    'cs!observerTest'
-  ], function () {
+    'cs!voltdivideIntegration'
+  ], function (chai) {
     "use strict";
+    chai.should();
+    chai.expect();
     mocha.run();
   });
 }

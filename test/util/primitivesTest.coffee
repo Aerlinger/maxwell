@@ -10,8 +10,6 @@ define [
 ) ->
 # </DEFINE>
 
-  
-  
   describe "Polygon", ->
   
     it "should create a triangle with 3 pairs of vertices", ->
