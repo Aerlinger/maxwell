@@ -1,0 +1,17 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #c3c3c3;
+}
+
+#mocha {
+    background: white;
+}
+
+.maxwell {
+    background-color: white;
+}
+
+canvas {
+    border: 1px solid grey;
+}

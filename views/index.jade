@@ -1,101 +1,92 @@
 extends layout
 
 block body
-  div.row.full
-  //div.large-2.columns
-    div.section-container.vertical-nav
-    each circuit in circuits
-      section.section
-        p.title
-          a.circuit-link(href="#") #{circuit}
-  div.large-8.columns
-    h5= circuit_name || "voltdividesimple"
-    #container
-      // Missing Components or Functionality: ---------------------------------------
-      //canvas.maxwell(data-circuit="ohms", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="induct", width="1600", height="3000")
-      // Buggy/Not working: ---------------------------------------------------------
-      // qp == -1 (Has one row with all zero values)
-      //canvas.maxwell(data-circuit="amp-follower", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="nmosfet", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="amp-noninvert", width="1600", height="3000")
-      // Needs testing/validation: --------------------------------------------------
-      //canvas.maxwell(data-circuit="zeneriv", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="relaxosc", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="amp-schmitt", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="howland", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="dcrestoration", width="1600", height="3000")
-      //  canvas.maxwell(data-circuit="ladder", width="1600", height="3000")
-      // Runs, but invalid result:
-      //canvas.maxwell(data-circuit="amp-fullrect", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="sine", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="sawtooth", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="sawtooth", width="1600", height="3000")
-      // Working: ------------------------------------------------------------------
-      //canvas.maxwell(data-circuit="grid", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="grid2", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="amp-invert", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="triangle", width="1600", height="3000")
-      canvas.maxwell(data-circuit="phaseshiftosc", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="mosfetamp", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="mosswitch", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="amp-diff", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="inductac", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="amp-integ", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="indmultind", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="diodelimit", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="rectify", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="diodecurve", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="fullrect", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="amp-sum", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="gyrator", width="1600", height="3000")
-      //canvas.maxwell(data-circuit="voltdividesimple", width="1600", height="3000")
+  #container
+    // Missing Components or Functionality: ---------------------------------------
+    //canvas.maxwell(data-circuit="ohms", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="induct", width="1600", height="3000")
+    // Buggy/Not working: ---------------------------------------------------------
+    // qp == -1 (Has one row with all zero values)
+    //canvas.maxwell(data-circuit="amp-follower", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="nmosfet", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="amp-noninvert", width="1600", height="3000")
+    // Needs testing/validation: --------------------------------------------------
+    //canvas.maxwell(data-circuit="zeneriv", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="relaxosc", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="amp-schmitt", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="howland", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="dcrestoration", width="1600", height="3000")
+    //  canvas.maxwell(data-circuit="ladder", width="1600", height="3000")
+    // Runs, but invalid result:
+    //canvas.maxwell(data-circuit="amp-fullrect", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="sine", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="sawtooth", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="sawtooth", width="1600", height="3000")
+    // Working: ------------------------------------------------------------------
+    //canvas.maxwell(data-circuit="grid", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="grid2", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="amp-invert", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="triangle", width="1600", height="3000")
+    canvas.maxwell(data-circuit="phaseshiftosc", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="mosfetamp", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="mosswitch", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="amp-diff", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="inductac", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="amp-integ", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="indmultind", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="diodelimit", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="rectify", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="diodecurve", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="fullrect", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="amp-sum", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="gyrator", width="1600", height="3000")
+    //canvas.maxwell(data-circuit="voltdividesimple", width="1600", height="3000")
 
-    // Scope:
-    #content
-      form#side_panel
-        section
-          #legend
-        section
-          #renderer_form.toggler
-            input#area(type='radio', name='renderer', value='area', checked='checked')
-            label(for='area') area
-            input#bar(type='radio', name='renderer', value='bar')
-            label(for='bar') bar
-            input#line(type='radio', name='renderer', value='line')
-            label(for='line') line
-            input#scatter(type='radio', name='renderer', value='scatterplot')
-            label(for='scatter') scatter
-        section
-          #offset_form
-            label(for='stack')
-              input#stack(type='radio', name='offset', value='zero', checked='checked')
-              span stack
-            label(for='stream')
-              input#stream(type='radio', name='offset', value='wiggle')
-              span stream
-            label(for='pct')
-              input#pct(type='radio', name='offset', value='expand')
-              span pct
-            label(for='value')
-              input#value(type='radio', name='offset', value='value')
-              span value
+  // Scope:
+  #content
+    form#side_panel
+      section
+        #legend
+      section
+        #renderer_form.toggler
+          input#area(type='radio', name='renderer', value='area', checked='checked')
+          label(for='area') area
+          input#bar(type='radio', name='renderer', value='bar')
+          label(for='bar') bar
+          input#line(type='radio', name='renderer', value='line')
+          label(for='line') line
+          input#scatter(type='radio', name='renderer', value='scatterplot')
+          label(for='scatter') scatter
+      section
+        #offset_form
+          label(for='stack')
+            input#stack(type='radio', name='offset', value='zero', checked='checked')
+            span stack
+          label(for='stream')
+            input#stream(type='radio', name='offset', value='wiggle')
+            span stream
+          label(for='pct')
+            input#pct(type='radio', name='offset', value='expand')
+            span pct
+          label(for='value')
+            input#value(type='radio', name='offset', value='value')
+            span value
 
-          #interpolation_form
-            label(for='cardinal')
-              input#cardinal(type='radio', name='interpolation', value='cardinal', checked='checked')
-              span cardinal
-            label(for='linear')
-              input#linear(type='radio', name='interpolation', value='linear')
-              span linear
-            label(for='step')
-              input#step(type='radio', name='interpolation', value='step-after')
-              span step
-        //section
-        //  h6 Smoothing
-        //  #smoother
-        //section
-      #chart_container
-        #chart
-        #timeline
-        #preview
+        #interpolation_form
+          label(for='cardinal')
+            input#cardinal(type='radio', name='interpolation', value='cardinal', checked='checked')
+            span cardinal
+          label(for='linear')
+            input#linear(type='radio', name='interpolation', value='linear')
+            span linear
+          label(for='step')
+            input#step(type='radio', name='interpolation', value='step-after')
+            span step
+      //section
+      //  h6 Smoothing
+      //  #smoother
+      //section
+    #chart_container
+      #chart
+      #timeline
+      #preview
