@@ -90,21 +90,8 @@ define [
 
       return sysTime
 
-
-    #
-
-    updateVoltageSource: (n1, n2, vs, voltage) ->
-      @Stamper.updateVoltageSource(n1, n2, vs, voltage)
-
     getStamper: ->
       return @Stamper
-
-    needsRemap: ->
-      return @analyzeFlag
-
-    pause: (message = "Simulator stopped") ->
-      Logger.log message
-      @isStopped = true
 
     getIterCount: ->
 #      if Settings.SPEED is 0

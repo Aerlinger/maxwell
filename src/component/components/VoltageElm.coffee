@@ -81,9 +81,9 @@ define [
       else
         stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource
   
-    doStep: (solver) ->
+    doStep: (stamper) ->
       unless @waveform is VoltageElm.WF_DC
-        solver.updateVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
+        stamper.updateVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
   
     getVoltage: ->
       omega = 2 * Math.PI * (@Circuit.time - @freqTimeZero) * @frequency + @phaseShift

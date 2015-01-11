@@ -47,8 +47,6 @@ define [
       clock = @waveform is VoltageElm.WF_SQUARE and (@flags & VoltageElm.FLAG_CLOCK) isnt 0
 
       if @waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR or clock
-        #Font f = new Font("SansSerif", 0, 12);
-        #g.setFont(f);
         color = ((if @needsHighlight() then Settings.SELECT_COLOR else "#FFFFFF"))
 
         #this.setPowerColor(g, false);

@@ -134,8 +134,8 @@ define [
         @fmul = 1 / @fmul
         @dir = 1
 
-    doStep: ->
-      Circuit.updateVoltageSource 0, @nodes[0], @voltSource, @v
+    doStep: (stamper) ->
+      stamper.updateVoltageSource 0, @nodes[0], @voltSource, @v
 
     getVoltageDiff: ->
       @volts[0]
