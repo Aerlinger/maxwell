@@ -17,19 +17,16 @@ define [
       @circuitName = options['circuitName']
 
       if @circuitName
-        CircuitLoader.createCircuitFromJSON @circuitName, (circuit) =>
+        CircuitLoader.createCircuitFromJsonFile @circuitName, (circuit) =>
           @Circuit = circuit
 
           new CircuitCanvas(@Circuit, canvas)
 
     @loadCircuitFromFile: (circuitFileName) ->
-      return CircuitLoader.createCircuitFromJSON(circuitFileName)
+      return CircuitLoader.createCircuitFromJsonFile(circuitFileName)
 
     @loadCircuitFromJson: (jsonData) ->
-      circuit = new Circuit()
-      CircuitLoader.parseJSON(circuit, jsonData)
-
-      return circuit
+      return CircuitLoader.createCircuitFromJsonData(jsonData)
 
     @createCircuitSync: (circuitName, circuitData) ->
 
@@ -44,7 +41,7 @@ define [
         else
           raise "Parameter must either be a path to a JSON file or raw JSON data representing the circuit. Use `Maxwell.createCircuit()` to create a new empty circuit object."
       else
-        circuit new circuitData()
+        circuit = new Circuit()
 
       @Circuits[circuitName] = circuit
 

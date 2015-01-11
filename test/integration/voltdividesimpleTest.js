@@ -3,7 +3,7 @@
   define(['cs!CircuitNode', 'cs!CircuitLoader', 'cs!Circuit', 'cs!ArrayUtils'], function(CircuitNode, CircuitLoader, Circuit, ArrayUtils) {
     return describe("Simple Voltage Divider", function() {
       before(function(done) {
-        return CircuitLoader.createCircuitFromJSON("../../circuits/voltdividesimple.json", (function(_this) {
+        return CircuitLoader.createCircuitFromJsonFile("../../circuits/voltdividesimple.json", (function(_this) {
           return function(circuit) {
             _this.circuit = circuit;
             return done();
@@ -13,6 +13,7 @@
       describe("should Analyze voltdividesimple.json and have", function() {
         before(function(done) {
           this.circuit.Solver.reconstruct();
+          this.rowInfo = this.circuit.Solver.circuitRowInfo;
           return done();
         });
         it("7 elements", function() {
@@ -41,19 +42,22 @@
           voltageSources = "VoltageElm,WireElm,WireElm,WireElm,WireElm";
           return this.circuit.getVoltageSources().toString().should.equal(voltageSources);
         });
-        it("current rowInfos", function() {
-          var rowInfo;
-          rowInfo = this.circuit.Solver.circuitRowInfo;
-          rowInfo[0].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true");
-          rowInfo[1].toString().should.equal("         RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true");
-          rowInfo[2].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0, rsChanges: false, lsChanges: false, dropRow: true");
-          rowInfo[3].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, false false true");
-          rowInfo[4].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0, false false true");
-          rowInfo[5].toString().should.equal("RowInfo: type: 1, nodeEq: 6, mapCol: -1, mapRow: -1, value: 0.0015, false false true");
-          rowInfo[6].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0.0015, false false true");
-          rowInfo[7].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: -0.0015, false false true");
-          rowInfo[8].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0.0005, rsChanges: false, lsChanges: false, dropRow: true");
-          return rowInfo[9].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: -0.0005, rsChanges: false, lsChanges: false, dropRow: true");
+        describe("current rowInfos", function() {
+          it("index: 0", function() {
+            return this.rowInfo[0].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true");
+          });
+          it("index: 1", function() {
+            return this.rowInfo[1].toString().should.equal('RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: 0, value: 10, rsChanges: false, lsChanges: false, dropRow: false');
+          });
+          it("index: 2", function() {
+            return this.rowInfo[2].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0, rsChanges: false, lsChanges: false, dropRow: true");
+          });
+          it("index: 3", function() {
+            return this.rowInfo[3].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, false false true");
+          });
+          return it("index 4", function() {
+            return this.rowInfo[4].toString().should.equal("RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0, false false true");
+          });
         });
         it("10 elements in circuitRowInfo", function() {
           return this.circuit.Solver.circuitRowInfo.length.should.equal(10);

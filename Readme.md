@@ -10,7 +10,7 @@ javascript environment.
   Bower:
     `bower install maxwell`
 
-  Compiled file:
+  Using precompiled file:
     See the `/build` directory
 
   Compile using Grunt:
@@ -26,7 +26,7 @@ javascript environment.
   - Performance tuned
 
 
-### Introduction
+## Introduction
 
 ### JSON circuit definition specification:
 
@@ -45,76 +45,79 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
 ##### Setting up the circuit:
   ```javascript
 
-    resistiveCircuit = Maxwell.createCircuit('Simple RC circuit');
+  resistiveCircuit = Maxwell.createCircuit('Simple RC circuit');
 
-    // Set the timestep to 1 millisecond (1 microsecond is the default):
-    resistiveCircuit.configure({ timeStep: '1e6', cacheOnStep: true })
+  // Set the timestep to 1 millisecond (1 microsecond is the default):
+  resistiveCircuit.configure({ timeStep: '1e6', cacheOnStep: true })
 
-    // Add a 50 Ohm resistor resistor:
-    resistiveCircuit.addComponent('resistor', [0, 1], { id: "simple_resistor", resistance: 50 });
+  // Add a 50 Ohm resistor resistor:
+  resistiveCircuit.addComponent('resistor', [0, 1], { id: "simple_resistor", resistance: 50 });
 
-    // Add a 2 millifarad capacitor with an initial voltage of 1.0 volt
-    resistiveCircuit.addComponent('capacitor',[1, 2], { "simple_capacitor", resistance: 2e-3, v0: 1.0 });
+  // Add a 2 millifarad capacitor with an initial voltage of 1.0 volt
+  resistiveCircuit.addComponent('capacitor',[1, 2], { "simple_capacitor", resistance: 2e-3, v0: 1.0 });
 
-    // Define the ground. Maxwell can infer this automatically, but it's good practice to set an explicit ground
-    resistiveCircuit.addComponent('ground', []);
+  // Define the ground. Maxwell can infer this automatically, but it's good practice to set an explicit ground
+  resistiveCircuit.addComponent('ground', []);
 
-    resistiveCircuit.reset();       // Implicitly gets called on create. Sets time to 0 seconds
-    resistiveCircuit.time           // 0 seconds have elapsed
+  resistiveCircuit.reset();       // Implicitly gets called on create. Sets time to 0 seconds
+  resistiveCircuit.time           // 0 seconds have elapsed
 
-    // A simple human readable printout of the state and parameters of the circuit:
-    resistiveCircuit.describe();
+  // A simple human readable printout of the state and parameters of the circuit:
+  resistiveCircuit.describe();
 
-    // Step the simulation forward using the previously configured time step:
-    resistiveCircuit.step();
-    resistiveCircuit.describe();
+  // Step the simulation forward using the previously configured time step:
+  resistiveCircuit.step();
+  resistiveCircuit.describe();
 
-    // For linear circuits we can declare an explicit time step as well:
-    resistiveCircuit.step(3e-6);
-    resistiveCircuit.describe();
+  // For linear circuits we can declare an explicit time step as well:
+  resistiveCircuit.step(3e-6);
+  resistiveCircuit.describe();
 
-    // We can also step until a specified time (100ms in this example):
-    resistiveCircuit.stepUntil(1e4);
-    resistiveCircuit.describe();
+  // We can also step until a specified time (100ms in this example):
+  resistiveCircuit.stepUntil(1e4);
+  resistiveCircuit.describe();
+
+  Maxwell.getCircuits(); // [resistiveCircuit(...)]
 
   ```
+
 
 #####Querying computed values within the circuit:
   ```javascript
 
-    components  = resistiveCircuit.getComponents();
-    nodes       = resistiveCircuit.getNodes();
-    links       = resistiveCircuit.getNodeLinks();
+  components  = resistiveCircuit.getComponents();
+  nodes       = resistiveCircuit.getNodes();
+  links       = resistiveCircuit.getNodeLinks();
 
-    primaryNode = resistiveCircuit.findNodeById("1");
+  primaryNode = resistiveCircuit.findNodeById("1");
 
-    // primaryNode.connectedComponents();
+  // primaryNode.connectedComponents();
 
-    resistor = resistiveCircuit.findComponentById("simple_resistor");
+  resistor = resistiveCircuit.findComponentById("simple_resistor");
 
-    resistor.getNodes();
+  resistor.getNodes();
 
-    resistor.siblings();
+  resistor.siblings();
 
-    resistor.getVoltages(); // { "node1_id": 1.0, "node2_id": 2.0 }
+  resistor.getVoltages(); // { "node1_id": 1.0, "node2_id": 2.0 }
 
-    resistor.getCurrents(); // { "node1_id": 0.1, "node2_id": 0.5 }
+  resistor.getCurrents(); // { "node1_id": 0.1, "node2_id": 0.5 }
   ```
 
   ```javascript
 
-    // Other helpers
-    resistiveCircuit.isPlanar(); // true
-    resistiveCircuit.isLinear(); // true
-    resistiveCircuit.isReactive(); // true (since a reactive element (capacitor) is present
+  // Other helpers
+  resistiveCircuit.isPlanar(); // true
+  resistiveCircuit.isLinear(); // true
+  resistiveCircuit.isReactive(); // true (since a reactive element (capacitor) is present
 
-    resistiveCircuit.isPureAnalog();  // true
-    resistiveCircuit.isDigital();     // false
-    resistiveCircuit.isMixedSignal(); // false
+  resistiveCircuit.isPureAnalog();  // true
+  resistiveCircuit.isDigital();     // false
+  resistiveCircuit.isMixedSignal(); // false
 
-    // Analysis:
-    conductance_matrix = resistiveCircuit.getConductanceMatrix();
-    driving_matrix = resistiveCircuit.getDrivingMatrix();
+  // Analysis:
+  conductance_matrix = resistiveCircuit.getConductanceMatrix();
+  driving_matrix = resistiveCircuit.getDrivingMatrix();
   ```
 
 
@@ -159,7 +162,6 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
     // schmittTrigger.onstep(function() {
     //  circuitRenderer.redraw(schmittTrigger);
     // });
-
   ```
 
   The Maxwell Rendering API is an extension of Soulwire's Sketch.js framework. You can find find a list of additional
@@ -190,35 +192,35 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
   * `bottom`
   * `left`
 
-  *Top/bottom aligned scopes use 25% height and full width and height of the canvas. Similarly, left/right scopes
+  Top/bottom aligned scopes use 25% height and full width and height of the canvas. Similarly, left/right scopes
   use 33% canvas width and expand to full height. If more than one scope is aligned to the same position attributes
   they will automatically arrange and stack to use space most effectively.*
 
   Scopes can also be placed on the corners using the following attributes.
-    - `topleft`
-    - `topright`
-    - `bottomright`
-    - `bottomleft`
+  - `topleft`
+  - `topright`
+  - `bottomright`
+  - `bottomleft`
 
 
   If desired, more granular positioning can also be achieved with the following attributes:
-    - `width`
-    - `height`
-    - `x` (relative to top-left corner of circuit canvas)
-    - `y` (relative to top-left corner of circuit canvas)
+  - `width`
+  - `height`
+  - `x` (relative to top-left corner of circuit canvas)
+  - `y` (relative to top-left corner of circuit canvas)
 
   Either pixels or percentages can be used
 
   Width and height attributes can be used with the positional attributes. For instance, if we wanted a scope taking up
   half the canvas we could combine the attrubutes
-    ```javascript
-      options = {
-        ...
-        position: 'bottom',
-        height: '50%'
-        ...
-      }
-    ```
+  ```javascript
+    options = {
+      ...
+      position: 'bottom',
+      height: '50%'
+      ...
+    }
+  ```
 
 ### Acknowledgements
 

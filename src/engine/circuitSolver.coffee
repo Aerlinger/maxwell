@@ -12,7 +12,6 @@ define [
   'cs!Settings',
   'cs!ArrayUtils',
 
-
   # Components
   'cs!CapacitorElm',
   'cs!InductorElm',

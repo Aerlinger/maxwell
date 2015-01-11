@@ -4,7 +4,7 @@
     return describe("CircuitLoader", function() {
       return describe("should read voltdividesimple.json and", function() {
         before(function(done) {
-          return CircuitLoader.createCircuitFromJSON("../../circuits/voltdividesimple.json", (function(_this) {
+          return CircuitLoader.createCircuitFromJsonFile("../../circuits/voltdividesimple.json", (function(_this) {
             return function(circuit) {
               _this.circuit = circuit;
               return done();

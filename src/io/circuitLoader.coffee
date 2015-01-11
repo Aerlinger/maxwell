@@ -17,9 +17,11 @@ define [
 
   class CircuitLoader
 
-    @parseJSON: (circuit, jsonData) ->
-      circuitParams = jsonData.shift()
+    @createCircuitFromJsonData: (jsonData) ->
+      circuit = new Circuit()
+
       # Circuit Parameters are stored at the header of the .json file (index 0)
+      circuitParams = jsonData.shift()
       circuit.setParamsFromJSON(circuitParams)
 
       # Load each Circuit component from JSON data:
@@ -57,17 +59,16 @@ define [
           circuit.solder newCircuitElm
 
       if elms.length == 0
-        console.error "No elements loaded JSON most likely malformed"
+        console.error "No elements loaded. JSON most likely malformed"
 
 
 
     ###
     Retrieves string data from a circuit text file (via AJAX GET)
     ###
-    @createCircuitFromJSON: (circuitFileName, onComplete = null) ->
+    @createCircuitFromJsonFile: (circuitFileName, onComplete = null) ->
       $.getJSON circuitFileName, (jsonData) =>
-        circuit = new Circuit()
-        CircuitLoader.parseJSON(circuit, jsonData)
+        circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
 
         onComplete?(circuit)
 

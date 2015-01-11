@@ -15,7 +15,7 @@ define [
 
   describe "Simple Voltage Divider", ->
     before (done) ->
-      CircuitLoader.createCircuitFromJSON "../../circuits/voltdividesimple.json", (circuit) =>
+      CircuitLoader.createCircuitFromJsonFile "../../circuits/voltdividesimple.json", (circuit) =>
         @circuit = circuit
         done()
 
