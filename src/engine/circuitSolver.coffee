@@ -44,7 +44,9 @@ define [
 
 
     reset: ->
-      @Circuit.resetTimings()
+      @Circuit.time = 0
+      @Circuit.frames = 0
+
       @converged = true     # true if numerical analysis has converged
       @subIterations = 5000
 
@@ -64,6 +66,8 @@ define [
       @invalidate()
 
 
+
+
     # When the circuit has changed we will need to rebuild the node graph and the circuit matrix.
     invalidate: ->
       @analyzeFlag = true
@@ -78,16 +82,9 @@ define [
     needsRemap: ->
       return @analyzeFlag
 
-
     pause: (message = "Simulator stopped") ->
       Logger.log message
       @isStopped = true
-
-
-    run: (message = "Simulator running") ->
-      Logger.log message
-      @isStopped = false
-
 
     getIterCount: ->
 #      if Settings.SPEED is 0
@@ -100,7 +97,6 @@ define [
     reconstruct: ->
       return if !@analyzeFlag || (@Circuit.numElements() is 0)
 
-      @Circuit.getCircuitBottom()
       @Circuit.clearErrors()
       @Circuit.resetNodes()
 
@@ -470,23 +466,6 @@ define [
           @Circuit.halt "Singular matrix in linear circuit!", null
           return
 
-      # For debugging only:
-      console.log("Frame 0 Dump: ----------------------------------")
-      console.log("Circuit Matrix size: #{@circuitMatrixSize}")
-      console.log("Circuit Matrix size: #{@matrixSize}")
-      console.log("Circuit Matrix:")
-      ArrayUtils.printArray @circuitMatrix
-      console.log("Circuit Permute:")
-      ArrayUtils.printArray @circuitPermute
-      console.log("Circuit Right Side:")
-      ArrayUtils.printArray @circuitRightSide
-      console.log("Sim speed: #{@getIterCount()}")
-      console.log("Current speed: #{@Circuit.currentSpeed()}")
-      console.log(i)
-      console.log("ROWINFO: ")
-      console.log(@circuitRowInfo)
-      console.log("------------------------------------------------")
-
 
     solveCircuit: ->
       if not @circuitMatrix? or @Circuit.numElements() is 0
@@ -502,20 +481,12 @@ define [
 
       lit = @lastIterTime
 
-      # Double-check
-#      console.log("Step Rate: ", stepRate)
-#      console.log("timeEnd - @lastIterTime", tm - @lastIterTime)
-#      console.log(stepRate * (tm - @lastIterTime))
       if 1000 >= stepRate * (tm - @lastIterTime)
-#        console.log("Return!")
         return
-
-      #console.log debugPrint, stepRate, lastIterTime, @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide,
 
       # Main iteration
       iter = 1
       loop
-        # Start Iteration for each element in the circuit
         for circuitElm in @Circuit.getElements()
           circuitElm.startIteration()
 
@@ -592,7 +563,6 @@ define [
         lit = tm
 
         if iter * 1000 >= stepRate * (tm - @lastIterTime)
-#          console.log("BREAK: iter * 1000 >= stepRate * (timeEnd - @lastIterTime)!")
           break
         else if (tm - @Circuit.getLastFrameTime()) > 500
 #          console.log("BREAK: timeEnd - @Circuit.getLastFrameTime() > 500!")
@@ -602,7 +572,7 @@ define [
 
         # End Iteration Loop
 
-      @frames++
+      @Circuit.frames++
 
       @lastIterTime = lit
 

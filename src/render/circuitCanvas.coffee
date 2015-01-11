@@ -181,10 +181,22 @@ define [
         @context.strokeStyle = "#FF0"
       component.draw(this)
 
+    # Returns the y position of the bottom of the circuit
+    # TODO: Deprecate
+    getCircuitBottom: ->
+      circuitBottom = -100000000
+
+      @Circuit.eachComponent (component) ->
+        rect = component.boundingBox
+        bottom = rect.height + rect.y
+        circuitBottom = bottom if (bottom > circuitBottom)
+
+      return circuitBottom
+
     drawInfo: ->
       # TODO: Find where to show data; below circuit, not too high unless we need it
       bottomTextOffset = 100
-      ybase = @Circuit.getCircuitBottom - (1*15) - bottomTextOffset
+      ybase = @getCircuitBottom() - (1*15) - bottomTextOffset
       @context.fillText("t = #{FormatUtils.longFormat(@Circuit.time)} s", 10, 10)
       @context.fillText("F.T. = #{@Circuit.frames}", 10, 20)
 

@@ -23,17 +23,13 @@ define [
   'cs!Point'
   'cs!MathUtils',
   'cs!ArrayUtils'
-], (
-  Settings,
-  DrawHelper,
-  Rectangle,
-  Point,
-  MathUtils,
-  ArrayUtils
-) ->
+], (Settings,
+    DrawHelper,
+    Rectangle,
+    Point,
+    MathUtils,
+    ArrayUtils) ->
 # </DEFINE>
-
-
   class CircuitComponent
 
     constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, st = []) ->
@@ -51,6 +47,8 @@ define [
       @allocNodes()
       @initBoundingBox()
       @component_id = MathUtils.getRand(100000000) + (new Date()).getTime()
+
+    # Freeze/frozen?
 
     getParentCircuit: () ->
       return @Circuit
@@ -80,10 +78,6 @@ define [
       @point1 = new Point(@x1, @y1)
       @point2 = new Point(@x2, @y2)
 
-    # As a string
-    setColor: (color) ->
-      @color = color
-
     setPowerColor: (color) ->
       console.warn("Set power color not yet implemented")
 
@@ -109,7 +103,7 @@ define [
     calculateCurrent: ->
       # TODO: Implemented by subclasses
 
-    # Steps forward one frame and performs calculation
+      # Steps forward one frame and performs calculation
     doStep: ->
       # To be implemented by subclasses
 
@@ -136,7 +130,7 @@ define [
         console.log("Len: " + len);
         return
 
-#      console.log("Calc leads: #{@toString()}");
+      #      console.log("Calc leads: #{@toString()}");
       @lead1 = DrawHelper.interpPoint(@point1, @point2, (@dn - len) / (2 * @dn));
       @lead2 = DrawHelper.interpPoint(@point1, @point2, (@dn + len) / (2 * @dn));
 
@@ -148,7 +142,7 @@ define [
       cc = @curcount  if (isNaN(cc) || !cc?)
 
       cadd = cur * @Circuit.Params.getCurrentMult()
-#      cadd = cur * 48
+      #      cadd = cur * 48
       cadd %= 8
       @curcount = cc + cadd
       @curcount
@@ -350,7 +344,7 @@ define [
 
     needsHighlight: ->
       @focused
-      #      @Circuit?.mouseElm is this or @selected
+    #      @Circuit?.mouseElm is this or @selected
 
     setSelected: (selected) ->
       @selected = selected
@@ -358,12 +352,8 @@ define [
     isSelected: ->
       @selected
 
-    selectRect: (rect) ->
-      @selected = rect.intersects(@boundingBox)
-
     needsShortcut: ->
       false
-
 
     ### #######################################################################
     # RENDERING METHODS
@@ -374,15 +364,12 @@ define [
       @drawPosts(renderContext)
       @draw2Leads(renderContext)
 
-#      throw("Called abstract function draw() in AbstractCircuitElement")
 
     draw2Leads: (renderContext) ->
       if @point1? and @lead1?
         renderContext.drawThickLinePt @point1, @lead1, DrawHelper.getVoltageColor(@volts[0])
       if @point2? and @lead2?
         renderContext.drawThickLinePt @lead2, @point2, DrawHelper.getVoltageColor(@volts[1])
-
-    updateDotCount: ->
 
 
     drawDots: (point1 = @point1, point2 = @point2, renderContext) =>
@@ -393,11 +380,9 @@ define [
       dn = Math.sqrt dx * dx + dy * dy
 
       ds = 16
-#      pos %= ds
 
       currentIncrement = @current * @Circuit.currentSpeed()
       @curcount = (@curcount + currentIncrement) % ds
-#      @curcount = 3
       @curcount += ds if @curcount < 0
 
       newPos = @curcount
@@ -413,16 +398,16 @@ define [
     Todo: Not yet implemented
     ###
     drawCenteredText: (text, x, y, doCenter, renderContext) ->
-      # TODO: test
-      strWidth = 10 * text.length # fm.stringWidth(s);
+      strWidth = 10 * text.length
       x -= strWidth / 2 if doCenter
-      ascent = -10 # fm.getAscent() / 2;
-      descent = 5  # fm.getAscent() / 2;
+      ascent = -10
+      descent = 5
 
       renderContext.fillStyle = Settings.TEXT_COLOR
       renderContext.fillText text, x, y + ascent
 
       @adjustBbox x, y - ascent, x + strWidth, y + ascent + descent
+
       return text
 
 
@@ -432,18 +417,16 @@ define [
     ###
     drawValues: (valueText, hs, renderContext) ->
       return unless valueText
-      stringWidth = 100 #fm.stringWidth(s);
-      ya = -10 #fm.getAscent() / 2;
 
-#      if this instanceof RailElm or this instanceof SweepElm
-#        xc = @x2
-#        yc = @y2
-#      else
+      stringWidth = 100
+      ya = -10
+
       xc = (@x2 + @x1) / 2
       yc = (@y2 + @y1) / 2
       dpx = Math.floor(@dpx1 * hs)
       dpy = Math.floor(@dpy1 * hs)
       offset = 20
+
       renderContext.fillStyle = Settings.TEXT_COLOR
       if dpx is 0
         renderContext.fillText valueText, xc - stringWidth / 2 + 3 * offset / 2, yc - Math.abs(dpy) - offset / 3
@@ -461,9 +444,8 @@ define [
 
     drawPost: (x0, y0, node, renderContext) ->
       #if node
-        #return if not @Circuit?.dragElm? and not @needsHighlight() and @Circuit?.getNode(node).links.length is 2
-        #return if @Circuit?.mouseMode is @Circuit?.MODE_DRAG_ROW or @Circuit?.mouseMode is @Circuit?.MODE_DRAG_COLUMN
-
+      #return if not @Circuit?.dragElm? and not @needsHighlight() and @Circuit?.getNode(node).links.length is 2
+      #return if @Circuit?.mouseMode is @Circuit?.MODE_DRAG_ROW or @Circuit?.mouseMode is @Circuit?.MODE_DRAG_COLUMN
       if @needsHighlight()
         fillColor = Settings.POST_COLOR_SELECTED
         strokeColor = Settings.POST_COLOR_SELECTED
@@ -473,7 +455,6 @@ define [
 
       renderContext.fillCircle x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor
 
-    # @deprecated
     @newPointArray = (n) ->
       a = new Array(n)
       while (n > 0)
