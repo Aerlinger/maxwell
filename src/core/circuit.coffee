@@ -65,12 +65,6 @@ define [
       @clearAndReset()
 
 
-    setParamsFromJSON: (jsonData) ->
-      @Params = new SimulationParams(jsonData)
-
-      console.log(@Params.toString())
-
-
     ## Removes all circuit elements and scopes from the workspace and resets time to zero.
     ##   Called on initialization and reset.
     clearAndReset: ->
@@ -87,6 +81,7 @@ define [
       @scopes = []
 
       @time = 0
+      @iterations = 0
 
       @clearErrors()
       @notifyObservers @ON_RESET
@@ -112,10 +107,6 @@ define [
 
     toString: ->
       @Params
-
-    # TODO: Scopes aren't implemented yet
-    getScopes: ->
-      []
 
 
     ####################################################################################################################
@@ -164,6 +155,10 @@ define [
     ####################################################################################################################
     ### Circuit Element Accessors:
     ####################################################################################################################
+
+    # TODO: Scopes aren't implemented yet
+    getScopes: ->
+      []
 
     findElm: (searchElm) ->
       for circuitElm in @elementList

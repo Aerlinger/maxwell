@@ -2,12 +2,14 @@
 define [
   'jquery'
   'cs!ComponentRegistry',
+  'cs!SimulationParams',
   'cs!Circuit',
   'cs!Oscilloscope',
   'cs!Hint'
 ], (
   $,
   ComponentRegistry,
+  SimulationParams,
   Circuit,
   Oscilloscope,
   Hint
@@ -22,7 +24,9 @@ define [
 
       # Circuit Parameters are stored at the header of the .json file (index 0)
       circuitParams = jsonData.shift()
-      circuit.setParamsFromJSON(circuitParams)
+      circuit.Params = new SimulationParams(jsonData)
+
+      console.log(circuit.Params.toString())
 
       # Load each Circuit component from JSON data:
       console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");

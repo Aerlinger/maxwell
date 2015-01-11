@@ -68,27 +68,28 @@ define [
 
       @analyzeFlag = true
 
-    # TIMING
 
+    _updateTimings: (lastIterationTime) ->
+      @lastIterTime = lastIterationTime
 
-    _updateTimings: () ->
       sysTime = (new Date()).getTime()
 
       if @lastTime != 0
         inc = Math.floor(sysTime - @lastTime)
-        currentSpeed = Math.exp(@Circuit.currentSpeed / 3.5 - 14.2)
+        currentSpeed = Math.exp(@Circuit.currentSpeed() / 3.5 - 14.2)
 
-        console.log("Setting current speed: ", 1.7 * inc * currentSpeed);
         @Circuit.Params.setCurrentMult(1.7 * inc * currentSpeed)
 
       if (sysTime - @secTime) >= 1000
+        console.log("Reset!")
         @frames = 0
         @steps = 0
         @secTime = sysTime
 
       @lastTime = sysTime
 
-      return sysTime
+      @lastFrameTime = @lastTime
+
 
     getStamper: ->
       return @Stamper
@@ -565,28 +566,9 @@ define [
         # End Iteration Loop
 
       @frames++
+      @Circuit.iterations++
 
-      @lastIterTime = lit
-
-      sysTime = (new Date()).getTime()
-
-      if @lastTime != 0
-        inc = Math.floor(sysTime - @lastTime)
-        currentSpeed = Math.exp(@Circuit.currentSpeed() / 3.5 - 14.2)
-
-        console.log("Setting current speed: ", inc, currentSpeed);
-        @Circuit.Params.setCurrentMult(1.7 * inc * currentSpeed)
-
-      if (sysTime - @secTime) >= 1000
-        console.log("Reset!")
-        @frames = 0
-        @steps = 0
-        @secTime = sysTime
-
-      @lastTime = sysTime
-
-      @lastFrameTime = @lastTime
-
+      @_updateTimings(lit)
 
     ###
       luFactor: finds a solution to a factored matrix through LU (Lower-Upper) factorization
