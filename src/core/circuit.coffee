@@ -87,9 +87,6 @@ define [
       @scopes = []
 
       @time = 0
-      @secTime = 0
-      @lastTime = 0
-      @lastFrameTime = 0
 
       @clearErrors()
       @notifyObservers @ON_RESET
@@ -138,36 +135,11 @@ define [
       @Solver.reconstruct()
 
       if @Solver.isStopped
-        @lastTime = 0
+        @Solver.lastTime = 0
       else
-        @sysTime = (new Date()).getTime();
         @Solver.solveCircuit()
-        @lastTime = @_updateTimings()
 
       @notifyObservers(@ON_COMPLETE_UPDATE)
-
-      @lastFrameTime = @lastTime
-
-
-    _updateTimings: () ->
-      sysTime = (new Date()).getTime()
-      
-      # FIXME: Out of order?
-      if @lastTime != 0
-        inc = Math.floor(sysTime - @lastTime)
-        currentSpeed = Math.exp(@Params.currentSpeed / 3.5 - 14.2)
-        @Params.setCurrentMult(1.7 * inc * currentSpeed)
-
-      if (sysTime - @secTime) >= 1000
-        @framerate = @frames
-        @steprate = @Solver.steps
-        @frames = 0 # Fixme
-        @steps = 0
-        @secTime = sysTime
-
-      @lastTime = sysTime
-
-      return sysTime
 
     setSelected: (component) ->
       for elm in @elementList
@@ -285,10 +257,6 @@ define [
 
     getNode: (idx) ->
       @nodeList[idx]
-
-    getElm: (idx) ->
-      console.error("getElm() is deprecated!")
-      @getElmByIdx(idx)
 
 
   return Circuit

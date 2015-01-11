@@ -61,17 +61,37 @@ define [
 
       @circuitNonLinear = false
 
+      @lastTime = 0
+      @secTime = 0
+      @lastFrameTime = 0
       @lastIterTime = 0
 
-      @invalidate()
-
-
-
-
-    # When the circuit has changed we will need to rebuild the node graph and the circuit matrix.
-    invalidate: ->
       @analyzeFlag = true
 
+    # TIMING
+
+
+    _updateTimings: () ->
+      sysTime = (new Date()).getTime()
+
+      if @lastTime != 0
+        inc = Math.floor(sysTime - @lastTime)
+        currentSpeed = Math.exp(@Circuit.currentSpeed / 3.5 - 14.2)
+
+        console.log("Setting current speed: ", 1.7 * inc * currentSpeed);
+        @Circuit.Params.setCurrentMult(1.7 * inc * currentSpeed)
+
+      if (sysTime - @secTime) >= 1000
+        @frames = 0
+        @steps = 0
+        @secTime = sysTime
+
+      @lastTime = sysTime
+
+      return sysTime
+
+
+    #
 
     updateVoltageSource: (n1, n2, vs, voltage) ->
       @Stamper.updateVoltageSource(n1, n2, vs, voltage)
@@ -335,24 +355,7 @@ define [
 
         if j is @matrixSize
           if qp is -1
-            # FIXME: @circuitRowInfo[j] is undefined in some circuits
             @Circuit.halt "Matrix error qp (rsadd = #{rsadd})", null
-            console.log("Frame 0 Dump: ----------------------------------")
-            console.log("Circuit Matrix size: #{@circuitMatrixSize}")
-            console.log("Circuit Matrix size: #{@matrixSize}")
-            console.log("Circuit Matrix:")
-            ArrayUtils.printArray @circuitMatrix
-            console.log("Circuit Permute:")
-            ArrayUtils.printArray @circuitPermute
-            console.log("Circuit Right Side:")
-            ArrayUtils.printArray @circuitRightSide
-            console.log("Sim speed: #{@getIterCount()}")
-            console.log("Current speed: #{@Circuit.currentSpeed()}")
-            console.log(i)
-            console.log("ROWINFO: ")
-            console.log(@circuitRowInfo)
-            console.log("------------------------------------------------")
-#            @circuitRowInfo[j].type
             return
 
           elt = @circuitRowInfo[qp]
@@ -468,6 +471,8 @@ define [
 
 
     solveCircuit: ->
+      @sysTime = (new Date()).getTime();
+
       if not @circuitMatrix? or @Circuit.numElements() is 0
         @circuitMatrix = null
 #        console.log("Called solve circuit when circuit Matrix not initialized")
@@ -564,7 +569,7 @@ define [
 
         if iter * 1000 >= stepRate * (tm - @lastIterTime)
           break
-        else if (tm - @Circuit.getLastFrameTime()) > 500
+        else if (tm - @lastFrameTime) > 500
 #          console.log("BREAK: timeEnd - @Circuit.getLastFrameTime() > 500!")
           break
 
@@ -572,9 +577,29 @@ define [
 
         # End Iteration Loop
 
-      @Circuit.frames++
+      @frames++
 
       @lastIterTime = lit
+
+      sysTime = (new Date()).getTime()
+
+      if @lastTime != 0
+        inc = Math.floor(sysTime - @lastTime)
+        currentSpeed = Math.exp(@Circuit.currentSpeed() / 3.5 - 14.2)
+
+        console.log("Setting current speed: ", inc, currentSpeed);
+        @Circuit.Params.setCurrentMult(1.7 * inc * currentSpeed)
+
+      if (sysTime - @secTime) >= 1000
+        console.log("Reset!")
+        @frames = 0
+        @steps = 0
+        @secTime = sysTime
+
+      @lastTime = sysTime
+
+      @lastFrameTime = @lastTime
+
 
     ###
       luFactor: finds a solution to a factored matrix through LU (Lower-Upper) factorization
