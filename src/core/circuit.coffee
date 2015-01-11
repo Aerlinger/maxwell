@@ -24,38 +24,18 @@
 
 # <DEFINE>
 define [
-  'cs!KeyboardState',
   'cs!Oscilloscope',
   'cs!Logger',
-  'cs!ColorMapState',
-  'cs!CircuitState',
-  'cs!Point',
   'cs!Rectangle',
-  'cs!Polygon',
   'cs!SimulationParams',
-  'cs!MouseState',
-  'cs!Settings',
-  'cs!ComponentRegistry',
-  'cs!Hint',
-  'cs!CommandHistory',
   'cs!CircuitSolver',
   'cs!Module',
   'cs!Observer'
 ], (
-  KeyboardState,
   Oscilloscope,
   Logger,
-  ColorMapState,
-  CircuitState,
-  Point,
   Rectangle,
-  Polygon,
   SimulationParams,
-  MouseState,
-  Settings,
-  ComponentRegistry,
-  Hint,
-  CommandHistory,
   CircuitSolver,
   Module,
   Observer
@@ -117,19 +97,12 @@ define [
       @voltageSources = []
 
       @scopes = []
-      @scopeColCount = []  # Array of integers
 
       @time = 0
       @secTime = 0
       @lastTime = 0
       @lastFrameTime = 0
 
-      # State Handlers
-      @mouseState = new MouseState()
-      @keyboardState = new KeyboardState()
-      @colorMapState = new ColorMapState()
-
-      @state = CircuitState.RUNNING
       @clearErrors()
       @notifyObservers @ON_RESET
 

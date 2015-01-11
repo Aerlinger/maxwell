@@ -1,5 +1,5 @@
 # <DEFINE>
-define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
+define ['cs!Circuit'], (Circuit) ->
 # </DEFINE>
 
   describe "Circuit", ->
@@ -10,9 +10,6 @@ define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
       it "has no errors", ->
         @Circuit.stopMessage == null
         @Circuit.stopElm == null
-
-      it "has correct initial state", ->
-        @Circuit.getState() == State.RUN     # Run, Pause, Edit
 
       it "has a default timestep", ->
         @Circuit.timeStep().should.equal 0.000005

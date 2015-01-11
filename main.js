@@ -55,12 +55,6 @@
       // OSCILLOSCOPE:
       Oscilloscope: 'src/scope/oscilloscope',
 
-      // STATE:
-      CircuitState: 'src/state/circuitState',
-      ColorMapState: 'src/state/colorMapState',
-      KeyboardState: 'src/state/keyboardState',
-      MouseState: 'src/state/mouseState',
-
       // COMPONENT:
       CircuitComponent: 'src/component/circuitComponent',
       ComponentRegistry: 'src/component/componentRegistry',
