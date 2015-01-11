@@ -622,7 +622,7 @@ define [
 
         # End Iteration Loop
 
-      @Circuit.incrementFrames()
+      @frames++
 
       @lastIterTime = lit
 

@@ -210,9 +210,9 @@ require([
     var canvas = $('canvas.maxwell');
 
     if (canvas && circuitName) {
-      maxwell = new Maxwell(canvas.get(0), {
-        circuitName: circuitFileName
-      });
+      new Maxwell(canvas.get(0), {circuitName: circuitFileName});
+
+      var defaultCircuit = Maxwell.createCircuit("default", circuitFileName);
     } else {
       console.error("No circuit definition provided");
     }

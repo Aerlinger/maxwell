@@ -22,22 +22,20 @@ define [
 
           new CircuitCanvas(@Circuit, canvas)
 
-    @loadCircuitFromFile: (circuitFileName) ->
+    @_loadCircuitFromFile: (circuitFileName) ->
       return CircuitLoader.createCircuitFromJsonFile(circuitFileName)
 
-    @loadCircuitFromJson: (jsonData) ->
+    @_loadCircuitFromJson: (jsonData) ->
       return CircuitLoader.createCircuitFromJsonData(jsonData)
-
-    @createCircuitSync: (circuitName, circuitData) ->
 
     @createCircuit: (circuitName, circuitData) ->
       circuit = null
 
       if circuitData
         if typeof circuitData is "string"
-          circuit = Maxwell.loadCircuitFromFile(circuitData)
+          circuit = Maxwell._loadCircuitFromFile(circuitData)
         else if typeof circuitData is "object"
-          circuit = Maxwell.loadCircuitFromJson(circuitData)
+          circuit = Maxwell._loadCircuitFromJson(circuitData)
         else
           raise "Parameter must either be a path to a JSON file or raw JSON data representing the circuit. Use `Maxwell.createCircuit()` to create a new empty circuit object."
       else

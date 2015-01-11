@@ -92,7 +92,6 @@ define [
       @Params = new SimulationParams()
 
       @clearAndReset()
-      @bindListeners()
 
 
     # Simulator
@@ -112,7 +111,6 @@ define [
         element.destroy()
 
       @Solver = new CircuitSolver(this)
-#      @Grid = new Grid()
 
       @nodeList = []
       @elementList = []
@@ -135,10 +133,6 @@ define [
       @clearErrors()
       @notifyObservers @ON_RESET
 
-
-    bindListeners: ->
-#      @Solver
-      #bind(@Solver.completeStep, )
 
     # "Solders" a new element to this circuit (adds it to the element list array).
     solder: (newElement) ->
@@ -173,8 +167,6 @@ define [
     getScopes: ->
       []
 
-    setupScopes: ->
-
 
     ####################################################################################################################
     ### Circuit Element Accessors:
@@ -204,7 +196,6 @@ define [
       @nodeList = []
 
     addCircuitNode: (circuitNode) ->
-#      console.log("Adding: #{circuitNode}");
       @nodeList.push circuitNode
 
     getNode: (idx) ->
@@ -216,9 +207,6 @@ define [
 
     numNodes: ->
       @nodeList.length
-
-#    getGrid: ->
-#      return @Grid
 
     findBadNodes: ->
       @badNodes = []
@@ -250,15 +238,6 @@ define [
       @notifyObservers @ON_PAUSE
       @Solver.pause("Circuit is paused")
 
-    restartAndStop: ->
-      @restartAndRun()
-      @simulation = cancelAnimationFrame()
-      @Solver.pause("Restarted Circuit from time 0")
-
-    restartAndRun: ->
-      if(!@Solver)
-        halt("Solver not initialized!");
-
     reset: ->
       element.reset() for element in @elementList
       scope.resetGraph() for scope in @scopes
@@ -266,7 +245,7 @@ define [
       @Solver.reset()
 
     resetTimings: ->
-      @time
+      @time = 0
       @frames = 0
 
 
@@ -283,28 +262,23 @@ define [
     ###
     updateCircuit: () ->
       @notifyObservers(@ON_START_UPDATE)
-      #@simulation = requestAnimationFrame(Circuit.prototype.updateCircuit, @)
-#      startTime = (new Date()).getTime()
 
-      # Reconstruct circuit
       @Solver.reconstruct()
 
-      # If the circuit isn't stopped,
       if @Solver.isStopped
         @lastTime = 0
       else
         @sysTime = (new Date()).getTime();
         @Solver.solveCircuit()
-        @lastTime = @updateTimings()
+        @lastTime = @_updateTimings()
 
       @notifyObservers(@ON_COMPLETE_UPDATE)
 
-#      endTime = (new Date()).getTime()
-#      frameTime = endTime - startTime
       @lastFrameTime = @lastTime
 
 
     # Returns the y position of the bottom of the circuit
+    # TODO: Deprecate
     getCircuitBottom: ->
       if @circuitBottom
         return @circuitBottom
@@ -316,6 +290,7 @@ define [
 
       return @circuitBottom
 
+    # @deprecated
     recalculateCircuitBounds: ->
       maxX = Number.MIN_VALUE
       maxY = Number.MIN_VALUE
@@ -333,11 +308,12 @@ define [
         if (bounds.height + bounds.y) > maxY
           maxY = (bounds.height + bounds.y)
 
-        @circuitBounds = new Rectangle(minX, minY, maxX-minX, maxY-minY)
+      new Rectangle(minX, minY, maxX-minX, maxY-minY)
 
 
-    updateTimings: () ->
+    _updateTimings: () ->
       sysTime = (new Date()).getTime()
+      
       # FIXME: Out of order?
       if @lastTime != 0
         inc = Math.floor(sysTime - @lastTime)
@@ -353,7 +329,6 @@ define [
 
       @lastTime = sysTime
 
-#      @frames++
       return sysTime
 
     setSelected: (component) ->
@@ -383,12 +358,6 @@ define [
     eachComponent: (callback) ->
       for component in @elementList
         callback(component)
-
-    incrementFrames: ->
-      @frames++
-
-    setLastFrameTime: (time) ->
-      @lastFrameTime = time
 
     getLastFrameTime: ->
       @lastFrameTime
