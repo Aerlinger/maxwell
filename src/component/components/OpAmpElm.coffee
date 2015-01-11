@@ -6,8 +6,7 @@ define [
   'cs!Rectangle',
   'cs!Point',
   'cs!CircuitComponent',
-  'cs!MathUtils',
-  'cs!ConsoleUtils'
+  'cs!MathUtils'
 ], (
   Settings,
   DrawHelper,
@@ -16,8 +15,7 @@ define [
   Point,
 
   CircuitComponent,
-  MathUtils,
-  ConsoleUtils
+  MathUtils
 ) ->
   # </DEFINE>
 

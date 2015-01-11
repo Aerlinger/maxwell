@@ -6,11 +6,11 @@ define [
   'cs!InductorElm',
   'cs!CapacitorElm'
 ], (
-VoltageElm,
-CurrentElm,
-ResistorElm,
-InductorElm,
-CapacitorElm
+  VoltageElm,
+  CurrentElm,
+  ResistorElm,
+  InductorElm,
+  CapacitorElm
 ) ->
 # </DEFINE>
 

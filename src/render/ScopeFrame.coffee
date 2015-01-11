@@ -1,5 +1,0 @@
-require [
-], ->
-
-  class RenderControls
-    constructor: ->

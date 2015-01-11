@@ -13,7 +13,6 @@ define [], () ->
       @longFormat: (decimalNum) ->
         decimalNum.toPrecision(4)
 
-      
       ###
       Removes commas from a number containing a string:
       e.g. 1,234,567.99 -> 1234567.99

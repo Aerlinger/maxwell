@@ -89,14 +89,10 @@
       ZenerElm: 'src/component/components/ZenerElm',
 
       // Utils
-      ColorScale: 'src/util/colorScale',
       Observer: 'src/util/observer',
-      ColorPalette: 'src/util/colorPalette',
       MathUtils: 'src/util/mathUtils',
       ArrayUtils: 'src/util/arrayUtils',
       FormatUtils: 'src/util/formatUtils',
-      ConsoleUtils: 'src/util/consoleUtils',
-
 
       ////////////////////////////////////////////////////////
       // TESTS:

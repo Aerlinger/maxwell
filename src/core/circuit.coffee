@@ -26,14 +26,12 @@
 define [
   'cs!Oscilloscope',
   'cs!Logger',
-#  'cs!Rectangle',
   'cs!SimulationParams',
   'cs!CircuitSolver',
   'cs!Observer'
 ], (
   Oscilloscope,
   Logger,
-#  Rectangle,
   SimulationParams,
   CircuitSolver,
   Observer
@@ -323,6 +321,9 @@ define [
     ####################################################################################################################
     ### Simulation Accessor Methods
     ####################################################################################################################
+
+    subIterations: ->
+      @Solver.subIterations
 
     eachComponent: (callback) ->
       for component in @elementList

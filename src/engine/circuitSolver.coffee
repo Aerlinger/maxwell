@@ -29,14 +29,11 @@ define [
   Settings,
   ArrayUtils,
 
-
   CapacitorElm,
   InductorElm,
   CurrentElm
 ) ->
 # </DEFINE>
-
-
 
   class CircuitSolver
 
@@ -47,7 +44,6 @@ define [
 
 
     reset: ->
-      # simulation variables
       @Circuit.resetTimings()
       @converged = true     # true if numerical analysis has converged
       @subIterations = 5000
@@ -63,10 +59,7 @@ define [
 
       @circuitNonLinear = false
 
-#      @lastFrameTime = 0
       @lastIterTime = 0
-#      @lastTime = 0
-#      @secTime = 0
 
       @invalidate()
 
@@ -559,19 +552,6 @@ define [
             unless @luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
               @Circuit.halt "Singular matrix in nonlinear circuit!", null
               return
-
-#          if @Circuit.frames == 0
-#            console.log("Frame 0 Dump: ----------------------------------")
-#            console.log("Circuit Matrix size: #{@circuitMatrixSize}")
-#            console.log("Circuit Matrix:")
-#            ArrayUtils.printArray @circuitMatrix
-#            console.log("Circuit Permute:")
-#            ArrayUtils.printArray @circuitPermute
-#            console.log("Circuit Right Side:")
-#            ArrayUtils.printArray @circuitRightSide
-#            console.log("Sim speed: #{@getIterCount()}")
-#            console.log("Current speed: #{@Circuit.currentSpeed()}")
-#            console.log("------------------------------------------------")
 
           @luSolve @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide
 
