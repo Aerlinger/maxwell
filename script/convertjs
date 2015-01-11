@@ -1,8 +1,0 @@
-#!/usr/bin/env sh
-
-for file in ../src/component/components/core/*.js
-do
- newfile=${file%%.js}.coffee
- echo "converting $file to $newfile"
- js2coffee "$file" > "$newfile"
-done

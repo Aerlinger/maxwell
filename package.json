@@ -40,10 +40,6 @@
   },
   "scripts": {
     "start": "node app",
-    "update": "script/update",
-    "build": "script/build",
-    "listComponents": "script/listComponents.rb",
-    "postinstall": "bower install; grunt dist",
-    "test": "./node_modules/grunt-cli/bin/grunt test"
+    "listComponents": "script/listComponents.rb"
   }
 }

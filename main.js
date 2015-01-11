@@ -246,6 +246,7 @@ function runTests() {
     "use strict";
     chai.should();
     chai.expect();
+
     mocha.run();
   });
 }
