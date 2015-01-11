@@ -2,8 +2,6 @@
 define ['cs!Circuit', 'cs!CircuitState'], (Circuit, State) ->
 # </DEFINE>
 
-  console.log Circuit
-
   describe "Circuit", ->
     beforeEach () ->
       @Circuit = new Circuit()

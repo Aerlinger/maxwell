@@ -114,6 +114,7 @@
 
       TestHelper: 'test/_helper',
       CircuitTest: 'test/circuit/circuitTest',
+      MaxwellTest: 'test/maxwell/maxwellTest',
 
       // Components
       ResistorTest: 'test/component/components/resistorTest',
@@ -230,6 +231,7 @@ function runTests() {
 
   require([
     'test/_helper',
+    'cs!MaxwellTest',
     'cs!CircuitTest',
     'cs!ResistorTest',
     'cs!VoltageElmTest',
