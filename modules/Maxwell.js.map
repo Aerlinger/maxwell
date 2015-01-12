@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Maxwell.js",
+  "sourceRoot": "",
+  "sources": [
+    "Maxwell.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,IAAA,qCAAA;;AAAA,aAAA,GAAgB,OAAA,CAAQ,kBAAR,CAAhB,CAAA;;AAAA,aACA,GAAgB,OAAA,CAAQ,kBAAR,CADhB,CAAA;;AAAA,OAEA,GAAU,OAAA,CAAQ,eAAR,CAFV,CAAA"
+}

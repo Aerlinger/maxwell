@@ -16,6 +16,7 @@ requirejs.config({
     chai: '../bower_components/chai/chai',
 
   var Config = {
+    baseUrl: "src",
     'paths': {
       // LIBRARIES:
       //d3: 'bower_components/d3/d3',

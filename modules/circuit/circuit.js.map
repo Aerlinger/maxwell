@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "circuit.js",
+  "sourceRoot": "",
+  "sources": [
+    "circuit.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA"
+}
