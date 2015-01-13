@@ -68,7 +68,6 @@ define [
       return circuit
 
 
-
     ###
     Retrieves string data from a circuit text file (via AJAX GET)
     ###
