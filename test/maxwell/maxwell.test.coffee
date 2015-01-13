@@ -1,14 +1,3 @@
-#requirejs = require('requirejs');
-
-#requirejs ['SampleJs'], (Sample) ->
-
-chai = require 'chai'
-chai.use require 'chai-as-promised'
-
-{expect} = chai
-chai.should()
-
 describe "Authentication capabilities", ->
-
-    it "returns true", ->
-      true.should.eq(true)
+  it "returns true", ->
+    true.should.eq(true)

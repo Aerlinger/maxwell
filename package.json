@@ -37,7 +37,8 @@
     "requirejs": "^2.1.15",
     "sinon": "~1.6.0",
     "stylus": "~0.28.1",
-    "underscore": "~1.5.2"
+    "underscore": "~1.5.2",
+    "grunt-server-mocha": "*"
   },
   "scripts": {
     "start": "node app",

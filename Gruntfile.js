@@ -1,22 +1,50 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
   grunt.initConfig({
-
-    requirejs: {
-      compile: {
+    pkg: grunt.file.readJSON('package.json'),
+    "mocha-server": {
+      testRequireJS: {
+        src: 'test/**/*.test.js',
         options: {
-          //almond: true,
-          //wrap: true,
-          baseUrl: "",
-          mainConfigFile: "main.js",
-          //name: 'node_modules/almond/almond',
-          optimize: "none",
-          out: "build/maxwell.js"
-
-
-          //name: 'bower_components/almond/almond'
+          require: ['coffee-script/register', 'test/test-main.js'],
+          rjsConfig: {
+            baseUrl: "./src",
+            paths: {
+              FormatUtils: "util/formatUtils",
+              cs: '../bower_components/require-cs/cs',
+              "maxwell.test": "../test/maxwell.test"
+            },
+            packages: [
+              {
+                name: 'cs',
+                location: 'bower_components/require-cs/',
+                main: 'cs'
+              },
+              {
+                name: 'coffee-script',
+                location: 'bower_components/coffee-script/extras',
+                main: 'coffee-script'
+              }
+            ]
+          }
         }
       }
     },
+    //requirejs: {
+    //  compile: {
+    //    options: {
+    //      almond: true,
+    //      wrap: true,
+          //baseUrl: "",
+          //mainConfigFile: "main.js",
+          //name: 'node_modules/almond/almond',
+          //optimize: "none",
+          //out: "build/maxwell.js"
+          //
+          //
+          //name: 'bower_components/almond/almond'
+        //}
+      //}
+    //},
     mochaTest: {
       test: {
         options: {
@@ -33,8 +61,9 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-requirejs');
   grunt.loadNpmTasks('grunt-mocha-test');
+  grunt.loadNpmTasks('grunt-server-mocha');
   //grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.registerTask('default', 'mochaTest');
 
-  grunt.registerTask("dist", ["requirejs"]);
+  //grunt.registerTask("dist", ["requirejs"]);
 };

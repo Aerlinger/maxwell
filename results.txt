@@ -4,6 +4,61 @@ test main!
 [0m  Authentication capabilities[0m
 [2K[0G  [32m  ✓[0m[90m returns true [0m
 
+[0m  Authentication capabilities[0m
+[2K[0G  [32m  ✓[0m[90m loads rjs [0m
 
-[92m [0m[32m 1 passing[0m[90m (6ms)[0m
+[0m  RequireJS modules[0m
+Before!
+{ LOL: 'SUP' }
+[2K[0G  [31m  1) DEFINES MODULE[0m
+[2K[0G  [31m  2) Formats[0m
+[2K[0G  [32m  ✓[0m[90m loads rjs [0m
+
+
+[92m [0m[32m 3 passing[0m[90m (153ms)[0m
+[31m  2 failing[0m
+
+[0m  1) RequireJS modules DEFINES MODULE:
+
+      [31mAssertionError: expected { LOL: 'SUP' } to equal {}[0m
+      [42m+ expected[0m [41m- actual[0m
+
+      [42m+{}[0m
+      [41m-{[0m
+      [41m-  "LOL": "SUP"[0m
+      [41m-}[0m
+      [0m[90m
+    at Context.<anonymous> (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/test/maxwell/rjs-working.test.coffee:16:33)
+    at callFn (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runnable.js:251:21)
+    at Test.Runnable.run (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runnable.js:244:7)
+    at Runner.runTest (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runner.js:374:10)
+    at /Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runner.js:452:12
+    at next (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runner.js:299:14)
+    at /Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runner.js:309:7
+    at next (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runner.js:248:23)
+    at Object._onImmediate (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runner.js:276:5)
+    at processImmediate [as _immediateCallback] (timers.js:354:15)
+  
+[0m
+[0m  2) RequireJS modules Formats:
+
+      [31mAssertionError: expected '3.0' to equal 'asdfsdf'[0m
+      [42m+ expected[0m [41m- actual[0m
+
+      [42m+asdfsdf[0m
+      [41m-3.0[0m
+      [0m[90m
+    at Context.<anonymous> (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/test/maxwell/rjs-working.test.coffee:19:60)
+    at callFn (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runnable.js:251:21)
+    at Test.Runnable.run (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runnable.js:244:7)
+    at Runner.runTest (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runner.js:374:10)
+    at /Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runner.js:452:12
+    at next (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runner.js:299:14)
+    at /Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runner.js:309:7
+    at next (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runner.js:248:23)
+    at Object._onImmediate (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runner.js:276:5)
+    at processImmediate [as _immediateCallback] (timers.js:354:15)
+  
+[0m
+
 
