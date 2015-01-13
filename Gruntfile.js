@@ -26,13 +26,24 @@ module.exports = function (grunt) {
         },
         src: ['test/**/*test.coffee']
       }
+    },
+    watch: {
+      module_test: {
+        files: ['test/**/*'],
+        tasks: ['mochaTest']
+      }
+      //autoreload: {
+      //  files: ['lib/**/*', 'built-app/**/*'],
+      //  options: {
+      //    livereload: true
+      //  }
+      //}
     }
   });
 
   grunt.loadNpmTasks('grunt-requirejs');
   grunt.loadNpmTasks('grunt-mocha-test');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   //grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.registerTask('default', 'mochaTest');
-
-  //grunt.registerTask("dist", ["requirejs"]);
 };

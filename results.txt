@@ -4,15 +4,12 @@ Loading test scripts...
 [0m  Authentication capabilities[0m
 [2K[0G  [32m  ✓[0m[90m returns true [0m
 
-[0m  Authentication capabilities[0m
-[2K[0G  [32m  ✓[0m[90m loads rjs [0m
-
 [0m  RequireJS modules[0m
 [2K[0G  [31m  1) DEFINES MODULE[0m
 [2K[0G  [31m  2) Formats[0m
 
 
-[92m [0m[32m 2 passing[0m[90m (140ms)[0m
+[92m [0m[32m 1 passing[0m[90m (256ms)[0m
 [31m  2 failing[0m
 
 [0m  1) RequireJS modules DEFINES MODULE:

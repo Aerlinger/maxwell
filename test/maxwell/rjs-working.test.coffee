@@ -10,4 +10,3 @@ describe "RequireJS modules", ->
 
   it "Formats", ->
     @FormatUtils.showFormat(2.9999999).should.equal("asdfsdf")
-
