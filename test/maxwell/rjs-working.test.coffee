@@ -6,7 +6,7 @@ describe "RequireJS modules", ->
       done()
 
   it "DEFINES MODULE", ->
-    @sample.should.equal({})
+    expect(@sample).to.eql({"LOL": "SUP"})
 
   it "Formats", ->
-    @FormatUtils.showFormat(2.9999999).should.equal("asdfsdf")
+    expect(@FormatUtils.showFormat(2.9999999)).to.eql('3.0')

@@ -1,7 +1,7 @@
 define [
-  'cs!CircuitLoader',
-  'cs!CircuitCanvas',
-  'cs!Circuit'
+  'cs!io/CircuitLoader',
+  'cs!render/CircuitCanvas',
+  'cs!core/Circuit'
 ],
 (
   CircuitLoader,

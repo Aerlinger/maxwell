@@ -21,7 +21,6 @@ define [
   'cs!TextElm',
   'cs!ProbeElm'
 
-
 ], (
   WireElm,
   ResistorElm,

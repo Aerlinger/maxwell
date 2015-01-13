@@ -1,264 +1,235 @@
 // This script gets run before any other Javascript in the library:
 
-(function () {
-  "use strict";
+requirejs.config({
+  'paths': {
+    // LIBRARIES:
+    d3: 'bower_components/d3/d3',
+    jquery: 'bower_components/jquery/dist/jquery.min',
+    jqueryui: 'bower_components/jquery-ui/jquery-ui',
+    Rickshaw: 'bower_components/rickshaw/rickshaw',
+    underscore: 'bower_components/underscore/underscore',
+    'coffee-script': 'bower_components/coffee-script/extras/coffee-script',
+    //cs: 'bower_components/require-cs/cs',
+    color: 'bower_components/one-color',
+    mocha: 'bower_components/mocha/mocha',
+    chai: 'bower_components/chai/chai',
 
-  console.log("Loading RequireJS configuration...");
+    Maxwell: 'src/Maxwell',
 
-  var Config = {
-    'paths': {
-      // LIBRARIES:
-      d3: 'bower_components/d3/d3',
-      jquery: 'bower_components/jquery/dist/jquery.min',
-      jqueryui: 'bower_components/jquery-ui/jquery-ui',
-      Rickshaw: 'bower_components/rickshaw/rickshaw',
-      underscore: 'bower_components/underscore/underscore',
-      'coffee-script': 'bower_components/coffee-script/extras/coffee-script',
-      cs: 'bower_components/require-cs/cs',
-      color: 'bower_components/one-color',
-      mocha: 'bower_components/mocha/mocha',
-      chai: 'bower_components/chai/chai',
+    // CORE:
+    ScopeControls: 'src/render/ScopeControls',
+    Circuit: 'src/core/circuit',
+    SimulationParams: 'src/core/simulationParams',
 
-      Maxwell: 'src/Maxwell',
+    // ENGINE:
+    MatrixStamper: 'src/engine/matrixStamper',
+    RowInfo: 'src/engine/rowInfo',
+    CircuitSolver: 'src/engine/circuitSolver',
+    Hint: 'src/engine/hint',
+    CircuitNode: 'src/engine/graphTraversal/circuitNode',
+    CircuitNodeLink: 'src/engine/graphTraversal/circuitNodeLink',
+    Pathfinder: 'src/engine/graphTraversal/pathfinder',
 
-      // CORE:
-      ScopeControls: 'src/render/ScopeControls',
-      Circuit: 'src/core/circuit',
-      SimulationParams: 'src/core/simulationParams',
+    // SETTINGS:
+    Settings: 'src/settings/settings',
 
-      // ENGINE:
-      MatrixStamper: 'src/engine/matrixStamper',
-      RowInfo: 'src/engine/rowInfo',
-      CircuitSolver: 'src/engine/circuitSolver',
-      Hint: 'src/engine/hint',
-      CircuitNode: 'src/engine/graphTraversal/circuitNode',
-      CircuitNodeLink: 'src/engine/graphTraversal/circuitNodeLink',
-      Pathfinder: 'src/engine/graphTraversal/pathfinder',
+    // IO:
+    Logger: 'src/io/logger',
+    CircuitLoader: 'src/io/circuitLoader',
 
-      // SETTINGS:
-      Settings: 'src/settings/settings',
+    // GEOM:
+    Point: 'src/geom/point',
+    Polygon: 'src/geom/polygon',
+    Rectangle: 'src/geom/rectangle',
 
-      // IO:
-      Logger: 'src/io/logger',
-      CircuitLoader: 'src/io/circuitLoader',
+    // RENDERING:
+    CircuitCanvas: 'src/render/circuitCanvas',
+    CanvasContext: 'src/render/canvasContext',
+    DrawHelper: 'src/render/drawHelper',
 
-      // GEOM:
-      Point: 'src/geom/point',
-      Polygon: 'src/geom/polygon',
-      Rectangle: 'src/geom/rectangle',
+    // OSCILLOSCOPE:
+    Oscilloscope: 'src/scope/oscilloscope',
 
-      // RENDERING:
-      CircuitCanvas: 'src/render/circuitCanvas',
-      CanvasContext: 'src/render/canvasContext',
-      DrawHelper: 'src/render/drawHelper',
+    // COMPONENT:
+    CircuitComponent: 'src/component/circuitComponent',
+    ComponentRegistry: 'src/component/componentRegistry',
 
-      // OSCILLOSCOPE:
-      Oscilloscope: 'src/scope/oscilloscope',
+    // COMPONENTS:
+    Diode: 'src/component/components/core/Diode',
 
-      // COMPONENT:
-      CircuitComponent: 'src/component/circuitComponent',
-      ComponentRegistry: 'src/component/componentRegistry',
+    AntennaElm: 'src/component/components/AntennaElm',
+    CapacitorElm: 'src/component/components/CapacitorElm',
+    CurrentElm: 'src/component/components/CurrentElm',
+    DiodeElm: 'src/component/components/DiodeElm',
+    GroundElm: 'src/component/components/GroundElm',
+    InductorElm: 'src/component/components/InductorElm',
+    JFetElm: 'src/component/components/JFetElm',
+    LogicInputElm: 'src/component/components/LogicInputElm',
+    LogicOutputElm: 'src/component/components/LogicOutputElm',
+    MosfetElm: 'src/component/components/MosfetElm',
+    OpAmpElm: 'src/component/components/OpAmpElm',
+    OutputElm: 'src/component/components/OutputElm',
+    ProbeElm: 'src/component/components/ProbeElm',
+    RailElm: 'src/component/components/RailElm',
+    ResistorElm: 'src/component/components/ResistorElm',
+    SparkGapElm: 'src/component/components/SparkGapElm',
+    SweepElm: 'src/component/components/SweepElm',
+    Switch2Elm: 'src/component/components/Switch2Elm',
+    SwitchElm: 'src/component/components/SwitchElm',
+    TextElm: 'src/component/components/TextElm',
+    TransistorElm: 'src/component/components/TransistorElm',
+    VarRailElm: 'src/component/components/VarRailElm',
+    VoltageElm: 'src/component/components/VoltageElm',
+    WireElm: 'src/component/components/WireElm',
+    ZenerElm: 'src/component/components/ZenerElm',
 
-      // COMPONENTS:
-      Diode: 'src/component/components/core/Diode',
+    // Utils
+    Observer: 'src/util/observer',
+    MathUtils: 'src/util/mathUtils',
+    ArrayUtils: 'src/util/arrayUtils',
+    FormatUtils: 'src/util/formatUtils',
 
-      AntennaElm: 'src/component/components/AntennaElm',
-      CapacitorElm: 'src/component/components/CapacitorElm',
-      CurrentElm: 'src/component/components/CurrentElm',
-      DiodeElm: 'src/component/components/DiodeElm',
-      GroundElm: 'src/component/components/GroundElm',
-      InductorElm: 'src/component/components/InductorElm',
-      JFetElm: 'src/component/components/JFetElm',
-      LogicInputElm: 'src/component/components/LogicInputElm',
-      LogicOutputElm: 'src/component/components/LogicOutputElm',
-      MosfetElm: 'src/component/components/MosfetElm',
-      OpAmpElm: 'src/component/components/OpAmpElm',
-      OutputElm: 'src/component/components/OutputElm',
-      ProbeElm: 'src/component/components/ProbeElm',
-      RailElm: 'src/component/components/RailElm',
-      ResistorElm: 'src/component/components/ResistorElm',
-      SparkGapElm: 'src/component/components/SparkGapElm',
-      SweepElm: 'src/component/components/SweepElm',
-      Switch2Elm: 'src/component/components/Switch2Elm',
-      SwitchElm: 'src/component/components/SwitchElm',
-      TextElm: 'src/component/components/TextElm',
-      TransistorElm: 'src/component/components/TransistorElm',
-      VarRailElm: 'src/component/components/VarRailElm',
-      VoltageElm: 'src/component/components/VoltageElm',
-      WireElm: 'src/component/components/WireElm',
-      ZenerElm: 'src/component/components/ZenerElm',
+    ////////////////////////////////////////////////////////
+    // TESTS:
+    ////////////////////////////////////////////////////////
 
-      // Utils
-      Observer: 'src/util/observer',
-      MathUtils: 'src/util/mathUtils',
-      ArrayUtils: 'src/util/arrayUtils',
-      FormatUtils: 'src/util/formatUtils',
+    TestHelper: 'test/_helper',
+    CircuitTest: 'test/circuit/circuitTest',
+    MaxwellTest: 'test/maxwell/maxwellTest',
 
-      ////////////////////////////////////////////////////////
-      // TESTS:
-      ////////////////////////////////////////////////////////
+    // Components
+    ResistorTest: 'test/component/components/resistorTest',
+    VoltageElmTest: 'test/component/components/voltageTest',
+    GroundTest: 'test/component/components/groundTest',
+    WireTest: 'test/component/components/wireTest',
+    CapacitorTest: 'test/component/components/capacitorTest',
+    ComponentTest: 'test/component/circuitComponentTest',
 
-      TestHelper: 'test/_helper',
-      CircuitTest: 'test/circuit/circuitTest',
-      MaxwellTest: 'test/maxwell/maxwellTest',
+    // Engine:
+    ComponentNodeLinkTest: 'test/circuit/circuitNodeLinkTest',
+    ComponentNodeTest: 'test/circuit/circuitNodeTest',
 
-      // Components
-      ResistorTest: 'test/component/components/resistorTest',
-      VoltageElmTest: 'test/component/components/voltageTest',
-      GroundTest: 'test/component/components/groundTest',
-      WireTest: 'test/component/components/wireTest',
-      CapacitorTest: 'test/component/components/capacitorTest',
-      ComponentTest: 'test/component/circuitComponentTest',
+    // Solvers
+    CircuitSolverTest: 'test/solver/circuitSolverTest',
+    MatrixSolverTest: 'test/solver/matrixSolverTest',
+    CircuitStamperTest: 'test/solver/matrixStamperTest',
 
-      // Engine:
-      ComponentNodeLinkTest: 'test/circuit/circuitNodeLinkTest',
-      ComponentNodeTest: 'test/circuit/circuitNodeTest',
+    // Utils
+    ArraysTest: 'test/util/arraysTest',
+    FormatsTest: 'test/util/formatsTest',
+    MathTest: 'test/util/mathTest',
+    UnitsTest: 'test/util/unitsTest',
 
-      // Solvers
-      CircuitSolverTest: 'test/solver/circuitSolverTest',
-      MatrixSolverTest: 'test/solver/matrixSolverTest',
-      CircuitStamperTest: 'test/solver/matrixStamperTest',
+    // IO
+    AjaxTest: 'test/io/ajaxTest',
+    CircuitLoaderTest: 'test/io/circuitLoaderTest',
 
-      // Utils
-      ArraysTest: 'test/util/arraysTest',
-      FormatsTest: 'test/util/formatsTest',
-      MathTest: 'test/util/mathTest',
-      UnitsTest: 'test/util/unitsTest',
+    // UI
+    PrimitivesTest: 'test/util/primitivesTest',
 
-      // IO
-      AjaxTest: 'test/io/ajaxTest',
-      CircuitLoaderTest: 'test/io/circuitLoaderTest',
-
-      // UI
-      PrimitivesTest: 'test/util/primitivesTest',
-
-      // Integration tests:
-      voltdivideIntegration: 'test/integration/voltdividesimpleTest',
-      observerTest: 'test/observers/observerTest'
+    // Integration tests:
+    voltdivideIntegration: 'test/integration/voltdividesimpleTest',
+    observerTest: 'test/observers/observerTest'
+  },
+  shim: {
+    'd3': 'd3',
+    'jqueryui': 'jquery',
+    'jquery': {
+      exports: '$'
     },
-    shim: {
-      'd3': 'd3',
-      'jqueryui': 'jquery',
-      'jquery': {
-        exports: '$'
-      },
-      'underscore': {
-        exports: '_'
-      }
-    },
-    packages: [
-      {
-        name: 'cs',
-        location: 'bower_components/require-cs/',
-        main: 'cs'
-      },
-      {
-        name: 'coffee-script',
-        location: 'bower_components/coffee-script/extras',
-        main: 'coffee-script'
-      }
-    ]
-  };
-
-  // If _TEST_MODE, configure to '../' since our tests are stored in './test/'.
-  if (typeof _TEST_MODE !== 'undefined' && _TEST_MODE === true) {
-    Config.baseUrl = '../src/';
-    require.config(Config);
-    return true;
-  }
-
-  // If 'define' exists as a function, run main.
-  if (typeof define === 'function') {
-    require.config(Config);
-    return true;
-  }
-  // If exports exists as an object, CommonJS.
-  if (typeof module === 'object') {
-    module.exports = Config;
-  }
-  // If module exists as an object, use CommonJS-like module exports for node.
-  if (typeof exports === 'object') {
-    exports.RJSConfig = Config;
-  }
-
-  return Config;
-}());
-
-
-require([
-  // Load our app module and pass it to our definition function
-  'cs!Maxwell'
-], function (Maxwell) {
-  var circuitName = $('canvas').data('circuit');
-  var circuitFileName = "../circuits/" + circuitName + ".json";
-
-  $(document).ready(function (event) {
-    var canvas = $('canvas.maxwell');
-
-    if (canvas && circuitName) {
-      new Maxwell(canvas.get(0), {circuitName: circuitFileName});
-
-      var defaultCircuit = Maxwell.createCircuit("default", circuitFileName);
-    } else {
-      console.error("No circuit definition provided");
+    'underscore': {
+      exports: '_'
     }
-  });
-
-  if (window.location.toString().match("/test")) {
-    runTests();
-  }
+  },
+  packages: [
+    {
+      name: 'cs',
+      location: 'bower_components/require-cs/',
+      main: 'cs'
+    },
+    {
+      name: 'coffee-script',
+      location: 'bower_components/coffee-script/extras',
+      main: 'coffee-script'
+    }
+  ]
 });
-
 //
-function runTests() {
-  "use strict";
-
-  mocha.setup('bdd');
-
-  require([
-    'chai',
-    'cs!MaxwellTest',
-    'cs!CircuitTest',
-    'cs!ResistorTest',
-    'cs!VoltageElmTest',
-    'cs!GroundTest',
-    'cs!WireTest',
-    'cs!CapacitorTest',
-    'cs!ComponentTest',
-    'cs!ComponentNodeLinkTest',
-    'cs!ComponentNodeTest',
-
-    'cs!CircuitSolverTest',
-    'cs!MatrixSolverTest',
-    'cs!CircuitStamperTest',
-
-    'cs!ArraysTest',
-    'cs!FormatsTest',
-    'cs!MathTest',
-    'cs!UnitsTest',
-    'cs!UnitsTest',
-
-    'cs!PrimitivesTest',
-    'cs!AjaxTest',
-    'cs!CircuitLoaderTest',
-    'cs!voltdivideIntegration'
-  ], function (chai) {
-    "use strict";
-    chai.should();
-    chai.expect();
-
-    mocha.run();
-  });
-}
-
-
-require([
-  'cs!Oscilloscope'
-], function (Oscilloscope) {
-  "use strict";
-
-  //var scope = new Oscilloscope();
-});
+//
+//require([
+//  // Load our app module and pass it to our definition function
+//  'cs!Maxwell'
+//], function (Maxwell) {
+//  var circuitName = $('canvas').data('circuit');
+//  var circuitFileName = "../circuits/" + circuitName + ".json";
+//
+//  $(document).ready(function (event) {
+//    var canvas = $('canvas.maxwell');
+//
+//    if (canvas && circuitName) {
+//      new Maxwell(canvas.get(0), {circuitName: circuitFileName});
+//
+//      var defaultCircuit = Maxwell.createCircuit("default", circuitFileName);
+//    } else {
+//      console.error("No circuit definition provided");
+//    }
+//  });
+//
+//  if (window.location.toString().match("/test")) {
+//    runTests();
+//  }
+//});
+//
+////
+//function runTests() {
+//  "use strict";
+//
+//  mocha.setup('bdd');
+//
+//  require([
+//    'chai',
+//    'cs!MaxwellTest',
+//    'cs!CircuitTest',
+//    'cs!ResistorTest',
+//    'cs!VoltageElmTest',
+//    'cs!GroundTest',
+//    'cs!WireTest',
+//    'cs!CapacitorTest',
+//    'cs!ComponentTest',
+//    'cs!ComponentNodeLinkTest',
+//    'cs!ComponentNodeTest',
+//
+//    'cs!CircuitSolverTest',
+//    'cs!MatrixSolverTest',
+//    'cs!CircuitStamperTest',
+//
+//    'cs!ArraysTest',
+//    'cs!FormatsTest',
+//    'cs!MathTest',
+//    'cs!UnitsTest',
+//    'cs!UnitsTest',
+//
+//    'cs!PrimitivesTest',
+//    'cs!AjaxTest',
+//    'cs!CircuitLoaderTest',
+//    'cs!voltdivideIntegration'
+//  ], function (chai) {
+//    "use strict";
+//    chai.should();
+//    chai.expect();
+//
+//    mocha.run();
+//  });
+//}
+//
+//
+//require([
+//  'cs!Oscilloscope'
+//], function (Oscilloscope) {
+//  "use strict";
+//
+//  //var scope = new Oscilloscope();
+//});
 
 //
 //

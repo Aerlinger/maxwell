@@ -21,6 +21,7 @@ module.exports = function (grunt) {
           reporter: 'spec',
           captureFile: 'results.txt',
           quiet: false,
+          ui: 'bdd',
           clearRequireCache: false,
           require: ['coffee-script/register', 'test/test-main.js']
         },
@@ -29,7 +30,7 @@ module.exports = function (grunt) {
     },
     watch: {
       module_test: {
-        files: ['test/**/*'],
+        files: ['Gruntfile.js', 'test/**/*', "src/**/*.coffee"],
         tasks: ['mochaTest']
       }
       //autoreload: {

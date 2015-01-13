@@ -1,3 +1,8 @@
-describe "Authentication capabilities", ->
+describe "Maxwell", ->
+  before (done) ->
+    requirejs ['cs!Maxwell'], (Maxwell) =>
+      @Maxwell = Maxwell
+
   it "returns true", ->
-    true.should.eq(true)
+    expect(Maxwell).to.be
+ 
