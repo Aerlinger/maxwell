@@ -12,12 +12,12 @@
 
 # <DEFINE>
 define [
-    'cs!Observer',
-    'cs!Circuit',
-    'cs!CircuitComponent',
-    'cs!FormatUtils',
-    'cs!Settings',
-    'cs!Rectangle'
+    'cs!util/Observer',
+    'cs!core/Circuit',
+    'cs!component/CircuitComponent',
+    'cs!util/FormatUtils',
+    'cs!settings/Settings',
+    'cs!geom/Rectangle'
   ],
 (
   Observer,

@@ -1,10 +1,10 @@
 # <DEFINE>
 define [
-  'cs!VoltageElm',
-  'cs!CurrentElm',
-  'cs!ResistorElm',
-  'cs!InductorElm',
-  'cs!CapacitorElm'
+  'cs!component/components/VoltageElm',
+  'cs!component/components/CurrentElm',
+  'cs!component/components/ResistorElm',
+  'cs!component/components/InductorElm',
+  'cs!component/components/CapacitorElm'
 ], (
   VoltageElm,
   CurrentElm,

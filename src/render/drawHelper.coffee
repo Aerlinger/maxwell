@@ -1,9 +1,9 @@
 # <DEFINE>
 define [
-  'cs!Settings',
-  'cs!Polygon',
-  'cs!Rectangle',
-  'cs!Point'
+  'cs!settings/Settings',
+  'cs!geom/Polygon',
+  'cs!geom/Rectangle',
+  'cs!geom/Point'
 ], (
   Settings,
   Polygon,

@@ -1,5 +1,5 @@
 # <DEFINE>
-define ['jquery'], ($) ->
+define ['jquery', 'Rickshaw'], ($, Rickshaw) ->
 # </DEFINE>
   class ScopeControls
 

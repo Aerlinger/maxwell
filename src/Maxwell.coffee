@@ -1,11 +1,11 @@
 define [
   'cs!io/CircuitLoader',
-  'cs!render/CircuitCanvas',
+#  'cs!render/CircuitCanvas',
   'cs!core/Circuit'
 ],
 (
   CircuitLoader,
-  CircuitCanvas,
+#  CircuitCanvas,
   Circuit
 ) ->
 
@@ -20,7 +20,7 @@ define [
         CircuitLoader.createCircuitFromJsonFile @circuitName, (circuit) =>
           @Circuit = circuit
 
-          new CircuitCanvas(@Circuit, canvas)
+#          new CircuitCanvas(@Circuit, canvas)
 
     @_loadCircuitFromFile: (circuitFileName) ->
       return CircuitLoader.createCircuitFromJsonFile(circuitFileName)
@@ -44,3 +44,5 @@ define [
       @Circuits[circuitName] = circuit
 
       return circuit
+
+  return Maxwell

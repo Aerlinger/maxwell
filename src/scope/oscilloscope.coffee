@@ -1,17 +1,18 @@
 # <DEFINE>
 define [
-  'Rickshaw'
-  'cs!ScopeControls'
-  'jqueryui'
-], (Rickshaw,
-    ScopeControls) ->
+#  'Rickshaw',
+#  'cs!render/ScopeControls'
+], (
+#  Rickshaw,
+#    ScopeControls
+) ->
 # </DEFINE>
   class Oscilloscope
     constructor: (@timeStep = 1) ->
       @timeBase = 0
       @frames = 0
 
-      palette = new Rickshaw.Color.Palette scheme: 'classic9'
+#      palette = new Rickshaw.Color.Palette scheme: 'classic9'
 
       @seriesData = [[], [], [], [], [], [], [], [], []];
 
@@ -22,21 +23,21 @@ define [
       for i in [0..xbuffer_size]
         @addData 0
 
-      graph = new Rickshaw.Graph({
-        element: chartDiv,
-        width: 400,
-        height: 200,
-        renderer: "line",
-        stroke: true,
-        preserve: true,
-        series: [
-          color: palette.color()
-          data: @seriesData[0]
-          name: "Voltage"
-        ],
-      })
+#      graph = new Rickshaw.Graph({
+#        element: chartDiv,
+#        width: 400,
+#        height: 200,
+#        renderer: "line",
+#        stroke: true,
+#        preserve: true,
+#        series: [
+#          color: palette.color()
+#          data: @seriesData[0]
+#          name: "Voltage"
+#        ],
+#      })
 
-      new ScopeControls(graph)
+#      new ScopeControls(graph)
 
       setInterval =>
         @step()
@@ -47,7 +48,7 @@ define [
     step: ->
       @frames += 1
       @removeData(1);
-      @addData 0.5 * Math.sin(@frames/10) + 0.5
+      @addData 0.5 * Math.sin(@frames / 10) + 0.5
 
     addData: (value) ->
       index = @seriesData[0].length

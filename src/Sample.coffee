@@ -1,4 +1,0 @@
-define [], ->
-  return {
-    "LOL": "SUP"
-  }

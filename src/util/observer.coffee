@@ -23,4 +23,3 @@ define [], ->
       return @_events
 
   return Observer
-

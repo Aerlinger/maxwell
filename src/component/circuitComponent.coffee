@@ -17,12 +17,12 @@
 
 # <DEFINE>
 define [
-  'cs!Settings',
-  'cs!DrawHelper',
-  'cs!Rectangle',
-  'cs!Point'
-  'cs!MathUtils',
-  'cs!ArrayUtils'
+  'cs!settings/Settings',
+  'cs!render/DrawHelper',
+  'cs!geom/Rectangle',
+  'cs!geom/Point'
+  'cs!util/MathUtils',
+  'cs!util/ArrayUtils'
 ], (Settings,
     DrawHelper,
     Rectangle,

@@ -1,13 +1,13 @@
 # <DEFINE>
 define [
-  'cs!Diode',
-  'cs!DiodeElm',
-  'cs!Settings',
-  'cs!DrawHelper',
-  'cs!Polygon',
-  'cs!Rectangle',
-  'cs!Point',
-  'cs!CircuitComponent'
+  'cs!component/components/core/Diode',
+  'cs!component/components/DiodeElm',
+  'cs!settings/Settings',
+  'cs!render/DrawHelper',
+  'cs!geom/Polygon',
+  'cs!geom/Rectangle',
+  'cs!geom/Point',
+  'cs!component/CircuitComponent'
 
 ], (
   Diode,

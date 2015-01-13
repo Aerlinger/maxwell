@@ -1,25 +1,25 @@
 # <DEFINE>
 define [
-  'cs!WireElm',
-  'cs!ResistorElm',
-  'cs!GroundElm',
-  'cs!VoltageElm',
-  'cs!DiodeElm',
-  'cs!OutputElm',
-  'cs!SwitchElm',
-  'cs!CapacitorElm',
-  'cs!InductorElm',
-  'cs!SparkGapElm',
-  'cs!CurrentElm',
-  'cs!RailElm',
-  'cs!MosfetElm',
-  'cs!TransistorElm',
-  'cs!VarRailElm',
-  'cs!OpAmpElm',
-  'cs!ZenerElm',
-  'cs!Switch2Elm',
-  'cs!TextElm',
-  'cs!ProbeElm'
+  'cs!component/components/WireElm',
+  'cs!component/components/ResistorElm',
+  'cs!component/components/GroundElm',
+  'cs!component/components/VoltageElm',
+  'cs!component/components/DiodeElm',
+  'cs!component/components/OutputElm',
+  'cs!component/components/SwitchElm',
+  'cs!component/components/CapacitorElm',
+  'cs!component/components/InductorElm',
+  'cs!component/components/SparkGapElm',
+  'cs!component/components/CurrentElm',
+  'cs!component/components/RailElm',
+  'cs!component/components/MosfetElm',
+  'cs!component/components/TransistorElm',
+  'cs!component/components/VarRailElm',
+  'cs!component/components/OpAmpElm',
+  'cs!component/components/ZenerElm',
+  'cs!component/components/Switch2Elm',
+  'cs!component/components/TextElm',
+  'cs!component/components/ProbeElm'
 
 ], (
   WireElm,
@@ -67,13 +67,11 @@ define [
       'd': DiodeElm
       's': SwitchElm
       '187': SparkGapElm
-      187: SparkGapElm
       'a': OpAmpElm
       'f': MosfetElm
 
       # Testing
       'R': RailElm
-      172: VarRailElm
       '172': VarRailElm
       'z': ZenerElm
       'i': CurrentElm

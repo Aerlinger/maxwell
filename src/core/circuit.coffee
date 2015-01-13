@@ -24,11 +24,11 @@
 
 # <DEFINE>
 define [
-  'cs!Oscilloscope',
-  'cs!Logger',
-  'cs!SimulationParams',
-  'cs!CircuitSolver',
-  'cs!Observer'
+  'cs!scope/Oscilloscope',
+  'cs!io/Logger',
+  'cs!core/SimulationParams',
+  'cs!engine/CircuitSolver',
+  'cs!util/Observer'
 ], (
   Oscilloscope,
   Logger,

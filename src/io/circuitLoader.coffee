@@ -1,11 +1,11 @@
 # <DEFINE>
 define [
   'jquery'
-  'cs!ComponentRegistry',
-  'cs!SimulationParams',
-  'cs!Circuit',
-  'cs!Oscilloscope',
-  'cs!Hint'
+  'cs!component/ComponentRegistry',
+  'cs!core/SimulationParams',
+  'cs!core/Circuit',
+  'cs!scope/Oscilloscope',
+  'cs!engine/Hint'
 ], (
   $,
   ComponentRegistry,

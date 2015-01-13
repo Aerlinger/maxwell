@@ -2,7 +2,9 @@ describe "Maxwell", ->
   before (done) ->
     requirejs ['cs!Maxwell'], (Maxwell) =>
       @Maxwell = Maxwell
+      done()
 
-  it "returns true", ->
-    expect(Maxwell).to.be
+  it "returns true", (done) ->
+    expect(@Maxwell).to.be
+    done()
  

@@ -1,8 +1,8 @@
 # <DEFINE>
 define [
-  'cs!CircuitComponent',
-  'cs!DrawHelper',
-  'cs!Point'
+  'cs!component/CircuitComponent',
+  'cs!render/DrawHelper',
+  'cs!geom/Point'
 ], (
   CircuitComponent,
   DrawHelper,

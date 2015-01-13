@@ -1,5 +1,5 @@
 # <DEFINE>
-define ['cs!Point'], (Point) ->
+define ['cs!geom/Point'], (Point) ->
 # </DEFINE>
 
   class Polygon

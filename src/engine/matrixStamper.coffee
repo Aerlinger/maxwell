@@ -1,7 +1,7 @@
 # <DEFINE>
 define [
-  'cs!MathUtils',
-  'cs!RowInfo'
+  'cs!util/MathUtils',
+  'cs!engine/RowInfo'
 ], (MathUtils, RowInfo) ->
 # </DEFINE>
 

@@ -1,13 +1,13 @@
 # <DEFINE>
 define [
-  'cs!Settings',
-  'cs!DrawHelper',
-  'cs!Polygon',
-  'cs!Rectangle',
-  'cs!Point',
+  'cs!settings/Settings',
+  'cs!render/DrawHelper',
+  'cs!geom/Polygon',
+  'cs!geom/Rectangle',
+  'cs!geom/Point',
 #  'cs!RailElm',
 
-  'cs!CircuitComponent'
+  'cs!component/CircuitComponent'
 ], (
   Settings,
   DrawHelper,
