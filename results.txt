@@ -1,4 +1,4 @@
-test main!
+Loading test scripts...
 
 [0m[0m
 [0m  Authentication capabilities[0m
@@ -8,14 +8,11 @@ test main!
 [2K[0G  [32m  ✓[0m[90m loads rjs [0m
 
 [0m  RequireJS modules[0m
-Before!
-{ LOL: 'SUP' }
 [2K[0G  [31m  1) DEFINES MODULE[0m
 [2K[0G  [31m  2) Formats[0m
-[2K[0G  [32m  ✓[0m[90m loads rjs [0m
 
 
-[92m [0m[32m 3 passing[0m[90m (153ms)[0m
+[92m [0m[32m 2 passing[0m[90m (140ms)[0m
 [31m  2 failing[0m
 
 [0m  1) RequireJS modules DEFINES MODULE:
@@ -28,7 +25,7 @@ Before!
       [41m-  "LOL": "SUP"[0m
       [41m-}[0m
       [0m[90m
-    at Context.<anonymous> (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/test/maxwell/rjs-working.test.coffee:16:33)
+    at Context.<anonymous> (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/test/maxwell/rjs-working.test.coffee:13:33)
     at callFn (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runnable.js:251:21)
     at Test.Runnable.run (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runnable.js:244:7)
     at Runner.runTest (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runner.js:374:10)
@@ -48,7 +45,7 @@ Before!
       [42m+asdfsdf[0m
       [41m-3.0[0m
       [0m[90m
-    at Context.<anonymous> (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/test/maxwell/rjs-working.test.coffee:19:60)
+    at Context.<anonymous> (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/test/maxwell/rjs-working.test.coffee:16:60)
     at callFn (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runnable.js:251:21)
     at Test.Runnable.run (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runnable.js:244:7)
     at Runner.runTest (/Users/Aerlinger/Dropbox/Code/javascript/CircuitBox/app/maxwell/node_modules/mocha/lib/runner.js:374:10)
