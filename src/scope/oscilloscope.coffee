@@ -1,27 +1,18 @@
-# <DEFINE>
-define [
-#  'Rickshaw',
-#  'cs!render/ScopeControls'
-], (
-#  Rickshaw,
-#    ScopeControls
-) ->
-# </DEFINE>
-  class Oscilloscope
-    constructor: (@timeStep = 1) ->
-      @timeBase = 0
-      @frames = 0
+class Oscilloscope
+  constructor: (@timeStep = 1) ->
+    @timeBase = 0
+    @frames = 0
 
 #      palette = new Rickshaw.Color.Palette scheme: 'classic9'
 
-      @seriesData = [[], [], [], [], [], [], [], [], []];
+    @seriesData = [[], [], [], [], [], [], [], [], []];
 
-      xbuffer_size = 150
+    xbuffer_size = 150
 
-      chartDiv = document.getElementById("chart")
+    chartDiv = document.getElementById("chart")
 
-      for i in [0..xbuffer_size]
-        @addData 0
+    for i in [0..xbuffer_size]
+      @addData 0
 
 #      graph = new Rickshaw.Graph({
 #        element: chartDiv,
@@ -39,28 +30,28 @@ define [
 
 #      new ScopeControls(graph)
 
-      setInterval =>
-        @step()
-        graph.update();
-      , 40
+    setInterval =>
+      @step()
+      graph.update();
+    , 40
 #
 
-    step: ->
-      @frames += 1
-      @removeData(1);
-      @addData 0.5 * Math.sin(@frames / 10) + 0.5
+  step: ->
+    @frames += 1
+    @removeData(1);
+    @addData 0.5 * Math.sin(@frames / 10) + 0.5
 
-    addData: (value) ->
-      index = @seriesData[0].length
+  addData: (value) ->
+    index = @seriesData[0].length
 
-      for item in @seriesData
-        item.push({x: index * @timeStep + @timeBase, y: value})
+    for item in @seriesData
+      item.push({x: index * @timeStep + @timeBase, y: value})
 
-    removeData: (data) ->
-      for item in @seriesData
-        item.shift()
+  removeData: (data) ->
+    for item in @seriesData
+      item.shift()
 
-      @timeBase += @timeStep
+    @timeBase += @timeStep
 
 
-  return Oscilloscope
+module.exports = Oscilloscope

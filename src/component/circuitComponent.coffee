@@ -14,12 +14,12 @@
 #
 # #######################################################################
 
-Settings = require('settings/Settings')
-DrawHelper = ('render/DrawHelper')
-Rectangle = require('geom/Rectangle')
-Point = require('geom/Point')
-MathUtils = require('util/MathUtils')
-ArrayUtils = require('util/ArrayUtils')
+Settings = require('../settings/settings.coffee')
+DrawHelper = ('../render/drawHelper.coffee')
+Rectangle = require('../geom/rectangle.coffee')
+Point = require('../geom/point.coffee')
+MathUtils = require('../util/mathUtils.coffee')
+ArrayUtils = require('../util/arrayUtils.coffee')
 
 
 class CircuitComponent

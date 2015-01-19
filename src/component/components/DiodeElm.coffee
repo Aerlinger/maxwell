@@ -1,125 +1,112 @@
-# <DEFINE>
-define [
-  'cs!component/components/core/Diode',
-  'cs!settings/Settings',
-  'cs!render/DrawHelper',
-  'cs!geom/Polygon',
-  'cs!geom/Rectangle',
-  'cs!geom/Point',
-  'cs!component/CircuitComponent'
+Settings = require('../../settings/settings.coffee')
+DrawHelper = require('../../render/drawHelper.coffee')
+Polygon = require('../../geom/polygon.coffee')
+Rectangle = require('../../geom/rectangle.coffee')
+Point = require('../../geom/point.coffee')
+CircuitComponent = require('../circuitComponent.coffee')
 
-], (
-  Diode,
-  Settings,
-  DrawHelper,
-  Polygon,
-  Rectangle,
-  Point,
+class DiodeElm extends CircuitComponent
 
-  CircuitComponent
-) ->
-  # </DEFINE>
+  @FLAG_FWDROP: 1
+  @DEFAULT_DROP: .805904783
 
-  class DiodeElm extends CircuitComponent
+  constructor: (xa, ya, xb, yb, f, st) ->
+    super xa, ya, xb, yb, f, st
 
-    @FLAG_FWDROP: 1
-    @DEFAULT_DROP: .805904783
+    @hs = 8
+    @poly
+    @cathode = []
 
-    constructor: (xa, ya, xb, yb, f, st) ->
-      super xa, ya, xb, yb, f, st
+    @diode = new Diode(self)
+    @fwdrop = DiodeElm.DEFAULT_DROP
+    @zvoltage = 0
 
-      @hs = 8
-      @poly
-      @cathode = []
+    if (f & DiodeElm.FLAG_FWDROP) > 0
+      try
+        @fwdrop = parseFloat(st)
 
-      @diode = new Diode(self)
-      @fwdrop = DiodeElm.DEFAULT_DROP
-      @zvoltage = 0
+    @setup()
 
-      if (f & DiodeElm.FLAG_FWDROP) > 0
-        try
-          @fwdrop = parseFloat(st)
+  nonLinear: ->
+    true
 
-      @setup()
+  setup: ->
+    @diode.setup @fwdrop, @zvoltage
 
-    nonLinear: ->
-      true
+  getDumpType: ->
+    "d"
 
-    setup: ->
-      @diode.setup @fwdrop, @zvoltage
+  dump: ->
+    @flags |= DiodeElm.FLAG_FWDROP
+    CircuitComponent::dump.call(this) + " " + @fwdrop
 
-    getDumpType: ->
-      "d"
+  setPoints: ->
+    super()
+    @calcLeads 16
+    @cathode = CircuitComponent.newPointArray(2)
+    [pa, pb] = DrawHelper.interpPoint2 @lead1, @lead2, 0, @hs
+    [@cathode[0], @cathode[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 1, @hs
+    @poly = DrawHelper.createPolygonFromArray([pa, pb, @lead2])
 
-    dump: ->
-      @flags |= DiodeElm.FLAG_FWDROP
-      CircuitComponent::dump.call(this) + " " + @fwdrop
+  draw: (renderContext) ->
+    @drawDiode(renderContext)
+    @drawDots(@point1, @point2, renderContext)
+    @drawPosts(renderContext)
 
-    setPoints: ->
-      super()
-      @calcLeads 16
-      @cathode = CircuitComponent.newPointArray(2)
-      [pa, pb] = DrawHelper.interpPoint2 @lead1, @lead2, 0, @hs
-      [@cathode[0], @cathode[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 1, @hs
-      @poly = DrawHelper.createPolygonFromArray([pa, pb, @lead2])
+  reset: ->
+    @diode.reset()
+    @volts[0] = @volts[1] = @curcount = 0
 
-    draw: (renderContext) ->
-      @drawDiode(renderContext)
-      @drawDots(@point1, @point2, renderContext)
-      @drawPosts(renderContext)
+  drawDiode: (renderContext) ->
+    @setBboxPt @point1, @point2, @hs
+    v1 = @volts[0]
+    v2 = @volts[1]
+    @draw2Leads(renderContext)
 
-    reset: ->
-      @diode.reset()
-      @volts[0] = @volts[1] = @curcount = 0
+    # TODO: RENDER DIODE
 
-    drawDiode: (renderContext) ->
-      @setBboxPt @point1, @point2, @hs
-      v1 = @volts[0]
-      v2 = @volts[1]
-      @draw2Leads(renderContext)
+    # draw arrow
+    #this.setPowerColor(true);
+    color = DrawHelper.getVoltageColor(v1)
+    renderContext.drawThickPolygonP @poly, color
 
-      # TODO: RENDER DIODE
+    #g.fillPolygon(poly);
 
-      # draw arrow
-      #this.setPowerColor(true);
-      color = DrawHelper.getVoltageColor(v1)
-      renderContext.drawThickPolygonP @poly, color
+    # draw the diode plate
+    color = DrawHelper.getVoltageColor(v2)
+    renderContext.drawThickLinePt @cathode[0], @cathode[1], color
 
-      #g.fillPolygon(poly);
+  stamp: (stamper) ->
+    @diode.stamp @nodes[0], @nodes[1], stamper
 
-      # draw the diode plate
-      color = DrawHelper.getVoltageColor(v2)
-      renderContext.drawThickLinePt @cathode[0], @cathode[1], color
+  doStep: (stamper) ->
+    @diode.doStep @volts[0] - @volts[1], stamper
 
-    stamp: (stamper) ->
-      @diode.stamp @nodes[0], @nodes[1], stamper
+  calculateCurrent: ->
+    @current = @diode.calculateCurrent(@volts[0] - @volts[1])
 
-    doStep: (stamper) ->
-      @diode.doStep @volts[0] - @volts[1], stamper
+  getInfo: (arr) ->
+    super()
+    arr[0] = "diode"
+    arr[1] = "I = " + DrawHelper.getCurrentText(@getCurrent())
+    arr[2] = "Vd = " + DrawHelper.getVoltageText(@getVoltageDiff())
+    arr[3] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
+    arr[4] = "Vf = " + DrawHelper.getVoltageText(@fwdrop)
 
-    calculateCurrent: ->
-      @current = @diode.calculateCurrent(@volts[0] - @volts[1])
+  getEditInfo: (n) ->
+    return new EditInfo("Fwd Voltage @ 1A", @fwdrop, 10, 1000)  if n is 0
 
-    getInfo: (arr) ->
-      super()
-      arr[0] = "diode"
-      arr[1] = "I = " + DrawHelper.getCurrentText(@getCurrent())
-      arr[2] = "Vd = " + DrawHelper.getVoltageText(@getVoltageDiff())
-      arr[3] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
-      arr[4] = "Vf = " + DrawHelper.getVoltageText(@fwdrop)
+  setEditValue: (n, ei) ->
+    @fwdrop = ei.value
+    @setup()
 
-    getEditInfo: (n) ->
-      return new EditInfo("Fwd Voltage @ 1A", @fwdrop, 10, 1000)  if n is 0
+  toString: ->
+    "DiodeElm"
 
-    setEditValue: (n, ei) ->
-      @fwdrop = ei.value
-      @setup()
+  # TODO: fix
+  needsShortcut: ->
+    return true
 
-    toString: ->
-      "DiodeElm"
+return DiodeElm
 
-    # TODO: fix
-    needsShortcut: ->
-      return true
-
-  return DiodeElm
+module.exports = DiodeElm

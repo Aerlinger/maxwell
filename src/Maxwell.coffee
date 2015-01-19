@@ -1,6 +1,5 @@
 CircuitLoader = require('./io/CircuitLoader.coffee')
-#Circuit = require('core/Circuit.coffee')
-
+Circuit = require('./core/circuit.coffee')
 
 class Maxwell
   @Circuits = {}

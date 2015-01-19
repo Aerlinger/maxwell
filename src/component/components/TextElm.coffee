@@ -1,58 +1,46 @@
-# <DEFINE>
-define [
-  'cs!settings/Settings',
-  'cs!render/DrawHelper',
-  'cs!geom/Polygon',
-  'cs!geom/Rectangle',
-  'cs!geom/Point',
-  'cs!component/CircuitComponent'
-], (
-  Settings,
-  DrawHelper,
-  Polygon,
-  Rectangle,
-  Point,
+Settings = require('../../settings/settings.coffee')
+DrawHelper = require('../../render/drawHelper.coffee')
+Polygon = require('../../geom/polygon.coffee')
+Rectangle = require('../../geom/rectangle.coffee')
+Point = require('../../geom/point.coffee')
+CircuitComponent = require('../circuitComponent.coffee')
 
-  CircuitComponent,
-) ->
-# </DEFINE>
+class TextElm extends CircuitComponent
 
-  class TextElm extends CircuitComponent
+  @FLAG_CENTER: 1
+  @FLAG_BAR: 2
 
-    @FLAG_CENTER: 1
-    @FLAG_BAR: 2
+  constructor: ->
+    super(xa, ya, xb, yb, f)
+    @text = "hello"
+    @lines = new Array() # new vector()
+    @lines.add text
+    @size = 24
+    if st
+      st = st.split(" ")  if typeof st is "string"
+      @size = Math.floor(st.shift())
+      @text = st.shift()
+      @text += " " + st.shift()  until st.length is 0
 
-    constructor: ->
-      super(xa, ya, xb, yb, f)
-      @text = "hello"
-      @lines = new Array() # new vector()
-      @lines.add text
-      @size = 24
-      if st
-        st = st.split(" ")  if typeof st is "string"
-        @size = Math.floor(st.shift())
-        @text = st.shift()
-        @text += " " + st.shift()  until st.length is 0
-
-    split: ->
-      @lines = @text.split("\n")
+  split: ->
+    @lines = @text.split("\n")
 
 
-    dump: ->
-      super() + " " + @size + " " + @text
+  dump: ->
+    super() + " " + @size + " " + @text
 
-    getDumpType: ->
-      "x"
+  getDumpType: ->
+    "x"
 
-    drag: (xx, yy) ->
-      @x1 = xx
-      @y = yy
-      @x2 = xx + 16
-      @y2 = yy
+  drag: (xx, yy) ->
+    @x1 = xx
+    @y = yy
+    @x2 = xx + 16
+    @y2 = yy
 
-    draw: (renderContext) ->
-      color = (if @needsHighlight() then Settings.SELECT_COLOR else Settings.TEXT_COLOR)
-      @setBbox @x1, @y, @x1, @y
+  draw: (renderContext) ->
+    color = (if @needsHighlight() then Settings.SELECT_COLOR else Settings.TEXT_COLOR)
+    @setBbox @x1, @y, @x1, @y
 
 #      f = new Font("SansSerif", 0, size)
 #      g.setFont f
@@ -76,54 +64,54 @@ define [
 #        cury += fm.getHeight()
 #        i++
 
-      i = 0
-      for line in @lines
-        renderContext.fillText(line, 40, 15*i + 100)
-        i++
+    i = 0
+    for line in @lines
+      renderContext.fillText(line, 40, 15*i + 100)
+      i++
 
-      @x2 = @boundingBox.x1 + @boundingBox.width
-      @y2 = @boundingBox.y + @boundingBox.height
+    @x2 = @boundingBox.x1 + @boundingBox.width
+    @y2 = @boundingBox.y + @boundingBox.height
 
-    getEditInfo: (n) ->
-      if n is 0
-        ei = new EditInfo("Text", 0, -1, -1)
-        ei.text = text
-        return ei
-      return new EditInfo("Size", size, 5, 100)  if n is 1
-      if n is 2
-        ei = new EditInfo("", 0, -1, -1)
-        ei.checkbox = new Checkbox("Center", (@flags & TextElm.FLAG_CENTER) isnt 0)
-        return ei
-      if n is 3
-        ei = new EditInfo("", 0, -1, -1)
-        ei.checkbox = new Checkbox("Draw Bar On Top", (@flags & TextElm.FLAG_BAR) isnt 0)
-        return ei
-      null
+  getEditInfo: (n) ->
+    if n is 0
+      ei = new EditInfo("Text", 0, -1, -1)
+      ei.text = text
+      return ei
+    return new EditInfo("Size", size, 5, 100)  if n is 1
+    if n is 2
+      ei = new EditInfo("", 0, -1, -1)
+      ei.checkbox = new Checkbox("Center", (@flags & TextElm.FLAG_CENTER) isnt 0)
+      return ei
+    if n is 3
+      ei = new EditInfo("", 0, -1, -1)
+      ei.checkbox = new Checkbox("Draw Bar On Top", (@flags & TextElm.FLAG_BAR) isnt 0)
+      return ei
+    null
 
-    setEditValue: (n, ei) ->
-      if n is 0
-        @text = ei.textf.getText()
-        @split()
-      @size = Math.floor(ei.value)  if n is 1
-      if n is 3
-        if ei.checkbox.getState()
-          @flags |= TextElm.FLAG_BAR
-        else
-          @flags &= ~TextElm.FLAG_BAR
-      if n is 2
-        if ei.checkbox.getState()
-          @flags |= TextElm.FLAG_CENTER
-        else
-          @flags &= ~TextElm.FLAG_CENTER
+  setEditValue: (n, ei) ->
+    if n is 0
+      @text = ei.textf.getText()
+      @split()
+    @size = Math.floor(ei.value)  if n is 1
+    if n is 3
+      if ei.checkbox.getState()
+        @flags |= TextElm.FLAG_BAR
+      else
+        @flags &= ~TextElm.FLAG_BAR
+    if n is 2
+      if ei.checkbox.getState()
+        @flags |= TextElm.FLAG_CENTER
+      else
+        @flags &= ~TextElm.FLAG_CENTER
 
-    isCenteredText: ->
-      (@flags & TextElm.FLAG_CENTER) isnt 0
+  isCenteredText: ->
+    (@flags & TextElm.FLAG_CENTER) isnt 0
 
-    getInfo: (arr) ->
-      arr[0] = @text
+  getInfo: (arr) ->
+    arr[0] = @text
 
-    getPostCount: ->
-      0
+  getPostCount: ->
+    0
 
 
-  return TextElm
+return TextElm

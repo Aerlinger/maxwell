@@ -1,25 +1,13 @@
-# <DEFINE>
-define [
-  'cs!settings/Settings',
-  'cs!render/DrawHelper',
-  'cs!geom/Polygon',
-  'cs!geom/Rectangle',
-  'cs!geom/Point',
-  'cs!component/CircuitComponent'
-], (
-  Settings,
-  DrawHelper,
-  Polygon,
-  Rectangle,
-  Point,
+Settings = require('../../settings/settings.coffee')
+DrawHelper = require('../../render/drawHelper.coffee')
+Polygon = require('../../geom/polygon.coffee')
+Rectangle = require('../../geom/rectangle.coffee')
+Point = require('../../geom/point.coffee')
+CircuitComponent = require('../circuitComponent.coffee')
 
-  CircuitComponent
-) ->
-# </DEFINE>
+class JFetElm extends CircuitComponent
 
-  class JFetElm extends CircuitComponent
+  constructor: (xa, ya, xb, yb, f, st) ->
+    super(xa, ya, xb, yb, f)
 
-    constructor: (xa, ya, xb, yb, f, st) ->
-      super(xa, ya, xb, yb, f)
-
-  return JFetElm
+module.exports = JFetElm
