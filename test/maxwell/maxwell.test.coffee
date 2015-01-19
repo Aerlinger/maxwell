@@ -1,10 +1,10 @@
-describe "Maxwell", ->
-  before (done) ->
-    requirejs ['cs!Maxwell'], (Maxwell) =>
-      @Maxwell = Maxwell
-      done()
+Maxwell = require('../../src/Maxwell');
 
-  it "returns true", (done) ->
-    expect(@Maxwell).to.be
+describe "Maxwell", ->
+  it "Maxwell can be found", (done) ->
+    expect(Maxwell).to.be
     done()
+
+  it "Maxwell has the correct functions", ->
+    expect(Maxwell.createCircuit).to.be
  

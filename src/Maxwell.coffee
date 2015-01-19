@@ -2,8 +2,6 @@ CircuitLoader = require('./io/CircuitLoader.coffee')
 Circuit = require('./core/circuit.coffee')
 
 class Maxwell
-  @Circuits = {}
-
   constructor: (canvas, options = {}) ->
     @Circuit = null
     @circuitName = options['circuitName']
@@ -37,4 +35,18 @@ class Maxwell
 
     return circuit
 
-  window.Maxwell = Maxwell;
+  @foo: () ->
+    return "foo"
+
+  instance_method: ->
+    return "instance"
+
+if typeof(window) == "undefined"
+  console.log("Not in browsier, including maxwell...")
+  global.Maxwell = Maxwell
+else
+  window.Maxwell = Maxwell
+
+module.exports = Maxwell
+
+

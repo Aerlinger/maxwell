@@ -16,7 +16,6 @@ module.exports = (grunt) ->
       test:
         options:
           reporter: "spec"
-          captureFile: "results.txt"
           quiet: false
           ui: "bdd"
           clearRequireCache: false
@@ -37,30 +36,52 @@ module.exports = (grunt) ->
         tasks: ["mochaTest"]
 
     coffeelint:
-      app: ['*.coffee']
+      app: ['src/**/*.coffee']
       options:
         configFile: 'coffeelint.json'
+
     coffeeify:
-#      options:
-#        debug: true
       files:
-#        paths: ['./node_modules','./src']
-#        src: 'src/**/*.coffee',
         src: 'src/Maxwell.coffee',
         dest: 'dist/maxwell.js'
-  
-  #autoreload: {
-  #  files: ['lib/**/*', 'built-app/**/*'],
-  #  options: {
-  #    livereload: true
-  #  }
-  #}
+
+    connect:
+      options:
+        base: 'examples',
+        livereload: 35729,
+        hostname: 'localhost'
+#      livereload:
+#        options:
+#          open: true,
+#          base: ['.tmp', './examples']
+      server:
+        options:
+          keepalive: true,
+          open: true
+          port: 6502
+      test:
+        options:
+          port: 4004
+          base: [
+            '.tmp',
+            'test'
+          ]
+
+    open:
+      all:
+        path: 'http://localhost:<%= connect.server.options.port %>'
+
+
   grunt.loadNpmTasks "grunt-mocha-test"
   grunt.loadNpmTasks "grunt-coffeelint"
   grunt.loadNpmTasks "grunt-coffeeify"
   grunt.loadNpmTasks "grunt-contrib-watch"
+  grunt.loadNpmTasks "grunt-contrib-connect"
   grunt.loadNpmTasks "grunt-contrib-coffee"
   grunt.loadNpmTasks "grunt-contrib-clean"
-  grunt.registerTask "default", "mochaTest"
+  grunt.loadNpmTasks "grunt-open"
+
+  grunt.registerTask 'server', ['connect:server']
+  grunt.registerTask "default", ["coffeeify", "mochaTest"]
 
   return
