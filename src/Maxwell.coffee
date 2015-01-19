@@ -1,48 +1,41 @@
-define [
-  'cs!io/CircuitLoader',
-#  'cs!render/CircuitCanvas',
-  'cs!core/Circuit'
-],
-(
-  CircuitLoader,
-#  CircuitCanvas,
-  Circuit
-) ->
+CircuitLoader = require('./io/CircuitLoader.coffee')
+#Circuit = require('core/Circuit.coffee')
 
-  class Maxwell
-    @Circuits = {}
 
-    constructor: (canvas, options = {}) ->
-      @Circuit = null
-      @circuitName = options['circuitName']
+class Maxwell
+  @Circuits = {}
 
-      if @circuitName
-        CircuitLoader.createCircuitFromJsonFile @circuitName, (circuit) =>
-          @Circuit = circuit
+  constructor: (canvas, options = {}) ->
+    @Circuit = null
+    @circuitName = options['circuitName']
+
+#    if @circuitName
+#      CircuitLoader.createCircuitFromJsonFile @circuitName, (circuit) =>
+#        @Circuit = circuit
 
 #          new CircuitCanvas(@Circuit, canvas)
 
-    @_loadCircuitFromFile: (circuitFileName) ->
-      return CircuitLoader.createCircuitFromJsonFile(circuitFileName)
+  @_loadCircuitFromFile: (circuitFileName) ->
+    return CircuitLoader.createCircuitFromJsonFile(circuitFileName)
 
-    @_loadCircuitFromJson: (jsonData) ->
-      return CircuitLoader.createCircuitFromJsonData(jsonData)
+  @_loadCircuitFromJson: (jsonData) ->
+    return CircuitLoader.createCircuitFromJsonData(jsonData)
 
-    @createCircuit: (circuitName, circuitData) ->
-      circuit = null
+  @createCircuit: (circuitName, circuitData) ->
+    circuit = null
 
-      if circuitData
-        if typeof circuitData is "string"
-          circuit = Maxwell._loadCircuitFromFile(circuitData)
-        else if typeof circuitData is "object"
-          circuit = Maxwell._loadCircuitFromJson(circuitData)
-        else
-          raise "Parameter must either be a path to a JSON file or raw JSON data representing the circuit. Use `Maxwell.createCircuit()` to create a new empty circuit object."
+    if circuitData
+      if typeof circuitData is "string"
+        circuit = Maxwell._loadCircuitFromFile(circuitData)
+      else if typeof circuitData is "object"
+        circuit = Maxwell._loadCircuitFromJson(circuitData)
       else
-        circuit = new Circuit()
+        raise "Parameter must either be a path to a JSON file or raw JSON data representing the circuit. Use `Maxwell.createCircuit()` to create a new empty circuit object."
+    else
+      circuit = new Circuit()
 
-      @Circuits[circuitName] = circuit
+    @Circuits[circuitName] = circuit
 
-      return circuit
+    return circuit
 
-  return Maxwell
+  window.Maxwell = Maxwell;

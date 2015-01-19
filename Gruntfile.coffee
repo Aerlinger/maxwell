@@ -44,9 +44,10 @@ module.exports = (grunt) ->
 #      options:
 #        debug: true
       files:
-        paths: ['./node_modules','./src']
-        src: 'src/**/*.coffee',
-        dest: 'app/script.js'
+#        paths: ['./node_modules','./src']
+#        src: 'src/**/*.coffee',
+        src: 'src/Maxwell.coffee',
+        dest: 'dist/maxwell.js'
   
   #autoreload: {
   #  files: ['lib/**/*', 'built-app/**/*'],
