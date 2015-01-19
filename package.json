@@ -16,7 +16,6 @@
     "chai-as-promised": "^4.1.1",
     "coffee-script": "~1.8.0",
     "colors": "*",
-    "express": "3.0.6",
     "grunt": "^0.4.5",
     "grunt-cli": "~0.1.7",
     "grunt-coffeeify": "^0.1.3",
