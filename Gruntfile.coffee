@@ -1,3 +1,13 @@
+fs = require('fs')
+
+enumerate_examples = ->
+  result = {}
+
+  for example in fs.readdirSync('./examples/templates')
+    result['./examples/' + example + ".html"] = './examples/templates/' + example
+
+  return result
+
 module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON("package.json")
@@ -66,6 +76,14 @@ module.exports = (grunt) ->
             '.tmp',
             'test'
           ]
+    jade:
+      compile:
+        options:
+          pretty: true
+          data:
+            debug: false
+            examples: Object.keys(enumerate_examples())
+        files: enumerate_examples()
 
     open:
       all:
@@ -75,6 +93,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-mocha-test"
   grunt.loadNpmTasks "grunt-coffeelint"
   grunt.loadNpmTasks "grunt-coffeeify"
+  grunt.loadNpmTasks "grunt-contrib-jade"
   grunt.loadNpmTasks "grunt-contrib-watch"
   grunt.loadNpmTasks "grunt-contrib-connect"
   grunt.loadNpmTasks "grunt-contrib-coffee"
