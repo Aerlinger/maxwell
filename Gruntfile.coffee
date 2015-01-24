@@ -33,17 +33,17 @@ module.exports = (grunt) ->
             "coffee-script/register"
             "test/test-main.js"
           ]
-
         src: ["test/**/*test.coffee"]
 
     watch:
-#      module_test:
-#        files: [
-#          "Gruntfile.js"
-#          "test/**/*"
-#          "src/**/*.coffee"
-#        ]
-#        tasks: ["mochaTest"]
+      test:
+        files: [
+          "Gruntfile.js"
+          "test/test-main.js"
+          "test/**/*.coffee"
+          "src/**/*.coffee"
+        ]
+        tasks: ["mochaTest"]
       examples:
         files: [
           "examples/layout.jade"
@@ -71,10 +71,10 @@ module.exports = (grunt) ->
         base: 'examples',
         livereload: 35729,
         hostname: 'localhost'
-#      livereload:
-#        options:
-#          open: true,
-#          base: ['.tmp', './examples']
+      livereload:
+        options:
+          open: true,
+          base: ['.tmp', './examples']
       server:
         options:
           keepalive: true,

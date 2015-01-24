@@ -13,13 +13,85 @@
     <script type="text/javascript" src="../bower_components/d3/d3.js"></script>
     <script type="text/javascript" src="../dist/maxwell.js"></script>
     <script>
-      circuit = Maxwell.createCircuit("Test");
+      $(document).ready(function () {
+        var circuitOptions = {};
+        circuit = Maxwell.createCircuit("Test", {
+          options: [
+            {
+              "completion_status": "complete",
+              "created_at": null,
+              "current_speed": 55.0,
+              "description": null,
+              "flags": 1,
+              "id": null,
+              "name_unique": "capac.txt",
+              "power_range": 0.0,
+              "sim_speed": 10,
+              "time_step": 5.0e-06,
+              "title": "Capacitor",
+              "topic": "A/C Circuits",
+              "updated_at": null,
+              "voltage_range": 5.0
+            },
+            {
+              "sym": "v",
+              "x1": "176",
+              "y1": "256",
+              "x2": "176",
+              "y2": "80",
+              "flags": "0",
+              "params": [
+                "0",
+                "40.0",
+                "5.0",
+                "0.0"
+              ]
+            },
+            {
+              "sym": "r",
+              "x1": "176",
+              "y1": "80",
+              "x2": "336",
+              "y2": "80",
+              "flags": "0",
+              "params": ["180.0"]
+            },
+            {
+              "sym": "c",
+              "x1": "336",
+              "y1": "80",
+              "x2": "336",
+              "y2": "256",
+              "flags": "0",
+              "params": [
+                "3.3E-5",
+                "0.20495321439656933"
+              ]
+            },
+            {
+              "sym": "w",
+              "x1": "176",
+              "y1": "256",
+              "x2": "336",
+              "y2": "256",
+              "flags": "0",
+              "params": []
+            }
+          ]
+        });
+      
+        var circuitCanvas = $('.maxwell')[0];
+      
+        var rendererOptions = {};
+        var circuitRenderer = Maxwell.Renderer(circuit, circuitCanvas, rendererOptions);
+      
+        circuitRenderer.start();
+      });
       
     </script>
   </head>
   <body>
-    <li><a href="./examples/phase-shift-oscillator.jade.html">./examples/phase-shift-oscillator.jade.html</a></li>
-    <li><a href="./examples/resistors.jade.html">./examples/resistors.jade.html</a></li>
+    <li><a></a></li>
     <canvas data-circuit="phaseshiftosc" width="1600" height="3000" class="maxwell"></canvas>
   </body>
 </html>
