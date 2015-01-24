@@ -1,39 +1,32 @@
 {
-  "name": "Circuit",
-  "version": "0.0.1",
-  "hompage": "maxwell",
+  "name": "maxwell",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Aerlinger/maxwell",
   "authors": [
-    "Anthony Erlinger"
+    "Anthony Erlinger <aerlinger@gmail.com>"
   ],
-  "description": "Interactive Circuit Simulation",
-  "license": "BSD",
-  "private": true,
+  "license": "MIT",
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
     "test",
-    "example"
+    "tests"
   ],
+  "dependencies": {
+    "color": "2.4.2",
+    "d3": "~3.4.13",
+    "jquery-ui": "*",
+    "lodash": "*",
+    "rickshaw": "1.5.0",
+    "sketch.js": "*"
+  },
   "devDependencies": {
-    "almond": "0.3",
     "coffee-script": "1.8.0",
-    "chai": "~1.8.1",
+    "coffeescript": "~1.7.1",
+    "chai": "~1.10.0",
     "mocha": "~1.15.1",
     "should": "4.3.0",
-    "color": "2.4.2",
-    "sinonjs": "~1.7.3",
-    "require-cs": "0.5.0"
-  },
-  "dependencies": {
-    "d3": "~3.4.13",
-    "requirejs": "~2.1.9",
-    "rickshaw": "1.5.0",
-    "jquery": "*",
-    "jquery-ui": "*",
-    "underscore": "*",
-    "lodash": "*",
-    "dat.gui": "*",
-    "sketch.js": "*"
+    "sinonjs": "~1.7.3"
   }
 }

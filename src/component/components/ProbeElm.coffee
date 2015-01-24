@@ -1,105 +1,96 @@
-# <DEFINE>
-define [
-  'cs!settings/Settings',
-  'cs!render/DrawHelper',
-  'cs!geom/Polygon',
-  'cs!geom/Rectangle',
-  'cs!geom/Point',
-  'cs!component/CircuitComponent'
-], (Settings,
-    DrawHelper,
-    Polygon,
-    Rectangle,
-    Point,
-    CircuitComponent
-  ) ->
-  # </DEFINE>
-  class ProbeElm extends CircuitComponent
+Settings = require('../../settings/settings.coffee')
+DrawHelper = require('../../render/drawHelper.coffee')
+Polygon = require('../../geom/polygon.coffee')
+Rectangle = require('../../geom/rectangle.coffee')
+Point = require('../../geom/point.coffee')
+CircuitComponent = require('../circuitComponent.coffee')
 
-    @FLAG_SHOWVOLTAGE: 1
+class ProbeElm extends CircuitComponent
 
-    constructor: (xa, ya, xb, yb, f, st) ->
-      super xa, ya, xb, yb, f
+  @FLAG_SHOWVOLTAGE: 1
 
-    getDumpType: ->
-      "p"
+  constructor: (xa, ya, xb, yb, f, st) ->
+    super xa, ya, xb, yb, f
 
-    toString: ->
-      "ProbeElm"
+  getDumpType: ->
+    "p"
 
-    setPoints: ->
-      super()
+  toString: ->
+    "ProbeElm"
 
-      # swap points so that we subtract higher from lower
-      if @point2.y < @point1.y
-        x = @point1
-        @point1 = @point2
-        @point2 = @x1
+  setPoints: ->
+    super()
 
-      @center = DrawHelper.interpPoint(@point1, @point2, .5)
+    # swap points so that we subtract higher from lower
+    if @point2.y < @point1.y
+      x = @point1
+      @point1 = @point2
+      @point2 = @x1
 
-    draw: (renderContext) ->
-      hs = 8
-      @setBboxPt @point1, @point2, hs
-      #      selected = (@needsHighlight() or Circuit.plotYElm is this)
+    @center = DrawHelper.interpPoint(@point1, @point2, .5)
 
-      #      if selected or Circuit.dragElm is this
-      #        len = 16
-      #      else
-      len = @dn - 32
+  draw: (renderContext) ->
+    hs = 8
+    @setBboxPt @point1, @point2, hs
+    #      selected = (@needsHighlight() or Circuit.plotYElm is this)
 
-      @calcLeads Math.floor(len)
+    #      if selected or Circuit.dragElm is this
+    #        len = 16
+    #      else
+    len = @dn - 32
 
-      if @isSelected()
-        color = Settings.SELECT_COLOR
+    @calcLeads Math.floor(len)
+
+    if @isSelected()
+      color = Settings.SELECT_COLOR
+    else
+      color = DrawHelper.getVoltageColor(@volts[0])
+
+    renderContext.drawThickLinePt @point1, @lead1, color
+
+    if @isSelected()
+      color = Settings.SELECT_COLOR
+    else
+      color = DrawHelper.getVoltageColor(@volts[1])
+
+    renderContext.drawThickLinePt @lead2, @point2, color
+
+    #      renderContext.setFont new Font("SansSerif", Font.BOLD, 14)
+
+    #      renderContext.drawCenteredText("X", @center.x1, @center.y, color) if this is Circuit.plotXElm
+    #      renderContext.drawCenteredText("Y", @center.x1, @center.y, color) if this is Circuit.plotYElm
+
+    if @mustShowVoltage()
+      unit_text = DrawHelper.getShortUnitText(@volts[0], "V")
+      @drawValues unit_text, 4, renderContext
+
+    @drawPosts(renderContext)
+
+  mustShowVoltage: ->
+    (@flags & ProbeElm.FLAG_SHOWVOLTAGE) isnt 0
+
+  getInfo: (arr) ->
+    arr[0] = "scope probe"
+    arr[1] = "Vd = " + DrawHelper.getVoltageText(@getVoltageDiff())
+
+  stamp: (stamper) ->
+
+  getConnection: (n1, n2) ->
+    false
+
+  getEditInfo: (n) ->
+    if n is 0
+      ei = new EditInfo("", 0, -1, -1)
+      ei.checkbox = new Checkbox("Show Voltage", @mustShowVoltage())
+      return ei
+    return null
+
+  setEditValue: (n, ei) ->
+    if n is 0
+      if ei.checkbox.getState()
+        flags = ProbeElm.FLAG_SHOWVOLTAGE
       else
-        color = DrawHelper.getVoltageColor(@volts[0])
-
-      renderContext.drawThickLinePt @point1, @lead1, color
-
-      if @isSelected()
-        color = Settings.SELECT_COLOR
-      else
-        color = DrawHelper.getVoltageColor(@volts[1])
-
-      renderContext.drawThickLinePt @lead2, @point2, color
-
-      #      renderContext.setFont new Font("SansSerif", Font.BOLD, 14)
-
-      #      renderContext.drawCenteredText("X", @center.x1, @center.y, color) if this is Circuit.plotXElm
-      #      renderContext.drawCenteredText("Y", @center.x1, @center.y, color) if this is Circuit.plotYElm
-
-      if @mustShowVoltage()
-        unit_text = DrawHelper.getShortUnitText(@volts[0], "V")
-        @drawValues unit_text, 4, renderContext
-
-      @drawPosts(renderContext)
-
-    mustShowVoltage: ->
-      (@flags & ProbeElm.FLAG_SHOWVOLTAGE) isnt 0
-
-    getInfo: (arr) ->
-      arr[0] = "scope probe"
-      arr[1] = "Vd = " + DrawHelper.getVoltageText(@getVoltageDiff())
-
-    stamp: (stamper) ->
-
-    getConnection: (n1, n2) ->
-      false
-
-    getEditInfo: (n) ->
-      if n is 0
-        ei = new EditInfo("", 0, -1, -1)
-        ei.checkbox = new Checkbox("Show Voltage", @mustShowVoltage())
-        return ei
-      return null
-
-    setEditValue: (n, ei) ->
-      if n is 0
-        if ei.checkbox.getState()
-          flags = ProbeElm.FLAG_SHOWVOLTAGE
-        else
-          flags &= ~ProbeElm.FLAG_SHOWVOLTAGE
+        flags &= ~ProbeElm.FLAG_SHOWVOLTAGE
 
 
-  return ProbeElm
+module.exports = ProbeElm

@@ -1,112 +1,99 @@
-# <DEFINE>
-define [
-  'cs!settings/Settings',
-  'cs!render/DrawHelper',
-  'cs!geom/Polygon',
-  'cs!geom/Rectangle',
-  'cs!geom/Point',
+Settings = require('../../settings/settings.coffee')
+DrawHelper = require('../../render/drawHelper.coffee')
+Polygon = require('../../geom/polygon.coffee')
+Rectangle = require('../../geom/rectangle.coffee')
+Point = require('../../geom/point.coffee')
+CircuitComponent = require('../circuitComponent.coffee')
 
-  'cs!component/CircuitComponent'
-], (
-  Settings,
-  DrawHelper,
-  Polygon,
-  Rectangle,
-  Point
+class ResistorElm extends CircuitComponent
 
-  CircuitComponent
-) ->
-# </DEFINE>
+  constructor: (xa, ya, xb, yb, f = 0, st = null) ->
+    super(xa, ya, xb, yb, f, st)
 
-  class ResistorElm extends CircuitComponent
+    if st and st.length > 0
+      @resistance = parseFloat(st)
+    else
+      @resistance = 500
 
-    constructor: (xa, ya, xb, yb, f = 0, st = null) ->
-      super(xa, ya, xb, yb, f, st)
+    @ps3 = new Point(100, 50)
+    @ps4 = new Point(100, 150)
 
-      if st and st.length > 0
-        @resistance = parseFloat(st)
-      else
-        @resistance = 500
+  draw: (renderContext) ->
+    segments = 16
+    oldOffset = 0
+    hs = 6
+    volt1 = @volts[0]
+    volt2 = @volts[1]
 
-      @ps3 = new Point(100, 50)
-      @ps4 = new Point(100, 150)
+    @setBboxPt @point1, @point2, hs
+    @draw2Leads(renderContext)
+    DrawHelper.getPowerColor @getPower
+    segf = 1 / segments
 
-    draw: (renderContext) ->
-      segments = 16
-      oldOffset = 0
-      hs = 6
-      volt1 = @volts[0]
-      volt2 = @volts[1]
+    for i in [0...segments]
+      newOffset = 0
+      switch i & 3
+        when 0
+          newOffset = 1
+        when 2
+          newOffset = -1
+        else
+          newOffset = 0
+      voltDrop = volt1 + (volt2 - volt1) * i / segments
+      pt1 = DrawHelper.interpPoint @lead1, @lead2, i*segf, hs*oldOffset
+      pt2 = DrawHelper.interpPoint @lead1, @lead2, (i+1)*segf, hs*newOffset
+      renderContext.drawThickLinePt pt1, pt2, DrawHelper.getVoltageColor(voltDrop)
+      oldOffset = newOffset
 
-      @setBboxPt @point1, @point2, hs
-      @draw2Leads(renderContext)
-      DrawHelper.getPowerColor @getPower
-      segf = 1 / segments
+    #if true @Circuit?.Params.showValues
+    resistanceVal = DrawHelper.getUnitText(@resistance, "ohm")
+    @drawValues resistanceVal, hs, renderContext
 
-      for i in [0...segments]
-        newOffset = 0
-        switch i & 3
-          when 0
-            newOffset = 1
-          when 2
-            newOffset = -1
-          else
-            newOffset = 0
-        voltDrop = volt1 + (volt2 - volt1) * i / segments
-        pt1 = DrawHelper.interpPoint @lead1, @lead2, i*segf, hs*oldOffset
-        pt2 = DrawHelper.interpPoint @lead1, @lead2, (i+1)*segf, hs*newOffset
-        renderContext.drawThickLinePt pt1, pt2, DrawHelper.getVoltageColor(voltDrop)
-        oldOffset = newOffset
+    @drawDots(@point1, @point2, renderContext)
+    @drawPosts(renderContext)
 
-      #if true @Circuit?.Params.showValues
-      resistanceVal = DrawHelper.getUnitText(@resistance, "ohm")
-      @drawValues resistanceVal, hs, renderContext
+  dump: ->
+    super() + " " + @resistance
 
-      @drawDots(@point1, @point2, renderContext)
-      @drawPosts(renderContext)
+  getDumpType: ->
+    "r"
 
-    dump: ->
-      super() + " " + @resistance
+  getEditInfo: (n) ->
+    return new EditInfo("Resistance (ohms):", @resistance, 0, 0)  if n is 0
+    null
 
-    getDumpType: ->
-      "r"
+  setEditValue: (n, ei) ->
+    @resistance = ei.value  if ei.value > 0
 
-    getEditInfo: (n) ->
-      return new EditInfo("Resistance (ohms):", @resistance, 0, 0)  if n is 0
-      null
+  getInfo: (arr) ->
+    arr[0] = "resistor"
+    @getBasicInfo arr
+    arr[3] = "R = " + DrawHelper.getUnitText(@resistance, DrawHelper.ohmString)
+    arr[4] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
 
-    setEditValue: (n, ei) ->
-      @resistance = ei.value  if ei.value > 0
+    return arr
 
-    getInfo: (arr) ->
-      arr[0] = "resistor"
-      @getBasicInfo arr
-      arr[3] = "R = " + DrawHelper.getUnitText(@resistance, DrawHelper.ohmString)
-      arr[4] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
+  needsShortcut: ->
+    true
 
-      return arr
+  calculateCurrent: ->
+    @current = (@volts[0] - @volts[1]) / @resistance
 
-    needsShortcut: ->
-      true
+  setPoints: ->
+    super()
+    @calcLeads 32
+    @ps3 = new Point(0, 0)
+    @ps4 = new Point(0, 0)
 
-    calculateCurrent: ->
-      @current = (@volts[0] - @volts[1]) / @resistance
+  stamp: (stamper) ->
+    console.log("\nStamping Resistor Elm")
+    if @orphaned()
+      console.warn "attempting to stamp an orphaned resistor"
 
-    setPoints: ->
-      super()
-      @calcLeads 32
-      @ps3 = new Point(0, 0)
-      @ps4 = new Point(0, 0)
+    stamper.stampResistor @nodes[0], @nodes[1], @resistance
 
-    stamp: (stamper) ->
-      console.log("\nStamping Resistor Elm")
-      if @orphaned()
-        console.warn "attempting to stamp an orphaned resistor"
-
-      stamper.stampResistor @nodes[0], @nodes[1], @resistance
-
-    toString: ->
-      "ResistorElm"
+  toString: ->
+    "ResistorElm"
 
 
-  return ResistorElm
+module.exports = ResistorElm

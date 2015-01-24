@@ -1,12 +1,7 @@
-# <DEFINE>
-define [], () ->
-  # </DEFINE>
+class CircuitNodeLink
+  constructor: (@num=0, @elm=null) ->
 
-  class CircuitNodeLink
-    constructor: (@num=0, @elm=null) ->
+  toString: () ->
+    "#{@num} #{@elm.toString()}"
 
-    toString: () ->
-      "#{@num} #{@elm.toString()}"
-
-
-  return CircuitNodeLink
+module.expors = CircuitNodeLink

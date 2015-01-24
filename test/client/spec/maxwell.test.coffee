@@ -1,3 +1,5 @@
+Maxwell = require('../../../src/Maxwell');
+
 describe "Instantiating Maxwell", ->
   before ->
     @primary_circuit = Maxwell.createCircuit("test_circuit")

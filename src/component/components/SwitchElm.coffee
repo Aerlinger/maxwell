@@ -1,39 +1,26 @@
-# <DEFINE>
-define [
-  'cs!settings/Settings',
-  'cs!render/DrawHelper',
-  'cs!geom/Polygon',
-  'cs!geom/Rectangle',
-  'cs!geom/Point',
-  'cs!component/CircuitComponent'
-], (
-  Settings,
-  DrawHelper,
-  Polygon,
-  Rectangle,
-  Point,
+Settings = require('../../settings/settings.coffee')
+DrawHelper = require('../../render/drawHelper.coffee')
+Polygon = require('../../geom/polygon.coffee')
+Rectangle = require('../../geom/rectangle.coffee')
+Point = require('../../geom/point.coffee')
+CircuitComponent = require('../circuitComponent.coffee')
 
-  CircuitComponent
-) ->
-# </DEFINE>
+class SwitchElm extends CircuitComponent
 
+  constructor: (xa, ya, xb, yb, f, st) ->
+    super xa, ya, xb, yb, f, st
 
-  class SwitchElm extends CircuitComponent
+    @momentary = false
+    @position = 0
+    @posCount = 2
 
-    constructor: (xa, ya, xb, yb, f, st) ->
-      super xa, ya, xb, yb, f, st
+    @ps = new Point(0, 0)
+    @ps2 = new Point(0, 0)
 
-      @momentary = false
+    if st
+      st = st.split(" ")  if typeof st is "string"
+      str = st.shift()
       @position = 0
-      @posCount = 2
-
-      @ps = new Point(0, 0)
-      @ps2 = new Point(0, 0)
-
-      if st
-        st = st.split(" ")  if typeof st is "string"
-        str = st.shift()
-        @position = 0
 #        if str is "true"
 #          @position = (if (this instanceof LogicInputElm) then 0 else 1)
 #        else if str is "false"
@@ -43,85 +30,85 @@ define [
 #          @momentary = (st.shift().toLowerCase() is "true")
 
 
-    getDumpType: ->
-      "s"
+  getDumpType: ->
+    "s"
 
-    dump: ->
-      "#{super()} #{@position} #{@momentary}"
+  dump: ->
+    "#{super()} #{@position} #{@momentary}"
 
-    setPoints: ->
-      super()
-      @calcLeads 32
-      @ps = new Point(0, 0)
-      @ps2 = new Point(0, 0)
+  setPoints: ->
+    super()
+    @calcLeads 32
+    @ps = new Point(0, 0)
+    @ps2 = new Point(0, 0)
 
-    stamp: (stamper) ->
-      console.log(@voltSource)
-      if @position is 0
-        stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
+  stamp: (stamper) ->
+    console.log(@voltSource)
+    if @position is 0
+      stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
 
-    draw: (renderContext) ->
-      openhs = 16
-      hs1 = (if (@position is 1) then 0 else 2)
-      hs2 = (if (@position is 1) then openhs else 2)
+  draw: (renderContext) ->
+    openhs = 16
+    hs1 = (if (@position is 1) then 0 else 2)
+    hs2 = (if (@position is 1) then openhs else 2)
 
-      @setBboxPt @point1, @point2, openhs
-      @draw2Leads(renderContext)
+    @setBboxPt @point1, @point2, openhs
+    @draw2Leads(renderContext)
 
-      @drawDots(renderContext)  if @position is 0
+    @drawDots(renderContext)  if @position is 0
 
-      @ps = DrawHelper.interpPoint @lead1, @lead2, 0, hs1
-      @ps2 = DrawHelper.interpPoint @lead1, @lead2, 1, hs2
+    @ps = DrawHelper.interpPoint @lead1, @lead2, 0, hs1
+    @ps2 = DrawHelper.interpPoint @lead1, @lead2, 1, hs2
 
-      renderContext.drawThickLinePt @ps, @ps2, Settings.FG_COLOR
+    renderContext.drawThickLinePt @ps, @ps2, Settings.FG_COLOR
 
-      @drawPosts(renderContext)
+    @drawPosts(renderContext)
 
-    calculateCurrent: ->
-      @current = 0  if @position is 1
+  calculateCurrent: ->
+    @current = 0  if @position is 1
 
-    getVoltageSourceCount: ->
-      if (@position is 1) then 0 else 1
+  getVoltageSourceCount: ->
+    if (@position is 1) then 0 else 1
 
-    mouseUp: ->
-      @toggle() if @momentary
+  mouseUp: ->
+    @toggle() if @momentary
 
-    toggle: ->
-      @position++
-      @position = 0  if @position >= @posCount
-      @Circuit.Solver.analyzeFlag = true
+  toggle: ->
+    @position++
+    @position = 0  if @position >= @posCount
+    @Circuit.Solver.analyzeFlag = true
 
-    getInfo: (arr) ->
-      arr[0] = (if (@momentary) then "push switch (SPST)" else "switch (SPST)")
-      if @position is 1
-        arr[1] = "open"
-        arr[2] = "Vd = " + DrawHelper.getVoltageDText(@getVoltageDiff())
-      else
-        arr[1] = "closed"
-        arr[2] = "V = " + DrawHelper.getVoltageText(@volts[0])
-        arr[3] = "I = " + DrawHelper.getCurrentDText(@getCurrent())
+  getInfo: (arr) ->
+    arr[0] = (if (@momentary) then "push switch (SPST)" else "switch (SPST)")
+    if @position is 1
+      arr[1] = "open"
+      arr[2] = "Vd = " + DrawHelper.getVoltageDText(@getVoltageDiff())
+    else
+      arr[1] = "closed"
+      arr[2] = "V = " + DrawHelper.getVoltageText(@volts[0])
+      arr[3] = "I = " + DrawHelper.getCurrentDText(@getCurrent())
 
-    getConnection: (n1, n2) ->
-      @position is 0
+  getConnection: (n1, n2) ->
+    @position is 0
 
-    isWire: ->
-      true
+  isWire: ->
+    true
 
-    getEditInfo: (n) ->
-    # TODO: Implement
-    #    if (n == 0) {
-    #        var ei:EditInfo = new EditInfo("", 0, -1, -1);
-    #        //ei.checkbox = new Checkbox("Momentary Switch", momentary);
-    #        return ei;
-    #    }
-    #    return null;
-    setEditValue: (n, ei) ->
-      n is 0
-
-
-    #momentary = ei.checkbox.getState();
-    toString: ->
-      "SwitchElm"
+  getEditInfo: (n) ->
+  # TODO: Implement
+  #    if (n == 0) {
+  #        var ei:EditInfo = new EditInfo("", 0, -1, -1);
+  #        //ei.checkbox = new Checkbox("Momentary Switch", momentary);
+  #        return ei;
+  #    }
+  #    return null;
+  setEditValue: (n, ei) ->
+    n is 0
 
 
-  return SwitchElm
+  #momentary = ei.checkbox.getState();
+  toString: ->
+    "SwitchElm"
+
+
+return SwitchElm

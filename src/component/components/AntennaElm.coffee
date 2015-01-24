@@ -1,22 +1,13 @@
-# <DEFINE>
-define [
-  'cs!settings/Settings',
-  'cs!render/DrawHelper',
-  'cs!geom/Polygon',
-  'cs!geom/Rectangle',
-  'cs!geom/Point',
-  'cs!component/CircuitComponent'
-], (Settings,
-    DrawHelper,
-    Polygon,
-    Rectangle,
-    Point,
-    CircuitComponent) ->
-# </DEFINE>
-  class AntennaElm extends CircuitComponent
+Settings = require('../../settings/settings.coffee')
+DrawHelper = require('../../render/drawHelper.coffee')
+Polygon = require('../../geom/polygon.coffee')
+Rectangle = require('../../geom/rectangle.coffee')
+Point = require('../../geom/point.coffee')
+CircuitComponent = require('../circuitComponent.coffee')
 
-    constructor: (xa, ya, xb, yb, f, st) ->
-      super this, xa, ya, xb, yb, f
+class AntennaElm extends CircuitComponent
 
-  return AntennaElm
-  
+  constructor: (xa, ya, xb, yb, f, st) ->
+    super this, xa, ya, xb, yb, f
+
+module.exports = AntennaElm

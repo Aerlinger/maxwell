@@ -1,100 +1,85 @@
-# <DEFINE>
-define [
-  'cs!component/components/core/Diode',
-  'cs!component/components/DiodeElm',
-  'cs!settings/Settings',
-  'cs!render/DrawHelper',
-  'cs!geom/Polygon',
-  'cs!geom/Rectangle',
-  'cs!geom/Point',
-  'cs!component/CircuitComponent'
+Settings = require('../../settings/settings.coffee')
+DrawHelper = require('../../render/drawHelper.coffee')
+Polygon = require('../../geom/polygon.coffee')
+Rectangle = require('../../geom/rectangle.coffee')
+Point = require('../../geom/point.coffee')
+CircuitComponent = require('../circuitComponent.coffee')
 
-], (
-  Diode,
-  DiodeElm,
-  Settings,
-  DrawHelper,
-  Polygon,
-  Rectangle,
-  Point,
+class ZenerElm extends DiodeElm
 
-  CircuitComponent
-) ->
-  # </DEFINE>
+  constructor: (xa, ya, xb, yb, f, st) ->
+    super xa, ya, xb, yb, f, st
 
-  class ZenerElm extends DiodeElm
+    @default_z_voltage = 5.6
+    @zvoltage = st[0] || @default_z_voltage
 
-    constructor: (xa, ya, xb, yb, f, st) ->
-      super xa, ya, xb, yb, f, st
+    if (f & DiodeElm.FLAG_FWDROP) > 0
+      try
+        @fwdrop = st[1]
 
-      @default_z_voltage = 5.6
-      @zvoltage = st[0] || @default_z_voltage
+    @setup()
 
-      if (f & DiodeElm.FLAG_FWDROP) > 0
-        try
-          @fwdrop = st[1]
+  setPoints: ->
+    super()
 
-      @setup()
+    @calcLeads(16)
+    pa = CircuitComponent.newPointArray(2);
+    @wing = CircuitComponent.newPointArray(2);
 
-    setPoints: ->
-      super()
+    [pa[0], pa[1]] = DrawHelper.interpPoint2(@lead1, @lead2, 0, @hs);
+    [@cathode[0], @cathode[1]] = DrawHelper.interpPoint2(@lead1, @lead2, 1, @hs);
+    @wing[0] = DrawHelper.interpPoint(@cathode[0], @cathode[1], -0.2, -@hs);
+    @wing[1] = DrawHelper.interpPoint(@cathode[1], @cathode[0], -0.2, -@hs);
 
-      @calcLeads(16)
-      pa = CircuitComponent.newPointArray(2);
-      @wing = CircuitComponent.newPointArray(2);
+    @poly = DrawHelper.createPolygonFromArray([pa[0], pa[1], @lead2]);
 
-      [pa[0], pa[1]] = DrawHelper.interpPoint2(@lead1, @lead2, 0, @hs);
-      [@cathode[0], @cathode[1]] = DrawHelper.interpPoint2(@lead1, @lead2, 1, @hs);
-      @wing[0] = DrawHelper.interpPoint(@cathode[0], @cathode[1], -0.2, -@hs);
-      @wing[1] = DrawHelper.interpPoint(@cathode[1], @cathode[0], -0.2, -@hs);
+  draw: (renderContext) ->
+    @setBboxPt(@point1, @point2, @hs);
 
-      @poly = DrawHelper.createPolygonFromArray([pa[0], pa[1], @lead2]);
+    v1 = @volts[0]
+    v2 = @volts[1]
 
-    draw: (renderContext) ->
-      @setBboxPt(@point1, @point2, @hs);
+    @draw2Leads(renderContext)
 
-      v1 = @volts[0]
-      v2 = @volts[1]
-
-      @draw2Leads(renderContext)
-
-      # draw arrow thingy
+    # draw arrow thingy
 #      setPowerColor(g, true);
-      color = DrawHelper.getVoltageColor(v1);
-      renderContext.drawThickPolygonP @poly, color
+    color = DrawHelper.getVoltageColor(v1);
+    renderContext.drawThickPolygonP @poly, color
 #      g.fillPolygon(poly);
 
 #      // draw thing arrow is pointing to
 #      setVoltageColor(g, v2);
-      renderContext.drawThickLinePt(@cathode[0], @cathode[1], v1);
+    renderContext.drawThickLinePt(@cathode[0], @cathode[1], v1);
 
 #      // draw wings on cathode
-      color = DrawHelper.getVoltageColor(v2)
-      renderContext.drawThickLinePt(@wing[0], @cathode[0], color);
-      renderContext.drawThickLinePt(@wing[1], @cathode[1], color);
+    color = DrawHelper.getVoltageColor(v2)
+    renderContext.drawThickLinePt(@wing[0], @cathode[0], color);
+    renderContext.drawThickLinePt(@wing[1], @cathode[1], color);
 
-      @drawDots(@point2, @point1, renderContext);
-      @drawPosts(renderContext);
+    @drawDots(@point2, @point1, renderContext);
+    @drawPosts(renderContext);
 
 
-    nonlinear: ->
-      true
+  nonlinear: ->
+    true
 
-    setup: ->
-      @diode.leakage = 5e-6
-      super()
+  setup: ->
+    @diode.leakage = 5e-6
+    super()
 
-    getDumpType: ->
-      "z"
+  getDumpType: ->
+    "z"
 
-    dump: ->
-      super() + " " + @zvoltage
+  dump: ->
+    super() + " " + @zvoltage
 
-    getInfo: (arr) ->
-      super(arr)
-      arr[0] = "Zener diode";
-      arr[5] = "Vz = " + DrawHelper.getVoltageText(zvoltage);
+  getInfo: (arr) ->
+    super(arr)
+    arr[0] = "Zener diode";
+    arr[5] = "Vz = " + DrawHelper.getVoltageText(zvoltage);
 
-    getEditInfo: ->
+  getEditInfo: ->
 
-    setEditInfo: ->
+  setEditInfo: ->
+
+module.exports = ZenerElm

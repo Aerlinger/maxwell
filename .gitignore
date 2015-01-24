@@ -6,3 +6,4 @@ src/**/*.js.map
 src/**/*.js
 .bower-cache
 .bower-registry
+npm-debug.log

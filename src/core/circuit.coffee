@@ -22,236 +22,227 @@
 #
 ####################################################################################################################
 
-# <DEFINE>
-define [
-  'cs!scope/Oscilloscope',
-  'cs!io/Logger',
-  'cs!core/SimulationParams',
-  'cs!engine/CircuitSolver',
-  'cs!util/Observer'
-], (
-  Oscilloscope,
-  Logger,
-  SimulationParams,
-  CircuitSolver,
-  Observer
-) ->
-# </DEFINE>
+Oscilloscope = require('../scope/oscilloscope.coffee')
+Logger = require('../io/logger.coffee')
+SimulationParams = require('../core/simulationParams.coffee')
+CircuitSolver = require('../engine/circuitSolver.coffee')
+Observer = require('../util/observer.coffee')
 
-  class Circuit extends Observer
+class Circuit extends Observer
 
-    # Messages Dispatched to listeners:
-    ####################################################################################################################
+  # Messages Dispatched to listeners:
+  ####################################################################################################################
 
-    @ON_START_UPDATE = "ON_START_UPDATE"
-    @ON_COMPLETE_UPDATE = "ON_END_UPDATE"
+  @ON_START_UPDATE = "ON_START_UPDATE"
+  @ON_COMPLETE_UPDATE = "ON_END_UPDATE"
 
-    @ON_RESET = "ON_RESET"
+  @ON_RESET = "ON_RESET"
 
-    @ON_SOLDER = "ON_SOLDER"
-    @ON_DESOLDER = "ON_DESOLDER"
+  @ON_SOLDER = "ON_SOLDER"
+  @ON_DESOLDER = "ON_DESOLDER"
 
-    @ON_ADD_COMPONENT = "ON_ADD_COMPONENT"
-    @ON_REMOVE_COMPONENT = "ON_MOVE_COMPONENT"
-    @ON_MOVE_COMPONENT = "ON_MOVE_COMPONENT"
+  @ON_ADD_COMPONENT = "ON_ADD_COMPONENT"
+  @ON_REMOVE_COMPONENT = "ON_MOVE_COMPONENT"
+  @ON_MOVE_COMPONENT = "ON_MOVE_COMPONENT"
 
-    @ON_ERROR = "ON_ERROR"
-    @ON_WARNING = "ON_WARNING"
+  @ON_ERROR = "ON_ERROR"
+  @ON_WARNING = "ON_WARNING"
 
 
-    constructor: () ->
-      @Params = new SimulationParams()
+  constructor: () ->
+    @Params = new SimulationParams()
 
-      @clearAndReset()
+    @clearAndReset()
 
 
-    ## Removes all circuit elements and scopes from the workspace and resets time to zero.
-    ##   Called on initialization and reset.
-    clearAndReset: ->
-      # TODO: Prompt to save before destroying components
-      for element in @elementList?
-        element.destroy()
+  ## Removes all circuit elements and scopes from the workspace and resets time to zero.
+  ##   Called on initialization and reset.
+  clearAndReset: ->
+    # TODO: Prompt to save before destroying components
+    for element in @elementList?
+      element.destroy()
 
-      @Solver = new CircuitSolver(this)
+    @Solver = new CircuitSolver(this)
 
-      @nodeList = []
-      @elementList = []
-      @voltageSources = []
+    @nodeList = []
+    @elementList = []
+    @voltageSources = []
 
-      @scopes = []
+    @scopes = []
 
-      @time = 0
-      @iterations = 0
+    @time = 0
+    @iterations = 0
 
-      @clearErrors()
-      @notifyObservers @ON_RESET
+    @clearErrors()
+    @notifyObservers @ON_RESET
 
 
-    # "Solders" a new element to this circuit (adds it to the element list array).
-    solder: (newElement) ->
-      console.log("\tSoldering #{newElement}: #{newElement.dump()}")
-      @notifyObservers @ON_SOLDER
+  # "Solders" a new element to this circuit (adds it to the element list array).
+  solder: (newElement) ->
+    console.log("\tSoldering #{newElement}: #{newElement.dump()}")
+    @notifyObservers @ON_SOLDER
 
-      newElement.Circuit = this
-      newElement.setPoints()
-      @elementList.push newElement
+    newElement.Circuit = this
+    newElement.setPoints()
+    @elementList.push newElement
 
-    # "Desolders" an existing element to this circuit (removes it to the element list array).
-    desolder: (component, destroy = false) ->
-      @notifyObservers @ON_DESOLDER
+  # "Desolders" an existing element to this circuit (removes it to the element list array).
+  desolder: (component, destroy = false) ->
+    @notifyObservers @ON_DESOLDER
 
-      component.Circuit = null
-      @elementList.remove component
-      if destroy
-        component.destroy()
+    component.Circuit = null
+    @elementList.remove component
+    if destroy
+      component.destroy()
 
-    toString: ->
-      @Params
+  toString: ->
+    @Params
 
 
-    ####################################################################################################################
-    ### Simulation Frame Computation
-    ####################################################################################################################
+  ####################################################################################################################
+  ### Simulation Frame Computation
+  ####################################################################################################################
 
-    ###
-    UpdateCircuit: Updates the circuit each frame.
-      1. ) Reconstruct Circuit:
-            Rebuilds a data representation of the circuit (only applied when circuit changes)
-      2. ) Solve Circuit build matrix representation of the circuit solve for the voltage and current for each component.
-            Solving is performed via LU factorization.
-    ###
-    updateCircuit: () ->
-      @notifyObservers(@ON_START_UPDATE)
+  ###
+  UpdateCircuit: Updates the circuit each frame.
+    1. ) Reconstruct Circuit:
+          Rebuilds a data representation of the circuit (only applied when circuit changes)
+    2. ) Solve Circuit build matrix representation of the circuit solve for the voltage and current for each component.
+          Solving is performed via LU factorization.
+  ###
+  updateCircuit: () ->
+    @notifyObservers(@ON_START_UPDATE)
 
-      @Solver.reconstruct()
+    @Solver.reconstruct()
 
-      if @Solver.isStopped
-        @Solver.lastTime = 0
-      else
-        @Solver.solveCircuit()
+    if @Solver.isStopped
+      @Solver.lastTime = 0
+    else
+      @Solver.solveCircuit()
 
-      @notifyObservers(@ON_COMPLETE_UPDATE)
+    @notifyObservers(@ON_COMPLETE_UPDATE)
 
-    setSelected: (component) ->
-      for elm in @elementList
-        if elm == component
-          console.log("Selected: #{component.dump()}")
-          @selectedElm = component
-          component.setSelected(true)
+  setSelected: (component) ->
+    for elm in @elementList
+      if elm == component
+        console.log("Selected: #{component.dump()}")
+        @selectedElm = component
+        component.setSelected(true)
 
-    warn: (message) ->
-      Logger.warn message
-      @warnMessage = message
+  warn: (message) ->
+    Logger.warn message
+    @warnMessage = message
 
-    halt: (message) ->
-      Logger.error message
-      @stopMessage = message
+  halt: (message) ->
+    Logger.error message
+    @stopMessage = message
 
-    clearErrors: ->
-      @stopMessage = null
-      @stopElm = null
+  clearErrors: ->
+    @stopMessage = null
+    @stopElm = null
 
 
-    ####################################################################################################################
-    ### Circuit Element Accessors:
-    ####################################################################################################################
+  ####################################################################################################################
+  ### Circuit Element Accessors:
+  ####################################################################################################################
 
-    # TODO: Scopes aren't implemented yet
-    getScopes: ->
-      []
+  # TODO: Scopes aren't implemented yet
+  getScopes: ->
+    []
 
-    findElm: (searchElm) ->
-      for circuitElm in @elementList
-        return circuitElm if searchElm == circuitElm
-      return false
+  findElm: (searchElm) ->
+    for circuitElm in @elementList
+      return circuitElm if searchElm == circuitElm
+    return false
 
-    #TODO: It may be worthwhile to return a defensive copy here
-    getElements: ->
-      @elementList
+  #TODO: It may be worthwhile to return a defensive copy here
+  getElements: ->
+    @elementList
 
-    getElmByIdx: (elmIdx) ->
-      return @elementList[elmIdx]
+  getElmByIdx: (elmIdx) ->
+    return @elementList[elmIdx]
 
-    numElements: ->
-      return @elementList.length
+  numElements: ->
+    return @elementList.length
 
-    #TODO: It may be worthwhile to return a defensive copy here
-    getVoltageSources: ->
-      @voltageSources
+  #TODO: It may be worthwhile to return a defensive copy here
+  getVoltageSources: ->
+    @voltageSources
 
 
-    ####################################################################################################################
-    ### Nodes
-    ####################################################################################################################
+  ####################################################################################################################
+  ### Nodes
+  ####################################################################################################################
 
-    resetNodes: ->
-      @nodeList = []
+  resetNodes: ->
+    @nodeList = []
 
-    addCircuitNode: (circuitNode) ->
-      @nodeList.push circuitNode
+  addCircuitNode: (circuitNode) ->
+    @nodeList.push circuitNode
 
-    getNode: (idx) ->
-      @nodeList[idx]
+  getNode: (idx) ->
+    @nodeList[idx]
 
-    #TODO: It may be worthwhile to return a defensive copy here
-    getNodes: ->
-      @nodeList
+  #TODO: It may be worthwhile to return a defensive copy here
+  getNodes: ->
+    @nodeList
 
-    numNodes: ->
-      @nodeList.length
+  numNodes: ->
+    @nodeList.length
 
-    findBadNodes: ->
-      @badNodes = []
+  findBadNodes: ->
+    @badNodes = []
 
-      for circuitNode in @nodeList
-        if not circuitNode.intern and circuitNode.links.length is 1
-          numBadPoints = 0
-          firstCircuitNode = circuitNode.links[0]
-          for circuitElm in @elementList
-            # If firstCircuitNode isn't the same as the second
-            if firstCircuitNode.elm.equal_to(circuitElm) is false and circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)
-              numBadPoints++
-          if numBadPoints > 0
-            # Todo: outline bad nodes here
-            @badNodes.push circuitNode
+    for circuitNode in @nodeList
+      if not circuitNode.intern and circuitNode.links.length is 1
+        numBadPoints = 0
+        firstCircuitNode = circuitNode.links[0]
+        for circuitElm in @elementList
+          # If firstCircuitNode isn't the same as the second
+          if firstCircuitNode.elm.equal_to(circuitElm) is false and circuitElm.boundingBox.contains(circuitNode.x,
+            circuitNode.y)
+            numBadPoints++
+        if numBadPoints > 0
+          # Todo: outline bad nodes here
+          @badNodes.push circuitNode
 
-      return @badNodes
+    return @badNodes
 
 
-    ####################################################################################################################
-    ### Simulation Accessor Methods
-    ####################################################################################################################
+  ####################################################################################################################
+  ### Simulation Accessor Methods
+  ####################################################################################################################
 
-    subIterations: ->
-      @Solver.subIterations
+  subIterations: ->
+    @Solver.subIterations
 
-    eachComponent: (callback) ->
-      for component in @elementList
-        callback(component)
+  eachComponent: (callback) ->
+    for component in @elementList
+      callback(component)
 
-    isStopped: ->
-      @Solver.isStopped
+  isStopped: ->
+    @Solver.isStopped
 
-    timeStep: ->
-      @Params.timeStep
+  timeStep: ->
+    @Params.timeStep
 
-    voltageRange: ->
-      return @Params.voltageRange
+  voltageRange: ->
+    return @Params.voltageRange
 
-    powerRange: ->
-      return @Params.powerRange
+  powerRange: ->
+    return @Params.powerRange
 
-    currentSpeed: ->
-      return @Params.currentSpeed
+  currentSpeed: ->
+    return @Params.currentSpeed
 
-    getState: ->
-      return @state
+  getState: ->
+    return @state
 
-    getStamper: ->
-      @Solver.getStamper()
+  getStamper: ->
+    @Solver.getStamper()
 
-    getNode: (idx) ->
-      @nodeList[idx]
+  getNode: (idx) ->
+    @nodeList[idx]
 
 
-  return Circuit
+module.exports = Circuit

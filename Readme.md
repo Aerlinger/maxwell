@@ -1,9 +1,13 @@
 # Maxwell
 
-## A time-domain circuit simulation framework in written in pure JS
+A low-level javascript circuit simulation engine designed to model, simulate, and render complex electronic circuitry.
 
-#####Maxwell provides capability to represent, simulate, analyze and render complex virtual electronic circuits in any
-javascript environment.
+## Features
+  - Solvers for linear, nonlinear, analog, digital, and mixed-signal circuitry
+  - Preset definitions and examples
+  - Wide catalog of elements
+  - SPICE compatibility
+  - Performance tuned
 
 ## Installation:
 
@@ -18,18 +22,9 @@ javascript environment.
     `bower install && grunt dist`
 
 
-## Features
-  - Solvers for linear, nonlinear, analog, and digital circuits
-  - Preset definitions and examples
-  - Wide catalog of elements
-  - SPICE compatibility
-  - Performance tuned
-
-
 ## Introduction
 
 ### JSON circuit definition specification:
-
   A comprehensive list of examples can be found in the circuits folder.
 
 ### Component Hierarchy
