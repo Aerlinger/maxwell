@@ -161,5 +161,4 @@ class DrawHelper
     rg = 128 + Math.floor power * 127
     b = Math.floor 128 * (1 - power)
 
-
 module.exports = DrawHelper

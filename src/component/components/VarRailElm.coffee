@@ -4,6 +4,7 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
+RailElm = require('./RailElm.coffee')
 
 class VarRailElm extends RailElm
 

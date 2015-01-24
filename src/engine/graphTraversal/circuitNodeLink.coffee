@@ -4,4 +4,4 @@ class CircuitNodeLink
   toString: () ->
     "#{@num} #{@elm.toString()}"
 
-module.expors = CircuitNodeLink
+module.exports = CircuitNodeLink

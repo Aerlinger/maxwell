@@ -84,10 +84,10 @@ module.exports = (grunt) ->
         base: 'examples',
         livereload: 35729,
         hostname: 'localhost'
-      livereload:
-        options:
-          open: true,
-          base: ['.tmp', './examples']
+#      livereload:
+#        options:
+#          open: true,
+#          base: ['.tmp', './examples']
       server:
         options:
           keepalive: true,

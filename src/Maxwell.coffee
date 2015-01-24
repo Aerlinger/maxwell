@@ -1,16 +1,19 @@
 CircuitLoader = require('./io/CircuitLoader.coffee')
 Circuit = require('./core/circuit.coffee')
+CircuitCanvas = require('./render/circuitCanvas.coffee')
 
 class Maxwell
+  @Circuits = {}
+
   constructor: (canvas, options = {}) ->
     @Circuit = null
     @circuitName = options['circuitName']
 
-#    if @circuitName
-#      CircuitLoader.createCircuitFromJsonFile @circuitName, (circuit) =>
-#        @Circuit = circuit
+    if @circuitName
+      CircuitLoader.createCircuitFromJsonFile @circuitName, (circuit) =>
+        @Circuit = circuit
 
-#          new CircuitCanvas(@Circuit, canvas)
+        new CircuitCanvas(@Circuit, canvas)
 
   @_loadCircuitFromFile: (circuitFileName) ->
     return CircuitLoader.createCircuitFromJsonFile(circuitFileName)
@@ -20,8 +23,6 @@ class Maxwell
 
   @createCircuit: (circuitName, circuitData) ->
     circuit = null
-
-    @Circuits = {}
 
     if circuitData
       if typeof circuitData is "string"
@@ -50,5 +51,3 @@ else
   window.Maxwell = Maxwell
 
 module.exports = Maxwell
-
-

@@ -1,15 +1,14 @@
-#ComponentRegistry = require('component/ComponentRegistry.coffee')
+ComponentRegistry = require('../component/ComponentRegistry.coffee')
 
 SimulationParams = require('../core/SimulationParams.coffee')
-#Circuit = require('core/Circuit.coffee')
-#Oscilloscope = require('scope/Oscilloscope.coffee')
+Circuit = require('../core/Circuit.coffee')
+Oscilloscope = require('../scope/Oscilloscope.coffee')
 Hint = require('../engine/Hint.coffee')
 
 class CircuitLoader
 
   @createCircuitFromJsonData: (jsonData) ->
-#    circuit = new Circuit()
-    circuit = {}
+    circuit = new Circuit()
 
     # Circuit Parameters are stored at the header of the .json file (index 0)
     circuitParams = jsonData.shift()
@@ -26,7 +25,7 @@ class CircuitLoader
     for elementData in jsonData
       type = elementData['sym']
       # FixMe: Temp disable only
-      #sym = ComponentRegistry.ComponentDefs[type]
+      sym = ComponentRegistry.ComponentDefs[type]
       x1 = parseInt elementData['x1']
       y1 = parseInt elementData['y1']
       x2 = parseInt elementData['x2']
@@ -38,8 +37,8 @@ class CircuitLoader
         circuit.halt "Element: #{JSON.stringify(elementData)} is null"
       if type is Hint
         console.log "Hint found in file!"
-#      if type is Oscilloscope
-#        console.log "Scope found in file!"
+      if type is Oscilloscope
+        console.log "Scope found in file!"
 
       if !type
         circuit.warn "Unrecognized Type"
@@ -62,10 +61,10 @@ class CircuitLoader
   Retrieves string data from a circuit text file (via AJAX GET)
   ###
   @createCircuitFromJsonFile: (circuitFileName, onComplete = null) ->
-#      $.getJSON circuitFileName, (jsonData) =>
-#        circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
+    $.getJSON circuitFileName, (jsonData) =>
+      circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
 
-#        onComplete?(circuit)
+      onComplete?(circuit)
 
 
 module.exports = CircuitLoader

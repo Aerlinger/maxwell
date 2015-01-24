@@ -15,7 +15,7 @@ Circuit = require('../core/circuit.coffee')
 CircuitComponent = require('../component/circuitComponent.coffee')
 FormatUtils = require('../util/formatUtils.coffee')
 Settings = require('../settings/settings.coffee')
-Rectangle = require('../geom/rectangle')
+Rectangle = require('../geom/rectangle.coffee')
 
 
 # X components

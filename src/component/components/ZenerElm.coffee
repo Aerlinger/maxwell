@@ -4,6 +4,7 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
+DiodeElm = require('./DiodeElm.coffee')
 
 class ZenerElm extends DiodeElm
 

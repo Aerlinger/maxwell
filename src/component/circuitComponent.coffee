@@ -15,7 +15,7 @@
 # #######################################################################
 
 Settings = require('../settings/settings.coffee')
-DrawHelper = ('../render/drawHelper.coffee')
+DrawHelper = require('../render/drawHelper.coffee')
 Rectangle = require('../geom/rectangle.coffee')
 Point = require('../geom/point.coffee')
 MathUtils = require('../util/mathUtils.coffee')
