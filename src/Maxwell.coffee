@@ -21,6 +21,8 @@ class Maxwell
   @createCircuit: (circuitName, circuitData) ->
     circuit = null
 
+    @Circuits = {}
+
     if circuitData
       if typeof circuitData is "string"
         circuit = Maxwell._loadCircuitFromFile(circuitData)

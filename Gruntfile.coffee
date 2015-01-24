@@ -37,13 +37,24 @@ module.exports = (grunt) ->
         src: ["test/**/*test.coffee"]
 
     watch:
-      module_test:
+#      module_test:
+#        files: [
+#          "Gruntfile.js"
+#          "test/**/*"
+#          "src/**/*.coffee"
+#        ]
+#        tasks: ["mochaTest"]
+      examples:
         files: [
-          "Gruntfile.js"
-          "test/**/*"
+          "examples/layout.jade"
+          "examples/templates/**/*"
+        ]
+        tasks: ["jade"]
+      compile:
+        files: [
           "src/**/*.coffee"
         ]
-        tasks: ["mochaTest"]
+        tasks: ["coffeeify"]
 
     coffeelint:
       app: ['src/**/*.coffee']
