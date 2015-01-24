@@ -1,12 +1,25 @@
 fs = require('fs')
+path = require('path')
+
+examples = ->
+  result = []
+
+  for example in fs.readdirSync('./examples/templates')
+    result.push(path.basename(example, '.jade'))
+
+  return result
+
+console.log(examples())
 
 enumerate_examples = ->
   result = {}
 
-  for example in fs.readdirSync('./examples/templates')
-    result['./examples/' + example + ".html"] = './examples/templates/' + example
+  for example in examples()
+    result['./examples/' + example + ".html"] = './examples/templates/' + example + ".jade"
 
   return result
+
+console.log(enumerate_examples())
 
 module.exports = (grunt) ->
   grunt.initConfig
@@ -93,13 +106,8 @@ module.exports = (grunt) ->
           pretty: true
           data:
             debug: false
-            examples: Object.keys(enumerate_examples())
+            examples: examples()
         files: enumerate_examples()
-
-    open:
-      all:
-        path: 'http://localhost:<%= connect.server.options.port %>'
-
 
   grunt.loadNpmTasks "grunt-mocha-test"
   grunt.loadNpmTasks "grunt-coffeelint"
@@ -109,9 +117,50 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-connect"
   grunt.loadNpmTasks "grunt-contrib-coffee"
   grunt.loadNpmTasks "grunt-contrib-clean"
-  grunt.loadNpmTasks "grunt-open"
 
   grunt.registerTask 'server', ['connect:server']
   grunt.registerTask "default", ["coffeeify", "mochaTest"]
+
+#  grunt.registerTask 'examples', 'Creates base example jade files', ->
+#    files = [
+#      "ohms"
+#      "induct"
+#
+#      # Buggy:
+#      "amp-follower"
+#      "nmosfet"
+#      "amp-noninvert"
+#
+#      "zeneriv"
+#      "relaxosc"
+#      "amp-schmitt"
+#      "howland"
+#      "dcrestoration"
+#      "ladder"
+#
+#      "sine"
+#
+#      "sawtooth"
+#
+#      "grid"
+#      "amp-fullrect"
+#
+#      "triangle"
+#      "phaseshiftosc"
+#
+#      "mosfetamp"
+#      "mosswitch"
+#      "amp-diff"
+#      "inductac"
+#      "amp-integ"
+#      "indmultind"
+#      "diodelimit"
+#      "rectify"
+#      "diodecurve"
+#      "fullrect"
+#      "amp-sum"
+#      "gyrator"
+#      "voltdividesimple"
+#    ]
 
   return

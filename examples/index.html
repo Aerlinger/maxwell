@@ -12,9 +12,11 @@
     <script type="text/javascript" src="../bower_components/sketch.js/js/sketch.js"></script>
     <script type="text/javascript" src="../bower_components/d3/d3.js"></script>
     <script type="text/javascript" src="../dist/maxwell.js"></script>
+  </head>
+  <body>
+    <li><a></a></li>
     <script>
       $(document).ready(function () {
-        var circuitOptions = {};
         circuit = Maxwell.createCircuit("Test", {
           options: [
             {
@@ -85,13 +87,10 @@
         var rendererOptions = {};
         var circuitRenderer = Maxwell.Renderer(circuit, circuitCanvas, rendererOptions);
       
-        circuitRenderer.start();
+        circuitRenderer.start()
       });
       
     </script>
-  </head>
-  <body>
-    <li><a></a></li>
-    <canvas data-circuit="phaseshiftosc" width="1600" height="3000" class="maxwell"></canvas>
+    <canvas data-circuit="default" width="1600" height="3000" class="maxwell"></canvas>
   </body>
 </html>
