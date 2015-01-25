@@ -1,7 +1,7 @@
 class CircuitNodeLink
   constructor: (@num=0, @elm=null) ->
 
-  toString: () ->
+  toString: ->
     "#{@num} #{@elm.toString()}"
 
 module.exports = CircuitNodeLink

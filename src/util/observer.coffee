@@ -18,7 +18,7 @@ class Observer
       for callback in @_events[event]
         callback.apply(this, args)
 
-  getObservers: () ->
+  getObservers: ->
     return @_events
 
 module.exports = Observer

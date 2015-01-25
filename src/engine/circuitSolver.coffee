@@ -141,7 +141,7 @@ class CircuitSolver
         k = 0
         while k < @Circuit.numNodes()
           cn = @Circuit.getNode(k)
-          console.log("j=" + j + "  k=" + k + "  pt=" + postPt + "  " + cn);
+          console.log("j=" + j + "  k=" + k + "  pt=" + postPt + "  " + cn)
           if postPt.x is cn.x and postPt.y is cn.y
             console.log("#{i} Break!")
             break
@@ -347,7 +347,7 @@ class CircuitSolver
           elt.value = (@circuitRightSide[i] + rsadd) / qv
           @circuitRowInfo[i].dropRow = true
 
-          console.error("iter = 0 # start over from scratch");
+          console.error("iter = 0 # start over from scratch")
           i = -1 # start over from scratch
 
         else if (@circuitRightSide[i] + rsadd) is 0
@@ -440,7 +440,7 @@ class CircuitSolver
 
 
   solveCircuit: ->
-    @sysTime = (new Date()).getTime();
+    @sysTime = (new Date()).getTime()
 
     if not @circuitMatrix? or @Circuit.numElements() is 0
       @circuitMatrix = null
@@ -523,7 +523,7 @@ class CircuitSolver
       # End for
 
       if (subiter > 5)
-        console.log("converged after " + subiter + " iterations\n");
+        console.log("converged after " + subiter + " iterations\n")
       if subiter >= subiterCount
         @halt "Convergence failed: " + subiter, null
         break
@@ -660,7 +660,7 @@ class CircuitSolver
       tot = circuitRightSide[row]
       circuitRightSide[row] = circuitRightSide[i]
 
-      # Forward substitution by using the lower triangular matrix;
+      # Forward substitution by using the lower triangular matrix
       j = bi
       while j < i
         tot -= circuitMatrix[i][j] * circuitRightSide[j]

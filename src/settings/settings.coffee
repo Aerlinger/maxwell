@@ -170,7 +170,7 @@ class Settings
     'whitesmoke': '#f5f5f5',
     'yellow': '#ffff00',
     'yellowgreen': '#9acd32'
-  };
+  }
 
   @FRACTIONAL_DIGITS: 2
   @CURRENT_SEGMENT_LENGTH: 16

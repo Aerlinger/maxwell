@@ -7,16 +7,16 @@ class RowInfo
   constructor: ->
     @type = RowInfo.ROW_NORMAL
 
-    @nodeEq = 0;
-    @mapCol = 0;
-    @mapRow = 0;
+    @nodeEq = 0
+    @mapCol = 0
+    @mapRow = 0
 
-    @value = 0;
-    @rsChanges = false;
-    @lsChanges = false;
-    @dropRow = false;
+    @value = 0
+    @rsChanges = false
+    @lsChanges = false
+    @dropRow = false
 
-  toString: () ->
+  toString: ->
     "RowInfo: type: #{@type}, nodeEq: #{@nodeEq}, mapCol: #{@mapCol}, mapRow: #{@mapRow}, value: #{@value}, rsChanges: #{@rsChanges}, lsChanges: #{@lsChanges}, dropRow: #{@dropRow}"
 
 module.exports = RowInfo

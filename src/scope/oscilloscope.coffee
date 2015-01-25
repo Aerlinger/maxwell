@@ -5,7 +5,7 @@ class Oscilloscope
 
 #      palette = new Rickshaw.Color.Palette scheme: 'classic9'
 
-    @seriesData = [[], [], [], [], [], [], [], [], []];
+    @seriesData = [[], [], [], [], [], [], [], [], []]
 
     xbuffer_size = 150
 
@@ -32,13 +32,13 @@ class Oscilloscope
 
     setInterval =>
       @step()
-      graph.update();
+      graph.update()
     , 40
 #
 
   step: ->
     @frames += 1
-    @removeData(1);
+    @removeData(1)
     @addData 0.5 * Math.sin(@frames / 10) + 0.5
 
   addData: (value) ->

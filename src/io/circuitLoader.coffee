@@ -17,9 +17,9 @@ class CircuitLoader
     console.log(circuit.Params.toString())
 
     # Load each Circuit component from JSON data:
-    console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
-    console.log("Soldering Components:");
-    console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+    console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
+    console.log("Soldering Components:")
+    console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
     elms = []
 
     for elementData in jsonData
@@ -63,7 +63,7 @@ class CircuitLoader
   Retrieves string data from a circuit text file (via AJAX GET)
   ###
   @createCircuitFromJsonFile: (circuitFileName, onComplete = null) ->
-    $.getJSON circuitFileName, (jsonData) =>
+    $.getJSON circuitFileName, (jsonData) ->
       circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
 
       onComplete?(circuit)

@@ -36,11 +36,14 @@ class Switch2Elm extends SwitchElm
     @swpoles = CircuitComponent.newPointArray(3)
     @swposts = CircuitComponent.newPointArray(2)
 
-    [@swpoles[0], @swpoles[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 1, @openhs
+    [@swpoles[0], @swpoles[1]] = DrawHelper.interpPoint2(@lead1, @lead2, 1, @openhs)
     @swpoles[2] = @lead2
 
-    [@swposts[0], @swposts[1]] = DrawHelper.interpPoint2 @point1, @point2, 1, @openhs
-    @posCount = @hasCenterOff() ? 3 : 2
+    [@swposts[0], @swposts[1]] = DrawHelper.interpPoint2(@point1, @point2, 1, @openhs)
+    if @hasCenterOff()
+      @posCount = 3
+    else
+      @posCount = 2
 
   draw: (renderContext) ->
     @setBbox @point1, @point2, @openhs

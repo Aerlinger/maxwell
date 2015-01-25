@@ -42,10 +42,10 @@ class CircuitComponent
 
   # Freeze/frozen?
 
-  getParentCircuit: () ->
+  getParentCircuit: ->
     return @Circuit
 
-  isBeingDragged: () ->
+  isBeingDragged: ->
 #      return @Circuit.dragElm is this
     @dragging
 
@@ -119,12 +119,12 @@ class CircuitComponent
     if @dn < len or len is 0
       @lead1 = @point1
       @lead2 = @point2
-      console.log("Len: " + len);
+      console.log("Len: " + len)
       return
 
-    #      console.log("Calc leads: #{@toString()}");
-    @lead1 = DrawHelper.interpPoint(@point1, @point2, (@dn - len) / (2 * @dn));
-    @lead2 = DrawHelper.interpPoint(@point1, @point2, (@dn + len) / (2 * @dn));
+    #      console.log("Calc leads: #{@toString()}")
+    @lead1 = DrawHelper.interpPoint(@point1, @point2, (@dn - len) / (2 * @dn))
+    @lead2 = DrawHelper.interpPoint(@point1, @point2, (@dn + len) / (2 * @dn))
 
 
   # TODO: Validate consistency
@@ -202,7 +202,7 @@ class CircuitComponent
 
   # Returns the class name of this element (e.x. ResistorElm)
   toString: ->
-    console.error("Virtual call on toString in circuitComponent was #{@dump()}");
+    console.error("Virtual call on toString in circuitComponent was #{@dump()}")
 #      return arguments.callee.name
 
   dump: ->
@@ -247,10 +247,10 @@ class CircuitComponent
   initBoundingBox: ->
     @boundingBox = new Rectangle()
 
-    @boundingBox.x = Math.min(@x1, @x2);
-    @boundingBox.y = Math.min(@y1, @y2);
-    @boundingBox.width = Math.abs(@x2 - @x1) + 1;
-    @boundingBox.height = Math.abs(@y2 - @y1) + 1;
+    @boundingBox.x = Math.min(@x1, @x2)
+    @boundingBox.y = Math.min(@y1, @y2)
+    @boundingBox.width = Math.abs(@x2 - @x1) + 1
+    @boundingBox.height = Math.abs(@y2 - @y1) + 1
 
   setBbox: (x1, y1, x2, y2) ->
     if x1 > x2
@@ -304,11 +304,11 @@ class CircuitComponent
 
   # TODO: Implement
   getEditInfo: (n) ->
-    throw("Called abstract function getEditInfo() in AbstractCircuitElement")
+    throw new Error("Called abstract function getEditInfo() in AbstractCircuitElement")
 
   # TODO: Implement
   setEditValue: (n, ei) ->
-    throw("Called abstract function setEditInfo() in AbstractCircuitElement")
+    throw new Error("Called abstract function setEditInfo() in AbstractCircuitElement")
 
   # Extended by subclasses
   getBasicInfo: (arr) ->
@@ -450,11 +450,11 @@ class CircuitComponent
   @newPointArray = (n) ->
     a = new Array(n)
     while (n > 0)
-      a[--n] = new Point(0, 0);
+      a[--n] = new Point(0, 0)
 
     return a
 
-  comparePair: (x1, x2, y1, y2)->
+  comparePair: (x1, x2, y1, y2) ->
     (x1 == y1 && x2 == y2) || (x1 == y2 && x2 == y1)
 
     @Circuit.Params

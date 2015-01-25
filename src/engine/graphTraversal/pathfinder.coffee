@@ -22,7 +22,7 @@ class Pathfinder
       return false
 
     if @used[n1]
-      console.log("used " + n1);
+      console.log("used " + n1)
       return false
 
     @used[n1] = true
@@ -38,7 +38,7 @@ class Pathfinder
           console.log("type == VOLTAGE")
           continue
       if @type is Pathfinder.SHORT and !ce.isWire()
-        console.log("(type == SHORT && !ce.isWire())");
+        console.log("(type == SHORT && !ce.isWire())")
         continue
       if (@type is Pathfinder.CAP_V)
         if !(ce.isWire() or ce instanceof CapacitorElm or ce instanceof VoltageElm)
@@ -49,12 +49,12 @@ class Pathfinder
         # Look for posts which have a ground connection. Our path can go through ground!
         for j in [0...ce.getPostCount()]
           if ce.hasGroundConnection(j) and @findPath(ce.getNode(j), depth)
-            console.log(ce + " has ground (n1 is 0)");
+            console.log(ce + " has ground (n1 is 0)")
             @used[n1] = false
             return true
 
       for j in [0...ce.getPostCount()]
-        console.log("get post " + ce.dump() + " " + ce.getNode(j));
+        console.log("get post " + ce.dump() + " " + ce.getNode(j))
         if ce.getNode(j) is n1
           break
 
@@ -63,7 +63,7 @@ class Pathfinder
         continue
 
       if ce.hasGroundConnection(j) and @findPath(0, depth)
-        console.log(ce + " has ground");
+        console.log(ce + " has ground")
         @used[n1] = false
         return true
 
@@ -72,23 +72,23 @@ class Pathfinder
         if j is 0
           c = -c
 
-        console.log(ce + " > " + @firstElm + " >> matching " + ce + " to " + @firstElm.getCurrent());
+        console.log(ce + " > " + @firstElm + " >> matching " + ce + " to " + @firstElm.getCurrent())
         if Math.abs(c - @firstElm.getCurrent()) > 1e-10
           continue
 
       for k in [0...ce.getPostCount()]
         continue if j is k
 
-        console.log(ce + " " + ce.getNode(j) + " - " + ce.getNode(k));
+        console.log(ce + " " + ce.getNode(j) + " - " + ce.getNode(k))
         if ce.getConnection(j, k) and @findPath(ce.getNode(k), depth)
           @used[n1] = false
           console.log("got findpath #{n1}")
-          #            console.log("got findpath j: #{ce.getNode(j).toString()}, k: #{ce.getNode(k).toString()} on element " + ce);
+          #            console.log("got findpath j: #{ce.getNode(j).toString()}, k: #{ce.getNode(k).toString()} on element " + ce)
           return true
 
     @used[n1] = false
 
-    #      console.log(n1 + " failed");
+    #      console.log(n1 + " failed")
 
     return false
 

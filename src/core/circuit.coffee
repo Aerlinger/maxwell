@@ -49,7 +49,7 @@ class Circuit extends Observer
   @ON_WARNING = "ON_WARNING"
 
 
-  constructor: () ->
+  constructor: ->
     @Params = new SimulationParams()
 
     @clearAndReset()
@@ -110,7 +110,7 @@ class Circuit extends Observer
     2. ) Solve Circuit build matrix representation of the circuit solve for the voltage and current for each component.
           Solving is performed via LU factorization.
   ###
-  updateCircuit: () ->
+  updateCircuit: ->
     @notifyObservers(@ON_START_UPDATE)
 
     @Solver.reconstruct()
@@ -240,9 +240,6 @@ class Circuit extends Observer
 
   getStamper: ->
     @Solver.getStamper()
-
-  getNode: (idx) ->
-    @nodeList[idx]
 
 
 module.exports = Circuit

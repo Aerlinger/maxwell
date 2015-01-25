@@ -19,7 +19,7 @@
   "max_line_length": {
     "name": "max_line_length",
     "value": 80,
-    "level": "warn",
+    "level": "ignore",
     "limitComments": true
   },
   "line_endings": {
@@ -79,7 +79,7 @@
   },
   "space_operators": {
     "name": "space_operators",
-    "level": "warn"
+    "level": "ignore"
   },
   "duplicate_key": {
     "name": "duplicate_key",

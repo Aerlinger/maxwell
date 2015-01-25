@@ -129,7 +129,7 @@ class ScopeControls
   setDefaultOffset: (renderer) ->
     options = @rendererOptions[renderer]
     if options.defaults and options.defaults.offset
-      Array::forEach.call @inputs.offset, (input) =>
+      Array::forEach.call @inputs.offset, (input) ->
         if input.value is options.defaults.offset
           input.checked = true
         else

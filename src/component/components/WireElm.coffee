@@ -10,7 +10,7 @@ class WireElm extends CircuitComponent
   constructor: (xa, ya, xb, yb, f, st) ->
     super xa, ya, xb, yb, f, st
 
-  toString: () ->
+  toString: ->
     "WireElm"
 
   @FLAG_SHOWCURRENT: 1

@@ -30,7 +30,10 @@ class Maxwell
       else if typeof circuitData is "object"
         circuit = Maxwell._loadCircuitFromJson(circuitData)
       else
-        raise "Parameter must either be a path to a JSON file or raw JSON data representing the circuit. Use `Maxwell.createCircuit()` to create a new empty circuit object."
+        raise """
+            Parameter must either be a path to a JSON file or raw JSON data representing the circuit.
+            Use `Maxwell.createCircuit()` to create a new empty circuit object.
+        """
     else
       circuit = new Circuit()
 
@@ -38,7 +41,7 @@ class Maxwell
 
     return circuit
 
-  @foo: () ->
+  @foo: ->
     return "foo"
 
   instance_method: ->

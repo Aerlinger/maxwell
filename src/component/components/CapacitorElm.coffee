@@ -92,7 +92,7 @@ class CapacitorElm extends CircuitComponent
     @drawPosts(renderContext)
 
 
-  drawUnits: () ->
+  drawUnits: ->
     s = DrawHelper.getUnitText(@capacitance, "F")
     @drawValues s, hs
 
