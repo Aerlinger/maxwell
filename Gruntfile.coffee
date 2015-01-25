@@ -60,14 +60,14 @@ module.exports = (grunt) ->
         ]
         tasks: ["jade"]
         options:
-          livereload: 35729
+          livereload: true
       compile:
         files: [
           "src/**/*.coffee"
         ]
         tasks: ["coffeeify"]
         options:
-          livereload: 35729
+          livereload: true
 
     coffeelint:
       app: ['src/**/*.coffee']

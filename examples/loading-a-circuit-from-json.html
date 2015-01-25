@@ -15,86 +15,88 @@
   </head>
   <body>
     <li><a></a></li>
-    <script>
-      var circuitName = $('canvas').data('circuit');
-      var circuitFileName = "../circuits/" + circuitName + ".json";
-      
-      $(document).ready(function () {
-        circuit = Maxwell.createCircuit("Test", {
-          options: [
-            {
-              "completion_status": "complete",
-              "created_at": null,
-              "current_speed": 55.0,
-              "description": null,
-              "flags": 1,
-              "id": null,
-              "name_unique": "capac.txt",
-              "power_range": 0.0,
-              "sim_speed": 10,
-              "time_step": 5.0e-06,
-              "title": "Capacitor",
-              "topic": "A/C Circuits",
-              "updated_at": null,
-              "voltage_range": 5.0
-            },
-            {
-              "sym": "v",
-              "x1": "176",
-              "y1": "256",
-              "x2": "176",
-              "y2": "80",
-              "flags": "0",
-              "params": [
-                "0",
-                "40.0",
-                "5.0",
-                "0.0"
-              ]
-            },
-            {
-              "sym": "r",
-              "x1": "176",
-              "y1": "80",
-              "x2": "336",
-              "y2": "80",
-              "flags": "0",
-              "params": ["180.0"]
-            },
-            {
-              "sym": "c",
-              "x1": "336",
-              "y1": "80",
-              "x2": "336",
-              "y2": "256",
-              "flags": "0",
-              "params": [
-                "3.3E-5",
-                "0.20495321439656933"
-              ]
-            },
-            {
-              "sym": "w",
-              "x1": "176",
-              "y1": "256",
-              "x2": "336",
-              "y2": "256",
-              "flags": "0",
-              "params": []
-            }
-          ]
+    <div id="container">
+      <script>
+        var circuitName = $('canvas').data('circuit');
+        var circuitFileName = "../circuits/" + circuitName + ".json";
+        
+        $(document).ready(function () {
+          circuit = Maxwell.createCircuit("Test", {
+            options: [
+              {
+                "completion_status": "complete",
+                "created_at": null,
+                "current_speed": 55.0,
+                "description": null,
+                "flags": 1,
+                "id": null,
+                "name_unique": "capac.txt",
+                "power_range": 0.0,
+                "sim_speed": 10,
+                "time_step": 5.0e-06,
+                "title": "Capacitor",
+                "topic": "A/C Circuits",
+                "updated_at": null,
+                "voltage_range": 5.0
+              },
+              {
+                "sym": "v",
+                "x1": "176",
+                "y1": "256",
+                "x2": "176",
+                "y2": "80",
+                "flags": "0",
+                "params": [
+                  "0",
+                  "40.0",
+                  "5.0",
+                  "0.0"
+                ]
+              },
+              {
+                "sym": "r",
+                "x1": "176",
+                "y1": "80",
+                "x2": "336",
+                "y2": "80",
+                "flags": "0",
+                "params": ["180.0"]
+              },
+              {
+                "sym": "c",
+                "x1": "336",
+                "y1": "80",
+                "x2": "336",
+                "y2": "256",
+                "flags": "0",
+                "params": [
+                  "3.3E-5",
+                  "0.20495321439656933"
+                ]
+              },
+              {
+                "sym": "w",
+                "x1": "176",
+                "y1": "256",
+                "x2": "336",
+                "y2": "256",
+                "flags": "0",
+                "params": []
+              }
+            ]
+          });
+        
+          var circuitCanvas = $('.maxwell')[0];
+        
+          var rendererOptions = {};
+          var circuitRenderer = Maxwell.Renderer(circuit, circuitCanvas, rendererOptions);
+        
+          circuitRenderer.start()
         });
-      
-        var circuitCanvas = $('.maxwell')[0];
-      
-        var rendererOptions = {};
-        var circuitRenderer = Maxwell.Renderer(circuit, circuitCanvas, rendererOptions);
-      
-        circuitRenderer.start()
-      });
-      
-    </script>
-    <canvas data-circuit="default" width="1600" height="3000" class="maxwell"></canvas>
+        
+      </script>
+      <canvas data-circuit="default" width="1600" height="3000" class="maxwell"></canvas>
+    </div>
     <!-- Old Components:
     //  Missing Components or Functionality: 
     // canvas.maxwell(data-circuit="ohms", width="1600", height="3000")
@@ -138,59 +140,60 @@
     
     
     -->
-    <div id="content"></div>
-    <form id="side_panel">
-      <section>
-        <div id="legend"></div>
-      </section>
-      <section>
-        <div id="renderer_form" class="toggler">
-          <input id="area" type="radio" name="renderer" value="area" checked="checked">
-          <label for="area">area</label>
-          <input id="bar" type="radio" name="renderer" value="bar">
-          <label for="bar">bar</label>
-          <input id="line" type="radio" name="renderer" value="line">
-          <label for="line">line</label>
-          <input id="scatter" type="radio" name="renderer" value="scatterplot">
-          <label for="scatter">scatter</label>
-        </div>
-      </section>
-      <section>
-        <div id="offset_form">
-          <label for="stack">
-            <input id="stack" type="radio" name="offset" value="zero" checked="checked"><span>stack</span>
-          </label>
-          <label for="stream">
-            <input id="stream" type="radio" name="offset" value="wiggle"><span>stream</span>
-          </label>
-          <label for="pct">
-            <input id="pct" type="radio" name="offset" value="expand"><span>pct</span>
-          </label>
-          <label for="value">
-            <input id="value" type="radio" name="offset" value="value"><span>value</span>
-          </label>
-        </div>
-        <div id="interpolation_form">
-          <label for="cardinal">
-            <input id="cardinal" type="radio" name="interpolation" value="cardinal" checked="checked"><span>cardinal</span>
-          </label>
-          <label for="linear">
-            <input id="linear" type="radio" name="interpolation" value="linear"><span>linear</span>
-          </label>
-          <label for="step">
-            <input id="step" type="radio" name="interpolation" value="step-after"><span>step</span>
-          </label>
-        </div>
-      </section>
-      <!--section-->
-      <!--  h6 Smoothing-->
-      <!--  #smoother-->
-      <!--section-->
-    </form>
-    <div id="chart_container">
-      <div id="chart"></div>
-      <div id="timeline"></div>
-      <div id="preview"></div>
+    <div id="content">
+      <form id="side_panel">
+        <section>
+          <div id="legend"></div>
+        </section>
+        <section>
+          <div id="renderer_form" class="toggler">
+            <input id="area" type="radio" name="renderer" value="area" checked="checked">
+            <label for="area">area</label>
+            <input id="bar" type="radio" name="renderer" value="bar">
+            <label for="bar">bar</label>
+            <input id="line" type="radio" name="renderer" value="line">
+            <label for="line">line</label>
+            <input id="scatter" type="radio" name="renderer" value="scatterplot">
+            <label for="scatter">scatter</label>
+          </div>
+        </section>
+        <section>
+          <div id="offset_form">
+            <label for="stack">
+              <input id="stack" type="radio" name="offset" value="zero" checked="checked"><span>stack</span>
+            </label>
+            <label for="stream">
+              <input id="stream" type="radio" name="offset" value="wiggle"><span>stream</span>
+            </label>
+            <label for="pct">
+              <input id="pct" type="radio" name="offset" value="expand"><span>pct</span>
+            </label>
+            <label for="value">
+              <input id="value" type="radio" name="offset" value="value"><span>value</span>
+            </label>
+          </div>
+          <div id="interpolation_form">
+            <label for="cardinal">
+              <input id="cardinal" type="radio" name="interpolation" value="cardinal" checked="checked"><span>cardinal</span>
+            </label>
+            <label for="linear">
+              <input id="linear" type="radio" name="interpolation" value="linear"><span>linear</span>
+            </label>
+            <label for="step">
+              <input id="step" type="radio" name="interpolation" value="step-after"><span>step</span>
+            </label>
+          </div>
+        </section>
+        <!--section-->
+        <!--  h6 Smoothing-->
+        <!--  #smoother-->
+        <!--section-->
+      </form>
+      <div id="chart_container">
+        <div id="chart"></div>
+        <div id="timeline"></div>
+        <div id="preview"></div>
+      </div>
     </div>
   </body>
 </html>

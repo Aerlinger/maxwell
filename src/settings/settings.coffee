@@ -205,4 +205,4 @@ class Settings
   @ERROR_COLOR: ColorPalette.darkred
   @WARNING_COLOR: ColorPalette.orange
 
-return Settings
+module.exports = Settings

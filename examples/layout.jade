@@ -22,7 +22,8 @@ html
     li
       a(href= examples[i])= examples[i]
 
-    block body
+    #container
+      block body
 
     // Old Components:
       //  Missing Components or Functionality: 
@@ -67,49 +68,49 @@ html
 
 
     #content
-    form#side_panel
-      section
-        #legend
-      section
-        #renderer_form.toggler
-          input#area(type='radio', name='renderer', value='area', checked='checked')
-          label(for='area') area
-          input#bar(type='radio', name='renderer', value='bar')
-          label(for='bar') bar
-          input#line(type='radio', name='renderer', value='line')
-          label(for='line') line
-          input#scatter(type='radio', name='renderer', value='scatterplot')
-          label(for='scatter') scatter
-      section
-        #offset_form
-          label(for='stack')
-            input#stack(type='radio', name='offset', value='zero', checked='checked')
-            span stack
-          label(for='stream')
-            input#stream(type='radio', name='offset', value='wiggle')
-            span stream
-          label(for='pct')
-            input#pct(type='radio', name='offset', value='expand')
-            span pct
-          label(for='value')
-            input#value(type='radio', name='offset', value='value')
-            span value
+      form#side_panel
+        section
+          #legend
+        section
+          #renderer_form.toggler
+            input#area(type='radio', name='renderer', value='area', checked='checked')
+            label(for='area') area
+            input#bar(type='radio', name='renderer', value='bar')
+            label(for='bar') bar
+            input#line(type='radio', name='renderer', value='line')
+            label(for='line') line
+            input#scatter(type='radio', name='renderer', value='scatterplot')
+            label(for='scatter') scatter
+        section
+          #offset_form
+            label(for='stack')
+              input#stack(type='radio', name='offset', value='zero', checked='checked')
+              span stack
+            label(for='stream')
+              input#stream(type='radio', name='offset', value='wiggle')
+              span stream
+            label(for='pct')
+              input#pct(type='radio', name='offset', value='expand')
+              span pct
+            label(for='value')
+              input#value(type='radio', name='offset', value='value')
+              span value
 
-        #interpolation_form
-          label(for='cardinal')
-            input#cardinal(type='radio', name='interpolation', value='cardinal', checked='checked')
-            span cardinal
-          label(for='linear')
-            input#linear(type='radio', name='interpolation', value='linear')
-            span linear
-          label(for='step')
-            input#step(type='radio', name='interpolation', value='step-after')
-            span step
-      //section
-      //  h6 Smoothing
-      //  #smoother
-      //section
-    #chart_container
-      #chart
-      #timeline
-      #preview
+          #interpolation_form
+            label(for='cardinal')
+              input#cardinal(type='radio', name='interpolation', value='cardinal', checked='checked')
+              span cardinal
+            label(for='linear')
+              input#linear(type='radio', name='interpolation', value='linear')
+              span linear
+            label(for='step')
+              input#step(type='radio', name='interpolation', value='step-after')
+              span step
+        //section
+        //  h6 Smoothing
+        //  #smoother
+        //section
+      #chart_container
+        #chart
+        #timeline
+        #preview

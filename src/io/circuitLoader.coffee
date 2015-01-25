@@ -47,7 +47,7 @@ class CircuitLoader
       else
         newCircuitElm = new sym(x1, y1, x2, y2, flags, params)
 
-        console.log("New elm: ", sym)
+#        console.log("New elm: ", sym)
 
         elms.push(newCircuitElm)
 

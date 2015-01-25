@@ -11,7 +11,7 @@ block body
       if (canvas && circuitName.length !== 0) {
         new Maxwell(canvas.get(0), {circuitName: circuitFileName});
 
-        var defaultCircuit = Maxwell.createCircuit("default", circuitFileName);
+        //var defaultCircuit = Maxwell.createCircuit("default", circuitFileName);
       } else {
         console.error("No circuit definition provided");
         console.error("Circuit name: ", circuitName, "circuit Filename ");
