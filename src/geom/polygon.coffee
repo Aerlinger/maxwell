@@ -1,3 +1,5 @@
+Point = require('./point.coffee')
+
 class Polygon
   constructor: (vertices) ->
     @vertices = []
@@ -18,6 +20,5 @@ class Polygon
 
   numPoints: ->
     @vertices.length
-
 
 module.exports = Polygon

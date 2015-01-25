@@ -98,5 +98,4 @@ class ComponentRegistry
     catch e
       Logger.warn "Element: #{componentConstructor.prototype} Not yet implemented: [#{e.message}]"
 
-
 module.exports = ComponentRegistry

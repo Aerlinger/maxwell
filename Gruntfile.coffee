@@ -9,8 +9,6 @@ examples = ->
 
   return result
 
-console.log(examples())
-
 enumerate_examples = ->
   result = {}
 
@@ -18,8 +16,6 @@ enumerate_examples = ->
     result['./examples/' + example + ".html"] = './examples/templates/' + example + ".jade"
 
   return result
-
-console.log(enumerate_examples())
 
 module.exports = (grunt) ->
   grunt.initConfig
@@ -63,11 +59,15 @@ module.exports = (grunt) ->
           "examples/templates/**/*"
         ]
         tasks: ["jade"]
+        options:
+          livereload: 35729
       compile:
         files: [
           "src/**/*.coffee"
         ]
         tasks: ["coffeeify"]
+        options:
+          livereload: 35729
 
     coffeelint:
       app: ['src/**/*.coffee']
@@ -81,17 +81,12 @@ module.exports = (grunt) ->
 
     connect:
       options:
-        base: 'examples',
-        livereload: 35729,
         hostname: 'localhost'
-#      livereload:
-#        options:
-#          open: true,
-#          base: ['.tmp', './examples']
       server:
         options:
-          keepalive: true,
-          open: true
+          livereload: 35729,
+          keepalive: true
+          open: 'http://localhost:6502/examples'
           port: 6502
       test:
         options:
