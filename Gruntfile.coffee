@@ -104,6 +104,12 @@ module.exports = (grunt) ->
             examples: examples()
         files: enumerate_examples()
 
+    uglify:
+      mangle: true
+      release:
+        files:
+          'dist/maxwell.min.js': ['dist/maxwell.js']
+
   grunt.loadNpmTasks "grunt-mocha-test"
   grunt.loadNpmTasks "grunt-coffeelint"
   grunt.loadNpmTasks "grunt-coffeeify"
@@ -112,6 +118,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-connect"
   grunt.loadNpmTasks "grunt-contrib-coffee"
   grunt.loadNpmTasks "grunt-contrib-clean"
+  grunt.loadNpmTasks "grunt-contrib-uglify"
 
   grunt.registerTask 'server', ['connect:server']
   grunt.registerTask "default", ["coffeeify", "mochaTest"]
