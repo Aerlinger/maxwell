@@ -12,55 +12,32 @@
     <script type="text/javascript" src="../bower_components/sketch.js/js/sketch.js"></script>
     <script type="text/javascript" src="../bower_components/d3/d3.js"></script>
     <script type="text/javascript" src="../dist/maxwell.js"></script>
+    <script>
+      $(document).ready(function (event) {
+        var circuitName = $('canvas').data('circuit');
+        var circuitFileName = "../circuits/" + circuitName + ".json";
+      
+        var canvas = $('canvas.maxwell');
+      
+        if (canvas && circuitName.length !== 0) {
+          new Maxwell(canvas.get(0), {circuitName: circuitFileName});
+        } else {
+          console.error("No circuit definition provided");
+          console.error("Circuit name: ", circuitName, "circuit Filename ");
+        }
+      });
+      
+    </script>
   </head>
   <body>
-    <li><a></a></li>
+    <li><a href="index.html">index</a></li>
+    <li><a href="loading-a-circuit-from-json.html">loading-a-circuit-from-json</a></li>
+    <li><a href="phase-shift-oscillator.html">phase-shift-oscillator</a></li>
+    <li><a href="resistors.html">resistors</a></li>
     <div id="container">
       <canvas data-circuit="phaseshiftosc" width="1600" height="3000" class="maxwell"></canvas>
     </div>
-    <!-- Old Components:
-    //  Missing Components or Functionality: 
-    // canvas.maxwell(data-circuit="ohms", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="induct", width="1600", height="3000")
-    //  Buggy/Not working: 
-    //  qp == -1 (Has one row with all zero values)
-    // canvas.maxwell(data-circuit="amp-follower", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="nmosfet", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="amp-noninvert", width="1600", height="3000")
-    //  Needs testing/validation: 
-    // canvas.maxwell(data-circuit="zeneriv", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="relaxosc", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="amp-schmitt", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="howland", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="dcrestoration", width="1600", height="3000")
-    //   canvas.maxwell(data-circuit="ladder", width="1600", height="3000")
-    //  Runs, but invalid result:
-    // canvas.maxwell(data-circuit="amp-fullrect", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="sine", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="sawtooth", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="sawtooth", width="1600", height="3000")
-    //  Working: 
-    // canvas.maxwell(data-circuit="grid", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="grid2", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="amp-invert", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="triangle", width="1600", height="3000")
-    <canvas data-circuit="phaseshiftosc" width="1600" height="3000" class="maxwell"></canvas>
-    // canvas.maxwell(data-circuit="mosfetamp", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="mosswitch", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="amp-diff", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="inductac", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="amp-integ", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="indmultind", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="diodelimit", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="rectify", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="diodecurve", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="fullrect", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="amp-sum", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="gyrator", width="1600", height="3000")
-    // canvas.maxwell(data-circuit="voltdividesimple", width="1600", height="3000")
-    
-    
-    -->
+
     <div id="content">
       <form id="side_panel">
         <section>

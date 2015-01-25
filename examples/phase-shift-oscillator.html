@@ -12,9 +12,28 @@
     <script type="text/javascript" src="../bower_components/sketch.js/js/sketch.js"></script>
     <script type="text/javascript" src="../bower_components/d3/d3.js"></script>
     <script type="text/javascript" src="../dist/maxwell.js"></script>
+    <script>
+      $(document).ready(function (event) {
+        var circuitName = $('canvas').data('circuit');
+        var circuitFileName = "../circuits/" + circuitName + ".json";
+      
+        var canvas = $('canvas.maxwell');
+      
+        if (canvas && circuitName.length !== 0) {
+          new Maxwell(canvas.get(0), {circuitName: circuitFileName});
+        } else {
+          console.error("No circuit definition provided");
+          console.error("Circuit name: ", circuitName, "circuit Filename ");
+        }
+      });
+      
+    </script>
   </head>
   <body>
-    <li><a></a></li>
+    <li><a href="index.html">index</a></li>
+    <li><a href="loading-a-circuit-from-json.html">loading-a-circuit-from-json</a></li>
+    <li><a href="phase-shift-oscillator.html">phase-shift-oscillator</a></li>
+    <li><a href="resistors.html">resistors</a></li>
     <div id="container">
       <canvas data-circuit="phaseshiftosc" width="1600" height="3000" class="maxwell"></canvas>
     </div>

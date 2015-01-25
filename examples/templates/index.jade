@@ -1,21 +1,4 @@
 extends ../layout
 
 block body
-  script.
-    $(document).ready(function (event) {
-      var circuitName = $('canvas').data('circuit');
-      var circuitFileName = "../circuits/" + circuitName + ".json";
-
-      var canvas = $('canvas.maxwell');
-
-      if (canvas && circuitName.length !== 0) {
-        new Maxwell(canvas.get(0), {circuitName: circuitFileName});
-
-        //var defaultCircuit = Maxwell.createCircuit("default", circuitFileName);
-      } else {
-        console.error("No circuit definition provided");
-        console.error("Circuit name: ", circuitName, "circuit Filename ");
-      }
-    });
-
-  canvas.maxwell(data-circuit="inductac", width="1600", height="3000")
+  canvas.maxwell(data-circuit="default", width="1600", height="3000")

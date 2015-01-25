@@ -16,11 +16,25 @@ html
     script(type="text/javascript", src="../bower_components/d3/d3.js")
 
     script(type="text/javascript", src="../dist/maxwell.js")
+    script.
+      $(document).ready(function (event) {
+        var circuitName = $('canvas').data('circuit');
+        var circuitFileName = "../circuits/" + circuitName + ".json";
+
+        var canvas = $('canvas.maxwell');
+
+        if (canvas && circuitName.length !== 0) {
+          new Maxwell(canvas.get(0), {circuitName: circuitFileName});
+        } else {
+          console.error("No circuit definition provided");
+          console.error("Circuit name: ", circuitName, "circuit Filename ");
+        }
+      });
 
   body
     - for (var i=0; i<examples.length; ++i)
-    li
-      a(href= examples[i])= examples[i]
+      li
+        a(href= examples[i] + ".html")= examples[i]
 
     #container
       block body
