@@ -28,6 +28,7 @@
     "should": "4.3.0",
     "sinonjs": "~1.7.3",
     "dat.gui": "*",
-    "jquery-ui": "*"
+    "jquery-ui": "*",
+    "bootstrap": "~3.3.2"
   }
 }
