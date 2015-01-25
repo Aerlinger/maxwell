@@ -6,11 +6,13 @@
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="../bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css">
     <link rel="stylesheet" href="../bower_components/rickshaw/rickshaw.css">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
     <script type="text/javascript" src="../bower_components/dat.gui/dat.gui.js"></script>
     <script type="text/javascript" src="../bower_components/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="../bower_components/jquery-ui/jquery-ui.js"></script>
     <script type="text/javascript" src="../bower_components/sketch.js/js/sketch.js"></script>
     <script type="text/javascript" src="../bower_components/d3/d3.js"></script>
+    <script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script type="text/javascript" src="../dist/maxwell.js"></script>
     <script>
       $(document).ready(function (event) {
@@ -30,343 +32,351 @@
     </script>
   </head>
   <body>
-    <li><a href="3-cgand.html">3-cgand</a></li>
-    <li><a href="3-cgor.html">3-cgor</a></li>
-    <li><a href="3-f211.html">3-f211</a></li>
-    <li><a href="3-f220.html">3-f220</a></li>
-    <li><a href="3-f221.html">3-f221</a></li>
-    <li><a href="3-invert.html">3-invert</a></li>
-    <li><a href="3way.html">3way</a></li>
-    <li><a href="4way.html">4way</a></li>
-    <li><a href="555int.html">555int</a></li>
-    <li><a href="555lowduty.html">555lowduty</a></li>
-    <li><a href="555missing.html">555missing</a></li>
-    <li><a href="555monostable.html">555monostable</a></li>
-    <li><a href="555pulsemod.html">555pulsemod</a></li>
-    <li><a href="555saw.html">555saw</a></li>
-    <li><a href="555schmitt.html">555schmitt</a></li>
-    <li><a href="555sequencer.html">555sequencer</a></li>
-    <li><a href="555square.html">555square</a></li>
-    <li><a href="7segdecoder.html">7segdecoder</a></li>
-    <li><a href="__index__.html">__index__</a></li>
-    <li><a href="allpass1.html">allpass1</a></li>
-    <li><a href="allpass2.html">allpass2</a></li>
-    <li><a href="amdetect.html">amdetect</a></li>
-    <li><a href="amp-dfdx.html">amp-dfdx</a></li>
-    <li><a href="amp-diff.html">amp-diff</a></li>
-    <li><a href="amp-follower.html">amp-follower</a></li>
-    <li><a href="amp-fullrect.html">amp-fullrect</a></li>
-    <li><a href="amp-integ.html">amp-integ</a></li>
-    <li><a href="amp-invert.html">amp-invert</a></li>
-    <li><a href="amp-noninvert.html">amp-noninvert</a></li>
-    <li><a href="amp-rect.html">amp-rect</a></li>
-    <li><a href="amp-schmitt.html">amp-schmitt</a></li>
-    <li><a href="amp-sum.html">amp-sum</a></li>
-    <li><a href="bandpass.html">bandpass</a></li>
-    <li><a href="besselbutter.html">besselbutter</a></li>
-    <li><a href="blank.html">blank</a></li>
-    <li><a href="butter10lo.html">butter10lo</a></li>
-    <li><a href="cap.html">cap</a></li>
-    <li><a href="capac.html">capac</a></li>
-    <li><a href="capmult.html">capmult</a></li>
-    <li><a href="capmultcaps.html">capmultcaps</a></li>
-    <li><a href="capmultfreq.html">capmultfreq</a></li>
-    <li><a href="cappar.html">cappar</a></li>
-    <li><a href="capseries.html">capseries</a></li>
-    <li><a href="cc2.html">cc2</a></li>
-    <li><a href="cc2imp.html">cc2imp</a></li>
-    <li><a href="cc2impn.html">cc2impn</a></li>
-    <li><a href="cc2n.html">cc2n</a></li>
-    <li><a href="ccdiff.html">ccdiff</a></li>
-    <li><a href="cciamp.html">cciamp</a></li>
-    <li><a href="ccinductor.html">ccinductor</a></li>
-    <li><a href="ccint.html">ccint</a></li>
-    <li><a href="ccitov.html">ccitov</a></li>
-    <li><a href="ccvccs.html">ccvccs</a></li>
-    <li><a href="ceamp.html">ceamp</a></li>
-    <li><a href="classd.html">classd</a></li>
-    <li><a href="clockedsrff.html">clockedsrff</a></li>
-    <li><a href="cmosff.html">cmosff</a></li>
-    <li><a href="cmosinverter.html">cmosinverter</a></li>
-    <li><a href="cmosinvertercap.html">cmosinvertercap</a></li>
-    <li><a href="cmosinverterslow.html">cmosinverterslow</a></li>
-    <li><a href="cmosmsff.html">cmosmsff</a></li>
-    <li><a href="cmosnand.html">cmosnand</a></li>
-    <li><a href="cmosnor.html">cmosnor</a></li>
-    <li><a href="cmostransgate.html">cmostransgate</a></li>
-    <li><a href="cmosxor.html">cmosxor</a></li>
-    <li><a href="colpitts.html">colpitts</a></li>
-    <li><a href="counter.html">counter</a></li>
-    <li><a href="counter8.html">counter8</a></li>
-    <li><a href="coupled1.html">coupled1</a></li>
-    <li><a href="coupled2.html">coupled2</a></li>
-    <li><a href="coupled3.html">coupled3</a></li>
-    <li><a href="crossover.html">crossover</a></li>
-    <li><a href="cube.html">cube</a></li>
-    <li><a href="currentsrc.html">currentsrc</a></li>
-    <li><a href="currentsrcelm.html">currentsrcelm</a></li>
-    <li><a href="currentsrcramp.html">currentsrcramp</a></li>
-    <li><a href="dac.html">dac</a></li>
-    <li><a href="darlington.html">darlington</a></li>
-    <li><a href="dcrestoration.html">dcrestoration</a></li>
-    <li><a href="deccounter.html">deccounter</a></li>
-    <li><a href="decoder.html">decoder</a></li>
-    <li><a href="default.html">default</a></li>
-    <li><a href="delayrc.html">delayrc</a></li>
-    <li><a href="deltasigma.html">deltasigma</a></li>
-    <li><a href="diff.html">diff</a></li>
-    <li><a href="digcompare.html">digcompare</a></li>
-    <li><a href="digsine.html">digsine</a></li>
-    <li><a href="diodeclip.html">diodeclip</a></li>
-    <li><a href="diodecurve.html">diodecurve</a></li>
-    <li><a href="diodelimit.html">diodelimit</a></li>
-    <li><a href="diodevar.html">diodevar</a></li>
-    <li><a href="divideby2.html">divideby2</a></li>
-    <li><a href="divideby3.html">divideby3</a></li>
-    <li><a href="dram.html">dram</a></li>
-    <li><a href="dtlinverter.html">dtlinverter</a></li>
-    <li><a href="dtlnand.html">dtlnand</a></li>
-    <li><a href="dtlnor.html">dtlnor</a></li>
-    <li><a href="eclnor.html">eclnor</a></li>
-    <li><a href="eclosc.html">eclosc</a></li>
-    <li><a href="edgedff.html">edgedff</a></li>
-    <li><a href="filt-hipass-l.html">filt-hipass-l</a></li>
-    <li><a href="filt-hipass.html">filt-hipass</a></li>
-    <li><a href="filt-lopass-l.html">filt-lopass-l</a></li>
-    <li><a href="filt-lopass.html">filt-lopass</a></li>
-    <li><a href="filt-vcvs-hipass.html">filt-vcvs-hipass</a></li>
-    <li><a href="filt-vcvs-lopass.html">filt-vcvs-lopass</a></li>
-    <li><a href="flashadc.html">flashadc</a></li>
-    <li><a href="follower.html">follower</a></li>
-    <li><a href="freqdouble.html">freqdouble</a></li>
-    <li><a href="fulladd.html">fulladd</a></li>
-    <li><a href="fullrect.html">fullrect</a></li>
-    <li><a href="fullrectf.html">fullrectf</a></li>
-    <li><a href="graycode.html">graycode</a></li>
-    <li><a href="grid.html">grid</a></li>
-    <li><a href="grid2.html">grid2</a></li>
-    <li><a href="gyrator.html">gyrator</a></li>
-    <li><a href="halfadd.html">halfadd</a></li>
-    <li><a href="hartley.html">hartley</a></li>
-    <li><a href="hfadc.html">hfadc</a></li>
-    <li><a href="howland.html">howland</a></li>
-    <li><a href="impedance.html">impedance</a></li>
-    <li><a href="index.html">index</a></li>
-    <li><a href="indmultfreq.html">indmultfreq</a></li>
-    <li><a href="indmultind.html">indmultind</a></li>
-    <li><a href="indpar.html">indpar</a></li>
-    <li><a href="indseries.html">indseries</a></li>
-    <li><a href="induct.html">induct</a></li>
-    <li><a href="inductac.html">inductac</a></li>
-    <li><a href="inductkick-block.html">inductkick-block</a></li>
-    <li><a href="inductkick-snub.html">inductkick-snub</a></li>
-    <li><a href="inductkick.html">inductkick</a></li>
-    <li><a href="inv-osc.html">inv-osc</a></li>
-    <li><a href="invertamp.html">invertamp</a></li>
-    <li><a href="itov.html">itov</a></li>
-    <li><a href="jfetamp.html">jfetamp</a></li>
-    <li><a href="jfetcurrentsrc.html">jfetcurrentsrc</a></li>
-    <li><a href="jfetfollower-nooff.html">jfetfollower-nooff</a></li>
-    <li><a href="jfetfollower.html">jfetfollower</a></li>
-    <li><a href="jkff.html">jkff</a></li>
-    <li><a href="johnsonctr.html">johnsonctr</a></li>
-    <li><a href="ladder.html">ladder</a></li>
-    <li><a href="leadingedge.html">leadingedge</a></li>
-    <li><a href="ledflasher.html">ledflasher</a></li>
-    <li><a href="lissa.html">lissa</a></li>
-    <li><a href="loading-a-circuit-from-json.html">loading-a-circuit-from-json</a></li>
-    <li><a href="logconvert.html">logconvert</a></li>
-    <li><a href="longdist.html">longdist</a></li>
-    <li><a href="lrc-critical.html">lrc-critical</a></li>
-    <li><a href="lrc.html">lrc</a></li>
-    <li><a href="majority.html">majority</a></li>
-    <li><a href="masterslaveff.html">masterslaveff</a></li>
-    <li><a href="mirror.html">mirror</a></li>
-    <li><a href="moscurrentramp.html">moscurrentramp</a></li>
-    <li><a href="moscurrentsrc.html">moscurrentsrc</a></li>
-    <li><a href="mosfetamp.html">mosfetamp</a></li>
-    <li><a href="mosfollower.html">mosfollower</a></li>
-    <li><a href="mosmirror.html">mosmirror</a></li>
-    <li><a href="mosswitch.html">mosswitch</a></li>
-    <li><a href="mr-crossbar.html">mr-crossbar</a></li>
-    <li><a href="mr-sine.html">mr-sine</a></li>
-    <li><a href="mr-sine2.html">mr-sine2</a></li>
-    <li><a href="mr-sine3.html">mr-sine3</a></li>
-    <li><a href="mr-square.html">mr-square</a></li>
-    <li><a href="mr-triangle.html">mr-triangle</a></li>
-    <li><a href="mr.html">mr</a></li>
-    <li><a href="multivib-a.html">multivib-a</a></li>
-    <li><a href="multivib-bi.html">multivib-bi</a></li>
-    <li><a href="multivib-mono.html">multivib-mono</a></li>
-    <li><a href="mux.html">mux</a></li>
-    <li><a href="mux3state.html">mux3state</a></li>
-    <li><a href="nandff.html">nandff</a></li>
-    <li><a href="nic-r.html">nic-r</a></li>
-    <li><a href="nmosfet.html">nmosfet</a></li>
-    <li><a href="nmosinverter.html">nmosinverter</a></li>
-    <li><a href="nmosinverter2.html">nmosinverter2</a></li>
-    <li><a href="nmosnand.html">nmosnand</a></li>
-    <li><a href="norton.html">norton</a></li>
-    <li><a href="notch.html">notch</a></li>
-    <li><a href="npn.html">npn</a></li>
-    <li><a href="ohms.html">ohms</a></li>
-    <li><a href="opamp-regulator.html">opamp-regulator</a></li>
-    <li><a href="opamp.html">opamp</a></li>
-    <li><a href="opampfeedback.html">opampfeedback</a></li>
-    <li><a href="opint-current.html">opint-current</a></li>
-    <li><a href="opint-invert-amp.html">opint-invert-amp</a></li>
-    <li><a href="opint-slew.html">opint-slew</a></li>
-    <li><a href="opint.html">opint</a></li>
-    <li><a href="peak-detect.html">peak-detect</a></li>
-    <li><a href="phase-shift-oscillator.html">phase-shift-oscillator</a></li>
-    <li><a href="phasecomp.html">phasecomp</a></li>
-    <li><a href="phasecompint.html">phasecompint</a></li>
-    <li><a href="phaseseq.html">phaseseq</a></li>
-    <li><a href="phaseshiftosc.html">phaseshiftosc</a></li>
-    <li><a href="phasesplit.html">phasesplit</a></li>
-    <li><a href="pll.html">pll</a></li>
-    <li><a href="pll2.html">pll2</a></li>
-    <li><a href="pll2a.html">pll2a</a></li>
-    <li><a href="pmosfet.html">pmosfet</a></li>
-    <li><a href="pnp.html">pnp</a></li>
-    <li><a href="pot.html">pot</a></li>
-    <li><a href="potdivide.html">potdivide</a></li>
-    <li><a href="powerfactor1.html">powerfactor1</a></li>
-    <li><a href="powerfactor2.html">powerfactor2</a></li>
-    <li><a href="pushpull.html">pushpull</a></li>
-    <li><a href="pushpullxover.html">pushpullxover</a></li>
-    <li><a href="r2rladder.html">r2rladder</a></li>
-    <li><a href="rectify.html">rectify</a></li>
-    <li><a href="relaxosc.html">relaxosc</a></li>
-    <li><a href="relay.html">relay</a></li>
-    <li><a href="relayand.html">relayand</a></li>
-    <li><a href="relayctr.html">relayctr</a></li>
-    <li><a href="relayff.html">relayff</a></li>
-    <li><a href="relaymux.html">relaymux</a></li>
-    <li><a href="relayor.html">relayor</a></li>
-    <li><a href="relaytff.html">relaytff</a></li>
-    <li><a href="relayxor.html">relayxor</a></li>
-    <li><a href="res-par.html">res-par</a></li>
-    <li><a href="res-series.html">res-series</a></li>
-    <li><a href="resistors.html">resistors</a></li>
-    <li><a href="ringing.html">ringing</a></li>
-    <li><a href="ringmod.html">ringmod</a></li>
-    <li><a href="rossler.html">rossler</a></li>
-    <li><a href="rtlinverter.html">rtlinverter</a></li>
-    <li><a href="rtlnand.html">rtlnand</a></li>
-    <li><a href="rtlnor.html">rtlnor</a></li>
-    <li><a href="samplenhold.html">samplenhold</a></li>
-    <li><a href="sawtooth.html">sawtooth</a></li>
-    <li><a href="schmitt.html">schmitt</a></li>
-    <li><a href="scr.html">scr</a></li>
-    <li><a href="scractrig.html">scractrig</a></li>
-    <li><a href="sine.html">sine</a></li>
-    <li><a href="sinediode.html">sinediode</a></li>
-    <li><a href="spark-marx.html">spark-marx</a></li>
-    <li><a href="spark-sawtooth.html">spark-sawtooth</a></li>
-    <li><a href="spikegen.html">spikegen</a></li>
-    <li><a href="switchedcap.html">switchedcap</a></li>
-    <li><a href="switchfilter.html">switchfilter</a></li>
-    <li><a href="swtreedac.html">swtreedac</a></li>
-    <li><a href="synccounter.html">synccounter</a></li>
-    <li><a href="tdiode.html">tdiode</a></li>
-    <li><a href="tdosc.html">tdosc</a></li>
-    <li><a href="tdrelax.html">tdrelax</a></li>
-    <li><a href="tesla.html">tesla</a></li>
-    <li><a href="thevenin.html">thevenin</a></li>
-    <li><a href="tl.html">tl</a></li>
-    <li><a href="tlfreq.html">tlfreq</a></li>
-    <li><a href="tllight.html">tllight</a></li>
-    <li><a href="tllopass.html">tllopass</a></li>
-    <li><a href="tlmatch1.html">tlmatch1</a></li>
-    <li><a href="tlmatch2.html">tlmatch2</a></li>
-    <li><a href="tlmis1.html">tlmis1</a></li>
-    <li><a href="tlmismatch.html">tlmismatch</a></li>
-    <li><a href="tlstand.html">tlstand</a></li>
-    <li><a href="tlterm.html">tlterm</a></li>
-    <li><a href="traffic.html">traffic</a></li>
-    <li><a href="trans-diffamp-common.html">trans-diffamp-common</a></li>
-    <li><a href="trans-diffamp-cursrc.html">trans-diffamp-cursrc</a></li>
-    <li><a href="trans-diffamp.html">trans-diffamp</a></li>
-    <li><a href="transformer.html">transformer</a></li>
-    <li><a href="transformerdc.html">transformerdc</a></li>
-    <li><a href="transformerdown.html">transformerdown</a></li>
-    <li><a href="transformerup.html">transformerup</a></li>
-    <li><a href="transswitch.html">transswitch</a></li>
-    <li><a href="triangle.html">triangle</a></li>
-    <li><a href="triode.html">triode</a></li>
-    <li><a href="triodeamp.html">triodeamp</a></li>
-    <li><a href="ttlinverter.html">ttlinverter</a></li>
-    <li><a href="ttlnand.html">ttlnand</a></li>
-    <li><a href="ttlnor.html">ttlnor</a></li>
-    <li><a href="twint.html">twint</a></li>
-    <li><a href="vco.html">vco</a></li>
-    <li><a href="voltdivide.html">voltdivide</a></li>
-    <li><a href="voltdividesimple.html">voltdividesimple</a></li>
-    <li><a href="voltdouble.html">voltdouble</a></li>
-    <li><a href="voltdouble2.html">voltdouble2</a></li>
-    <li><a href="voltinvert.html">voltinvert</a></li>
-    <li><a href="voltquad.html">voltquad</a></li>
-    <li><a href="volttriple.html">volttriple</a></li>
-    <li><a href="volume.html">volume</a></li>
-    <li><a href="wheatstone.html">wheatstone</a></li>
-    <li><a href="xor.html">xor</a></li>
-    <li><a href="xorphasedet.html">xorphasedet</a></li>
-    <li><a href="zeneriv.html">zeneriv</a></li>
-    <li><a href="zenerref.html">zenerref</a></li>
-    <li><a href="zenerreffollow.html">zenerreffollow</a></li>
-    <div id="container">
-      <canvas data-circuit="mosfollower" width="1000" height="800" class="maxwell"></canvas>
+    <div class="col-md-1">
+      <div id="sidenav">
+        <ul class="list-unstyled">
+          <li><a href="3-cgand.html">3-cgand</a></li>
+          <li><a href="3-cgor.html">3-cgor</a></li>
+          <li><a href="3-f211.html">3-f211</a></li>
+          <li><a href="3-f220.html">3-f220</a></li>
+          <li><a href="3-f221.html">3-f221</a></li>
+          <li><a href="3-invert.html">3-invert</a></li>
+          <li><a href="3way.html">3way</a></li>
+          <li><a href="4way.html">4way</a></li>
+          <li><a href="555int.html">555int</a></li>
+          <li><a href="555lowduty.html">555lowduty</a></li>
+          <li><a href="555missing.html">555missing</a></li>
+          <li><a href="555monostable.html">555monostable</a></li>
+          <li><a href="555pulsemod.html">555pulsemod</a></li>
+          <li><a href="555saw.html">555saw</a></li>
+          <li><a href="555schmitt.html">555schmitt</a></li>
+          <li><a href="555sequencer.html">555sequencer</a></li>
+          <li><a href="555square.html">555square</a></li>
+          <li><a href="7segdecoder.html">7segdecoder</a></li>
+          <li><a href="__index__.html">__index__</a></li>
+          <li><a href="allpass1.html">allpass1</a></li>
+          <li><a href="allpass2.html">allpass2</a></li>
+          <li><a href="amdetect.html">amdetect</a></li>
+          <li><a href="amp-dfdx.html">amp-dfdx</a></li>
+          <li><a href="amp-diff.html">amp-diff</a></li>
+          <li><a href="amp-follower.html">amp-follower</a></li>
+          <li><a href="amp-fullrect.html">amp-fullrect</a></li>
+          <li><a href="amp-integ.html">amp-integ</a></li>
+          <li><a href="amp-invert.html">amp-invert</a></li>
+          <li><a href="amp-noninvert.html">amp-noninvert</a></li>
+          <li><a href="amp-rect.html">amp-rect</a></li>
+          <li><a href="amp-schmitt.html">amp-schmitt</a></li>
+          <li><a href="amp-sum.html">amp-sum</a></li>
+          <li><a href="bandpass.html">bandpass</a></li>
+          <li><a href="besselbutter.html">besselbutter</a></li>
+          <li><a href="blank.html">blank</a></li>
+          <li><a href="butter10lo.html">butter10lo</a></li>
+          <li><a href="cap.html">cap</a></li>
+          <li><a href="capac.html">capac</a></li>
+          <li><a href="capmult.html">capmult</a></li>
+          <li><a href="capmultcaps.html">capmultcaps</a></li>
+          <li><a href="capmultfreq.html">capmultfreq</a></li>
+          <li><a href="cappar.html">cappar</a></li>
+          <li><a href="capseries.html">capseries</a></li>
+          <li><a href="cc2.html">cc2</a></li>
+          <li><a href="cc2imp.html">cc2imp</a></li>
+          <li><a href="cc2impn.html">cc2impn</a></li>
+          <li><a href="cc2n.html">cc2n</a></li>
+          <li><a href="ccdiff.html">ccdiff</a></li>
+          <li><a href="cciamp.html">cciamp</a></li>
+          <li><a href="ccinductor.html">ccinductor</a></li>
+          <li><a href="ccint.html">ccint</a></li>
+          <li><a href="ccitov.html">ccitov</a></li>
+          <li><a href="ccvccs.html">ccvccs</a></li>
+          <li><a href="ceamp.html">ceamp</a></li>
+          <li><a href="classd.html">classd</a></li>
+          <li><a href="clockedsrff.html">clockedsrff</a></li>
+          <li><a href="cmosff.html">cmosff</a></li>
+          <li><a href="cmosinverter.html">cmosinverter</a></li>
+          <li><a href="cmosinvertercap.html">cmosinvertercap</a></li>
+          <li><a href="cmosinverterslow.html">cmosinverterslow</a></li>
+          <li><a href="cmosmsff.html">cmosmsff</a></li>
+          <li><a href="cmosnand.html">cmosnand</a></li>
+          <li><a href="cmosnor.html">cmosnor</a></li>
+          <li><a href="cmostransgate.html">cmostransgate</a></li>
+          <li><a href="cmosxor.html">cmosxor</a></li>
+          <li><a href="colpitts.html">colpitts</a></li>
+          <li><a href="counter.html">counter</a></li>
+          <li><a href="counter8.html">counter8</a></li>
+          <li><a href="coupled1.html">coupled1</a></li>
+          <li><a href="coupled2.html">coupled2</a></li>
+          <li><a href="coupled3.html">coupled3</a></li>
+          <li><a href="crossover.html">crossover</a></li>
+          <li><a href="cube.html">cube</a></li>
+          <li><a href="currentsrc.html">currentsrc</a></li>
+          <li><a href="currentsrcelm.html">currentsrcelm</a></li>
+          <li><a href="currentsrcramp.html">currentsrcramp</a></li>
+          <li><a href="dac.html">dac</a></li>
+          <li><a href="darlington.html">darlington</a></li>
+          <li><a href="dcrestoration.html">dcrestoration</a></li>
+          <li><a href="deccounter.html">deccounter</a></li>
+          <li><a href="decoder.html">decoder</a></li>
+          <li><a href="default.html">default</a></li>
+          <li><a href="delayrc.html">delayrc</a></li>
+          <li><a href="deltasigma.html">deltasigma</a></li>
+          <li><a href="diff.html">diff</a></li>
+          <li><a href="digcompare.html">digcompare</a></li>
+          <li><a href="digsine.html">digsine</a></li>
+          <li><a href="diodeclip.html">diodeclip</a></li>
+          <li><a href="diodecurve.html">diodecurve</a></li>
+          <li><a href="diodelimit.html">diodelimit</a></li>
+          <li><a href="diodevar.html">diodevar</a></li>
+          <li><a href="divideby2.html">divideby2</a></li>
+          <li><a href="divideby3.html">divideby3</a></li>
+          <li><a href="dram.html">dram</a></li>
+          <li><a href="dtlinverter.html">dtlinverter</a></li>
+          <li><a href="dtlnand.html">dtlnand</a></li>
+          <li><a href="dtlnor.html">dtlnor</a></li>
+          <li><a href="eclnor.html">eclnor</a></li>
+          <li><a href="eclosc.html">eclosc</a></li>
+          <li><a href="edgedff.html">edgedff</a></li>
+          <li><a href="filt-hipass-l.html">filt-hipass-l</a></li>
+          <li><a href="filt-hipass.html">filt-hipass</a></li>
+          <li><a href="filt-lopass-l.html">filt-lopass-l</a></li>
+          <li><a href="filt-lopass.html">filt-lopass</a></li>
+          <li><a href="filt-vcvs-hipass.html">filt-vcvs-hipass</a></li>
+          <li><a href="filt-vcvs-lopass.html">filt-vcvs-lopass</a></li>
+          <li><a href="flashadc.html">flashadc</a></li>
+          <li><a href="follower.html">follower</a></li>
+          <li><a href="freqdouble.html">freqdouble</a></li>
+          <li><a href="fulladd.html">fulladd</a></li>
+          <li><a href="fullrect.html">fullrect</a></li>
+          <li><a href="fullrectf.html">fullrectf</a></li>
+          <li><a href="graycode.html">graycode</a></li>
+          <li><a href="grid.html">grid</a></li>
+          <li><a href="grid2.html">grid2</a></li>
+          <li><a href="gyrator.html">gyrator</a></li>
+          <li><a href="halfadd.html">halfadd</a></li>
+          <li><a href="hartley.html">hartley</a></li>
+          <li><a href="hfadc.html">hfadc</a></li>
+          <li><a href="howland.html">howland</a></li>
+          <li><a href="impedance.html">impedance</a></li>
+          <li><a href="index.html">index</a></li>
+          <li><a href="indmultfreq.html">indmultfreq</a></li>
+          <li><a href="indmultind.html">indmultind</a></li>
+          <li><a href="indpar.html">indpar</a></li>
+          <li><a href="indseries.html">indseries</a></li>
+          <li><a href="induct.html">induct</a></li>
+          <li><a href="inductac.html">inductac</a></li>
+          <li><a href="inductkick-block.html">inductkick-block</a></li>
+          <li><a href="inductkick-snub.html">inductkick-snub</a></li>
+          <li><a href="inductkick.html">inductkick</a></li>
+          <li><a href="inv-osc.html">inv-osc</a></li>
+          <li><a href="invertamp.html">invertamp</a></li>
+          <li><a href="itov.html">itov</a></li>
+          <li><a href="jfetamp.html">jfetamp</a></li>
+          <li><a href="jfetcurrentsrc.html">jfetcurrentsrc</a></li>
+          <li><a href="jfetfollower-nooff.html">jfetfollower-nooff</a></li>
+          <li><a href="jfetfollower.html">jfetfollower</a></li>
+          <li><a href="jkff.html">jkff</a></li>
+          <li><a href="johnsonctr.html">johnsonctr</a></li>
+          <li><a href="ladder.html">ladder</a></li>
+          <li><a href="leadingedge.html">leadingedge</a></li>
+          <li><a href="ledflasher.html">ledflasher</a></li>
+          <li><a href="lissa.html">lissa</a></li>
+          <li><a href="loading-a-circuit-from-json.html">loading-a-circuit-from-json</a></li>
+          <li><a href="logconvert.html">logconvert</a></li>
+          <li><a href="longdist.html">longdist</a></li>
+          <li><a href="lrc-critical.html">lrc-critical</a></li>
+          <li><a href="lrc.html">lrc</a></li>
+          <li><a href="majority.html">majority</a></li>
+          <li><a href="masterslaveff.html">masterslaveff</a></li>
+          <li><a href="mirror.html">mirror</a></li>
+          <li><a href="moscurrentramp.html">moscurrentramp</a></li>
+          <li><a href="moscurrentsrc.html">moscurrentsrc</a></li>
+          <li><a href="mosfetamp.html">mosfetamp</a></li>
+          <li><a href="mosfollower.html">mosfollower</a></li>
+          <li><a href="mosmirror.html">mosmirror</a></li>
+          <li><a href="mosswitch.html">mosswitch</a></li>
+          <li><a href="mr-crossbar.html">mr-crossbar</a></li>
+          <li><a href="mr-sine.html">mr-sine</a></li>
+          <li><a href="mr-sine2.html">mr-sine2</a></li>
+          <li><a href="mr-sine3.html">mr-sine3</a></li>
+          <li><a href="mr-square.html">mr-square</a></li>
+          <li><a href="mr-triangle.html">mr-triangle</a></li>
+          <li><a href="mr.html">mr</a></li>
+          <li><a href="multivib-a.html">multivib-a</a></li>
+          <li><a href="multivib-bi.html">multivib-bi</a></li>
+          <li><a href="multivib-mono.html">multivib-mono</a></li>
+          <li><a href="mux.html">mux</a></li>
+          <li><a href="mux3state.html">mux3state</a></li>
+          <li><a href="nandff.html">nandff</a></li>
+          <li><a href="nic-r.html">nic-r</a></li>
+          <li><a href="nmosfet.html">nmosfet</a></li>
+          <li><a href="nmosinverter.html">nmosinverter</a></li>
+          <li><a href="nmosinverter2.html">nmosinverter2</a></li>
+          <li><a href="nmosnand.html">nmosnand</a></li>
+          <li><a href="norton.html">norton</a></li>
+          <li><a href="notch.html">notch</a></li>
+          <li><a href="npn.html">npn</a></li>
+          <li><a href="ohms.html">ohms</a></li>
+          <li><a href="opamp-regulator.html">opamp-regulator</a></li>
+          <li><a href="opamp.html">opamp</a></li>
+          <li><a href="opampfeedback.html">opampfeedback</a></li>
+          <li><a href="opint-current.html">opint-current</a></li>
+          <li><a href="opint-invert-amp.html">opint-invert-amp</a></li>
+          <li><a href="opint-slew.html">opint-slew</a></li>
+          <li><a href="opint.html">opint</a></li>
+          <li><a href="peak-detect.html">peak-detect</a></li>
+          <li><a href="phase-shift-oscillator.html">phase-shift-oscillator</a></li>
+          <li><a href="phasecomp.html">phasecomp</a></li>
+          <li><a href="phasecompint.html">phasecompint</a></li>
+          <li><a href="phaseseq.html">phaseseq</a></li>
+          <li><a href="phaseshiftosc.html">phaseshiftosc</a></li>
+          <li><a href="phasesplit.html">phasesplit</a></li>
+          <li><a href="pll.html">pll</a></li>
+          <li><a href="pll2.html">pll2</a></li>
+          <li><a href="pll2a.html">pll2a</a></li>
+          <li><a href="pmosfet.html">pmosfet</a></li>
+          <li><a href="pnp.html">pnp</a></li>
+          <li><a href="pot.html">pot</a></li>
+          <li><a href="potdivide.html">potdivide</a></li>
+          <li><a href="powerfactor1.html">powerfactor1</a></li>
+          <li><a href="powerfactor2.html">powerfactor2</a></li>
+          <li><a href="pushpull.html">pushpull</a></li>
+          <li><a href="pushpullxover.html">pushpullxover</a></li>
+          <li><a href="r2rladder.html">r2rladder</a></li>
+          <li><a href="rectify.html">rectify</a></li>
+          <li><a href="relaxosc.html">relaxosc</a></li>
+          <li><a href="relay.html">relay</a></li>
+          <li><a href="relayand.html">relayand</a></li>
+          <li><a href="relayctr.html">relayctr</a></li>
+          <li><a href="relayff.html">relayff</a></li>
+          <li><a href="relaymux.html">relaymux</a></li>
+          <li><a href="relayor.html">relayor</a></li>
+          <li><a href="relaytff.html">relaytff</a></li>
+          <li><a href="relayxor.html">relayxor</a></li>
+          <li><a href="res-par.html">res-par</a></li>
+          <li><a href="res-series.html">res-series</a></li>
+          <li><a href="resistors.html">resistors</a></li>
+          <li><a href="ringing.html">ringing</a></li>
+          <li><a href="ringmod.html">ringmod</a></li>
+          <li><a href="rossler.html">rossler</a></li>
+          <li><a href="rtlinverter.html">rtlinverter</a></li>
+          <li><a href="rtlnand.html">rtlnand</a></li>
+          <li><a href="rtlnor.html">rtlnor</a></li>
+          <li><a href="samplenhold.html">samplenhold</a></li>
+          <li><a href="sawtooth.html">sawtooth</a></li>
+          <li><a href="schmitt.html">schmitt</a></li>
+          <li><a href="scr.html">scr</a></li>
+          <li><a href="scractrig.html">scractrig</a></li>
+          <li><a href="sine.html">sine</a></li>
+          <li><a href="sinediode.html">sinediode</a></li>
+          <li><a href="spark-marx.html">spark-marx</a></li>
+          <li><a href="spark-sawtooth.html">spark-sawtooth</a></li>
+          <li><a href="spikegen.html">spikegen</a></li>
+          <li><a href="switchedcap.html">switchedcap</a></li>
+          <li><a href="switchfilter.html">switchfilter</a></li>
+          <li><a href="swtreedac.html">swtreedac</a></li>
+          <li><a href="synccounter.html">synccounter</a></li>
+          <li><a href="tdiode.html">tdiode</a></li>
+          <li><a href="tdosc.html">tdosc</a></li>
+          <li><a href="tdrelax.html">tdrelax</a></li>
+          <li><a href="tesla.html">tesla</a></li>
+          <li><a href="thevenin.html">thevenin</a></li>
+          <li><a href="tl.html">tl</a></li>
+          <li><a href="tlfreq.html">tlfreq</a></li>
+          <li><a href="tllight.html">tllight</a></li>
+          <li><a href="tllopass.html">tllopass</a></li>
+          <li><a href="tlmatch1.html">tlmatch1</a></li>
+          <li><a href="tlmatch2.html">tlmatch2</a></li>
+          <li><a href="tlmis1.html">tlmis1</a></li>
+          <li><a href="tlmismatch.html">tlmismatch</a></li>
+          <li><a href="tlstand.html">tlstand</a></li>
+          <li><a href="tlterm.html">tlterm</a></li>
+          <li><a href="traffic.html">traffic</a></li>
+          <li><a href="trans-diffamp-common.html">trans-diffamp-common</a></li>
+          <li><a href="trans-diffamp-cursrc.html">trans-diffamp-cursrc</a></li>
+          <li><a href="trans-diffamp.html">trans-diffamp</a></li>
+          <li><a href="transformer.html">transformer</a></li>
+          <li><a href="transformerdc.html">transformerdc</a></li>
+          <li><a href="transformerdown.html">transformerdown</a></li>
+          <li><a href="transformerup.html">transformerup</a></li>
+          <li><a href="transswitch.html">transswitch</a></li>
+          <li><a href="triangle.html">triangle</a></li>
+          <li><a href="triode.html">triode</a></li>
+          <li><a href="triodeamp.html">triodeamp</a></li>
+          <li><a href="ttlinverter.html">ttlinverter</a></li>
+          <li><a href="ttlnand.html">ttlnand</a></li>
+          <li><a href="ttlnor.html">ttlnor</a></li>
+          <li><a href="twint.html">twint</a></li>
+          <li><a href="vco.html">vco</a></li>
+          <li><a href="voltdivide.html">voltdivide</a></li>
+          <li><a href="voltdividesimple.html">voltdividesimple</a></li>
+          <li><a href="voltdouble.html">voltdouble</a></li>
+          <li><a href="voltdouble2.html">voltdouble2</a></li>
+          <li><a href="voltinvert.html">voltinvert</a></li>
+          <li><a href="voltquad.html">voltquad</a></li>
+          <li><a href="volttriple.html">volttriple</a></li>
+          <li><a href="volume.html">volume</a></li>
+          <li><a href="wheatstone.html">wheatstone</a></li>
+          <li><a href="xor.html">xor</a></li>
+          <li><a href="xorphasedet.html">xorphasedet</a></li>
+          <li><a href="zeneriv.html">zeneriv</a></li>
+          <li><a href="zenerref.html">zenerref</a></li>
+          <li><a href="zenerreffollow.html">zenerreffollow</a></li>
+        </ul>
+      </div>
     </div>
-    <div id="content">
-      <form id="side_panel">
-        <section>
-          <div id="legend"></div>
-        </section>
-        <section>
-          <div id="renderer_form" class="toggler">
-            <input id="area" type="radio" name="renderer" value="area" checked="checked">
-            <label for="area">area</label>
-            <input id="bar" type="radio" name="renderer" value="bar">
-            <label for="bar">bar</label>
-            <input id="line" type="radio" name="renderer" value="line">
-            <label for="line">line</label>
-            <input id="scatter" type="radio" name="renderer" value="scatterplot">
-            <label for="scatter">scatter</label>
-          </div>
-        </section>
-        <section>
-          <div id="offset_form">
-            <label for="stack">
-              <input id="stack" type="radio" name="offset" value="zero" checked="checked"><span>stack</span>
-            </label>
-            <label for="stream">
-              <input id="stream" type="radio" name="offset" value="wiggle"><span>stream</span>
-            </label>
-            <label for="pct">
-              <input id="pct" type="radio" name="offset" value="expand"><span>pct</span>
-            </label>
-            <label for="value">
-              <input id="value" type="radio" name="offset" value="value"><span>value</span>
-            </label>
-          </div>
-          <div id="interpolation_form">
-            <label for="cardinal">
-              <input id="cardinal" type="radio" name="interpolation" value="cardinal" checked="checked"><span>cardinal</span>
-            </label>
-            <label for="linear">
-              <input id="linear" type="radio" name="interpolation" value="linear"><span>linear</span>
-            </label>
-            <label for="step">
-              <input id="step" type="radio" name="interpolation" value="step-after"><span>step</span>
-            </label>
-          </div>
-        </section>
-      </form>
-      <div id="chart_container">
-        <div id="chart"></div>
-        <div id="timeline"></div>
-        <div id="preview"></div>
+    <div class="col-md-11">
+      <div id="container">
+        <canvas data-circuit="mosfollower" width="1000" height="800" class="maxwell"></canvas>
+      </div>
+      <div id="content">
+        <form id="side_panel">
+          <section>
+            <div id="legend"></div>
+          </section>
+          <section>
+            <div id="renderer_form" class="toggler">
+              <input id="area" type="radio" name="renderer" value="area" checked="checked">
+              <label for="area">area</label>
+              <input id="bar" type="radio" name="renderer" value="bar">
+              <label for="bar">bar</label>
+              <input id="line" type="radio" name="renderer" value="line">
+              <label for="line">line</label>
+              <input id="scatter" type="radio" name="renderer" value="scatterplot">
+              <label for="scatter">scatter</label>
+            </div>
+          </section>
+          <section>
+            <div id="offset_form">
+              <label for="stack">
+                <input id="stack" type="radio" name="offset" value="zero" checked="checked"><span>stack</span>
+              </label>
+              <label for="stream">
+                <input id="stream" type="radio" name="offset" value="wiggle"><span>stream</span>
+              </label>
+              <label for="pct">
+                <input id="pct" type="radio" name="offset" value="expand"><span>pct</span>
+              </label>
+              <label for="value">
+                <input id="value" type="radio" name="offset" value="value"><span>value</span>
+              </label>
+            </div>
+            <div id="interpolation_form">
+              <label for="cardinal">
+                <input id="cardinal" type="radio" name="interpolation" value="cardinal" checked="checked"><span>cardinal</span>
+              </label>
+              <label for="linear">
+                <input id="linear" type="radio" name="interpolation" value="linear"><span>linear</span>
+              </label>
+              <label for="step">
+                <input id="step" type="radio" name="interpolation" value="step-after"><span>step</span>
+              </label>
+            </div>
+          </section>
+        </form>
+        <div id="chart_container">
+          <div id="chart"></div>
+          <div id="timeline"></div>
+          <div id="preview"></div>
+        </div>
       </div>
     </div>
   </body>
