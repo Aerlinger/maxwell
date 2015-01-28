@@ -1,20 +1,11 @@
-# <DEFINE>
-define [
-  'cs!fs',
-  'cs!CanvasContext',
-], (
-  fs,
-  CanvasContext
-) ->
-# </DEFINE>
-
+fs = require('fs')
+CanvasContext = require('../../src/render/circuitCanvas.coffee')
 
 describe "Canvas Context", ->
   beforeEach (done) ->
     @canvasContext = new CanvasContext(400, 300)
     @canvasContext.clear()
     done()
-
 
   it "should render (46, 32):   10px radius red circle  3px border  fill: #F38   stroke: #0F0601", (done) ->
     @canvasContext.fillCircle(46, 32, 10, 3, '#F38', '#0F0601')

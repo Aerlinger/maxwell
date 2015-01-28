@@ -1,9 +1,6 @@
-# <DEFINE>
-define ['cs!FormatUtils'], (FormatUtils) ->
-# </DEFINE>
+FormatUtils = require('../../src/util/formatUtils.coffee')
 
-  describe "Format utilities", ->
-
+describe "Format utilities", ->
   #  global.showFormat = (decimalNum) ->
   #  decimalNum.toFixed(2)
   #
@@ -33,11 +30,11 @@ define ['cs!FormatUtils'], (FormatUtils) ->
   #  x1 = x1.replace(rgx, "$1" + "," + "$2")  while rgx.test(x1)
   #  x1 + x2
 
-    specify "NoCommaFormat(x)", ->
-      FormatUtils.noCommaFormat('1,234,567.99').should.equal '1234567.99'
+  specify "NoCommaFormat(x)", ->
+    FormatUtils.noCommaFormat('1,234,567.99').should.equal '1234567.99'
 
-    specify "addCommas(plainNumber)", ->
-      FormatUtils.commaFormat('1234567.99').should.equal '1,234,567.99'
+  specify "addCommas(plainNumber)", ->
+    FormatUtils.commaFormat('1234567.99').should.equal '1,234,567.99'
 
-    specify "commaFormat and noCommaFormat are inverse operations", ->
-      num = 123456789
+  specify "commaFormat and noCommaFormat are inverse operations", ->
+    num = 123456789

@@ -1,4 +1,4 @@
-Maxwell = require('../../../src/Maxwell');
+Maxwell = require('../../../src/Maxwell.coffee');
 
 describe "Instantiating Maxwell", ->
   before ->

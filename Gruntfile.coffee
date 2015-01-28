@@ -41,15 +41,15 @@ module.exports = (grunt) ->
           clearRequireCache: false
           require: [
             "coffee-script/register"
-            "test/test-main.js"
+            "test/test_helper.js"
           ]
-        src: ["test/**/*test.coffee"]
+        src: ["test/**/*Test.coffee"]
 
     watch:
       test:
         files: [
           "Gruntfile.js"
-          "test/test-main.js"
+          "test/test_helper.js"
           "test/**/*.coffee"
           "src/**/*.coffee"
         ]

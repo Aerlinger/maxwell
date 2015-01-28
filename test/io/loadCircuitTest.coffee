@@ -1,12 +1,12 @@
-CircuitLoader = require "../../src/io/circuitLoader"
-Circuit = require "../../src/core/circuit"
-CircuitNode = require("../../src/core/nodeGraph/circuitNode").CircuitNode
+CircuitLoader = require("../../src/io/circuitLoader.coffee")
+CircuitNode = require("../../src/engine/graphTraversal/circuitNode.coffee")
 fs = require 'fs'
+
+Circuit = require('../../src/core/circuit.coffee')
 
 describe "CircuitLoader", ->
   before () ->
     @circuit = new Circuit()
-
 
   describe "should read voltdividesimple.json and", ->
     before (done) ->

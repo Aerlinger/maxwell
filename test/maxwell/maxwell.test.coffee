@@ -1,4 +1,4 @@
-Maxwell = require('../../src/Maxwell');
+Maxwell = require('../../src/Maxwell')
 
 describe "Maxwell", ->
   it "Maxwell can be found", (done) ->

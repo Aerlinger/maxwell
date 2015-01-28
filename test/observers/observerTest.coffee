@@ -1,13 +1,15 @@
-define ['cs!Circuit', 'cs!CircuitCanvas'], (Circuit, CircuitCanvas) ->
-  describe "Render should receive a notification when a Circuit updates", ->
+Circuit = require('../../src/core/circuit.coffee')
+CircuitCanvas = require('../../src/render/circuitCanvas.coffee')
 
-    beforeEach () ->
-      @Circuit = new Circuit()
-      @Renderer = new CircuitCanvas(@Circuit)
+describe "Render should receive a notification when a Circuit updates", ->
 
-    it "Calling update() should also call @Renderer.clear()", ->
-      @Circuit.updateCircuit()
-      @Circuit.updateCircuit()
-      @Circuit.updateCircuit()
-      @Circuit.updateCircuit()
-      @Circuit.updateCircuit()
+  beforeEach () ->
+    @Circuit = new Circuit()
+    @Renderer = new CircuitCanvas(@Circuit)
+
+  it "Calling update() should also call @Renderer.clear()", ->
+    @Circuit.updateCircuit()
+    @Circuit.updateCircuit()
+    @Circuit.updateCircuit()
+    @Circuit.updateCircuit()
+    @Circuit.updateCircuit()
