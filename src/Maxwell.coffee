@@ -1,5 +1,5 @@
 CircuitLoader = require('./io/CircuitLoader.coffee')
-Circuit = require('./core/circuit.coffee')
+Circuit = require('./circuit/circuit.coffee')
 CircuitCanvas = require('./render/circuitCanvas.coffee')
 
 class Maxwell

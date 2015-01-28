@@ -1,7 +1,7 @@
-ComponentRegistry = require('../component/ComponentRegistry.coffee')
+ComponentRegistry = require('../circuit/ComponentRegistry.coffee')
 
 SimulationParams = require('../core/SimulationParams.coffee')
-Circuit = require('../core/Circuit.coffee')
+Circuit = require('../circuit/Circuit.coffee')
 Oscilloscope = require('../scope/Oscilloscope.coffee')
 Hint = require('../engine/Hint.coffee')
 

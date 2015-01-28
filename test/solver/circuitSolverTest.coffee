@@ -1,4 +1,4 @@
-Circuit = require('../../src/core/circuit.coffee')
+Circuit = require('../../src/circuit/circuit.coffee')
 ArrayUtils = require('../../src/util/arrayUtils.coffee')
 
 describe "Circuit Solver", ->

@@ -1,4 +1,4 @@
-Circuit = require('../../src/core/circuit.coffee')
+Circuit = require('../../src/circuit/circuit.coffee')
 
 describe "Circuit", ->
   beforeEach ->

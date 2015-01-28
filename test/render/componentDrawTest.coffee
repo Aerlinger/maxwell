@@ -1,8 +1,8 @@
 fs = require('fs')
-Wire = require('../../src/component/components/WireElm.coffee')
-GroundElm = require('../../src/component/components/GroundElm.coffee')
-ResistorElm = require('../../src/component/components/ResistorElm.coffee')
-VoltageElm = require('../../src/component/components/VoltageElm.coffee')
+Wire = require('../../src/circuit/components/WireElm.coffee')
+GroundElm = require('../../src/circuit/components/GroundElm.coffee')
+ResistorElm = require('../../src/circuit/components/ResistorElm.coffee')
+VoltageElm = require('../../src/circuit/components/VoltageElm.coffee')
 Renderer = require('../../src/render/circuitCanvas.coffee')
 
 describe "Should render", ->

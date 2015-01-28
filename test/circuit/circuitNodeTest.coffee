@@ -1,4 +1,4 @@
-CircuitNode = require('../../src/engine/graphTraversal/circuitNode.coffee')
+CircuitNode = require('../../src/engine/circuitNode.coffee')
 
 describe "Circuit Node", ->
   beforeEach ->

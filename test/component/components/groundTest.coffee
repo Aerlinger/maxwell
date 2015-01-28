@@ -1,5 +1,5 @@
-Circuit = require('../../../src/core/circuit.coffee')
-GroundElm = require('../../../src/component/components/GroundElm.coffee')
+Circuit = require('../../../src/circuit/circuit.coffee')
+GroundElm = require('../../../src/circuit/components/GroundElm.coffee')
 
 describe "Ground Component", ->
   beforeEach ->

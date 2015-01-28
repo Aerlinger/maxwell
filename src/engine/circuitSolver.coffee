@@ -1,19 +1,19 @@
 MatrixStamper = require('./matrixStamper.coffee')
 
-Pathfinder = require('./graphTraversal/pathfinder.coffee')
-CircuitNode = require('./graphTraversal/circuitNode.coffee')
-CircuitNodeLink = require('./graphTraversal/circuitNodeLink.coffee')
+Pathfinder = require('./pathfinder.coffee')
+CircuitNode = require('./circuitNode.coffee')
+CircuitNodeLink = require('./circuitNodeLink.coffee')
 RowInfo = require('./rowInfo.coffee')
 Setting = require('../settings/settings.coffee')
 ArrayUtils = require('../util/ArrayUtils.coffee')
 
-GroundElm = require('../component/components/GroundElm.coffee')
-RailElm = require('../component/components/RailElm.coffee')
-VoltageElm = require('../component/components/VoltageElm.coffee')
-WireElm = require('../component/components/WireElm.coffee')
-CapacitorElm = require('../component/components/CapacitorElm.coffee')
-InductorElm = require('../component/components/InductorElm.coffee')
-CurrentElm = require('../component/components/CurrentElm.coffee')
+GroundElm = require('../circuit/components/GroundElm.coffee')
+RailElm = require('../circuit/components/RailElm.coffee')
+VoltageElm = require('../circuit/components/VoltageElm.coffee')
+WireElm = require('../circuit/components/WireElm.coffee')
+CapacitorElm = require('../circuit/components/CapacitorElm.coffee')
+InductorElm = require('../circuit/components/InductorElm.coffee')
+CurrentElm = require('../circuit/components/CurrentElm.coffee')
 
 
 class CircuitSolver

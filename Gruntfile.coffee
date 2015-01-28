@@ -35,7 +35,7 @@ module.exports = (grunt) ->
     mochaTest:
       test:
         options:
-          reporter: "spec"
+          reporter: "min"
           quiet: false
           ui: "bdd"
           clearRequireCache: false

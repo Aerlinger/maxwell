@@ -11,8 +11,8 @@
 # #######################################################################
 
 Observer = require('../util/observer.coffee')
-Circuit = require('../core/circuit.coffee')
-CircuitComponent = require('../component/circuitComponent.coffee')
+Circuit = require('../circuit/circuit.coffee')
+CircuitComponent = require('../circuit/circuitComponent.coffee')
 FormatUtils = require('../util/formatUtils.coffee')
 Settings = require('../settings/settings.coffee')
 Rectangle = require('../geom/rectangle.coffee')

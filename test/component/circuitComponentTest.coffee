@@ -1,10 +1,10 @@
 Polygon = require("../../src/geom/polygon.coffee")
 Rectangle = require("../../src/geom/rectangle.coffee")
 Point = require("../../src/geom/point.coffee")
-CircuitComponent = require("../../src/component/circuitComponent.coffee")
-Circuit = require("../../src/core/circuit.coffee")
+CircuitComponent = require("../../src/circuit/circuitComponent.coffee")
+Circuit = require("../../src/circuit/circuit.coffee")
 
-Circuit = require('../../src/core/circuit.coffee')
+Circuit = require('../../src/circuit/circuit.coffee')
 
 describe "Base Circuit Component", ->
   beforeEach ->

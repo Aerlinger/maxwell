@@ -1,5 +1,5 @@
 CircuitSolver = require('../../src/engine/circuitSolver.coffee')
-Circuit = require('../../src/core/circuit.coffee')
+Circuit = require('../../src/circuit/circuit.coffee')
 
 describe "Matrix Solver", ->
 

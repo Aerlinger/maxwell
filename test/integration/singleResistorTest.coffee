@@ -1,8 +1,8 @@
-Circuit = require('../../src/core/circuit.coffee')
-GroundElm = require('../../src/component/components/GroundElm.coffee')
-WireElm = require('../../src/component/components/WireElm.coffee')
-VoltageElm = require('../../src/component/components/VoltageElm.coffee')
-ResistorElm = require('../../src/component/components/ResistorElm.coffee')
+Circuit = require('../../src/circuit/circuit.coffee')
+GroundElm = require('../../src/circuit/components/GroundElm.coffee')
+WireElm = require('../../src/circuit/components/WireElm.coffee')
+VoltageElm = require('../../src/circuit/components/VoltageElm.coffee')
+ResistorElm = require('../../src/circuit/components/ResistorElm.coffee')
 
 describe "1V grounded DC Source with 1 ohm grounded resistor", ->
   beforeEach ->

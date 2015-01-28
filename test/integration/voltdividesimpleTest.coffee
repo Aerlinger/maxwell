@@ -1,5 +1,5 @@
-Circuit = require('../../src/core/circuit.coffee')
-CircuitNode = require('../../src/engine/graphTraversal/circuitNode.coffee')
+Circuit = require('../../src/circuit/circuit.coffee')
+CircuitNode = require('../../src/engine/circuitNode.coffee')
 CircuitLoader = require('../../src/io/circuitLoader.coffee')
 ArrayUtils = require('../../src/util/arrayUtils.coffee')
 

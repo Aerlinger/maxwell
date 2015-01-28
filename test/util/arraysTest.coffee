@@ -1,4 +1,4 @@
-CircuitComponent = require('../../src/component/circuitComponent.coffee')
+CircuitComponent = require('../../src/circuit/circuitComponent.coffee')
 ArrayUtils = require('../../src/util/arrayUtils.coffee')
 
 

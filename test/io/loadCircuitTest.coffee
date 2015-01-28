@@ -1,8 +1,8 @@
 CircuitLoader = require("../../src/io/circuitLoader.coffee")
-CircuitNode = require("../../src/engine/graphTraversal/circuitNode.coffee")
+CircuitNode = require("../../src/engine/circuitNode.coffee")
 fs = require 'fs'
 
-Circuit = require('../../src/core/circuit.coffee')
+Circuit = require('../../src/circuit/circuit.coffee')
 
 describe "CircuitLoader", ->
   before ->
