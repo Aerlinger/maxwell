@@ -3,7 +3,7 @@ VoltageElm = require('../../../src/component/components/VoltageElm.coffee')
 MatrixStamper = require('../../../src/engine/matrixStamper.coffee')
 
 describe "Voltage Component", ->
-  beforeEach () ->
+  beforeEach ->
     @Circuit = new Circuit()
     @Stamper = new MatrixStamper(@Circuit)
     @voltageElm = new VoltageElm(100, 100, 100, 200, 0, [0, 40, 5, 1, 90, .45])
@@ -33,7 +33,7 @@ describe "Voltage Component", ->
     @voltageElm.orphaned().should.equal true
 
   describe "after soldering to circuit", ->
-    beforeEach () ->
+    beforeEach ->
       @Circuit.solder(@voltageElm)
 
     it "should get voltage correctly", ->

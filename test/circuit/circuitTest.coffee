@@ -1,7 +1,7 @@
 Circuit = require('../../src/core/circuit.coffee')
 
 describe "Circuit", ->
-  beforeEach () ->
+  beforeEach ->
     @Circuit = new Circuit()
 
   describe "on initialization", ->

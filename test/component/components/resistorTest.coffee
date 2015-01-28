@@ -2,7 +2,7 @@ Circuit = require('../../../src/core/circuit.coffee')
 ResistorElm = require('../../../src/component/components/ResistorElm.coffee')
 
 describe "Resistor", ->
-  beforeEach () ->
+  beforeEach ->
     @Circuit = new Circuit()
     @resistor = new ResistorElm(100, 300, 100, 200, 0, [50])
 
@@ -71,7 +71,7 @@ describe "Resistor", ->
 
 
   describe "after soldering to circuit", ->
-    beforeEach () ->
+    beforeEach ->
       @Circuit.solder(@resistor)
 
     it "is not be orphaned", ->
@@ -95,7 +95,7 @@ describe "Resistor", ->
       @Circuit.numNodes().should == 2
 
     describe "then destroying the resistor", ->
-      beforeEach () ->
+      beforeEach ->
         @resistor.destroy()
 
       it "is orphaned", ->
@@ -108,7 +108,7 @@ describe "Resistor", ->
         @Circuit.numElements().should.equal 0
 
     describe "then desoldering the resistor", ->
-      beforeEach () ->
+      beforeEach ->
         @Circuit.desolder(@resistor)
 
       it "is orphaned", ->

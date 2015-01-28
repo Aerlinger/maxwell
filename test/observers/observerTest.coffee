@@ -3,7 +3,7 @@ CircuitCanvas = require('../../src/render/circuitCanvas.coffee')
 
 describe "Render should receive a notification when a Circuit updates", ->
 
-  beforeEach () ->
+  beforeEach ->
     @Circuit = new Circuit()
     @Renderer = new CircuitCanvas(@Circuit)
 

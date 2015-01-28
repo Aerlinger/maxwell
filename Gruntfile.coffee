@@ -71,7 +71,7 @@ module.exports = (grunt) ->
           livereload: true
 
     coffeelint:
-      app: ['src/**/*.coffee']
+      app: ['src/**/*.coffee', 'test/**/*.coffee']
       options:
         configFile: 'coffeelint.json'
 

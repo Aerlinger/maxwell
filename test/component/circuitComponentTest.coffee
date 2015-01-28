@@ -107,7 +107,7 @@ describe "Base Circuit Component", ->
       @circuitElement.nonLinear().should.equal false
 
     describe "after soldering to circuit", ->
-      beforeEach () ->
+      beforeEach ->
         @Circuit.solder(@circuitElement)
 
       it "is not be orphaned", ->
@@ -125,7 +125,7 @@ describe "Base Circuit Component", ->
         @Circuit.numElements() == 1
 
       describe "then destroying the component", ->
-        beforeEach () ->
+        beforeEach ->
           @circuitElement.destroy()
 
         it "is orphaned", ->
@@ -138,7 +138,7 @@ describe "Base Circuit Component", ->
           @Circuit.numElements().should.equal 0
 
       describe "then desoldering the component", ->
-        beforeEach () ->
+        beforeEach ->
           @Circuit.desolder(@circuitElement)
 
         it "is orphaned", ->

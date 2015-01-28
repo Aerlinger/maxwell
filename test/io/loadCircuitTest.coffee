@@ -5,12 +5,12 @@ fs = require 'fs'
 Circuit = require('../../src/core/circuit.coffee')
 
 describe "CircuitLoader", ->
-  before () ->
+  before ->
     @circuit = new Circuit()
 
   describe "should read voltdividesimple.json and", ->
     before (done) ->
-      CircuitLoader.readCircuitFromFile @circuit, "./circuits/voltdividesimple.json", () =>
+      CircuitLoader.readCircuitFromFile @circuit, "./circuits/voltdividesimple.json", ->
       done()
 
     it "have only 7 elements", ->

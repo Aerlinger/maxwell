@@ -2,7 +2,7 @@ Circuit = require('../../../src/core/circuit.coffee')
 CapacitorElm = require('../../../src/component/components/CapacitorElm.coffee')
 
 describe "Capacitor Component", ->
-  beforeEach () ->
+  beforeEach ->
     @Circuit = new Circuit()
     @capacitor = new CapacitorElm(100, 100, 100, 200, 0.1, [1e-9, 1.1])
 
@@ -27,7 +27,7 @@ describe "Capacitor Component", ->
     @capacitor.orphaned().should.equal true
 
   describe "after soldering to circuit", ->
-    beforeEach () ->
+    beforeEach ->
       @Circuit.solder(@capacitor)
 
     it "should get voltage correctly", ->

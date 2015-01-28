@@ -1,7 +1,7 @@
 CircuitNode = require('../../src/engine/graphTraversal/circuitNode.coffee')
 
 describe "Circuit Node", ->
-  beforeEach () ->
+  beforeEach ->
     @CircuitNode1 = new CircuitNode()
     @CircuitNode = new CircuitNode(4, 5, false, [@CircuitNode1])
 

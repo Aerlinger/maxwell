@@ -81,7 +81,7 @@ describe "Simple Voltage Divider", ->
 
 
     describe "should runCircuit()", ->
-      before () ->
+      before ->
         @circuit.Solver.solveCircuit()
         @voltageCompnt = @circuit.getElmByIdx(0)
         @resistor10k = @circuit.getElmByIdx(2)
@@ -112,5 +112,5 @@ describe "Simple Voltage Divider", ->
 
 
   describe "Running updateCircuit", ->
-    before () ->
+    before ->
       @circuit.updateCircuit()

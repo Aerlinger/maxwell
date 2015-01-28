@@ -5,7 +5,7 @@ VoltageElm = require('../../src/component/components/VoltageElm.coffee')
 ResistorElm = require('../../src/component/components/ResistorElm.coffee')
 
 describe "1V grounded DC Source with 1 ohm grounded resistor", ->
-  beforeEach () ->
+  beforeEach ->
     @Circuit = new Circuit()
     @resistor       = new ResistorElm(300, 100, 300, 200, 0, [50])
     @voltageSource  = new VoltageElm(100, 100, 100, 200, 0, [50])
@@ -35,7 +35,7 @@ describe "1V grounded DC Source with 1 ohm grounded resistor", ->
 
 
   describe "after soldering to circuit", ->
-    beforeEach () ->
+    beforeEach ->
       @Circuit.solder(@resistor)
       @Circuit.solder(@voltageSource)
       @Circuit.solder(@wire)
@@ -75,7 +75,7 @@ describe "1V grounded DC Source with 1 ohm grounded resistor", ->
 
 
     describe "after updating circuit", ->
-      beforeEach () ->
+      beforeEach ->
         #@Circuit.updateCircuit()
 
       it "has 5 nodes", ->

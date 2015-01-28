@@ -47,8 +47,7 @@ describe "Point", ->
 
 
 describe "Rectangle", ->
-
-  beforeEach () ->
+  beforeEach ->
     @rect = new Rectangle(5, 6, 100, 150)
 
   it "should properly instantiate a rectangle", ->

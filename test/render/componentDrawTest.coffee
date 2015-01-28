@@ -6,7 +6,7 @@ VoltageElm = require('../../src/component/components/VoltageElm.coffee')
 Renderer = require('../../src/render/circuitCanvas.coffee')
 
 describe "Should render", ->
-  before () ->
+  before ->
     @Renderer = new Renderer()
 
   beforeEach (done) ->

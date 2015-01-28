@@ -2,7 +2,7 @@ fs = require('fs')
 Canvas = require('../../src/render/circuitCanvas.coffee')
 
 describe "Canvas", ->
-  before () ->
+  before ->
     @canvas = new Canvas(400, 300)
     @context = @canvas.getContext('2d');
 

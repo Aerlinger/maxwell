@@ -3,7 +3,7 @@ WireElm = require('../../../src/component/components/WireElm.coffee')
 MatrixStamper = require('../../../src/engine/matrixStamper.coffee')
 
 describe "Wire Component", ->
-  beforeEach () ->
+  beforeEach ->
     @Circuit = new Circuit()
     @Stamper = new MatrixStamper(@Circuit)
     @wireElm = new WireElm(100, 100, 100, 200, 0, [])
@@ -32,7 +32,7 @@ describe "Wire Component", ->
     @wireElm.orphaned().should.equal true
 
   describe "after soldering to circuit", ->
-    beforeEach () ->
+    beforeEach ->
       @Circuit.solder(@wireElm)
 
     it "is not be orphaned", ->

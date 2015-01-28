@@ -2,8 +2,7 @@ Circuit = require('../../src/core/circuit.coffee')
 ArrayUtils = require('../../src/util/arrayUtils.coffee')
 
 describe "Circuit Solver", ->
-
-  beforeEach () ->
+  beforeEach ->
     @Circuit = new Circuit()
     @Solver = @Circuit.Solver
 

@@ -2,7 +2,7 @@ Circuit = require('../../../src/core/circuit.coffee')
 GroundElm = require('../../../src/component/components/GroundElm.coffee')
 
 describe "Ground Component", ->
-  beforeEach () ->
+  beforeEach ->
     @Circuit = new Circuit()
     @groundElm = new GroundElm(100, 100, 100, 200, 0, [])
 
@@ -31,7 +31,7 @@ describe "Ground Component", ->
     @groundElm.orphaned().should.equal true
 
   describe "after soldering to circuit", ->
-    beforeEach () ->
+    beforeEach ->
       @Circuit.solder(@groundElm)
 
     it "is not be orphaned", ->
