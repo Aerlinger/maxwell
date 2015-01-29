@@ -61,10 +61,10 @@ class CircuitLoader
   Retrieves string data from a circuit text file (via AJAX GET)
   ###
   @createCircuitFromJsonFile: (circuitFileName, onComplete = null) ->
-#    $.getJSON circuitFileName, (jsonData) ->
-#      circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
-#
-#      onComplete?(circuit)
+    $.getJSON circuitFileName, (jsonData) ->
+      circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
+
+      onComplete?(circuit)
 
 
 module.exports = CircuitLoader

@@ -65,7 +65,7 @@ class SelectionMarquee extends Rectangle
       renderContext.drawThickLine @x2, @y1, @x2, @y2
 
 
-class CircuitCanvas extends Observer
+class Renderer extends Observer
 
   constructor: (@Circuit, @Canvas) ->
     @focusedComponent = null
@@ -267,4 +267,4 @@ class CircuitCanvas extends Observer
 #          component.focused = false
 
 
-module.exports = CircuitCanvas
+module.exports = Renderer

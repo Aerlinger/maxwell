@@ -135,7 +135,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-uglify"
 
   grunt.registerTask 'server', ['connect:server']
-  grunt.registerTask "default", ["coffeeify", "mochaTest"]
+  grunt.registerTask "test", ["mochaTest", "mocha"]
+  grunt.registerTask "default", ["test", "coffeeify"]
 
 #  grunt.registerTask 'examples', 'Creates base example jade files', ->
 #    files = [

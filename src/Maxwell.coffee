@@ -1,10 +1,11 @@
 CircuitLoader = require('./io/CircuitLoader.coffee')
 Circuit = require('./circuit/circuit.coffee')
-CircuitCanvas = require('./render/circuitCanvas.coffee')
+Renderer = require('./render/renderer.coffee')
 
 class Maxwell
   @Circuits = {}
 
+  # TODO: Deprecated
   constructor: (canvas, options = {}) ->
     @Circuit = null
     @circuitName = options['circuitName']
@@ -13,7 +14,7 @@ class Maxwell
       CircuitLoader.createCircuitFromJsonFile @circuitName, (circuit) =>
         @Circuit = circuit
 
-        new CircuitCanvas(@Circuit, canvas)
+        new Renderer(@Circuit, canvas)
 
   @_loadCircuitFromFile: (circuitFileName) ->
     return CircuitLoader.createCircuitFromJsonFile(circuitFileName)

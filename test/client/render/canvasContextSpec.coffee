@@ -1,9 +1,11 @@
 fs = require('fs')
-CanvasContext = require('../../src/render/circuitCanvas.coffee')
+require('../../src/Maxwell.coffee')
+
+#Renderer = require('../../src/render/renderer.coffee')
 
 describe "Canvas Context", ->
   beforeEach (done) ->
-    @canvasContext = new CanvasContext(400, 300)
+    @canvasContext = new #Renderer(400, 300)
     @canvasContext.clear()
     done()
 

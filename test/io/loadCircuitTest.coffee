@@ -1,5 +1,4 @@
 CircuitLoader = require("../../src/io/circuitLoader.coffee")
-CircuitNode = require("../../src/engine/circuitNode.coffee")
 fs = require 'fs'
 
 Circuit = require('../../src/circuit/circuit.coffee')
