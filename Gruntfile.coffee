@@ -45,6 +45,18 @@ module.exports = (grunt) ->
           ]
         src: ["test/**/*Test.coffee"]
 
+    mocha:
+      test:
+        src: ['test/client/**/*.html']
+        require: [
+          "coffee-script/register"
+        ]
+        options:
+          run: true,
+          require: [
+            "coffee-script/register"
+          ]
+
     watch:
       test:
         files: [
@@ -111,6 +123,7 @@ module.exports = (grunt) ->
         files:
           'dist/maxwell.min.js': ['dist/maxwell.js']
 
+  grunt.loadNpmTasks "grunt-mocha"
   grunt.loadNpmTasks "grunt-mocha-test"
   grunt.loadNpmTasks "grunt-coffeelint"
   grunt.loadNpmTasks "grunt-coffeeify"

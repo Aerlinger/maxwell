@@ -1,7 +1,7 @@
 CircuitLoader = require('../../src/io/circuitLoader.coffee')
 fs = require('fs')
 
-describe "CircuitLoader", ->
+describe.only "CircuitLoader", ->
   in_callback = "before"
   circuit = null
 

@@ -10,6 +10,7 @@
 <body>
 
 <div id="mocha"></div>
+<script src="../../bower_components/coffee-script/extras/coffee-script.js"></script>
 <script src="../../bower_components/mocha/mocha.js"></script>
 <script src="../../bower_components/chai/chai.js"></script>
 
@@ -27,7 +28,8 @@
 <!-- include source files here... -->
 
 <!-- include spec files here... -->
-<script src="spec/rendering.test.js"></script>
+<script type="text/javascript" src="./spec/renderingSpec.js"></script>
+<script type="text/coffeescript" src="./spec/anotherSpec.coffee"></script>
 
 <script>
   mocha.run()
