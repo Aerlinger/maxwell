@@ -11,23 +11,25 @@ class Maxwell
     @circuitName = options['circuitName']
 
     if @circuitName
-      CircuitLoader.createCircuitFromJsonFile @circuitName, (circuit) =>
+#      @_loadCircuitFromFile: (circuitFileName, onComplete)
+      Maxwell._loadCircuitFromFile @circuitName, (circuit) =>
         @Circuit = circuit
 
         new Renderer(@Circuit, canvas)
 
-  @_loadCircuitFromFile: (circuitFileName) ->
-    return CircuitLoader.createCircuitFromJsonFile(circuitFileName)
+  @_loadCircuitFromFile: (circuitFileName, onComplete) ->
+    return CircuitLoader.createCircuitFromJsonFile(circuitFileName, onComplete)
 
   @_loadCircuitFromJson: (jsonData) ->
     return CircuitLoader.createCircuitFromJsonData(jsonData)
 
-  @createCircuit: (circuitName, circuitData) ->
+  @createCircuit: (circuitName, circuitData, onComplete) ->
     circuit = null
+    @circuitName = options['circuitName']
 
     if circuitData
       if typeof circuitData is "string"
-        circuit = Maxwell._loadCircuitFromFile(circuitData)
+        circuit = Maxwell._loadCircuitFromFile(circuitData, onComplete)
       else if typeof circuitData is "object"
         circuit = Maxwell._loadCircuitFromJson(circuitData)
       else

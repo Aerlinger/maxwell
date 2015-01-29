@@ -17,9 +17,6 @@ class CircuitLoader
     console.log(circuit.Params.toString())
 
     # Load each Circuit component from JSON data:
-    console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
-    console.log("Soldering Components:")
-    console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
     elms = []
 
     for elementData in jsonData
