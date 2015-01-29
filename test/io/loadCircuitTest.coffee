@@ -10,8 +10,7 @@ describe "CircuitLoader", ->
 
   describe "should read voltdividesimple.json and", ->
     before (done) ->
-      CircuitLoader.readCircuitFromFile @circuit, "./circuits/voltdividesimple.json", ->
-      done()
+      @circuit = CircuitLoader.createCircuitFromJsonFile "./circuits/voltdividesimple.json"
 
     it "have only 7 elements", ->
       @circuit.numElements().should.equal 7

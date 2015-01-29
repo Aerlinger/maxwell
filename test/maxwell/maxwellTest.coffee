@@ -86,5 +86,5 @@ describe "Maxwell", ->
 
 
   it "can build a circuit from raw JSON data", ->
-    Maxwell.createCircuit("LRC", @lrcCircuit)
+    @circuit = Maxwell.createCircuit("LRC", @lrcCircuit)
     true

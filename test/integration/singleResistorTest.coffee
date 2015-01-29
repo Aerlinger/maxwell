@@ -24,7 +24,7 @@ describe "1V grounded DC Source with 1 ohm grounded resistor", ->
     @resistor.getDumpType().should.equal "r"
 
   it "should need a remap", ->
-    @Circuit.Solver.needsRemap().should.equal true
+    @Circuit.Solver.analyzeFlag.should.equal true
 
   it "should all be orphaned", ->
     @wire.orphaned().should.equal true

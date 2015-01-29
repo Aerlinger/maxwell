@@ -30,7 +30,7 @@
     "jade": "~0.26.3",
     "mocha": "^2.0.1",
     "sinon": "~1.6.0",
-    "underscore": "~1.5.2"
+    "lodash": "3.0.0"
   },
   "scripts": {
     "start": "node app"
