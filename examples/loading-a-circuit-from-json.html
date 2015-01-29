@@ -20,10 +20,15 @@
         var circuitName = $('canvas').data('circuit');
         var circuitFileName = "../circuits/" + circuitName + ".json";
       
-        var canvas = $('canvas.maxwell');
+        var canvas = $('canvas.maxwell').get(0);
+        renderer = null;
       
         if (canvas && circuitName.length !== 0) {
-          new Maxwell(canvas.get(0), {circuitName: circuitFileName});
+          Maxwell.createCircuit(circuitName, circuitFileName, function(circuit) {
+            console.log("Circuit loaded!:", circuit, canvas)
+            renderer = new Maxwell.Renderer(circuit, canvas);
+          });
+      
         } else {
           console.error("No circuit definition provided");
           console.error("Circuit name: ", circuitName, "circuit Filename ");

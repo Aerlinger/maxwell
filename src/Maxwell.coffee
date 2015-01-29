@@ -5,18 +5,6 @@ Renderer = require('./render/renderer.coffee')
 class Maxwell
   @Circuits = {}
 
-  # TODO: Deprecated
-  constructor: (canvas, options = {}) ->
-    @Circuit = null
-    @circuitName = options['circuitName']
-
-    if @circuitName
-#      @_loadCircuitFromFile: (circuitFileName, onComplete)
-      Maxwell._loadCircuitFromFile @circuitName, (circuit) =>
-        @Circuit = circuit
-
-        new Renderer(@Circuit, canvas)
-
   @_loadCircuitFromFile: (circuitFileName, onComplete) ->
     return CircuitLoader.createCircuitFromJsonFile(circuitFileName, onComplete)
 
@@ -25,9 +13,9 @@ class Maxwell
 
   @createCircuit: (circuitName, circuitData, onComplete) ->
     circuit = null
-    @circuitName = options['circuitName']
+#    @circuitName = options['circuitName']
 
-    if circuitData
+    if circuitName
       if typeof circuitData is "string"
         circuit = Maxwell._loadCircuitFromFile(circuitData, onComplete)
       else if typeof circuitData is "object"
@@ -44,10 +32,14 @@ class Maxwell
 
     return circuit
 
+Maxwell.Renderer = Renderer
+
 if typeof(window) == "undefined"
   console.log("Not in browser, declaring global Maxwell object")
   global.Maxwell = Maxwell
 else
   window.Maxwell = Maxwell
+
+
 
 module.exports = Maxwell
