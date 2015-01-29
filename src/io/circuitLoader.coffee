@@ -12,7 +12,7 @@ class CircuitLoader
 
     # Circuit Parameters are stored at the header of the .json file (index 0)
     circuitParams = jsonData.shift()
-    circuit.Params = new SimulationParams(jsonData)
+    circuit.Params = new SimulationParams(circuitParams)
 
     console.log(circuit.Params.toString())
 
@@ -24,7 +24,7 @@ class CircuitLoader
 
     for elementData in jsonData
       type = elementData['sym']
-      # FixMe: Temp disable only
+
       sym = ComponentRegistry.ComponentDefs[type]
       x1 = parseInt elementData['x1']
       y1 = parseInt elementData['y1']
@@ -42,12 +42,10 @@ class CircuitLoader
 
       if !type
         circuit.warn "Unrecognized Type"
-      if !sym
-        circuit.warn "Unrecognized dump type: #{type}"
+      if _.isEmpty(sym)
+        circuit.warn "Component could not be added to circuit. Unrecognized component symbol: #{type}."
       else
         newCircuitElm = new sym(x1, y1, x2, y2, flags, params)
-
-#        console.log("New elm: ", sym)
 
         elms.push(newCircuitElm)
 
@@ -63,10 +61,10 @@ class CircuitLoader
   Retrieves string data from a circuit text file (via AJAX GET)
   ###
   @createCircuitFromJsonFile: (circuitFileName, onComplete = null) ->
-    $.getJSON circuitFileName, (jsonData) ->
-      circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
-
-      onComplete?(circuit)
+#    $.getJSON circuitFileName, (jsonData) ->
+#      circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
+#
+#      onComplete?(circuit)
 
 
 module.exports = CircuitLoader

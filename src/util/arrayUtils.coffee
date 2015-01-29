@@ -39,7 +39,6 @@ class ArrayUtils
       else
         if !isFinite(element)
           console.warn("Invalid number found: #{element}")
-          console.printStackTrace()
           return false
 
   @printArray: (arr) ->

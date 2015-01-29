@@ -68,7 +68,6 @@ class CircuitSolver
       @secTime = sysTime
 
     @lastTime = sysTime
-
     @lastFrameTime = @lastTime
 
 
@@ -117,8 +116,7 @@ class CircuitSolver
       cn.y = pt.y
       @Circuit.addCircuitNode cn
 
-
-      # Else allocate extra node for ground
+    # Else allocate extra node for ground
     else
       cn = new CircuitNode()
       cn.x = cn.y = -1
@@ -136,7 +134,6 @@ class CircuitSolver
         postPt = circuitElm.getPost(j)
 
         console.log("D: " + circuitElm.dump())
-        #          console.log("P: " + postPt)
 
         k = 0
         while k < @Circuit.numNodes()
@@ -151,19 +148,22 @@ class CircuitSolver
         console.log("NUM NODES: #{i} " + @Circuit.numNodes())
 
         if k is @Circuit.numNodes()
-          cn = new CircuitNode()
-          cn.x = postPt.x
-          cn.y = postPt.y
+          cn = new CircuitNode(postPt.x, postPt.y)
+
           circuitNodeLink = new CircuitNodeLink()
           circuitNodeLink.num = j
           circuitNodeLink.elm = circuitElm
+
           cn.links.push circuitNodeLink
           circuitElm.setNode j, @Circuit.numNodes()
+
           @Circuit.addCircuitNode cn
         else
+
           cnl = new CircuitNodeLink()
           cnl.num = j
           cnl.elm = circuitElm
+
           @Circuit.getNode(k).links.push cnl
           circuitElm.setNode(j, k)
           # If it's the ground node, make sure the node voltage is 0, because it may not get set later.
@@ -490,7 +490,6 @@ class CircuitSolver
         return if @stopMessage?
 
         debugPrint = false
-        #          isCleanArray(@circuitMatrix)
 
         if @circuitNonLinear
           break if @converged and subiter > 0
@@ -530,6 +529,7 @@ class CircuitSolver
 
       @Circuit.time += @Circuit.timeStep()
 
+      # TODO: Update scopes here
       #        for scope in @Circuit.scopes
       #          scope.timeStep()
 
@@ -539,12 +539,11 @@ class CircuitSolver
       if iter * 1000 >= stepRate * (tm - @lastIterTime)
         break
       else if (tm - @lastFrameTime) > 500
-#          console.log("BREAK: timeEnd - @Circuit.getLastFrameTime() > 500!")
         break
 
       ++iter
 
-    # End Iteration Loop
+    # END: `loop`
 
     @frames++
     @Circuit.iterations++
@@ -556,9 +555,11 @@ class CircuitSolver
 
     Called once each frame for resistive circuits, otherwise called many times each frame
 
-    @param circuitMatrix 2D matrix to be solved
-    @param matrixSize number or rows/columns in the matrix
-    @param pivotArray pivot index
+    returns a falsy value if the provided circuitMatrix can't be factored
+
+    @param (input/output) circuitMatrix 2D matrix to be solved
+    @param (input) matrixSize number or rows/columns in the matrix
+    @param (output) pivotArray pivot index
   ###
   luFactor: (circuitMatrix, matrixSize, pivotArray) ->
     # Divide each row by largest element in that row and remember scale factors
@@ -568,11 +569,11 @@ class CircuitSolver
       j = 0
       while j < matrixSize
         x = Math.abs(circuitMatrix[i][j])
-        largest = x  if x > largest
+        largest = x if x > largest
         ++j
 
       # Check for singular matrix:
-      return false  if largest is 0
+      return false if largest is 0
       @scaleFactors[i] = 1.0 / largest
       ++i
 

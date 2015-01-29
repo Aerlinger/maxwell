@@ -41,14 +41,8 @@ class Maxwell
 
     return circuit
 
-  @foo: ->
-    return "foo"
-
-  instance_method: ->
-    return "instance"
-
 if typeof(window) == "undefined"
-  console.log("Not in browsier, including maxwell...")
+  console.log("Not in browser, declaring global Maxwell object")
   global.Maxwell = Maxwell
 else
   window.Maxwell = Maxwell
