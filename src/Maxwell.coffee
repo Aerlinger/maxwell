@@ -1,32 +1,23 @@
 CircuitLoader = require('./io/CircuitLoader.coffee')
-Circuit = require('./core/circuit.coffee')
-CircuitCanvas = require('./render/circuitCanvas.coffee')
+Circuit = require('./circuit/circuit.coffee')
+Renderer = require('./render/renderer.coffee')
 
 class Maxwell
   @Circuits = {}
 
-  constructor: (canvas, options = {}) ->
-    @Circuit = null
-    @circuitName = options['circuitName']
-
-    if @circuitName
-      CircuitLoader.createCircuitFromJsonFile @circuitName, (circuit) =>
-        @Circuit = circuit
-
-        new CircuitCanvas(@Circuit, canvas)
-
-  @_loadCircuitFromFile: (circuitFileName) ->
-    return CircuitLoader.createCircuitFromJsonFile(circuitFileName)
+  @_loadCircuitFromFile: (circuitFileName, onComplete) ->
+    return CircuitLoader.createCircuitFromJsonFile(circuitFileName, onComplete)
 
   @_loadCircuitFromJson: (jsonData) ->
     return CircuitLoader.createCircuitFromJsonData(jsonData)
 
-  @createCircuit: (circuitName, circuitData) ->
+  @createCircuit: (circuitName, circuitData, onComplete) ->
     circuit = null
+#    @circuitName = options['circuitName']
 
-    if circuitData
+    if circuitName
       if typeof circuitData is "string"
-        circuit = Maxwell._loadCircuitFromFile(circuitData)
+        circuit = Maxwell._loadCircuitFromFile(circuitData, onComplete)
       else if typeof circuitData is "object"
         circuit = Maxwell._loadCircuitFromJson(circuitData)
       else
@@ -41,16 +32,14 @@ class Maxwell
 
     return circuit
 
-  @foo: ->
-    return "foo"
-
-  instance_method: ->
-    return "instance"
+Maxwell.Renderer = Renderer
 
 if typeof(window) == "undefined"
-  console.log("Not in browsier, including maxwell...")
+  console.log("Not in browser, declaring global Maxwell object")
   global.Maxwell = Maxwell
 else
   window.Maxwell = Maxwell
+
+
 
 module.exports = Maxwell

@@ -41,15 +41,27 @@ module.exports = (grunt) ->
           clearRequireCache: false
           require: [
             "coffee-script/register"
-            "test/test-main.js"
+            "test/test_helper.js"
           ]
-        src: ["test/**/*test.coffee"]
+        src: ["test/**/*Test.coffee"]
+
+    mocha:
+      test:
+        src: ['test/client/**/*.html']
+        require: [
+          "coffee-script/register"
+        ]
+        options:
+          run: true,
+          require: [
+            "coffee-script/register"
+          ]
 
     watch:
       test:
         files: [
           "Gruntfile.js"
-          "test/test-main.js"
+          "test/test_helper.js"
           "test/**/*.coffee"
           "src/**/*.coffee"
         ]
@@ -71,7 +83,7 @@ module.exports = (grunt) ->
           livereload: true
 
     coffeelint:
-      app: ['src/**/*.coffee']
+      app: ['src/**/*.coffee', 'test/**/*.coffee']
       options:
         configFile: 'coffeelint.json'
 
@@ -111,6 +123,7 @@ module.exports = (grunt) ->
         files:
           'dist/maxwell.min.js': ['dist/maxwell.js']
 
+  grunt.loadNpmTasks "grunt-mocha"
   grunt.loadNpmTasks "grunt-mocha-test"
   grunt.loadNpmTasks "grunt-coffeelint"
   grunt.loadNpmTasks "grunt-coffeeify"
@@ -122,7 +135,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-uglify"
 
   grunt.registerTask 'server', ['connect:server']
-  grunt.registerTask "default", ["coffeeify", "mochaTest"]
+  grunt.registerTask "test", ["mochaTest", "mocha"]
+  grunt.registerTask "default", ["test", "coffeeify"]
 
 #  grunt.registerTask 'examples', 'Creates base example jade files', ->
 #    files = [

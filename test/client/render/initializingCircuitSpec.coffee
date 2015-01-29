@@ -1,0 +1,91 @@
+describe "initializing a circuit from scratch", ->
+  lrcCircuit = [
+    {
+      "completion_status": "complete",
+      "created_at": null,
+      "current_speed": 50.0,
+      "description": null,
+      "flags": 1,
+      "id": null,
+      "name_unique": "lrc.txt",
+      "power_range": 43.0,
+      "sim_speed": 10.0,
+      "time_step": 5.0e-06,
+      "title": "LRC Circuit",
+      "topic": "Basics",
+      "updated_at": null,
+      "voltage_range": 5.0
+    },
+    {
+      "sym": "r",
+      "x1": "50",
+      "y1": "25",
+      "x2": "384",
+      "y2": "25",
+      "flags": "0",
+      "params": ["10"]
+    },
+    {
+      "sym": "s",
+      "x1": "384",
+      "y1": "25",
+      "x2": "448",
+      "y2": "25",
+      "flags": "0",
+      "params": ["true", "false"]
+    },
+    {
+      "sym": "w",
+      "x1": "50",
+      "y1": "25",
+      "x2": "50",
+      "y2": "230",
+      "flags": "0",
+      "params": []
+    },
+    {
+      "sym": "c",
+      "x1": "50",
+      "y1": "230",
+      "x2": "384",
+      "y2": "230",
+      "flags": "0",
+      "params": ["1.5E-5", "-9.860041921625609"]
+    },
+    {
+      "sym": "l",
+      "x1": "384",
+      "y1": "25",
+      "x2": "384",
+      "y2": "230",
+      "flags": "0",
+      "params": ["1.0", "0.03019234785322575"]
+    },
+    {
+      "sym": "v",
+      "x1": "448",
+      "y1": "230",
+      "x2": "448",
+      "y2": "25",
+      "flags": "0",
+      "params": ["0", "40.0", "5.0", "0.0"]
+    },
+    {
+      "sym": "r",
+      "x1": "384",
+      "y1": "230",
+      "x2": "448",
+      "y2": "230",
+      "flags": "0",
+      "params": ["100.0"]
+    }
+  ]
+
+  beforeEach ->
+    @circuit = Maxwell.createCircuit('circuit name', lrcCircuit)
+
+    canvas = $('canvas.maxwell');
+
+    Maxwell.Renderer(@circuit, canvas)
+
+

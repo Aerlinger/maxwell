@@ -1,7 +1,7 @@
-ComponentRegistry = require('../component/ComponentRegistry.coffee')
+ComponentRegistry = require('../circuit/ComponentRegistry.coffee')
 
 SimulationParams = require('../core/SimulationParams.coffee')
-Circuit = require('../core/Circuit.coffee')
+Circuit = require('../circuit/Circuit.coffee')
 Oscilloscope = require('../scope/Oscilloscope.coffee')
 Hint = require('../engine/Hint.coffee')
 
@@ -12,19 +12,16 @@ class CircuitLoader
 
     # Circuit Parameters are stored at the header of the .json file (index 0)
     circuitParams = jsonData.shift()
-    circuit.Params = new SimulationParams(jsonData)
+    circuit.Params = new SimulationParams(circuitParams)
 
     console.log(circuit.Params.toString())
 
     # Load each Circuit component from JSON data:
-    console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
-    console.log("Soldering Components:")
-    console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
     elms = []
 
     for elementData in jsonData
       type = elementData['sym']
-      # FixMe: Temp disable only
+
       sym = ComponentRegistry.ComponentDefs[type]
       x1 = parseInt elementData['x1']
       y1 = parseInt elementData['y1']
@@ -42,12 +39,10 @@ class CircuitLoader
 
       if !type
         circuit.warn "Unrecognized Type"
-      if !sym
-        circuit.warn "Unrecognized dump type: #{type}"
+      if _.isEmpty(sym)
+        circuit.warn "Component could not be added to circuit. Unrecognized component symbol: #{type}."
       else
         newCircuitElm = new sym(x1, y1, x2, y2, flags, params)
-
-#        console.log("New elm: ", sym)
 
         elms.push(newCircuitElm)
 

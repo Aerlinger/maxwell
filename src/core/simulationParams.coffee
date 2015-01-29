@@ -42,8 +42,8 @@ class SimulationParams
       ""
     ].join("\n")
 
-  convertSimSpeed: (speed) ->
-    Math.floor(Math.log(10 * speed) * 24.0 + 61.5)
+  convertSimSpeed: (sim_speed) ->
+    Math.floor(Math.log(10 * sim_speed) * 24.0 + 61.5)
 
   setCurrentMult: (mult) ->
     @currentMult = mult

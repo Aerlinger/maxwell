@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../bower_components/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="../bower_components/jquery-ui/jquery-ui.js"></script>
     <script type="text/javascript" src="../bower_components/sketch.js/js/sketch.js"></script>
+    <script type="text/javascript" src="../bower_components/lodash/lodash.js"></script>
     <script type="text/javascript" src="../bower_components/d3/d3.js"></script>
     <script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script type="text/javascript" src="../dist/maxwell.js"></script>
@@ -19,10 +20,15 @@
         var circuitName = $('canvas').data('circuit');
         var circuitFileName = "../circuits/" + circuitName + ".json";
       
-        var canvas = $('canvas.maxwell');
+        var canvas = $('canvas.maxwell').get(0);
+        renderer = null;
       
         if (canvas && circuitName.length !== 0) {
-          new Maxwell(canvas.get(0), {circuitName: circuitFileName});
+          Maxwell.createCircuit(circuitName, circuitFileName, function(circuit) {
+            console.log("Circuit loaded!:", circuit, canvas)
+            renderer = new Maxwell.Renderer(circuit, canvas);
+          });
+      
         } else {
           console.error("No circuit definition provided");
           console.error("Circuit name: ", circuitName, "circuit Filename ");

@@ -1,4 +1,4 @@
-Maxwell = require('../../../src/Maxwell');
+Maxwell = require('../../../src/Maxwell.coffee')
 
 describe "Instantiating Maxwell", ->
   before ->
@@ -11,7 +11,7 @@ describe "Instantiating Maxwell", ->
     expect(Maxwell.findCircuitByName("test_circuit")).to.eq(@primary_circuit)
 
   it "binds to a canvas element for rendering", ->
-    circuitboardCanvas = document.getElementById('circuitboard');
+    circuitboardCanvas = document.getElementById('circuitboard')
 
     render_options = {
       toolbar: true,
@@ -26,7 +26,7 @@ describe "Instantiating Maxwell", ->
       autoupdate: true,
       autopause: true,
       interval: 1
-    };
+    }
 
     Maxwell.bindCircuitToCanvas(@primary)
 

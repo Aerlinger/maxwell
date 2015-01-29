@@ -49,7 +49,7 @@
 
       // RENDERING:
       CircuitCanvas: 'src/render/circuitCanvas',
-      CanvasContext: 'src/render/canvasContext',
+      CanvasContext: 'src/render/renderer',
       DrawHelper: 'src/render/drawHelper',
 
       // OSCILLOSCOPE:

@@ -11,8 +11,8 @@
 # #######################################################################
 
 Observer = require('../util/observer.coffee')
-Circuit = require('../core/circuit.coffee')
-CircuitComponent = require('../component/circuitComponent.coffee')
+Circuit = require('../circuit/circuit.coffee')
+CircuitComponent = require('../circuit/circuitComponent.coffee')
 FormatUtils = require('../util/formatUtils.coffee')
 Settings = require('../settings/settings.coffee')
 Rectangle = require('../geom/rectangle.coffee')
@@ -65,7 +65,7 @@ class SelectionMarquee extends Rectangle
       renderContext.drawThickLine @x2, @y1, @x2, @y2
 
 
-class CircuitCanvas extends Observer
+class Renderer extends Observer
 
   constructor: (@Circuit, @Canvas) ->
     @focusedComponent = null
@@ -267,4 +267,4 @@ class CircuitCanvas extends Observer
 #          component.focused = false
 
 
-module.exports = CircuitCanvas
+module.exports = Renderer
