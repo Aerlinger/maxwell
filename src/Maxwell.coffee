@@ -13,7 +13,6 @@ class Maxwell
 
   @createCircuit: (circuitName, circuitData, onComplete) ->
     circuit = null
-#    @circuitName = options['circuitName']
 
     if circuitName
       if typeof circuitData is "string"

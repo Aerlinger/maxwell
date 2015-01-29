@@ -23,6 +23,12 @@ ArrayUtils = require('../util/arrayUtils.coffee')
 
 
 class CircuitComponent
+  @Params = [{
+    name: "name",
+    default: "",
+    type: "string"
+  }]
+
 
   constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, st = []) ->
     @current = 0
