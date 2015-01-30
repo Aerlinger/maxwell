@@ -8,36 +8,19 @@ CircuitComponent = require('../circuitComponent.coffee')
 class ResistorElm extends CircuitComponent
   @ParameterDefinitions = {
     "resistance": {
-      default: 1000,
+      name: "Resistance"
+      unit: "Ohms",
+      default_value: 1000,
       symbol: "Ω",
-      type: "float"
+      data_type: "float"
       range: [0, Infinity]
+      type: "physical"
     }
   }
-
 
   constructor: (xa, ya, xb, yb, f = 0, params) ->
     super(xa, ya, xb, yb, f, params)
 
-    conversion = {
-      "float": parseFloat,
-      "integer": parseInt
-    }
-
-    for attr, value of params
-      unit_definitions = ResistorElm.ParameterDefinitions[attr]
-      if unit_definitions
-        value = conversion[unit_definitions.type](value)
-        this[attr] = value || unit_definitions.default
-      else
-        console.error("#{attr} is not a property of #{this}")
-
-
-    #    if st and st.length > 0
-    #      @resistance = parseFloat(st)
-    #    else
-    #      @resistance = 500
-    #
     @ps3 = new Point(100, 50)
     @ps4 = new Point(100, 150)
 

@@ -7,7 +7,7 @@ CircuitComponent = require('../circuitComponent.coffee')
 
 class LogicOutputElm extends CircuitComponent
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super(xa, ya, xb, yb, f)
+  constructor: (xa, ya, xb, yb, f, params) ->
+    super(xa, ya, xb, yb, f, params)
 
 module.exports = LogicOutputElm

@@ -11,8 +11,30 @@ class OpAmpElm extends CircuitComponent
   @FLAG_SMALL: 2
   @FLAG_LOWGAIN: 4
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f
+  @ComponentDefinitions = {
+    "maxOut": {
+      name: "Voltage"
+      unit: "Voltage"
+      description: "Maximum allowable output voltage of the Op Amp"
+      symbol: "V"
+      default_value: 15
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    },
+    "minOut": {
+      name: "Voltage"
+      unit: "Voltage"
+      description: "Minimum allowable output voltage of the Op Amp"
+      symbol: "V"
+      default_value: 15
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    }
+  }
+
+  constructor: (xa, ya, xb, yb, f, params) ->
     @opsize = 0
 #      @opheight = 0
     @opwidth = 0
@@ -25,6 +47,7 @@ class OpAmpElm extends CircuitComponent
     @in1p = []
     @in2p = []
     @textp = []
+    super(xa, ya, xb, yb, f, params)
 
 #      @lastvd = 0
 
@@ -34,12 +57,12 @@ class OpAmpElm extends CircuitComponent
 
     # GBW has no effect in this version of the simulator, but we retain it to keep the file format the same
     @gbw = 1e6
-    if st and st.length > 0
-      st = st.split(" ")  if typeof st is "string"
-      try
-        @maxOut ||= parseFloat(st[0])
-        @minOut ||= parseFloat(st[1])
-        @gbw ||= parseFloat(st[2])
+
+#    if st and st.length > 0
+#      st = st.split(" ")  if typeof st is "string"
+#      try
+#        @maxOut ||= parseFloat(st[0])
+#        @minOut ||= parseFloat(st[1])
 
     @noDiagonal = true
     @setSize(if (f & OpAmpElm.FLAG_SMALL) isnt 0 then 1 else 2)

@@ -11,8 +11,20 @@ class MosfetElm extends CircuitComponent
   @FLAG_SHOWVT: 2
   @FLAG_DIGITAL: 4
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super(xa, ya, xb, yb, f, st)
+  @ComponentDefinitions = {
+    vt: {
+      name: "Voltage"
+      description: "Threshold voltage"
+      units: "Volts"
+      symbol: "V"
+      default: 1.5
+      range: [0, Infinity]
+      type: "physical"
+    }
+  }
+
+  constructor: (xa, ya, xb, yb, f, params) ->
+    super(xa, ya, xb, yb, f, params)
 
     @lastv1 = 0
     @lastv2 = 0
@@ -33,9 +45,9 @@ class MosfetElm extends CircuitComponent
 
     @hs = 16
 
-    if st and st.length > 0
-      st = st.split(" ") if typeof st is "string"
-      @vt ||= st[0]
+#    if st and st.length > 0
+#      st = st.split(" ") if typeof st is "string"
+#      @vt ||= st[0]
 
   getDefaultThreshold: ->
     1.5

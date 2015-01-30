@@ -7,16 +7,27 @@ CircuitComponent = require('../circuitComponent.coffee')
 DiodeElm = require('./DiodeElm.coffee')
 
 class ZenerElm extends DiodeElm
+  @ParameterDefinitions = {
+    fwdrop: {
+      name: "Voltage"
+      unit: "Voltage"
+      symbol: "V"
+      default_value: DiodeElm.DEFAULT_DROP
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    }
+  }
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f, st
+  constructor: (xa, ya, xb, yb, f, params) ->
+    super(xa, ya, xb, yb, f, params)
 
     @default_z_voltage = 5.6
-    @zvoltage = st[0] || @default_z_voltage
+    @zvoltage = params[0] || @default_z_voltage
 
-    if (f & DiodeElm.FLAG_FWDROP) > 0
-      try
-        @fwdrop = st[1]
+#    if (f & DiodeElm.FLAG_FWDROP) > 0
+#      try
+#        @fwdrop = params[1]
 
     @setup()
 
@@ -42,7 +53,7 @@ class ZenerElm extends DiodeElm
 
     @draw2Leads(renderContext)
 
-    # draw arrow thingy
+    # draw arrow vector
 #      setPowerColor(g, true)
     color = DrawHelper.getVoltageColor(v1)
     renderContext.drawThickPolygonP @poly, color
@@ -78,9 +89,5 @@ class ZenerElm extends DiodeElm
     super(arr)
     arr[0] = "Zener diode"
     arr[5] = "Vz = " + DrawHelper.getVoltageText(zvoltage)
-
-  getEditInfo: ->
-
-  setEditInfo: ->
 
 module.exports = ZenerElm

@@ -13,13 +13,25 @@ class Switch2Elm extends SwitchElm
 
   @FLAG_CENTER_OFF: 1
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super(xa, ya, xb, yb, f, st)
+  @ParameterDefinitions = {
+    "link": {
+      name: "switch"
+      unit: "",
+      default_value: 0,
+      symbol: "",
+      data_type: "boolean"
+      range: [0, 1]
+      type: "attribute"
+    }
+  }
+
+  constructor: (xa, ya, xb, yb, f, params) ->
+    super(xa, ya, xb, yb, f, params)
 
     @openhs = 16
 
     @noDiagonal = true
-    @link = parseInt(st[st.length - 1])  if st
+#    @link = parseInt(st[st.length - 1])  if st
 
 
   getDumpType: ->

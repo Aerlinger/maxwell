@@ -6,24 +6,38 @@ Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
 
 class CapacitorElm extends CircuitComponent
-
   @FLAG_BACK_EULER: 2
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super(xa, ya, xb, yb, f, st)
+  @ParameterDefinitions = {
+    "capacitance": {
+      name: "Capacitance",
+      unit: "Farads",
+      default_value: 5e-6,
+      symbol: "F",
+      data_type: "float"
+      range: [0, Infinity]
+      type: "physical"
+    },
+    "voltDiff": {
+      name: "Volts"
+      unit: "Volts"
+      default_value: 10
+      symbol: "V"
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    }
+  }
 
-    @capacitance = 5e-6
+  constructor: (xa, ya, xb, yb, f, params) ->
+    super(xa, ya, xb, yb, f, params)
+
+#    @capacitance = 5e-6
     @compResistance = 11
-    @voltDiff = 10
+#    @voltDiff = 10
     @plate1 = []
     @plate2 = []
     @curSourceValue = 0
-
-    if st
-      st = st.split(" ") if typeof st is "string"
-      @capacitance = Number(st[0])
-      @voltDiff = Number(st[1])
-
 
   isTrapezoidal: ->
     (@flags & CapacitorElm.FLAG_BACK_EULER) is 0

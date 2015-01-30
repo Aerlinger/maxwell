@@ -8,8 +8,27 @@ CircuitComponent = require('../circuitComponent.coffee')
 class InductorElm extends CircuitComponent
   @FLAG_BACK_EULER = 2
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f
+  @ParameterDefinitions = {
+    "inductance": {
+      name: "inductance"
+      unit: "Henries"
+      symbol: "H"
+      default_value: 1e-3
+      range: [-Infinity, Infinity]
+      type: "physical"
+    },
+    "current": {
+      name: "current"
+      unit: "Amperes"
+      symbol: "A"
+      default_value: 0
+      range: [-Infinity, Infinity]
+      type: "physical"
+    },
+  }
+
+  constructor: (xa, ya, xb, yb, f, params) ->
+    super(xa, ya, xb, yb, f, params)
     #      @ind = new Inductor()
 
     @inductance = 0
@@ -19,10 +38,10 @@ class InductorElm extends CircuitComponent
     @current = 0
     @curSourceValue = 0
 
-    if st
-      st = st.split(" ")  if typeof st is "string"
-      @inductance = parseFloat(st[0])
-      @current = parseFloat(st[1])
+#    if st
+#      st = st.split(" ")  if typeof st is "string"
+#      @inductance = parseFloat(st[0])
+#      @current = parseFloat(st[1])
 
 #      @ind.setup @inductance, @current, @flags
 

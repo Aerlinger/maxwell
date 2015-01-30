@@ -6,9 +6,47 @@ Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
 
 class SparkGapElm extends CircuitComponent
+  @ParameterDefinitions = {
+    "onresistance": {
+      name: "Resistance"
+      unit: "Ohms",
+      default_value: 1e3,
+      symbol: "Ω",
+      data_type: "float"
+      range: [0, Infinity]
+      type: "physical"
+    },
+    "offresistance": {
+      name: "Resistance"
+      unit: "Ohms",
+      default_value: 1e9,
+      symbol: "Ω",
+      data_type: "float"
+      range: [0, Infinity]
+      type: "physical"
+    },
+    "breakdown": {
+      name: "Voltage"
+      unit: "Voltage"
+      symbol: "V"
+      default_value: 1e3
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    }
+    "holdcurrent": {
+      unit: "Amperes",
+      name: "Current",
+      symbol: "A",
+      default_value: 0.001,
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    },
+  }
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f
+  constructor: (xa, ya, xb, yb, f, params) ->
+    super(xa, ya, xb, yb, f, params)
     @resistance = 0
     @offresistance = 1e9
     @onresistance = 1e3
@@ -16,19 +54,18 @@ class SparkGapElm extends CircuitComponent
     @holdcurrent = 0.001
     @state = false
 
-    if st
-      st = st.split(" ")  if typeof st is "string"
-      @onresistance = parseFloat(st?.shift())  if st
-      @offresistance = parseFloat(st?.shift())  if st
-      @breakdown = parseFloat(st?.shift())  if st
-      @holdcurrent = parseFloat(st?.shift())  if st
+#    if st
+#      st = st.split(" ")  if typeof st is "string"
+#      @onresistance = parseFloat(st?.shift())  if st
+#      @offresistance = parseFloat(st?.shift())  if st
+#      @breakdown = parseFloat(st?.shift())  if st
+#      @holdcurrent = parseFloat(st?.shift())  if st
 
   nonLinear: ->
     true
 
   getDumpType: ->
     187
-
 
   dump: ->
     "#{super()} #{@onresistance} #{@offresistance} #{@breakdown} #{@holdcurrent}"

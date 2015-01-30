@@ -12,8 +12,8 @@ AntennaElm = require('./AntennaElm.coffee')
 class RailElm extends VoltageElm
   @FLAG_CLOCK: 1
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f, st
+  constructor: (xa, ya, xb, yb, f, params) ->
+    super(xa, ya, xb, yb, f, params)
 
   getDumpType: ->
     "R"

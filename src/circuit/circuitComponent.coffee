@@ -23,14 +23,8 @@ ArrayUtils = require('../util/arrayUtils.coffee')
 
 
 class CircuitComponent
-  @Params = [{
-    name: "name",
-    default: "",
-    type: "string"
-  }]
 
-
-  constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, st = []) ->
+  constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, params = {}) ->
     @current = 0
     @curcount = 0
     @noDiagonal = false
@@ -39,14 +33,44 @@ class CircuitComponent
     @parentCircuit = null
     @focused = false
 
-    @flags = flags || @getDefaultFlags()
+    # TODO: Deprecate
+    @flags = 0
 
     @setPoints()
     @allocNodes()
     @initBoundingBox()
     @component_id = MathUtils.getRand(100000000) + (new Date()).getTime()
 
-  # Freeze/frozen?
+    @setParameters(params)
+
+  setParameters: (params) ->
+    convert = {
+      "float": parseFloat,
+      "integer": parseInt,
+      "sign": Math.sign
+    }
+
+    ParameterDefinitions = this.constructor.ParameterDefinitions
+
+    for param_name, definition of ParameterDefinitions
+      default_value = definition.default_value
+      data_type = definition.data_type
+      symbol = definition.symbol
+
+      if params[param_name]
+        this[param_name] = convert[data_type](params[param_name])
+        delete params[param_name]
+      else
+        this[param_name] = convert[data_type](default_value)
+        console.warn("Defined parameter #{param_name} not set for #{this} (defaulting to #{default_value} #{symbol})")
+
+
+    unmatched_params = (param for param of params)
+
+    if unmatched_params.length > 0
+      console.error("The following parameters #{unmatched_params.join(" ")} do not belong in #{this}")
+      throw new Error("Invalid params #{unmatched_params.join(" ")} assigned to #{this}")
+
 
   getParentCircuit: ->
     return @Circuit
@@ -144,9 +168,6 @@ class CircuitComponent
     cadd %= 8
     @curcount = cc + cadd
     @curcount
-
-  getDefaultFlags: ->
-    0
 
   equal_to: (otherComponent) ->
     return @component_id == otherComponent.component_id

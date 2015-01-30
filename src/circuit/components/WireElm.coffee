@@ -6,9 +6,8 @@ Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
 
 class WireElm extends CircuitComponent
-
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f, st
+  constructor: (xa, ya, xb, yb, f, params) ->
+    super(xa, ya, xb, yb, f, params)
 
   toString: ->
     "WireElm"

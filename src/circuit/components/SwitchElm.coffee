@@ -7,8 +7,8 @@ CircuitComponent = require('../circuitComponent.coffee')
 
 class SwitchElm extends CircuitComponent
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f, st
+  constructor: (xa, ya, xb, yb, f, params) ->
+    super(xa, ya, xb, yb, f, params)
 
     @momentary = false
     @position = 0
@@ -17,10 +17,10 @@ class SwitchElm extends CircuitComponent
     @ps = new Point(0, 0)
     @ps2 = new Point(0, 0)
 
-    if st
-      st = st.split(" ")  if typeof st is "string"
-      str = st.shift()
-      @position = 0
+#    if params
+#      params = params.split(" ")  if typeof params is "string"
+#      str = params.shift()
+#      @position = 0
 #        if str is "true"
 #          @position = (if (this instanceof LogicInputElm) then 0 else 1)
 #        else if str is "false"

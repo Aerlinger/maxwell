@@ -6,14 +6,20 @@ Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
 
 class CurrentElm extends CircuitComponent
+  @ParameterDefinitions = {
+    "currentValue": {
+      unit: "Amperes",
+      name: "Current",
+      symbol: "A",
+      default_value: 0.01,
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    }
+  }
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f
-    try
-      st = st.split(" ")  if typeof st is "string"
-      @currentValue ||= parseFloat(st[0])
-    catch e
-      @currentValue = .01
+  constructor: (xa, ya, xb, yb, f, params) ->
+    super(xa, ya, xb, yb, f, params)
 
   dump: ->
     super() + " " + @currentValue

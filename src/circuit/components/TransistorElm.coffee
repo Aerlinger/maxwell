@@ -6,11 +6,51 @@ Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
 
 class TransistorElm extends CircuitComponent
-
   @FLAG_FLIP: 1
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super(xa, ya, xb, yb, f)
+  @ComponentParams = {
+    "pnp": {
+      name: ""
+      unit: ""
+      symbol: ""
+      description: "Current multiplier"
+      default_value: 100
+      data_type: "sign"
+      range: [0, Infinity]
+      type: "attribute"
+    },
+    "lastvbe": {
+      name: "Voltage"
+      unit: "Voltage"
+      symbol: "V"
+      default_value: 0
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    }
+    "lastvbc": {
+      name: "Voltage"
+      unit: "Voltage"
+      symbol: "V"
+      default_value: 0
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    },
+    "beta": {
+      name: ""
+      unit: ""
+      symbol: ""
+      description: "Current multiplier"
+      default_value: 100
+      data_type: "float"
+      range: [0, Infinity]
+      type: "scalar"
+    }
+  }
+
+  constructor: (xa, ya, xb, yb, f, params) ->
+    super(xa, ya, xb, yb, f, params)
 
     # Forward declarations:
     @beta = 100
@@ -37,20 +77,20 @@ class TransistorElm extends CircuitComponent
     @lastvbe = 0
     @leakage = 1e-13
 
-    if st and st.length > 0
-      st = st.split(" ")  if typeof st is "string"
+    if params and params.length > 0
+      params = params.split(" ") if typeof params is "string"
 
-      pnp = st.shift()
-      @pnp = parseInt(pnp)  if pnp
+      pnp = params.shift()
+      @pnp = parseInt(pnp) if pnp
 
-      lastvbe = st.shift()
-      @lastvbe = parseFloat(lastvbe)  if lastvbe
+      lastvbe = params.shift()
+      @lastvbe = parseFloat(lastvbe) if lastvbe
 
-      lastvbc = st.shift()
-      @lastvbc = parseFloat(lastvbc)  if lastvbc
+      lastvbc = params.shift()
+      @lastvbc = parseFloat(lastvbc) if lastvbc
 
-      beta = st.shift()
-      @beta = parseFloat(beta)  if beta
+      beta = params.shift()
+      @beta = parseFloat(beta) if beta
 
     @volts[0] = 0
     @volts[1] = -@lastvbe
