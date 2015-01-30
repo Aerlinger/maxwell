@@ -43,7 +43,7 @@ class CircuitComponent
 
     @setParameters(params)
 
-  setParameters: (params) ->
+  setParameters: (component_params) ->
     convert = {
       "float": parseFloat,
       "integer": parseInt,
@@ -57,15 +57,15 @@ class CircuitComponent
       data_type = definition.data_type
       symbol = definition.symbol
 
-      if params[param_name]
-        this[param_name] = convert[data_type](params[param_name])
-        delete params[param_name]
+      if param_name of component_params
+        this[param_name] = convert[data_type](component_params[param_name])
+        delete component_params[param_name]
       else
         this[param_name] = convert[data_type](default_value)
         console.warn("Defined parameter #{param_name} not set for #{this} (defaulting to #{default_value} #{symbol})")
 
 
-    unmatched_params = (param for param of params)
+    unmatched_params = (param for param of component_params)
 
     if unmatched_params.length > 0
       console.error("The following parameters #{unmatched_params.join(" ")} do not belong in #{this}")
@@ -149,7 +149,7 @@ class CircuitComponent
     if @dn < len or len is 0
       @lead1 = @point1
       @lead2 = @point2
-      console.log("Len: " + len)
+#      console.log("Len: " + len)
       return
 
     #      console.log("Calc leads: #{@toString()}")

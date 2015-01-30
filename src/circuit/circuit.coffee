@@ -79,7 +79,7 @@ class Circuit extends Observer
 
   # "Solders" a new element to this circuit (adds it to the element list array).
   solder: (newElement) ->
-    console.log("\tSoldering #{newElement}: #{newElement.dump()}")
+#    console.log("\tSoldering #{newElement}: #{newElement.dump()}")
     @notifyObservers @ON_SOLDER
 
     newElement.Circuit = this

@@ -3,8 +3,7 @@ CapacitorElm = require('../../../src/circuit/components/CapacitorElm.coffee')
 
 describe "Capacitor Component", ->
   beforeEach ->
-    @Circuit = new Circuit()
-    @capacitor = new CapacitorElm(100, 100, 100, 200, 0.1, [1e-9, 1.1])
+    @capacitor = new CapacitorElm(100, 100, 100, 200, 0.1, { capacitance: 1e-9, voltDiff: 1.1})
 
   it "has correct defaults", ->
     @capacitor.capacitance.should.equal 1e-9
@@ -28,6 +27,7 @@ describe "Capacitor Component", ->
 
   describe "after soldering to circuit", ->
     beforeEach ->
+      @Circuit = new Circuit()
       @Circuit.solder(@capacitor)
 
     it "should get voltage correctly", ->

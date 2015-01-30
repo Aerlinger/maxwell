@@ -44,6 +44,17 @@ module.exports = (grunt) ->
             "test/test_helper.js"
           ]
         src: ["test/**/*Test.coffee"]
+      testComponents:
+        options:
+          reporter: "spec"
+          quiet: false
+          ui: "bdd"
+          clearRequireCache: false
+          require: [
+            "coffee-script/register"
+            "test/test_helper.js"
+          ]
+        src: ["test/component/**/*Test.coffee"]
 
     mocha:
       test:
