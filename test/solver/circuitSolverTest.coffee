@@ -7,7 +7,6 @@ describe "Circuit Solver", ->
     @Solver = @Circuit.Solver
 
   describe "on initialization", ->
-
     it "initiates solver", ->
       @Solver != null
       @Solver.Stamper != null

@@ -15,6 +15,7 @@ class InductorElm extends CircuitComponent
       symbol: "H"
       default_value: 1e-3
       range: [-Infinity, Infinity]
+      data_type: "float"
       type: "physical"
     },
     "current": {
@@ -23,20 +24,23 @@ class InductorElm extends CircuitComponent
       symbol: "A"
       default_value: 0
       range: [-Infinity, Infinity]
+      data_type: "float"
       type: "physical"
-    },
+    }
   }
 
   constructor: (xa, ya, xb, yb, f, params) ->
-    super(xa, ya, xb, yb, f, params)
-    #      @ind = new Inductor()
-
     @inductance = 0
     @nodes = new Array(2)
     @flags = 0
-    @compResistance = 0
+    @compResistance = 1e-3
     @current = 0
     @curSourceValue = 0
+
+    super(xa, ya, xb, yb, f, params)
+    #      @ind = new Inductor()
+
+
 
 #    if st
 #      st = st.split(" ")  if typeof st is "string"

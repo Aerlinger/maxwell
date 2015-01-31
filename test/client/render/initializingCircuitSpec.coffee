@@ -87,5 +87,3 @@ describe "initializing a circuit from scratch", ->
     canvas = $('canvas.maxwell');
 
     Maxwell.Renderer(@circuit, canvas)
-
-

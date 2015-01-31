@@ -24,14 +24,17 @@ ArrayUtils = require('../util/arrayUtils.coffee')
 
 class CircuitComponent
 
+  @ParameterDefinitions = {}
+
   constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, params = {}) ->
     @current = 0
     @curcount = 0
     @noDiagonal = false
     @selected = false
     @dragging = false
-    @parentCircuit = null
+#    @parentCircuit = null
     @focused = false
+    @Circuit = null
 
     # TODO: Deprecate
     @flags = 0
@@ -43,7 +46,35 @@ class CircuitComponent
 
     @setParameters(params)
 
+  convertParamsToHash: (param_list) ->
+    convert = {
+      "float": parseFloat,
+      "integer": parseInt,
+      "sign": Math.sign
+    }
+
+    result = {}
+
+    ParameterDefinitions = this.constructor.ParameterDefinitions
+
+    for i in [0...param_list.length]
+      param_name = Object.keys(ParameterDefinitions)[i]
+
+      definition = ParameterDefinitions[param_name]
+      data_type = definition.data_type
+
+      param_value = param_list[i]
+      result[param_name] = convert[data_type](param_value)
+
+    console.log(@, "PARAMS: ", result)
+
+    return result
+
   setParameters: (component_params) ->
+
+    if component_params.constructor is Array
+      component_params = @convertParamsToHash(component_params)
+
     convert = {
       "float": parseFloat,
       "integer": parseInt,
@@ -193,6 +224,8 @@ class CircuitComponent
 
     @boundingBox.x += deltaX
     @boundingBox.y += deltaY
+
+    @getParentCircuit().invalidate()
 
     @setPoints()
 

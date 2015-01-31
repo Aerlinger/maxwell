@@ -6,7 +6,6 @@ Oscilloscope = require('../scope/Oscilloscope.coffee')
 Hint = require('../engine/Hint.coffee')
 
 class CircuitLoader
-
   @createCircuitFromJsonData: (jsonData) ->
     circuit = new Circuit()
 
@@ -27,7 +26,9 @@ class CircuitLoader
       y1 = parseInt elementData['y1']
       x2 = parseInt elementData['x2']
       y2 = parseInt elementData['y2']
+
       flags = parseInt elementData['flags']
+
       params = elementData['params']
 
       if sym is null
@@ -53,7 +54,6 @@ class CircuitLoader
 
     return circuit
 
-
   ###
   Retrieves string data from a circuit text file (via AJAX GET)
   ###
@@ -62,6 +62,8 @@ class CircuitLoader
       circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
 
       onComplete?(circuit)
-
+      
+  @convertParamsFromArrayToHash: (component_symbol) ->
+    
 
 module.exports = CircuitLoader

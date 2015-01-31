@@ -101,5 +101,4 @@ class ResistorElm extends CircuitComponent
   toString: ->
     "ResistorElm"
 
-
 module.exports = ResistorElm

@@ -98,6 +98,9 @@ class Circuit extends Observer
   toString: ->
     @Params
 
+  invalidate: ->
+    @Solver.analyzeFlag = true
+
 
   ####################################################################################################################
   ### Simulation Frame Computation

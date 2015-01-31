@@ -15,6 +15,8 @@ describe "Base Circuit Component", ->
     CircuitComponent.getScopeUnits(1).should.equal "W"
     CircuitComponent.getScopeUnits().should.equal "V"
 
+
+
   describe "after instantiating a new Circuit Component", ->
     it "has correct initial position", ->
       @circuitElement.x1.should.equal 10
@@ -113,11 +115,6 @@ describe "Base Circuit Component", ->
       it "is not be orphaned", ->
         @circuitElement.orphaned().should.equal false
 
-      it "is stampable", ->
-#          try {
-#            @circuitElement.stamp(@Circuit.Solver.Stamper)
-#          } catch() {}
-
       it "belongs to @Circuit", ->
         @Circuit.getElmByIdx(0) == @circuitElement
 
@@ -149,7 +146,3 @@ describe "Base Circuit Component", ->
 
         it "belongs to @Circuit", ->
           @Circuit.numElements().should.equal 0
-
-
-  describe "Should listen for", ->
-    specify "onDraw(Context)", ->
