@@ -34,7 +34,7 @@ class RailElm extends VoltageElm
     clock = @waveform is VoltageElm.WF_SQUARE and (@flags & VoltageElm.FLAG_CLOCK) isnt 0
 
     if @waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR or clock
-      color = ((if @needsHighlight() then Settings.SELECT_COLOR else "#FFFFFF"))
+      color = "#FFFFFF"  #((if @needsHighlight() then Settings.SELECT_COLOR else "#FFFFFF"))
 
       #this.setPowerColor(g, false);
       v = @getVoltage()

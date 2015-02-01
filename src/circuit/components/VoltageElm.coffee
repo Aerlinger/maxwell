@@ -185,7 +185,8 @@ class VoltageElm extends CircuitComponent
 
 
   drawWaveform: (center, renderContext) ->
-    color = if @needsHighlight() then Settings.FG_COLOR
+#    color = if @needsHighlight() then Settings.FG_COLOR
+    color = Settings.FG_COLOR
 
     #g.beginFill();
     #@setPowerColor false
@@ -249,7 +250,7 @@ class VoltageElm extends CircuitComponent
     if Settings.SHOW_VALUES
       valueString = DrawHelper.getShortUnitText(@frequency, "Hz")
 
-      if @dx is 0 or @dy is 0
+      if @axisAligned
         @drawValues valueString, VoltageElm.circleSize
 
   getVoltageSourceCount: ->

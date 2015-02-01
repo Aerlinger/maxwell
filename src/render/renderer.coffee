@@ -66,12 +66,16 @@ class SelectionMarquee extends Rectangle
 
 
 class Renderer extends Observer
+  @ON_COMPONENT_HOVER = "ON_COMPONENT_HOVER"
+  @ON_COMPONENT_CLICKED = "ON_COMPONENT_CLICKED"
+  @ON_COMPONENTS_SELECTED = "ON_COMPONENTS_SELECTED"
+  @ON_COMPONENTS_DESELECTED = "ON_COMPONENTS_DESELECTED"
+  @ON_COMPONENTS_MOVED = "ON_COMPONENTS_MOVED"
+
   MOUSEDOWN = 1
 
   constructor: (@Circuit, @Canvas) ->
-    @focusedComponent = null
     @highlightedComponent = null
-    @dragComponent = null
     @selectedComponents = []
 
     # TODO: Width and height are undefined
@@ -101,12 +105,10 @@ class Renderer extends Observer
 
 
   mousemove: (event) =>
-    @highlightedComponent = null
-
-    console.log(event.which)
-
     x = event.offsetX
     y = event.offsetY
+
+    @highlightedComponent = null
 
     @lastX = @snapX
     @lastY = @snapY
@@ -125,6 +127,7 @@ class Renderer extends Observer
       for component in @Circuit.getElements()
         if component.getBoundingBox().contains(x, y)
           @highlightedComponent = component
+          @notifyObservers(Renderer.ON_COMPONENT_HOVER, component)
 
     if @marquee is null and @selectedComponents?.length > 0 and event.which == MOUSEDOWN and (@lastX != @snapX or @lastY != @snapY)
       for component in @selectedComponents
@@ -136,32 +139,24 @@ class Renderer extends Observer
     y = event.offsetY
 
     if @highlightedComponent == null
-      console.log("DESELECT:")
-      for component in @selectedComponents
-        console.log("#{component} was selected")
-
       @selectedComponents = []
       @marquee = new SelectionMarquee(x, y)
 
     for component in @Circuit.getElements()
       if component.getBoundingBox().contains(x, y)
-        @dragComponent = component
-#        component.beingDragged(true)
-
-        @focusedComponent = component
+        @notifyObservers(Renderer.ON_COMPONENT_CLICKED, component)
 
         if @selectedComponents?.length == 0
-          @selectedComponents = [@focusedComponent]
+          @selectedComponents = [component]
 
-        if @dragComponent.toggle?
-          @dragComponent.toggle()
+        component.toggle?()
 
 
   mouseup: (event) =>
-    @focusedComponent = null
-#    @dragComponent?.beingDragged false
-    @dragComponent = null
     @marquee = null
+
+    if @selectedComponents?.length > 0
+      @notifyObservers(Renderer.ON_COMPONENTS_DESELECTED, @selectedComponents)
 
 
 
@@ -175,9 +170,9 @@ class Renderer extends Observer
     @drawComponents()
 
   infoText: ->
-    if @focusedComponent?
+    if @highlightedComponent?
       arr = []
-      @focusedComponent.getInfo(arr)
+      @highlightedComponent.getInfo(arr)
 
       for idx in [0...arr.length]
         @context.fillText(arr[idx], 500, idx * 10 + 15)
@@ -187,7 +182,6 @@ class Renderer extends Observer
     if @context
       for component in @Circuit.getElements()
         if @marquee?.collidesWithComponent(component)
-          component.focused = true
           console.log("MARQUEE COLLIDE: " + component)
         @drawComponent(component)
 
@@ -195,7 +189,7 @@ class Renderer extends Observer
     (x + (Settings.GRID_SIZE / 2 - 1)) & ~(Settings.GRID_SIZE - 1)
 
   drawComponent: (component) ->
-    if component.isSelected()
+    if component in @selectedComponents
       @context.strokeStyle = "#FF0"
     component.draw(this)
 

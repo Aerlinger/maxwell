@@ -26,7 +26,7 @@ class OutputElm extends CircuitComponent
 
   draw: (renderContext) ->
 #      selected = (@needsHighlight() or Circuit.plotYElm is this)
-    selected = @needsHighlight()
+#    selected = @needsHighlight()
 
     #Font f = new Font("SansSerif", selected ? Font.BOLD : 0, 14);
     #g.setFont(f);
@@ -42,10 +42,7 @@ class OutputElm extends CircuitComponent
     @setBboxPt @point1, @lead1, 0
     @drawCenteredText s, @x2, @y2, true, renderContext
 
-    if selected
-      color = DrawHelper.getVoltageColor(@volts[0])
-    else
-      color = Settings.SELECT_COLOR
+    color = DrawHelper.getVoltageColor(@volts[0])
 
     renderContext.drawThickLinePt @point1, @lead1, color
     @drawPosts(renderContext)

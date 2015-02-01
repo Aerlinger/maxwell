@@ -30,9 +30,6 @@ class CircuitComponent
     @current = 0
     @curcount = 0
     @noDiagonal = false
-    @selected = false
-    @dragging = false
-    @focused = false
     @Circuit = null
 
     @nodes = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
@@ -141,6 +138,7 @@ class CircuitComponent
     @dy = @y2 - @y1
 
     @dn = Math.sqrt(@dx * @dx + @dy * @dy)
+    @length = Math.sqrt(@dx * @dx + @dy * @dy)
     @dpx1 = @dy / @dn
     @dpy1 = -@dx / @dn
 
@@ -148,6 +146,15 @@ class CircuitComponent
 
     @point1 = new Point(@x1, @y1)
     @point2 = new Point(@x2, @y2)
+
+  height: ->
+    @y2 - @y1
+
+  width: ->
+    @x2 - @x1
+
+  axisAligned: ->
+    @height() is 0 or @width() is 0
 
   setPowerColor: (color) ->
     console.warn("Set power color not yet implemented")
@@ -378,15 +385,9 @@ class CircuitComponent
   canViewInScope: ->
     return @getPostCount() <= 2
 
-  needsHighlight: ->
-    @focused
+#  needsHighlight: ->
+#    @focused
   #      @Circuit?.mouseElm is this or @selected
-
-  setSelected: (selected) ->
-    @selected = selected
-
-  isSelected: ->
-    @selected
 
   needsShortcut: ->
     false
@@ -482,12 +483,12 @@ class CircuitComponent
     #if node
     #return if not @Circuit?.dragElm? and not @needsHighlight() and @Circuit?.getNode(node).links.length is 2
     #return if @Circuit?.mouseMode is @Circuit?.MODE_DRAG_ROW or @Circuit?.mouseMode is @Circuit?.MODE_DRAG_COLUMN
-    if @needsHighlight()
-      fillColor = Settings.POST_COLOR_SELECTED
-      strokeColor = Settings.POST_COLOR_SELECTED
-    else
-      fillColor = Settings.POST_COLOR
-      strokeColor = Settings.POST_COLOR
+#    if @needsHighlight()
+#      fillColor = Settings.POST_COLOR_SELECTED
+#      strokeColor = Settings.POST_COLOR_SELECTED
+#    else
+    fillColor = Settings.POST_COLOR
+    strokeColor = Settings.POST_COLOR
 
     renderContext.fillCircle x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor
 

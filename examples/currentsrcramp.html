@@ -329,10 +329,15 @@
         </ul>
       </div>
     </div>
-    <div class="col-md-11">
+    <div class="col-md-10">
       <div id="container">
         <canvas data-circuit="currentsrcramp" width="1000" height="800" class="maxwell"></canvas>
       </div>
+    </div>
+    <div class="col-md-1">
+      <ul class="list-unstyled">
+        <li id="components"><a data-component="WireElm">Wire</a><a data-component="ResistorElm">Resistor</a><a data-component="CapacitorElm">Capacitor</a><a data-component="InductorElm">Inductor</a><a data-component="OpAmpElm">OpAmp</a><a data-component="GroundElm">Ground</a></li>
+      </ul>
       <div id="content">
         <form id="side_panel">
           <section>
@@ -378,12 +383,12 @@
             </div>
           </section>
         </form>
-        <div id="chart_container">
-          <div id="chart"></div>
-          <div id="timeline"></div>
-          <div id="preview"></div>
-        </div>
       </div>
+    </div>
+    <div id="chart_container">
+      <div id="chart"></div>
+      <div id="timeline"></div>
+      <div id="preview"></div>
     </div>
   </body>
 </html>

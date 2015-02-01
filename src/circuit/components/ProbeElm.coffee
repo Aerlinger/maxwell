@@ -41,10 +41,10 @@ class ProbeElm extends CircuitComponent
 
     @calcLeads Math.floor(len)
 
-    if @isSelected()
-      color = Settings.SELECT_COLOR
-    else
-      color = DrawHelper.getVoltageColor(@volts[0])
+#    if @isSelected()
+#      color = Settings.SELECT_COLOR
+#    else
+    color = DrawHelper.getVoltageColor(@volts[0])
 
     renderContext.drawThickLinePt @point1, @lead1, color
 

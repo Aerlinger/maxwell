@@ -71,10 +71,11 @@ class Switch2Elm extends SwitchElm
     renderContext.drawThickLinePt @swpoles[1], @swposts[1], color
 
     # draw switch
-    color = Settings.SELECT_COLOR unless @needsHighlight()
+#    color = Settings.SELECT_COLOR unless @needsHighlight()
+
     renderContext.drawThickLinePt @lead1, @swpoles[@position], color
 
-#      @updateDotCount()
+    #      @updateDotCount()
     @drawDots @point1, @lead1, renderContext
     @drawDots @swpoles[@position], @swposts[@position], renderContext  unless @position is 2
     @drawPosts(renderContext)

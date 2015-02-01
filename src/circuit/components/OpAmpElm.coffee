@@ -94,7 +94,7 @@ class OpAmpElm extends CircuitComponent
 
 #      #g.setColor(this.needsHighlight() ? this.selectColor : this.lightGrayColor);
 #      @setPowerColor true
-    renderContext.drawThickPolygonP @triangle, (if @needsHighlight() then Settings.SELECT_COLOR else Settings.FG_COLOR)
+    renderContext.drawThickPolygonP @triangle, Settings.FG_COLOR
 #
 #      #g.setFont(plusFont);
 #      #this.drawCenteredText("-", this.textp[0].x + 3, this.textp[0].y + 8, true).attr({'font-weight':'bold', 'font-size':17});

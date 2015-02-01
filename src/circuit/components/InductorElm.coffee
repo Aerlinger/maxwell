@@ -106,7 +106,8 @@ class InductorElm extends CircuitComponent
   nonLinear: ->
     false
 
-#  isTrapezoidal: ->
+  isTrapezoidal: ->
+    false
 #    (@flags & InductorElm.FLAG_BACK_EULER) is 0
 
   calculateCurrent: ->

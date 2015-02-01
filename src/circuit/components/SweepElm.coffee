@@ -73,7 +73,10 @@ class SweepElm extends CircuitComponent
     @setBboxPt @point1, @point2, @circleSize
     color = @setVoltageColor(@volts[0])
     CircuitComponent.drawThickLinePt @point1, @lead1, color
-    @setVoltageColor (if @needsHighlight() then CircuitComponent.selectColor else Color.GREY)
+#    @setVoltageColor (if @needsHighlight() then CircuitComponent.selectColor else Color.GREY)
+
+    @setVoltageColor(Color.GREY)
+
     powerColor = @setPowerColor(false)
     xc = @point2.x1
     yc = @point2.y
@@ -99,7 +102,7 @@ class SweepElm extends CircuitComponent
       i++
     if Circuit.showValuesCheckItem
       s = CircuitComponent.getShortUnitText(@frequency, "Hz")
-      @drawValues s, @circleSize  if @dx is 0 or @dy is 0
+      @drawValues s, @circleSize  if @axisAligned()
     @drawPosts()
     @curcount = @updateDotCount(-@current, @curcount)
     @drawDots @point1, @lead1, @curcount  unless Circuit.dragElm is this

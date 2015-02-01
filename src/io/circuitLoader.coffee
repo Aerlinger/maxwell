@@ -9,6 +9,9 @@ class CircuitLoader
   @createCircuitFromJsonData: (jsonData) ->
     circuit = new Circuit()
 
+    # Valid class identifier name
+    validName = /^[$A-Z_][0-9A-Z_$]*$/i
+
     # Circuit Parameters are stored at the header of the .json file (index 0)
     circuitParams = jsonData.shift()
     circuit.Params = new SimulationParams(circuitParams)
