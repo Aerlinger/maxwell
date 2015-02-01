@@ -4,15 +4,26 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
+ArrayUtils = require('../../util/arrayUtils.coffee')
 
 class DiodeElm extends CircuitComponent
 
   @FLAG_FWDROP: 1
   @DEFAULT_DROP: .805904783
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f, st
+  @ParameterDefinitions = {
+    fwdrop: {
+      name: "Voltage"
+      unit: "Voltage"
+      symbol: "V"
+      default_value: DiodeElm.DEFAULT_DROP
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    }
+  }
 
+  constructor: (xa, ya, xb, yb, f, params) ->
     @hs = 8
     @poly
     @cathode = []
@@ -21,9 +32,11 @@ class DiodeElm extends CircuitComponent
     @fwdrop = DiodeElm.DEFAULT_DROP
     @zvoltage = 0
 
-    if (f & DiodeElm.FLAG_FWDROP) > 0
-      try
-        @fwdrop = parseFloat(st)
+    super(xa, ya, xb, yb, f, params)
+
+#    if (f & DiodeElm.FLAG_FWDROP) > 0
+#      try
+#        @fwdrop = parseFloat(st)
 
     @setup()
 
@@ -43,7 +56,7 @@ class DiodeElm extends CircuitComponent
   setPoints: ->
     super()
     @calcLeads 16
-    @cathode = CircuitComponent.newPointArray(2)
+    @cathode = ArrayUtils.newPointArray(2)
     [pa, pb] = DrawHelper.interpPoint2 @lead1, @lead2, 0, @hs
     [@cathode[0], @cathode[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 1, @hs
     @poly = DrawHelper.createPolygonFromArray([pa, pb, @lead2])

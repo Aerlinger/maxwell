@@ -27,8 +27,8 @@ class SimulationParams
       "\tName:        " + @name,
       "\tTopic:       " + @topic,
       "\tStatus:      " + @completionStatus,
-      "\tCreated at:  " + @createdAt,
-      "\tUpdated At:  " + @updatedAt,
+      "\tCreated at:  " + @createdAt || "?",
+      "\tUpdated At:  " + @updatedAt || "?",
       "\tDescription: " + @description,
       "\tId:          " + @id,
       "\tTitle:       " + @title,
@@ -39,6 +39,7 @@ class SimulationParams
       "\tCur Speed:   " + @currentSpeed,
       "\tVolt. Range: " + @voltageRange,
       "\tPwr Range:   " + @powerRange,
+      "----------------------------------------------------------------",
       ""
     ].join("\n")
 

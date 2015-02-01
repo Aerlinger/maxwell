@@ -8,21 +8,44 @@ CircuitComponent = require('../circuitComponent.coffee')
 class InductorElm extends CircuitComponent
   @FLAG_BACK_EULER = 2
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f
-    #      @ind = new Inductor()
+  @ParameterDefinitions = {
+    "inductance": {
+      name: "inductance"
+      unit: "Henries"
+      symbol: "H"
+      default_value: 1e-3
+      range: [-Infinity, Infinity]
+      data_type: "float"
+      type: "physical"
+    },
+    "current": {
+      name: "current"
+      unit: "Amperes"
+      symbol: "A"
+      default_value: 0
+      range: [-Infinity, Infinity]
+      data_type: "float"
+      type: "physical"
+    }
+  }
 
+  constructor: (xa, ya, xb, yb, f, params) ->
     @inductance = 0
     @nodes = new Array(2)
     @flags = 0
-    @compResistance = 0
+    @compResistance = 1e-3
     @current = 0
     @curSourceValue = 0
 
-    if st
-      st = st.split(" ")  if typeof st is "string"
-      @inductance = parseFloat(st[0])
-      @current = parseFloat(st[1])
+    super(xa, ya, xb, yb, f, params)
+    #      @ind = new Inductor()
+
+
+
+#    if st
+#      st = st.split(" ")  if typeof st is "string"
+#      @inductance = parseFloat(st[0])
+#      @current = parseFloat(st[1])
 
 #      @ind.setup @inductance, @current, @flags
 
@@ -37,8 +60,8 @@ class InductorElm extends CircuitComponent
 
     ts = @getParentCircuit().timeStep()
 
-    console.log ts
-    console.log @inductance
+#    console.log ts
+#    console.log @inductance
 
     if @isTrapezoidal()
       @compResistance = 2 * @inductance / ts
@@ -66,7 +89,7 @@ class InductorElm extends CircuitComponent
     @setBboxPt @point1, @point2, hs
     @draw2Leads(renderContext)
 #      @setPowerColor false
-    DrawHelper.drawCoil 8, @lead1, @lead2, v1, v2, renderContext
+    renderContext.drawCoil @lead1, @lead2, v1, v2, renderContext
 
 #      if @getParentCircuit().showValuesCheckItem
     unit_text = DrawHelper.getUnitText(@inductance, "H")

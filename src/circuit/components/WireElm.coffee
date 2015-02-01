@@ -6,9 +6,8 @@ Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
 
 class WireElm extends CircuitComponent
-
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f, st
+  constructor: (xa, ya, xb, yb, f, params) ->
+    super(xa, ya, xb, yb, f, params)
 
   toString: ->
     "WireElm"
@@ -33,7 +32,7 @@ class WireElm extends CircuitComponent
 
 
   stamp: (stamper) ->
-    console.log("\nStamping Wire Elm")
+#    console.log("\nStamping Wire Elm")
     stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
 
   mustShowCurrent: ->

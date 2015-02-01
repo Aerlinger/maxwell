@@ -10,21 +10,60 @@ class SweepElm extends CircuitComponent
   @FLAG_BIDIR: 2
   @circleSize: 17
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f
+  @ParameterDefinitions = {
+    "minF": {
+      name: "Frequency"
+      unit: "Hertz",
+      default_value: 20,
+      symbol: "Hz",
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    },
+    "maxF": {
+      name: "Frequency"
+      unit: "Hertz",
+      default_value: 4e4,
+      symbol: "Hz",
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    },
+    "maxV": {
+      name: "Voltage"
+      unit: "Voltage"
+      symbol: "V"
+      default_value: 5
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    },
+    "sweepTime": {
+      unit: "seconds",
+      name: "Time",
+      symbol: "s",
+      default_value: 0.1,
+      data_type: "float"
+      range: [0, -Infinity]
+      type: "physical"
+    }
+  }
 
+  constructor: (xa, ya, xb, yb, f, params) ->
     @dir = 1
 
-    if st
-      st = st.split(" ")  if typeof st is "string"
-
-      # Define defaults:
-      @minF = (if st[0] then parseFloat(st[0]) else 20)
-      @maxF = (if st[1] then parseFloat(st[1]) else 4e4)
-      @maxV = (if st[2] then parseFloat(st[2]) else 5)
-      @sweepTime = (if st[3] then parseFloat(st[3]) else 0.1)
+#    if st
+#      st = st.split(" ")  if typeof st is "string"
+#
+#      Define defaults:
+#      @minF = (if st[0] then parseFloat(st[0]) else 20)
+#      @maxF = (if st[1] then parseFloat(st[1]) else 4e4)
+#      @maxV = (if st[2] then parseFloat(st[2]) else 5)
+#      @sweepTime = (if st[3] then parseFloat(st[3]) else 0.1)
 
     @reset()
+
+    super(xa, ya, xb, yb, f, params)
 
 
   getDumpType: ->

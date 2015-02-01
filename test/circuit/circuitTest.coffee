@@ -23,7 +23,6 @@ describe "Circuit", ->
 
     specify "onError (message)", ->
 
-
   describe "should define events for", ->
     it "update", ->
       Circuit.ON_START_UPDATE != null
@@ -33,8 +32,6 @@ describe "Circuit", ->
 
     it "pause", ->
       Circuit.ON_PAUSE != null
-
-    it "complete", ->
 
     it " added (component)", ->
       Circuit.ON_ADD_COMPONENT != null
@@ -51,7 +48,6 @@ describe "Circuit", ->
     it " moved (component)", ->
       Circuit.ON_ERROR != null
 
-
   describe "has one", ->
     describe "Canvas", ->
 
@@ -59,7 +55,6 @@ describe "Circuit", ->
       @Circuit.Solver != null
 
     it "has Params Object", ->
-
 
   describe "has collection of", ->
     specify "Voltage Sources", ->

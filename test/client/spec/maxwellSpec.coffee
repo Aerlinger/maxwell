@@ -32,5 +32,4 @@ describe "Instantiating Maxwell", ->
 
     circuitRenderer = Maxwell.Renderer(circuitboardCanvas, @primary_circuit, render_options)
 
-  it "creates additional components for rendering oscilloscopes", ->
 

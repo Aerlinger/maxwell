@@ -17,9 +17,64 @@ class VoltageElm extends CircuitComponent
 
   @circleSize: 17
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f, st
+  @ParameterDefinitions = {
+    "waveform": {
+      name: "none"
+      unit: "none"
+      symbol: "none"
+      default_value: 0
+      data_type: "integer"
+      range: [0, 6]
+      type: "categorical"
+    },
+    "frequency": {
+      name: "Frequency"
+      unit: "Hertz",
+      default_value: 40,
+      symbol: "Hz",
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    },
+    "maxVoltage": {
+      name: "Voltage"
+      unit: "Voltage"
+      symbol: "V"
+      default_value: 5
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    },
+    "bias": {
+      name: "Voltage"
+      unit: "Voltage"
+      symbol: "V"
+      default_value: 0
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    },
+    "phaseShift": {
+      name: "degrees"
+      unit: "degrees",
+      default_value: 0,
+      symbol: "deg",
+      data_type: "float"
+      range: [-360, 360]
+      type: "float"
+    },
+    "dutyCycle": {
+      name: "percentage"
+      unit: "",
+      default_value: 0,
+      symbol: "%",
+      data_type: "float"
+      range: [0, 100]
+      type: "float"
+    }
+  }
 
+  constructor: (xa, ya, xb, yb, f, params) ->
     @waveform = VoltageElm.WF_DC
     @frequency = 40
     @maxVoltage = 5
@@ -28,14 +83,16 @@ class VoltageElm extends CircuitComponent
     @phaseShift = 0
     @dutyCycle = 0.5
 
-    if st
-      st = st.split(" ")  if typeof st is "string"
-      @waveform = (if st[0] then Math.floor(parseInt(st[0])) else VoltageElm.WF_DC)
-      @frequency = (if st[1] then parseFloat(st[1]) else 40)
-      @maxVoltage = (if st[2] then parseFloat(st[2]) else 5)
-      @bias = (if st[3] then parseFloat(st[3]) else 0)
-      @phaseShift = (if st[4] then parseFloat(st[4]) else 0)
-      @dutyCycle = (if st[5] then parseFloat(st[5]) else 0.5)
+    super(xa, ya, xb, yb, f, params)
+
+#    if params
+#      params = params.split(" ")  if typeof params is "string"
+#      @waveform = (if params[0] then Math.floor(parseInt(params[0])) else VoltageElm.WF_DC)
+#      @frequency = (if params[1] then parseFloat(params[1]) else 40)
+#      @maxVoltage = (if params[2] then parseFloat(params[2]) else 5)
+#      @bias = (if params[3] then parseFloat(params[3]) else 0)
+#      @phaseShift = (if params[4] then parseFloat(params[4]) else 0)
+#      @dutyCycle = (if params[5] then parseFloat(params[5]) else 0.5)
 
     if @flags & VoltageElm.FLAG_COS isnt 0
       @flags &= ~VoltageElm.FLAG_COS
@@ -59,7 +116,7 @@ class VoltageElm extends CircuitComponent
     1 - (x - Math.PI) * (2 / Math.PI)
 
   stamp: (stamper) ->
-    console.log("\nStamping Voltage Elm")
+#    console.log("\nStamping Voltage Elm")
     if @waveform is VoltageElm.WF_DC
       stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
     else

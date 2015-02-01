@@ -58,7 +58,6 @@ class Circuit extends Observer
   ## Removes all circuit elements and scopes from the workspace and resets time to zero.
   ##   Called on initialization and reset.
   clearAndReset: ->
-    # TODO: Prompt to save before destroying components
     for element in @elementList?
       element.destroy()
 
@@ -79,7 +78,7 @@ class Circuit extends Observer
 
   # "Solders" a new element to this circuit (adds it to the element list array).
   solder: (newElement) ->
-    console.log("\tSoldering #{newElement}: #{newElement.dump()}")
+#    console.log("\tSoldering #{newElement}: #{newElement.dump()}")
     @notifyObservers @ON_SOLDER
 
     newElement.Circuit = this
@@ -97,6 +96,9 @@ class Circuit extends Observer
 
   toString: ->
     @Params
+
+  invalidate: ->
+    @Solver.analyzeFlag = true
 
 
   ####################################################################################################################
@@ -125,7 +127,7 @@ class Circuit extends Observer
   setSelected: (component) ->
     for elm in @elementList
       if elm == component
-        console.log("Selected: #{component.dump()}")
+#        console.log("Selected: #{component.dump()}")
         @selectedElm = component
         component.setSelected(true)
 

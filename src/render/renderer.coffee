@@ -16,6 +16,8 @@ CircuitComponent = require('../circuit/circuitComponent.coffee')
 FormatUtils = require('../util/formatUtils.coffee')
 Settings = require('../settings/settings.coffee')
 Rectangle = require('../geom/rectangle.coffee')
+Point = require('../geom/point.coffee')
+DrawHelper = require('./drawHelper.coffee')
 
 
 # X components
@@ -53,8 +55,6 @@ class SelectionMarquee extends Rectangle
     @width = _x2 - _x1
     @height = _y2 - _y1
 
-
-
   draw: (renderContext) ->
     renderContext.lineWidth = 0.1
     if @x1? && @x2? && @y1? && @y2?
@@ -66,10 +66,13 @@ class SelectionMarquee extends Rectangle
 
 
 class Renderer extends Observer
+  MOUSEDOWN = 1
 
   constructor: (@Circuit, @Canvas) ->
     @focusedComponent = null
+    @highlightedComponent = null
     @dragComponent = null
+    @selectedComponents = []
 
     # TODO: Width and height are undefined
     @width = @Canvas.width
@@ -98,42 +101,69 @@ class Renderer extends Observer
 
 
   mousemove: (event) =>
+    @highlightedComponent = null
+
+    console.log(event.which)
+
     x = event.offsetX
     y = event.offsetY
+
+    @lastX = @snapX
+    @lastY = @snapY
 
     @snapX = @snapGrid(x)
     @snapY = @snapGrid(y)
 
     if @marquee?
       @marquee?.reposition(x, y)
+      @selectedComponents = []
+
+      for component in @Circuit.getElements()
+        if @marquee?.collidesWithComponent(component)
+          @selectedComponents.push(component)
     else
       for component in @Circuit.getElements()
         if component.getBoundingBox().contains(x, y)
-          @focusedComponent = component
-          @focusedComponent.focused = true
+          @highlightedComponent = component
+
+    if @marquee is null and @selectedComponents?.length > 0 and event.which == MOUSEDOWN and (@lastX != @snapX or @lastY != @snapY)
+      for component in @selectedComponents
+        component.move(@snapX - @lastX, @snapY - @lastY)
 
 
   mousedown: (event) =>
     x = event.offsetX
     y = event.offsetY
-    @marquee = new SelectionMarquee(x, y)
+
+    if @highlightedComponent == null
+      console.log("DESELECT:")
+      for component in @selectedComponents
+        console.log("#{component} was selected")
+
+      @selectedComponents = []
+      @marquee = new SelectionMarquee(x, y)
 
     for component in @Circuit.getElements()
       if component.getBoundingBox().contains(x, y)
         @dragComponent = component
-        component.beingDragged(true)
+#        component.beingDragged(true)
 
         @focusedComponent = component
-        @focusedComponent.focused = true
+
+        if @selectedComponents?.length == 0
+          @selectedComponents = [@focusedComponent]
 
         if @dragComponent.toggle?
           @dragComponent.toggle()
 
 
   mouseup: (event) =>
-    @dragComponent?.beingDragged false
+    @focusedComponent = null
+#    @dragComponent?.beingDragged false
     @dragComponent = null
     @marquee = null
+
+
 
   draw: =>
     if @snapX? && @snapY?
@@ -158,7 +188,7 @@ class Renderer extends Observer
       for component in @Circuit.getElements()
         if @marquee?.collidesWithComponent(component)
           component.focused = true
-          console.log("COLLIDE: " + component.dump())
+          console.log("MARQUEE COLLIDE: " + component.dump())
         @drawComponent(component)
 
   snapGrid: (x) ->
@@ -250,6 +280,21 @@ class Renderer extends Observer
     @context.lineWidth = origLineWidth
     @context.strokeStyle = origStrokeStyle
 
+    drawThinLine: (x, y, x2, y2, color = Settings.FG_COLOR) ->
+    origLineWidth = @context.lineWidth
+    origStrokeStyle = @context.strokeStyle
+
+    @context.lineWidth = 1
+    @context.strokeStyle = color
+    @context.beginPath()
+    @context.moveTo x, y
+    @context.lineTo x2, y2
+    @context.stroke()
+    @context.closePath()
+
+    @context.lineWidth = origLineWidth
+    @context.strokeStyle = origStrokeStyle
+
   drawThickPolygon: (xlist, ylist, color) ->
     for i in [0...(xlist.length - 1)]
       @drawThickLine xlist[i], ylist[i], xlist[i + 1], ylist[i + 1], color
@@ -260,6 +305,28 @@ class Renderer extends Observer
     for i in [0...(numVertices - 1)]
       @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(i + 1), polygon.getY(i + 1), color
     @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
+
+  drawCoil: (point1, point2, vStart, vEnd, renderContext) ->
+    hs = 8
+    segments = 40
+
+    ps1 = new Point(0, 0)
+    ps2 = new Point(0, 0)
+
+    ps1.x = point1.x
+    ps1.y = point1.y
+
+    for i in [0...segments]
+      cx = (((i + 1) * 8 / segments) % 2) - 1
+      hsx = Math.sqrt(1 - cx * cx)
+      ps2 = DrawHelper.interpPoint(point1, point2, i / segments, hsx * hs)
+
+      voltageLevel = vStart + (vEnd - vStart) * i / segments
+      color = DrawHelper.getVoltageColor(voltageLevel)
+      renderContext.drawThickLinePt ps1, ps2, color
+
+      ps1.x = ps2.x
+      ps1.y = ps2.y
 
   clear: ->
 #      if @Circuit?

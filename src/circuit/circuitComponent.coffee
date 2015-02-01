@@ -24,23 +24,83 @@ ArrayUtils = require('../util/arrayUtils.coffee')
 
 class CircuitComponent
 
-  constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, st = []) ->
+  @ParameterDefinitions = {}
+
+  constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, params = {}) ->
     @current = 0
     @curcount = 0
     @noDiagonal = false
     @selected = false
     @dragging = false
-    @parentCircuit = null
     @focused = false
+    @Circuit = null
 
-    @flags = flags || @getDefaultFlags()
+    # TODO: Deprecate
+    @flags = 0
 
     @setPoints()
     @allocNodes()
     @initBoundingBox()
     @component_id = MathUtils.getRand(100000000) + (new Date()).getTime()
 
-  # Freeze/frozen?
+    @setParameters(params)
+
+  convertParamsToHash: (param_list) ->
+    convert = {
+      "float": parseFloat,
+      "integer": parseInt,
+      "sign": Math.sign
+    }
+
+    result = {}
+
+    ParameterDefinitions = this.constructor.ParameterDefinitions
+
+    for i in [0...param_list.length]
+      param_name = Object.keys(ParameterDefinitions)[i]
+
+      definition = ParameterDefinitions[param_name]
+      data_type = definition.data_type
+
+      param_value = param_list[i]
+      result[param_name] = convert[data_type](param_value)
+
+    console.log(@, "PARAMS: ", result)
+
+    return result
+
+  setParameters: (component_params) ->
+
+    if component_params.constructor is Array
+      component_params = @convertParamsToHash(component_params)
+
+    convert = {
+      "float": parseFloat,
+      "integer": parseInt,
+      "sign": Math.sign
+    }
+
+    ParameterDefinitions = this.constructor.ParameterDefinitions
+
+    for param_name, definition of ParameterDefinitions
+      default_value = definition.default_value
+      data_type = definition.data_type
+      symbol = definition.symbol
+
+      if param_name of component_params
+        this[param_name] = convert[data_type](component_params[param_name])
+        delete component_params[param_name]
+      else
+        this[param_name] = convert[data_type](default_value)
+        console.warn("Defined parameter #{param_name} not set for #{this} (defaulting to #{default_value} #{symbol})")
+
+
+    unmatched_params = (param for param of component_params)
+
+    if unmatched_params.length > 0
+      console.error("The following parameters #{unmatched_params.join(" ")} do not belong in #{this}")
+      throw new Error("Invalid params #{unmatched_params.join(" ")} assigned to #{this}")
+
 
   getParentCircuit: ->
     return @Circuit
@@ -119,7 +179,7 @@ class CircuitComponent
     if @dn < len or len is 0
       @lead1 = @point1
       @lead2 = @point2
-      console.log("Len: " + len)
+#      console.log("Len: " + len)
       return
 
     #      console.log("Calc leads: #{@toString()}")
@@ -138,9 +198,6 @@ class CircuitComponent
     cadd %= 8
     @curcount = cc + cadd
     @curcount
-
-  getDefaultFlags: ->
-    0
 
   equal_to: (otherComponent) ->
     return @component_id == otherComponent.component_id
@@ -164,32 +221,10 @@ class CircuitComponent
     @x2 += deltaX
     @y2 += deltaY
 
-    @boundingBox.x += deltaX
-    @boundingBox.y += deltaY
+    @boundingBox.x = @x1
+    @boundingBox.y = @x2
 
-    @setPoints()
-
-  allowMove: (deltaX, deltaY) ->
-    newX = @x1 + deltaX
-    newY = @y1 + deltaY
-    newX2 = @x2 + deltaX
-    newY2 = @y2 + deltaY
-
-    for circuitElm in @Circuit.elementList
-      if circuitElm.x1 is newX and circuitElm.y1 is newY and circuitElm.x2 is newX2 and circuitElm.y2 is newY2
-        return false
-      if circuitElm.x1 is newX2 and circuitElm.y1 is newY2 and circuitElm.x2 is newX and circuitElm.y2 is newY
-        return false
-
-    true
-
-  movePoint: (n, deltaX, deltaY) ->
-    if n is 0
-      @x1 += deltaX
-      @y1 += deltaY
-    else
-      @x2 += deltaX
-      @y2 += deltaY
+    @getParentCircuit().invalidate()
 
     @setPoints()
 
@@ -319,7 +354,7 @@ class CircuitComponent
   getScopeValue: (x) ->
     (if (x is 1) then @getPower() else @getVoltageDiff())
 
-  @getScopeUnits: (x) ->
+  getScopeUnits: (x) ->
     if (x is 1) then "W" else "V"
 
   getConnection: (n1, n2) ->
@@ -447,13 +482,6 @@ class CircuitComponent
 
     renderContext.fillCircle x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor
 
-  @newPointArray = (n) ->
-    a = new Array(n)
-    while (n > 0)
-      a[--n] = new Point(0, 0)
-
-    return a
-
   comparePair: (x1, x2, y1, y2) ->
     (x1 == y1 && x2 == y2) || (x1 == y2 && x2 == y1)
 
@@ -463,4 +491,4 @@ class CircuitComponent
     @Circuit.timeStep()
 
 
-  module.exports = CircuitComponent
+module.exports = CircuitComponent

@@ -7,8 +7,8 @@ CircuitComponent = require('../circuitComponent.coffee')
 
 class GroundElm extends CircuitComponent
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f, st
+  constructor: (xa, ya, xb, yb, f, params) ->
+    super(xa, ya, xb, yb, f, params)
 
   getDumpType: ->
     "g"
@@ -37,7 +37,7 @@ class GroundElm extends CircuitComponent
     @current = -currentVal
 
   stamp: (stamper) ->
-    console.log("\nStamping Ground Elm")
+#    console.log("\nStamping Ground Elm")
 #      console.log("vs: #{@voltSource}")
     stamper.stampVoltageSource 0, @nodes[0], @voltSource, 0
 
@@ -62,3 +62,4 @@ class GroundElm extends CircuitComponent
     "GroundElm"
 
 module.exports = GroundElm
+

@@ -6,9 +6,46 @@ Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
 
 class SparkGapElm extends CircuitComponent
+  @ParameterDefinitions = {
+    "onresistance": {
+      name: "Resistance"
+      unit: "Ohms",
+      default_value: 1e3,
+      symbol: "Ω",
+      data_type: "float"
+      range: [0, Infinity]
+      type: "physical"
+    },
+    "offresistance": {
+      name: "Resistance"
+      unit: "Ohms",
+      default_value: 1e9,
+      symbol: "Ω",
+      data_type: "float"
+      range: [0, Infinity]
+      type: "physical"
+    },
+    "breakdown": {
+      name: "Voltage"
+      unit: "Voltage"
+      symbol: "V"
+      default_value: 1e3
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    }
+    "holdcurrent": {
+      unit: "Amperes",
+      name: "Current",
+      symbol: "A",
+      default_value: 0.001,
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    },
+  }
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f
+  constructor: (xa, ya, xb, yb, f, params) ->
     @resistance = 0
     @offresistance = 1e9
     @onresistance = 1e3
@@ -16,19 +53,21 @@ class SparkGapElm extends CircuitComponent
     @holdcurrent = 0.001
     @state = false
 
-    if st
-      st = st.split(" ")  if typeof st is "string"
-      @onresistance = parseFloat(st?.shift())  if st
-      @offresistance = parseFloat(st?.shift())  if st
-      @breakdown = parseFloat(st?.shift())  if st
-      @holdcurrent = parseFloat(st?.shift())  if st
+    super(xa, ya, xb, yb, f, params)
+
+
+#    if st
+#      st = st.split(" ")  if typeof st is "string"
+#      @onresistance = parseFloat(st?.shift())  if st
+#      @offresistance = parseFloat(st?.shift())  if st
+#      @breakdown = parseFloat(st?.shift())  if st
+#      @holdcurrent = parseFloat(st?.shift())  if st
 
   nonLinear: ->
     true
 
   getDumpType: ->
     187
-
 
   dump: ->
     "#{super()} #{@onresistance} #{@offresistance} #{@breakdown} #{@holdcurrent}"
@@ -72,7 +111,7 @@ class SparkGapElm extends CircuitComponent
 
   doStep: (stamper) ->
     if @state
-      console.log("SPARK!")
+#      console.log("SPARK!")
       @resistance = @onresistance
     else
       @resistance = @offresistance
@@ -90,31 +129,9 @@ class SparkGapElm extends CircuitComponent
     arr[0] = "spark gap"
     @getBasicInfo arr
     arr[3] = (if @state then "on" else "off")
-    arr[4] = "Ron = " + DrawHelper.getUnitText(@onresistance, Circuit.ohmString)
-    arr[5] = "Roff = " + DrawHelper.getUnitText(@offresistance, Circuit.ohmString)
+    arr[4] = "Ron = " + DrawHelper.getUnitText(@onresistance, Maxwell.OhmSymbol)
+    arr[5] = "Roff = " + DrawHelper.getUnitText(@offresistance, Maxwell.OhmSymbol)
     arr[6] = "Vbreakdown = " + DrawHelper.getUnitText(@breakdown, "V")
-
-#    getEditInfo: (n) ->
-    # ohmString doesn't work here on linux
-#      return new EditInfo("On resistance (ohms)", @onresistance, 0, 0)  if n is 0
-#      return new EditInfo("Off resistance (ohms)", @offresistance, 0, 0)  if n is 1
-#      return new EditInfo("Breakdown voltage", @breakdown, 0, 0)  if n is 2
-#      return new EditInfo("Holding current (A)", @holdcurrent, 0, 0)  if n is 3
-#      null
-
-  # TODO: Double-check
-#    getEditInfo: (n, edit_info) ->
-#      return if edit_info.value <= 0
-#
-#      switch n
-#        when 0
-#          @onresistance = edit_info.value
-#        when 1
-#          @offresistance = edit_info.value
-#        when 2
-#          @breakdown = edit_info.value
-#        when 3
-#          @holdcurrent = edit_info.value
 
   needsShortcut: ->
     false

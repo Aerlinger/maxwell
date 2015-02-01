@@ -11,8 +11,30 @@ class OpAmpElm extends CircuitComponent
   @FLAG_SMALL: 2
   @FLAG_LOWGAIN: 4
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super xa, ya, xb, yb, f
+  @ComponentDefinitions = {
+    "maxOut": {
+      name: "Voltage"
+      unit: "Voltage"
+      description: "Maximum allowable output voltage of the Op Amp"
+      symbol: "V"
+      default_value: 15
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    },
+    "minOut": {
+      name: "Voltage"
+      unit: "Voltage"
+      description: "Minimum allowable output voltage of the Op Amp"
+      symbol: "V"
+      default_value: 15
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    }
+  }
+
+  constructor: (xa, ya, xb, yb, f, params) ->
     @opsize = 0
 #      @opheight = 0
     @opwidth = 0
@@ -26,20 +48,22 @@ class OpAmpElm extends CircuitComponent
     @in2p = []
     @textp = []
 
-#      @lastvd = 0
-
     #Font plusFont;
     @maxOut = 15
     @minOut = -15
 
     # GBW has no effect in this version of the simulator, but we retain it to keep the file format the same
     @gbw = 1e6
-    if st and st.length > 0
-      st = st.split(" ")  if typeof st is "string"
-      try
-        @maxOut ||= parseFloat(st[0])
-        @minOut ||= parseFloat(st[1])
-        @gbw ||= parseFloat(st[2])
+
+    super(xa, ya, xb, yb, f, params)
+
+#      @lastvd = 0
+
+#    if st and st.length > 0
+#      st = st.split(" ")  if typeof st is "string"
+#      try
+#        @maxOut ||= parseFloat(st[0])
+#        @minOut ||= parseFloat(st[1])
 
     @noDiagonal = true
     @setSize(if (f & OpAmpElm.FLAG_SMALL) isnt 0 then 1 else 2)
@@ -109,15 +133,15 @@ class OpAmpElm extends CircuitComponent
     hs = Math.floor(@opheight * @dsign)
     hs = -hs  unless (@flags & OpAmpElm.FLAG_SWAP) is 0
 
-    @in1p = CircuitComponent.newPointArray(2)
-    @in2p = CircuitComponent.newPointArray(2)
-    @textp = CircuitComponent.newPointArray(2)
+    @in1p = ArrayUtils.newPointArray(2)
+    @in2p = ArrayUtils.newPointArray(2)
+    @textp = ArrayUtils.newPointArray(2)
 
     [@in1p[0], @in2p[0]] = DrawHelper.interpPoint2 @point1, @point2, 0, hs
     [@in1p[1], @in2p[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 0, hs
     [@textp[0], @textp[1]] = DrawHelper.interpPoint2 @lead1, @lead2, .2, hs
 
-    tris = CircuitComponent.newPointArray(2)
+    tris = ArrayUtils.newPointArray(2)
     [tris[0], tris[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 0, hs * 2
     @triangle = DrawHelper.createPolygonFromArray([tris[0], tris[1], @lead2])
 

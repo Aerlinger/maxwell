@@ -41,6 +41,13 @@ class ArrayUtils
           console.warn("Invalid number found: #{element}")
           return false
 
+  @newPointArray = (n) ->
+    a = new Array(n)
+    while (n > 0)
+      a[--n] = new Point(0, 0)
+
+    return a
+
   @printArray: (arr) ->
     console.log(subarr) for subarr in arr
 

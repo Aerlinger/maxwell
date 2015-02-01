@@ -4,16 +4,24 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
+Maxwell = require('../../Maxwell.coffee')
+
 
 class ResistorElm extends CircuitComponent
+  @ParameterDefinitions = {
+    "resistance": {
+      name: "Resistance"
+      unit: "Ohms",
+      default_value: 1000,
+      symbol: Maxwell.OhmSymbol,
+      data_type: "float"
+      range: [0, Infinity]
+      type: "physical"
+    }
+  }
 
-  constructor: (xa, ya, xb, yb, f = 0, st = null) ->
-    super(xa, ya, xb, yb, f, st)
-
-    if st and st.length > 0
-      @resistance = parseFloat(st)
-    else
-      @resistance = 500
+  constructor: (xa, ya, xb, yb, f = 0, params) ->
+    super(xa, ya, xb, yb, f, params)
 
     @ps3 = new Point(100, 50)
     @ps4 = new Point(100, 150)
@@ -40,8 +48,8 @@ class ResistorElm extends CircuitComponent
         else
           newOffset = 0
       voltDrop = volt1 + (volt2 - volt1) * i / segments
-      pt1 = DrawHelper.interpPoint @lead1, @lead2, i*segf, hs*oldOffset
-      pt2 = DrawHelper.interpPoint @lead1, @lead2, (i+1)*segf, hs*newOffset
+      pt1 = DrawHelper.interpPoint @lead1, @lead2, i * segf, hs * oldOffset
+      pt2 = DrawHelper.interpPoint @lead1, @lead2, (i + 1) * segf, hs * newOffset
       renderContext.drawThickLinePt pt1, pt2, DrawHelper.getVoltageColor(voltDrop)
       oldOffset = newOffset
 
@@ -51,9 +59,6 @@ class ResistorElm extends CircuitComponent
 
     @drawDots(@point1, @point2, renderContext)
     @drawPosts(renderContext)
-
-  dump: ->
-    super() + " " + @resistance
 
   getDumpType: ->
     "r"
@@ -68,7 +73,7 @@ class ResistorElm extends CircuitComponent
   getInfo: (arr) ->
     arr[0] = "resistor"
     @getBasicInfo arr
-    arr[3] = "R = " + DrawHelper.getUnitText(@resistance, DrawHelper.ohmString)
+    arr[3] = "R = " + DrawHelper.getUnitText(@resistance, Maxwell.OhmSymbol)
     arr[4] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
 
     return arr
@@ -86,7 +91,7 @@ class ResistorElm extends CircuitComponent
     @ps4 = new Point(0, 0)
 
   stamp: (stamper) ->
-    console.log("\nStamping Resistor Elm")
+#    console.log("\nStamping Resistor Elm")
     if @orphaned()
       console.warn "attempting to stamp an orphaned resistor"
 
@@ -94,6 +99,5 @@ class ResistorElm extends CircuitComponent
 
   toString: ->
     "ResistorElm"
-
 
 module.exports = ResistorElm

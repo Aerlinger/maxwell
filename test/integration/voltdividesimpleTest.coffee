@@ -2,12 +2,18 @@ Circuit = require('../../src/circuit/circuit.coffee')
 CircuitNode = require('../../src/engine/circuitNode.coffee')
 CircuitLoader = require('../../src/io/circuitLoader.coffee')
 ArrayUtils = require('../../src/util/arrayUtils.coffee')
+fs = require 'fs'
+
 
 describe "Simple Voltage Divider", ->
   before (done) ->
-    CircuitLoader.createCircuitFromJsonFile "../../circuits/voltdividesimple.json", (circuit) =>
-      @circuit = circuit
-      done()
+    voltdividesimple = fs.readFileSync("./circuits/voltdividesimple.json")
+    @circuit = CircuitLoader.createCircuitFromJsonData voltdividesimple
+    done()
+
+#    CircuitLoader.createCircuitFromJsonFile "../../circuits/voltdividesimple.json", (circuit) =>
+#      @circuit = circuit
+#      done()
 
   describe "should Analyze voltdividesimple.json and have", ->
     before (done) ->

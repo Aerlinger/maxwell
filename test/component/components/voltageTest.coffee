@@ -6,15 +6,22 @@ describe "Voltage Component", ->
   beforeEach ->
     @Circuit = new Circuit()
     @Stamper = new MatrixStamper(@Circuit)
-    @voltageElm = new VoltageElm(100, 100, 100, 200, 0, [0, 40, 5, 1, 90, .45])
+    @voltageElm = new VoltageElm(100, 100, 100, 200, 0, {
+      waveform: VoltageElm.WF_DC,
+      frequency: 80,
+      maxVoltage: 6,
+      bias: 2,
+      phaseShift: 45,
+      dutyCycle: .75
+    })
 
   it "has correct defaults", ->
     @voltageElm.waveform.should.equal VoltageElm.WF_DC
-    @voltageElm.frequency.should.equal 40
-    @voltageElm.maxVoltage.should.equal 5
-    @voltageElm.bias.should.equal 1
-    @voltageElm.phaseShift.should.equal 90
-    @voltageElm.dutyCycle.should.equal 0.45
+    @voltageElm.frequency.should.equal 80
+    @voltageElm.maxVoltage.should.equal 6
+    @voltageElm.bias.should.equal 2
+    @voltageElm.phaseShift.should.equal 45
+    @voltageElm.dutyCycle.should.equal 0.75
 
   it "has correct number of posts", ->
     @voltageElm.getPostCount().should.equal 2
@@ -37,7 +44,7 @@ describe "Voltage Component", ->
       @Circuit.solder(@voltageElm)
 
     it "should get voltage correctly", ->
-      @voltageElm.getVoltage().should.equal 6
+      @voltageElm.getVoltage().should.equal 6 + 2
 
     it "is not be orphaned", ->
       @voltageElm.orphaned().should.equal false

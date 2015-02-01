@@ -85,7 +85,6 @@ describe "Matrix Solver", ->
                   [-2, 0, 0],
                   [4, 6, 1]]
       @solvedMatrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-
       @result = @Solver.luFactor(@matrix3, 3, @circuitPermute)
 
     it "still returns the factored matrix", ->

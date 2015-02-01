@@ -4,6 +4,7 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
+ArrayUtils = require('../../util/arrayUtils.coffee')
 
 class MosfetElm extends CircuitComponent
 
@@ -11,9 +12,19 @@ class MosfetElm extends CircuitComponent
   @FLAG_SHOWVT: 2
   @FLAG_DIGITAL: 4
 
-  constructor: (xa, ya, xb, yb, f, st) ->
-    super(xa, ya, xb, yb, f, st)
+  @ComponentDefinitions = {
+    vt: {
+      name: "Voltage"
+      description: "Threshold voltage"
+      units: "Volts"
+      symbol: "V"
+      default: 1.5
+      range: [0, Infinity]
+      type: "physical"
+    }
+  }
 
+  constructor: (xa, ya, xb, yb, f, params) ->
     @lastv1 = 0
     @lastv2 = 0
     @ids = 0
@@ -33,9 +44,11 @@ class MosfetElm extends CircuitComponent
 
     @hs = 16
 
-    if st and st.length > 0
-      st = st.split(" ") if typeof st is "string"
-      @vt ||= st[0]
+    super(xa, ya, xb, yb, f, params)
+
+#    if st and st.length > 0
+#      st = st.split(" ") if typeof st is "string"
+#      @vt ||= st[0]
 
   getDefaultThreshold: ->
     1.5
@@ -142,18 +155,18 @@ class MosfetElm extends CircuitComponent
     # find the coordinates of the various points we need to draw
     # the MOSFET.
     hs2 = @hs * @dsign
-    @src = CircuitComponent.newPointArray(3)
-    @drn = CircuitComponent.newPointArray(3)
+    @src = ArrayUtils.newPointArray(3)
+    @drn = ArrayUtils.newPointArray(3)
 
     [@src[0], @drn[0]] = DrawHelper.interpPoint2 @point1, @point2, 1, -hs2
     [@src[1], @drn[1]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 22 / @dn, -hs2
     [@src[2], @drn[2]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 22 / @dn, -hs2 * 4 / 3
 
-    @gate = CircuitComponent.newPointArray(3)
+    @gate = ArrayUtils.newPointArray(3)
 
     [@gate[0], @gate[2]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 28 / @dn, hs2 / 2  #,  # was 1-20/dn
     @gate[1] = DrawHelper.interpPoint @gate[0], @gate[2], .5
-    console.log("GATE: #{@gate[1]}")
+#    console.log("GATE: #{@gate[1]}")
 
     if !@drawDigital()
       if @pnp is 1

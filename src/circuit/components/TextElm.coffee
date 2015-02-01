@@ -10,17 +10,34 @@ class TextElm extends CircuitComponent
   @FLAG_CENTER: 1
   @FLAG_BAR: 2
 
-  constructor: ->
-    super(xa, ya, xb, yb, f)
+  @ParameterDefinitions = {
+    size: {
+      name: "Pixel"
+      unit: "Pixel"
+      symbol: ""
+      default_value: 24
+      data_type: "integer"
+      range: [0, 500]
+      type: "attribute"
+    },
+    text: {
+      default_value: "<text>"
+      type: "attribute"
+    }
+  }
+
+  constructor: (xa, ya, xb, yb, f, params) ->
     @text = "hello"
     @lines = new Array() # new vector()
     @lines.add text
     @size = 24
-    if st
-      st = st.split(" ")  if typeof st is "string"
-      @size = Math.floor(st.shift())
-      @text = st.shift()
-      @text += " " + st.shift()  until st.length is 0
+
+    super(xa, ya, xb, yb, params)
+#    if st
+#      st = st.split(" ")  if typeof st is "string"
+#      @size = Math.floor(st.shift())
+#      @text = st.shift()
+#      @text += " " + st.shift()  until st.length is 0
 
   split: ->
     @lines = @text.split("\n")

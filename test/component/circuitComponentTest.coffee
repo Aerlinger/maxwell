@@ -11,11 +11,7 @@ describe "Base Circuit Component", ->
     @Circuit = new Circuit()
     @circuitElement = new CircuitComponent(10, 10, 13, 14)
 
-  specify "class methods", ->
-    CircuitComponent.getScopeUnits(1).should.equal "W"
-    CircuitComponent.getScopeUnits().should.equal "V"
-
-  describe "arfter instantiating a new Circuit Component", ->
+  describe "after instantiating a new Circuit Component", ->
     it "has correct initial position", ->
       @circuitElement.x1.should.equal 10
       @circuitElement.y1.should.equal 10
@@ -31,8 +27,8 @@ describe "Base Circuit Component", ->
       @circuitElement.flags.should.equal 0
 
     it "has flag passed as an argument", ->
-      circuitElm = new CircuitComponent(0, 3, 0, 4, 5)
-      circuitElm.flags.should.equal 5
+      circuitElm = new CircuitComponent(0, 3, 0, 4, 0)
+      circuitElm.flags.should.equal 0
 
     it "has component_id", ->
       @circuitElement.component_id > 0
@@ -113,11 +109,6 @@ describe "Base Circuit Component", ->
       it "is not be orphaned", ->
         @circuitElement.orphaned().should.equal false
 
-      it "is stampable", ->
-#          try {
-#            @circuitElement.stamp(@Circuit.Solver.Stamper)
-#          } catch() {}
-
       it "belongs to @Circuit", ->
         @Circuit.getElmByIdx(0) == @circuitElement
 
@@ -149,7 +140,3 @@ describe "Base Circuit Component", ->
 
         it "belongs to @Circuit", ->
           @Circuit.numElements().should.equal 0
-
-
-  describe "Should listen for", ->
-    specify "onDraw(Context)", ->

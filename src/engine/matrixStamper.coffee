@@ -10,7 +10,7 @@ class MatrixStamper
   ###
   stampVCVS: (n1, n2, coef, vs) ->
     if isNaN(vs) or isNaN(coef)
-      console.log("NaN in stampVCVS")
+      console.warn("NaN in stampVCVS")
     vn = @Circuit.numNodes() + vs
     @stampMatrix vn, n1, coef
     @stampMatrix vn, n2, -coef
@@ -19,7 +19,7 @@ class MatrixStamper
   # stamp independent voltage source #vs, from n1 to n2, amount v
   stampVoltageSource: (n1, n2, vs, v) ->
     vn = @Circuit.numNodes() + vs
-    console.log("Stamp voltage source " + " " + n1 + " " + n2 + " " + vs + " " + v)
+#    console.log("Stamp voltage source " + " " + n1 + " " + n2 + " " + vs + " " + v)
 #      console.log("v = #{v}")
     @stampMatrix vn, n1, -1
     @stampMatrix vn, n2, 1
@@ -34,7 +34,7 @@ class MatrixStamper
 
 
   stampResistor: (n1, n2, r) ->
-    console.log("Stamp resistor: " + n1 + " " + n2 + " " + r)
+#    console.log("Stamp resistor: " + n1 + " " + n2 + " " + r)
     r0 = 1 / r
     if isNaN(r0) or MathUtils.isInfinite(r0)
       @Circuit.halt "bad resistance"
@@ -117,8 +117,8 @@ class MatrixStamper
     if isNaN(value) or value == null
 #        console.warn("NaN in stampRightSide")
       if row > 0
-        console.log("rschanges true " + (row-1))
         @Circuit.Solver.circuitRowInfo[row - 1].rsChanges = true
+#        console.log("rschanges true " + (row-1))
     else
       if row > 0
         if @Circuit.Solver.circuitNeedsMap
