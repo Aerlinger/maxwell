@@ -72,9 +72,6 @@ class SweepElm extends CircuitComponent
   getPostCount: ->
     1
 
-  dump: ->
-    CircuitComponent::dump.call(this) + " " + @minF + " " + @maxF + " " + @maxV + " " + @sweepTime
-
   setPoints: ->
     CircuitComponent::setPoints.call this
     @lead1 = DrawHelper.interpPoint(@point1, @point2, 1 - @circleSize / @dn)

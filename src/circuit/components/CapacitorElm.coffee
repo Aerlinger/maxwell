@@ -58,9 +58,6 @@ class CapacitorElm extends CircuitComponent
   getDumpType: ->
     "c"
 
-  dump: ->
-    "#{super} #{@capacitance} #{@voltDiff}"
-
   setPoints: ->
     super()
     f = (@dn / 2 - 4) / @dn

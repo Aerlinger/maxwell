@@ -21,9 +21,6 @@ class CurrentElm extends CircuitComponent
   constructor: (xa, ya, xb, yb, f, params) ->
     super(xa, ya, xb, yb, f, params)
 
-  dump: ->
-    super() + " " + @currentValue
-
   getDumpType: ->
     "i"
 

@@ -38,8 +38,10 @@ class CircuitComponent
     # TODO: Deprecate
     @flags = 0
 
+    @nodes = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
+    @volts = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
+
     @setPoints()
-    @allocNodes()
     @initBoundingBox()
     @component_id = MathUtils.getRand(100000000) + (new Date()).getTime()
 
@@ -70,7 +72,6 @@ class CircuitComponent
     return result
 
   setParameters: (component_params) ->
-
     if component_params.constructor is Array
       component_params = @convertParamsToHash(component_params)
 
@@ -102,7 +103,7 @@ class CircuitComponent
       throw new Error("Invalid params #{unmatched_params.join(" ")} assigned to #{this}")
 
 
-  getParameters: ->
+  serializeParameters: ->
     params = {}
 
     for param_name, definition of this.constructor.ParameterDefinitions
@@ -110,20 +111,33 @@ class CircuitComponent
 
     return params
 
+  serialize: ->
+    {
+      sym: this.constructor.name,
+      x1: @x1,
+      y1: @y1,
+      x2: @x2,
+      y2: @y2,
+      params: @serializeParameters()
+    }
+
+  @deserialize: (jsonData) ->
+    sym = jsonData['sym']
+    x1 = jsonData['x1']
+    y1 = jsonData['y1']
+    x2 = jsonData['x2']
+    y2 = jsonData['y2']
+    params = jsonData['params']
+
+    params: @serializeParameters()
+
+    Component = eval(sym)
+
+    return new Component(x1, y2, x2, y2, params)
+
+
   getParentCircuit: ->
     return @Circuit
-
-  isBeingDragged: ->
-#      return @Circuit.dragElm is this
-    @dragging
-
-  beingDragged: (dragging) ->
-    @dragging = dragging
-
-
-  allocNodes: ->
-    @nodes = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
-    @volts = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
 
   setPoints: ->
     @dx = @x2 - @x1
@@ -161,7 +175,7 @@ class CircuitComponent
     @getVoltageDiff() * @current
 
   calculateCurrent: ->
-    # TODO: Implemented by subclasses
+    # To be implemented by subclasses
 
     # Steps forward one frame and performs calculation
   doStep: ->
@@ -207,7 +221,7 @@ class CircuitComponent
     @curcount = cc + cadd
     @curcount
 
-  equal_to: (otherComponent) ->
+  equalTo: (otherComponent) ->
     return @component_id == otherComponent.component_id
 
   drag: (newX, newY) ->
@@ -245,26 +259,8 @@ class CircuitComponent
 
   # Returns the class name of this element (e.x. ResistorElm)
   toString: ->
-    console.error("Virtual call on toString in circuitComponent was #{@dump()}")
+    console.error("Virtual call on toString in circuitComponent was #{@constructor.name}")
 #      return arguments.callee.name
-
-  serializeParams: ->
-
-
-  toJson: ->
-    {
-      sym: this.constructor.name,
-      x1: @x1,
-      y1: @y1,
-      x2: @x2,
-      y2: @y2,
-      params: @getParameters()
-    }
-
-  dump: ->
-    "component: #{this.constructor.name}, x1: #{@x1}, y1: #{@y1} #{@x2} #{@y2}"
-
-#    @getDumpType() + " " + @x1 + " " + @y1 + " " + @x2 + " " + @y2 + " " + @flags
 
   getVoltageSourceCount: ->
     0
@@ -326,6 +322,7 @@ class CircuitComponent
 
   setBboxPt: (p1, p2, width) ->
     @setBbox p1.x, p1.y, p2.x, p2.y
+
     deltaX = (@dpx1 * width)
     deltaY = (@dpy1 * width)
     @adjustBbox p1.x + deltaX, p1.y + deltaY, p1.x - deltaX, p1.y - deltaY
@@ -359,14 +356,6 @@ class CircuitComponent
   # Extended by subclasses
   getInfo: (arr) ->
     arr = new Array(15)
-
-  # TODO: Implement
-  getEditInfo: (n) ->
-    throw new Error("Called abstract function getEditInfo() in AbstractCircuitElement")
-
-  # TODO: Implement
-  setEditValue: (n, ei) ->
-    throw new Error("Called abstract function setEditInfo() in AbstractCircuitElement")
 
   # Extended by subclasses
   getBasicInfo: (arr) ->

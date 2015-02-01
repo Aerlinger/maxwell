@@ -83,7 +83,4 @@ class ZenerElm extends DiodeElm
   getDumpType: ->
     "z"
 
-  dump: ->
-    super() + " " + @zvoltage
-
 module.exports = ZenerElm

@@ -34,10 +34,10 @@ describe "Base Circuit Component", ->
       @circuitElement.component_id > 0
 
     it "should equal itself", ->
-      @circuitElement.equal_to(@circuitElement).should.equal true
+      @circuitElement.equalTo(@circuitElement).should.equal true
 
     it "is not equal another component", ->
-      @circuitElement.equal_to(new CircuitComponent()).should.equal false
+      @circuitElement.equalTo(new CircuitComponent()).should.equal false
 
     it "creates default parameters", ->
       @circuitElement.current.should.equal 0

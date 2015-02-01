@@ -49,10 +49,6 @@ class DiodeElm extends CircuitComponent
   getDumpType: ->
     "d"
 
-  dump: ->
-    @flags |= DiodeElm.FLAG_FWDROP
-    CircuitComponent::dump.call(this) + " " + @fwdrop
-
   setPoints: ->
     super()
     @calcLeads 16

@@ -188,7 +188,7 @@ class Renderer extends Observer
       for component in @Circuit.getElements()
         if @marquee?.collidesWithComponent(component)
           component.focused = true
-          console.log("MARQUEE COLLIDE: " + component.dump())
+          console.log("MARQUEE COLLIDE: " + component)
         @drawComponent(component)
 
   snapGrid: (x) ->

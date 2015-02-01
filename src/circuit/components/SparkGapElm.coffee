@@ -69,9 +69,6 @@ class SparkGapElm extends CircuitComponent
   getDumpType: ->
     187
 
-  dump: ->
-    "#{super()} #{@onresistance} #{@offresistance} #{@breakdown} #{@holdcurrent}"
-
   setPoints: ->
     super()
 

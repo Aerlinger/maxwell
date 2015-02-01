@@ -68,9 +68,6 @@ class MosfetElm extends CircuitComponent
   reset: ->
     @lastv1 = @lastv2 = @volts[0] = @volts[1] = @volts[2] = @curcount = 0
 
-  dump: ->
-    super() + " " + @vt
-
   getDumpType: ->
     "f"
 

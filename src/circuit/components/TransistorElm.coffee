@@ -114,9 +114,6 @@ class TransistorElm extends CircuitComponent
   getDumpType: ->
     "t"
 
-  dump: ->
-    super() + " " + @pnp + " " + (@volts[0] - @volts[1]) + " " + (@volts[0] - @volts[2]) + " " + @beta
-
   draw: (renderContext) ->
     @setBboxPt @point1, @point2, 16
 #      @setPowerColor true

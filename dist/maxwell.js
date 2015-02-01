@@ -953,7 +953,7 @@
           _ref1 = this.elementList;
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
             circuitElm = _ref1[_j];
-            if (firstCircuitNode.elm.equal_to(circuitElm) === false && circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)) {
+            if (firstCircuitNode.elm.equalTo(circuitElm) === false && circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)) {
               numBadPoints++;
             }
           }
@@ -2023,7 +2023,7 @@ Settings do not change by loading a new circuit.
       return this.curcount;
     };
 
-    CircuitComponent.prototype.equal_to = function(otherComponent) {
+    CircuitComponent.prototype.equalTo = function(otherComponent) {
       return this.component_id === otherComponent.component_id;
     };
 
@@ -2818,7 +2818,7 @@ process.chdir = function (dir) {
           _ref1 = this.elementList;
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
             circuitElm = _ref1[_j];
-            if (firstCircuitNode.elm.equal_to(circuitElm) === false && circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)) {
+            if (firstCircuitNode.elm.equalTo(circuitElm) === false && circuitElm.boundingBox.contains(circuitNode.x, circuitNode.y)) {
               numBadPoints++;
             }
           }

@@ -42,10 +42,6 @@ class TextElm extends CircuitComponent
   split: ->
     @lines = @text.split("\n")
 
-
-  dump: ->
-    super() + " " + @size + " " + @text
-
   getDumpType: ->
     "x"
 

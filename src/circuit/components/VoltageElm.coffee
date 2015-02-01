@@ -104,9 +104,6 @@ class VoltageElm extends CircuitComponent
   getDumpType: ->
     "v"
 
-  dump: ->
-    "#{super()} #{@waveform} #{@frequency} #{@maxVoltage} #{@bias} #{@phaseShift} #{@dutyCycle}"
-
   reset: ->
     @freqTimeZero = 0
     @curcount = 5

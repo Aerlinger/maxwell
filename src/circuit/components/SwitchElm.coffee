@@ -33,9 +33,6 @@ class SwitchElm extends CircuitComponent
   getDumpType: ->
     "s"
 
-  dump: ->
-    "#{super()} #{@position} #{@momentary}"
-
   setPoints: ->
     super()
     @calcLeads 32

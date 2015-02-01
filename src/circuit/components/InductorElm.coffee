@@ -97,9 +97,6 @@ class InductorElm extends CircuitComponent
     @drawPosts(renderContext)
     @drawDots(@point1, @point2, renderContext)
 
-  dump: ->
-    "#{super()} #{@inductance} #{@current}"
-
   getDumpType: ->
     "l"
 

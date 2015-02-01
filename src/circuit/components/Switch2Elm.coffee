@@ -37,10 +37,6 @@ class Switch2Elm extends SwitchElm
   getDumpType: ->
     "S"
 
-  dump: ->
-    super() + @link
-
-
   setPoints: ->
     super()
     @calcLeads 32

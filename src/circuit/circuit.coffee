@@ -201,7 +201,7 @@ class Circuit extends Observer
         firstCircuitNode = circuitNode.links[0]
         for circuitElm in @elementList
           # If firstCircuitNode isn't the same as the second
-          if firstCircuitNode.elm.equal_to(circuitElm) is false and circuitElm.boundingBox.contains(circuitNode.x,
+          if firstCircuitNode.elm.equalTo(circuitElm) is false and circuitElm.boundingBox.contains(circuitNode.x,
             circuitNode.y)
             numBadPoints++
         if numBadPoints > 0

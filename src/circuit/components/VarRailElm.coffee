@@ -15,9 +15,6 @@ class VarRailElm extends RailElm
     super(xa, ya, xb, yb, f, params)
 #      @createSlider()
 
-  dump: ->
-    super()
-
   getDumpType: ->
     172
 

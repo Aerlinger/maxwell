@@ -75,9 +75,6 @@ class OpAmpElm extends CircuitComponent
     # gain was 1000, but it broke amp-schmitt.txt
     @gain = (if ((@flags & OpAmpElm.FLAG_LOWGAIN) isnt 0) then 1000 else 100000)
 
-  dump: ->
-    "#{super()} #{@maxOut} #{@minOut} #{@gbw}"
-
   nonLinear: ->
     true
 

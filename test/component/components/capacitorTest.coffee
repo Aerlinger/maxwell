@@ -26,7 +26,7 @@ describe "Capacitor Component", ->
     @capacitor.orphaned().should.equal true
 
   it "serializes to JSON", ->
-    expect(@capacitor.toJson()).to.deep.equal({
+    expect(@capacitor.serialize()).to.deep.equal({
       sym: "CapacitorElm",
       x1: 100,
       y1: 100,
