@@ -14,20 +14,19 @@
     "tests"
   ],
   "dependencies": {
-    "color": "2.4.2",
     "d3": "~3.5.3",
     "lodash": "*",
     "rickshaw": "1.5.0",
     "sketch.js": "*"
   },
   "devDependencies": {
+    "jquery": "*",
     "coffee-script": "1.8.0",
     "chai": "~1.10.0",
     "mocha": "~1.15.1",
     "should": "4.3.0",
     "sinonjs": "~1.7.3",
     "dat.gui": "*",
-    "jquery-ui": "*",
     "bootstrap": "~3.3.2"
   }
 }
