@@ -36,7 +36,6 @@ describe "Base Circuit Component", ->
     it "should equal itself", ->
       @circuitElement.equal_to(@circuitElement).should.equal true
 
-
     it "is not equal another component", ->
       @circuitElement.equal_to(new CircuitComponent()).should.equal false
 
@@ -96,8 +95,8 @@ describe "Base Circuit Component", ->
     it "Has no internal nodes", ->
       @circuitElement.getInternalNodeCount().should.equal 0
 
-    it "has correct dump type", ->
-      @circuitElement.dump().should.equal '0 10 10 13 14 0'
+#    it "has correct dump type", ->
+#      @circuitElement.dump().should.equal '0 10 10 13 14 0'
 
     specify "base elements should be linear by default", ->
       @circuitElement.nonLinear().should.equal false

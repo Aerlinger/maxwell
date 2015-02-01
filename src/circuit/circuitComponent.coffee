@@ -102,6 +102,14 @@ class CircuitComponent
       throw new Error("Invalid params #{unmatched_params.join(" ")} assigned to #{this}")
 
 
+  getParameters: ->
+    params = {}
+
+    for param_name, definition of this.constructor.ParameterDefinitions
+      params[param_name] = this[param_name]
+
+    return params
+
   getParentCircuit: ->
     return @Circuit
 
@@ -240,8 +248,23 @@ class CircuitComponent
     console.error("Virtual call on toString in circuitComponent was #{@dump()}")
 #      return arguments.callee.name
 
+  serializeParams: ->
+
+
+  toJson: ->
+    {
+      sym: this.constructor.name,
+      x1: @x1,
+      y1: @y1,
+      x2: @x2,
+      y2: @y2,
+      params: @getParameters()
+    }
+
   dump: ->
-    @getDumpType() + " " + @x1 + " " + @y1 + " " + @x2 + " " + @y2 + " " + @flags
+    "component: #{this.constructor.name}, x1: #{@x1}, y1: #{@y1} #{@x2} #{@y2}"
+
+#    @getDumpType() + " " + @x1 + " " + @y1 + " " + @x2 + " " + @y2 + " " + @flags
 
   getVoltageSourceCount: ->
     0

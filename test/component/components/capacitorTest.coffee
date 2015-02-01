@@ -25,6 +25,19 @@ describe "Capacitor Component", ->
   it "should be orphaned", ->
     @capacitor.orphaned().should.equal true
 
+  it "serializes to JSON", ->
+    expect(@capacitor.toJson()).to.deep.equal({
+      sym: "CapacitorElm",
+      x1: 100,
+      y1: 100,
+      x2: 100,
+      y2: 200,
+      params: {
+        "capacitance": 1e-9
+        "voltDiff": 1.1
+      }
+    })
+
   describe "after soldering to circuit", ->
     beforeEach ->
       @Circuit = new Circuit()
