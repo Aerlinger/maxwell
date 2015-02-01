@@ -60,9 +60,6 @@ class ResistorElm extends CircuitComponent
     @drawDots(@point1, @point2, renderContext)
     @drawPosts(renderContext)
 
-  dump: ->
-    super() + " " + @resistance
-
   getDumpType: ->
     "r"
 

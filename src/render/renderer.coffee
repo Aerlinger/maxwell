@@ -55,8 +55,6 @@ class SelectionMarquee extends Rectangle
     @width = _x2 - _x1
     @height = _y2 - _y1
 
-
-
   draw: (renderContext) ->
     renderContext.lineWidth = 0.1
     if @x1? && @x2? && @y1? && @y2?
@@ -68,11 +66,13 @@ class SelectionMarquee extends Rectangle
 
 
 class Renderer extends Observer
+  MOUSEDOWN = 1
 
   constructor: (@Circuit, @Canvas) ->
     @focusedComponent = null
     @highlightedComponent = null
     @dragComponent = null
+    @selectedComponents = []
 
     # TODO: Width and height are undefined
     @width = @Canvas.width
@@ -103,6 +103,8 @@ class Renderer extends Observer
   mousemove: (event) =>
     @highlightedComponent = null
 
+    console.log(event.which)
+
     x = event.offsetX
     y = event.offsetY
 
@@ -114,29 +116,42 @@ class Renderer extends Observer
 
     if @marquee?
       @marquee?.reposition(x, y)
+      @selectedComponents = []
+
+      for component in @Circuit.getElements()
+        if @marquee?.collidesWithComponent(component)
+          @selectedComponents.push(component)
     else
       for component in @Circuit.getElements()
         if component.getBoundingBox().contains(x, y)
           @highlightedComponent = component
 
-    if @focusedComponent? and (@lastX != @snapX or @lastY != @snapY)
-      @focusedComponent.move(@snapX - @lastX, @snapY - @lastY)
+    if @marquee is null and @selectedComponents?.length > 0 and event.which == MOUSEDOWN and (@lastX != @snapX or @lastY != @snapY)
+      for component in @selectedComponents
+        component.move(@snapX - @lastX, @snapY - @lastY)
 
 
   mousedown: (event) =>
     x = event.offsetX
     y = event.offsetY
 
-    if @highlightedComponent != null
+    if @highlightedComponent == null
+      console.log("DESELECT:")
+      for component in @selectedComponents
+        console.log("#{component} was selected")
+
+      @selectedComponents = []
       @marquee = new SelectionMarquee(x, y)
 
     for component in @Circuit.getElements()
       if component.getBoundingBox().contains(x, y)
         @dragComponent = component
-        component.beingDragged(true)
+#        component.beingDragged(true)
 
         @focusedComponent = component
-        @focusedComponent.focused = true
+
+        if @selectedComponents?.length == 0
+          @selectedComponents = [@focusedComponent]
 
         if @dragComponent.toggle?
           @dragComponent.toggle()
@@ -144,9 +159,11 @@ class Renderer extends Observer
 
   mouseup: (event) =>
     @focusedComponent = null
-    @dragComponent?.beingDragged false
+#    @dragComponent?.beingDragged false
     @dragComponent = null
     @marquee = null
+
+
 
   draw: =>
     if @snapX? && @snapY?
@@ -253,6 +270,21 @@ class Renderer extends Observer
     origLineWidth = @context.lineWidth
     origStrokeStyle = @context.strokeStyle
 
+    @context.strokeStyle = color
+    @context.beginPath()
+    @context.moveTo x, y
+    @context.lineTo x2, y2
+    @context.stroke()
+    @context.closePath()
+
+    @context.lineWidth = origLineWidth
+    @context.strokeStyle = origStrokeStyle
+
+    drawThinLine: (x, y, x2, y2, color = Settings.FG_COLOR) ->
+    origLineWidth = @context.lineWidth
+    origStrokeStyle = @context.strokeStyle
+
+    @context.lineWidth = 1
     @context.strokeStyle = color
     @context.beginPath()
     @context.moveTo x, y
