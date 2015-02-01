@@ -101,8 +101,15 @@ class CircuitCanvas extends Observer
     x = event.offsetX
     y = event.offsetY
 
+    @lastX = @snapX
+    @lastY = @snapY
+
     @snapX = @snapGrid(x)
     @snapY = @snapGrid(y)
+
+    if @focusedComponent and (@lastX != @snapX or @lastY != @snapY)
+      console.log("STF")
+      @focusedComponent.move(@snapX - @lastX, @snapY - @lastY)
 
     if @marquee?
       @marquee?.reposition(x, y)
