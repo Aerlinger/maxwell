@@ -101,22 +101,30 @@ class Renderer extends Observer
     x = event.offsetX
     y = event.offsetY
 
+    @lastX = @snapX
+    @lastY = @snapY
+
     @snapX = @snapGrid(x)
     @snapY = @snapGrid(y)
 
     if @marquee?
       @marquee?.reposition(x, y)
-    else
-      for component in @Circuit.getElements()
-        if component.getBoundingBox().contains(x, y)
-          @focusedComponent = component
-          @focusedComponent.focused = true
+#    else
+#      for component in @Circuit.getElements()
+#        if component.getBoundingBox().contains(x, y)
+#          @focusedComponent = component
+#          @focusedComponent.focused = true
+
+    if @focusedComponent? and (@lastX != @snapX or @lastY != @snapY)
+      @focusedComponent.move(@snapX - @lastX, @snapY - @lastY)
 
 
   mousedown: (event) =>
     x = event.offsetX
     y = event.offsetY
-    @marquee = new SelectionMarquee(x, y)
+
+    if @focusedComponent != null
+      @marquee = new SelectionMarquee(x, y)
 
     for component in @Circuit.getElements()
       if component.getBoundingBox().contains(x, y)
@@ -131,6 +139,7 @@ class Renderer extends Observer
 
 
   mouseup: (event) =>
+    @focusedComponent = null
     @dragComponent?.beingDragged false
     @dragComponent = null
     @marquee = null
