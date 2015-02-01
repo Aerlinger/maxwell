@@ -24,9 +24,12 @@ class TextElm extends CircuitComponent
       default_value: "<text>"
       type: "attribute"
     }
+    # FLAGS
+#    @FLAG_CENTER: 1
+#    @FLAG_BAR: 2
   }
 
-  constructor: (xa, ya, xb, yb, f, params) ->
+  constructor: (xa, ya, xb, yb, params) ->
     @text = "hello"
     @lines = new Array() # new vector()
     @lines.add text

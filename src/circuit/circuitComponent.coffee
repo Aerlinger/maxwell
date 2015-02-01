@@ -26,7 +26,7 @@ class CircuitComponent
 
   @ParameterDefinitions = {}
 
-  constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, flags = 0, params = {}) ->
+  constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, params = {}) ->
     @current = 0
     @curcount = 0
     @noDiagonal = false
@@ -34,9 +34,6 @@ class CircuitComponent
     @dragging = false
     @focused = false
     @Circuit = null
-
-    # TODO: Deprecate
-    @flags = 0
 
     @nodes = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
     @volts = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())

@@ -22,9 +22,13 @@ class MosfetElm extends CircuitComponent
       range: [0, Infinity]
       type: "physical"
     }
+    # Flags:
+    # FLAG_SHOWVT: 1
+    # FLAG_SHOWVT: 2
+    # FLAG_DIGITAL: 4
   }
 
-  constructor: (xa, ya, xb, yb, f, params) ->
+  constructor: (xa, ya, xb, yb, params) ->
     @lastv1 = 0
     @lastv2 = 0
     @ids = 0
@@ -44,11 +48,7 @@ class MosfetElm extends CircuitComponent
 
     @hs = 16
 
-    super(xa, ya, xb, yb, f, params)
-
-#    if st and st.length > 0
-#      st = st.split(" ") if typeof st is "string"
-#      @vt ||= st[0]
+    super(xa, ya, xb, yb, params)
 
   getDefaultThreshold: ->
     1.5
@@ -62,8 +62,8 @@ class MosfetElm extends CircuitComponent
   toString: ->
     "MosfetElm"
 
-  drawDigital: ->
-    (@flags & MosfetElm.FLAG_DIGITAL) isnt 0
+#  drawDigital: ->
+#    (@flags & MosfetElm.FLAG_DIGITAL) isnt 0
 
   reset: ->
     @lastv1 = @lastv2 = @volts[0] = @volts[1] = @volts[2] = @curcount = 0
@@ -111,8 +111,8 @@ class MosfetElm extends CircuitComponent
 
     #Main.getMainCanvas().drawThickCircle(pcircle.x, pcircle.y, pcircler, Settings.FG_COLOR);
     #drawThickCircle(g, pcircle.x, pcircle.y, pcircler);
-    unless (@flags & MosfetElm.FLAG_SHOWVT) is 0
-      s = "" + (@vt * @pnp)
+#    unless (@flags & MosfetElm.FLAG_SHOWVT) is 0
+#      s = "" + (@vt * @pnp)
 
       #g.setColor(whiteColor);
       #g.setFont(unitsFont);

@@ -3,7 +3,7 @@ CapacitorElm = require('../../../src/circuit/components/CapacitorElm.coffee')
 
 describe "Capacitor Component", ->
   beforeEach ->
-    @capacitor = new CapacitorElm(100, 100, 100, 200, 0.1, { capacitance: 1e-9, voltDiff: 1.1})
+    @capacitor = new CapacitorElm(100, 100, 100, 200, { capacitance: 1e-9, voltDiff: 1.1})
 
   it "has correct defaults", ->
     @capacitor.capacitance.should.equal 1e-9

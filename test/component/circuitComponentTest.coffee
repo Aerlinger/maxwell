@@ -23,13 +23,6 @@ describe "Base Circuit Component", ->
       @circuitElement.dy.should.eq 4
       @circuitElement.dn.should.eq 5
 
-    it "had default flag", ->
-      @circuitElement.flags.should.equal 0
-
-    it "has flag passed as an argument", ->
-      circuitElm = new CircuitComponent(0, 3, 0, 4, 0)
-      circuitElm.flags.should.equal 0
-
     it "has component_id", ->
       @circuitElement.component_id > 0
 
@@ -93,7 +86,7 @@ describe "Base Circuit Component", ->
       @circuitElement.getPostCount().should.equal 2
 
     it "Has no internal nodes", ->
-      @circuitElement.getInternalNodeCount().should.equal 0
+      expect(@circuitElement.getInternalNodeCount()).to.equal 0
 
 #    it "has correct dump type", ->
 #      @circuitElement.dump().should.equal '0 10 10 13 14 0'

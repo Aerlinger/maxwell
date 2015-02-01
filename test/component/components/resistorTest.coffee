@@ -5,21 +5,21 @@ ResistorElm = require('../../../src/circuit/components/ResistorElm.coffee')
 describe "Resistor", ->
   beforeEach ->
     @Circuit = new Circuit()
-    @resistor = new ResistorElm(100, 300, 100, 200, 0, {resistance: 50})
+    @resistor = new ResistorElm(100, 300, 100, 200, {resistance: 50})
 
   describe "Initialization", ->
     it "can be initialized through a hash object matching the parameter definitions", ->
-      resistorElm = new ResistorElm(0, 0, 0, 0, null, {resistance: "3"})
+      resistorElm = new ResistorElm(0, 0, 0, 0, {resistance: "3"})
       expect(resistorElm.resistance).to.equal(3)
 
     it "throws an exception for a parameter that isn't defined on this object", ->
       bad_resistor_definition = ->
-        new ResistorElm(0, 0, 0, 0, null, {cubits: "3"})
+        new ResistorElm(0, 0, 0, 0, {cubits: "3"})
 
       expect(bad_resistor_definition).to.throw(Error)
 
     it "sets default resistance if none provided", ->
-      resistorElm = new ResistorElm(0, 0, 0, 0, null)
+      resistorElm = new ResistorElm(0, 0, 0, 0)
       expect(resistorElm.resistance).to.equal(1000)
 
   it "has correct resistance", ->
@@ -64,9 +64,6 @@ describe "Resistor", ->
     @resistor.boundingBox.y.should.equal 200
     @resistor.boundingBox.width.should.equal 1
     @resistor.boundingBox.height.should.equal 101
-
-  it "has correct initial position", ->
-    @resistor.flags.should.equal 0
 
   it "Has 0 voltage at its terminals", ->
     @resistor.getPostVoltage(0).should.equal 0

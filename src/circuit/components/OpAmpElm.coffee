@@ -32,9 +32,14 @@ class OpAmpElm extends CircuitComponent
       range: [-Infinity, Infinity]
       type: "physical"
     }
+
+    # FLAGS:
+    #    @FLAG_SWAP: 1
+    #    @FLAG_SMALL: 2
+    #    @FLAG_LOWGAIN: 4
   }
 
-  constructor: (xa, ya, xb, yb, f, params) ->
+  constructor: (xa, ya, xb, yb, params) ->
     @opsize = 0
 #      @opheight = 0
     @opwidth = 0
@@ -55,7 +60,7 @@ class OpAmpElm extends CircuitComponent
     # GBW has no effect in this version of the simulator, but we retain it to keep the file format the same
     @gbw = 1e6
 
-    super(xa, ya, xb, yb, f, params)
+    super(xa, ya, xb, yb, params)
 
 #      @lastvd = 0
 
@@ -109,7 +114,7 @@ class OpAmpElm extends CircuitComponent
     @opsize = s
     @opheight = 8 * s
     @opwidth = 13 * s
-    @flags = (@flags & ~OpAmpElm.FLAG_SMALL) | ((if (s is 1) then OpAmpElm.FLAG_SMALL else 0))
+#    @flags = (@flags & ~OpAmpElm.FLAG_SMALL) | ((if (s is 1) then OpAmpElm.FLAG_SMALL else 0))
 
   setPoints: ->
     super()

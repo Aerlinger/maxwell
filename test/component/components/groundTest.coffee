@@ -4,7 +4,7 @@ GroundElm = require('../../../src/circuit/components/GroundElm.coffee')
 describe "Ground Component", ->
   beforeEach ->
     @Circuit = new Circuit()
-    @groundElm = new GroundElm(100, 100, 100, 200, 0)
+    @groundElm = new GroundElm(100, 100, 100, 200)
 
 
   it "has correct defaults", ->

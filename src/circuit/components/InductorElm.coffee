@@ -29,19 +29,15 @@ class InductorElm extends CircuitComponent
     }
   }
 
-  constructor: (xa, ya, xb, yb, f, params) ->
+  constructor: (xa, ya, xb, yb, params) ->
     @inductance = 0
     @nodes = new Array(2)
-    @flags = 0
     @compResistance = 1e-3
     @current = 0
     @curSourceValue = 0
 
-    super(xa, ya, xb, yb, f, params)
+    super(xa, ya, xb, yb, params)
     #      @ind = new Inductor()
-
-
-
 #    if st
 #      st = st.split(" ")  if typeof st is "string"
 #      @inductance = parseFloat(st[0])
@@ -110,8 +106,8 @@ class InductorElm extends CircuitComponent
   nonLinear: ->
     false
 
-  isTrapezoidal: ->
-    (@flags & InductorElm.FLAG_BACK_EULER) is 0
+#  isTrapezoidal: ->
+#    (@flags & InductorElm.FLAG_BACK_EULER) is 0
 
   calculateCurrent: ->
     if @compResistance > 0

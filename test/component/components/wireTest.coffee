@@ -6,7 +6,7 @@ describe "Wire Component", ->
   beforeEach ->
     @Circuit = new Circuit()
     @Stamper = new MatrixStamper(@Circuit)
-    @wireElm = new WireElm(100, 100, 100, 200, 0, {})
+    @wireElm = new WireElm(100, 100, 100, 200, {})
 
   it "has correct defaults", ->
     @wireElm.x1 == 100

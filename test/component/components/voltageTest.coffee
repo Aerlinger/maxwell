@@ -6,7 +6,7 @@ describe "Voltage Component", ->
   beforeEach ->
     @Circuit = new Circuit()
     @Stamper = new MatrixStamper(@Circuit)
-    @voltageElm = new VoltageElm(100, 100, 100, 200, 0, {
+    @voltageElm = new VoltageElm(100, 100, 100, 200, {
       waveform: VoltageElm.WF_DC,
       frequency: 80,
       maxVoltage: 6,

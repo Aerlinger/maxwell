@@ -21,9 +21,11 @@ class DiodeElm extends CircuitComponent
       range: [-Infinity, Infinity]
       type: "physical"
     }
+
+#    flags: DiodeElm.FLAG_FWDROP
   }
 
-  constructor: (xa, ya, xb, yb, f, params) ->
+  constructor: (xa, ya, xb, yb, params) ->
     @hs = 8
     @poly
     @cathode = []
@@ -32,7 +34,7 @@ class DiodeElm extends CircuitComponent
     @fwdrop = DiodeElm.DEFAULT_DROP
     @zvoltage = 0
 
-    super(xa, ya, xb, yb, f, params)
+    super(xa, ya, xb, yb, params)
 
 #    if (f & DiodeElm.FLAG_FWDROP) > 0
 #      try

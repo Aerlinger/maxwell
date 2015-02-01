@@ -9,9 +9,9 @@ class OutputElm extends CircuitComponent
 
   @FLAG_VALUE: 1
 
-  constructor: (xa, ya, xb, yb, f, params) ->
+  constructor: (xa, ya, xb, yb, params) ->
     # st not used for OutputElm
-    super(xa, ya, xb, yb, f, params)
+    super(xa, ya, xb, yb, params)
 
 
   getDumpType: ->

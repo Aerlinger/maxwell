@@ -72,9 +72,11 @@ class VoltageElm extends CircuitComponent
       range: [0, 100]
       type: "float"
     }
+    # Flags:
+#    @FLAG_COS: 2
   }
 
-  constructor: (xa, ya, xb, yb, f, params) ->
+  constructor: (xa, ya, xb, yb, params) ->
     @waveform = VoltageElm.WF_DC
     @frequency = 40
     @maxVoltage = 5
@@ -83,7 +85,7 @@ class VoltageElm extends CircuitComponent
     @phaseShift = 0
     @dutyCycle = 0.5
 
-    super(xa, ya, xb, yb, f, params)
+    super(xa, ya, xb, yb, params)
 
 #    if params
 #      params = params.split(" ")  if typeof params is "string"

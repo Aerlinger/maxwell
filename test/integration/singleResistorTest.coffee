@@ -7,11 +7,11 @@ ResistorElm = require('../../src/circuit/components/ResistorElm.coffee')
 describe "1V grounded DC Source with 1 ohm grounded resistor", ->
   beforeEach ->
     @Circuit = new Circuit()
-    @resistor       = new ResistorElm(300, 100, 300, 200, 0, [50])
-    @voltageSource  = new VoltageElm(100, 100, 100, 200, 0, [50])
-    @wire           = new WireElm(100, 100, 300, 100, 0)
-    @voltageGround  = new GroundElm(100, 200, 100, 250, 0)
-    @resGround      = new GroundElm(300, 200, 300, 250, 0)
+    @resistor       = new ResistorElm(300, 100, 300, 200, [50])
+    @voltageSource  = new VoltageElm(100, 100, 100, 200, [50])
+    @wire           = new WireElm(100, 100, 300, 100)
+    @voltageGround  = new GroundElm(100, 200, 100, 250)
+    @resGround      = new GroundElm(300, 200, 300, 250)
 
   it "has correct resistance", ->
     @resistor.resistance.should.equal 50
@@ -61,7 +61,7 @@ describe "1V grounded DC Source with 1 ohm grounded resistor", ->
         #@Circuit.Solver.analyzeCircuit()
         done()
 
-      it "is not need remap", ->
+      it "does not need remap", ->
         #@Circuit.Solver.needsRemap().should.equal false
 
       it "has 4 nodes", ->

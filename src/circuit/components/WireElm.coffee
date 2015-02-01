@@ -6,14 +6,15 @@ Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
 
 class WireElm extends CircuitComponent
-  constructor: (xa, ya, xb, yb, f, params) ->
-    super(xa, ya, xb, yb, f, params)
+  @FLAG_SHOWCURRENT: 1
+  @FLAG_SHOWVOLTAGE: 2
+
+  constructor: (xa, ya, xb, yb, params) ->
+    super(xa, ya, xb, yb, params)
 
   toString: ->
     "WireElm"
 
-  @FLAG_SHOWCURRENT: 1
-  @FLAG_SHOWVOLTAGE: 2
 
   draw: (renderContext) ->
     renderContext.drawThickLinePt @point1, @point2, DrawHelper.getVoltageColor(@volts[0])

@@ -20,8 +20,8 @@ class ResistorElm extends CircuitComponent
     }
   }
 
-  constructor: (xa, ya, xb, yb, f = 0, params) ->
-    super(xa, ya, xb, yb, f, params)
+  constructor: (xa, ya, xb, yb, params) ->
+    super(xa, ya, xb, yb, params)
 
     @ps3 = new Point(100, 50)
     @ps4 = new Point(100, 150)

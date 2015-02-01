@@ -47,23 +47,16 @@ class SweepElm extends CircuitComponent
       range: [0, -Infinity]
       type: "physical"
     }
+    # FLAGS:
+#    @FLAG_LOG: 1
+#    @FLAG_BIDIR: 2
   }
 
-  constructor: (xa, ya, xb, yb, f, params) ->
+  constructor: (xa, ya, xb, yb, params) ->
     @dir = 1
-
-#    if st
-#      st = st.split(" ")  if typeof st is "string"
-#
-#      Define defaults:
-#      @minF = (if st[0] then parseFloat(st[0]) else 20)
-#      @maxF = (if st[1] then parseFloat(st[1]) else 4e4)
-#      @maxV = (if st[2] then parseFloat(st[2]) else 5)
-#      @sweepTime = (if st[3] then parseFloat(st[3]) else 0.1)
-
     @reset()
 
-    super(xa, ya, xb, yb, f, params)
+    super(xa, ya, xb, yb, params)
 
 
   getDumpType: ->

@@ -7,8 +7,7 @@ CircuitComponent = require('../circuitComponent.coffee')
 
 class AntennaElm extends CircuitComponent
 
-  constructor: (xa, ya, xb, yb, f, params) ->
-    super(xa, ya, xb, yb, f, params)
+  constructor: (xa, ya, xb, yb, params) ->
+    super(xa, ya, xb, yb, params)
 
 module.exports = AntennaElm
-

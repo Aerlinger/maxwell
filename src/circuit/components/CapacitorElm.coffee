@@ -29,7 +29,7 @@ class CapacitorElm extends CircuitComponent
     }
   }
 
-  constructor: (xa, ya, xb, yb, f, params) ->
+  constructor: (xa, ya, xb, yb, params) ->
     #    @capacitance = 5e-6
     #    @voltDiff = 10
     @compResistance = 11
@@ -37,10 +37,11 @@ class CapacitorElm extends CircuitComponent
     @plate2 = []
     @curSourceValue = 0
 
-    super(xa, ya, xb, yb, f, params)
+    super(xa, ya, xb, yb, params)
 
   isTrapezoidal: ->
-    (@flags & CapacitorElm.FLAG_BACK_EULER) is 0
+    false
+#    (@flags & CapacitorElm.FLAG_BACK_EULER) is 0
 
   nonLinear: ->
     false
@@ -76,9 +77,6 @@ class CapacitorElm extends CircuitComponent
   draw: (renderContext) ->
     hs = 12
     @setBboxPt @point1, @point2, hs
-#      @curcount = @updateDotCount()
-
-#      unless @isBeingDragged()
 
     # draw first lead and plate
     color = DrawHelper.getVoltageColor(@volts[0])

@@ -20,15 +20,11 @@ class ZenerElm extends DiodeElm
     }
   }
 
-  constructor: (xa, ya, xb, yb, f, params) ->
+  constructor: (xa, ya, xb, yb, params) ->
     @default_z_voltage = 5.6
     @zvoltage = params[0] || @default_z_voltage
 
-    super(xa, ya, xb, yb, f, params)
-
-#    if (f & DiodeElm.FLAG_FWDROP) > 0
-#      try
-#        @fwdrop = params[1]
+    super(xa, ya, xb, yb, params)
 
     @setup()
 
@@ -55,16 +51,15 @@ class ZenerElm extends DiodeElm
     @draw2Leads(renderContext)
 
     # draw arrow vector
-#      setPowerColor(g, true)
+    # setPowerColor(g, true)
     color = DrawHelper.getVoltageColor(v1)
     renderContext.drawThickPolygonP @poly, color
-#      g.fillPolygon(poly)
 
-#      // draw thing arrow is pointing to
-#      setVoltageColor(g, v2)
+    # PLATE:
+    # setVoltageColor(g, v2)
     renderContext.drawThickLinePt(@cathode[0], @cathode[1], v1)
 
-#      // draw wings on cathode
+    # Cathode "Wings"
     color = DrawHelper.getVoltageColor(v2)
     renderContext.drawThickLinePt(@wing[0], @cathode[0], color)
     renderContext.drawThickLinePt(@wing[1], @cathode[1], color)

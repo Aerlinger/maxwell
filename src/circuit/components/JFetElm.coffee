@@ -7,8 +7,8 @@ CircuitComponent = require('../circuitComponent.coffee')
 
 class JFetElm extends CircuitComponent
 
-  conparamsructor: (xa, ya, xb, yb, f, params) ->
-    super(xa, ya, xb, yb, f,  params)
+  conparamsructor: (xa, ya, xb, yb, params) ->
+    super(xa, ya, xb, yb, params)
 
 module.exports = JFetElm
 
