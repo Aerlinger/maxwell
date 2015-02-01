@@ -4,6 +4,8 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
+Maxwell = require('../../Maxwell.coffee')
+
 
 class ResistorElm extends CircuitComponent
   @ParameterDefinitions = {
@@ -11,7 +13,7 @@ class ResistorElm extends CircuitComponent
       name: "Resistance"
       unit: "Ohms",
       default_value: 1000,
-      symbol: "Ω",
+      symbol: Maxwell.OhmSymbol,
       data_type: "float"
       range: [0, Infinity]
       type: "physical"
@@ -74,7 +76,7 @@ class ResistorElm extends CircuitComponent
   getInfo: (arr) ->
     arr[0] = "resistor"
     @getBasicInfo arr
-    arr[3] = "R = " + DrawHelper.getUnitText(@resistance, DrawHelper.ohmString)
+    arr[3] = "R = " + DrawHelper.getUnitText(@resistance, Maxwell.OhmSymbol)
     arr[4] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
 
     return arr

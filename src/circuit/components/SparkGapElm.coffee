@@ -129,31 +129,9 @@ class SparkGapElm extends CircuitComponent
     arr[0] = "spark gap"
     @getBasicInfo arr
     arr[3] = (if @state then "on" else "off")
-    arr[4] = "Ron = " + DrawHelper.getUnitText(@onresistance, Circuit.ohmString)
-    arr[5] = "Roff = " + DrawHelper.getUnitText(@offresistance, Circuit.ohmString)
+    arr[4] = "Ron = " + DrawHelper.getUnitText(@onresistance, Maxwell.OhmSymbol)
+    arr[5] = "Roff = " + DrawHelper.getUnitText(@offresistance, Maxwell.OhmSymbol)
     arr[6] = "Vbreakdown = " + DrawHelper.getUnitText(@breakdown, "V")
-
-#    getEditInfo: (n) ->
-    # ohmString doesn't work here on linux
-#      return new EditInfo("On resistance (ohms)", @onresistance, 0, 0)  if n is 0
-#      return new EditInfo("Off resistance (ohms)", @offresistance, 0, 0)  if n is 1
-#      return new EditInfo("Breakdown voltage", @breakdown, 0, 0)  if n is 2
-#      return new EditInfo("Holding current (A)", @holdcurrent, 0, 0)  if n is 3
-#      null
-
-  # TODO: Double-check
-#    getEditInfo: (n, edit_info) ->
-#      return if edit_info.value <= 0
-#
-#      switch n
-#        when 0
-#          @onresistance = edit_info.value
-#        when 1
-#          @offresistance = edit_info.value
-#        when 2
-#          @breakdown = edit_info.value
-#        when 3
-#          @holdcurrent = edit_info.value
 
   needsShortcut: ->
     false

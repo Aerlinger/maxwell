@@ -4,6 +4,7 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
+ArrayUtils = require('../../util/arrayUtils.coffee')
 
 class MosfetElm extends CircuitComponent
 
@@ -154,14 +155,14 @@ class MosfetElm extends CircuitComponent
     # find the coordinates of the various points we need to draw
     # the MOSFET.
     hs2 = @hs * @dsign
-    @src = CircuitComponent.newPointArray(3)
-    @drn = CircuitComponent.newPointArray(3)
+    @src = ArrayUtils.newPointArray(3)
+    @drn = ArrayUtils.newPointArray(3)
 
     [@src[0], @drn[0]] = DrawHelper.interpPoint2 @point1, @point2, 1, -hs2
     [@src[1], @drn[1]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 22 / @dn, -hs2
     [@src[2], @drn[2]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 22 / @dn, -hs2 * 4 / 3
 
-    @gate = CircuitComponent.newPointArray(3)
+    @gate = ArrayUtils.newPointArray(3)
 
     [@gate[0], @gate[2]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 28 / @dn, hs2 / 2  #,  # was 1-20/dn
     @gate[1] = DrawHelper.interpPoint @gate[0], @gate[2], .5

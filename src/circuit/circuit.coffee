@@ -58,7 +58,6 @@ class Circuit extends Observer
   ## Removes all circuit elements and scopes from the workspace and resets time to zero.
   ##   Called on initialization and reset.
   clearAndReset: ->
-    # TODO: Prompt to save before destroying components
     for element in @elementList?
       element.destroy()
 

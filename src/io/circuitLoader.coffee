@@ -63,7 +63,5 @@ class CircuitLoader
 
       onComplete?(circuit)
       
-  @convertParamsFromArrayToHash: (component_symbol) ->
-    
 
 module.exports = CircuitLoader

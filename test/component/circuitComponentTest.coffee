@@ -11,12 +11,6 @@ describe "Base Circuit Component", ->
     @Circuit = new Circuit()
     @circuitElement = new CircuitComponent(10, 10, 13, 14)
 
-  specify "class methods", ->
-    CircuitComponent.getScopeUnits(1).should.equal "W"
-    CircuitComponent.getScopeUnits().should.equal "V"
-
-
-
   describe "after instantiating a new Circuit Component", ->
     it "has correct initial position", ->
       @circuitElement.x1.should.equal 10

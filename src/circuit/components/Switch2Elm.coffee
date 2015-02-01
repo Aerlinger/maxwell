@@ -5,6 +5,7 @@ Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
 SwitchElm = require('./SwitchElm.coffee')
+ArrayUtils = require('../../util/arrayUtils.coffee')
 
 ###
 Todo: Click functionality does not work
@@ -44,8 +45,8 @@ class Switch2Elm extends SwitchElm
     super()
     @calcLeads 32
 
-    @swpoles = CircuitComponent.newPointArray(3)
-    @swposts = CircuitComponent.newPointArray(2)
+    @swpoles = ArrayUtils.newPointArray(3)
+    @swposts = ArrayUtils.newPointArray(2)
 
     [@swpoles[0], @swpoles[1]] = DrawHelper.interpPoint2(@lead1, @lead2, 1, @openhs)
     @swpoles[2] = @lead2

@@ -27,6 +27,11 @@ describe "CircuitLoader", ->
       param_value = param_list[i]
       result[param_name] = convert[data_type](param_value)
 
-    expect(result).to.equal({})
+    expect(result).to.deep.equal({
+        "bias": 0
+        "frequency": 40
+        "maxVoltage": 5
+        "waveform": 0
+    })
 
 

@@ -270,6 +270,28 @@ class Renderer extends Observer
       @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(i + 1), polygon.getY(i + 1), color
     @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
 
+  drawCoil: (point1, point2, vStart, vEnd, renderContext) ->
+    hs = 8
+    segments = 40
+
+    ps1 = new Point(0, 0)
+    ps2 = new Point(0, 0)
+
+    ps1.x = point1.x
+    ps1.y = point1.y
+
+    for i in [0...segments]
+      cx = (((i + 1) * 8 / segments) % 2) - 1
+      hsx = Math.sqrt(1 - cx * cx)
+      ps2 = DrawHelper.interpPoint(point1, point2, i / segments, hsx * hs)
+
+      voltageLevel = vStart + (vEnd - vStart) * i / segments
+      color = DrawHelper.getVoltageColor(voltageLevel)
+      renderContext.drawThickLinePt ps1, ps2, color
+
+      ps1.x = ps2.x
+      ps1.y = ps2.y
+
   clear: ->
 #      if @Circuit?
 #        @Circuit.eachComponent (component) ->

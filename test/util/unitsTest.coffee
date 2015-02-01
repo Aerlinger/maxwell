@@ -23,14 +23,14 @@ describe "Units test", ->
     DrawHelper.getUnitText(1e-11, "Amps").should.equal "10.00 pAmps"
 
   specify "micro amps", ->
-    DrawHelper.getUnitText(1.99e-6, "Amps").should.equal "1.99 uAmps"
-    DrawHelper.getUnitText(999.99e-6, "Amps").should.equal "999.99 uAmps"
+    DrawHelper.getUnitText(1.99e-6, "Amps").should.equal "1.99 μAmps"
+    DrawHelper.getUnitText(999.99e-6, "Amps").should.equal "999.99 μAmps"
     DrawHelper.getUnitText(1e-8, "Amps").should.equal "10.00 nAmps"
 
   specify "milli amps", ->
     DrawHelper.getUnitText(1.99e-3, "Amps").should.equal "1.99 mAmps"
     DrawHelper.getUnitText(999.99e-3, "Amps").should.equal "999.99 mAmps"
-    DrawHelper.getUnitText(1e-5, "Amps").should.equal "10.00 uAmps"
+    DrawHelper.getUnitText(1e-5, "Amps").should.equal "10.00 μAmps"
 
   specify "amps", ->
     DrawHelper.getUnitText(1.99, "Amps").should.equal "1.99 Amps"

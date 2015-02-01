@@ -31,8 +31,8 @@ class CapacitorElm extends CircuitComponent
 
   constructor: (xa, ya, xb, yb, f, params) ->
     #    @capacitance = 5e-6
-    @compResistance = 11
     #    @voltDiff = 10
+    @compResistance = 11
     @plate1 = []
     @plate2 = []
     @curSourceValue = 0

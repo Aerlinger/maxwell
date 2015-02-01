@@ -89,7 +89,7 @@ class InductorElm extends CircuitComponent
     @setBboxPt @point1, @point2, hs
     @draw2Leads(renderContext)
 #      @setPowerColor false
-    DrawHelper.drawCoil 8, @lead1, @lead2, v1, v2, renderContext
+    renderContext.drawCoil @lead1, @lead2, v1, v2, renderContext
 
 #      if @getParentCircuit().showValuesCheckItem
     unit_text = DrawHelper.getUnitText(@inductance, "H")

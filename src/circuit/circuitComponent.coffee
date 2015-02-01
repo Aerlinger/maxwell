@@ -32,7 +32,6 @@ class CircuitComponent
     @noDiagonal = false
     @selected = false
     @dragging = false
-#    @parentCircuit = null
     @focused = false
     @Circuit = null
 
@@ -229,30 +228,6 @@ class CircuitComponent
 
     @setPoints()
 
-  allowMove: (deltaX, deltaY) ->
-    newX = @x1 + deltaX
-    newY = @y1 + deltaY
-    newX2 = @x2 + deltaX
-    newY2 = @y2 + deltaY
-
-    for circuitElm in @Circuit.elementList
-      if circuitElm.x1 is newX and circuitElm.y1 is newY and circuitElm.x2 is newX2 and circuitElm.y2 is newY2
-        return false
-      if circuitElm.x1 is newX2 and circuitElm.y1 is newY2 and circuitElm.x2 is newX and circuitElm.y2 is newY
-        return false
-
-    true
-
-  movePoint: (n, deltaX, deltaY) ->
-    if n is 0
-      @x1 += deltaX
-      @y1 += deltaY
-    else
-      @x2 += deltaX
-      @y2 += deltaY
-
-    @setPoints()
-
   stamp: ->
     throw("Called abstract function stamp() in Circuit #{@getDumpType()}")
 
@@ -379,7 +354,7 @@ class CircuitComponent
   getScopeValue: (x) ->
     (if (x is 1) then @getPower() else @getVoltageDiff())
 
-  @getScopeUnits: (x) ->
+  getScopeUnits: (x) ->
     if (x is 1) then "W" else "V"
 
   getConnection: (n1, n2) ->
@@ -507,13 +482,6 @@ class CircuitComponent
 
     renderContext.fillCircle x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor
 
-  @newPointArray = (n) ->
-    a = new Array(n)
-    while (n > 0)
-      a[--n] = new Point(0, 0)
-
-    return a
-
   comparePair: (x1, x2, y1, y2) ->
     (x1 == y1 && x2 == y2) || (x1 == y2 && x2 == y1)
 
@@ -523,4 +491,4 @@ class CircuitComponent
     @Circuit.timeStep()
 
 
-  module.exports = CircuitComponent
+module.exports = CircuitComponent

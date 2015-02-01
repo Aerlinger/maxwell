@@ -4,6 +4,7 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
+ArrayUtils = require('../../util/arrayUtils.coffee')
 
 class TransistorElm extends CircuitComponent
   @FLAG_FLIP: 1
@@ -186,12 +187,12 @@ class TransistorElm extends CircuitComponent
     hs2 = hs * @dsign * @pnp
 
     # calc collector, emitter posts
-    @coll = CircuitComponent.newPointArray(2)
-    @emit = CircuitComponent.newPointArray(2)
+    @coll = ArrayUtils.newPointArray(2)
+    @emit = ArrayUtils.newPointArray(2)
     [@coll[0], @emit[0]] = DrawHelper.interpPoint2 @point1, @point2, 1, hs2
 
     # calc rectangle edges
-    @rect = CircuitComponent.newPointArray(4)
+    @rect = ArrayUtils.newPointArray(4)
     [@rect[0], @rect[1]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 16 / @dn, hs
     [@rect[2], @rect[3]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 13 / @dn, hs
 

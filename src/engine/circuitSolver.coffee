@@ -142,7 +142,6 @@ class CircuitSolver
           if postPt.x is cn.x and postPt.y is cn.y
             console.log("#{i} Break!")
             break
-
           k++
 
         console.log("NUM NODES: #{i} " + @Circuit.numNodes())
@@ -278,7 +277,7 @@ class CircuitSolver
 
         if pathfinder.findPath(ce.getNode(0))
           @Circuit.halt "Voltage source/wire loop with no resistance!", ce
-      #            return
+      #     return
 
       #        # Look for shorted caps or caps with voltage but no resistance
       if ce instanceof CapacitorElm

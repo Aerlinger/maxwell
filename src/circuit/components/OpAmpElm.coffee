@@ -133,15 +133,15 @@ class OpAmpElm extends CircuitComponent
     hs = Math.floor(@opheight * @dsign)
     hs = -hs  unless (@flags & OpAmpElm.FLAG_SWAP) is 0
 
-    @in1p = CircuitComponent.newPointArray(2)
-    @in2p = CircuitComponent.newPointArray(2)
-    @textp = CircuitComponent.newPointArray(2)
+    @in1p = ArrayUtils.newPointArray(2)
+    @in2p = ArrayUtils.newPointArray(2)
+    @textp = ArrayUtils.newPointArray(2)
 
     [@in1p[0], @in2p[0]] = DrawHelper.interpPoint2 @point1, @point2, 0, hs
     [@in1p[1], @in2p[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 0, hs
     [@textp[0], @textp[1]] = DrawHelper.interpPoint2 @lead1, @lead2, .2, hs
 
-    tris = CircuitComponent.newPointArray(2)
+    tris = ArrayUtils.newPointArray(2)
     [tris[0], tris[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 0, hs * 2
     @triangle = DrawHelper.createPolygonFromArray([tris[0], tris[1], @lead2])
 

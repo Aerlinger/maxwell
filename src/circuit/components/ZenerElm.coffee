@@ -5,6 +5,7 @@ Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
 DiodeElm = require('./DiodeElm.coffee')
+ArrayUtils = require('../../util/arrayUtils.coffee')
 
 class ZenerElm extends DiodeElm
   @ParameterDefinitions = {
@@ -35,8 +36,8 @@ class ZenerElm extends DiodeElm
     super()
 
     @calcLeads(16)
-    pa = CircuitComponent.newPointArray(2)
-    @wing = CircuitComponent.newPointArray(2)
+    pa = ArrayUtils.newPointArray(2)
+    @wing = ArrayUtils.newPointArray(2)
 
     [pa[0], pa[1]] = DrawHelper.interpPoint2(@lead1, @lead2, 0, @hs)
     [@cathode[0], @cathode[1]] = DrawHelper.interpPoint2(@lead1, @lead2, 1, @hs)
