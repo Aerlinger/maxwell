@@ -134,6 +134,7 @@ module.exports = (grunt) ->
         files:
           'dist/maxwell.min.js': ['dist/maxwell.js']
 
+
   grunt.loadNpmTasks "grunt-mocha"
   grunt.loadNpmTasks "grunt-mocha-test"
   grunt.loadNpmTasks "grunt-coffeelint"
@@ -148,6 +149,8 @@ module.exports = (grunt) ->
   grunt.registerTask 'server', ['connect:server']
   grunt.registerTask "test", ["mochaTest", "mocha"]
   grunt.registerTask "default", ["test", "coffeeify"]
+
+  grunt.registerTask('heroku:development', 'coffeeify');
 
 #  grunt.registerTask 'examples', 'Creates base example jade files', ->
 #    files = [
