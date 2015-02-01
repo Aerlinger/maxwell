@@ -154,22 +154,6 @@ class CapacitorElm extends CircuitComponent
     v = @getVoltageDiff()
     arr[4] = "U = " + DrawHelper.getUnitText(.5 * @capacitance * v * v, "J")
 
-  getEditInfo: (n) ->
-    return new EditInfo("Capacitance (F)", @capacitance, 0, 0)  if n is 0
-    if n is 1
-      ei = new EditInfo("", 0, -1, -1)
-      ei.checkbox = "Trapezoidal Approximation" #new Checkbox("Trapezoidal Approximation", isTrapezoidal());
-      return ei
-    null
-
-  setEditValue: (n, ei) ->
-    @capacitance = ei.value  if n is 0 and ei.value > 0
-    if n is 1
-      if ei.isChecked
-        @flags &= ~CapacitorElm.FLAG_BACK_EULER
-      else
-        @flags |= CapacitorElm.FLAG_BACK_EULER
-
   needsShortcut: ->
     true
 

@@ -63,13 +63,6 @@ class ResistorElm extends CircuitComponent
   getDumpType: ->
     "r"
 
-  getEditInfo: (n) ->
-    return new EditInfo("Resistance (ohms):", @resistance, 0, 0)  if n is 0
-    null
-
-  setEditValue: (n, ei) ->
-    @resistance = ei.value  if ei.value > 0
-
   getInfo: (arr) ->
     arr[0] = "resistor"
     @getBasicInfo arr

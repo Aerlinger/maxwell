@@ -51,33 +51,6 @@ class WireElm extends CircuitComponent
     arr[1] = "I = " + DrawHelper.getCurrentDText(@getCurrent())
     arr[2] = "V = " + DrawHelper.getVoltageText(@volts[0])
 
-  getEditInfo: (n) ->
-  # TODO:
-  #    if(n==0) {
-  #        var ei:EditInfo = new EditInfo("", 0, -1, -1);
-  #        //ei.checkbox = new Checkbox("Show Current", mustShowCurrent());
-  #        return ei;
-  #    }
-  #    if( n==1) {
-  #        var ei:EditInfo = new EditInfo("", 0, -1, -1);
-  #        //ei.checkbox = new Checkbox("Show Voltage", mustShowVoltage());
-  #        return ei;
-  #    }
-  #    return null;
-  setEditValue: (n, ei) ->
-  # TODO:
-  #    if(n==0) {
-  #        if(ei.isChecked)
-  #            flags = FLAG_SHOWCURRENT;
-  #        else
-  #            flags &= ~FLAG_SHOWCURRENT;
-  #    }
-  #    if( n==1 ) {
-  #        if(ei.isChecked)
-  #            flags = FLAG_SHOWVOLTAGE;
-  #        else
-  #            flags &- ~FLAG_SHOWVOLTAGE;
-  #    }
   getDumpType: ->
     "w"
 

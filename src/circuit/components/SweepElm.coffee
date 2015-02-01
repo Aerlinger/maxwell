@@ -177,37 +177,4 @@ class SweepElm extends CircuitComponent
     arr[4] = "range = " + CircuitComponent.getUnitText(@minF, "Hz") + " .. " + CircuitComponent.getUnitText(@maxF, "Hz")
     arr[5] = "time = " + CircuitComponent.getUnitText(@sweepTime, "s")
 
-  getEditInfo: (n) ->
-    return new EditInfo("Min Frequency (Hz)", @minF, 0, 0)  if n is 0
-    return new EditInfo("Max Frequency (Hz)", @maxF, 0, 0)  if n is 1
-    return new EditInfo("Sweep Time (s)", @sweepTime, 0, 0)  if n is 2
-    if n is 3
-      ei = new EditInfo("", 0, -1, -1)
-      ei.checkbox = new Checkbox("Logarithmic", (@flags & SweepElm.FLAG_LOG) isnt 0)
-      return ei
-    return new EditInfo("Max Voltage", @maxV, 0, 0)  if n is 4
-    if n is 5
-      ei = new EditInfo("", 0, -1, -1)
-      ei.checkbox = new Checkbox("Bidirectional", (@flags & SweepElm.FLAG_BIDIR) isnt 0)
-      return ei
-    null
-
-  setEditValue: (n, ei) ->
-    maxfreq = 1 / (8 * Circuit.timeStep)
-    if n is 0
-      @minF = ei.value
-      @minF = maxfreq  if @minF > maxfreq
-    if n is 1
-      @maxF = ei.value
-      @maxF = maxfreq  if @maxF > maxfreq
-    @sweepTime = ei.value  if n is 2
-    if n is 3
-      @flags &= ~SweepElm.FLAG_LOG
-      @flags |= SweepElm.FLAG_LOG  if ei.checkbox.getState()
-    @maxV = ei.value  if n is 4
-    if n is 5
-      @flags &= ~SweepElm.FLAG_BIDIR
-      @flags |= SweepElm.FLAG_BIDIR  if ei.checkbox.getState()
-    @setParams()
-
 module.exports = SweepElm

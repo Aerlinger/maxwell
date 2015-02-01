@@ -8,8 +8,6 @@ CircuitComponent = require('../circuitComponent.coffee')
 class SwitchElm extends CircuitComponent
 
   constructor: (xa, ya, xb, yb, f, params) ->
-
-
     @momentary = false
     @position = 0
     @posCount = 2
@@ -96,19 +94,6 @@ class SwitchElm extends CircuitComponent
   isWire: ->
     true
 
-  getEditInfo: (n) ->
-  # TODO: Implement
-  #    if (n == 0) {
-  #        var ei:EditInfo = new EditInfo("", 0, -1, -1);
-  #        //ei.checkbox = new Checkbox("Momentary Switch", momentary);
-  #        return ei;
-  #    }
-  #    return null;
-  setEditValue: (n, ei) ->
-    n is 0
-
-
-  #momentary = ei.checkbox.getState();
   toString: ->
     "SwitchElm"
 

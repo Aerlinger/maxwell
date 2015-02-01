@@ -340,25 +340,6 @@ class TransistorElm extends CircuitComponent
       else
         "V"
 
-  getEditInfo: (n) ->
-    return new EditInfo("Beta/hFE", @beta, 10, 1000).setDimensionless()  if n is 0
-    if n is 1
-      ei = new EditInfo("", 0, -1, -1)
-      ei.checkbox = new Checkbox("Swap E/C", (@flags & TransistorElm.FLAG_FLIP) isnt 0)
-      return ei
-    null
-
-  setEditValue: (n, ei) ->
-    if n is 0
-      @beta = ei.value
-      @setup()
-    if n is 1
-      if ei.checkbox.getState()
-        @flags |= TransistorElm.FLAG_FLIP
-      else
-        @flags &= ~TransistorElm.FLAG_FLIP
-      @setPoints()
-
   canViewInScope: ->
     true
 

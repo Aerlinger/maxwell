@@ -122,22 +122,6 @@ class Switch2Elm extends SwitchElm
     arr[0] = (if (@link is 0) then "switch (SPDT)" else "switch (DPDT)")
     arr[1] = "I = " + @getCurrentDText(@getCurrent())
 
-#    getEditInfo: (n) ->
-#      if n is 1
-#        ei = new EditInfo("", 0, -1, -1)
-#        ei.checkbox = new Checkbox("Center Off", @hasCenterOff())
-#        return ei
-#      SwitchElm::getEditInfo.call this, n
-
-#    setEditValue: (n, ei) ->
-#      if n is 1
-#        @flags &= ~Switch2Elm.FLAG_CENTER_OFF
-#        @flags |= Switch2Elm.FLAG_CENTER_OFF  if ei.checkbox.getState()
-#        @momentary = false  if @hasCenterOff()
-#        @setPoints()
-#      else
-#        Switch2Elm::setEditValue.call this, n, ei
-
   hasCenterOff: ->
     (@flags & Switch2Elm.FLAG_CENTER_OFF) isnt 0
 

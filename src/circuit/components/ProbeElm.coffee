@@ -78,19 +78,5 @@ class ProbeElm extends CircuitComponent
   getConnection: (n1, n2) ->
     false
 
-  getEditInfo: (n) ->
-    if n is 0
-      ei = new EditInfo("", 0, -1, -1)
-      ei.checkbox = new Checkbox("Show Voltage", @mustShowVoltage())
-      return ei
-    return null
-
-  setEditValue: (n, ei) ->
-    if n is 0
-      if ei.checkbox.getState()
-        flags = ProbeElm.FLAG_SHOWVOLTAGE
-      else
-        flags &= ~ProbeElm.FLAG_SHOWVOLTAGE
-
 
 module.exports = ProbeElm

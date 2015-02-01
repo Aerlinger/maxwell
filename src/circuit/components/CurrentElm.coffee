@@ -61,12 +61,6 @@ class CurrentElm extends CircuitComponent
     @current = @currentValue
     stamper.stampCurrentSource @nodes[0], @nodes[1], @current
 
-#    getEditInfo: (n) ->
-#      return new EditInfo("Current (A)", @currentValue, 0, .1)  if n is 0
-
-#    setEditValue: (n, ei) ->
-#      @currentValue = ei.value
-
   getInfo: (arr) ->
     super()
     arr[0] = "current source"

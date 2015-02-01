@@ -106,13 +106,6 @@ class DiodeElm extends CircuitComponent
     arr[3] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
     arr[4] = "Vf = " + DrawHelper.getVoltageText(@fwdrop)
 
-  getEditInfo: (n) ->
-    return new EditInfo("Fwd Voltage @ 1A", @fwdrop, 10, 1000)  if n is 0
-
-  setEditValue: (n, ei) ->
-    @fwdrop = ei.value
-    @setup()
-
   toString: ->
     "DiodeElm"
 

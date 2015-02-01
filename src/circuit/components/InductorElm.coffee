@@ -77,7 +77,6 @@ class InductorElm extends CircuitComponent
   doStep: (stamper) ->
     stamper.stampCurrentSource @nodes[0], @nodes[1], @curSourceValue
 
-
 #      voltdiff = @volts[0] - @volts[1]
 #      @ind.doStep stamper, voltdiff
 
@@ -141,25 +140,6 @@ class InductorElm extends CircuitComponent
 
   toString: ->
     "InductorElm"
-
-
-  getEditInfo: (n) ->
-    return new EditInfo("Inductance (H)", @inductance, 0, 0)  if n is 0
-    if n is 1
-      ei = new EditInfo("", 0, -1, -1)
-      ei.checkbox = "Trapezoidal Approximation" # new Checkbox("Trapezoidal Approximation",	ind.isTrapezoidal());
-      return ei
-    null
-
-  setEditValue: (n, ei) ->
-    # TODO Auto Generated method stub
-    @inductance = ei.value  if n is 0
-    if n is 1
-      if ei.checkbox.getState()
-        @flags &= ~Inductor.FLAG_BACK_EULER
-      else
-        @flags |= Inductor.FLAG_BACK_EULER
-#      @ind.setup @inductance, @current, @flags
 
   setPoints: ->
     super()

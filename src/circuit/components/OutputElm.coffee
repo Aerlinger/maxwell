@@ -57,24 +57,9 @@ class OutputElm extends CircuitComponent
     arr[0] = "output"
     arr[1] = "V = " + DrawHelper.getVoltageText(@volts[0])
 
-  getEditInfo: (n) ->
-    if n is 0
-      ei = new EditInfo("", 0, -1, -1)
-
-      #ei.checkbox = new Checkbox("Show Voltage", (flags & FLAG_VALUE) != 0);
-      ei.checkbox = "Show Voltage"
-      return ei
-    null
-
   stamp: (stamper) ->
 
   toString: ->
     "OutputElm"
-
-  setEditValue: (n, ei) ->
-
-  # Todo: fix
-  #if (n == 0)
-  #   this.flags = (ei.checkbox.getState()) ? (this.flags | OutputElm.FLAG_VALUE) : (this.flags & ~OutputElm.FLAG_VALUE);
 
 module.exports = OutputElm

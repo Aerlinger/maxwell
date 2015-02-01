@@ -222,14 +222,4 @@ class OpAmpElm extends CircuitComponent
   getDumpType: ->
     "a"
 
-  getEditInfo: (n) ->
-    return new EditInfo("Max Output (V)", @maxOut, 1, 20)  if n is 0
-    return new EditInfo("Min Output (V)", @minOut, -20, 0)  if n is 1
-    null
-
-  setEditValue: (n, ei) ->
-    @maxOut = ei.value  if n is 0
-    @minOut = ei.value  if n is 1
-
-
 module.exports = OpAmpElm

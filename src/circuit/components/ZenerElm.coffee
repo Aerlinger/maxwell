@@ -86,9 +86,4 @@ class ZenerElm extends DiodeElm
   dump: ->
     super() + " " + @zvoltage
 
-  getInfo: (arr) ->
-    super(arr)
-    arr[0] = "Zener diode"
-    arr[5] = "Vz = " + DrawHelper.getVoltageText(zvoltage)
-
 module.exports = ZenerElm

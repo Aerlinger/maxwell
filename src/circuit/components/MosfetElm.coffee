@@ -286,19 +286,5 @@ class MosfetElm extends CircuitComponent
 
   getConnection: (n1, n2) ->
     not (n1 is 0 or n2 is 0)
-#
-#    getEditInfo: (n) ->
-#      return new EditInfo("Threshold Voltage", @pnp * @vt, .01, 5)  if n is 0
-#      if n is 1
-#        ei = new EditInfo("", 0, -1, -1)
-#        ei.checkbox = "Digital Symbol" # new Checkbox("Digital Symbol", this.drawDigital());
-#        return ei
-#      null
-#
-#    setEditValue: (n, ei) ->
-#      @vt = @pnp * ei.value  if n is 0
-#      if n is 1
-#        @flags = (if (ei.checkbox) then (@flags | MosfetElm.FLAG_DIGITAL) else (@flags & ~MosfetElm.FLAG_DIGITAL))
-#        @setPoints()
 
 module.exports = MosfetElm

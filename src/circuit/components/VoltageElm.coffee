@@ -161,11 +161,10 @@ class VoltageElm extends CircuitComponent
 
     @draw2Leads(renderContext)
 
-    unless @isBeingDragged()
-      if @waveform is VoltageElm.WF_DC
-        @drawDots @point1, @point2, renderContext
-      else
-        @drawDots @point1, @lead1, renderContext
+    if @waveform is VoltageElm.WF_DC
+      @drawDots @point1, @point2, renderContext
+    else
+      @drawDots @point1, @lead1, renderContext
     #          @drawDots @point2, @lead2, renderContext
 
     if @waveform is VoltageElm.WF_DC
@@ -289,58 +288,6 @@ class VoltageElm extends CircuitComponent
         arr[i++] = "Voff = " + @getVoltageText(@bias)
       else arr[i++] = "wavelength = " + DrawHelper.getUnitText(2.9979e8 / @frequency, "m")  if @frequency > 500
       arr[i++] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
-
-  getEditInfo: (n) ->
-    if n is 0
-      return new EditInfo((if @waveform is VoltageElm.WF_DC then "Voltage" else "Max Voltage"), @maxVoltage, -20, 20)
-
-    if n is 1
-      ei = new EditInfo("Waveform", @waveform, -1, -1)
-      ei.choice = new Array()
-      ei.choice.push "D/C"
-      ei.choice.push "A/C"
-      ei.choice.push "Square Wave"
-      ei.choice.push "Triangle"
-      ei.choice.push "Sawtooth"
-      ei.choice.push "Pulse"
-      ei.choice.push @waveform
-      return ei
-
-      if @waveform is VoltageElm.WF_DC
-        return null
-      if n is 2
-        return new EditInfo("Frequency (Hz)", @frequency, 4, 500)
-      if n is 3
-        return new EditInfo("DC Offset (V)", @bias, -20, 20)
-      if n is 4
-        return new EditInfo("Phase Offset (degrees)", @phaseShift * 180 / Math.PI, -180, 180).setDimensionless()
-      if n is 5 and @waveform is VoltageElm.WF_SQUARE
-        return new EditInfo("Duty Cycle", @dutyCycle * 100, 0, 100).setDimensionless()
-
-  setEditValue: (n, ei) ->
-    @maxVoltage = ei.value  if n is 0
-    @bias = ei.value  if n is 3
-
-    if n is 2
-      # adjust time zero to maintain continuity in the waveform even though the frequency has changed.
-      oldfreq = @frequency
-      @frequency = ei.value
-      maxfreq = 1 / (8 * simParams)
-      @frequency = maxfreq  if @frequency > maxfreq
-      adj = @frequency - oldfreq
-      @freqTimeZero = @Circuit?.time - oldfreq * (@Circuit?.time - @freqTimeZero) / @frequency
-
-    if n is 1
-      waveform = @waveform
-      #waveform = ei.choice.getSelectedIndex();
-      if @waveform is VoltageElm.WF_DC and waveform isnt VoltageElm.WF_DC
-        #ei.newDialog = true;
-        @bias = 0
-      else @waveform isnt VoltageElm.WF_DC and waveform is VoltageElm.WF_DC
-      #ei.newDialog = true;
-      @setPoints()  if (@waveform is VoltageElm.WF_SQUARE or waveform is VoltageElm.WF_SQUARE) and @waveform isnt waveform
-    @phaseShift = ei.value * Math.PI / 180  if n is 4
-    @dutyCycle = ei.value * 0.01  if n is 5
 
   toString: ->
     "VoltageElm"
