@@ -10,7 +10,7 @@ class MatrixStamper
   ###
   stampVCVS: (n1, n2, coef, vs) ->
     if isNaN(vs) or isNaN(coef)
-      console.log("NaN in stampVCVS")
+      console.warn("NaN in stampVCVS")
     vn = @Circuit.numNodes() + vs
     @stampMatrix vn, n1, coef
     @stampMatrix vn, n2, -coef

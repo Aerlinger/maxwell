@@ -45,7 +45,7 @@ class SwitchElm extends CircuitComponent
     @ps2 = new Point(0, 0)
 
   stamp: (stamper) ->
-    console.log(@voltSource)
+#    console.log(@voltSource)
     if @position is 0
       stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
 

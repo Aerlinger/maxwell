@@ -127,7 +127,7 @@ class Circuit extends Observer
   setSelected: (component) ->
     for elm in @elementList
       if elm == component
-        console.log("Selected: #{component.dump()}")
+#        console.log("Selected: #{component.dump()}")
         @selectedElm = component
         component.setSelected(true)
 

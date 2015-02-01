@@ -16,6 +16,8 @@ CircuitComponent = require('../circuit/circuitComponent.coffee')
 FormatUtils = require('../util/formatUtils.coffee')
 Settings = require('../settings/settings.coffee')
 Rectangle = require('../geom/rectangle.coffee')
+Point = require('../geom/point.coffee')
+DrawHelper = require('./drawHelper.coffee')
 
 
 # X components
@@ -69,6 +71,7 @@ class Renderer extends Observer
 
   constructor: (@Circuit, @Canvas) ->
     @focusedComponent = null
+    @highlightedComponent = null
     @dragComponent = null
 
     # TODO: Width and height are undefined
@@ -98,6 +101,8 @@ class Renderer extends Observer
 
 
   mousemove: (event) =>
+    @highlightedComponent = null
+
     x = event.offsetX
     y = event.offsetY
 
@@ -109,11 +114,10 @@ class Renderer extends Observer
 
     if @marquee?
       @marquee?.reposition(x, y)
-#    else
-#      for component in @Circuit.getElements()
-#        if component.getBoundingBox().contains(x, y)
-#          @focusedComponent = component
-#          @focusedComponent.focused = true
+    else
+      for component in @Circuit.getElements()
+        if component.getBoundingBox().contains(x, y)
+          @highlightedComponent = component
 
     if @focusedComponent? and (@lastX != @snapX or @lastY != @snapY)
       @focusedComponent.move(@snapX - @lastX, @snapY - @lastY)
@@ -123,7 +127,7 @@ class Renderer extends Observer
     x = event.offsetX
     y = event.offsetY
 
-    if @focusedComponent != null
+    if @highlightedComponent != null
       @marquee = new SelectionMarquee(x, y)
 
     for component in @Circuit.getElements()
@@ -167,7 +171,7 @@ class Renderer extends Observer
       for component in @Circuit.getElements()
         if @marquee?.collidesWithComponent(component)
           component.focused = true
-          console.log("COLLIDE: " + component.dump())
+          console.log("MARQUEE COLLIDE: " + component.dump())
         @drawComponent(component)
 
   snapGrid: (x) ->

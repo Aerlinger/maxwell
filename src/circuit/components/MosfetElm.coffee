@@ -166,7 +166,7 @@ class MosfetElm extends CircuitComponent
 
     [@gate[0], @gate[2]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 28 / @dn, hs2 / 2  #,  # was 1-20/dn
     @gate[1] = DrawHelper.interpPoint @gate[0], @gate[2], .5
-    console.log("GATE: #{@gate[1]}")
+#    console.log("GATE: #{@gate[1]}")
 
     if !@drawDigital()
       if @pnp is 1

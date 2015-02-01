@@ -60,8 +60,8 @@ class InductorElm extends CircuitComponent
 
     ts = @getParentCircuit().timeStep()
 
-    console.log ts
-    console.log @inductance
+#    console.log ts
+#    console.log @inductance
 
     if @isTrapezoidal()
       @compResistance = 2 * @inductance / ts

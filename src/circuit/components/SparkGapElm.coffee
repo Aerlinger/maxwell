@@ -111,7 +111,7 @@ class SparkGapElm extends CircuitComponent
 
   doStep: (stamper) ->
     if @state
-      console.log("SPARK!")
+#      console.log("SPARK!")
       @resistance = @onresistance
     else
       @resistance = @offresistance

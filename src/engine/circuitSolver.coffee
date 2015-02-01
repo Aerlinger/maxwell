@@ -62,7 +62,7 @@ class CircuitSolver
       @Circuit.Params.setCurrentMult(1.7 * inc * currentSpeed)
 
     if (sysTime - @secTime) >= 1000
-      console.log("Reset!")
+#      console.log("Reset!")
       @frames = 0
       @steps = 0
       @secTime = sysTime
@@ -97,21 +97,21 @@ class CircuitSolver
     # Check if this circuit has a voltage rail and if it has a voltage element.
     for ce in @Circuit.getElements()
       if ce instanceof GroundElm
-        console.log("Found ground")
+#        console.log("Found ground")
         gotGround = true
         break
       if ce instanceof RailElm
-        console.log("Got rail")
+#        console.log("Got rail")
         gotRail = true
       if !volt? and ce instanceof VoltageElm
-        console.log("Ve")
+#        console.log("Ve")
         volt = ce
 
     # If no ground and no rails then voltage element's first terminal is referenced to ground:
     if !gotGround and volt? and !gotRail
       cn = new CircuitNode()
       pt = volt.getPost(0)
-      console.log("GOT GROUND cn=#{cn}, pt=#{pt}")
+#      console.log("GOT GROUND cn=#{cn}, pt=#{pt}")
       cn.x = pt.x
       cn.y = pt.y
       @Circuit.addCircuitNode cn
@@ -133,18 +133,18 @@ class CircuitSolver
       for j in [0...postCount]
         postPt = circuitElm.getPost(j)
 
-        console.log("D: " + circuitElm.dump())
+#        console.log("D: " + circuitElm.dump())
 
         k = 0
         while k < @Circuit.numNodes()
           cn = @Circuit.getNode(k)
-          console.log("j=" + j + "  k=" + k + "  pt=" + postPt + "  " + cn)
+#          console.log("j=" + j + "  k=" + k + "  pt=" + postPt + "  " + cn)
           if postPt.x is cn.x and postPt.y is cn.y
-            console.log("#{i} Break!")
+#            console.log("#{i} Break!")
             break
           k++
 
-        console.log("NUM NODES: #{i} " + @Circuit.numNodes())
+#        console.log("NUM NODES: #{i} " + @Circuit.numNodes())
 
         if k is @Circuit.numNodes()
           cn = new CircuitNode(postPt.x, postPt.y)
@@ -272,7 +272,7 @@ class CircuitSolver
           return
       # Look for voltage source loops:
       if (ce instanceof VoltageElm and ce.getPostCount() is 2) or ce instanceof WireElm
-        console.log("Examining Loop: #{ce.dump()}")
+#        console.log("Examining Loop: #{ce.dump()}")
         pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
 
         if pathfinder.findPath(ce.getNode(0))
@@ -346,7 +346,7 @@ class CircuitSolver
           elt.value = (@circuitRightSide[i] + rsadd) / qv
           @circuitRowInfo[i].dropRow = true
 
-          console.error("iter = 0 # start over from scratch")
+#          console.warn("iter = 0 # start over from scratch")
           i = -1 # start over from scratch
 
         else if (@circuitRightSide[i] + rsadd) is 0
@@ -520,8 +520,8 @@ class CircuitSolver
         subiter++
       # End for
 
-      if (subiter > 5)
-        console.log("converged after " + subiter + " iterations\n")
+#      if (subiter > 5)
+#        console.log("converged after " + subiter + " iterations\n")
       if subiter >= subiterCount
         @halt "Convergence failed: " + subiter, null
         break
