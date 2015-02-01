@@ -27,6 +27,7 @@ Logger = require('../io/logger.coffee')
 SimulationParams = require('../core/simulationParams.coffee')
 CircuitSolver = require('../engine/circuitSolver.coffee')
 Observer = require('../util/observer.coffee')
+Rectangle = require('../geom/rectangle.coffee')
 
 class Circuit extends Observer
 
@@ -62,6 +63,7 @@ class Circuit extends Observer
       element.destroy()
 
     @Solver = new CircuitSolver(this)
+    @boundingBox = null
 
     @nodeList = []
     @elementList = []
@@ -83,7 +85,10 @@ class Circuit extends Observer
 
     newElement.Circuit = this
     newElement.setPoints()
+
     @elementList.push newElement
+
+    @recomputeBounds()
 
   # "Desolders" an existing element to this circuit (removes it to the element list array).
   desolder: (component, destroy = false) ->
@@ -93,6 +98,8 @@ class Circuit extends Observer
     @elementList.remove component
     if destroy
       component.destroy()
+
+    @recomputeBounds()
 
   toString: ->
     @Params
@@ -171,6 +178,41 @@ class Circuit extends Observer
   getVoltageSources: ->
     @voltageSources
 
+  recomputeBounds: ->
+    @minX = 10000000000
+    @minY = 10000000000
+    @maxX = -10000000000
+    @maxY = -10000000000
+
+    console.log("RECOMPUTER!")
+
+    @eachComponent (component) ->
+      console.log("COMPONENT")
+
+      componentBounds = component.boundingBox
+
+      componentMinX = componentBounds.x
+      componentMinY = componentBounds.y
+      componentMaxX = componentBounds.x + componentBounds.width
+      componentMaxY = componentBounds.y + componentBounds.height
+
+      if componentMinX < @minX
+        @minX = componentMinX
+
+      if componentMinY < @minY
+        @minY = componentMinY
+
+      if componentMaxX > @maxX
+        @maxX = componentMaxX
+        
+      if componentMaxY > @maxY
+        @maxY = componentMaxY
+
+    @boundingBox = new Rectangle(@minX, @minY, @maxX - @minX, @maxY - @minY)
+
+
+  getBoundingBox: ->
+    @boundingBox
 
   ####################################################################################################################
   ### Nodes

@@ -12,13 +12,20 @@ class Maxwell
   @Circuits = {}
 
   @loadCircuitFromFile: (circuitFileName, onComplete) ->
-    return CircuitLoader.createCircuitFromJsonFile(circuitFileName, onComplete)
+    circuit = CircuitLoader.createCircuitFromJsonFile(circuitFileName, onComplete)
+    @Circuits[circuitFileName] = circuit
+
+    return circuit
 
 #  @loadCircuitFromFileSync: (circuitFileName) ->
 #    CircuitLoader.loadCircuitFromFile(circuitFileName, onComplete)
 
   @loadCircuitFromJson: (jsonData) ->
-    return CircuitLoader.createCircuitFromJsonData(jsonData)
+    circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
+
+    @Circuits[circuitFileName] = circuit
+
+    return circuit
 
   @createCircuit: (circuitName, circuitData, onComplete) ->
     circuit = null

@@ -24,4 +24,7 @@ class Rectangle
   collidesWithComponent: (circuitComponent) ->
     @intersects(circuitComponent.getBoundingBox())
 
+  toString: ->
+    "(#{@x}, #{@y}) [w: #{@width}, h: #{@height}]"
+
 module.exports = Rectangle
