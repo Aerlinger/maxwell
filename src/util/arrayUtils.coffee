@@ -1,3 +1,5 @@
+Point = require('../geom/point.coffee')
+
 
 # Add indexOf to Array prototype (useful for IE <= 8)
 unless Array::indexOf

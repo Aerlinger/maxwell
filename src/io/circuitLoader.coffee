@@ -14,7 +14,8 @@ class CircuitLoader
 
     # Circuit Parameters are stored at the header of the .json file (index 0)
     circuitParams = jsonData.shift()
-    circuit.Params = new SimulationParams(circuitParams)
+#    circuit.Params = new SimulationParams(circuitParams)
+    circuit.Params = SimulationParams.deserialize(circuitParams)
 
     console.log(circuit.Params.toString())
 
@@ -37,14 +38,14 @@ class CircuitLoader
 
       params = elementData['params']
 
-      if sym is null
-        circuit.halt "Element: #{JSON.stringify(elementData)} is null"
-      if type is Hint
+      if !sym
+        circuit.warn "No matching component for #{type}: #{sym}"
+#        circuit.halt "Element: #{JSON.stringify(elementData)} is null"
+      else if type is Hint
         console.log "Hint found in file!"
-      if type is Oscilloscope
+      else if type is Oscilloscope
         console.log "Scope found in file!"
-
-      if !type
+      else if !type
         circuit.warn "Unrecognized Type"
 #      if _.isEmpty(sym)
 #        circuit.warn "Component could not be added to circuit. Unrecognized component symbol: #{type}."

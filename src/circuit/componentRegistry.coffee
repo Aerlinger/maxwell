@@ -1,3 +1,4 @@
+CircuitComponent = require('./CircuitComponent.coffee')
 WireElm = require('./components/WireElm.coffee')
 ResistorElm = require('./components/ResistorElm.coffee')
 GroundElm = require('./components/GroundElm.coffee')
@@ -19,7 +20,7 @@ Switch2Elm = require('./components/Switch2Elm.coffee')
 TextElm = require('./components/TextElm.coffee')
 ProbeElm = require('./components/ProbeElm.coffee')
 
-
+##
 # ElementMap
 #
 #   A Hash Map of circuit components within Maxwell
@@ -31,7 +32,7 @@ ProbeElm = require('./components/ProbeElm.coffee')
 #   Elements that are not yet implemented have their names (key) prefixed with a '-'
 class ComponentRegistry
   @ComponentDefs:
-    # Working
+  # Working
     'w': WireElm
     'r': ResistorElm
     'g': GroundElm
@@ -44,18 +45,42 @@ class ComponentRegistry
     'a': OpAmpElm
     'f': MosfetElm
 
-    # Testing
+  # Testing
     'R': RailElm
     '172': VarRailElm
     'z': ZenerElm
     'i': CurrentElm
     't': TransistorElm
 
-    # In progress:
+  # In progress:
     'S': Switch2Elm  # Needs interaction
     'x': TextElm
-    'o': ProbeElm
+    'p': ProbeElm
     'O': OutputElm
 
+  @InverseComponentDefs: {
+    WireElm: 'w'
+    ResistorElm: 'r'
+    GroundElm: 'g'
+    InductorElm: 'l'
+    CapacitorElm: 'c'
+    VoltageElm: 'v'
+    DiodeElm: 'd'
+    SwitchElm: 's'
+    SparkGapElm: '187'
+    OpAmpElm: 'a'
+    MosfetElm: 'f'
+
+    RailElm: 'R'
+    VarRailElm: '17'
+    ZenerElm: 'z'
+    CurrentElm: 'i'
+    TransistorElm: 't'
+
+    Switch2Elm: 'S'
+    TextElm: 'x'
+    ProbeElm: 'o'
+    OutputElm: 'O'
+  }
 
 module.exports = ComponentRegistry

@@ -20,7 +20,7 @@ Rectangle = require('../geom/rectangle.coffee')
 Point = require('../geom/point.coffee')
 MathUtils = require('../util/mathUtils.coffee')
 ArrayUtils = require('../util/arrayUtils.coffee')
-Circuit = require('../Circuit.coffee')
+Circuit = require('./Circuit.coffee')
 
 Circuit.components = [
   # Working
@@ -52,7 +52,6 @@ Circuit.components = [
 
 
 class CircuitComponent
-
   @ParameterDefinitions = {}
 
   constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, params = {}) ->

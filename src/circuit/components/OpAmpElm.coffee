@@ -1,3 +1,4 @@
+ArrayUtils =  require('../../util/ArrayUtils.coffee')
 Settings = require('../../settings/settings.coffee')
 DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
