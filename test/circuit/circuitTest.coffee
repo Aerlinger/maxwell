@@ -1,73 +1,45 @@
 Circuit = require('../../src/circuit/circuit.coffee')
+ResistorElm = require('../../src/circuit/components/ResistorElm.coffee')
 
 describe "Circuit", ->
   beforeEach ->
     @Circuit = new Circuit()
 
-  describe "on initialization", ->
+  describe "initial state", ->
     it "has no errors", ->
       @Circuit.stopMessage == null
       @Circuit.stopElm == null
 
+    it "has no observers", ->
+      @Circuit.getObservers().should == []
+
+    it "has a time of zero", ->
+      expect(@Circuit.Solver.time).to.equal(0)
+      expect(@iterations).to.equal(0)
+
     it "has a default timestep", ->
       @Circuit.timeStep().should.equal 0.000005
 
-  describe "should observe", ->
-    specify "UIContext", ->
-      @Circuit.getObservers().should == []
+    it "needs analysis", ->
+      expect(@Circuit.Solver.analyzeFlag).to.eq(true)
 
-  describe "has event listeners for", ->
-    specify "onMouseMove (x, y)", ->
-
-    specify "onMouseDown (x, y)", ->
-
-    specify "onError (message)", ->
-
-  describe "should define events for", ->
-    it "update", ->
-      Circuit.ON_START_UPDATE != null
-
-    it "start", ->
-      Circuit.ON_START != null
-
-    it "pause", ->
-      Circuit.ON_PAUSE != null
-
-    it " added (component)", ->
-      Circuit.ON_ADD_COMPONENT != null
-
-    it "component removed (component)", ->
-      Circuit.ON_REMOVE_COMPONENT != null
-
-    it " moved (component)", ->
-      Circuit.ON_MOVE_COMPONENT != null
-
-    it " moved (component)", ->
-      Circuit.ON_WARNING != null
-
-    it " moved (component)", ->
-      Circuit.ON_ERROR != null
-
-  describe "has one", ->
-    describe "Canvas", ->
-
-    it "has Solver", ->
-      @Circuit.Solver != null
-
-    it "has Params Object", ->
-
-  describe "has collection of", ->
-    specify "Voltage Sources", ->
-      @Circuit.getVoltageSources().should.be.empty
-
-    specify "Circuit Components", ->
+    it "has no components or nodes", ->
       @Circuit.getElements().should.be.empty
-
-    specify "Nodes", ->
+      @Circuit.getVoltageSources().should.be.empty
       @Circuit.getNodes().should.be.empty
-
-    specify "Oscilloscopes", ->
       @Circuit.getScopes().should.be.empty
 
-      specify "GetElmByIdx should return an empty array", ->
+    specify "GetElmByIdx should return an empty array", ->
       @Circuit.getElmByIdx(0) == null
+
+    describe "Adding components", ->
+      before ->
+        @resistor = new ResistorElm(100, 100, 200, 300, { resistance: 410 })
+        @Circuit.solder(@resistor)
+
+      it "has one resistor", ->
+        expect(@Circuit.getElements()).to.eq([@resistor])
+
+      it "can also remove the component", ->
+        @Circuit.desolder(@resistor)
+        expect(@Circuit.getElements()).to.eq([])

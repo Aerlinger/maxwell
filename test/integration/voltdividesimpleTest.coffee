@@ -3,13 +3,13 @@ CircuitNode = require('../../src/engine/circuitNode.coffee')
 CircuitLoader = require('../../src/io/circuitLoader.coffee')
 ArrayUtils = require('../../src/util/arrayUtils.coffee')
 fs = require 'fs'
+_ = require('lodash')
 
 
 describe "Simple Voltage Divider", ->
   before (done) ->
-    voltdividesimple = fs.readFileSync("./circuits/voltdividesimple.json")
-    @circuit = CircuitLoader.createCircuitFromJsonData voltdividesimple
-    done()
+    voltdividesimple = JSON.parse(fs.readFileSync("./circuits/voltdividesimple.json"))
+    @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
 
 #    CircuitLoader.createCircuitFromJsonFile "../../circuits/voltdividesimple.json", (circuit) =>
 #      @circuit = circuit

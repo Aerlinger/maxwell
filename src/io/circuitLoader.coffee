@@ -40,9 +40,10 @@ class CircuitLoader
 
       if !type
         circuit.warn "Unrecognized Type"
-      if _.isEmpty(sym)
-        circuit.warn "Component could not be added to circuit. Unrecognized component symbol: #{type}."
+#      if _.isEmpty(sym)
+#        circuit.warn "Component could not be added to circuit. Unrecognized component symbol: #{type}."
       else
+        console.log(sym)
         newCircuitElm = new sym(x1, y1, x2, y2, params)
 
         elms.push(newCircuitElm)

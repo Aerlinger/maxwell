@@ -1,19 +1,13 @@
 CircuitLoader = require("../../src/io/circuitLoader.coffee")
+Circuit = require('../../src/circuit/circuit.coffee')
 fs = require 'fs'
 
-Circuit = require('../../src/circuit/circuit.coffee')
-
 describe "CircuitLoader", ->
-  before ->
-    @circuit = new Circuit()
-
   describe "should read voltdividesimple.json and", ->
     before (done) ->
-      voltdividesimple = fs.readFileSync("./circuits/voltdividesimple.json")
+      voltdividesimple = JSON.parse(fs.readFileSync("./circuits/voltdividesimple.json"))
 
-      @circuit = CircuitLoader.createCircuitFromJsonData voltdividesimple
-
-      done()
+      @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
 
     it "have only 7 elements", ->
       @circuit.numElements().should.equal 7

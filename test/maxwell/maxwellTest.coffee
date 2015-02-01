@@ -1,4 +1,5 @@
 Maxwell = require('../../src/Maxwell')
+_ = require('lodash')
 
 describe "Maxwell", ->
   before ->

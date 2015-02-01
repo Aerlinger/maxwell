@@ -53,7 +53,7 @@ class CircuitComponent
 
     result = {}
 
-    ParameterDefinitions = this.constructor.ParameterDefinitions
+    ParameterDefinitions = @constructor.ParameterDefinitions
 
     for i in [0...param_list.length]
       param_name = Object.keys(ParameterDefinitions)[i]
@@ -78,7 +78,7 @@ class CircuitComponent
       "sign": Math.sign
     }
 
-    ParameterDefinitions = this.constructor.ParameterDefinitions
+    ParameterDefinitions = @constructor.ParameterDefinitions
 
     for param_name, definition of ParameterDefinitions
       default_value = definition.default_value
@@ -413,7 +413,7 @@ class CircuitComponent
 
     dx = point2.x - point1.x
     dy = point2.y - point1.y
-    dn = Math.sqrt dx * dx + dy * dy
+#    dn = Math.sqrt(dx * dx + dy * dy)
 
     ds = 16
 
@@ -423,9 +423,9 @@ class CircuitComponent
 
     newPos = @curcount
 
-    while newPos < dn
-      x0 = point1.x + newPos * dx / dn
-      y0 = point1.y + newPos * dy / dn
+    while newPos < @dn
+      x0 = point1.x + newPos * dx / @dn
+      y0 = point1.y + newPos * dy / @dn
 
       renderContext.fillCircle(x0, y0, Settings.CURRENT_RADIUS)
       newPos += ds

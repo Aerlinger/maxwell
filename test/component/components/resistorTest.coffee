@@ -90,9 +90,6 @@ describe "Resistor", ->
     it "is not be orphaned", ->
       @resistor.orphaned().should.equal false
 
-    it "should be stampable", ->
-      @resistor.stamp(@Circuit.Solver.Stamper)
-
     it "belongs to @Circuit", ->
       @Circuit.getElmByIdx(0) == @resistor
 
@@ -102,9 +99,6 @@ describe "Resistor", ->
     it "has two unconnected nodes", ->
       @Circuit.updateCircuit()
       @Circuit.findBadNodes().should == []
-
-    it "has two unconnected nodes", ->
-      @Circuit.updateCircuit()
       @Circuit.numNodes().should == 2
 
     describe "then destroying the resistor", ->
