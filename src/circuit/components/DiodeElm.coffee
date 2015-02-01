@@ -23,8 +23,6 @@ class DiodeElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, f, st) ->
-    super(xa, ya, xb, yb, f, st)
-
     @hs = 8
     @poly
     @cathode = []
@@ -33,9 +31,11 @@ class DiodeElm extends CircuitComponent
     @fwdrop = DiodeElm.DEFAULT_DROP
     @zvoltage = 0
 
-    if (f & DiodeElm.FLAG_FWDROP) > 0
-      try
-        @fwdrop = parseFloat(st)
+    super(xa, ya, xb, yb, f, st)
+
+#    if (f & DiodeElm.FLAG_FWDROP) > 0
+#      try
+#        @fwdrop = parseFloat(st)
 
     @setup()
 

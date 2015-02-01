@@ -30,14 +30,14 @@ class CapacitorElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, f, params) ->
-    super(xa, ya, xb, yb, f, params)
-
-#    @capacitance = 5e-6
+    #    @capacitance = 5e-6
     @compResistance = 11
-#    @voltDiff = 10
+    #    @voltDiff = 10
     @plate1 = []
     @plate2 = []
     @curSourceValue = 0
+
+    super(xa, ya, xb, yb, f, params)
 
   isTrapezoidal: ->
     (@flags & CapacitorElm.FLAG_BACK_EULER) is 0

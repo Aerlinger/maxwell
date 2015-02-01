@@ -50,8 +50,6 @@ class SweepElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, f, params) ->
-    super(xa, ya, xb, yb, f, params)
-
     @dir = 1
 
 #    if st
@@ -64,6 +62,8 @@ class SweepElm extends CircuitComponent
 #      @sweepTime = (if st[3] then parseFloat(st[3]) else 0.1)
 
     @reset()
+
+    super(xa, ya, xb, yb, f, params)
 
 
   getDumpType: ->

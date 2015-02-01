@@ -26,12 +26,11 @@ class Switch2Elm extends SwitchElm
   }
 
   constructor: (xa, ya, xb, yb, f, params) ->
-    super(xa, ya, xb, yb, f, params)
-
     @openhs = 16
-
     @noDiagonal = true
-#    @link = parseInt(st[st.length - 1])  if st
+    #    @link = parseInt(st[st.length - 1])  if st
+
+    super(xa, ya, xb, yb, f, params)
 
 
   getDumpType: ->

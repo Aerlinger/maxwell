@@ -24,8 +24,6 @@ class MosfetElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, f, params) ->
-    super(xa, ya, xb, yb, f, params)
-
     @lastv1 = 0
     @lastv2 = 0
     @ids = 0
@@ -44,6 +42,8 @@ class MosfetElm extends CircuitComponent
     @vt = @getDefaultThreshold()
 
     @hs = 16
+
+    super(xa, ya, xb, yb, f, params)
 
 #    if st and st.length > 0
 #      st = st.split(" ") if typeof st is "string"

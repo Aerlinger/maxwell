@@ -222,8 +222,8 @@ class CircuitComponent
     @x2 += deltaX
     @y2 += deltaY
 
-    @boundingBox.x += deltaX
-    @boundingBox.y += deltaY
+    @boundingBox.x = @x1
+    @boundingBox.y = @x2
 
     @getParentCircuit().invalidate()
 

@@ -8,7 +8,7 @@ CircuitComponent = require('../circuitComponent.coffee')
 class SwitchElm extends CircuitComponent
 
   constructor: (xa, ya, xb, yb, f, params) ->
-    super(xa, ya, xb, yb, f, params)
+
 
     @momentary = false
     @position = 0
@@ -28,6 +28,8 @@ class SwitchElm extends CircuitComponent
 #        else
 #          @position = parseInt(str)
 #          @momentary = (st.shift().toLowerCase() is "true")
+
+    super(xa, ya, xb, yb, f, params)
 
 
   getDumpType: ->

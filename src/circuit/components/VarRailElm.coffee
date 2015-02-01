@@ -9,9 +9,10 @@ RailElm = require('./RailElm.coffee')
 class VarRailElm extends RailElm
 
   constructor: (xa, ya, xb, yb, f, params) ->
-    super(xa, ya, xb, yb, f, params)
 #      @sliderText = "voltage"
     @frequency = @maxVoltage
+
+    super(xa, ya, xb, yb, f, params)
 #      @createSlider()
 
   dump: ->

@@ -47,9 +47,6 @@ class OpAmpElm extends CircuitComponent
     @in1p = []
     @in2p = []
     @textp = []
-    super(xa, ya, xb, yb, f, params)
-
-#      @lastvd = 0
 
     #Font plusFont;
     @maxOut = 15
@@ -57,6 +54,10 @@ class OpAmpElm extends CircuitComponent
 
     # GBW has no effect in this version of the simulator, but we retain it to keep the file format the same
     @gbw = 1e6
+
+    super(xa, ya, xb, yb, f, params)
+
+#      @lastvd = 0
 
 #    if st and st.length > 0
 #      st = st.split(" ")  if typeof st is "string"

@@ -20,10 +20,10 @@ class ZenerElm extends DiodeElm
   }
 
   constructor: (xa, ya, xb, yb, f, params) ->
-    super(xa, ya, xb, yb, f, params)
-
     @default_z_voltage = 5.6
     @zvoltage = params[0] || @default_z_voltage
+
+    super(xa, ya, xb, yb, f, params)
 
 #    if (f & DiodeElm.FLAG_FWDROP) > 0
 #      try

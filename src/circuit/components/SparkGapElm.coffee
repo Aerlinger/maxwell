@@ -46,13 +46,15 @@ class SparkGapElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, f, params) ->
-    super(xa, ya, xb, yb, f, params)
     @resistance = 0
     @offresistance = 1e9
     @onresistance = 1e3
     @breakdown = 1e3
     @holdcurrent = 0.001
     @state = false
+
+    super(xa, ya, xb, yb, f, params)
+
 
 #    if st
 #      st = st.split(" ")  if typeof st is "string"
