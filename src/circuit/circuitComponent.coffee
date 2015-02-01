@@ -20,6 +20,35 @@ Rectangle = require('../geom/rectangle.coffee')
 Point = require('../geom/point.coffee')
 MathUtils = require('../util/mathUtils.coffee')
 ArrayUtils = require('../util/arrayUtils.coffee')
+Circuit = require('../Circuit.coffee')
+
+Circuit.components = [
+  # Working
+  "WireElm"
+  "ResistorElm"
+  "GroundElm"
+  "InductorElm"
+  "CapacitorElm"
+  "VoltageElm"
+  "DiodeElm"
+  "SwitchElm"
+  "SparkGapElm"
+  "OpAmpElm"
+  "MosfetElm"
+
+  # Testing
+  "RailElm"
+  "VarRailElm"
+  "ZenerElm"
+  "CurrentElm"
+  "TransistorElm"
+
+  # In progress:
+  "Switch2Elm"  # Needs interaction
+  "TextElm"
+  "ProbeElm"
+  "OutputElm"
+]
 
 
 class CircuitComponent
@@ -107,12 +136,12 @@ class CircuitComponent
 
   serialize: ->
     {
-      sym: this.constructor.name,
-      x1: @x1,
-      y1: @y1,
-      x2: @x2,
-      y2: @y2,
-      params: @serializeParameters()
+    sym: this.constructor.name,
+    x1: @x1,
+    y1: @y1,
+    x2: @x2,
+    y2: @y2,
+    params: @serializeParameters()
     }
 
   @deserialize: (jsonData) ->
@@ -205,7 +234,7 @@ class CircuitComponent
     if @dn < len or len is 0
       @lead1 = @point1
       @lead2 = @point2
-#      console.log("Len: " + len)
+      #      console.log("Len: " + len)
       return
 
     #      console.log("Calc leads: #{@toString()}")
@@ -414,7 +443,7 @@ class CircuitComponent
 
     dx = point2.x - point1.x
     dy = point2.y - point1.y
-#    dn = Math.sqrt(dx * dx + dy * dy)
+    #    dn = Math.sqrt(dx * dx + dy * dy)
 
     ds = 16
 

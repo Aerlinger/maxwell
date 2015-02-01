@@ -24,6 +24,9 @@ class CircuitLoader
     for elementData in jsonData
       type = elementData['sym']
 
+      if type in Circuit.components
+        console.log("Found #{type}...")
+
       sym = ComponentRegistry.ComponentDefs[type]
       x1 = parseInt elementData['x1']
       y1 = parseInt elementData['y1']

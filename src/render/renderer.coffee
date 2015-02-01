@@ -191,7 +191,7 @@ class Renderer extends BaseRenderer
       for idx in [0...arr.length]
         @context.fillText(arr[idx], 500, idx * 10 + 15)
 
-        
+
   snapGrid: (x) ->
     (x + (Settings.GRID_SIZE / 2 - 1)) & ~(Settings.GRID_SIZE - 1)
 

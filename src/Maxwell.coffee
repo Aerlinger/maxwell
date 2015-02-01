@@ -17,9 +17,6 @@ class Maxwell
 
     return circuit
 
-#  @loadCircuitFromFileSync: (circuitFileName) ->
-#    CircuitLoader.loadCircuitFromFile(circuitFileName, onComplete)
-
   @loadCircuitFromJson: (jsonData) ->
     circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
 
