@@ -7,16 +7,17 @@ _ = require('lodash')
 
 
 describe "Simple Voltage Divider", ->
-  before (done) ->
+  beforeEach (done) ->
     voltdividesimple = JSON.parse(fs.readFileSync("./circuits/voltdividesimple.json"))
     @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
+    done()
 
 #    CircuitLoader.createCircuitFromJsonFile "../../circuits/voltdividesimple.json", (circuit) =>
 #      @circuit = circuit
 #      done()
 
   describe "should Analyze voltdividesimple.json and have", ->
-    before (done) ->
+    beforeEach (done) ->
       @circuit.Solver.reconstruct()
       @rowInfo = @circuit.Solver.circuitRowInfo
       done()
@@ -87,11 +88,12 @@ describe "Simple Voltage Divider", ->
 
 
     describe "should runCircuit()", ->
-      before ->
+      before (done) ->
         @circuit.Solver.solveCircuit()
         @voltageCompnt = @circuit.getElmByIdx(0)
         @resistor10k = @circuit.getElmByIdx(2)
         @resistor20k = @circuit.getElmByIdx(6)
+        done()
 
       describe "components have correct values", ->
 

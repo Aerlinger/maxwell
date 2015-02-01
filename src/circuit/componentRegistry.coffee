@@ -20,6 +20,8 @@ Switch2Elm = require('./components/Switch2Elm.coffee')
 TextElm = require('./components/TextElm.coffee')
 ProbeElm = require('./components/ProbeElm.coffee')
 
+CircuitLoader = require('../io/circuitLoader.coffee')
+
 ##
 # ElementMap
 #

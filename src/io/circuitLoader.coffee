@@ -1,4 +1,5 @@
-ComponentRegistry = require('../circuit/ComponentRegistry.coffee')
+CircuitSolver = require('../engine/circuitSolver.coffee')
+
 
 SimulationParams = require('../core/SimulationParams.coffee')
 Circuit = require('../circuit/Circuit.coffee')
@@ -7,6 +8,10 @@ Hint = require('../engine/Hint.coffee')
 
 class CircuitLoader
   @createCircuitFromJsonData: (jsonData) ->
+    ComponentRegistry = require('../circuit/ComponentRegistry.coffee')
+
+    console.log("CS1: ", CircuitSolver)
+
     circuit = new Circuit()
 
     # Valid class identifier name
@@ -50,7 +55,7 @@ class CircuitLoader
 #      if _.isEmpty(sym)
 #        circuit.warn "Component could not be added to circuit. Unrecognized component symbol: #{type}."
       else
-        console.log(sym)
+#        console.log(sym)
         newCircuitElm = new sym(x1, y1, x2, y2, params)
 
         elms.push(newCircuitElm)

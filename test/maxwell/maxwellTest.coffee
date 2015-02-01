@@ -1,8 +1,9 @@
+#Circuit = require('../../src/circuit/circuit.coffee')
 Maxwell = require('../../src/Maxwell')
-_ = require('lodash')
+#_ = require('lodash')
 
 describe "Maxwell", ->
-  before ->
+  beforeEach (done) ->
     @lrcCircuit = [
       {
         "completion_status": "complete",
@@ -84,7 +85,10 @@ describe "Maxwell", ->
         "params": ["100.0"]
       }
     ]
+    @circuit = Maxwell.loadCircuitFromJson(@lrcCircuit)
 
-  it "can build a circuit from raw JSON data", ->
-    @circuit = Maxwell.createCircuit("LRC", @lrcCircuit)
+    done()
+
+  it "can build a circuit from raw JSON data", (done) ->
     true
+    done()

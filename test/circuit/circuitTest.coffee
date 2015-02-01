@@ -33,17 +33,18 @@ describe "Circuit", ->
       @Circuit.getElmByIdx(0) == null
 
     describe "Adding components", ->
+      beforeEach ->
+        @resistor = new ResistorElm(100, 100, 200, 300, { resistance: 410 })
+        @Circuit.solder(@resistor)
 
       it "has a bounding box", ->
-        expect(@resistor.boundingBox.toString()).to.equal("")
+        expect(@resistor.boundingBox.toString()).to.equal('(100, 100) [w: 101, h: 201]')
 
       it "has one resistor", ->
-        expect(@Circuit.getElements()).to.eq([@resistor])
+        expect(@Circuit.getElements()).to.deep.equal([@resistor])
 
       it "recomputes the bounds", ->
-        @resistor = new ResistorElm(100, 100, 200, 300, { resistance: 410 })
 
-        @Circuit.solder(@resistor)
 #        @Circuit.recomputeBounds()
 
         bbox = @Circuit.boundingBox.toString()

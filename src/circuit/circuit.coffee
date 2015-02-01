@@ -22,10 +22,10 @@
 #
 ####################################################################################################################
 
+#CircuitSolver = require('../engine/circuitSolver.coffee')
 Oscilloscope = require('../scope/oscilloscope.coffee')
 Logger = require('../io/logger.coffee')
 SimulationParams = require('../core/simulationParams.coffee')
-CircuitSolver = require('../engine/circuitSolver.coffee')
 Observer = require('../util/observer.coffee')
 Rectangle = require('../geom/rectangle.coffee')
 
@@ -51,7 +51,13 @@ class Circuit extends Observer
 
 
   constructor: ->
-    @Params = new SimulationParams()
+    CircuitSolver = require('../engine/circuitSolver.coffee')
+
+#    @Params = new SimulationParams()
+
+    console.log("CS:", CircuitSolver)
+
+    @Solver = new CircuitSolver(this)
 
     @clearAndReset()
 
@@ -62,7 +68,6 @@ class Circuit extends Observer
     for element in @elementList?
       element.destroy()
 
-    @Solver = new CircuitSolver(this)
     @boundingBox = null
 
     @nodeList = []
@@ -106,6 +111,18 @@ class Circuit extends Observer
 
   invalidate: ->
     @Solver.analyzeFlag = true
+
+
+  serialize: ->
+    result = []
+
+    result.push(SimulationParams.serialize(@Params))
+
+    for component in @elementList
+      result.push(component.serialize())
+
+    return result
+
 
 
   ####################################################################################################################
@@ -179,6 +196,8 @@ class Circuit extends Observer
     @voltageSources
 
   recomputeBounds: ->
+    return if @elementList.length == 0
+
     @minX = 10000000000
     @minY = 10000000000
     @maxX = -10000000000

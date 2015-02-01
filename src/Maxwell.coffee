@@ -1,3 +1,4 @@
+CircuitSolver = require('./engine/CircuitSolver.coffee')
 CircuitLoader = require('./io/CircuitLoader.coffee')
 Circuit = require('./circuit/circuit.coffee')
 Renderer = require('./render/renderer.coffee')

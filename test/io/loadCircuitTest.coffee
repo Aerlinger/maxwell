@@ -4,10 +4,10 @@ fs = require 'fs'
 
 describe "CircuitLoader", ->
   describe "should read voltdividesimple.json and", ->
-    before (done) ->
+    beforeEach (done) ->
       voltdividesimple = JSON.parse(fs.readFileSync("./circuits/voltdividesimple.json"))
-
       @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
+      done()
 
     it "have only 7 elements", ->
       @circuit.numElements().should.equal 7
@@ -24,7 +24,7 @@ describe "CircuitLoader", ->
         @circuit.Params.completionStatus.should.equal "complete"
 
       it "has correct currentSpeed", ->
-        @circuit.Params.currentSpeed.should.equal 63.0
+        @circuit.Params.currentSpeed.should.equal 103
 
       it "has correct description", ->
         @circuit.Params.description.should.equal "A simple voltage divider circuit"
@@ -40,7 +40,7 @@ describe "CircuitLoader", ->
         @circuit.Params.powerRange.should.equal 62.0
 
       it "has correct simSpeed", ->
-        @circuit.Params.simSpeed.should.equal 10.0
+        @circuit.Params.simSpeed.should.equal 116
 
       it "has correct timeStep", ->
         @circuit.Params.timeStep.should.equal 5.0e-6

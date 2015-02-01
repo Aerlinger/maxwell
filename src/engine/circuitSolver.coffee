@@ -1,3 +1,5 @@
+Circuit = require('../circuit/circuit.coffee')
+
 MatrixStamper = require('./matrixStamper.coffee')
 
 Pathfinder = require('./pathfinder.coffee')
