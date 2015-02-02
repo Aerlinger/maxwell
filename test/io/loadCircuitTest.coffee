@@ -1,6 +1,8 @@
 CircuitLoader = require("../../src/io/circuitLoader.coffee")
 Circuit = require('../../src/circuit/circuit.coffee')
-fs = require 'fs'
+Renderer = require('../../src/render/renderer.coffee')
+Maxwell = require('../../src/Maxwell.coffee')
+fs = require('fs')
 
 describe "CircuitLoader", ->
   describe "should read voltdividesimple.json and", ->
@@ -12,7 +14,8 @@ describe "CircuitLoader", ->
     it "have only 7 elements", ->
       @circuit.numElements().should.equal 7
 
-    it "should render circuit", (done) ->
+    xit "should render circuit", (done) ->
+      Maxwell.Renderer()
       @circuit.renderCircuit()
       @circuit.getRenderer().getCanvas().toBuffer (err, buf) ->
         throw err if err

@@ -22,7 +22,7 @@
 #
 ####################################################################################################################
 
-#CircuitSolver = require('../engine/circuitSolver.coffee')
+CircuitSolver = require('../engine/circuitSolver.coffee')
 Oscilloscope = require('../scope/oscilloscope.coffee')
 Logger = require('../io/logger.coffee')
 SimulationParams = require('../core/simulationParams.coffee')
@@ -53,11 +53,7 @@ class Circuit extends Observer
   constructor: ->
     CircuitSolver = require('../engine/circuitSolver.coffee')
 
-#    @Params = new SimulationParams()
-
-    console.log("CS:", CircuitSolver)
-
-    @Solver = new CircuitSolver(this)
+    @Params = new SimulationParams()
 
     @clearAndReset()
 
@@ -68,6 +64,7 @@ class Circuit extends Observer
     for element in @elementList?
       element.destroy()
 
+    @Solver = new CircuitSolver(this)
     @boundingBox = null
 
     @nodeList = []
@@ -203,11 +200,7 @@ class Circuit extends Observer
     @maxX = -10000000000
     @maxY = -10000000000
 
-    console.log("RECOMPUTER!")
-
-    @eachComponent (component) ->
-      console.log("COMPONENT")
-
+    for component in @elementList
       componentBounds = component.boundingBox
 
       componentMinX = componentBounds.x

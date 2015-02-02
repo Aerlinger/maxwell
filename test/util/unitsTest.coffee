@@ -1,8 +1,6 @@
 DrawHelper = require('../../src/render/drawHelper.coffee')
 
-
 describe "Units test", ->
-
   specify "zero ", ->
     DrawHelper.getUnitText(1.99e-18, "Amps").should.equal "0.00 fAmps"
     DrawHelper.getUnitText(0, "Amps").should.equal "0 Amps"

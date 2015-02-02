@@ -3,7 +3,6 @@ Rectangle = require('../../src/geom/rectangle.coffee')
 Point = require('../../src/geom/point.coffee')
 
 describe "Polygon", ->
-
   it "should create a triangle with 3 pairs of vertices", ->
     poly = new Polygon([0, 0, 1, 1, 2, 3])
     poly.numPoints().should.equal 3
@@ -19,7 +18,6 @@ describe "Polygon", ->
 
 
 describe "Point", ->
-
   it "should default to (0, 0) when no parameters are entered", ->
     point = new Point()
     point.x.should.equal 0

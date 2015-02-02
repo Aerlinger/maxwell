@@ -10,7 +10,7 @@ class CircuitLoader
   @createCircuitFromJsonData: (jsonData) ->
     ComponentRegistry = require('../circuit/ComponentRegistry.coffee')
 
-    console.log("CS1: ", CircuitSolver)
+#    console.log("CS1: ", CircuitSolver)
 
     circuit = new Circuit()
 
@@ -22,7 +22,7 @@ class CircuitLoader
 #    circuit.Params = new SimulationParams(circuitParams)
     circuit.Params = SimulationParams.deserialize(circuitParams)
 
-    console.log(circuit.Params.toString())
+#    console.log(circuit.Params.toString())
 
     # Load each Circuit component from JSON data:
     elms = []

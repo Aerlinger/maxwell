@@ -2,8 +2,9 @@ Circuit = require('../../src/circuit/circuit.coffee')
 ResistorElm = require('../../src/circuit/components/ResistorElm.coffee')
 
 describe "Circuit", ->
-  beforeEach ->
+  beforeEach (done) ->
     @Circuit = new Circuit()
+    done()
 
   describe "initial state", ->
     it "has no errors", ->
@@ -14,8 +15,8 @@ describe "Circuit", ->
       @Circuit.getObservers().should == []
 
     it "has a time of zero", ->
-      expect(@Circuit.Solver.time).to.equal(0)
-      expect(@iterations).to.equal(0)
+      expect(@Circuit.time).to.equal(0)
+      expect(@Circuit.iterations).to.equal(0)
 
     it "has a default timestep", ->
       @Circuit.timeStep().should.equal 0.000005
@@ -33,9 +34,11 @@ describe "Circuit", ->
       @Circuit.getElmByIdx(0) == null
 
     describe "Adding components", ->
-      beforeEach ->
+      beforeEach (done) ->
         @resistor = new ResistorElm(100, 100, 200, 300, { resistance: 410 })
         @Circuit.solder(@resistor)
+
+        done()
 
       it "has a bounding box", ->
         expect(@resistor.boundingBox.toString()).to.equal('(100, 100) [w: 101, h: 201]')
@@ -44,11 +47,10 @@ describe "Circuit", ->
         expect(@Circuit.getElements()).to.deep.equal([@resistor])
 
       it "recomputes the bounds", ->
-
 #        @Circuit.recomputeBounds()
 
         bbox = @Circuit.boundingBox.toString()
-        expect(bbox).to.equal("asdfas")
+        expect(bbox).to.equal('(100, 100) [w: 101, h: 201]')
 
 #      it "can also remove the component", ->
 #        @Circuit.desolder(@resistor)

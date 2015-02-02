@@ -1,23 +1,23 @@
 class SimulationParams
-#  constructor: (paramsObj) ->
-#    @completionStatus = paramsObj?['completion_status'] || "in development"
-#    @createdAt = paramsObj?['created_at']
-#    @currentSpeed = paramsObj?['current_speed'] || 63
-#    @updatedAt = paramsObj?['updated_at']
-#    @description = paramsObj?['description'] || ""
-#    @flags = paramsObj?['flags'] || 1
-#    @id = paramsObj?['id'] || null
-#    @name = paramsObj?['name_unique'] || "default"
-#    @powerRange = paramsObj?['power_range'] || 62.0
-#    @voltageRange = paramsObj?['voltage_range'] || 10.0
-#    @simSpeed = SimulationParams.convertSimSpeed(paramsObj?['sim_speed'] || 10.0)
-#    @timeStep = paramsObj?['time_step'] || 5.0e-06
-#    @title = paramsObj?['title'] || "Default"
-#    @topic = paramsObj?['topic'] || null
-#    #      @currentMult = 1
-#
-#    unless @timeStep?
-#      throw new Error("Circuit params is missing its time step (was null)!")
+  constructor: (paramsObj) ->
+    @completionStatus = paramsObj?['completion_status'] || "in development"
+    @createdAt = paramsObj?['created_at']
+    @currentSpeed = paramsObj?['current_speed'] || 63
+    @updatedAt = paramsObj?['updated_at']
+    @description = paramsObj?['description'] || ""
+    @flags = paramsObj?['flags'] || 1
+    @id = paramsObj?['id'] || null
+    @name = paramsObj?['name_unique'] || "default"
+    @powerRange = paramsObj?['power_range'] || 62.0
+    @voltageRange = paramsObj?['voltage_range'] || 10.0
+    @simSpeed = SimulationParams.convertSimSpeed(paramsObj?['sim_speed'] || 10.0)
+    @timeStep = paramsObj?['time_step'] || 5.0e-06
+    @title = paramsObj?['title'] || "Default"
+    @topic = paramsObj?['topic'] || null
+    #      @currentMult = 1
+
+    unless @timeStep?
+      throw new Error("Circuit params is missing its time step (was null)!")
 
   @serialize: (simParams) ->
     completion_status: simParams.completionStatus

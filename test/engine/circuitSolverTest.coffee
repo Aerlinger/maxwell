@@ -7,12 +7,12 @@ describe "Circuit Solver", ->
     @Solver = @Circuit.Solver
 
   describe "on initialization", ->
-    it "initiates solver", ->
+    it "initiates engine", ->
       @Solver != null
       @Solver.Stamper != null
       @Solver.scaleFactors.toString().should.equal ArrayUtils.zeroArray(400).toString()
 
-    it "solver belongs to @Circuit", ->
+    it "engine belongs to @Circuit", ->
       @Solver.Circuit.should.equal @Circuit
       @Circuit.Solver.should.equal @Solver
 

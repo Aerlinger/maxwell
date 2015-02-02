@@ -8,13 +8,10 @@ _ = require('lodash')
 
 describe "Simple Voltage Divider", ->
   beforeEach (done) ->
-    voltdividesimple = JSON.parse(fs.readFileSync("./circuits/voltdividesimple.json"))
-    @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
-    done()
+    voltDivideSimpleJson = JSON.parse(fs.readFileSync("./circuits/voltdividesimple.json"))
 
-#    CircuitLoader.createCircuitFromJsonFile "../../circuits/voltdividesimple.json", (circuit) =>
-#      @circuit = circuit
-#      done()
+    @circuit = CircuitLoader.createCircuitFromJsonData(voltDivideSimpleJson)
+    done()
 
   describe "should Analyze voltdividesimple.json and have", ->
     beforeEach (done) ->

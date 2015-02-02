@@ -10,7 +10,3 @@ describe "Circuit Node", ->
     @CircuitNode.y.should == 5
     @CircuitNode.intern.should == false
     @CircuitNode.links.should == [@CircuitNode1]
-
-  it "should output to string", ->
-    console.log @CircuitNode.toString()
-

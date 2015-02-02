@@ -115,9 +115,9 @@
       ComponentNodeTest: 'test/circuit/circuitNodeTest',
 
       // Solvers
-      CircuitSolverTest: 'test/solver/circuitSolverTest',
-      MatrixSolverTest: 'test/solver/matrixSolverTest',
-      CircuitStamperTest: 'test/solver/matrixStamperTest',
+      CircuitSolverTest: 'test/engine/circuitSolverTest',
+      MatrixSolverTest: 'test/engine/matrixSolverTest',
+      CircuitStamperTest: 'test/engine/matrixStamperTest',
 
       // Utils
       ArraysTest: 'test/util/arraysTest',

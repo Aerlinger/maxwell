@@ -89,7 +89,7 @@ class CircuitComponent
       param_value = param_list[i]
       result[param_name] = convert[data_type](param_value)
 
-    console.log(@, "PARAMS: ", result)
+#    console.log(@, "PARAMS: ", result)
 
     return result
 
