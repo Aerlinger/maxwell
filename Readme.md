@@ -9,6 +9,10 @@ A low-level javascript circuit simulation engine designed to model, simulate, an
   - SPICE compatibility
   - Performance tuned
 
+## Demo:
+
+(http://maxwellsim.herokuapp.com)
+
 ## Installation:
 
   Bower:
