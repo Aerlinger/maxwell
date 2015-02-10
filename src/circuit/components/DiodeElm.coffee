@@ -5,6 +5,7 @@ Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
 ArrayUtils = require('../../util/arrayUtils.coffee')
+Diode = require('./core/Diode.coffee')
 
 class DiodeElm extends CircuitComponent
 
@@ -30,7 +31,7 @@ class DiodeElm extends CircuitComponent
     @poly
     @cathode = []
 
-    @diode = new Diode(self)
+    @diode = new Diode(this)
     @fwdrop = DiodeElm.DEFAULT_DROP
     @zvoltage = 0
 
@@ -110,7 +111,5 @@ class DiodeElm extends CircuitComponent
   # TODO: fix
   needsShortcut: ->
     return true
-
-return DiodeElm
 
 module.exports = DiodeElm
