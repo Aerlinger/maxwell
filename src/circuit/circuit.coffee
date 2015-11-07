@@ -179,16 +179,14 @@ class Circuit extends Observer
     @voltageSources
 
   recomputeBounds: ->
-    @minX = 10000000000
-    @minY = 10000000000
-    @maxX = -10000000000
-    @maxY = -10000000000
+    minX = 10000000000
+    minY = 10000000000
+    maxX = -10000000000
+    maxY = -10000000000
 
-    console.log("RECOMPUTER!")
+    console.log("RECOMPUTING BOUNDS!")
 
     @eachComponent (component) ->
-      console.log("COMPONENT")
-
       componentBounds = component.boundingBox
 
       componentMinX = componentBounds.x
@@ -196,19 +194,19 @@ class Circuit extends Observer
       componentMaxX = componentBounds.x + componentBounds.width
       componentMaxY = componentBounds.y + componentBounds.height
 
-      if componentMinX < @minX
-        @minX = componentMinX
+      if componentMinX < minX
+        minX = componentMinX
 
-      if componentMinY < @minY
-        @minY = componentMinY
+      if componentMinY < minY
+        minY = componentMinY
 
-      if componentMaxX > @maxX
-        @maxX = componentMaxX
+      if componentMaxX > maxX
+        maxX = componentMaxX
         
-      if componentMaxY > @maxY
-        @maxY = componentMaxY
+      if componentMaxY > maxY
+        maxY = componentMaxY
 
-    @boundingBox = new Rectangle(@minX, @minY, @maxX - @minX, @maxY - @minY)
+    @boundingBox = new Rectangle(minX, minY, maxX - minX, maxY - minY)
 
 
   getBoundingBox: ->

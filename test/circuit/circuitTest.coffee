@@ -14,11 +14,11 @@ describe "Circuit", ->
       @Circuit.getObservers().should == []
 
     it "has a time of zero", ->
-      expect(@Circuit.Solver.time).to.equal(0)
-      expect(@iterations).to.equal(0)
+      expect(@Circuit.time).to.equal(0)
+      expect(@Circuit.iterations).to.equal(0)
 
     it "has a default timestep", ->
-      @Circuit.timeStep().should.equal 0.000005
+      expect(@Circuit.timeStep()).to.equal 0.000005
 
     it "needs analysis", ->
       expect(@Circuit.Solver.analyzeFlag).to.eq(true)
@@ -33,22 +33,22 @@ describe "Circuit", ->
       @Circuit.getElmByIdx(0) == null
 
     describe "Adding components", ->
-
-      it "has a bounding box", ->
-        expect(@resistor.boundingBox.toString()).to.equal("")
-
-      it "has one resistor", ->
-        expect(@Circuit.getElements()).to.eq([@resistor])
-
-      it "recomputes the bounds", ->
+      beforeEach ->
         @resistor = new ResistorElm(100, 100, 200, 300, { resistance: 410 })
 
         @Circuit.solder(@resistor)
-#        @Circuit.recomputeBounds()
 
+      it "has one resistor", ->
+        expect(@Circuit.getElements()).to.eql([@resistor])
+
+      it "has a bounding box for the resistor", ->
+        @resistor = @Circuit.getElements()[0]
+        expect(@resistor.getBoundingBox().toString()).to.equal("(100, 100) [w: 101, h: 201]")
+
+      it "recomputes the bounds", ->
         bbox = @Circuit.boundingBox.toString()
-        expect(bbox).to.equal("asdfas")
+        expect(bbox).to.equal("(100, 100) [w: 101, h: 201]")
 
-#      it "can also remove the component", ->
-#        @Circuit.desolder(@resistor)
-#        expect(@Circuit.getElements()).to.eq([])
+      it "can also remove the component", ->
+        @Circuit.desolder(@resistor)
+#        expect(@Circuit.getElements()).to.equal([])

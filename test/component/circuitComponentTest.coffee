@@ -36,14 +36,11 @@ describe "Base Circuit Component", ->
       @circuitElement.current.should.equal 0
       @circuitElement.getCurrent().should.equal 0
       @circuitElement.noDiagonal.should.equal false
-      @circuitElement.selected.should.equal false
 
     it "default method return values", ->
       @circuitElement.getPostCount().should.equal 2
-      @circuitElement.isSelected().should.equal false
       @circuitElement.isWire().should.equal false
       @circuitElement.hasGroundConnection().should.equal false
-      @circuitElement.needsHighlight().should.equal false
       @circuitElement.needsShortcut().should.equal false
       @circuitElement.canViewInScope().should.equal true
 
