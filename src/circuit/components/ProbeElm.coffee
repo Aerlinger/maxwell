@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -27,7 +26,7 @@ class ProbeElm extends CircuitComponent
       @point1 = @point2
       @point2 = @x1
 
-    @center = DrawHelper.interpPoint(@point1, @point2, .5)
+    @center = @getCenter()
 
   draw: (renderContext) ->
     hs = 8
@@ -44,14 +43,14 @@ class ProbeElm extends CircuitComponent
 #    if @isSelected()
 #      color = Settings.SELECT_COLOR
 #    else
-    color = DrawHelper.getVoltageColor(@volts[0])
+    color = renderContext.getVoltageColor(@volts[0])
 
     renderContext.drawThickLinePt @point1, @lead1, color
 
 #    if @isSelected()
 #      color = Settings.SELECT_COLOR
 #    else
-    color = DrawHelper.getVoltageColor(@volts[1])
+    color = renderContext.getVoltageColor(@volts[1])
 
     renderContext.drawThickLinePt @lead2, @point2, color
 
@@ -61,17 +60,17 @@ class ProbeElm extends CircuitComponent
     #      renderContext.drawCenteredText("Y", @center.x1, @center.y, color) if this is Circuit.plotYElm
 
     if @mustShowVoltage()
-      unit_text = DrawHelper.getShortUnitText(@volts[0], "V")
-      @drawValues unit_text, 4, renderContext
+      unit_text = @getUnitText(@volts[0], "V")
+#      @drawValues unit_text, 4, renderContext
 
-    @drawPosts(renderContext)
+    renderContext.drawPosts(this)
 
   mustShowVoltage: ->
     (@flags & ProbeElm.FLAG_SHOWVOLTAGE) isnt 0
 
   getInfo: (arr) ->
     arr[0] = "scope probe"
-    arr[1] = "Vd = " + DrawHelper.getVoltageText(@getVoltageDiff())
+    arr[1] = "Vd = " + getUnitText(@getVoltageDiff(), "V")
 
   stamp: (stamper) ->
 

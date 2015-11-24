@@ -195,6 +195,109 @@ class Renderer extends BaseRenderer
   snapGrid: (x) ->
     (x + (Settings.GRID_SIZE / 2 - 1)) & ~(Settings.GRID_SIZE - 1)
 
+  drawValue: (perpindicularOffset, parallelOffset, component, text = null) ->
+    stringWidth = @context.measureText(text).width
+    stringHeight = @context.measureText(text).actualBoundingBoxAscent || 0
+
+    if component.isVertical()
+      x = component.getCenter().x + perpindicularOffset
+      y = component.getCenter().y + parallelOffset - stringHeight / 2.0
+    else
+      x = component.getCenter().x + parallelOffset  - stringWidth / 2.0
+      y = component.getCenter().y - perpindicularOffset - stringHeight / 2.0
+
+    console.log(x, y)
+
+    #      this.fillStyle = Settings.TEXT_COLOR
+    @fillText text, x, y
+
+
+  drawDots: (ptA, ptB, component) =>
+    return if @Circuit?.isStopped()
+
+    ds = 16
+
+    dx = ptB.x - ptA.x
+    dy = ptB.y - ptA.y
+    dn = Math.sqrt dx * dx + dy * dy
+
+    newPos = component.curcount
+
+    while newPos < dn
+      xOffset = ptA.x + newPos * dx / dn
+      yOffset = ptA.y + newPos * dy / dn
+
+      @fillCircle(xOffset, yOffset, Settings.CURRENT_RADIUS)
+      newPos += ds
+
+  drawLeads: (component) ->
+    if component.point1? and component.lead1?
+      @drawThickLinePt component.point1, component.lead1, @getVoltageColor(component.volts[0])
+    if component.point2? and component.lead2?
+      @drawThickLinePt component.lead2, component.point2, @getVoltageColor(component.volts[1])
+
+  drawPosts: (component) ->
+    for i in [0...component.getPostCount()]
+      post = component.getPost(i)
+      @drawPost post.x, post.y
+
+  drawPost: (x0, y0) ->
+    #if node
+    #return if not @Circuit?.dragElm? and not @needsHighlight() and @Circuit?.getNode(node).links.length is 2
+    #return if @Circuit?.mouseMode is @Circuit?.MODE_DRAG_ROW or @Circuit?.mouseMode is @Circuit?.MODE_DRAG_COLUMN
+
+#      if @needsHighlight()
+#        fillColor = Settings.POST_COLOR_SELECTED
+#        strokeColor = Settings.POST_COLOR_SELECTED
+#      else
+    fillColor = Settings.POST_COLOR
+    strokeColor = Settings.POST_COLOR
+
+    @fillCircle x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor
+
+  ##
+  # From a vector between points AB, calculate a new point in space relative to some multiple of the parallel (u)
+  # and perpindicular (v) components of the the original AB vector.
+  #
+  interpolate: (ptA, ptB, u, v = 0) ->
+    dx = ptB.y - ptA.y
+    dy = ptA.x - ptB.x
+    v /= Math.sqrt dx*dx + dy*dy
+
+    interpX = Math.round((1-u)*ptA.x + (u*ptB.x) + v*dx)
+    interpY = Math.round((1-u)*ptA.y + (u*ptB.y) + v*dy)
+
+    new Point(interpX, interpY)
+
+  interpolateSymmetrical: (ptA, ptB, u, v) ->
+    dx = ptB.y - ptA.y
+    dy = ptA.x - ptB.x
+    v /= Math.sqrt dx*dx + dy*dy
+
+    interpX = Math.round((1-u)*ptA.x + (u*ptB.x) + v*dx)
+    interpY = Math.round((1-u)*ptA.y + (u*ptB.y) + v*dy)
+
+    interpXReflection = Math.round((1-u)*ptA.x + (u*ptB.x) - v*dx)
+    interpYReflection = Math.round((1-u)*ptA.y + (u*ptB.y) - v*dy)
+
+    [new Point(interpX, interpY), new Point(interpXReflection, interpYReflection)]
+
+  getVoltageColor: (volts, fullScaleVRange=10) ->
+    scale =
+      [ "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
+        "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
+        "#7f7f7f", "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747",
+        "#3fbf3f", "#37c737", "#2fcf2f", "#27d727", "#1fdf1f", "#17e717", "#0fef0f", "#07f707", "#00ff00" ]
+
+    numColors = scale.length - 1
+
+    value = Math.floor (volts + fullScaleVRange) * numColors / (2 * fullScaleVRange)
+    if value < 0
+      value = 0
+    else if value >= numColors
+      value = numColors - 1
+
+    return scale[value]
 
 
 module.exports = Renderer

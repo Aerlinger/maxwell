@@ -14,19 +14,11 @@ class Oscilloscope
     for i in [0..xbuffer_size]
       @addData 0
 
-#      graph = new Rickshaw.Graph({
-#        element: chartDiv,
-#        width: 400,
-#        height: 200,
-#        renderer: "line",
-#        stroke: true,
-#        preserve: true,
-#        series: [
-#          color: palette.color()
-#          data: @seriesData[0]
-#          name: "Voltage"
-#        ],
-#      })
+    step: ->
+      @frames += 1
+      @removeData(1);
+      if @targetComponent
+        @addData @targetComponent.getScopeValue()
 
 #      new ScopeControls(graph)
 

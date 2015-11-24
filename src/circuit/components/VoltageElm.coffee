@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -158,29 +157,31 @@ class VoltageElm extends CircuitComponent
   draw: (renderContext) ->
     @setBbox @x1, @y2, @x2, @y2
 
-    @draw2Leads(renderContext)
+    @updateDots()
+    renderContext.drawLeads(this)
 
     if @waveform is VoltageElm.WF_DC
-      @drawDots @point1, @point2, renderContext
+      renderContext.drawDots @point1, @point2, this
     else
-      @drawDots @point1, @lead1, renderContext
+      renderContext.drawDots(@point1, @lead1, this)
+      renderContext.drawDots(@lead2, @point2, this)
     #          @drawDots @point2, @lead2, renderContext
 
     if @waveform is VoltageElm.WF_DC
-      [ptA, ptB] = DrawHelper.interpPoint2 @lead1, @lead2, 0, 10
-      renderContext.drawThickLinePt @lead1, ptA, DrawHelper.getVoltageColor(@volts[0])
-      renderContext.drawThickLinePt ptA, ptB, DrawHelper.getVoltageColor(@volts[0])
+      [ptA, ptB] = renderContext.interpolateSymmetrical @lead1, @lead2, 0, 10
+      renderContext.drawThickLinePt @lead1, ptA, renderContext.getVoltageColor(@volts[0])
+      renderContext.drawThickLinePt ptA, ptB, renderContext.getVoltageColor(@volts[0])
 
       @setBboxPt @point1, @point2, 16
-      [ptA, ptB] = DrawHelper.interpPoint2 @lead1, @lead2, 1, 16
-      renderContext.drawThickLinePt ptA, ptB, DrawHelper.getVoltageColor(@volts[1])
+      [ptA, ptB] = renderContext.interpolateSymmetrical @lead1, @lead2, 1, 16
+      renderContext.drawThickLinePt ptA, ptB, renderContext.getVoltageColor(@volts[1])
 
     else
       @setBboxPt @point1, @point2, VoltageElm.circleSize
-      ps1 = DrawHelper.interpPoint @lead1, @lead2, 0.5
+      ps1 = renderContext.interpolate @lead1, @lead2, 0.5
       @drawWaveform ps1, renderContext
 
-    @drawPosts(renderContext)
+    renderContext.drawPosts(this)
 
 
 
@@ -198,7 +199,7 @@ class VoltageElm extends CircuitComponent
 
     #Main.getMainCanvas().drawThickCircle(xc, yc, circleSize, color);
     wl = 8
-    @adjustBbox xc - VoltageElm.circleSize, yc - VoltageElm.circleSize, xc + VoltageElm.circleSize, yc + VoltageElm.circleSize
+    @setBbox xc - VoltageElm.circleSize, yc - VoltageElm.circleSize, xc + VoltageElm.circleSize, yc + VoltageElm.circleSize
     xc2 = undefined
     switch @waveform
       when VoltageElm.WF_DC
@@ -248,7 +249,7 @@ class VoltageElm extends CircuitComponent
           i++
 
     if Settings.SHOW_VALUES
-      valueString = DrawHelper.getShortUnitText(@frequency, "Hz")
+      valueString = @getUnitText(@frequency, "Hz")
 
       if @axisAligned
         @drawValues valueString, VoltageElm.circleSize
@@ -277,17 +278,17 @@ class VoltageElm extends CircuitComponent
       when VoltageElm.WF_TRIANGLE
         arr[0] = "triangle gen"
 
-    arr[1] = "I = " + DrawHelper.getCurrentText(@getCurrent())
+    arr[1] = "I = " + @getUnitText(@getCurrent(), "A")
 #      arr[2] = ((if (this instanceof RailElm) then "V = " else "Vd = ")) + DrawHelper.getVoltageText(@getVoltageDiff())
 
     if @waveform isnt VoltageElm.WF_DC and @waveform isnt VoltageElm.WF_VAR
-      arr[3] = "f = " + DrawHelper.getUnitText(@frequency, "Hz")
-      arr[4] = "Vmax = " + DrawHelper.getVoltageText(@maxVoltage)
+      arr[3] = "f = " + @getUnitText(@frequency, "Hz")
+      arr[4] = "Vmax = " + @getUnitText(@maxVoltage, "V")
       i = 5
       unless @bias is 0
         arr[i++] = "Voff = " + @getVoltageText(@bias)
-      else arr[i++] = "wavelength = " + DrawHelper.getUnitText(2.9979e8 / @frequency, "m")  if @frequency > 500
-      arr[i++] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
+      else arr[i++] = "wavelength = " + @getUnitText(2.9979e8 / @frequency, "m")  if @frequency > 500
+      arr[i++] = "P = " + @getUnitText(@getPower(), "W")
 
   toString: ->
     "VoltageElm"

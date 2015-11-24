@@ -64,7 +64,7 @@ class CircuitComponent
     @volts = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
 
     @setPoints()
-    @initBoundingBox()
+    @setBbox(@x1, @y1, @x2, @y2)
     @component_id = MathUtils.getRand(100000000) + (new Date()).getTime()
 
     @setParameters(params)
@@ -175,6 +175,9 @@ class CircuitComponent
     @point1 = new Point(@x1, @y1)
     @point2 = new Point(@x2, @y2)
 
+  unitText: ->
+    "?"
+
   height: ->
     @y2 - @y1
 
@@ -240,6 +243,14 @@ class CircuitComponent
     @lead1 = DrawHelper.interpPoint(@point1, @point2, (@dn - len) / (2 * @dn))
     @lead2 = DrawHelper.interpPoint(@point1, @point2, (@dn + len) / (2 * @dn))
 
+  isVertical: ->
+    @dx == 0
+
+  getCenter: ->
+    centerX = (@point1.x + @point2.x) / 2.0
+    centerY = (@point2.y + @point2.y) / 2.0
+
+    return new Point(centerX, centerY)
 
   # TODO: Validate consistency
   updateDotCount: (cur, cc) ->
@@ -330,57 +341,19 @@ class CircuitComponent
   getBoundingBox: ->
     @boundingBox
 
-  initBoundingBox: ->
-    @boundingBox = new Rectangle()
-
-    @boundingBox.x = Math.min(@x1, @x2)
-    @boundingBox.y = Math.min(@y1, @y2)
-    @boundingBox.width = Math.abs(@x2 - @x1) + 1
-    @boundingBox.height = Math.abs(@y2 - @y1) + 1
-
   setBbox: (x1, y1, x2, y2) ->
-    if x1 > x2
-      temp = x1
-      x1 = x2
-      x2 = temp
-    if y1 > y2
-      temp = y1
-      y1 = y2
-      y2 = temp
-    @boundingBox.x = x1
-    @boundingBox.y = y1
-    @boundingBox.width = x2 - x1 + 1
-    @boundingBox.height = y2 - y1 + 1
+    x = Math.min(x1, x2)
+    y = Math.min(y1, y2)
+    width = Math.abs(x2 - x1) + 1
+    height = Math.abs(y2 - y1) + 1
+
+    @boundingBox = new Rectangle(x, y, width, height)
 
   setBboxPt: (p1, p2, width) ->
-    @setBbox p1.x, p1.y, p2.x, p2.y
-
     deltaX = (@dpx1 * width)
     deltaY = (@dpy1 * width)
-    @adjustBbox p1.x + deltaX, p1.y + deltaY, p1.x - deltaX, p1.y - deltaY
 
-  adjustBbox: (x1, y1, x2, y2) ->
-    if x1 > x2
-      q = x1
-      x1 = x2
-      x2 = q
-    if y1 > y2
-      q = y1
-      y1 = y2
-      y2 = q
-
-    x1 = Math.min(@boundingBox.x, x1)
-    y1 = Math.min(@boundingBox.y, y1)
-    x2 = Math.max(@boundingBox.x + @boundingBox.width - 1, x2)
-    y2 = Math.max(@boundingBox.y + @boundingBox.height - 1, y2)
-
-    @boundingBox.x = x1
-    @boundingBox.y = y1
-    @boundingBox.width = x2 - x1
-    @boundingBox.height = y2 - y1
-
-  adjustBboxPt: (p1, p2) ->
-    @adjustBbox p1.x, p1.y, p2.x, p2.y
+    @setBbox p1.x - deltaX, p1.y - deltaY, p1.x + deltaX, p1.y + deltaY
 
   isCenteredText: ->
     false
@@ -430,95 +403,24 @@ class CircuitComponent
     @draw2Leads(renderContext)
 
 
-  draw2Leads: (renderContext) ->
-    if @point1? and @lead1?
-      renderContext.drawThickLinePt @point1, @lead1, DrawHelper.getVoltageColor(@volts[0])
-    if @point2? and @lead2?
-      renderContext.drawThickLinePt @lead2, @point2, DrawHelper.getVoltageColor(@volts[1])
-
-
-  drawDots: (point1 = @point1, point2 = @point2, renderContext) =>
-    return if @Circuit?.isStopped() or @current is 0
-
-    dx = point2.x - point1.x
-    dy = point2.y - point1.y
-    #    dn = Math.sqrt(dx * dx + dy * dy)
-
-    ds = 16
-
+  updateDots: (ds = 16) ->
     currentIncrement = @current * @Circuit.currentSpeed()
+    ds = 16
     @curcount = (@curcount + currentIncrement) % ds
     @curcount += ds if @curcount < 0
 
-    newPos = @curcount
-
-    while newPos < @dn
-      x0 = point1.x + newPos * dx / @dn
-      y0 = point1.y + newPos * dy / @dn
-
-      renderContext.fillCircle(x0, y0, Settings.CURRENT_RADIUS)
-      newPos += ds
-
-  ###
-  Todo: Not yet implemented
-  ###
-  drawCenteredText: (text, x, y, doCenter, renderContext) ->
-    strWidth = 10 * text.length
-    x -= strWidth / 2 if doCenter
-    ascent = -10
-    descent = 5
-
-    renderContext.fillStyle = Settings.TEXT_COLOR
-    renderContext.fillText text, x, y + ascent
-
-    @adjustBbox x, y - ascent, x + strWidth, y + ascent + descent
-
-    return text
-
-
-  ###
-  # Draws relevant values near components
-  #  e.g. 500 Ohms, 10V, etc...
-  ###
-  drawValues: (valueText, hs, renderContext) ->
-    return unless valueText
-
-    stringWidth = 100
-    ya = -10
-
-    xc = (@x2 + @x1) / 2
-    yc = (@y2 + @y1) / 2
-    dpx = Math.floor(@dpx1 * hs)
-    dpy = Math.floor(@dpy1 * hs)
-    offset = 20
-
-    renderContext.fillStyle = Settings.TEXT_COLOR
-    if dpx is 0
-      renderContext.fillText valueText, xc - stringWidth / 2 + 3 * offset / 2, yc - Math.abs(dpy) - offset / 3
-    else
-      xx = xc + Math.abs(dpx) + offset
-      #if this instanceof VoltageElm or (@x1 < @x2 and @y1 > @y2)
-      #  xx = xc - (10 + Math.abs(dpx) + offset)
-      renderContext.fillText valueText, xx, yc + dpy + ya
-
-
-  drawPosts: (renderContext) ->
-    for i in [0...@getPostCount()]
-      post = @getPost(i)
-      @drawPost post.x, post.y, @nodes[i], renderContext
-
-  drawPost: (x0, y0, node, renderContext) ->
-    #if node
-    #return if not @Circuit?.dragElm? and not @needsHighlight() and @Circuit?.getNode(node).links.length is 2
-    #return if @Circuit?.mouseMode is @Circuit?.MODE_DRAG_ROW or @Circuit?.mouseMode is @Circuit?.MODE_DRAG_COLUMN
-#    if @needsHighlight()
-#      fillColor = Settings.POST_COLOR_SELECTED
-#      strokeColor = Settings.POST_COLOR_SELECTED
-#    else
-    fillColor = Settings.POST_COLOR
-    strokeColor = Settings.POST_COLOR
-
-    renderContext.fillCircle x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor
+  getUnitText: (value, unit, decimalPoints = 2) ->
+    absValue = Math.abs(value)
+    return "0 " + unit  if absValue < 1e-18
+    return (value * 1e15).toFixed(decimalPoints) + " f" + unit  if absValue < 1e-12
+    return (value * 1e12).toFixed(decimalPoints) + " p" + unit  if absValue < 1e-9
+    return (value * 1e9).toFixed(decimalPoints) + " n" + unit  if absValue < 1e-6
+    return (value * 1e6).toFixed(decimalPoints) + " " + @muString + unit  if absValue < 1e-3
+    return (value * 1e3).toFixed(decimalPoints) + " m" + unit  if absValue < 1
+    return (value).toFixed(decimalPoints) + " " + unit  if absValue < 1e3
+    return (value * 1e-3).toFixed(decimalPoints) + " k" + unit  if absValue < 1e6
+    return (value * 1e-6).toFixed(decimalPoints) + " M" + unit  if absValue < 1e9
+    (value * 1e-9).toFixed(decimalPoints) + " G" + unit
 
   comparePair: (x1, x2, y1, y2) ->
     (x1 == y1 && x2 == y2) || (x1 == y2 && x2 == y1)

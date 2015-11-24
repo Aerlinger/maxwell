@@ -70,8 +70,8 @@ class Switch2Elm extends SwitchElm
     color = DrawHelper.getVoltageColor @volts[2]
     renderContext.drawThickLinePt @swpoles[1], @swposts[1], color
 
-    # draw switch
-#    color = Settings.SELECT_COLOR unless @needsHighlight()
+    # draw: (renderContext) ->
+#      @setBbox @point1, @point2, @openhs
 
     renderContext.drawThickLinePt @lead1, @swpoles[@position], color
 

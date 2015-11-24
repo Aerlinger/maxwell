@@ -17,7 +17,9 @@ class GroundElm extends CircuitComponent
     1
 
   draw: (renderContext) ->
-    color = DrawHelper.getVoltageColor(0)
+    @updateDots()
+
+    color = renderContext.getVoltageColor(0)
 
     renderContext.drawThickLinePt @point1, @point2, color
 
@@ -27,11 +29,11 @@ class GroundElm extends CircuitComponent
       [pt1, pt2] = DrawHelper.interpPoint2 @point1, @point2, 1 + endPt / @dn, startPt
       renderContext.drawThickLinePt pt1, pt2, color
 
-    pt2 = DrawHelper.interpPoint @point1, @point2, 1 + 11.0 / @dn
+    pt2 = renderContext.interpolate @point1, @point2, 1 + 11.0 / @dn
     @setBboxPt @point1, pt2, 11
-    @drawPost @x1, @y1, @nodes[0], renderContext
+    renderContext.drawPosts this
 
-    @drawDots(@point1, @point2, renderContext)
+    renderContext.drawDots(@point1, @point2, this)
 
   setCurrent: (x, currentVal) ->
     @current = -currentVal

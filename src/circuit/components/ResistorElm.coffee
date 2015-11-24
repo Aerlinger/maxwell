@@ -27,38 +27,40 @@ class ResistorElm extends CircuitComponent
     @ps4 = new Point(100, 150)
 
   draw: (renderContext) ->
-    segments = 16
-    oldOffset = 0
-    hs = 6
-    volt1 = @volts[0]
-    volt2 = @volts[1]
+    @updateDots()
 
-    @setBboxPt @point1, @point2, hs
-    @draw2Leads(renderContext)
-    DrawHelper.getPowerColor @getPower
-    segf = 1 / segments
+    numSegments = 16
+    lateralOffset = 0
+    width = 5
 
-    for i in [0...segments]
-      newOffset = 0
-      switch i & 3
-        when 0
-          newOffset = 1
-        when 2
-          newOffset = -1
-        else
-          newOffset = 0
-      voltDrop = volt1 + (volt2 - volt1) * i / segments
-      pt1 = DrawHelper.interpPoint @lead1, @lead2, i * segf, hs * oldOffset
-      pt2 = DrawHelper.interpPoint @lead1, @lead2, (i + 1) * segf, hs * newOffset
-      renderContext.drawThickLinePt pt1, pt2, DrawHelper.getVoltageColor(voltDrop)
-      oldOffset = newOffset
+    @setBboxPt @point1, @point2, width
 
-    #if true @Circuit?.Params.showValues
-    resistanceVal = DrawHelper.getUnitText(@resistance, "ohm")
-    @drawValues resistanceVal, hs, renderContext
+    renderContext.drawLeads(this)
 
-    @drawDots(@point1, @point2, renderContext)
-    @drawPosts(renderContext)
+    parallelOffset = 1 / numSegments
+
+    # Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
+    offsets = [0, 1, 0, -1]
+
+    # Give "sawtooth" edges to resistor
+    for n in [0...numSegments]
+      resistorSegmentVoltage = @volts[0] + (@volts[1]-@volts[0]) * (n / numSegments)
+
+      startPosition = renderContext.interpolate @lead1, @lead2, n*parallelOffset, width*offsets[n % 4]
+      endPosition = renderContext.interpolate @lead1, @lead2, (n+1)*parallelOffset, width*offsets[(n+1) % 4]
+
+      renderContext.drawThickLinePt startPosition, endPosition, renderContext.getVoltageColor(resistorSegmentVoltage)
+
+    renderContext.drawValue 10, 0, this, @getUnitText(@resistance, @unitSymbol())
+
+    renderContext.drawDots(@point1, @point2, this)
+    renderContext.drawPosts(this)
+
+  value: ->
+    @resistance
+
+  unitSymbol: ->
+    "Ω"
 
   getDumpType: ->
     "r"
@@ -66,8 +68,8 @@ class ResistorElm extends CircuitComponent
   getInfo: (arr) ->
     arr[0] = "resistor"
     @getBasicInfo arr
-    arr[3] = "R = " + DrawHelper.getUnitText(@resistance, Maxwell.OhmSymbol)
-    arr[4] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
+    arr[3] = "R = " + @getUnitText(@resistance, @unitSymbol)
+    arr[4] = "P = " + @getUnitText(@getPower(), "W")
 
     return arr
 

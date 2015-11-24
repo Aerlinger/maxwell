@@ -88,17 +88,6 @@ class DrawHelper
   @getShortUnitText: (value, unit) ->
     @getUnitText value, unit, 1
 
-  @getVoltageDText: (v) ->
-    @getUnitText Math.abs(v), "V"
-
-  @getVoltageText: (v) ->
-    @getUnitText v, "V"
-
-  @getCurrentText: (value) ->
-    @getUnitText value, "A"
-
-  @getCurrentDText: (value) ->
-    @getUnitText Math.abs(value), "A"
 
   @getVoltageColor: (volts, fullScaleVRange=10) ->
     colorScaleCount = 32

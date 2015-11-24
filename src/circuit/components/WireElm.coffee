@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -17,19 +16,21 @@ class WireElm extends CircuitComponent
 
 
   draw: (renderContext) ->
-    renderContext.drawThickLinePt @point1, @point2, DrawHelper.getVoltageColor(@volts[0])
+    @updateDots()
+
+    renderContext.drawThickLinePt @point1, @point2, renderContext.getVoltageColor(@volts[0])
     @setBboxPt @point1, @point2, 3
 
     if @mustShowCurrent()
-      s = DrawHelper.getUnitText(Math.abs(@getCurrent()), "A")
+      s = @getUnitText(Math.abs(@getCurrent()), "A")
       @drawValues s, 4, renderContext
     else if @mustShowVoltage()
-      s = DrawHelper.getUnitText(@volts[0], "V")
+      s = @getUnitText(@volts[0], "V")
 
-    @drawValues s, 4, renderContext
-    @drawPosts(renderContext)
+    renderContext.drawValue 10, 0, this, s
+    renderContext.drawDots(@point1, @point2, this)
+    renderContext.drawPosts(this)
 
-    @drawDots(@point1, @point2, renderContext)
 
 
   stamp: (stamper) ->
@@ -49,8 +50,8 @@ class WireElm extends CircuitComponent
     super()
 
     arr[0] = "Wire"
-    arr[1] = "I = " + DrawHelper.getCurrentDText(@getCurrent())
-    arr[2] = "V = " + DrawHelper.getVoltageText(@volts[0])
+    arr[1] = "I = " + getUnitText(@getCurrent(), "A")
+    arr[2] = "V = " + getVoltageText(@volts[0], "V")
 
   getDumpType: ->
     "w"
