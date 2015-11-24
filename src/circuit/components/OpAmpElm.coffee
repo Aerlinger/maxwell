@@ -5,6 +5,7 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
+MathUtils = require('../../util/MathUtils.coffee')
 
 class OpAmpElm extends CircuitComponent
 
@@ -12,7 +13,7 @@ class OpAmpElm extends CircuitComponent
   @FLAG_SMALL: 2
   @FLAG_LOWGAIN: 4
 
-  @ComponentDefinitions = {
+  @ParameterDefinitions = {
     "maxOut": {
       name: "Voltage"
       unit: "Voltage"
@@ -29,6 +30,16 @@ class OpAmpElm extends CircuitComponent
       description: "Minimum allowable output voltage of the Op Amp"
       symbol: "V"
       default_value: 15
+      data_type: "float"
+      range: [-Infinity, Infinity]
+      type: "physical"
+    },
+    "gain": {
+      name: "Gain"
+      unit: ""
+      description: "Gutput gain"
+      symbol: ""
+      default_value: 1e6
       data_type: "float"
       range: [-Infinity, Infinity]
       type: "physical"
@@ -72,7 +83,7 @@ class OpAmpElm extends CircuitComponent
 #        @minOut ||= parseFloat(st[1])
 
     @noDiagonal = true
-    @setSize(if (f & OpAmpElm.FLAG_SMALL) isnt 0 then 1 else 2)
+    @setSize(if params["size"] isnt 0 then 1 else 2)
     @setGain()
 
 

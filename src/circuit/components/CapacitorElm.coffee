@@ -30,8 +30,6 @@ class CapacitorElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, params) ->
-    #    @capacitance = 5e-6
-    #    @voltDiff = 10
     @compResistance = 11
     @plate1 = []
     @plate2 = []

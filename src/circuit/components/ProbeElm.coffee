@@ -48,10 +48,10 @@ class ProbeElm extends CircuitComponent
 
     renderContext.drawThickLinePt @point1, @lead1, color
 
-    if @isSelected()
-      color = Settings.SELECT_COLOR
-    else
-      color = DrawHelper.getVoltageColor(@volts[1])
+#    if @isSelected()
+#      color = Settings.SELECT_COLOR
+#    else
+    color = DrawHelper.getVoltageColor(@volts[1])
 
     renderContext.drawThickLinePt @lead2, @point2, color
 

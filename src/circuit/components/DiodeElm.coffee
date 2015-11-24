@@ -111,6 +111,4 @@ class DiodeElm extends CircuitComponent
   needsShortcut: ->
     return true
 
-return DiodeElm
-
 module.exports = DiodeElm

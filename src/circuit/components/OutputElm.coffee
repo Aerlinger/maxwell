@@ -30,7 +30,7 @@ class OutputElm extends CircuitComponent
 
     #Font f = new Font("SansSerif", selected ? Font.BOLD : 0, 14);
     #g.setFont(f);
-    color = (if selected then Settings.SELECT_COLOR else "#FFF")
+    color = "#FFF";
     s = (if (@flags & OutputElm.FLAG_VALUE) isnt 0 then DrawHelper.getVoltageText(@volts[0]) else "out")
 
     #FontMetrics fm = g.getFontMetrics();

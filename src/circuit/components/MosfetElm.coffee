@@ -12,8 +12,9 @@ class MosfetElm extends CircuitComponent
   @FLAG_SHOWVT: 2
   @FLAG_DIGITAL: 4
 
-  @ComponentDefinitions = {
-    vt: {
+  @ParameterDefinitions = {
+    "vt": {
+      data_type: "float"
       name: "Voltage"
       description: "Threshold voltage"
       units: "Volts"
@@ -21,6 +22,10 @@ class MosfetElm extends CircuitComponent
       default: 1.5
       range: [0, Infinity]
       type: "physical"
+    },
+    "polarity": {
+      data_type: "string"
+      name: "Polarity"
     }
     # Flags:
     # FLAG_SHOWVT: 1
@@ -42,7 +47,7 @@ class MosfetElm extends CircuitComponent
     @gate = []
     @pcircle = []
 
-    @pnp = (if ((f & MosfetElm.FLAG_PNP) isnt 0) then -1 else 1)
+    @pnp = (params["polarity"] ? -1 : 1)
     @noDiagonal = true
     @vt = @getDefaultThreshold()
 
@@ -163,7 +168,6 @@ class MosfetElm extends CircuitComponent
 
     [@gate[0], @gate[2]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 28 / @dn, hs2 / 2  #,  # was 1-20/dn
     @gate[1] = DrawHelper.interpPoint @gate[0], @gate[2], .5
-#    console.log("GATE: #{@gate[1]}")
 
     if !@drawDigital()
       if @pnp is 1
