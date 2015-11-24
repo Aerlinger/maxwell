@@ -155,9 +155,9 @@ class VoltageElm extends CircuitComponent
       @calcLeads(VoltageElm.circleSize * 2)
 
   draw: (renderContext) ->
-    @setBbox @x1, @y2, @x2, @y2
-
     @updateDots()
+
+    @setBbox @x1, @y2, @x2, @y2
     renderContext.drawLeads(this)
 
     if @waveform is VoltageElm.WF_DC
@@ -165,16 +165,15 @@ class VoltageElm extends CircuitComponent
     else
       renderContext.drawDots(@point1, @lead1, this)
       renderContext.drawDots(@lead2, @point2, this)
-    #          @drawDots @point2, @lead2, renderContext
 
     if @waveform is VoltageElm.WF_DC
       [ptA, ptB] = renderContext.interpolateSymmetrical @lead1, @lead2, 0, 10
-      renderContext.drawThickLinePt @lead1, ptA, renderContext.getVoltageColor(@volts[0])
-      renderContext.drawThickLinePt ptA, ptB, renderContext.getVoltageColor(@volts[0])
+      renderContext.drawLinePt @lead1, ptA, renderContext.getVoltageColor(@volts[0])
+      renderContext.drawLinePt ptA, ptB, renderContext.getVoltageColor(@volts[0])
 
-      @setBboxPt @point1, @point2, 16
-      [ptA, ptB] = renderContext.interpolateSymmetrical @lead1, @lead2, 1, 16
-      renderContext.drawThickLinePt ptA, ptB, renderContext.getVoltageColor(@volts[1])
+      @setBboxPt @point1, @point2, Settings.GRID_SIZE
+      [ptA, ptB] = renderContext.interpolateSymmetrical @lead1, @lead2, 1, Settings.GRID_SIZE
+      renderContext.drawLinePt ptA, ptB, renderContext.getVoltageColor(@volts[1])
 
     else
       @setBboxPt @point1, @point2, VoltageElm.circleSize
@@ -209,30 +208,47 @@ class VoltageElm extends CircuitComponent
         xc2 = Math.floor(wl * 2 * @dutyCycle - wl + xc)
         xc2 = Math.max(xc - wl + 3, Math.min(xc + wl - 3, xc2))
 
-        renderContext.drawThickLine xc - wl, yc - wl, xc - wl, yc, color
-        renderContext.drawThickLine xc - wl, yc - wl, xc2, yc - wl, color
-        renderContext.drawThickLine xc2, yc - wl, xc2, yc + wl, color
-        renderContext.drawThickLine xc + wl, yc + wl, xc2, yc + wl, color
-        renderContext.drawThickLine xc + wl, yc, xc + wl, yc + wl, color
+        renderContext.drawLine xc - wl, yc - wl, xc - wl, yc, color
+        renderContext.drawLine xc - wl, yc - wl, xc2, yc - wl, color
+        renderContext.drawLine xc2, yc - wl, xc2, yc + wl, color
+        renderContext.drawLine xc + wl, yc + wl, xc2, yc + wl, color
+        renderContext.drawLine xc + wl, yc, xc + wl, yc + wl, color
 
       when VoltageElm.WF_PULSE
         yc += wl / 2
-        renderContext.drawThickLine xc - wl, yc - wl, xc - wl, yc, color
-        renderContext.drawThickLine xc - wl, yc - wl, xc - wl / 2, yc - wl, color
-        renderContext.drawThickLine xc - wl / 2, yc - wl, xc - wl / 2, yc, color
-        renderContext.drawThickLine xc - wl / 2, yc, xc + wl, yc, color
+
+        renderContext.context.strokeStyle = '#FF0000'
+
+#        renderContext.drawThickLine xc - wl, yc - wl, xc - wl, yc, color   # Left vertical
+#        renderContext.drawThickLine xc - wl, yc - wl, xc - wl / 2, yc - wl, color
+#        renderContext.drawThickLine xc - wl / 2, yc - wl, xc - wl / 2, yc, color
+#        renderContext.drawThickLine xc - wl / 2, yc, xc + wl, yc, color
+
+
+        renderContext.context.stroke()
+        renderContext.context.moveTo xc - wl, yc
+
+        renderContext.context.lineTo xc - wl, yc - wl
+        renderContext.context.moveTo xc - wl, yc - wl
+
+#        renderContext.context.lineTo xc - wl / 2, yc - wl
+#        renderContext.context.moveTo xc - wl / 2, yc - wl
+
+#        renderContext.context.lineTo xc - wl / 2, yc - wl, xc - wl / 2, yc, color
+#        renderContext.context.lineTo xc - wl / 2, yc, xc + wl, yc, color
+        renderContext.context.closePath()
 
       when VoltageElm.WF_SAWTOOTH
-        renderContext.drawThickLine xc, yc - wl, xc - wl, yc, color
-        renderContext.drawThickLine xc, yc - wl, xc, yc + wl, color
-        renderContext.drawThickLine xc, yc + wl, xc + wl, yc, color
+        renderContext.drawLine xc, yc - wl, xc - wl, yc, color
+        renderContext.drawLine xc, yc - wl, xc, yc + wl, color
+        renderContext.drawLine xc, yc + wl, xc + wl, yc, color
 
       when VoltageElm.WF_TRIANGLE
         xl = 5
-        renderContext.drawThickLine xc - xl * 2, yc, xc - xl, yc - wl, color
-        renderContext.drawThickLine xc - xl, yc - wl, xc, yc, color
-        renderContext.drawThickLine xc, yc, xc + xl, yc + wl, color
-        renderContext.drawThickLine xc + xl, yc + wl, xc + xl * 2, yc, color
+        renderContext.drawLine xc - xl * 2, yc, xc - xl, yc - wl, color
+        renderContext.drawLine xc - xl, yc - wl, xc, yc, color
+        renderContext.drawLine xc, yc, xc + xl, yc + wl, color
+        renderContext.drawLine xc + xl, yc + wl, xc + xl * 2, yc, color
 
       when VoltageElm.WF_AC
         xl = 10
@@ -243,7 +259,7 @@ class VoltageElm extends CircuitComponent
         while i <= xl
           yy = yc + Math.floor(0.95 * Math.sin(i * Math.PI / xl) * wl)
           if ox != -1
-            renderContext.drawThickLine ox, oy, xc + i, yy, color
+            renderContext.drawLine ox, oy, xc + i, yy, color
           ox = xc + i
           oy = yy
           i++

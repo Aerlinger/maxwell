@@ -78,9 +78,9 @@ class CapacitorElm extends CircuitComponent
 
     # draw first lead and plate
     color = DrawHelper.getVoltageColor(@volts[0])
-    renderContext.drawThickLinePt @point1, @lead1, color
+    renderContext.drawLinePt @point1, @lead1, color
 #      @setPowerColor false
-    renderContext.drawThickLinePt @plate1[0], @plate1[1], color
+    renderContext.drawLinePt @plate1[0], @plate1[1], color
 
     # TODO:
     #    if (CirSim.powerCheckItem)
@@ -88,9 +88,9 @@ class CapacitorElm extends CircuitComponent
 
     # draw second lead and plate
     color = DrawHelper.getVoltageColor(@volts[1])
-    renderContext.drawThickLinePt @point2, @lead2, color
+    renderContext.drawLinePt @point2, @lead2, color
 #      @setPowerColor false
-    renderContext.drawThickLinePt @plate2[0], @plate2[1], color
+    renderContext.drawLinePt @plate2[0], @plate2[1], color
 
     @drawDots @point1, @lead1, renderContext
 #      @drawDots @point2, @lead2, renderContext

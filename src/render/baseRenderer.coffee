@@ -32,11 +32,11 @@ class BaseRenderer extends Observer
     origStrokeStyle = @context.strokeStyle
 
     @context.fillStyle = fillColor
-    @context.strokeStyle = lineColor
+#    @context.strokeStyle = lineColor
     @context.beginPath()
     @context.lineWidth = lineWidth
     @context.arc x, y, radius, 0, 2 * Math.PI, true
-    @context.stroke()
+#    @context.stroke()
     @context.fill()
     @context.closePath()
 
@@ -57,29 +57,17 @@ class BaseRenderer extends Observer
     @context.lineWidth = origLineWidth
     @context.strokeStyle = origStrokeStyle
 
-  drawThickLinePt: (pa, pb, color) ->
-    @drawThickLine pa.x, pa.y, pb.x, pb.y, color
+  drawLinePt: (pa, pb, color) ->
+    @drawLine pa.x, pa.y, pb.x, pb.y, color
 
-  drawThickLine: (x, y, x2, y2, color = Settings.FG_COLOR) ->
-    origLineWidth = @context.lineWidth
+  drawLine: (x, y, x2, y2, color = Settings.FG_COLOR, lineWidth = Settings.LINE_WIDTH) ->
+    origLineWidth = Settings.LINE_WIDTH
     origStrokeStyle = @context.strokeStyle
 
+    @context.lineJoin = 'miter'
+
     @context.strokeStyle = color
-    @context.beginPath()
-    @context.moveTo x, y
-    @context.lineTo x2, y2
-    @context.stroke()
-    @context.closePath()
-
-    @context.lineWidth = origLineWidth
-    @context.strokeStyle = origStrokeStyle
-
-    drawThinLine: (x, y, x2, y2, color = Settings.FG_COLOR) ->
-    origLineWidth = @context.lineWidth
-    origStrokeStyle = @context.strokeStyle
-
-    @context.lineWidth = 1
-    @context.strokeStyle = color
+    @context.lineWidth = lineWidth
     @context.beginPath()
     @context.moveTo x, y
     @context.lineTo x2, y2
@@ -91,14 +79,14 @@ class BaseRenderer extends Observer
 
   drawThickPolygon: (xlist, ylist, color) ->
     for i in [0...(xlist.length - 1)]
-      @drawThickLine xlist[i], ylist[i], xlist[i + 1], ylist[i + 1], color
-    @drawThickLine xlist[i], ylist[i], xlist[0], ylist[0], color
+      @drawLine xlist[i], ylist[i], xlist[i + 1], ylist[i + 1], color
+    @drawLine xlist[i], ylist[i], xlist[0], ylist[0], color
 
   drawThickPolygonP: (polygon, color) ->
     numVertices = polygon.numPoints()
     for i in [0...(numVertices - 1)]
-      @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(i + 1), polygon.getY(i + 1), color
-    @drawThickLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
+      @drawLine polygon.getX(i), polygon.getY(i), polygon.getX(i + 1), polygon.getY(i + 1), color
+    @drawLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
 
   drawCoil: (point1, point2, vStart, vEnd, renderContext) ->
     hs = 8
@@ -117,7 +105,7 @@ class BaseRenderer extends Observer
 
       voltageLevel = vStart + (vEnd - vStart) * i / segments
       color = DrawHelper.getVoltageColor(voltageLevel)
-      renderContext.drawThickLinePt ps1, ps2, color
+      renderContext.drawLinePt ps1, ps2, color
 
       ps1.x = ps2.x
       ps1.y = ps2.y

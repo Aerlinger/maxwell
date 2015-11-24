@@ -50,16 +50,16 @@ class SwitchElm extends CircuitComponent
     hs2 = (if (@position is 1) then openhs else 2)
 
     @setBboxPt @point1, @point2, openhs
-    @draw2Leads(renderContext)
+    renderContext.drawLeads(this)
 
-    @drawDots(renderContext)  if @position is 0
+    renderContext.drawDots(this)  if @position is 0
 
-    @ps = DrawHelper.interpPoint @lead1, @lead2, 0, hs1
-    @ps2 = DrawHelper.interpPoint @lead1, @lead2, 1, hs2
+    @ps = renderContext.interpolate @lead1, @lead2, 0, hs1
+    @ps2 = renderContext.interpolate @lead1, @lead2, 1, hs2
 
-    renderContext.drawThickLinePt @ps, @ps2, Settings.FG_COLOR
+    renderContext.drawLinePt @ps, @ps2, Settings.FG_COLOR
 
-    @drawPosts(renderContext)
+    renderContext.drawPosts(this)
 
   calculateCurrent: ->
     @current = 0  if @position is 1
@@ -79,11 +79,11 @@ class SwitchElm extends CircuitComponent
     arr[0] = (if (@momentary) then "push switch (SPST)" else "switch (SPST)")
     if @position is 1
       arr[1] = "open"
-      arr[2] = "Vd = " + DrawHelper.getVoltageDText(@getVoltageDiff())
+      arr[2] = "Vd = " + @getUnitText(@getVoltageDiff(), "V")
     else
       arr[1] = "closed"
-      arr[2] = "V = " + DrawHelper.getVoltageText(@volts[0])
-      arr[3] = "I = " + DrawHelper.getCurrentDText(@getCurrent())
+      arr[2] = "V = " + @getUnitText(@volts[0], "V")
+      arr[3] = "I = " + @getUnitText(@getCurrent(), "A")
 
   getConnection: (n1, n2) ->
     @position is 0

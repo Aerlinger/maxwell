@@ -120,11 +120,11 @@ class TransistorElm extends CircuitComponent
 
     # draw collector
     color = DrawHelper.getVoltageColor(@volts[1])
-    renderContext.drawThickLinePt @coll[0], @coll[1], color
+    renderContext.drawLinePt @coll[0], @coll[1], color
 
     # draw emitter
     color = DrawHelper.getVoltageColor(@volts[2])
-    renderContext.drawThickLinePt @emit[0], @emit[1], color
+    renderContext.drawLinePt @emit[0], @emit[1], color
 
     # draw arrow
     #g.setColor(lightGrayColor);
@@ -133,7 +133,7 @@ class TransistorElm extends CircuitComponent
     # draw base
     color = DrawHelper.getVoltageColor(@volts[0])
 #      g.setColor Color.gray  if Circuit.powerCheckItem
-    renderContext.drawThickLinePt @point1, @base, color
+    renderContext.drawLinePt @point1, @base, color
 
     # draw dots
 #      @curcount_b = @updateDotCount(-@ib, @curcount_b)

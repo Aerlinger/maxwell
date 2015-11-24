@@ -60,20 +60,20 @@ class Switch2Elm extends SwitchElm
 
     # draw first lead
     color = DrawHelper.getVoltageColor(@volts[0])
-    renderContext.drawThickLinePt @point1, @lead1, color
+    renderContext.drawLinePt @point1, @lead1, color
 
     # draw second lead
     color = DrawHelper.getVoltageColor(@volts[1])
-    renderContext.drawThickLinePt @swpoles[0], @swposts[0], color
+    renderContext.drawLinePt @swpoles[0], @swposts[0], color
 
     # draw third lead
     color = DrawHelper.getVoltageColor @volts[2]
-    renderContext.drawThickLinePt @swpoles[1], @swposts[1], color
+    renderContext.drawLinePt @swpoles[1], @swposts[1], color
 
     # draw: (renderContext) ->
 #      @setBbox @point1, @point2, @openhs
 
-    renderContext.drawThickLinePt @lead1, @swpoles[@position], color
+    renderContext.drawLinePt @lead1, @swpoles[@position], color
 
     #      @updateDotCount()
     @drawDots @point1, @lead1, renderContext

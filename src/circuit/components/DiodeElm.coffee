@@ -85,7 +85,7 @@ class DiodeElm extends CircuitComponent
 
     # draw the diode plate
     color = DrawHelper.getVoltageColor(v2)
-    renderContext.drawThickLinePt @cathode[0], @cathode[1], color
+    renderContext.drawLinePt @cathode[0], @cathode[1], color
 
   stamp: (stamper) ->
     @diode.stamp @nodes[0], @nodes[1], stamper

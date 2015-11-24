@@ -39,11 +39,11 @@ class OutputElm extends CircuitComponent
     @lead1 = renderContext.interpolate @point1, @point2, 1 - (3 * s.length / 2 + 8) / @dn
 
     @setBboxPt @point1, @lead1, 0
-    @drawCenteredText s, @x2, @y2, true, renderContext
+    renderContext.drawValue 0, 0, this, s
 
     color = renderContext.getVoltageColor(@volts[0])
 
-    renderContext.drawThickLinePt @point1, @lead1, color
+    renderContext.drawLinePt @point1, @lead1, color
     renderContext.drawPosts(this)
 
   getVoltageDiff: ->

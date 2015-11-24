@@ -77,21 +77,21 @@ class InductorElm extends CircuitComponent
 #      @ind.doStep stamper, voltdiff
 
   draw: (renderContext) ->
+    @updateDots()
+
     v1 = @volts[0]
     v2 = @volts[1]
     hs = 8
 
     @setBboxPt @point1, @point2, hs
-    @draw2Leads(renderContext)
-#      @setPowerColor false
+    renderContext.drawLeads(this)
     renderContext.drawCoil @lead1, @lead2, v1, v2, renderContext
 
-#      if @getParentCircuit().showValuesCheckItem
-    unit_text = DrawHelper.getUnitText(@inductance, "H")
-    @drawValues unit_text, hs, renderContext
+    unit_text = @getUnitText(@inductance, "H")
+    renderContext.drawValue 0, 0, this, unit_text
 
-    @drawPosts(renderContext)
-    @drawDots(@point1, @point2, renderContext)
+    renderContext.drawDots(@point1, @point2, this)
+    renderContext.drawPosts(this)
 
   getDumpType: ->
     "l"

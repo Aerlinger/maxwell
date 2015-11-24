@@ -7,3 +7,5 @@ src/**/*.js
 .bower-cache
 .bower-registry
 npm-debug.log
+build/
+scripts/

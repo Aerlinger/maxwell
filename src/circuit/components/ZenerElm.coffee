@@ -48,24 +48,24 @@ class ZenerElm extends DiodeElm
     v1 = @volts[0]
     v2 = @volts[1]
 
-    @draw2Leads(renderContext)
+    renderContext.drawLeads(this)
 
     # draw arrow vector
     # setPowerColor(g, true)
-    color = DrawHelper.getVoltageColor(v1)
+    color = renderContext.getVoltageColor(v1)
     renderContext.drawThickPolygonP @poly, color
 
     # PLATE:
     # setVoltageColor(g, v2)
-    renderContext.drawThickLinePt(@cathode[0], @cathode[1], v1)
+    renderContext.drawLinePt(@cathode[0], @cathode[1], v1)
 
     # Cathode "Wings"
-    color = DrawHelper.getVoltageColor(v2)
-    renderContext.drawThickLinePt(@wing[0], @cathode[0], color)
-    renderContext.drawThickLinePt(@wing[1], @cathode[1], color)
+    color = renderContext.getVoltageColor(v2)
+    renderContext.drawLinePt(@wing[0], @cathode[0], color)
+    renderContext.drawLinePt(@wing[1], @cathode[1], color)
 
-    @drawDots(@point2, @point1, renderContext)
-    @drawPosts(renderContext)
+    renderContext.drawDots(@point2, @point1, this)
+    renderContext.drawPosts(this)
 
 
   nonlinear: ->

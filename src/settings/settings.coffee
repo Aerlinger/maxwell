@@ -176,8 +176,8 @@ class Settings
   @CURRENT_SEGMENT_LENGTH: 16
 
   # Line Widths:
-  @POST_RADIUS: 1
-  @CURRENT_RADIUS: 1
+  @POST_RADIUS: 2.5
+  @CURRENT_RADIUS: 2
   @LINE_WIDTH: 2
 
   # Grid
@@ -201,7 +201,7 @@ class Settings
 
   @GRID_COLOR: ColorPalette.darkyellow
   @BG_COLOR: ColorPalette.white
-  @FG_COLOR: ColorPalette.darkgray
+  @FG_COLOR: ColorPalette.black
   @ERROR_COLOR: ColorPalette.darkred
   @WARNING_COLOR: ColorPalette.orange
 

@@ -18,7 +18,7 @@ describe "Canvas Context", ->
 
 
   it "should render (46, 32, 100, 150):  #00A", (done) ->
-    @renderer.drawThickLine(46, 32, 100, 150, '#00A')
+    @renderer.drawLine(46, 32, 100, 150, '#00A')
     @renderer.getCanvas().toBuffer (err, buf) ->
       throw err if err
       fs.writeFile(__dirname + '/primitives/line.png', buf)

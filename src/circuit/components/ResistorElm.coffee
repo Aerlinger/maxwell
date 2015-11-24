@@ -49,7 +49,7 @@ class ResistorElm extends CircuitComponent
       startPosition = renderContext.interpolate @lead1, @lead2, n*parallelOffset, width*offsets[n % 4]
       endPosition = renderContext.interpolate @lead1, @lead2, (n+1)*parallelOffset, width*offsets[(n+1) % 4]
 
-      renderContext.drawThickLinePt startPosition, endPosition, renderContext.getVoltageColor(resistorSegmentVoltage)
+      renderContext.drawLinePt startPosition, endPosition, renderContext.getVoltageColor(resistorSegmentVoltage)
 
     renderContext.drawValue 10, 0, this, @getUnitText(@resistance, @unitSymbol())
 

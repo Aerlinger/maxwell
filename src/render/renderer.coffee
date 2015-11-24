@@ -56,11 +56,11 @@ class SelectionMarquee extends Rectangle
   draw: (renderContext) ->
     renderContext.lineWidth = 0.1
     if @x1? && @x2? && @y1? && @y2?
-      renderContext.drawThickLine @x1, @y1, @x2, @y1
-      renderContext.drawThickLine @x1, @y2, @x2, @y2
+      renderContext.drawLine @x1, @y1, @x2, @y1
+      renderContext.drawLine @x1, @y2, @x2, @y2
 
-      renderContext.drawThickLine @x1, @y1, @x1, @y2
-      renderContext.drawThickLine @x2, @y1, @x2, @y2
+      renderContext.drawLine @x1, @y1, @x1, @y2
+      renderContext.drawLine @x2, @y1, @x2, @y2
 
 
 class Renderer extends BaseRenderer
@@ -99,6 +99,8 @@ class Renderer extends BaseRenderer
       # keyup
       # resize
     }
+
+    @context.lineJoin = 'miter'
 
     #    @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
     #    @Circuit.addObserver Circuit.ON_RESET, @clear
@@ -206,16 +208,15 @@ class Renderer extends BaseRenderer
       x = component.getCenter().x + parallelOffset  - stringWidth / 2.0
       y = component.getCenter().y - perpindicularOffset - stringHeight / 2.0
 
-    console.log(x, y)
 
-    #      this.fillStyle = Settings.TEXT_COLOR
+    @context.fillStyle = Settings.TEXT_COLOR
     @fillText text, x, y
 
 
   drawDots: (ptA, ptB, component) =>
     return if @Circuit?.isStopped()
 
-    ds = 16
+    ds = Settings.CURRENT_SEGMENT_LENGTH
 
     dx = ptB.x - ptA.x
     dy = ptB.y - ptA.y
@@ -232,9 +233,9 @@ class Renderer extends BaseRenderer
 
   drawLeads: (component) ->
     if component.point1? and component.lead1?
-      @drawThickLinePt component.point1, component.lead1, @getVoltageColor(component.volts[0])
+      @drawLinePt component.point1, component.lead1, @getVoltageColor(component.volts[0])
     if component.point2? and component.lead2?
-      @drawThickLinePt component.lead2, component.point2, @getVoltageColor(component.volts[1])
+      @drawLinePt component.lead2, component.point2, @getVoltageColor(component.volts[1])
 
   drawPosts: (component) ->
     for i in [0...component.getPostCount()]
@@ -242,14 +243,6 @@ class Renderer extends BaseRenderer
       @drawPost post.x, post.y
 
   drawPost: (x0, y0) ->
-    #if node
-    #return if not @Circuit?.dragElm? and not @needsHighlight() and @Circuit?.getNode(node).links.length is 2
-    #return if @Circuit?.mouseMode is @Circuit?.MODE_DRAG_ROW or @Circuit?.mouseMode is @Circuit?.MODE_DRAG_COLUMN
-
-#      if @needsHighlight()
-#        fillColor = Settings.POST_COLOR_SELECTED
-#        strokeColor = Settings.POST_COLOR_SELECTED
-#      else
     fillColor = Settings.POST_COLOR
     strokeColor = Settings.POST_COLOR
 
@@ -289,6 +282,18 @@ class Renderer extends BaseRenderer
         "#7f7f7f", "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747",
         "#3fbf3f", "#37c737", "#2fcf2f", "#27d727", "#1fdf1f", "#17e717", "#0fef0f", "#07f707", "#00ff00" ]
 
+    scale =
+      ["#B81B00", "#B21F00", "#AC2301", "#A72801", "#A12C02", "#9C3002", "#963503", "#913903",
+       "#8B3E04", "#854205", "#804605", "#7A4B06", "#754F06", "#6F5307", "#6A5807", "#645C08",
+       "#5F6109", "#596509", "#53690A", "#4E6E0A", "#48720B", "#43760B", "#3D7B0C", "#387F0C",
+       "#32840D", "#2C880E", "#278C0E", "#21910F", "#1C950F", "#169910", "#119E10", "#0BA211", "#06A712"]
+
+    scale =
+      ["#EB1416", "#E91330", "#E7134A", "#E51363", "#E3137C", "#E11394", "#E013AC", "#DE13C3",
+       "#DC13DA", "#C312DA", "#AA12D8", "#9012D7", "#7712D5", "#5F12D3", "#4612D1", "#2F12CF",
+       "#1712CE", "#1123CC", "#1139CA", "#114FC8", "#1164C6", "#1179C4", "#118EC3", "#11A2C1",
+       "#11B6BF", "#10BDB1", "#10BB9B", "#10BA84", "#10B86F", "#10B659", "#10B444", "#10B230", "#10B11C"]
+
     numColors = scale.length - 1
 
     value = Math.floor (volts + fullScaleVRange) * numColors / (2 * fullScaleVRange)
@@ -299,5 +304,35 @@ class Renderer extends BaseRenderer
 
     return scale[value]
 
+  @calcArrow: (ptA, , al, aw) ->
+    poly = new Polygon()
+
+    dx = point2.x - point1.x
+    dy = point2.y - point1.y
+    dist = Math.sqrt(dx * dx + dy * dy)
+
+    poly.addVertex point2.x, point2.y
+
+    [p1, p2] = @.interpPoint2 point1, point2, 1 - al / dist, aw
+
+    poly.addVertex p1.x, p1.y
+    poly.addVertex p2.x, p2.y
+
+    return poly
+
+  @createPolygon: (pt1, pt2, pt3, pt4) ->
+    newPoly = new Polygon()
+    newPoly.addVertex pt1.x, pt1.y
+    newPoly.addVertex pt2.x, pt2.y
+    newPoly.addVertex pt3.x, pt3.y
+    newPoly.addVertex pt4.x, pt4.y if pt4
+    return newPoly
+
+  @createPolygonFromArray: (vertexArray) ->
+    newPoly = new Polygon()
+    for vertex in vertexArray
+      newPoly.addVertex vertex.x, vertex.y
+
+    return newPoly
 
 module.exports = Renderer

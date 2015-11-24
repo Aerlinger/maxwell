@@ -39,8 +39,8 @@ class CurrentElm extends CircuitComponent
 
   draw: (renderContext) ->
     cr = 12
-    @draw2Leads(renderContext)
-    color = DrawHelper.getVoltageColor (@volts[0] + @volts[1]) / 2
+    renderContext.draw2Leads(this)
+    color = renderContext.getVoltageColor (@volts[0] + @volts[1]) / 2
 #      @setPowerColor false
     renderContext.drawCircle @center.x, @center.y, cr
     renderContext.drawCircle @ashaft1, @ashaft2
@@ -51,8 +51,8 @@ class CurrentElm extends CircuitComponent
 #        s = DrawHelper.getShortUnitText(@currentValue, "A")
 #        @drawValues s, cr  if @dx is 0 or @dy is 0
 
-    @drawPosts(renderContext)
-    @doDots(renderContext)
+    renderContext.drawPosts(this)
+    renderContext.doDots(this)
 
   stamp: (stamper) ->
     @current = @currentValue

@@ -117,7 +117,6 @@ class CircuitComponent
         this[param_name] = convert[data_type](default_value)
         console.warn("Defined parameter #{param_name} not set for #{this} (defaulting to #{default_value} #{symbol})")
 
-
     unmatched_params = (param for param of component_params)
 
     if unmatched_params.length > 0
@@ -135,12 +134,12 @@ class CircuitComponent
 
   serialize: ->
     {
-    sym: this.constructor.name,
-    x1: @x1,
-    y1: @y1,
-    x2: @x2,
-    y2: @y2,
-    params: @serializeParameters()
+      sym: this.constructor.name,
+      x1: @x1,
+      y1: @y1,
+      x2: @x2,
+      y2: @y2,
+      params: @serializeParameters()
     }
 
   @deserialize: (jsonData) ->
@@ -355,17 +354,14 @@ class CircuitComponent
 
     @setBbox p1.x - deltaX, p1.y - deltaY, p1.x + deltaX, p1.y + deltaY
 
-  isCenteredText: ->
-    false
-
   # Extended by subclasses
   getInfo: (arr) ->
     arr = new Array(15)
 
   # Extended by subclasses
   getBasicInfo: (arr) ->
-    arr[1] = "I = " + DrawHelper.getCurrentDText(@getCurrent())
-    arr[2] = "Vd = " + DrawHelper.getVoltageDText(@getVoltageDiff())
+    arr[1] = "I = " + @getUnitText(@getCurrent(), "A")
+    arr[2] = "Vd = " + @getUnitText(@getVoltageDiff(), "V")
     3
 
   getScopeValue: (x) ->
@@ -399,13 +395,12 @@ class CircuitComponent
 
   draw: (renderContext) ->
     @curcount = @updateDotCount()
-    @drawPosts(renderContext)
-    @draw2Leads(renderContext)
+    renderContext.drawPosts(this)
+    renderContext.drawLeads(this)
 
 
-  updateDots: (ds = 16) ->
+  updateDots: (ds = Settings.CURRENT_SEGMENT_LENGTH) ->
     currentIncrement = @current * @Circuit.currentSpeed()
-    ds = 16
     @curcount = (@curcount + currentIncrement) % ds
     @curcount += ds if @curcount < 0
 

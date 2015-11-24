@@ -45,14 +45,14 @@ class ProbeElm extends CircuitComponent
 #    else
     color = renderContext.getVoltageColor(@volts[0])
 
-    renderContext.drawThickLinePt @point1, @lead1, color
+    renderContext.drawLinePt @point1, @lead1, color
 
 #    if @isSelected()
 #      color = Settings.SELECT_COLOR
 #    else
     color = renderContext.getVoltageColor(@volts[1])
 
-    renderContext.drawThickLinePt @lead2, @point2, color
+    renderContext.drawLinePt @lead2, @point2, color
 
     #      renderContext.setFont new Font("SansSerif", Font.BOLD, 14)
 

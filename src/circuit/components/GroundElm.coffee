@@ -21,19 +21,19 @@ class GroundElm extends CircuitComponent
 
     color = renderContext.getVoltageColor(0)
 
-    renderContext.drawThickLinePt @point1, @point2, color
+    renderContext.drawLinePt @point1, @point2, color
 
     for row in [0...3]
       startPt = 10 - row * 2
       endPt = row * 3
       [pt1, pt2] = DrawHelper.interpPoint2 @point1, @point2, 1 + endPt / @dn, startPt
-      renderContext.drawThickLinePt pt1, pt2, color
+      renderContext.drawLinePt pt1, pt2, color
 
     pt2 = renderContext.interpolate @point1, @point2, 1 + 11.0 / @dn
     @setBboxPt @point1, pt2, 11
-    renderContext.drawPosts this
 
     renderContext.drawDots(@point1, @point2, this)
+    renderContext.drawPosts this
 
   setCurrent: (x, currentVal) ->
     @current = -currentVal
@@ -52,7 +52,7 @@ class GroundElm extends CircuitComponent
   getInfo: (arr) ->
     super()
     arr[0] = "ground"
-    arr[1] = "I = " + DrawHelper.getCurrentText(@getCurrent())
+    arr[1] = "I = " + getUnitText(@getCurrent(), "A")
 
   hasGroundConnection: (n1) ->
     true

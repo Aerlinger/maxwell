@@ -26,10 +26,11 @@ class RailElm extends VoltageElm
     @lead1 = DrawHelper.interpPoint(@point1, @point2, 1 - VoltageElm.circleSize / @dn)
 
   draw: (renderContext) ->
+    @updateDots()
     @setBboxPt @point1, @point2, @circleSize
 
     color = DrawHelper.getVoltageColor(@volts[0])
-    renderContext.drawThickLinePt @point1, @lead1, color
+    renderContext.drawLinePt @point1, @lead1, color
 
     clock = @waveform is VoltageElm.WF_SQUARE and (@flags & VoltageElm.FLAG_CLOCK) isnt 0
 
@@ -39,21 +40,21 @@ class RailElm extends VoltageElm
       #this.setPowerColor(g, false);
       v = @getVoltage()
 
-      s = DrawHelper.getShortUnitText(v, "V")
+      s = @getUnitText(v, "V")
       s = v + "V" if Math.abs(v) < 1 #showFormat.format(v)
       s = "+" + s if @getVoltage() > 0
 
       s = "Ant" if this instanceof AntennaElm
       s = "CLK" if clock
 
-      @drawCenteredText s, @x2, @y2, true, renderContext
+      renderContext.drawValue 0, 0, this, s
     else
       @drawWaveform @point2, renderContext
 
-    @drawPosts(renderContext)
-#      @curcount = @updateDotCount(-@current, @curcount)
+    renderContext.drawDots(@point2, @point1, this)
+    renderContext.drawPosts(this)
 
-    @drawDots @point1, @lead1, renderContext # @curcount  unless Circuit.dragElm is this
+    renderContext.drawDots @point1, @lead1, this # @curcount  unless Circuit.dragElm is this
 
   getVoltageDiff: ->
     @volts[0]

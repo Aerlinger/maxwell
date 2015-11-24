@@ -80,10 +80,10 @@ class MosfetElm extends CircuitComponent
     @setBboxPt @point1, @point2, @hs
 
     color = DrawHelper.getVoltageColor(@volts[1])
-    renderContext.drawThickLinePt @src[0], @src[1], color
+    renderContext.drawLinePt @src[0], @src[1], color
 
     color = DrawHelper.getVoltageColor(@volts[2])
-    renderContext.drawThickLinePt @drn[0], @drn[1], color
+    renderContext.drawLinePt @drn[0], @drn[1], color
 
     segments = 6
 #      @setPowerColor true
@@ -93,13 +93,13 @@ class MosfetElm extends CircuitComponent
       color = DrawHelper.getVoltageColor(v)
       ps1 = DrawHelper.interpPoint @src[1], @drn[1], i * segf
       ps2 = DrawHelper.interpPoint @src[1], @drn[1], (i + 1) * segf
-      renderContext.drawThickLinePt ps1, ps2, color
+      renderContext.drawLinePt ps1, ps2, color
 
     color = DrawHelper.getVoltageColor(@volts[1])
-    renderContext.drawThickLinePt @src[1], @src[2], color
+    renderContext.drawLinePt @src[1], @src[2], color
 
     color = DrawHelper.getVoltageColor(@volts[2])
-    renderContext.drawThickLinePt @drn[1], @drn[2], color
+    renderContext.drawLinePt @drn[1], @drn[2], color
 
     unless @drawDigital()
       color = DrawHelper.getVoltageColor((if @pnp is 1 then @volts[1] else @volts[2]))
@@ -110,8 +110,8 @@ class MosfetElm extends CircuitComponent
 
     #g.setColor(Color.gray);
     color = DrawHelper.getVoltageColor(@volts[0])
-    renderContext.drawThickLinePt @point1, @gate[1], color
-    renderContext.drawThickLinePt @gate[0], @gate[2], color
+    renderContext.drawLinePt @point1, @gate[1], color
+    renderContext.drawLinePt @gate[0], @gate[2], color
     @drawDigital() and @pnp is -1
 
     #Main.getMainCanvas().drawThickCircle(pcircle.x, pcircle.y, pcircler, Settings.FG_COLOR);
@@ -170,7 +170,7 @@ class MosfetElm extends CircuitComponent
     @gate[1] = DrawHelper.interpPoint @gate[0], @gate[2], .5
 
     if !@drawDigital()
-      if @pnp is 1
+      if @pnp is
         @arrowPoly = DrawHelper.calcArrow(@src[1], @src[0], 10, 4)
       else
         @arrowPoly = DrawHelper.calcArrow(@drn[0], @drn[1], 12, 5)
