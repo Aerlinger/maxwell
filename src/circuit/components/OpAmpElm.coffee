@@ -1,6 +1,5 @@
 ArrayUtils =  require('../../util/ArrayUtils.coffee')
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -99,10 +98,10 @@ class OpAmpElm extends CircuitComponent
     @updateDots()
     @setBboxPt @point1, @point2, @opheight * 2
 
-    color = DrawHelper.getVoltageColor(@volts[0])
+    color = renderContext.getVoltageColor(@volts[0])
     renderContext.drawLinePt @in1p[0], @in1p[1], color
 
-    color = DrawHelper.getVoltageColor(@volts[1])
+    color = renderContext.getVoltageColor(@volts[1])
     renderContext.drawLinePt @in2p[0], @in2p[1], color
 
 #      #g.setColor(this.needsHighlight() ? this.selectColor : this.lightGrayColor);
@@ -125,28 +124,20 @@ class OpAmpElm extends CircuitComponent
     @volts[2] * @current
 
   setSize: (s) ->
-#      console.log("s = #{s}")
     @opsize = s
     @opheight = 8 * s
     @opwidth = 13 * s
-#    @flags = (@flags & ~OpAmpElm.FLAG_SMALL) | ((if (s is 1) then OpAmpElm.FLAG_SMALL else 0))
 
   setPoints: ->
     super()
-#      if @dn > 150 and this is Circuit.dragElm
     @setSize 2
 
     if ww > @dn / 2
-#        console.log("1")
       ww = Math.floor(@dn / 2)
     else
-#        console.log("2")
-#        throw("error")
       ww = Math.floor(@opwidth)
 
-#      console.log("ww = #{ww}")
-
-    @calcLeads ww * 2
+    @calcLeads renderContext, ww * 2
     hs = Math.floor(@opheight * @dsign)
     hs = -hs  unless (@flags & OpAmpElm.FLAG_SWAP) is 0
 
@@ -154,16 +145,15 @@ class OpAmpElm extends CircuitComponent
     @in2p = ArrayUtils.newPointArray(2)
     @textp = ArrayUtils.newPointArray(2)
 
-    [@in1p[0], @in2p[0]] = DrawHelper.interpPoint2 @point1, @point2, 0, hs
-    [@in1p[1], @in2p[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 0, hs
-    [@textp[0], @textp[1]] = DrawHelper.interpPoint2 @lead1, @lead2, .2, hs
+    [@in1p[0], @in2p[0]] = renderContext.interpolateSymmetrical @point1, @point2, 0, hs
+    [@in1p[1], @in2p[1]] = renderContext.interpolateSymmetrical @lead1, @lead2, 0, hs
+    [@textp[0], @textp[1]] = renderContext.interpolateSymmetrical @lead1, @lead2, .2, hs
 
     tris = ArrayUtils.newPointArray(2)
-    [tris[0], tris[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 0, hs * 2
-    @triangle = DrawHelper.createPolygonFromArray([tris[0], tris[1], @lead2])
+    [tris[0], tris[1]] = renderContext.interpolateSymmetrical @lead1, @lead2, 0, hs * 2
+    @triangle = renderContext.createPolygonFromArray([tris[0], tris[1], @lead2])
 
 
-  #this.plusFont = new Font("SansSerif", 0, opsize == 2 ? 14 : 10);
   getPostCount: ->
     3
 
@@ -176,14 +166,14 @@ class OpAmpElm extends CircuitComponent
   getInfo: (arr) ->
     super()
     arr[0] = "op-amp"
-    arr[1] = "V+ = " + DrawHelper.getVoltageText(@volts[1])
-    arr[2] = "V- = " + DrawHelper.getVoltageText(@volts[0])
+    arr[1] = "V+ = " + @getUnitText(@volts[1], "V")
+    arr[2] = "V- = " + @getUnitText(@volts[0], "V")
 
     # sometimes the voltage goes slightly outside range, to make convergence easier.  so we hide that here.
     vo = Math.max(Math.min(@volts[2], @maxOut), @minOut)
-    arr[3] = "Vout = " + DrawHelper.getVoltageText(vo)
-    arr[4] = "Iout = " + DrawHelper.getCurrentText(@getCurrent())
-    arr[5] = "range = " + DrawHelper.getVoltageText(@minOut) + " to " + DrawHelper.getVoltageText(@maxOut)
+    arr[3] = "Vout = " + @getUnitText(vo, "V")
+    arr[4] = "Iout = " + @getUnitText(@getCurrent(), "A")
+    arr[5] = "range = " + @getVoltageText(@minOut, "V") + " to " + @getVoltageText(@maxOut, "V")
 
   stamp: (stamper) ->
 #      console.log("\nStamping OpAmpElm")

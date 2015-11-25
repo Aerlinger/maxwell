@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -21,15 +20,13 @@ class RailElm extends VoltageElm
   getPostCount: ->
     1
 
-  setPoints: ->
-    super()
-    @lead1 = DrawHelper.interpPoint(@point1, @point2, 1 - VoltageElm.circleSize / @dn)
-
   draw: (renderContext) ->
+    @lead1 = renderContext.interpolate(@point1, @point2, 1 - VoltageElm.circleSize / @dn)
+
     @updateDots()
     @setBboxPt @point1, @point2, @circleSize
 
-    color = DrawHelper.getVoltageColor(@volts[0])
+    color = renderContext.getVoltageColor(@volts[0])
     renderContext.drawLinePt @point1, @lead1, color
 
     clock = @waveform is VoltageElm.WF_SQUARE and (@flags & VoltageElm.FLAG_CLOCK) isnt 0

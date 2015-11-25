@@ -1,7 +1,13 @@
+ComponentRegistry = require('../../src/circuit/ComponentRegistry.coffee')
+CircuitComponent = require('../../src/circuit/circuitComponent.coffee')
 Circuit = require('../../src/circuit/circuit.coffee')
 CircuitNode = require('../../src/engine/circuitNode.coffee')
 CircuitLoader = require('../../src/io/circuitLoader.coffee')
 ArrayUtils = require('../../src/util/arrayUtils.coffee')
+SimulationParams = require('../../src/core/SimulationParams.coffee')
+Hint = require('../../src/engine/Hint.coffee')
+Oscilloscope = require('../../src/scope/Oscilloscope.coffee')
+
 fs = require 'fs'
 _ = require('lodash')
 
@@ -9,11 +15,66 @@ _ = require('lodash')
 describe "Simple Voltage Divider", ->
   before (done) ->
     voltdividesimple = JSON.parse(fs.readFileSync("./circuits/voltdividesimple.json"))
-    @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
+#    @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
+
+    @circuit = new Circuit()
+
+    # Valid class identifier name
+    validName = /^[$A-Z_][0-9A-Z_$]*$/i
+
+    # Circuit Parameters are stored at the header of the .json file (index 0)
+    circuitParams = voltdividesimple.shift()
+    #    circuit.Params = new SimulationParams(circuitParams)
+    @circuit.Params = SimulationParams.deserialize(circuitParams)
+
+    console.log(@circuit.Params.toString())
+
+    # Load each Circuit component from JSON data:
+    elms = []
+
+    for elementData in voltdividesimple
+      type = elementData['sym']
+
+#      if type in Circuit.components
+#        console.log("Found #{type}...")
+
+      sym = ComponentRegistry.ComponentDefs[type]
+      x1 = parseInt elementData['x1']
+      y1 = parseInt elementData['y1']
+      x2 = parseInt elementData['x2']
+      y2 = parseInt elementData['y2']
+
+      flags = parseInt elementData['flags']
+
+      params = elementData['params']
+
+      console.log(sym)
+
+      if !sym
+        @circuit.warn "No matching component for #{type}: #{sym}"
+#        circuit.halt "Element: #{JSON.stringify(elementData)} is null"
+      else if type is Hint
+        console.log "Hint found in file!"
+      else if type is Oscilloscope
+        console.log "Scope found in file!"
+      else if !type
+        @circuit.warn "Unrecognized Type"
+#      if _.isEmpty(sym)
+#        circuit.warn "Component could not be added to circuit. Unrecognized component symbol: #{type}."
+      else
+#        console.log(sym.toString())
+        newCircuitElm = new sym(x1, y1, x2, y2, params)
+
+        elms.push(newCircuitElm)
+
+        @circuit.solder newCircuitElm
+
+    if elms.length == 0
+      console.error "No elements loaded. JSON most likely malformed"
 
 #    CircuitLoader.createCircuitFromJsonFile "../../circuits/voltdividesimple.json", (circuit) =>
 #      @circuit = circuit
-#      done()
+    done()
 
   describe "should Analyze voltdividesimple.json and have", ->
     before (done) ->

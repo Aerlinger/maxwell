@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')

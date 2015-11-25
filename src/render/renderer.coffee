@@ -304,7 +304,7 @@ class Renderer extends BaseRenderer
 
     return scale[value]
 
-  @calcArrow: (ptA, , al, aw) ->
+  calcArrow: (point1, point2, al, aw) ->
     poly = new Polygon()
 
     dx = point2.x - point1.x
@@ -320,15 +320,16 @@ class Renderer extends BaseRenderer
 
     return poly
 
-  @createPolygon: (pt1, pt2, pt3, pt4) ->
+  createPolygon: (pt1, pt2, pt3, pt4) ->
     newPoly = new Polygon()
     newPoly.addVertex pt1.x, pt1.y
     newPoly.addVertex pt2.x, pt2.y
     newPoly.addVertex pt3.x, pt3.y
     newPoly.addVertex pt4.x, pt4.y if pt4
+
     return newPoly
 
-  @createPolygonFromArray: (vertexArray) ->
+  createPolygonFromArray: (vertexArray) ->
     newPoly = new Polygon()
     for vertex in vertexArray
       newPoly.addVertex vertex.x, vertex.y

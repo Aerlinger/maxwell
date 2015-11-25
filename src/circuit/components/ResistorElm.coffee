@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -23,14 +22,11 @@ class ResistorElm extends CircuitComponent
   constructor: (xa, ya, xb, yb, params) ->
     super(xa, ya, xb, yb, params)
 
-    @ps3 = new Point(100, 50)
-    @ps4 = new Point(100, 150)
-
   draw: (renderContext) ->
+    @calcLeads renderContext, 32
     @updateDots()
 
     numSegments = 16
-    lateralOffset = 0
     width = 5
 
     @setBboxPt @point1, @point2, width
@@ -79,14 +75,7 @@ class ResistorElm extends CircuitComponent
   calculateCurrent: ->
     @current = (@volts[0] - @volts[1]) / @resistance
 
-  setPoints: ->
-    super()
-    @calcLeads 32
-    @ps3 = new Point(0, 0)
-    @ps4 = new Point(0, 0)
-
   stamp: (stamper) ->
-#    console.log("\nStamping Resistor Elm")
     if @orphaned()
       console.warn "attempting to stamp an orphaned resistor"
 

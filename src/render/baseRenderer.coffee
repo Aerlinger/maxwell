@@ -1,7 +1,6 @@
 Observer = require('../util/observer.coffee')
 Settings = require('../settings/settings.coffee')
 FormatUtils = require('../util/formatUtils.coffee')
-DrawHelper = require('./drawHelper.coffee')
 Point = require('../geom/point.coffee')
 
 class BaseRenderer extends Observer
@@ -101,10 +100,10 @@ class BaseRenderer extends Observer
     for i in [0...segments]
       cx = (((i + 1) * 8 / segments) % 2) - 1
       hsx = Math.sqrt(1 - cx * cx)
-      ps2 = DrawHelper.interpPoint(point1, point2, i / segments, hsx * hs)
+      ps2 = renderContext.interpolate(point1, point2, i / segments, hsx * hs)
 
       voltageLevel = vStart + (vEnd - vStart) * i / segments
-      color = DrawHelper.getVoltageColor(voltageLevel)
+      color = renderContext.getVoltageColor(voltageLevel)
       renderContext.drawLinePt ps1, ps2, color
 
       ps1.x = ps2.x

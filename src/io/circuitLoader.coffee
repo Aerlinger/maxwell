@@ -1,6 +1,6 @@
 ComponentRegistry = require('../circuit/ComponentRegistry.coffee')
-
 SimulationParams = require('../core/SimulationParams.coffee')
+
 Circuit = require('../circuit/Circuit.coffee')
 Oscilloscope = require('../scope/Oscilloscope.coffee')
 Hint = require('../engine/Hint.coffee')
@@ -50,7 +50,7 @@ class CircuitLoader
 #      if _.isEmpty(sym)
 #        circuit.warn "Component could not be added to circuit. Unrecognized component symbol: #{type}."
       else
-        console.log(sym)
+#        console.log(sym.toString())
         newCircuitElm = new sym(x1, y1, x2, y2, params)
 
         elms.push(newCircuitElm)

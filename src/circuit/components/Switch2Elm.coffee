@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -39,35 +38,33 @@ class Switch2Elm extends SwitchElm
   getDumpType: ->
     "S"
 
-  setPoints: ->
-    super()
-    @calcLeads 32
+  draw: (renderContext) ->
+    @setBbox @point1, @point2, @openhs
+
+    @calcLeads renderContext, 32
 
     @swpoles = ArrayUtils.newPointArray(3)
     @swposts = ArrayUtils.newPointArray(2)
 
-    [@swpoles[0], @swpoles[1]] = DrawHelper.interpPoint2(@lead1, @lead2, 1, @openhs)
+    [@swpoles[0], @swpoles[1]] = renderContext.interpolateSymmetrical(@lead1, @lead2, 1, @openhs)
     @swpoles[2] = @lead2
 
-    [@swposts[0], @swposts[1]] = DrawHelper.interpPoint2(@point1, @point2, 1, @openhs)
+    [@swposts[0], @swposts[1]] = renderContext.interpolateSymmetrical(@point1, @point2, 1, @openhs)
     if @hasCenterOff()
       @posCount = 3
     else
       @posCount = 2
 
-  draw: (renderContext) ->
-    @setBbox @point1, @point2, @openhs
-
     # draw first lead
-    color = DrawHelper.getVoltageColor(@volts[0])
+    color = renderContext.getVoltageColor(@volts[0])
     renderContext.drawLinePt @point1, @lead1, color
 
     # draw second lead
-    color = DrawHelper.getVoltageColor(@volts[1])
+    color = renderContext.getVoltageColor(@volts[1])
     renderContext.drawLinePt @swpoles[0], @swposts[0], color
 
     # draw third lead
-    color = DrawHelper.getVoltageColor @volts[2]
+    color = renderContext.getVoltageColor @volts[2]
     renderContext.drawLinePt @swpoles[1], @swposts[1], color
 
     # draw: (renderContext) ->

@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -33,18 +32,16 @@ class SwitchElm extends CircuitComponent
   getDumpType: ->
     "s"
 
-  setPoints: ->
-    super()
-    @calcLeads 32
-    @ps = new Point(0, 0)
-    @ps2 = new Point(0, 0)
-
   stamp: (stamper) ->
 #    console.log(@voltSource)
     if @position is 0
       stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
 
   draw: (renderContext) ->
+    @calcLeads renderContext, 32
+    @ps = new Point(0, 0)
+    @ps2 = new Point(0, 0)
+
     openhs = 16
     hs1 = (if (@position is 1) then 0 else 2)
     hs2 = (if (@position is 1) then openhs else 2)

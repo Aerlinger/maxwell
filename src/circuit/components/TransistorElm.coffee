@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -115,23 +114,51 @@ class TransistorElm extends CircuitComponent
     "t"
 
   draw: (renderContext) ->
-    @setBboxPt @point1, @point2, 16
-#      @setPowerColor true
+    @dsign = -@dsign  unless (@flags & TransistorElm.FLAG_FLIP) is 0
+
+    hs2 = Settings.GRID_SIZE * @dsign * @pnp
+
+    # calc collector, emitter posts
+    @coll = ArrayUtils.newPointArray(2)
+    @emit = ArrayUtils.newPointArray(2)
+
+    [@coll[0], @emit[0]] = renderContext.interpolateSymmetrical @point1, @point2, 1, hs2
+
+    # calc rectangle edges
+    @rect = ArrayUtils.newPointArray(4)
+    [@rect[0], @rect[1]] = renderContext.interpolateSymmetrical @point1, @point2, 1 - 16 / @dn, Settings.GRID_SIZE
+    [@rect[2], @rect[3]] = renderContext.interpolateSymmetrical @point1, @point2, 1 - 13 / @dn, Settings.GRID_SIZE
+
+    # calc points where collector/emitter leads contact rectangle
+    [@coll[1], @emit[1]] = renderContext.interpolateSymmetrical @point1, @point2, 1 - 13 / @dn, 6 * @dsign * @pnp
+
+    # calc point where base lead contacts rectangle
+    @base = renderContext.interpolateSymmetrical @point1, @point2, 1 - Settings.GRID_SIZE / @dn
+
+    # rectangle
+    @rectPoly = renderContext.createPolygon(@rect[0], @rect[2], @rect[3], @rect[1])
+
+    # arrow
+    unless @pnp is 1
+      pt = renderContext.interpolateSymmetrical(@point1, @point2, 1 - 11 / @dn, -5 * @dsign * @pnp)
+      @arrowPoly = renderContext.calcArrow(@emit[0], pt, 8, 4)
+
+    @setBboxPt @point1, @point2, Settings.GRID_SIZE
 
     # draw collector
-    color = DrawHelper.getVoltageColor(@volts[1])
+    color = renderContext.getVoltageColor(@volts[1])
     renderContext.drawLinePt @coll[0], @coll[1], color
 
     # draw emitter
-    color = DrawHelper.getVoltageColor(@volts[2])
+    color = renderContext.getVoltageColor(@volts[2])
     renderContext.drawLinePt @emit[0], @emit[1], color
 
     # draw arrow
     #g.setColor(lightGrayColor);
-#      renderContext.drawThickPolygonP @arrowPoly
+    renderContext.drawThickPolygonP @arrowPoly
 
     # draw base
-    color = DrawHelper.getVoltageColor(@volts[0])
+    color = renderContext.getVoltageColor(@volts[0])
 #      g.setColor Color.gray  if Circuit.powerCheckItem
     renderContext.drawLinePt @point1, @base, color
 
@@ -144,12 +171,12 @@ class TransistorElm extends CircuitComponent
 #      @drawDots @emit[1], @emit[0], @curcount_e
 
     # draw dots
-    @drawDots @base, @point1, renderContext
-    @drawDots @coll[1], @coll[0], renderContext
-    @drawDots @emit[1], @emit[0], renderContext
+    renderContext.drawDots @base, @point1, this
+    renderContext.drawDots @coll[1], @coll[0], this
+    renderContext.drawDots @emit[1], @emit[0], this
 
     # draw base rectangle
-    color = DrawHelper.getVoltageColor(@volts[0])
+    color = renderContext.getVoltageColor(@volts[0])
 #      @setPowerColor true
 
     #g.fillPolygon(rectPoly);
@@ -165,7 +192,7 @@ class TransistorElm extends CircuitComponent
 #        @drawCenteredText "C", @coll[0].x1 - 3 + 9 * ds, @coll[0].y + 4, Color.WHITE # x+6 if ds=1, -12 if -1
 #        @drawCenteredText "E", @emit[0].x1 - 3 + 9 * ds, @emit[0].y + 4, Color.WHITE
 
-    @drawPosts(renderContext)
+    renderContext.drawPosts(renderContext, this)
 
   getPost: (n) ->
     (if (n is 0) then @point1 else (if (n is 1) then @coll[0] else @emit[0]))
@@ -178,35 +205,6 @@ class TransistorElm extends CircuitComponent
 
   setPoints: (stamper) ->
     super()
-
-    hs = 16
-    @dsign = -@dsign  unless (@flags & TransistorElm.FLAG_FLIP) is 0
-    hs2 = hs * @dsign * @pnp
-
-    # calc collector, emitter posts
-    @coll = ArrayUtils.newPointArray(2)
-    @emit = ArrayUtils.newPointArray(2)
-    [@coll[0], @emit[0]] = DrawHelper.interpPoint2 @point1, @point2, 1, hs2
-
-    # calc rectangle edges
-    @rect = ArrayUtils.newPointArray(4)
-    [@rect[0], @rect[1]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 16 / @dn, hs
-    [@rect[2], @rect[3]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 13 / @dn, hs
-
-    # calc points where collector/emitter leads contact rectangle
-    [@coll[1], @emit[1]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 13 / @dn, 6 * @dsign * @pnp
-
-    # calc point where base lead contacts rectangle
-    @base = new Point()
-    @base = DrawHelper.interpPoint @point1, @point2, 1 - 16 / @dn
-
-    # rectangle
-    @rectPoly = DrawHelper.createPolygon(@rect[0], @rect[2], @rect[3], @rect[1])
-
-    # arrow
-    unless @pnp is 1
-      pt = DrawHelper.interpPoint(@point1, @point2, 1 - 11 / @dn, -5 * @dsign * @pnp)
-      @arrowPoly = DrawHelper.calcArrow(@emit[0], pt, 8, 4)
 
   limitStep: (vnew, vold) ->
     arg = 0  # TODO
@@ -236,6 +234,7 @@ class TransistorElm extends CircuitComponent
 
     vbc = @volts[0] - @volts[1] # typically negative
     vbe = @volts[0] - @volts[2] # typically positive
+
     # .01
     if Math.abs(vbc - @lastvbc) > .01 or Math.abs(vbe - @lastvbe) > .01
       @getParentCircuit.converged = false
@@ -301,18 +300,21 @@ class TransistorElm extends CircuitComponent
   getInfo: (arr) ->
     arr[0] = "transistor (" + ((if (@pnp is -1) then "PNP)" else "NPN)")) + " beta=" + @beta.toFixed(4)
     arr[0] = ""
+
     vbc = @volts[0] - @volts[1]
     vbe = @volts[0] - @volts[2]
     vce = @volts[1] - @volts[2]
+
     if vbc * @pnp > .2
       arr[1] = (if vbe * @pnp > .2 then "saturation" else "reverse active")
     else
       arr[1] = (if vbe * @pnp > .2 then "fwd active" else "cutoff")
-    arr[2] = "Ic = " + DrawHelper.getCurrentText(@ic)
-    arr[3] = "Ib = " + DrawHelper.getCurrentText(@ib)
-    arr[4] = "Vbe = " + DrawHelper.getVoltageText(vbe)
-    arr[5] = "Vbc = " + DrawHelper.getVoltageText(vbc)
-    arr[6] = "Vce = " + DrawHelper.getVoltageText(vce)
+
+    arr[2] = "Ic = " + @getUnitText(@ic, "A")
+    arr[3] = "Ib = " + @getUnitText(@ib, "A")
+    arr[4] = "Vbe = " +@getUnitText(vbe, "V")
+    arr[5] = "Vbc = " +@getUnitText(vbc, "V")
+    arr[6] = "Vce = " +@getUnitText(vce, "V")
 
   getScopeValue: (x) ->
     switch x

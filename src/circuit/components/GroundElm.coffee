@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -26,7 +25,7 @@ class GroundElm extends CircuitComponent
     for row in [0...3]
       startPt = 10 - row * 2
       endPt = row * 3
-      [pt1, pt2] = DrawHelper.interpPoint2 @point1, @point2, 1 + endPt / @dn, startPt
+      [pt1, pt2] = renderContext.interpolateSymmetrical @point1, @point2, 1 + endPt / @dn, startPt
       renderContext.drawLinePt pt1, pt2, color
 
     pt2 = renderContext.interpolate @point1, @point2, 1 + 11.0 / @dn

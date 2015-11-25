@@ -15,7 +15,6 @@
 # #######################################################################
 
 Settings = require('../settings/settings.coffee')
-DrawHelper = require('../render/drawHelper.coffee')
 Rectangle = require('../geom/rectangle.coffee')
 Point = require('../geom/point.coffee')
 MathUtils = require('../util/mathUtils.coffee')
@@ -89,7 +88,7 @@ class CircuitComponent
       param_value = param_list[i]
       result[param_name] = convert[data_type](param_value)
 
-    console.log(@, "PARAMS: ", result)
+#    console.log("PARAMS: ", result)
 
     return result
 
@@ -115,7 +114,7 @@ class CircuitComponent
         delete component_params[param_name]
       else
         this[param_name] = convert[data_type](default_value)
-        console.warn("Defined parameter #{param_name} not set for #{this} (defaulting to #{default_value} #{symbol})")
+#        console.warn("Defined parameter #{param_name} not set for #{this} (defaulting to #{default_value}#{symbol})")
 
     unmatched_params = (param for param of component_params)
 
@@ -231,16 +230,14 @@ class CircuitComponent
     @volts[node_idx] = voltage
     @calculateCurrent()
 
-  calcLeads: (len) ->
+  calcLeads: (renderContext, len) ->
     if @dn < len or len is 0
       @lead1 = @point1
       @lead2 = @point2
-      #      console.log("Len: " + len)
       return
 
-    #      console.log("Calc leads: #{@toString()}")
-    @lead1 = DrawHelper.interpPoint(@point1, @point2, (@dn - len) / (2 * @dn))
-    @lead2 = DrawHelper.interpPoint(@point1, @point2, (@dn + len) / (2 * @dn))
+    @lead1 = renderContext.interpolate(@point1, @point2, (@dn - len) / (2 * @dn))
+    @lead2 = renderContext.interpolate(@point1, @point2, (@dn + len) / (2 * @dn))
 
   isVertical: ->
     @dx == 0
@@ -410,7 +407,7 @@ class CircuitComponent
     return (value * 1e15).toFixed(decimalPoints) + " f" + unit  if absValue < 1e-12
     return (value * 1e12).toFixed(decimalPoints) + " p" + unit  if absValue < 1e-9
     return (value * 1e9).toFixed(decimalPoints) + " n" + unit  if absValue < 1e-6
-    return (value * 1e6).toFixed(decimalPoints) + " " + @muString + unit  if absValue < 1e-3
+    return (value * 1e6).toFixed(decimalPoints) + " μ" + unit  if absValue < 1e-3
     return (value * 1e3).toFixed(decimalPoints) + " m" + unit  if absValue < 1
     return (value).toFixed(decimalPoints) + " " + unit  if absValue < 1e3
     return (value * 1e-3).toFixed(decimalPoints) + " k" + unit  if absValue < 1e6

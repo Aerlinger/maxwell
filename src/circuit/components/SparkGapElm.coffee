@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -69,30 +68,34 @@ class SparkGapElm extends CircuitComponent
   getDumpType: ->
     187
 
-  setPoints: ->
-    super()
-
-    dist = 16
-    alen = 8
-    @calcLeads dist + alen
 
 #      p1 = DrawHelper.interpPoint(@point1, @point2, (@dn - alen) / (2 * @dn))
 #      @arrow1 = DrawHelper.calcArrow(@point1, p1, alen, alen)
 #      p1 = DrawHelper.interpPoint(@point1, @point2, (@dn + alen) / (2 * @dn))
 #      @arrow2 = DrawHelper.calcArrow(@point2, p1, alen, alen)
 
-#    draw: (renderContext) ->
-#      v1 = @volts[0]
-#      v2 = @volts[1]
-#      @setBboxPt @point1, @point2, 8
-#      @draw2Leads()
-#      @setPowerColor true
-#      color = @setVoltageColor(@volts[0])
-#      CircuitComponent.drawThickPolygonP @arrow1, color
-#      color = @setVoltageColor(@volts[1])
-#      CircuitComponent.drawThickPolygonP @arrow2, color
-#      @doDots() if @state
-#      @drawPosts()
+  draw: (renderContext) ->
+    @updateDots()
+
+    dist = 16
+    alen = 8
+    @calcLeads renderContext, dist + alen
+
+    v1 = @volts[0]
+    v2 = @volts[1]
+
+    @setBboxPt @point1, @point2, 8
+
+    renderContext.drawLeads()
+
+    color = renderContext.getVoltageColor(@volts[0])
+    CircuitComponent.drawThickPolygonP @arrow1, color
+
+    color = renderContext.getVoltageColor(@volts[1])
+    CircuitComponent.drawThickPolygonP @arrow2, color
+
+    renderContext.drawDots(@point1, @point2, this) if @state
+    renderContext.drawPosts()
 
   calculateCurrent: ->
     @current = (@volts[0] - @volts[1]) / @resistance

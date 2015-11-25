@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -51,15 +50,14 @@ class DiodeElm extends CircuitComponent
   getDumpType: ->
     "d"
 
-  setPoints: ->
-    super()
-    @calcLeads 16
-    @cathode = ArrayUtils.newPointArray(2)
-    [pa, pb] = DrawHelper.interpPoint2 @lead1, @lead2, 0, @hs
-    [@cathode[0], @cathode[1]] = DrawHelper.interpPoint2 @lead1, @lead2, 1, @hs
-    @poly = DrawHelper.createPolygonFromArray([pa, pb, @lead2])
-
   draw: (renderContext) ->
+    @calcLeads renderContext, 16
+
+    @cathode = ArrayUtils.newPointArray(2)
+    [pa, pb] = renderContext.interpolateSymmetrical @lead1, @lead2, 0, @hs
+    [@cathode[0], @cathode[1]] = renderContext.interpolateSymmetrical @lead1, @lead2, 1, @hs
+    @poly = renderContext.renderContext([pa, pb, @lead2])
+
     @drawDiode(renderContext)
     @drawDots(@point1, @point2, renderContext)
     @drawPosts(renderContext)
@@ -78,13 +76,13 @@ class DiodeElm extends CircuitComponent
 
     # draw arrow
     #this.setPowerColor(true);
-    color = DrawHelper.getVoltageColor(v1)
+    color = renderContext.getVoltageColor(v1)
     renderContext.drawThickPolygonP @poly, color
 
     #g.fillPolygon(poly);
 
     # draw the diode plate
-    color = DrawHelper.getVoltageColor(v2)
+    color = renderContext.getVoltageColor(v2)
     renderContext.drawLinePt @cathode[0], @cathode[1], color
 
   stamp: (stamper) ->
@@ -99,10 +97,10 @@ class DiodeElm extends CircuitComponent
   getInfo: (arr) ->
     super()
     arr[0] = "diode"
-    arr[1] = "I = " + DrawHelper.getCurrentText(@getCurrent())
-    arr[2] = "Vd = " + DrawHelper.getVoltageText(@getVoltageDiff())
-    arr[3] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
-    arr[4] = "Vf = " + DrawHelper.getVoltageText(@fwdrop)
+    arr[1] = "I = " + @getUnitText(@getCurrent(), "A")
+    arr[2] = "Vd = " + @getUnitText(@getVoltageDiff(), "V")
+    arr[3] = "P = " + @getUnitText(@getPower(), "W")
+    arr[4] = "Vf = " + @getUnitText(@fwdrop, "V")
 
   toString: ->
     "DiodeElm"

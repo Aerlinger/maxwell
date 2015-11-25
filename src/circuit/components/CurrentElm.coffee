@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -24,27 +23,25 @@ class CurrentElm extends CircuitComponent
   getDumpType: ->
     "i"
 
-  setPoints: ->
-    super()
-
-    @calcLeads 26
-
-    @ashaft1 = DrawHelper.interpPoint(@lead1, @lead2, .25)
-    @ashaft2 = DrawHelper.interpPoint(@lead1, @lead2, .6)
-    @center = DrawHelper.interpPoint(@lead1, @lead2, .5)
-
-    p2 = DrawHelper.interpPoint(@lead1, @lead2, .75)
-
-    @arrow = DrawHelper.calcArrow(@center, p2, 4, 4)
-
   draw: (renderContext) ->
+    @calcLeads renderContext, 26
+
+    @ashaft1 = renderContext.interpolate(@lead1, @lead2, .25)
+    @ashaft2 = renderContext.interpolate(@lead1, @lead2, .6)
+    @center = renderContext.interpolate(@lead1, @lead2, .5)
+
+    p2 = renderContext.interpolate(@lead1, @lead2, .75)
+
+    @arrow = renderContext.calcArrow(@center, p2, 4, 4)
+
     cr = 12
-    renderContext.draw2Leads(this)
+    renderContext.drawLeads(this)
     color = renderContext.getVoltageColor (@volts[0] + @volts[1]) / 2
 #      @setPowerColor false
     renderContext.drawCircle @center.x, @center.y, cr
     renderContext.drawCircle @ashaft1, @ashaft2
     renderContext.fillPolygon @arrow
+
     renderContext.setBboxPt @point1, @point2, cr
 
 #      if Circuit.showValuesCheckItem
@@ -52,7 +49,7 @@ class CurrentElm extends CircuitComponent
 #        @drawValues s, cr  if @dx is 0 or @dy is 0
 
     renderContext.drawPosts(this)
-    renderContext.doDots(this)
+    renderContext.drawDots(@point1, @lead1, this)
 
   stamp: (stamper) ->
     @current = @currentValue

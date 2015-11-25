@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -59,25 +58,25 @@ class CapacitorElm extends CircuitComponent
 
   setPoints: ->
     super()
+
+  draw: (renderContext) ->
     f = (@dn / 2 - 4) / @dn
 
     # calc leads
-    @lead1 = DrawHelper.interpPoint(@point1, @point2, f)
-    @lead2 = DrawHelper.interpPoint(@point1, @point2, 1 - f)
+    @lead1 = renderContext.interpolateSymmetrical(@point1, @point2, f)
+    @lead2 = renderContext.interpolateSymmetrical(@point1, @point2, 1 - f)
 
     # calc plates
     @plate1 = [new Point(), new Point()]
     @plate2 = [new Point(), new Point()]
-    [@plate1[0], @plate1[1]] = DrawHelper.interpPoint2 @point1, @point2, f, 12
-    [@plate2[0], @plate2[1]] = DrawHelper.interpPoint2 @point1, @point2, 1 - f, 12
+    [@plate1[0], @plate1[1]] = renderContext.interpolateSymmetrical @point1, @point2, f, 12
+    [@plate2[0], @plate2[1]] = renderContext.interpolateSymmetrical @point1, @point2, 1 - f, 12
 
-
-  draw: (renderContext) ->
     hs = 12
     @setBboxPt @point1, @point2, hs
 
     # draw first lead and plate
-    color = DrawHelper.getVoltageColor(@volts[0])
+    color = renderContext.getVoltageColor(@volts[0])
     renderContext.drawLinePt @point1, @lead1, color
 #      @setPowerColor false
     renderContext.drawLinePt @plate1[0], @plate1[1], color
@@ -87,20 +86,20 @@ class CapacitorElm extends CircuitComponent
     #        g.beginFill(Color.GRAY);
 
     # draw second lead and plate
-    color = DrawHelper.getVoltageColor(@volts[1])
+    color = renderContext.getVoltageColor(@volts[1])
     renderContext.drawLinePt @point2, @lead2, color
 #      @setPowerColor false
     renderContext.drawLinePt @plate2[0], @plate2[1], color
 
-    @drawDots @point1, @lead1, renderContext
+    renderContext.drawDots @point1, @lead1, this
 #      @drawDots @point2, @lead2, renderContext
-    @drawDots @lead2, @point2, renderContext
+    renderContext.drawDots @lead2, @point2, this
 
-    @drawPosts(renderContext)
+    renderContext.drawPosts(this)
 
 
   drawUnits: ->
-    s = DrawHelper.getUnitText(@capacitance, "F")
+    s = @getUnitText(@capacitance, "F")
     @drawValues s, hs
 
   doStep: (stamper) ->
@@ -142,10 +141,10 @@ class CapacitorElm extends CircuitComponent
 
     arr[0] = "capacitor"
     @getBasicInfo arr
-    arr[3] = "C = " + DrawHelper.getUnitText(@capacitance, "F")
-    arr[4] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
+    arr[3] = "C = " + @getUnitText(@capacitance, "F")
+    arr[4] = "P = " + @getUnitText(@getPower(), "W")
     v = @getVoltageDiff()
-    arr[4] = "U = " + DrawHelper.getUnitText(.5 * @capacitance * v * v, "J")
+    arr[4] = "U = " + @getUnitText(.5 * @capacitance * v * v, "J")
 
   needsShortcut: ->
     true

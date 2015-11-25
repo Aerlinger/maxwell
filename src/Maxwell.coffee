@@ -1,7 +1,6 @@
 CircuitLoader = require('./io/CircuitLoader.coffee')
 Circuit = require('./circuit/circuit.coffee')
 Renderer = require('./render/renderer.coffee')
-DrawHelper = require('./render/drawHelper.coffee')
 
 class Maxwell
   version = "0.0.0"

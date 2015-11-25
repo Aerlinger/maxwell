@@ -184,8 +184,6 @@ class Circuit extends Observer
     maxX = -10000000000
     maxY = -10000000000
 
-    console.log("RECOMPUTING BOUNDS!")
-
     @eachComponent (component) ->
       componentBounds = component.boundingBox
 

@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -28,22 +27,20 @@ class ZenerElm extends DiodeElm
 
     @setup()
 
-  setPoints: ->
-    super()
+  draw: (renderContext) ->
+    @updateDots()
+    @setBboxPt(@point1, @point2, @hs)
 
-    @calcLeads(16)
+    @calcLeads renderContext, 16
     pa = ArrayUtils.newPointArray(2)
     @wing = ArrayUtils.newPointArray(2)
 
-    [pa[0], pa[1]] = DrawHelper.interpPoint2(@lead1, @lead2, 0, @hs)
-    [@cathode[0], @cathode[1]] = DrawHelper.interpPoint2(@lead1, @lead2, 1, @hs)
-    @wing[0] = DrawHelper.interpPoint(@cathode[0], @cathode[1], -0.2, -@hs)
-    @wing[1] = DrawHelper.interpPoint(@cathode[1], @cathode[0], -0.2, -@hs)
+    [pa[0], pa[1]] = renderContext.interpolateSymmetrical(@lead1, @lead2, 0, @hs)
+    [@cathode[0], @cathode[1]] = renderContext.interpolateSymmetrical(@lead1, @lead2, 1, @hs)
+    @wing[0] = renderContext.interpolate(@cathode[0], @cathode[1], -0.2, -@hs)
+    @wing[1] = renderContext.interpolate(@cathode[1], @cathode[0], -0.2, -@hs)
 
-    @poly = DrawHelper.createPolygonFromArray([pa[0], pa[1], @lead2])
-
-  draw: (renderContext) ->
-    @setBboxPt(@point1, @point2, @hs)
+    @poly = renderContext.createPolygonFromArray([pa[0], pa[1], @lead2])
 
     v1 = @volts[0]
     v2 = @volts[1]

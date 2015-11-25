@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -37,13 +36,7 @@ class InductorElm extends CircuitComponent
     @curSourceValue = 0
 
     super(xa, ya, xb, yb, params)
-    #      @ind = new Inductor()
-#    if st
-#      st = st.split(" ")  if typeof st is "string"
-#      @inductance = parseFloat(st[0])
-#      @current = parseFloat(st[1])
 
-#      @ind.setup @inductance, @current, @flags
 
   stamp: (stamper) ->
     # Inductor companion model using trapezoidal or backward euler
@@ -56,12 +49,8 @@ class InductorElm extends CircuitComponent
 
     ts = @getParentCircuit().timeStep()
 
-#    console.log ts
-#    console.log @inductance
-
     if @isTrapezoidal()
       @compResistance = 2 * @inductance / ts
-      # backward euler
     else
       @compResistance = @inductance / ts
 
@@ -73,10 +62,9 @@ class InductorElm extends CircuitComponent
   doStep: (stamper) ->
     stamper.stampCurrentSource @nodes[0], @nodes[1], @curSourceValue
 
-#      voltdiff = @volts[0] - @volts[1]
-#      @ind.doStep stamper, voltdiff
-
   draw: (renderContext) ->
+    @calcLeads renderContext, 32
+
     @updateDots()
 
     v1 = @volts[0]
@@ -87,8 +75,7 @@ class InductorElm extends CircuitComponent
     renderContext.drawLeads(this)
     renderContext.drawCoil @lead1, @lead2, v1, v2, renderContext
 
-    unit_text = @getUnitText(@inductance, "H")
-    renderContext.drawValue 0, 0, this, unit_text
+    renderContext.drawValue 0, 0, this, @getUnitText(@inductance, "H")
 
     renderContext.drawDots(@point1, @point2, this)
     renderContext.drawPosts(this)
@@ -119,25 +106,20 @@ class InductorElm extends CircuitComponent
   getInfo: (arr) ->
     arr[0] = "inductor"
     @getBasicInfo arr
-    arr[3] = "L = " + DrawHelper.getUnitText(@inductance, "H")
-    arr[4] = "P = " + DrawHelper.getUnitText(@getPower(), "W")
+    arr[3] = "L = " + @getUnitText(@inductance, "H")
+    arr[4] = "P = " + @getUnitText(@getPower(), "W")
 
   reset: ->
     @current = 0
     @volts[0] = 0
     @volts[1] = 0
     @curcount = 0
-#      @ind.reset()
 
   getVoltageDiff: ->
     @volts[0] - @volts[1]
 
   toString: ->
     "InductorElm"
-
-  setPoints: ->
-    super()
-    @calcLeads 32
 
 
 module.exports = InductorElm

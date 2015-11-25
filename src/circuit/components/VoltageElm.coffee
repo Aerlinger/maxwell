@@ -149,13 +149,14 @@ class VoltageElm extends CircuitComponent
 
   setPoints: ->
     super()
-    if(@waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR)
-      @calcLeads 8
-    else
-      @calcLeads(VoltageElm.circleSize * 2)
 
   draw: (renderContext) ->
     @updateDots()
+
+    if(@waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR)
+      @calcLeads renderContext, 8
+    else
+      @calcLeads renderContext, VoltageElm.circleSize * 2
 
     @setBbox @x1, @y2, @x2, @y2
     renderContext.drawLeads(this)

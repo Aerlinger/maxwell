@@ -1,5 +1,4 @@
 Settings = require('../../settings/settings.coffee')
-DrawHelper = require('../../render/drawHelper.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
@@ -65,13 +64,13 @@ class SweepElm extends CircuitComponent
   getPostCount: ->
     1
 
-  setPoints: ->
-    CircuitComponent::setPoints.call this
-    @lead1 = DrawHelper.interpPoint(@point1, @point2, 1 - @circleSize / @dn)
 
-  draw: ->
+  draw: (renderContext) ->
     @setBboxPt @point1, @point2, @circleSize
     color = @setVoltageColor(@volts[0])
+
+    @lead1 = DrawHelper.interpPoint(@point1, @point2, 1 - @circleSize / @dn)
+
     CircuitComponent.drawThickLinePt @point1, @lead1, color
 #    @setVoltageColor (if @needsHighlight() then CircuitComponent.selectColor else Color.GREY)
 
