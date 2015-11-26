@@ -1,5 +1,5 @@
-Circuit = require('../../src/circuit/circuit.coffee')
 CircuitLoader = require('../../src/io/CircuitLoader.coffee')
+#Circuit = require('../../src/circuit/circuit.coffee')
 
 describe "Simple single diode circuit", ->
   beforeEach (done) ->
@@ -55,6 +55,7 @@ describe "Simple single diode circuit", ->
         "params": []
       }
     ]
+#    new Circuit()
 
     @Circuit = CircuitLoader.createCircuitFromJsonData(@json)
 

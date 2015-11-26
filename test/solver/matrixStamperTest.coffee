@@ -1,12 +1,11 @@
 MatrixStamper = require('../../src/engine/matrixStamper.coffee')
-CircuitSolver = require('../../src/engine/circuitSolver.coffee')
 Circuit = require('../../src/circuit/circuit.coffee')
 
 describe "Matrix stamper", ->
 
   beforeEach ->
     @Circuit = new Circuit()
-    @CircuitSolver = new CircuitSolver(@Circuit)
+    @CircuitSolver = @Circuit.Solver
     @MatrixStamper = new MatrixStamper(@Circuit)
 
   it "should stamp VCVS", ->

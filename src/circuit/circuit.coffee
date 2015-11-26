@@ -30,6 +30,33 @@ Observer = require('../util/observer.coffee')
 Rectangle = require('../geom/rectangle.coffee')
 
 class Circuit extends Observer
+  @components = [
+# Working
+    "WireElm"
+    "ResistorElm"
+    "GroundElm"
+    "InductorElm"
+    "CapacitorElm"
+    "VoltageElm"
+    "DiodeElm"
+    "SwitchElm"
+    "SparkGapElm"
+    "OpAmpElm"
+    "MosfetElm"
+
+# Testing
+    "RailElm"
+    "VarRailElm"
+    "ZenerElm"
+    "CurrentElm"
+    "TransistorElm"
+
+# In progress:
+    "Switch2Elm"  # Needs interaction
+    "TextElm"
+    "ProbeElm"
+    "OutputElm"
+  ]
 
   # Messages Dispatched to listeners:
   ####################################################################################################################

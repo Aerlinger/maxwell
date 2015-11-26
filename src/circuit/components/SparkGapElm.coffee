@@ -129,8 +129,8 @@ class SparkGapElm extends CircuitComponent
     arr[0] = "spark gap"
     @getBasicInfo arr
     arr[3] = (if @state then "on" else "off")
-    arr[4] = "Ron = " + @getUnitText(@onresistance, Maxwell.OhmSymbol)
-    arr[5] = "Roff = " + @getUnitText(@offresistance, Maxwell.OhmSymbol)
+    arr[4] = "Ron = " + @getUnitText(@onresistance, "Ω")
+    arr[5] = "Roff = " + @getUnitText(@offresistance, "Ω")
     arr[6] = "Vbreakdown = " + @getUnitText(@breakdown, "V")
 
   needsShortcut: ->

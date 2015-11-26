@@ -1,11 +1,10 @@
-CircuitSolver = require('../../src/engine/circuitSolver.coffee')
 Circuit = require('../../src/circuit/circuit.coffee')
 
 describe "Matrix Solver", ->
 
   beforeEach ->
     @Circuit = new Circuit()
-    @Solver = new CircuitSolver(@Circuit)
+    @Solver = @Circuit.Solver
 
   describe "calling lu_factor", ->
     beforeEach ->

@@ -50,12 +50,14 @@
     "on-finished": "^2.3.0",
     "range-parser": "^1.0.3",
     "serve-static": "^1.10.0",
+    "should": "^7.1.1",
     "sinon": "~1.6.0",
     "statuses": "^1.2.1",
     "tiny-lr": "^0.2.1",
     "watchify": "^3.6.1"
   },
   "scripts": {
+    "test": "mocha -w --compilers coffee:coffee-script/register",
     "start": "node app",
     "postinstall": "npm rebuild gulp-cli"
   }

@@ -1,0 +1,5 @@
+--compilers coffee:coffee-script/register
+--recursive
+-R spec
+-u bdd
+-w

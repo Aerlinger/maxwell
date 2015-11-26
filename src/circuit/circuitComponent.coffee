@@ -19,36 +19,7 @@ Rectangle = require('../geom/rectangle.coffee')
 Point = require('../geom/point.coffee')
 MathUtils = require('../util/mathUtils.coffee')
 ArrayUtils = require('../util/arrayUtils.coffee')
-Circuit = require('./Circuit.coffee')
-
-Circuit.components = [
-  # Working
-  "WireElm"
-  "ResistorElm"
-  "GroundElm"
-  "InductorElm"
-  "CapacitorElm"
-  "VoltageElm"
-  "DiodeElm"
-  "SwitchElm"
-  "SparkGapElm"
-  "OpAmpElm"
-  "MosfetElm"
-
-  # Testing
-  "RailElm"
-  "VarRailElm"
-  "ZenerElm"
-  "CurrentElm"
-  "TransistorElm"
-
-  # In progress:
-  "Switch2Elm"  # Needs interaction
-  "TextElm"
-  "ProbeElm"
-  "OutputElm"
-]
-
+Circuit = require('./circuit.coffee')
 
 class CircuitComponent
   @ParameterDefinitions = {}

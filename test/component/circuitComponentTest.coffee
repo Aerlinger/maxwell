@@ -2,7 +2,6 @@ Polygon = require("../../src/geom/polygon.coffee")
 Rectangle = require("../../src/geom/rectangle.coffee")
 Point = require("../../src/geom/point.coffee")
 CircuitComponent = require("../../src/circuit/circuitComponent.coffee")
-CircuitSolver = require("../../src/engine/circuitSolver.coffee")
 
 Circuit = require('../../src/circuit/circuit.coffee')
 

@@ -1,9 +1,10 @@
-ComponentRegistry = require('../circuit/ComponentRegistry.coffee')
-SimulationParams = require('../core/SimulationParams.coffee')
+ComponentRegistry = require('../circuit/componentRegistry.coffee')
+SimulationParams = require('../core/simulationParams.coffee')
 
-Circuit = require('../circuit/Circuit.coffee')
-Oscilloscope = require('../scope/Oscilloscope.coffee')
-Hint = require('../engine/Hint.coffee')
+Circuit = require('../circuit/circuit.coffee')
+CircuitComponent = require('../circuit/circuitComponent.coffee')
+Oscilloscope = require('../scope/oscilloscope.coffee')
+Hint = require('../engine/hint.coffee')
 
 class CircuitLoader
   @createCircuitFromJsonData: (jsonData) ->

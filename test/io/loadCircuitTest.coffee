@@ -8,6 +8,7 @@ describe "CircuitLoader", ->
       voltdividesimple = JSON.parse(fs.readFileSync("./circuits/voltdividesimple.json"))
 
       @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
+      done()
 
     it "have only 7 elements", ->
       @circuit.numElements().should.equal 7

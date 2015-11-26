@@ -1,10 +1,10 @@
 fs = require('fs')
-Wire = require('../../src/circuit/components/WireElm.coffee')
-GroundElm = require('../../src/circuit/components/GroundElm.coffee')
-ResistorElm = require('../../src/circuit/components/ResistorElm.coffee')
-VoltageElm = require('../../src/circuit/components/VoltageElm.coffee')
+Wire = require('../../../src/circuit/components/WireElm.coffee')
+GroundElm = require('../../../src/circuit/components/GroundElm.coffee')
+ResistorElm = require('../../../src/circuit/components/ResistorElm.coffee')
+VoltageElm = require('../../../src/circuit/components/VoltageElm.coffee')
 #Renderer = require('../../src/render/renderer.coffee')
-Maxwell = require('../../src/Maxwell.coffee')
+Maxwell = require('../../../src/Maxwell.coffee')
 
 describe "Should render", ->
   before ->

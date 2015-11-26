@@ -1,4 +1,4 @@
-CircuitComponent = require('./CircuitComponent.coffee')
+CircuitComponent = require('./circuitComponent.coffee')
 WireElm = require('./components/WireElm.coffee')
 ResistorElm = require('./components/ResistorElm.coffee')
 GroundElm = require('./components/GroundElm.coffee')

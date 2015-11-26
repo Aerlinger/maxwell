@@ -3,7 +3,7 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 CircuitComponent = require('../circuitComponent.coffee')
-Maxwell = require('../../Maxwell.coffee')
+#Maxwell = require('../../Maxwell.coffee')
 
 
 class ResistorElm extends CircuitComponent
@@ -12,7 +12,7 @@ class ResistorElm extends CircuitComponent
       name: "Resistance"
       unit: "Ohms",
       default_value: 1000,
-      symbol: Maxwell.OhmSymbol,
+      symbol: "Ω",
       data_type: "float"
       range: [0, Infinity]
       type: "physical"

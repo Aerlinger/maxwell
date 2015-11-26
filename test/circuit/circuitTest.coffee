@@ -1,9 +1,10 @@
 Circuit = require('../../src/circuit/circuit.coffee')
 ResistorElm = require('../../src/circuit/components/ResistorElm.coffee')
 
-describe "Circuit", ->
-  beforeEach ->
+xdescribe "Circuit", ->
+  beforeEach (done)->
     @Circuit = new Circuit()
+    done()
 
   describe "initial state", ->
     it "has no errors", ->
