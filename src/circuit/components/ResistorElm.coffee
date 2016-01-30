@@ -22,6 +22,9 @@ class ResistorElm extends CircuitComponent
   constructor: (xa, ya, xb, yb, params) ->
     super(xa, ya, xb, yb, params)
 
+  value: ->
+    @resistance
+
   draw: (renderContext) ->
     @calcLeads renderContext, 32
     @updateDots()
@@ -51,9 +54,6 @@ class ResistorElm extends CircuitComponent
 
     renderContext.drawDots(@point1, @point2, this)
     renderContext.drawPosts(this)
-
-  value: ->
-    @resistance
 
   unitSymbol: ->
     "Ω"
