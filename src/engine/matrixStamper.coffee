@@ -11,16 +11,21 @@ class MatrixStamper
   stampVCVS: (n1, n2, coef, vs) ->
     if isNaN(vs) or isNaN(coef)
       console.warn("NaN in stampVCVS")
+
+    console.log("stamp VCVS" + " " + n1 + " " + n2 + " " + coef + " " + vs);
+
     vn = @Circuit.numNodes() + vs
+
     @stampMatrix vn, n1, coef
     @stampMatrix vn, n2, -coef
 
 
   # stamp independent voltage source #vs, from n1 to n2, amount v
-  stampVoltageSource: (n1, n2, vs, v) ->
+  stampVoltageSource: (n1, n2, vs, v = null) ->
     vn = @Circuit.numNodes() + vs
-#    console.log("Stamp voltage source " + " " + n1 + " " + n2 + " " + vs + " " + v)
-#      console.log("v = #{v}")
+
+    console.log("Stamp voltage source " + " " + n1 + " " + n2 + " " + vs + " " + v)
+
     @stampMatrix vn, n1, -1
     @stampMatrix vn, n2, 1
     @stampRightSide vn, v
@@ -40,6 +45,9 @@ class MatrixStamper
       @Circuit.halt "bad resistance"
       a = 0
       a /= a
+
+    console.log("Stamp resistor: " + n1 + " " + n2 + " " + r + " ");
+
     @stampMatrix n1, n1, r0
     @stampMatrix n2, n2, r0
     @stampMatrix n1, n2, -r0
@@ -49,6 +57,9 @@ class MatrixStamper
   stampConductance: (n1, n2, r0) ->
     if isNaN(r0) or MathUtils.isInfinite(r0)
       @Circuit.halt "bad conductance"
+
+    console.log("Stamp conductance: " + n1 + " " + n2 + " " + r0 + " ");
+
     @stampMatrix n1, n1, r0
     @stampMatrix n2, n2, r0
     @stampMatrix n1, n2, -r0
@@ -62,6 +73,8 @@ class MatrixStamper
     if isNaN(gain) or MathUtils.isInfinite(gain)
       @Circuit.halt "Invalid gain on voltage controlled current source"
 
+    console.log("stampVCCurrentSource: " + cn1 + " " + cn2 + " " + vn1 + " " + vn2 + " " + value)
+
     @stampMatrix cn1, vn1, value
     @stampMatrix cn2, vn2, value
     @stampMatrix cn1, vn2, -value
@@ -69,6 +82,8 @@ class MatrixStamper
 
 
   stampCurrentSource: (n1, n2, value) ->
+    console.log("stampCurrentSource: " + n1 + " " + n2 + " " + value);
+
     @stampRightSide n1, -value
     @stampRightSide n2, value
 
@@ -79,6 +94,8 @@ class MatrixStamper
   stampCCCS: (n1, n2, vs, gain) ->
     if isNaN(gain) or MathUtils.isInfinite(gain)
       @Circuit.halt "Invalid gain on current source"
+
+    console.log("stampCurrentSource: " + n1 + " " + n2 + " " + vs + " " + gain);
 
     vn = @Circuit.numNodes() + vs
     @stampMatrix n1, vn, gain
@@ -94,11 +111,15 @@ class MatrixStamper
     if isNaN(value) or MathUtils.isInfinite(value)
       @Circuit.halt "attempted to stamp Matrix with invalid value"
 
+    console.log("stampMatrix: " + row + " " + col + " " + value);
+
     if row > 0 and col > 0
       if @Circuit.Solver.circuitNeedsMap
+#        console.log("STAMP MATRIX if @Circuit.Solver.circuitNeedsMap", row, col, value)
         row = @Circuit.Solver.circuitRowInfo[row - 1].mapRow
         rowInfo = @Circuit.Solver.circuitRowInfo[col - 1]
         if rowInfo.type is RowInfo.ROW_CONST
+#          console.log("if rowInfo.type is RowInfo.ROW_CONST", row, col, value)
           @Circuit.Solver.circuitRightSide[row] -= value * rowInfo.value
           return
         col = rowInfo.mapCol
@@ -115,13 +136,14 @@ class MatrixStamper
   ###
   stampRightSide: (row, value) ->
     if isNaN(value) or value == null
-#        console.warn("NaN in stampRightSide")
       if row > 0
+        console.log("rschanges true " + (row - 1));
         @Circuit.Solver.circuitRowInfo[row - 1].rsChanges = true
 #        console.log("rschanges true " + (row-1))
     else
       if row > 0
         if @Circuit.Solver.circuitNeedsMap
+#          console.log("if @Circuit.Solver.circuitNeedsMap", row, col, value)
           row = @Circuit.Solver.circuitRowInfo[row - 1].mapRow
 #            console.log("stamping rs " + row + " " + value);
         else

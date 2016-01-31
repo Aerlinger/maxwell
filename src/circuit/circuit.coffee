@@ -28,6 +28,7 @@ SimulationParams = require('../core/simulationParams.coffee')
 CircuitSolver = require('../engine/circuitSolver.coffee')
 Observer = require('../util/observer.coffee')
 Rectangle = require('../geom/rectangle.coffee')
+FormatUtils = require('../util/FormatUtils.coffee')
 
 
 class Circuit extends Observer
@@ -146,6 +147,21 @@ class Circuit extends Observer
   invalidate: ->
     @Solver.analyzeFlag = true
 
+  dump: ->
+    out = ""
+
+    for elm in @getElements()
+      dumpType = elm.getDumpType()
+      voltDiff = elm.getVoltageDiff()
+      current = elm.getCurrent()
+
+      circuitComponentOut = dumpType +
+        ", b: [" + elm.getBoundingBox().x + ", " + elm.getBoundingBox().y + ", " + elm.getBoundingBox().width + ", " + elm.getBoundingBox().height + "]" + ", vdiff: " + voltDiff + ", i: " + current;
+
+      out += circuitComponentOut + "\n"
+
+    out
+
 
   ####################################################################################################################
   ### Simulation Frame Computation
@@ -167,6 +183,9 @@ class Circuit extends Observer
       @Solver.lastTime = 0
     else
       @Solver.solveCircuit()
+
+    console.log(@Solver.dump())
+    console.log(@dump() + "\n")
 
     @notifyObservers(@ON_COMPLETE_UPDATE)
 

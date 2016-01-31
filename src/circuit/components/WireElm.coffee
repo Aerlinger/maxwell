@@ -32,9 +32,8 @@ class WireElm extends CircuitComponent
     renderContext.drawPosts(this)
 
 
-
   stamp: (stamper) ->
-#    console.log("\nStamping Wire Elm")
+    console.log("\n::Stamping WireElm::")
     stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
 
   mustShowCurrent: ->

@@ -114,7 +114,7 @@ class VoltageElm extends CircuitComponent
     1 - (x - Math.PI) * (2 / Math.PI)
 
   stamp: (stamper) ->
-#    console.log("\nStamping Voltage Elm")
+    console.log("\n::Stamping Voltage Elm #{@waveform}")
     if @waveform is VoltageElm.WF_DC
       stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
     else

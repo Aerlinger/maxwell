@@ -5,8 +5,6 @@ Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 #Maxwell = require('../../Maxwell.coffee')
 
-console.log("ResistorElm extending", CircuitComponent)
-
 class ResistorElm extends CircuitComponent
   @ParameterDefinitions = {
     "resistance": {
@@ -77,6 +75,8 @@ class ResistorElm extends CircuitComponent
     @current = (@volts[0] - @volts[1]) / @resistance
 
   stamp: (stamper) ->
+    console.log("\n::Stamping Resistor::")
+
     if @orphaned()
       console.warn "attempting to stamp an orphaned resistor"
 

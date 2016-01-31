@@ -1,3 +1,5 @@
+sprintf = require("sprintf-js").sprintf
+
 class FormatUtils
 
   @showFormat: (decimalNum) ->
@@ -8,6 +10,9 @@ class FormatUtils
 
   @longFormat: (decimalNum) ->
     decimalNum.toPrecision(4)
+
+  @tidyFloat: (f) ->
+    sprintf("%0.2f", f)
 
   ###
   Removes commas from a number containing a string:

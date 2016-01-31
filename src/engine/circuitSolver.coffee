@@ -6,6 +6,7 @@ CircuitNodeLink = require('./circuitNodeLink.coffee')
 RowInfo = require('./rowInfo.coffee')
 Setting = require('../settings/settings.coffee')
 ArrayUtils = require('../util/ArrayUtils.coffee')
+FormatUtils = require('../util/FormatUtils.coffee')
 
 GroundElm = require('../circuit/components/GroundElm.coffee')
 RailElm = require('../circuit/components/RailElm.coffee')
@@ -293,13 +294,18 @@ class CircuitSolver
             return
 
     # Simplify the matrix to improve performance
-    for i in [0...@matrixSize]
+    i=-1
+    while i < @matrixSize-1
+      i += 1
+
+#    for i in [0...@matrixSize]
       qm = -1
       qp = -1
       qv = 0
 
       re = @circuitRowInfo[i]
       if re.lsChanges or re.dropRow or re.rsChanges
+        console.log("CONT: " + re.toString())
         continue
 
       rsadd = 0
@@ -322,6 +328,8 @@ class CircuitSolver
           qm = j
           continue
         break
+
+      console.log(i, j, ":", qm, qp, qv, q)
 
       if j is @matrixSize
         if qp is -1
@@ -346,6 +354,8 @@ class CircuitSolver
 
           elt.type = RowInfo.ROW_CONST
           elt.value = (@circuitRightSide[i] + rsadd) / qv
+
+          console.log(i + " qm is -1: @circuitRowInfo[i].dropRow = true")
           @circuitRowInfo[i].dropRow = true
 
 #          console.warn("iter = 0 # start over from scratch")
@@ -364,6 +374,7 @@ class CircuitSolver
               continue
           elt.type = RowInfo.ROW_EQUAL
           elt.nodeEq = qm
+          console.log(i + " else if (@circuitRightSide[i] + rsadd) is 0")
           @circuitRowInfo[i].dropRow = true
 
 
@@ -380,6 +391,7 @@ class CircuitSolver
           rowNodeEq = @circuitRowInfo[rowInfo.nodeEq]
           break  unless rowNodeEq.type is RowInfo.ROW_EQUAL
           break  if i is rowNodeEq.nodeEq
+          console.log("rowInfo.nodeEq = rowNodeEq.nodeEq")
           rowInfo.nodeEq = rowNodeEq.nodeEq
       rowInfo.mapCol = -1  if rowInfo.type is RowInfo.ROW_CONST
 
@@ -405,6 +417,9 @@ class CircuitSolver
     ii = 0
     for i in [0...@matrixSize]
       circuitRowInfo = @circuitRowInfo[i]
+
+      console.log(circuitRowInfo.toString());
+
       if circuitRowInfo.dropRow
         circuitRowInfo.mapRow = -1
         continue
@@ -552,9 +567,6 @@ class CircuitSolver
 #    if (nFrames % 100 == 0 || nFrames == 1)
 #      this.dump(writer);
 
-#    console.log("VSCount: ", voltageSourceCount)
-    console.log(@dump())
-
     @_updateTimings(lit)
 
   ###
@@ -687,9 +699,6 @@ class CircuitSolver
       circuitRightSide[i] = total / circuitMatrix[i][i]
       i--
 
-  tidyFloat: (f) ->
-    sprintf("%0.2f", f)
-
   dump: ->
     matrixRowCount = @circuitRightSide.length
 
@@ -699,12 +708,12 @@ class CircuitSolver
     circuitRightSideDump = ""
 
     for i in [0...matrixRowCount]
-      circuitRightSideDump += @tidyFloat(@circuitRightSide[i])
+      circuitRightSideDump += FormatUtils.tidyFloat(@circuitRightSide[i])
 #      circuitMatrixDump += @tidyFloat(@circuitRightSide[i])
 
       circuitMatrixDump += "["
       for j in [0...matrixRowCount]
-        circuitMatrixDump += @tidyFloat(@circuitMatrix[i][j])
+        circuitMatrixDump += FormatUtils.tidyFloat(@circuitMatrix[i][j])
 
         if(j != matrixRowCount - 1)
           circuitMatrixDump += ", "
@@ -715,23 +724,12 @@ class CircuitSolver
         circuitRightSideDump += ", "
         circuitMatrixDump += ", "
 
-    out += sprintf("%d %.2f %d %d\n", @frames, @Circuit.time, @subIterations, matrixRowCount)
+    out += sprintf("%d %.7f %d %d\n", @Circuit.iterations, @Circuit.time, @subIterations, matrixRowCount)
     out += circuitMatrixDump + "\n"
-    out += circuitRightSideDump + "\n"
+    out += circuitRightSideDump
 
-    for elm in @Circuit.getElements()
-      dumpType = elm.getDumpType()
-      voltDiff = @tidyFloat(elm.getVoltageDiff())
-      current = @tidyFloat(elm.getCurrent())
+    out
 
-      circuitComponentOut = dumpType +
-        ", b: [" + elm.getBoundingBox().x + ", " + elm.getBoundingBox().y + ", " + elm.getBoundingBox().width + ", " + elm.getBoundingBox().height + "]" + ", vdiff: " + voltDiff + ", i: " + current;
-
-      out += circuitComponentOut + "\n"
-
-    out += "\n"
-
-    return  out
 
 
 module.exports = CircuitSolver
