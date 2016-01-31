@@ -9,3 +9,4 @@ src/**/*.js
 npm-debug.log
 build/
 scripts/
+dump/*.json

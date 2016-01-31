@@ -17,6 +17,7 @@ class FormatUtils
 
     sprintf("#{sign}%0.2f", f)
 
+
   ###
   Removes commas from a number containing a string:
   e.g. 1,234,567.99 -> 1234567.99
@@ -30,7 +31,7 @@ class FormatUtils
     arrayStr = "["
 
     for i in [0...arrLen]
-      arrayStr += FormatUtils.tidyFloat(array[i])
+      arrayStr += array[i]
 
       if(i != arrLen - 1)
         arrayStr += ", "
@@ -45,7 +46,6 @@ class FormatUtils
     circuitMatrixDump = "["
 
     for i in [0...arrLen]
-
       circuitMatrixDump += "["
       for j in [0...arrLen]
         circuitMatrixDump += FormatUtils.tidyFloat(matrix[i][j])

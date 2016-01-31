@@ -61,13 +61,13 @@ class RailElm extends VoltageElm
 #      super()
 
   stamp: (stamper) ->
-    console.log("\n::Stamping RailElm:: " + @waveform)
-    if @waveform is VoltageElm.WF_DC
-      console.log("STAMP DC")
-      stamper.stampVoltageSource 0, @nodes[0], @voltSource, @getVoltage()
-    else
-      console.log("STAMP PLAIN")
-      stamper.stampVoltageSource 0, @nodes[0], @voltSource
+#    console.log("\n::Stamping RailElm:: " + @waveform)
+#    if @waveform is VoltageElm.WF_DC
+#      console.log("STAMP DC")
+#      stamper.stampVoltageSource 0, @nodes[0], @voltSource, @getVoltage()
+#    else
+#      console.log("STAMP PLAIN")
+    stamper.stampVoltageSource 0, @nodes[0], @voltSource
 
   doStep: (stamper) ->
     stamper.updateVoltageSource 0, @nodes[0], @voltSource, @getVoltage() unless @waveform is VoltageElm.WF_DC

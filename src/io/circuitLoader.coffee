@@ -16,9 +16,7 @@ class CircuitLoader
     # Valid class identifier name
     validName = /^[$A-Z_][0-9A-Z_$]*$/i
 
-    # Circuit Parameters are stored at the header of the .json file (index 0)
     circuitParams = jsonData.shift()
-#    circuit.Params = new SimulationParams(circuitParams)
     circuit.Params = SimulationParams.deserialize(circuitParams)
 
     console.log(circuit.Params.toString())
@@ -38,27 +36,21 @@ class CircuitLoader
       x2 = parseInt elementData['x2']
       y2 = parseInt elementData['y2']
 
-      flags = parseInt elementData['flags']
+      flags = parseInt(elementData['flags']) || 0
 
       params = elementData['params']
 
       if !sym
         circuit.warn "No matching component for #{type}: #{sym}"
-#        circuit.halt "Element: #{JSON.stringify(elementData)} is null"
       else if type is Hint
         console.log "Hint found in file!"
       else if type is Oscilloscope
         console.log "Scope found in file!"
       else if !type
         circuit.warn "Unrecognized Type"
-#      if _.isEmpty(sym)
-#        circuit.warn "Component could not be added to circuit. Unrecognized component symbol: #{type}."
       else
-#        console.log(sym.toString())
-        newCircuitElm = new sym(x1, y1, x2, y2, params)
-
+        newCircuitElm = new sym(x1, y1, x2, y2, params, flags)
         elms.push(newCircuitElm)
-
         circuit.solder newCircuitElm
 
     if elms.length == 0

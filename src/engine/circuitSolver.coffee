@@ -709,7 +709,7 @@ class CircuitSolver
     for rowInfo in @circuitRowInfo
       out += rowInfo.toString() + "\n"
 
-    out += "Circuit permute: " + FormatUtils.prettyArray(@circuitPermute)
+    out += "\nCircuit permute: " + FormatUtils.prettyArray(@circuitPermute)
 
     out + "\n"
 

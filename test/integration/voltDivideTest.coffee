@@ -27,5 +27,5 @@ describe "Voltage Divider", ->
     before ->
       @circuit.updateCircuit()
 
-    it.only "has correct voltage", ->
+    it "has correct voltage", ->
       @circuit.Solver.dump().should.eql ""

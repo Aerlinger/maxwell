@@ -26,11 +26,12 @@ sprintf = require("sprintf-js").sprintf
 class CircuitComponent
   @ParameterDefinitions = {}
 
-  constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, params = {}) ->
+  constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, params = {}, flags = 0) ->
     @current = 0
     @curcount = 0
     @noDiagonal = false
     @Circuit = null
+    @flags = flags
 
     @nodes = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
     @volts = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
@@ -45,12 +46,11 @@ class CircuitComponent
     input
 
   @conversionTypes = {
-      "float": parseFloat,
-      "integer": parseInt,
-      "sign": Math.sign,
-      "string": sprintf
-    }
-
+    "float": parseFloat,
+    "integer": parseInt,
+    "sign": Math.sign,
+    "string": sprintf
+  }
 
   convertParamsToHash: (param_list) ->
     ParameterDefinitions = @constructor.ParameterDefinitions
@@ -115,12 +115,12 @@ class CircuitComponent
 
   serialize: ->
     {
-    sym: this.constructor.name,
-    x1: @x1,
-    y1: @y1,
-    x2: @x2,
-    y2: @y2,
-    params: @serializeParameters()
+      sym: this.constructor.name,
+      x1: @x1,
+      y1: @y1,
+      x2: @x2,
+      y2: @y2,
+      params: @serializeParameters()
     }
 
   @deserialize: (jsonData) ->
@@ -208,9 +208,9 @@ class CircuitComponent
 
     #    paramStr = JSON.stringify(@params)
 
-    paramStr = "[#{(val for key, val of @params).join(" ")}]"
+    paramStr = (val for key, val of @params).join(" ")
 
-    "#{@getDumpType()}\t[v #{tidyVoltage}, i #{tidyCurrent}]\t#{@x1} #{@y1} #{@x2} #{@y2}\t#{paramStr}"
+    "[v #{tidyVoltage}, i #{tidyCurrent}]\t#{@getDumpType()} #{@x1} #{@y1} #{@x2} #{@y2}"
 
   startIteration: ->
 # Called on reactive elements such as inductors and capacitors.
@@ -433,5 +433,23 @@ class CircuitComponent
   timeStep: ->
     @Circuit.timeStep()
 
+  needsShortcut: ->
+    false
+
+  toJson: ->
+    {
+      x: @x1
+      y: @y1
+      x2: @x2
+      y2: @y2
+      flags: @flags
+      nodes: @nodes
+      selected: false
+      voltSource: @getVoltageSource()
+      needsShortcut: @needsShortcut()
+      dumpType: @getDumpType()
+      postCount: @getPostCount()
+      nonLinear: @nonLinear()
+    }
 
 module.exports = CircuitComponent

@@ -59,11 +59,8 @@ class SimulationParams
 
     return simParams
 
-
-  toString: ->
+  details: ->
     [
-      "#{@title}",
-      "================================================================",
       "\tName:        " + @name,
       "\tTopic:       " + @topic,
       "\tStatus:      " + @completionStatus,
@@ -71,13 +68,19 @@ class SimulationParams
       "\tUpdated At:  " + @updatedAt || "?",
       "\tDescription: " + @description,
       "\tId:          " + @id,
-      "\tTitle:       " + @title,
-      "----------------------------------------------------------------",
+      "\tTitle:       " + @title
+    ].join("\n")
+
+
+  toString: ->
+    [
+      "#{@name}",
+      "================================================================",
       "\tFlags:       " + @flags,
-      "\tTimeStep:    " + @timeStep,
+      "\tTimeStep:    " + @timeStep.toFixed(7),
       "\tSim Speed:   " + @simSpeed,
       "\tCur Speed:   " + @currentSpeed,
-      "\tVolt. Range: " + @voltageRange,
+      "\tVolt. Range: " + @voltageRange.toFixed(2),
       "\tPwr Range:   " + @powerRange,
       "----------------------------------------------------------------",
       ""

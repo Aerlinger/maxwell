@@ -139,14 +139,6 @@ class Circuit extends Observer
 
   inspect: ->
     @elementList.map (elm) -> elm.inspect()
-#    res = ""
-#    for elm in @elementList
-#      res += elm.inspect() + "[V=#{elm.getVoltageDiff()}, I=#{elm.getCurrent()}]\n"
-#
-#    return res
-
-#  toArray: ->
-#    @elementList.map (elm)-> { dump: elm.dump(), voltDiff: elm.getVoltageDiff(), current: elm.getCurrent() }
 
   invalidate: ->
     @Solver.analyzeFlag = true
@@ -337,6 +329,31 @@ class Circuit extends Observer
 
   getStamper: ->
     @Solver.getStamper()
+
+
+  toJson: ->
+    {
+      startCircuit: @Params.name
+      timeStep: @timeStep()
+      flags: @flags
+      setupList: "TBD"
+      circuitNonLinear: @Solver.circuitNonLinear
+      voltageSourceCount: @voltageSourceCount
+      circuitMatrixSize: @Solver.circuitMatrixSize
+      circuitMatrixFullSize: @Solver.circuitMatrixFullSize
+      circuitPermute: @Solver.circuitPermute
+      voltageSources: @getVoltageSources().map (elm) -> elm.toJson()
+      circuitRowInfo: @Solver.circuitRowInfo.map (rowInfo) -> rowInfo.toJson()
+      elmList: @elementList.map (element) -> element.toJson()
+      nodeList: @nodeList.map (node) -> node.toJson()
+      useFrame: true
+    }
+
+  dumpAnalysisToFile: ->
+    circuitAnalysisJson = JSON.stringify(@toJson(), null, 2)
+
+    fs.writeFileSync("./dump/#{@Params.name}_ANALYSIS.json", circuitAnalysisJson)
+
 
 
 module.exports = Circuit

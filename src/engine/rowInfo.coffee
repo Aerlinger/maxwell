@@ -16,6 +16,18 @@ class RowInfo
     @lsChanges = false
     @dropRow = false
 
+  toJson: ->
+    {
+      nodeEq: @nodeEq,
+      mapCol: @mapCol,
+      mapRow: @mapRow,
+      value: @value,
+      rsChanges: @rsChanges,
+      lsChanges: @lsChanges,
+      dropRow: @dropRow,
+      type: @type
+    }
+
   toString: ->
     "RowInfo: type: #{@type}, nodeEq: #{@nodeEq}, mapCol: #{@mapCol}, mapRow: #{@mapRow}, value: #{@value}, rsChanges: #{@rsChanges}, lsChanges: #{@lsChanges}, dropRow: #{@dropRow}"
 
