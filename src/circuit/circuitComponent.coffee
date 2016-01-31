@@ -19,6 +19,7 @@ Rectangle = require('../geom/rectangle.coffee')
 Point = require('../geom/point.coffee')
 MathUtils = require('../util/mathUtils.coffee')
 ArrayUtils = require('../util/arrayUtils.coffee')
+FormatUtils = require('../util/formatUtils.coffee')
 
 sprintf = require("sprintf-js").sprintf
 
@@ -93,6 +94,7 @@ class CircuitComponent
         delete component_params[param_name]
       else
         this[param_name] = CircuitComponent.conversionTypes[data_type](default_value)
+        @params[param_name] = CircuitComponent.conversionTypes[data_type](default_value)
     #        console.warn("Defined parameter #{param_name} not set for #{this} (defaulting to #{default_value}#{symbol})")
 
     unmatched_params = (param for param of component_params)
@@ -100,6 +102,7 @@ class CircuitComponent
     if unmatched_params.length > 0
       console.error("The following parameters #{unmatched_params.join(" ")} do not belong in #{this}")
       throw new Error("Invalid params #{unmatched_params.join(" ")} assigned to #{this}")
+
 
 
   serializeParameters: ->
@@ -198,6 +201,16 @@ class CircuitComponent
 
   destroy: =>
     @Circuit.desolder(this)
+
+  dump: ->
+    tidyVoltage = FormatUtils.tidyFloat(@getVoltageDiff())
+    tidyCurrent = FormatUtils.tidyFloat(@getCurrent())
+
+    #    paramStr = JSON.stringify(@params)
+
+    paramStr = "[#{(val for key, val of @params).join(" ")}]"
+
+    "#{@getDumpType()}\t[v #{tidyVoltage}, i #{tidyCurrent}]\t#{@x1} #{@y1} #{@x2} #{@y2}\t#{paramStr}"
 
   startIteration: ->
 # Called on reactive elements such as inductors and capacitors.

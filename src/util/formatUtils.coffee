@@ -12,7 +12,10 @@ class FormatUtils
     decimalNum.toPrecision(4)
 
   @tidyFloat: (f) ->
-    sprintf("%0.2f", f)
+    sign = ""
+#    sign = if f >= 0 then "+" else ""
+
+    sprintf("#{sign}%0.2f", f)
 
   ###
   Removes commas from a number containing a string:
@@ -20,6 +23,45 @@ class FormatUtils
   ###
   @noCommaFormat: (numberWithCommas) ->
     numberWithCommas.replace(/,/g, '');
+
+  @prettyArray: (array) ->
+    arrLen = array.length
+
+    arrayStr = "["
+
+    for i in [0...arrLen]
+      arrayStr += FormatUtils.tidyFloat(array[i])
+
+      if(i != arrLen - 1)
+        arrayStr += ", "
+
+    arrayStr += "]"
+
+    return arrayStr
+
+  @prettyMatrix: (matrix) ->
+    arrLen = matrix.length
+
+    circuitMatrixDump = "["
+
+    for i in [0...arrLen]
+
+      circuitMatrixDump += "["
+      for j in [0...arrLen]
+        circuitMatrixDump += FormatUtils.tidyFloat(matrix[i][j])
+
+        if(j != arrLen - 1)
+          circuitMatrixDump += ", "
+
+      circuitMatrixDump += "]"
+
+      if(i != arrLen - 1)
+        circuitMatrixDump += ", "
+
+    circuitMatrixDump += "]"
+
+    circuitMatrixDump
+
 
   ###
   Adds commas to a number, and returns the string representation of that number

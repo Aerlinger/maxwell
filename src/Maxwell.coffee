@@ -2,6 +2,7 @@ CircuitComponent = require('./circuit/circuitComponent.coffee')
 CircuitLoader = require('./io/circuitLoader.coffee')
 Circuit = require('./circuit/circuit.coffee')
 Renderer = require('./render/renderer.coffee')
+Winston = require('winston')
 
 class Maxwell
   version = "0.0.0"
@@ -11,6 +12,13 @@ class Maxwell
 
   @Circuits = {}
 
+  @logger = new (Winston.Logger)({
+    transports: [
+      new (Winston.transports.Console)(),
+      new (Winston.transports.File)({ filename: 'log/maxwell.log' })
+    ]
+  });
+
   @loadCircuitFromFile: (circuitFileName, onComplete) ->
     circuit = CircuitLoader.createCircuitFromJsonFile(circuitFileName, onComplete)
     @Circuits[circuitFileName] = circuit
@@ -19,7 +27,6 @@ class Maxwell
 
   @loadCircuitFromJson: (jsonData) ->
     circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
-
     @Circuits[circuitFileName] = circuit
 
     return circuit

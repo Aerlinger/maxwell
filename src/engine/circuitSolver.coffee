@@ -454,6 +454,8 @@ class CircuitSolver
         @Circuit.halt "Singular matrix in linear circuit!", null
         return
 
+    @Circuit.write(@dump() + "\n")
+
 
   solveCircuit: ->
     @sysTime = (new Date()).getTime()
@@ -700,6 +702,18 @@ class CircuitSolver
       i--
 
   dump: ->
+    out = ""
+
+    out += @Circuit.Params.toString() + "\n"
+
+    for rowInfo in @circuitRowInfo
+      out += rowInfo.toString() + "\n"
+
+    out += "Circuit permute: " + FormatUtils.prettyArray(@circuitPermute)
+
+    out + "\n"
+
+  dumpFrame: ->
     matrixRowCount = @circuitRightSide.length
 
     out = ""

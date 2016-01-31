@@ -30,6 +30,8 @@ Observer = require('../util/observer.coffee')
 Rectangle = require('../geom/rectangle.coffee')
 FormatUtils = require('../util/FormatUtils.coffee')
 
+fs = require('fs')
+
 
 class Circuit extends Observer
   @components = [
@@ -84,6 +86,8 @@ class Circuit extends Observer
 
     @clearAndReset()
 
+  write: (buffer) ->
+    @ostream.write(buffer)
 
   ## Removes all circuit elements and scopes from the workspace and resets time to zero.
   ##   Called on initialization and reset.
@@ -147,18 +151,13 @@ class Circuit extends Observer
   invalidate: ->
     @Solver.analyzeFlag = true
 
+
+
   dump: ->
     out = ""
 
     for elm in @getElements()
-      dumpType = elm.getDumpType()
-      voltDiff = elm.getVoltageDiff()
-      current = elm.getCurrent()
-
-      circuitComponentOut = dumpType +
-        ", b: [" + elm.getBoundingBox().x + ", " + elm.getBoundingBox().y + ", " + elm.getBoundingBox().width + ", " + elm.getBoundingBox().height + "]" + ", vdiff: " + voltDiff + ", i: " + current;
-
-      out += circuitComponentOut + "\n"
+      out += elm.dump() + "\n"
 
     out
 
@@ -184,11 +183,10 @@ class Circuit extends Observer
     else
       @Solver.solveCircuit()
 
-    console.log(@Solver.dump())
-    console.log(@dump() + "\n")
+    @write(@Solver.dumpFrame() + "\n")
+    @write(@dump() + "\n")
 
     @notifyObservers(@ON_COMPLETE_UPDATE)
-
 
 
   setSelected: (component) ->

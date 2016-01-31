@@ -64,6 +64,8 @@ class CircuitLoader
     if elms.length == 0
       console.error "No elements loaded. JSON most likely malformed"
 
+    circuit.ostream ||= fs.createWriteStream("dump/#{circuit.Params.name}")
+
     return circuit
 
   ###
