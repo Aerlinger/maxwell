@@ -5,6 +5,9 @@ Circuit = require('../circuit/circuit.coffee')
 CircuitComponent = require('../circuit/circuitComponent.coffee')
 Oscilloscope = require('../scope/oscilloscope.coffee')
 Hint = require('../engine/hint.coffee')
+fs = require('fs')
+
+VoltageElm = require('../circuit/components/VoltageElm.coffee')
 
 class CircuitLoader
   @createCircuitFromJsonData: (jsonData) ->
@@ -67,10 +70,15 @@ class CircuitLoader
   Retrieves string data from a circuit text file (via AJAX GET)
   ###
   @createCircuitFromJsonFile: (circuitFileName, onComplete = null) ->
-    $.getJSON circuitFileName, (jsonData) ->
-      circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
+    if $?
+      $.getJSON circuitFileName, (jsonData) ->
+        circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
 
-      onComplete?(circuit)
+        onComplete?(circuit)
+    else
+      jsonData = JSON.parse(fs.readFileSync(circuitFileName))
+      CircuitLoader.createCircuitFromJsonData(jsonData)
+
       
 
 module.exports = CircuitLoader

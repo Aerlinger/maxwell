@@ -1,4 +1,5 @@
 CircuitComponent = require('./circuitComponent.coffee')
+
 WireElm = require('./components/WireElm.coffee')
 ResistorElm = require('./components/ResistorElm.coffee')
 GroundElm = require('./components/GroundElm.coffee')
@@ -57,6 +58,13 @@ class ComponentRegistry
     'x': TextElm
     'p': ProbeElm
     'O': OutputElm
+#    'L': LogicInput
+#    'M': LogicOutput
+#   'I': Inverter
+#  151: NandGate
+#  151: AndGate
+#  171: TransmissionLine
+#  178: RelayElm
 
   @InverseComponentDefs: {
     WireElm: 'w'

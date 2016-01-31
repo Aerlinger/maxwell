@@ -55,7 +55,6 @@ describe "Simple single diode circuit", ->
         "params": []
       }
     ]
-#    new Circuit()
 
     @Circuit = CircuitLoader.createCircuitFromJsonData(@json)
 

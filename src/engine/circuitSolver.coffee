@@ -15,6 +15,7 @@ CapacitorElm = require('../circuit/components/CapacitorElm.coffee')
 InductorElm = require('../circuit/components/InductorElm.coffee')
 CurrentElm = require('../circuit/components/CurrentElm.coffee')
 
+sprintf = require("sprintf-js").sprintf
 
 class CircuitSolver
 
@@ -196,6 +197,7 @@ class CircuitSolver
     @Circuit.voltageSourceCount = voltageSourceCount
 
     @matrixSize = @Circuit.numNodes() - 1 + voltageSourceCount
+
     @circuitMatrixSize = @circuitMatrixFullSize = @matrixSize
 
     @circuitMatrix = ArrayUtils.zeroArray2(@matrixSize, @matrixSize)
@@ -547,6 +549,12 @@ class CircuitSolver
     @frames++
     @Circuit.iterations++
 
+#    if (nFrames % 100 == 0 || nFrames == 1)
+#      this.dump(writer);
+
+#    console.log("VSCount: ", voltageSourceCount)
+    console.log(@dump())
+
     @_updateTimings(lit)
 
   ###
@@ -678,6 +686,52 @@ class CircuitSolver
         ++j
       circuitRightSide[i] = total / circuitMatrix[i][i]
       i--
+
+  tidyFloat: (f) ->
+    sprintf("%0.2f", f)
+
+  dump: ->
+    matrixRowCount = @circuitRightSide.length
+
+    out = ""
+
+    circuitMatrixDump = ""
+    circuitRightSideDump = ""
+
+    for i in [0...matrixRowCount]
+      circuitRightSideDump += @tidyFloat(@circuitRightSide[i])
+#      circuitMatrixDump += @tidyFloat(@circuitRightSide[i])
+
+      circuitMatrixDump += "["
+      for j in [0...matrixRowCount]
+        circuitMatrixDump += @tidyFloat(@circuitMatrix[i][j])
+
+        if(j != matrixRowCount - 1)
+          circuitMatrixDump += ", "
+
+      circuitMatrixDump += "]"
+
+      if(i != matrixRowCount - 1)
+        circuitRightSideDump += ", "
+        circuitMatrixDump += ", "
+
+    out += sprintf("%d %.2f %d %d\n", @frames, @Circuit.time, @subIterations, matrixRowCount)
+    out += circuitMatrixDump + "\n"
+    out += circuitRightSideDump + "\n"
+
+    for elm in @Circuit.getElements()
+      dumpType = elm.getDumpType()
+      voltDiff = @tidyFloat(elm.getVoltageDiff())
+      current = @tidyFloat(elm.getCurrent())
+
+      circuitComponentOut = dumpType +
+        ", b: [" + elm.getBoundingBox().x + ", " + elm.getBoundingBox().y + ", " + elm.getBoundingBox().width + ", " + elm.getBoundingBox().height + "]" + ", vdiff: " + voltDiff + ", i: " + current;
+
+      out += circuitComponentOut + "\n"
+
+    out += "\n"
+
+    return  out
 
 
 module.exports = CircuitSolver

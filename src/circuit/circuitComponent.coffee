@@ -21,6 +21,8 @@ MathUtils = require('../util/mathUtils.coffee')
 ArrayUtils = require('../util/arrayUtils.coffee')
 Circuit = require('./circuit.coffee')
 
+sprintf = require("sprintf-js").sprintf
+
 class CircuitComponent
   @ParameterDefinitions = {}
 
@@ -39,27 +41,34 @@ class CircuitComponent
 
     @setParameters(params)
 
-  convertParamsToHash: (param_list) ->
-    convert = {
+  noop: (input) ->
+    input
+
+  @conversionTypes = {
       "float": parseFloat,
       "integer": parseInt,
-      "sign": Math.sign
+      "sign": Math.sign,
+      "string": sprintf
     }
 
-    result = {}
 
+  convertParamsToHash: (param_list) ->
     ParameterDefinitions = @constructor.ParameterDefinitions
+    result = {}
 
     for i in [0...param_list.length]
       param_name = Object.keys(ParameterDefinitions)[i]
-
-      definition = ParameterDefinitions[param_name]
-      data_type = definition.data_type
-
       param_value = param_list[i]
-      result[param_name] = convert[data_type](param_value)
 
-#    console.log("PARAMS: ", result)
+      console.log(param_name)
+      console.log(param_value)
+
+      data_type = ParameterDefinitions[param_name].data_type
+
+      if (!data_type?)
+        console.log("Data type: #{data_type} not found for parameter #{param_name} and value #{param_value}")
+
+      result[param_name] = CircuitComponent.conversionTypes[data_type](param_value)
 
     return result
 
@@ -67,13 +76,9 @@ class CircuitComponent
     if component_params.constructor is Array
       component_params = @convertParamsToHash(component_params)
 
-    convert = {
-      "float": parseFloat,
-      "integer": parseInt,
-      "sign": Math.sign
-    }
-
     ParameterDefinitions = @constructor.ParameterDefinitions
+
+    @params = {}
 
     for param_name, definition of ParameterDefinitions
       default_value = definition.default_value
@@ -81,11 +86,15 @@ class CircuitComponent
       symbol = definition.symbol
 
       if param_name of component_params
-        this[param_name] = convert[data_type](component_params[param_name])
+        param_value = CircuitComponent.conversionTypes[data_type](component_params[param_name])
+
+        this[param_name] = param_value
+        @params[param_name] = param_value
+
         delete component_params[param_name]
       else
-        this[param_name] = convert[data_type](default_value)
-#        console.warn("Defined parameter #{param_name} not set for #{this} (defaulting to #{default_value}#{symbol})")
+        this[param_name] = CircuitComponent.conversionTypes[data_type](default_value)
+    #        console.warn("Defined parameter #{param_name} not set for #{this} (defaulting to #{default_value}#{symbol})")
 
     unmatched_params = (param for param of component_params)
 
@@ -104,12 +113,12 @@ class CircuitComponent
 
   serialize: ->
     {
-      sym: this.constructor.name,
-      x1: @x1,
-      y1: @y1,
-      x2: @x2,
-      y2: @y2,
-      params: @serializeParameters()
+    sym: this.constructor.name,
+    x1: @x1,
+    y1: @y1,
+    x2: @x2,
+    y2: @y2,
+    params: @serializeParameters()
     }
 
   @deserialize: (jsonData) ->
@@ -179,11 +188,11 @@ class CircuitComponent
     @getVoltageDiff() * @current
 
   calculateCurrent: ->
-    # To be implemented by subclasses
+# To be implemented by subclasses
 
-    # Steps forward one frame and performs calculation
+# Steps forward one frame and performs calculation
   doStep: ->
-    # To be implemented by subclasses
+# To be implemented by subclasses
 
   orphaned: ->
     return @Circuit is null or @Circuit is undefined
@@ -192,7 +201,7 @@ class CircuitComponent
     @Circuit.desolder(this)
 
   startIteration: ->
-    # Called on reactive elements such as inductors and capacitors.
+# Called on reactive elements such as inductors and capacitors.
 
   getPostVoltage: (post_idx) ->
     @volts[post_idx]
@@ -219,9 +228,9 @@ class CircuitComponent
 
     return new Point(centerX, centerY)
 
-  # TODO: Validate consistency
+# TODO: Validate consistency
   updateDotCount: (cur, cc) ->
-    #      return cc  if CirSim.stoppedCheck
+#      return cc  if CirSim.stoppedCheck
     cur = @current  if (isNaN(cur) || !cur?)
     cc = @curcount  if (isNaN(cc) || !cc?)
 
@@ -263,11 +272,26 @@ class CircuitComponent
   stamp: ->
     throw("Called abstract function stamp() in Circuit #{@getDumpType()}")
 
-  # Todo: implement needed
+# Todo: implement needed
   getDumpClass: ->
-    this.toString()
+    @toString()
 
-  # Returns the class name of this element (e.x. ResistorElm)
+  inspect: ->
+    paramValues = (val for key, val of @params)
+
+    {
+    sym: @getDumpType(),
+    x1: @x1,
+    y1: @y1,
+    x2: @x2,
+    xy: @y2,
+    params: paramValues,
+    voltage: @getVoltageDiff(),
+    current: @getCurrent()
+    }
+
+
+# Returns the class name of this element (e.x. ResistorElm)
   toString: ->
     console.error("Virtual call on toString in circuitComponent was #{@constructor.name}")
 #      return arguments.callee.name
@@ -290,7 +314,7 @@ class CircuitComponent
   nonLinear: ->
     false
 
-  # Two terminals by default, but likely to be overidden by subclasses
+# Two terminals by default, but likely to be overidden by subclasses
   getPostCount: ->
     2
 
@@ -322,11 +346,11 @@ class CircuitComponent
 
     @setBbox p1.x - deltaX, p1.y - deltaY, p1.x + deltaX, p1.y + deltaY
 
-  # Extended by subclasses
+# Extended by subclasses
   getInfo: (arr) ->
     arr = new Array(15)
 
-  # Extended by subclasses
+# Extended by subclasses
   getBasicInfo: (arr) ->
     arr[1] = "I = " + @getUnitText(@getCurrent(), "A")
     arr[2] = "Vd = " + @getUnitText(@getVoltageDiff(), "V")
@@ -352,19 +376,23 @@ class CircuitComponent
 
 #  needsHighlight: ->
 #    @focused
-  #      @Circuit?.mouseElm is this or @selected
+#      @Circuit?.mouseElm is this or @selected
 
   needsShortcut: ->
     false
 
   ### #######################################################################
-  # RENDERING METHODS
+# RENDERING METHODS
   ### #######################################################################
 
   draw: (renderContext) ->
-    @curcount = @updateDotCount()
+#    @curcount = @updateDotCount()
+    @calcLeads renderContext, 0
+    @updateDots(this)
+    renderContext.drawValue 10, 0, this, @toString()
     renderContext.drawPosts(this)
     renderContext.drawLeads(this)
+    renderContext.drawDots(@point1, @point2, this)
 
 
   updateDots: (ds = Settings.CURRENT_SEGMENT_LENGTH) ->

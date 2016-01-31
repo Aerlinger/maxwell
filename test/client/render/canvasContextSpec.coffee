@@ -1,5 +1,6 @@
 fs = require('fs')
-require('../../../src/Maxwell.coffee')
+Maxwell = require('../../../src/Maxwell.coffee')
+Renderer = require('../../../src/render/renderer.coffee')
 
 #Renderer = require('../../src/render/renderer.coffee')
 

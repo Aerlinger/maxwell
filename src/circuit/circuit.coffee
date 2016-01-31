@@ -29,6 +29,7 @@ CircuitSolver = require('../engine/circuitSolver.coffee')
 Observer = require('../util/observer.coffee')
 Rectangle = require('../geom/rectangle.coffee')
 
+
 class Circuit extends Observer
   @components = [
 # Working
@@ -131,6 +132,17 @@ class Circuit extends Observer
   toString: ->
     @Params
 
+  inspect: ->
+    @elementList.map (elm) -> elm.inspect()
+#    res = ""
+#    for elm in @elementList
+#      res += elm.inspect() + "[V=#{elm.getVoltageDiff()}, I=#{elm.getCurrent()}]\n"
+#
+#    return res
+
+#  toArray: ->
+#    @elementList.map (elm)-> { dump: elm.dump(), voltDiff: elm.getVoltageDiff(), current: elm.getCurrent() }
+
   invalidate: ->
     @Solver.analyzeFlag = true
 
@@ -158,10 +170,11 @@ class Circuit extends Observer
 
     @notifyObservers(@ON_COMPLETE_UPDATE)
 
+
+
   setSelected: (component) ->
     for elm in @elementList
       if elm == component
-#        console.log("Selected: #{component.dump()}")
         @selectedElm = component
         component.setSelected(true)
 

@@ -76,6 +76,8 @@ class VoltageElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, params) ->
+    super(xa, ya, xb, yb, params)
+
     @waveform = VoltageElm.WF_DC
     @frequency = 40
     @maxVoltage = 5
@@ -83,8 +85,6 @@ class VoltageElm extends CircuitComponent
     @bias = 0
     @phaseShift = 0
     @dutyCycle = 0.5
-
-    super(xa, ya, xb, yb, params)
 
 #    if params
 #      params = params.split(" ")  if typeof params is "string"
