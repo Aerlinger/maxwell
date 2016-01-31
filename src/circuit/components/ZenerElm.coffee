@@ -1,8 +1,8 @@
+CircuitComponent = require('../circuitComponent.coffee')
 Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-CircuitComponent = require('../circuitComponent.coffee')
 DiodeElm = require('./DiodeElm.coffee')
 ArrayUtils = require('../../util/arrayUtils.coffee')
 

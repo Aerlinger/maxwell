@@ -1,9 +1,9 @@
+CircuitComponent = require('../circuitComponent.coffee')
 ArrayUtils =  require('../../util/ArrayUtils.coffee')
 Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-CircuitComponent = require('../circuitComponent.coffee')
 MathUtils = require('../../util/MathUtils.coffee')
 
 class OpAmpElm extends CircuitComponent

@@ -1,10 +1,11 @@
+CircuitComponent = require('../circuitComponent.coffee')
 Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-CircuitComponent = require('../circuitComponent.coffee')
 #Maxwell = require('../../Maxwell.coffee')
 
+console.log("ResistorElm extending", CircuitComponent)
 
 class ResistorElm extends CircuitComponent
   @ParameterDefinitions = {

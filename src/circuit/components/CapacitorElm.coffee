@@ -1,8 +1,8 @@
+CircuitComponent = require('../circuitComponent.coffee')
 Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-CircuitComponent = require('../circuitComponent.coffee')
 
 class CapacitorElm extends CircuitComponent
   @FLAG_BACK_EULER: 2

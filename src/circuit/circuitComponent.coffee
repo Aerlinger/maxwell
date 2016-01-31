@@ -19,7 +19,6 @@ Rectangle = require('../geom/rectangle.coffee')
 Point = require('../geom/point.coffee')
 MathUtils = require('../util/mathUtils.coffee')
 ArrayUtils = require('../util/arrayUtils.coffee')
-Circuit = require('./circuit.coffee')
 
 sprintf = require("sprintf-js").sprintf
 
