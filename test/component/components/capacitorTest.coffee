@@ -1,7 +1,7 @@
 Circuit = require('../../../src/circuit/circuit.coffee')
 CapacitorElm = require('../../../src/circuit/components/CapacitorElm.coffee')
 
-describe "Capacitor Component", ->
+describe.skip "Capacitor Component", ->
   beforeEach ->
     @capacitor = new CapacitorElm(100, 100, 100, 200, { capacitance: 1e-9, voltDiff: 1.1})
 

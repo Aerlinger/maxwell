@@ -8,6 +8,8 @@ Setting = require('../settings/settings.coffee')
 ArrayUtils = require('../util/ArrayUtils.coffee')
 FormatUtils = require('../util/FormatUtils.coffee')
 
+SimulationFrame = require('../circuit/simulationFrame.coffee')
+
 GroundElm = require('../circuit/components/GroundElm.coffee')
 RailElm = require('../circuit/components/RailElm.coffee')
 VoltageElm = require('../circuit/components/VoltageElm.coffee')
@@ -50,6 +52,8 @@ class CircuitSolver
     @lastIterTime = 0
 
     @analyzeFlag = true
+
+    @simulationFrames = []
 
 
   _updateTimings: (lastIterationTime) ->
@@ -566,8 +570,7 @@ class CircuitSolver
     @frames++
     @Circuit.iterations++
 
-#    if (nFrames % 100 == 0 || nFrames == 1)
-#      this.dump(writer);
+    @simulationFrames.push(new SimulationFrame(@Circuit))
 
     @_updateTimings(lit)
 

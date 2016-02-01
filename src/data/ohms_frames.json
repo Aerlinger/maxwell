@@ -1,0 +1,632 @@
+{
+  "nFrames": 3,
+  "t": 0.00003,
+  "circuitMatrix": [
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      -1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      -1
+    ],
+    [
+      0,
+      0,
+      -1,
+      -1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      -0.01,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      -1,
+      -1,
+      0,
+      0
+    ],
+    [
+      -0.001,
+      0,
+      0,
+      0,
+      -1,
+      -1,
+      0,
+      0
+    ],
+    [
+      0.001,
+      0,
+      0,
+      0,
+      0,
+      0,
+      -1,
+      0
+    ],
+    [
+      0.01,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ]
+  ],
+  "circuitRightSide": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "simulationFrames": [
+    {
+      "frameNumber": 1,
+      "time": 0.000005,
+      "circuitMatrix": [
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          -1
+        ],
+        [
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          -0.01,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0
+        ],
+        [
+          -0.001,
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0
+        ],
+        [
+          0.001,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          0
+        ],
+        [
+          0.01,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "circuitRightSide": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "elementStates": [
+        [
+          {
+            "dumpType": "r",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": 172,
+            "volts": [
+              0
+            ],
+            "current": 0,
+            "curcount": 5
+          },
+          {
+            "dumpType": "g",
+            "volts": [
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "w",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "r",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "w",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "g",
+            "volts": [
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "w",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "w",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          }
+        ]
+      ]
+    },
+    {
+      "frameNumber": 2,
+      "time": 0.00002,
+      "circuitMatrix": [
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          -1
+        ],
+        [
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          -0.01,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0
+        ],
+        [
+          -0.001,
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0
+        ],
+        [
+          0.001,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          0
+        ],
+        [
+          0.01,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "circuitRightSide": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "elementStates": [
+        [
+          {
+            "dumpType": "r",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": 172,
+            "volts": [
+              0
+            ],
+            "current": 0,
+            "curcount": 5
+          },
+          {
+            "dumpType": "g",
+            "volts": [
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "w",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "r",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "w",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "g",
+            "volts": [
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "w",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "w",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          }
+        ]
+      ]
+    },
+    {
+      "frameNumber": 3,
+      "time": 0.00003,
+      "circuitMatrix": [
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          -1
+        ],
+        [
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          -0.01,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0
+        ],
+        [
+          -0.001,
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0
+        ],
+        [
+          0.001,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          0
+        ],
+        [
+          0.01,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "circuitRightSide": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "elementStates": [
+        [
+          {
+            "dumpType": "r",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": 172,
+            "volts": [
+              0
+            ],
+            "current": 0,
+            "curcount": 5
+          },
+          {
+            "dumpType": "g",
+            "volts": [
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "w",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "r",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "w",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "g",
+            "volts": [
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "w",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          },
+          {
+            "dumpType": "w",
+            "volts": [
+              0,
+              0
+            ],
+            "current": 0,
+            "curcount": 0
+          }
+        ]
+      ]
+    }
+  ]
+}

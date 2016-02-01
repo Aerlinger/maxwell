@@ -25,6 +25,7 @@
 Oscilloscope = require('../scope/oscilloscope.coffee')
 Logger = require('../io/logger.coffee')
 SimulationParams = require('../core/simulationParams.coffee')
+SimulationFrame = require('./simulationFrame.coffee')
 CircuitSolver = require('../engine/circuitSolver.coffee')
 Observer = require('../util/observer.coffee')
 Rectangle = require('../geom/rectangle.coffee')
@@ -330,7 +331,6 @@ class Circuit extends Observer
   getStamper: ->
     @Solver.getStamper()
 
-
   toJson: ->
     {
       startCircuit: @Params.name
@@ -346,10 +346,23 @@ class Circuit extends Observer
       circuitRowInfo: @Solver.circuitRowInfo.map (rowInfo) -> rowInfo.toJson()
       elmList: @elementList.map (element) -> element.toJson()
       nodeList: @nodeList.map (node) -> node.toJson()
-      useFrame: true
     }
 
-  dumpAnalysisToFile: ->
+  frameJson: ->
+    {
+      nFrames: @iterations,
+      t: @time,
+      circuitMatrix: @Solver.circuitMatrix,
+      circuitRightSide: @Solver.circuitRightSide,
+      simulationFrames: @Solver.simulationFrames.map (element) -> element.toJson()
+    }
+
+  dumpFrameJson: (filename = "./dump/#{@Params.name}_FRAMES.json") ->
+    circuitFramsJson = JSON.stringify(@frameJson(), null, 2)
+
+    fs.writeFileSync(filename, circuitFramsJson)
+
+  dumpAnalysisJson: ->
     circuitAnalysisJson = JSON.stringify(@toJson(), null, 2)
 
     fs.writeFileSync("./dump/#{@Params.name}_ANALYSIS.json", circuitAnalysisJson)

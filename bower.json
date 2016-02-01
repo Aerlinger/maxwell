@@ -22,7 +22,8 @@
   "devDependencies": {
     "jquery": "*",
     "coffee-script": "1.8.0",
-    "chai": "~1.10.0",
+    "chai": "2.1.0",
+    "chai-fuzzy": "*",
     "mocha": "~1.15.1",
     "should": "4.3.0",
     "sinonjs": "~1.7.3",

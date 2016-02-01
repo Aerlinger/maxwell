@@ -1,20 +1,69 @@
-Circuit = require('../../src/circuit/circuit.coffee')
 Maxwell = require('../../src/Maxwell.coffee')
-GroundElm = require('../../src/circuit/components/GroundElm.coffee')
-WireElm = require('../../src/circuit/components/WireElm.coffee')
-VoltageElm = require('../../src/circuit/components/VoltageElm.coffee')
-ResistorElm = require('../../src/circuit/components/ResistorElm.coffee')
+
+fs = require("fs")
+
 
 describe.only "JSON output", ->
   before (done) ->
     @circuit = Maxwell.loadCircuitFromFile("./circuits/ohms.json")
     @circuit.updateCircuit()
+
+    @circuit.updateCircuit()
+    @circuit.updateCircuit()
+    @circuit.updateCircuit()
+
     done()
 
-  it "matches truth", ->
+  it.skip "matches truth", ->
     ohms = require("../../dump/ohms.txt_ANALYSIS.json")
 
     expect(@circuit.toJson()).to.equal(ohms)
 
-  it "Stringifies", ->
-    expect(JSON.stringify(@circuit.toJson())).to.equal()
+  describe "has correct JSON structure", ->
+    before (done) ->
+      @analysisJson = @circuit.toJson()
+      @frameJson = @circuit.frameJson()
+      done()
+
+    it "persists circuit analysis to JSON format", ->
+      analysisJsonKeys = [
+        'startCircuit',
+        'timeStep',
+        'flags',
+        'setupList',
+        'circuitNonLinear',
+        'voltageSourceCount',
+        'circuitMatrixSize',
+        'circuitMatrixFullSize',
+        'circuitPermute',
+        'voltageSources',
+        'circuitRowInfo',
+        'elmList',
+        'nodeList'
+      ]
+
+      expect(@analysisJson).to.have.all.keys analysisJsonKeys
+
+
+    it "persists frames to JSON format", ->
+      frameJsonKeys = [
+        'nFrames',
+        't',
+        'circuitMatrix',
+        'circuitRightSide',
+        'simulationFrames'
+      ]
+
+      expect(@frameJson).to.have.all.keys frameJsonKeys
+
+
+    describe "saving to file", ->
+      before (done) ->
+        @circuit.dumpFrameJson("./src/data/ohms_frames.json")
+
+        done()
+
+      it "dumps frame JSON", ->
+        fileJson = JSON.parse(fs.readFileSync("./src/data/ohms_frames.json"))
+
+        fileJson.should.eql @circuit.frameJson()
