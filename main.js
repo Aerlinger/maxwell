@@ -1,4 +1,4 @@
-// This script gets run before any other Javascript in the library:
+// TODO: No longer used
 
 (function () {
   "use strict";

@@ -1,3 +1,1 @@
 Maxwell = require("./src/Maxwell")
-
-
