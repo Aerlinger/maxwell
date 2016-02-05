@@ -52,6 +52,7 @@ class ComponentRegistry
     'f': MosfetElm
 
   # Testing
+    'A': AntennaElm
     'R': RailElm
     '172': VarRailElm
     'z': ZenerElm
@@ -105,6 +106,7 @@ class ComponentRegistry
     ProbeElm: 'p'
     Scope: 'o'
     OutputElm: 'O'
+    AntennaElm: 'A'
   }
 
 module.exports = ComponentRegistry
