@@ -1,6 +1,6 @@
 ACRailElm = require('../../src/circuit/components/ACRailElm.coffee')
 
-describe.only "ACRailElmTest", ->
+describe "ACRailElmTest", ->
   before ->
     @acRailElm = new ACRailElm(100, 200)
 

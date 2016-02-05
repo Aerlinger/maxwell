@@ -7,7 +7,7 @@ CircuitComparator = require("../helpers/CircuitComparator.coffee")
 Maxwell = require("../../src/Maxwell.coffee")
 jsondiffpatch = require('jsondiffpatch').create({});
 
-describe "Testing all circuits", ->
+describe.only "Testing all circuits", ->
   @timeout(30000)
 
   before ->
@@ -26,8 +26,40 @@ describe "Testing all circuits", ->
 
 #    @files = ["ohms", "voltdivide", "cap", "capac", "diodecurve", "diodevar", "opamp", "diodeclip", "induct"]
 #    @files = ["capseries"]
-    @files = ["potdivide"]
+    @opamps = [
+      "opamp"
+      "opampfeedback"
+      "amp-invert"
 
+      "amp-diff" # need p,
+      "amp-follower"
+      "amp-fullrect"
+      "amp-integ"
+      "amp-invert"
+      "amp-noninvert"
+      "amp-rect"
+      "amp-schmitt"
+      "amp-sum"
+      "relaxosc"
+      "sawtooth"
+      "howland"
+      "logconvert"
+      "nic-r"
+      "itov"
+      "capmult"
+      "gyrator"
+
+      "amp-dfdx"
+      "allpass2"
+
+
+
+      "opamp-regulator"  # need 174
+      "allpass1"  # need 170
+    ]
+
+    @files = @opamps
+#
     for circuit_name in @files
       circuit_file = "#{circuit_name}.json"
 

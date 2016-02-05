@@ -30,6 +30,8 @@ class CircuitComponent
   @ParameterDefinitions = {}
 
   constructor: (@x1, @y1, @x2, @y2, params) ->
+    @flags = params.shift()
+
     @current = 0
     @curcount = 0
     @voltSource = 0
@@ -37,7 +39,6 @@ class CircuitComponent
     @Circuit = null
 
     # TODO: Beware of slowness with 'delete' (http://stackoverflow.com/questions/208105/how-do-i-remove-a-property-from-a-javascript-object)
-    @flags = params['flags']
     delete params['flags']
 
     @nodes = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())

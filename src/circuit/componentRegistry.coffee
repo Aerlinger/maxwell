@@ -1,5 +1,6 @@
 CircuitComponent = require('./circuitComponent.coffee')
 
+AntennaElm = require('./components/AntennaElm.coffee')
 WireElm = require('./components/WireElm.coffee')
 ResistorElm = require('./components/ResistorElm.coffee')
 GroundElm = require('./components/GroundElm.coffee')

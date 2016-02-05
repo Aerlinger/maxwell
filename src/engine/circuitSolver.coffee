@@ -250,7 +250,7 @@ class CircuitSolver
       # connect unconnected nodes
       for i in [0...@Circuit.numNodes()]
         if !closure[i] and !@Circuit.nodeList[i].intern
-          console.warn("Node #{i} unconnected!")
+          console.warn("Node #{i} unconnected! -> #{@Circuit.nodeList[i].toString()}")
           @Stamper.stampResistor 0, i, 1e8
           closure[i] = true
           changed = true

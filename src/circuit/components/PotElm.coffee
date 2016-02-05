@@ -32,6 +32,11 @@ class PotElm extends CircuitComponent
 
     @sliderValue = @position * 100
 
+#  draw: (renderContext) ->
+#    super()
+#
+#    @getParentCircuit.halt("Draw not yet implemented for #{this}")
+
   adjustmentValueChanged: ->
     @getParentCircuit().Solver.analyzeFlag = true
     @setPoints()

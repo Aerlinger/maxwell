@@ -28,7 +28,7 @@ class OpAmpElm extends CircuitComponent
       unit: "Voltage"
       description: "Minimum allowable output voltage of the Op Amp"
       symbol: "V"
-      default_value: 15
+      default_value: -15
       data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"

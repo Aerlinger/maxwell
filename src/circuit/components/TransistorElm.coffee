@@ -19,6 +19,7 @@ class TransistorElm extends CircuitComponent
       range: [0, Infinity]
       type: "attribute"
     },
+    #    TODO
     "lastvbe": {
       name: "Voltage"
       unit: "Voltage"
