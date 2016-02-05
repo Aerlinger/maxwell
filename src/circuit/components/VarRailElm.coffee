@@ -49,14 +49,14 @@ class VarRailElm extends RailElm
   createSlider: ->
 
   getSliderValue: ->
-    100
+    @sliderValue
 
 #  getVoltageDiff: ->
 #    @volts[0]
 
     # Todo: implement
   getVoltage: ->
-    @frequency = @sliderValue * (@maxVoltage - @bias) / 100.0 + @bias;
+    @frequency = @getSliderValue * (@maxVoltage - @bias) / 100.0 + @bias;
 
 #    console.log("frequency: #{@frequency}")
     return @frequency

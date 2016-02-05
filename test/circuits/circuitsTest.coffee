@@ -7,7 +7,7 @@ CircuitComparator = require("../helpers/CircuitComparator.coffee")
 Maxwell = require("../../src/Maxwell.coffee")
 jsondiffpatch = require('jsondiffpatch').create({});
 
-describe "Testing all circuits", ->
+describe.only "Testing all circuits", ->
   @timeout(30000)
 
   before ->
@@ -20,13 +20,13 @@ describe "Testing all circuits", ->
     expect({})
 
   it "tests each circuit", ->
-    @files = ["ohms", "resistors", "inductac", "voltdivide", "thevenin", "norton", "diodelimit", "diodelimit"]
+    @files = ["ohms", "resistors", "inductac", "voltdivide", "thevenin", "norton", "diodelimit", "diodelimit", "pot"]
     @epsilon_error = ["diodeclip", "diodecurve", "impedance", "lrc", "diodevar"]
     @key_error = ["res-series"]
 
 #    @files = ["ohms", "voltdivide", "cap", "capac", "diodecurve", "diodevar", "opamp", "diodeclip", "induct"]
 #    @files = ["capseries"]
-#    @files = ["diodevar"]
+    @files = ["potdivide"]
 
     for circuit_name in @files
       circuit_file = "#{circuit_name}.json"
@@ -47,7 +47,7 @@ describe "Testing all circuits", ->
       assert.deepEqual(circuit.frameJson(), simulationValidationJson)
       simulationDelta = jsondiffpatch.diff(circuit.frameJson(), simulationValidationJson)
 
-      simulationFlatDelta = flatdiff.diff(circuit.frameJson(), simulationValidationJson)
+#      simulationFlatDelta = flatdiff.diff(circuit.frameJson(), simulationValidationJson)
 
 #      { '0': { x: [ 50, 176 ], y: [ 25, 80 ], y2: [ 25, 80 ] },
 #      '1': { y: [ 25, 80 ], y2: [ 25, 80 ] },

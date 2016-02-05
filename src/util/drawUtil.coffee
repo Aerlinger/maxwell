@@ -1,5 +1,6 @@
 Point = require('../geom/point.coffee')
 Polygon = require('../geom/polygon.coffee')
+Settings = require('../settings/settings.coffee')
 
 class DrawUtil
   @interpolate: (ptA, ptB, u, v = 0) ->
@@ -47,6 +48,9 @@ class DrawUtil
       newPoly.addVertex vertex.x, vertex.y
 
     return newPoly
+
+  @snapGrid: (x) ->
+    (x + (Settings.GRID_SIZE / 2 - 1)) & ~(Settings.GRID_SIZE - 1)
 
 
 

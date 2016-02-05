@@ -21,6 +21,9 @@ Switch2Elm = require('./components/Switch2Elm.coffee')
 TextElm = require('./components/TextElm.coffee')
 ProbeElm = require('./components/ProbeElm.coffee')
 
+PotElm = require('./components/PotElm.coffee')
+ClockElm = require('./components/ClockElm.coffee')
+
 Scope = require('./components/Scope.coffee')
 
 ##
@@ -54,6 +57,7 @@ class ComponentRegistry
     'z': ZenerElm
     'i': CurrentElm
     't': TransistorElm
+    '174': PotElm
 
   # In progress:
     'S': Switch2Elm  # Needs interaction
@@ -88,6 +92,7 @@ class ComponentRegistry
     SparkGapElm: '187'
     OpAmpElm: 'a'
     MosfetElm: 'f'
+    PotElm: '174'
 
     RailElm: 'R'
     VarRailElm: '17'

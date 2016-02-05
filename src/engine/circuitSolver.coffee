@@ -507,7 +507,7 @@ class CircuitSolver
 
         # Step each element this iteration
         for circuitElm in @Circuit.getElements()
-          console.log("DOSTEP: #{circuitElm}")
+#          console.log("DOSTEP: #{circuitElm}")
           circuitElm.doStep(@Stamper)
 
         return if @stopMessage?
@@ -561,25 +561,16 @@ class CircuitSolver
       tm = (new Date()).getTime()
       lit = tm
 
-#      console.log("> 500: " + " sr: " + @steprate + " iter: " + iter + " subiter: " + subiter + " subitertime " + (tm - lastFrameTime) + " iter time: " + (tm - lastIterTime) + " lastIterTime: " + lastIterTime + " lastFrametime: " + lastFrameTime );
 
       if iter * 1000 >= stepRate * (tm - @lastIterTime)
-
-#        console.log("iter * 1000 >= stepRate * (tm - @lastIterTime)", iter, stepRate, tm, @listiter
-
 #        console.log("1 breaking from iteration: " + " sr: " + @steprate + " iter: " + subiter + " time: " + (tm - @lastIterTime) + " lastIterTime: " + @lastIterTime + " lastFrametime: " + @lastFrameTime );
         break
       else if (tm - @lastFrameTime) > 500
-        console.log("tm: " + tm)
-        console.log("@lastFrameTime: " + @lastFrameTime)
-
 #        console.log("> 500: " + " sr: " + @steprate + " iter: " + iter + " subiter: " + subiter + " subitertime " + (tm - @lastFrameTime) + " iter time: " + (tm - @lastIterTime) + " lastIterTime: " + @lastIterTime + " lastFrametime: " + @lastFrameTime );
-
         break
 
 
       ++iter
-
     # END: `loop`
 
     @frames++

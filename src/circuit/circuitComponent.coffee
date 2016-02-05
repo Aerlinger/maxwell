@@ -96,7 +96,6 @@ class CircuitComponent
     for param_name, definition of ParameterDefinitions
       default_value = definition.default_value
       data_type = definition.data_type
-      symbol = definition.symbol
 
       if param_name of component_params
         param_value = data_type(component_params[param_name])
@@ -350,8 +349,6 @@ class CircuitComponent
       return @point1
     else if postIdx == 1
       return @point2
-
-    console.printStackTrace()
 
   getBoundingBox: ->
     @boundingBox
