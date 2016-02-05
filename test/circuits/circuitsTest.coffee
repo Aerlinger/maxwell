@@ -5,8 +5,9 @@ fs = require("fs")
 CircuitComparator = require("../helpers/CircuitComparator.coffee")
 
 Maxwell = require("../../src/Maxwell.coffee")
+jsondiffpatch = require('jsondiffpatch').create({});
 
-describe.only "Testing all circuits", ->
+describe "Testing all circuits", ->
   @timeout(30000)
 
   before ->
@@ -15,6 +16,8 @@ describe.only "Testing all circuits", ->
     @files = filenames.map (file) ->
       path.basename(file, ".txt")
 
+  it "detects a close object", ->
+    expect({})
 
   it "tests each circuit", ->
     @files = ["ohms", "resistors", "inductac", "voltdivide", "thevenin", "norton", "diodelimit", "diodelimit"]
@@ -23,7 +26,7 @@ describe.only "Testing all circuits", ->
 
 #    @files = ["ohms", "voltdivide", "cap", "capac", "diodecurve", "diodevar", "opamp", "diodeclip", "induct"]
 #    @files = ["capseries"]
-    @files = ["diodevar"]
+#    @files = ["diodevar"]
 
     for circuit_name in @files
       circuit_file = "#{circuit_name}.json"
@@ -35,12 +38,16 @@ describe.only "Testing all circuits", ->
       analysisValidationFileName = "./dump/#{circuit_name}.txt_ANALYSIS.json"
       analysisValidationJson = JSON.parse(fs.readFileSync(analysisValidationFileName))
 
-#      assert.deepEqual(circuit.toJson(), analysisValidationJson)
+      assert.deepEqual(circuit.toJson(), analysisValidationJson)
+      jsondiffpatch.diff(circuit.toJson(), analysisValidationJson)
 
       simulationValidationFileName = "./dump/#{circuit_name}.txt_FRAMES.json"
       simulationValidationJson = JSON.parse(fs.readFileSync(simulationValidationFileName))
 
       assert.deepEqual(circuit.frameJson(), simulationValidationJson)
+      simulationDelta = jsondiffpatch.diff(circuit.frameJson(), simulationValidationJson)
+
+      simulationFlatDelta = flatdiff.diff(circuit.frameJson(), simulationValidationJson)
 
 #      { '0': { x: [ 50, 176 ], y: [ 25, 80 ], y2: [ 25, 80 ] },
 #      '1': { y: [ 25, 80 ], y2: [ 25, 80 ] },

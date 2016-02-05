@@ -1,5 +1,5 @@
-Circuit = require('../../../src/circuit/circuit.coffee')
-CapacitorElm = require('../../../src/circuit/components/CapacitorElm.coffee')
+Circuit = require('../../src/circuit/circuit.coffee')
+CapacitorElm = require('../../src/circuit/components/CapacitorElm.coffee')
 
 describe.skip "Capacitor Component", ->
   beforeEach ->

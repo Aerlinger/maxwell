@@ -1,6 +1,6 @@
-Circuit = require('../../../src/circuit/circuit.coffee')
-VoltageElm = require('../../../src/circuit/components/VoltageElm.coffee')
-MatrixStamper = require('../../../src/engine/matrixStamper.coffee')
+Circuit = require('../../src/circuit/circuit.coffee')
+VoltageElm = require('../../src/circuit/components/VoltageElm.coffee')
+MatrixStamper = require('../../src/engine/matrixStamper.coffee')
 
 describe "Voltage Component", ->
   beforeEach ->

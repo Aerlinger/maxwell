@@ -1,6 +1,6 @@
-Circuit = require('../../../src/circuit/circuit.coffee')
-WireElm = require('../../../src/circuit/components/WireElm.coffee')
-MatrixStamper = require('../../../src/engine/matrixStamper.coffee')
+Circuit = require('../../src/circuit/circuit.coffee')
+WireElm = require('../../src/circuit/components/WireElm.coffee')
+MatrixStamper = require('../../src/engine/matrixStamper.coffee')
 
 describe "Wire Component", ->
   beforeEach ->

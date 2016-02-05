@@ -1,6 +1,6 @@
-Circuit = require('../../../src/circuit/circuit.coffee')
-CircuitComponent = require('../../../src/circuit/circuitComponent.coffee')
-ResistorElm = require('../../../src/circuit/components/ResistorElm.coffee')
+Circuit = require('../../src/circuit/circuit.coffee')
+CircuitComponent = require('../../src/circuit/circuitComponent.coffee')
+ResistorElm = require('../../src/circuit/components/ResistorElm.coffee')
 
 describe "Resistor", ->
   beforeEach ->
