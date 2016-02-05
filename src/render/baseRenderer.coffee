@@ -109,6 +109,4 @@ class BaseRenderer extends Observer
       ps1.x = ps2.x
       ps1.y = ps2.y
 
-
-
 module.exports = BaseRenderer

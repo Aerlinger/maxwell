@@ -5,9 +5,9 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 MathUtils = require('../../util/MathUtils.coffee')
+DrawUtil = require("../../util/drawUtil.coffee")
 
 class OpAmpElm extends CircuitComponent
-
   @FLAG_SWAP: 1
   @FLAG_SMALL: 2
   @FLAG_LOWGAIN: 4
@@ -19,7 +19,7 @@ class OpAmpElm extends CircuitComponent
       description: "Maximum allowable output voltage of the Op Amp"
       symbol: "V"
       default_value: 15
-      data_type: "float"
+      data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"
     },
@@ -29,17 +29,17 @@ class OpAmpElm extends CircuitComponent
       description: "Minimum allowable output voltage of the Op Amp"
       symbol: "V"
       default_value: 15
-      data_type: "float"
+      data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"
     },
-    "gain": {
+    "gbw": {
       name: "Gain"
       unit: ""
       description: "Gutput gain"
       symbol: ""
       default_value: 1e6
-      data_type: "float"
+      data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"
     }
@@ -137,21 +137,21 @@ class OpAmpElm extends CircuitComponent
     else
       ww = Math.floor(@opwidth)
 
-    @calcLeads renderContext, ww * 2
+    @calcLeads ww * 2
     hs = Math.floor(@opheight * @dsign)
-    hs = -hs  unless (@flags & OpAmpElm.FLAG_SWAP) is 0
+    hs = -hs unless (@flags & OpAmpElm.FLAG_SWAP) is 0
 
     @in1p = ArrayUtils.newPointArray(2)
     @in2p = ArrayUtils.newPointArray(2)
     @textp = ArrayUtils.newPointArray(2)
 
-    [@in1p[0], @in2p[0]] = renderContext.interpolateSymmetrical @point1, @point2, 0, hs
-    [@in1p[1], @in2p[1]] = renderContext.interpolateSymmetrical @lead1, @lead2, 0, hs
-    [@textp[0], @textp[1]] = renderContext.interpolateSymmetrical @lead1, @lead2, .2, hs
+    [@in1p[0], @in2p[0]] = DrawUtil.interpolateSymmetrical @point1, @point2, 0, hs
+    [@in1p[1], @in2p[1]] = DrawUtil.interpolateSymmetrical @lead1, @lead2, 0, hs
+    [@textp[0], @textp[1]] = DrawUtil.interpolateSymmetrical @lead1, @lead2, .2, hs
 
     tris = ArrayUtils.newPointArray(2)
-    [tris[0], tris[1]] = renderContext.interpolateSymmetrical @lead1, @lead2, 0, hs * 2
-    @triangle = renderContext.createPolygonFromArray([tris[0], tris[1], @lead2])
+    [tris[0], tris[1]] = DrawUtil.interpolateSymmetrical @lead1, @lead2, 0, hs * 2
+    @triangle = DrawUtil.createPolygonFromArray([tris[0], tris[1], @lead2])
 
 
   getPostCount: ->
@@ -184,9 +184,9 @@ class OpAmpElm extends CircuitComponent
   doStep: (stamper) ->
     vd = @volts[1] - @volts[0]
     if Math.abs(@lastvd - vd) > .1
-      @Circuit.converged = false
+      @Circuit.Solver.converged = false
     else if @volts[2] > @maxOut + .1 or @volts[2] < @minOut - .1
-      @Circuit.converged = false
+      @Circuit.Solver.converged = false
 
     x = 0
     vn = @Circuit.numNodes() + @voltSource

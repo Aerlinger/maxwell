@@ -84,7 +84,7 @@ class CircuitSolver
 #      if Settings.SPEED is 0
 #        return 0
 #      sim_speed = @Circuit.simSpeed()
-    sim_speed = 150
+    sim_speed = 172
     return 0.1 * Math.exp((sim_speed - 61.0) / 24.0)
 
 
@@ -144,13 +144,9 @@ class CircuitSolver
         k = 0
         while k < @Circuit.numNodes()
           cn = @Circuit.getNode(k)
-#          console.log("j=" + j + "  k=" + k + "  pt=" + postPt + "  " + cn)
           if postPt.x is cn.x and postPt.y is cn.y
-#            console.log("#{i} Break!")
             break
           k++
-
-#        console.log("NUM NODES: #{i} " + @Circuit.numNodes())
 
         if k is @Circuit.numNodes()
           cn = new CircuitNode(postPt.x, postPt.y)
@@ -279,7 +275,6 @@ class CircuitSolver
           return
       # Look for voltage source loops:
       if (ce instanceof VoltageElm and ce.getPostCount() is 2) or ce instanceof WireElm
-#        console.log("Examining Loop: #{ce.dump()}")
         pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
 
         if pathfinder.findPath(ce.getNode(0))
@@ -309,7 +304,7 @@ class CircuitSolver
 
       re = @circuitRowInfo[i]
       if re.lsChanges or re.dropRow or re.rsChanges
-        console.log("CONT: " + re.toString())
+#        console.log("CONT: " + re.toString())
         continue
 
       rsadd = 0
@@ -320,6 +315,7 @@ class CircuitSolver
         # *
         if @circuitRowInfo[j].type is RowInfo.ROW_CONST
           # Keep a running total of const values that have been removed already
+#          console.log("j=#{j} q=#{q}")
           rsadd -= @circuitRowInfo[j].value * q
           continue
         if q is 0
@@ -333,7 +329,7 @@ class CircuitSolver
           continue
         break
 
-      console.log(i, j, ":", qm, qp, qv, q)
+#      console.log(i, j, ":", qm, qp, qv, q)
 
       if j is @matrixSize
         if qp is -1
@@ -357,9 +353,10 @@ class CircuitSolver
             continue
 
           elt.type = RowInfo.ROW_CONST
+#          console.log("i=#{i} rsadd: #{rsadd}, qm is #{qm}, qv is #{qv}, crs=#{@circuitRightSide[i]} rsadd=#{rsadd}")
           elt.value = (@circuitRightSide[i] + rsadd) / qv
 
-          console.log(i + " qm is -1: @circuitRowInfo[i].dropRow = true")
+#          console.log(i + " qm is -1: @circuitRowInfo[i].dropRow = true")
           @circuitRowInfo[i].dropRow = true
 
 #          console.warn("iter = 0 # start over from scratch")
@@ -378,7 +375,7 @@ class CircuitSolver
               continue
           elt.type = RowInfo.ROW_EQUAL
           elt.nodeEq = qm
-          console.log(i + " else if (@circuitRightSide[i] + rsadd) is 0")
+#          console.log(i + " else if (@circuitRightSide[i] + rsadd) is 0")
           @circuitRowInfo[i].dropRow = true
 
 
@@ -395,7 +392,7 @@ class CircuitSolver
           rowNodeEq = @circuitRowInfo[rowInfo.nodeEq]
           break  unless rowNodeEq.type is RowInfo.ROW_EQUAL
           break  if i is rowNodeEq.nodeEq
-          console.log("rowInfo.nodeEq = rowNodeEq.nodeEq")
+#          console.log("rowInfo.nodeEq = rowNodeEq.nodeEq")
           rowInfo.nodeEq = rowNodeEq.nodeEq
       rowInfo.mapCol = -1  if rowInfo.type is RowInfo.ROW_CONST
 
@@ -407,6 +404,8 @@ class CircuitSolver
 
           # if something is equal to a const, it's a const
           rowInfo.type = rowNodeEq.type
+
+#          console.log("411", rowNodeEq.value)
           rowInfo.value = rowNodeEq.value
           rowInfo.mapCol = -1
         else
@@ -422,20 +421,21 @@ class CircuitSolver
     for i in [0...@matrixSize]
       circuitRowInfo = @circuitRowInfo[i]
 
-      console.log(circuitRowInfo.toString());
+#      console.log(circuitRowInfo.toString());
 
       if circuitRowInfo.dropRow
         circuitRowInfo.mapRow = -1
         continue
       newRS[ii] = @circuitRightSide[i]
       circuitRowInfo.mapRow = ii
-
       for j in [0...@matrixSize]
         rowInfo = @circuitRowInfo[j]
         if rowInfo.type is RowInfo.ROW_CONST
           newRS[ii] -= rowInfo.value * @circuitMatrix[i][j]
         else
           newMatx[ii][rowInfo.mapCol] += @circuitMatrix[i][j]
+
+#      console.log("ii: #{ii} #{newRS[ii]}")
       ii++
 
     @circuitMatrix = newMatx
@@ -507,6 +507,7 @@ class CircuitSolver
 
         # Step each element this iteration
         for circuitElm in @Circuit.getElements()
+          console.log("DOSTEP: #{circuitElm}")
           circuitElm.doStep(@Stamper)
 
         return if @stopMessage?
@@ -543,13 +544,15 @@ class CircuitSolver
         subiter++
       # End for
 
-#      if (subiter > 5)
-#        console.log("converged after " + subiter + " iterations\n")
+      if (subiter > 5)
+        console.log("converged after " + subiter + " iterations\n")
       if subiter >= subiterCount
         @halt "Convergence failed: " + subiter, null
         break
 
       @Circuit.time += @Circuit.timeStep()
+
+#      console.log("ts: #{@Circuit.time}, #{@Circuit.timeStep()} #{iter} #{stepRate}")
 
       # TODO: Update scopes here
       #        for scope in @Circuit.scopes
@@ -558,10 +561,22 @@ class CircuitSolver
       tm = (new Date()).getTime()
       lit = tm
 
+#      console.log("> 500: " + " sr: " + @steprate + " iter: " + iter + " subiter: " + subiter + " subitertime " + (tm - lastFrameTime) + " iter time: " + (tm - lastIterTime) + " lastIterTime: " + lastIterTime + " lastFrametime: " + lastFrameTime );
+
       if iter * 1000 >= stepRate * (tm - @lastIterTime)
+
+#        console.log("iter * 1000 >= stepRate * (tm - @lastIterTime)", iter, stepRate, tm, @listiter
+
+#        console.log("1 breaking from iteration: " + " sr: " + @steprate + " iter: " + subiter + " time: " + (tm - @lastIterTime) + " lastIterTime: " + @lastIterTime + " lastFrametime: " + @lastFrameTime );
         break
       else if (tm - @lastFrameTime) > 500
+        console.log("tm: " + tm)
+        console.log("@lastFrameTime: " + @lastFrameTime)
+
+#        console.log("> 500: " + " sr: " + @steprate + " iter: " + iter + " subiter: " + subiter + " subitertime " + (tm - @lastFrameTime) + " iter time: " + (tm - @lastIterTime) + " lastIterTime: " + @lastIterTime + " lastFrametime: " + @lastFrameTime );
+
         break
+
 
       ++iter
 
@@ -679,6 +694,7 @@ class CircuitSolver
       circuitRightSide[i] = swap
       break unless swap is 0
       ++i
+
     bi = i++
     while i < numRows
       row = pivotVector[i]
@@ -693,6 +709,7 @@ class CircuitSolver
       circuitRightSide[i] = tot
       ++i
     i = numRows - 1
+
     while i >= 0
       total = circuitRightSide[i]
 
@@ -702,6 +719,7 @@ class CircuitSolver
         total -= circuitMatrix[i][j] * circuitRightSide[j]
         ++j
       circuitRightSide[i] = total / circuitMatrix[i][i]
+
       i--
 
   dump: ->

@@ -38,7 +38,7 @@ class ProbeElm extends CircuitComponent
     #      else
     len = @dn - 32
 
-    @calcLeads renderContext, Math.floor(len)
+    @calcLeads Math.floor(len)
 
 #    if @isSelected()
 #      color = Settings.SELECT_COLOR

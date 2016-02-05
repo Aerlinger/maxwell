@@ -262,6 +262,7 @@ class Renderer extends BaseRenderer
 
     new Point(interpX, interpY)
 
+  # Deprecate this shit
   interpolateSymmetrical: (ptA, ptB, u, v) ->
     dx = ptB.y - ptA.y
     dy = ptA.x - ptB.x

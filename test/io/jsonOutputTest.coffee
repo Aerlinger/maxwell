@@ -3,7 +3,7 @@ Maxwell = require('../../src/Maxwell.coffee')
 fs = require("fs")
 
 
-describe.only "JSON output", ->
+describe "JSON output", ->
   before (done) ->
     @circuit = Maxwell.loadCircuitFromFile("./circuits/ohms.json")
     @circuit.updateCircuit()

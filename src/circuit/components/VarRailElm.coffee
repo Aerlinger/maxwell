@@ -4,93 +4,61 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 RailElm = require('./RailElm.coffee')
+VoltageElm = require('./VoltageElm.coffee')
+
+sprintf = require("sprintf-js").sprintf
+_ = require("lodash")
 
 class VarRailElm extends RailElm
 
-  @ParameterDefinitions = {
-    "waveform": {
-      name: "none"
-      unit: "none"
-      symbol: "none"
-      default_value: 0
-      data_type: "integer"
-      range: [0, 6]
-    },
-    "frequency": {
-      name: "Frequency"
-      unit: "Hertz",
-      default_value: 40,
-      symbol: "Hz",
-      data_type: "float"
-      range: [-Infinity, Infinity]
-    },
-    "maxVoltage": {
-      name: "Voltage"
-      unit: "Voltage"
-      symbol: "V"
-      default_value: 5
-      data_type: "float"
-      range: [-Infinity, Infinity]
-    },
-    "bias": {
-      name: "Voltage"
-      unit: "Voltage"
-      symbol: "V"
-      default_value: 0
-      data_type: "float"
-      range: [-Infinity, Infinity]
-    },
-    "phaseShift": {
-      name: "degrees"
-      unit: "degrees",
-      default_value: 0,
-      symbol: "deg",
-      data_type: "float"
-      range: [-360, 360]
-    },
-    "dutyCycle": {
-      name: "percentage"
-      unit: "",
-      default_value: 0,
-      symbol: "%",
-      data_type: "float"
-      range: [0, 100]
-    },
-    "label": {
-      name: "label"
+  @ParameterDefinitions = {}
+
+  _.extend(@ParameterDefinitions, RailElm.ParameterDefinitions, {
+    "sliderText": {
+      name: "sliderText"
       unit: "",
       default_value: "Voltage",
       symbol: "%",
-      data_type: "string"
+      data_type: (x) -> x
     }
-# Flags:
-#    @FLAG_COS: 2
-  }
-
+  })
 
   constructor: (xa, ya, xb, yb, params) ->
-#      @sliderText = "voltage"
-    @frequency = @maxVoltage
-
+    @waveform = VoltageElm.WF_VAR
     super(xa, ya, xb, yb, params)
-#      @createSlider()
+
+#    console.log(@toJson())
+
+    @sliderValue = Math.floor((@frequency - @bias) * 100 / (@maxVoltage - @bias));
+
+#    console.log("value: #{@sliderValue}")
+
+#  setPoints: ->
+#    super()
+#
+#    diameter = if (@waveform == VoltageElm.WF_DC || @waveform == VoltageElm.WF_VAR)
+#      8
+#    else
+#      @circleSize * 2
+#
+#    @calcLeads(diameter)
 
   getDumpType: ->
     172
 
   createSlider: ->
 
-  getVoltageDiff: ->
-    @volts[0]
+  getSliderValue: ->
+    100
+
+#  getVoltageDiff: ->
+#    @volts[0]
 
     # Todo: implement
   getVoltage: ->
-    super()
-#      frequency = slider.getValue() * (maxVoltage - bias) / 100.0 + bias
-#      frequency
+    @frequency = @sliderValue * (@maxVoltage - @bias) / 100.0 + @bias;
 
-  destroy: ->
-#      Circuit.main.remove label
-#      Circuit.main.remove slider
+#    console.log("frequency: #{@frequency}")
+    return @frequency
 
 module.exports = VarRailElm

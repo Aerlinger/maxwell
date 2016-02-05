@@ -25,7 +25,7 @@ describe "CircuitLoader", ->
       data_type = definition.data_type
 
       param_value = param_list[i]
-      result[param_name] = convert[data_type](param_value)
+      result[param_name] = data_type(param_value)
 
     expect(result).to.deep.equal({
         "bias": 0

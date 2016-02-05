@@ -38,7 +38,7 @@ class GroundElm extends CircuitComponent
     @current = -currentVal
 
   stamp: (stamper) ->
-    console.log("\n::Stamping GroundElm::")
+#    console.log("\n::Stamping GroundElm::")
     stamper.stampVoltageSource 0, @nodes[0], @voltSource, 0
 
   getVoltageDiff: ->

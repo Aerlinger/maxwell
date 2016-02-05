@@ -12,7 +12,7 @@ class ResistorElm extends CircuitComponent
       unit: "Ohms",
       default_value: 1000,
       symbol: "Ω",
-      data_type: "float"
+      data_type: parseFloat
       range: [0, Infinity]
       type: "physical"
     }
@@ -25,7 +25,7 @@ class ResistorElm extends CircuitComponent
     @resistance
 
   draw: (renderContext) ->
-    @calcLeads renderContext, 32
+    @calcLeads 32
     @updateDots()
 
     numSegments = 16
@@ -75,7 +75,7 @@ class ResistorElm extends CircuitComponent
     @current = (@volts[0] - @volts[1]) / @resistance
 
   stamp: (stamper) ->
-    console.log("\n::Stamping Resistor::")
+#    console.log("\n::Stamping Resistor::")
 
     if @orphaned()
       console.warn "attempting to stamp an orphaned resistor"

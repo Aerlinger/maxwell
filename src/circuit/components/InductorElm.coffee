@@ -14,7 +14,7 @@ class InductorElm extends CircuitComponent
       symbol: "H"
       default_value: 1e-3
       range: [-Infinity, Infinity]
-      data_type: "float"
+      data_type: parseFloat
       type: "physical"
     },
     "current": {
@@ -23,7 +23,7 @@ class InductorElm extends CircuitComponent
       symbol: "A"
       default_value: 0
       range: [-Infinity, Infinity]
-      data_type: "float"
+      data_type: parseFloat
       type: "physical"
     }
   }
@@ -63,7 +63,7 @@ class InductorElm extends CircuitComponent
     stamper.stampCurrentSource @nodes[0], @nodes[1], @curSourceValue
 
   draw: (renderContext) ->
-    @calcLeads renderContext, 32
+    @calcLeads 32
 
     @updateDots()
 
@@ -94,7 +94,7 @@ class InductorElm extends CircuitComponent
     false
 
   isTrapezoidal: ->
-    false
+    true
 #    (@flags & InductorElm.FLAG_BACK_EULER) is 0
 
   calculateCurrent: ->

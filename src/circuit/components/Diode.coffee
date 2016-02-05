@@ -56,7 +56,7 @@ class Diode
         # as in linearized model from previous iteration.
         # (1/vt = slope of load line)
         vnew = @vt * Math.log(vnew / @vt)
-      @circuit.converged = false
+      @circuit.Solver.converged = false
 
     else if vnew < 0 and @zoffset isnt 0
       # for Zener breakdown, use the same logic but translate the values
@@ -74,7 +74,7 @@ class Diode
             vnew = @vcrit
         else
           vnew = @vt * Math.log(vnew / @vt)
-        @circuit.converged = false
+        @circuit.Solver.converged = false
       vnew = -(vnew + @zoffset)
     vnew
 
@@ -90,7 +90,7 @@ class Diode
   doStep: (voltdiff, stamper) ->
     # used to have .1 here, but needed .01 for peak detector
     if Math.abs(voltdiff - @lastvoltdiff) > .01
-      @circuit.converged = false
+      @circuit.Solver.converged = false
     voltdiff = @limitStep(voltdiff, @lastvoltdiff)
 
     @lastvoltdiff = voltdiff

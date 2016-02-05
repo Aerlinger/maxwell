@@ -20,18 +20,25 @@ Point = require('../geom/point.coffee')
 MathUtils = require('../util/mathUtils.coffee')
 ArrayUtils = require('../util/arrayUtils.coffee')
 FormatUtils = require('../util/formatUtils.coffee')
+DrawUtil = require("../util/drawUtil.coffee")
+
+_ = require("lodash")
 
 sprintf = require("sprintf-js").sprintf
 
 class CircuitComponent
   @ParameterDefinitions = {}
 
-  constructor: (@x1 = 100, @y1 = 100, @x2 = 100, @y2 = 200, params = {}, flags = 0) ->
+  constructor: (@x1, @y1, @x2, @y2, params) ->
     @current = 0
     @curcount = 0
+    @voltSource = 0
     @noDiagonal = false
     @Circuit = null
-    @flags = flags
+
+    # TODO: Beware of slowness with 'delete' (http://stackoverflow.com/questions/208105/how-do-i-remove-a-property-from-a-javascript-object)
+    @flags = params['flags']
+    delete params['flags']
 
     @nodes = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
     @volts = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
@@ -49,7 +56,8 @@ class CircuitComponent
     "float": parseFloat,
     "integer": parseInt,
     "sign": Math.sign,
-    "string": sprintf
+    "string": sprintf,
+    "boolean": (x)-> if (x.toString() == "true") then 1 else 0
   }
 
   convertParamsToHash: (param_list) ->
@@ -60,15 +68,20 @@ class CircuitComponent
       param_name = Object.keys(ParameterDefinitions)[i]
       param_value = param_list[i]
 
-      console.log(param_name)
-      console.log(param_value)
-
+#      console.log("#{i}: param_name", ParameterDefinitions)
       data_type = ParameterDefinitions[param_name].data_type
+#      console.log(data_type  + " " + param_value)
+#      console.log(param_value)
 
       if (!data_type?)
         console.log("Data type: #{data_type} not found for parameter #{param_name} and value #{param_value}")
 
-      result[param_name] = CircuitComponent.conversionTypes[data_type](param_value)
+      if !data_type
+        console.warn("No conversion found for #{data_type}")
+
+      result[param_name] = data_type.call(this, param_value)
+
+#    console.log(result)
 
     return result
 
@@ -86,15 +99,15 @@ class CircuitComponent
       symbol = definition.symbol
 
       if param_name of component_params
-        param_value = CircuitComponent.conversionTypes[data_type](component_params[param_name])
+        param_value = data_type(component_params[param_name])
 
         this[param_name] = param_value
         @params[param_name] = param_value
 
         delete component_params[param_name]
       else
-        this[param_name] = CircuitComponent.conversionTypes[data_type](default_value)
-        @params[param_name] = CircuitComponent.conversionTypes[data_type](default_value)
+        this[param_name] = data_type(default_value)
+        @params[param_name] = data_type(default_value)
     #        console.warn("Defined parameter #{param_name} not set for #{this} (defaulting to #{default_value}#{symbol})")
 
     unmatched_params = (param for param of component_params)
@@ -190,7 +203,7 @@ class CircuitComponent
     @getVoltageDiff() * @current
 
   calculateCurrent: ->
-# To be implemented by subclasses
+    # To be implemented by subclasses
 
 # Steps forward one frame and performs calculation
   doStep: ->
@@ -222,14 +235,13 @@ class CircuitComponent
     @volts[node_idx] = voltage
     @calculateCurrent()
 
-  calcLeads: (renderContext, len) ->
+  calcLeads: (len) ->
     if @dn < len or len is 0
       @lead1 = @point1
       @lead2 = @point2
-      return
-
-    @lead1 = renderContext.interpolate(@point1, @point2, (@dn - len) / (2 * @dn))
-    @lead2 = renderContext.interpolate(@point1, @point2, (@dn + len) / (2 * @dn))
+    else
+      @lead1 = DrawUtil.interpolate(@point1, @point2, (@dn - len) / (2 * @dn))
+      @lead2 = DrawUtil.interpolate(@point1, @point2, (@dn + len) / (2 * @dn))
 
   isVertical: ->
     @dx == 0
@@ -282,7 +294,7 @@ class CircuitComponent
     @setPoints()
 
   stamp: ->
-    throw("Called abstract function stamp() in Circuit #{@getDumpType()}")
+    @Circuit.halt("Called abstract function stamp() in Circuit #{@getDumpType()}")
 
 # Todo: implement needed
   getDumpClass: ->
@@ -399,8 +411,10 @@ class CircuitComponent
 
   draw: (renderContext) ->
 #    @curcount = @updateDotCount()
-    @calcLeads renderContext, 0
+    @calcLeads 0
+
     @updateDots(this)
+
     renderContext.drawValue 10, 0, this, @toString()
     renderContext.drawPosts(this)
     renderContext.drawLeads(this)
@@ -411,6 +425,8 @@ class CircuitComponent
     currentIncrement = @current * @Circuit.currentSpeed()
     @curcount = (@curcount + currentIncrement) % ds
     @curcount += ds if @curcount < 0
+
+    @curcount
 
   getUnitText: (value, unit, decimalPoints = 2) ->
     absValue = Math.abs(value)
@@ -444,10 +460,11 @@ class CircuitComponent
       y2: @y2
       flags: @flags
       nodes: @nodes
+      params: @params
       selected: false
       voltSource: @getVoltageSource()
       needsShortcut: @needsShortcut()
-      dumpType: @getDumpType()
+      dump: @getDumpType().toString()
       postCount: @getPostCount()
       nonLinear: @nonLinear()
     }

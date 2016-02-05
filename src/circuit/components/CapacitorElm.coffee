@@ -13,7 +13,7 @@ class CapacitorElm extends CircuitComponent
       unit: "Farads",
       default_value: 5e-6,
       symbol: "F",
-      data_type: "float"
+      data_type: parseFloat
       range: [0, Infinity]
       type: "physical"
     },
@@ -22,7 +22,7 @@ class CapacitorElm extends CircuitComponent
       unit: "Volts"
       default_value: 10
       symbol: "V"
-      data_type: "float"
+      data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"
     }
@@ -37,14 +37,14 @@ class CapacitorElm extends CircuitComponent
     super(xa, ya, xb, yb, params)
 
   isTrapezoidal: ->
-    false
+    true
 #    (@flags & CapacitorElm.FLAG_BACK_EULER) is 0
 
   nonLinear: ->
     false
 
   setNodeVoltage: (n, c) ->
-    super n, c
+    super(n, c)
     @voltDiff = @volts[0] - @volts[1]
 
   reset: ->
@@ -119,22 +119,19 @@ class CapacitorElm extends CircuitComponent
     stamper.stampRightSide @nodes[0]
     stamper.stampRightSide @nodes[1]
 
-    return
-
   startIteration: ->
     if @isTrapezoidal()
       @curSourceValue = -@voltDiff / @compResistance - @current
     else
       @curSourceValue = -@voltDiff / @compResistance
 
-    return
-
   calculateCurrent: ->
     vdiff = @volts[0] - @volts[1]
 
     # we check compResistance because this might get called before stamp(), which sets compResistance, causing
     # infinite current
-    @current = vdiff / @compResistance + @curSourceValue  if @compResistance > 0
+    if @compResistance > 0
+      @current = vdiff / @compResistance + @curSourceValue
 
   getInfo: (arr) ->
     super()

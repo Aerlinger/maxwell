@@ -11,7 +11,7 @@ class CurrentElm extends CircuitComponent
       name: "Current",
       symbol: "A",
       default_value: 0.01,
-      data_type: "float"
+      data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"
     }
@@ -24,7 +24,7 @@ class CurrentElm extends CircuitComponent
     "i"
 
   draw: (renderContext) ->
-    @calcLeads renderContext, 26
+    @calcLeads 26
 
     @ashaft1 = renderContext.interpolate(@lead1, @lead2, .25)
     @ashaft2 = renderContext.interpolate(@lead1, @lead2, .6)

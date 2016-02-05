@@ -15,7 +15,7 @@ class TransistorElm extends CircuitComponent
       symbol: ""
       description: "Current multiplier"
       default_value: 100
-      data_type: "sign"
+      data_type: Math.sign
       range: [0, Infinity]
       type: "attribute"
     },
@@ -24,7 +24,7 @@ class TransistorElm extends CircuitComponent
       unit: "Voltage"
       symbol: "V"
       default_value: 0
-      data_type: "float"
+      data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"
     }
@@ -33,7 +33,7 @@ class TransistorElm extends CircuitComponent
       unit: "Voltage"
       symbol: "V"
       default_value: 0
-      data_type: "float"
+      data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"
     },
@@ -43,7 +43,7 @@ class TransistorElm extends CircuitComponent
       symbol: ""
       description: "Current multiplier"
       default_value: 100
-      data_type: "float"
+      data_type: parseFloat
       range: [0, Infinity]
       type: "scalar"
     }
@@ -219,7 +219,7 @@ class TransistorElm extends CircuitComponent
           vnew = @vcrit
       else
         vnew = @vt * Math.log(vnew / @vt)
-      @getParentCircuit().converged = false
+      @getParentCircuit().Solver.converged = false
 
     #console.log(vnew + " " + oo + " " + vold);
     vnew
@@ -237,7 +237,7 @@ class TransistorElm extends CircuitComponent
 
     # .01
     if Math.abs(vbc - @lastvbc) > .01 or Math.abs(vbe - @lastvbe) > .01
-      @getParentCircuit.converged = false
+      @getParentCircuit.Solver.converged = false
     @gmin = 0
     if subIterations > 100
 

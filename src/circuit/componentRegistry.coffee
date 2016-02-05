@@ -21,6 +21,8 @@ Switch2Elm = require('./components/Switch2Elm.coffee')
 TextElm = require('./components/TextElm.coffee')
 ProbeElm = require('./components/ProbeElm.coffee')
 
+Scope = require('./components/Scope.coffee')
+
 ##
 # ElementMap
 #
@@ -58,6 +60,14 @@ class ComponentRegistry
     'x': TextElm
     'p': ProbeElm
     'O': OutputElm
+
+    'o': Scope
+#    'h': Scope
+    '$': Scope
+    '%': Scope
+    '?': Scope
+    'B': Scope
+
 #    'L': LogicInput
 #    'M': LogicOutput
 #   'I': Inverter
@@ -87,7 +97,8 @@ class ComponentRegistry
 
     Switch2Elm: 'S'
     TextElm: 'x'
-    ProbeElm: 'o'
+    ProbeElm: 'p'
+    Scope: 'o'
     OutputElm: 'O'
   }
 

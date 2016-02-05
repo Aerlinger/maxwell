@@ -6,6 +6,27 @@ Point = require('../../geom/point.coffee')
 
 class SwitchElm extends CircuitComponent
 
+  @ParameterDefinitions = {
+    "position": {
+      name: "Position"
+      default_value: 0
+      data_type: (str)->
+        str = str.toString()
+
+        if str == 'true'
+          1
+        else if str == 'false'
+          0
+        else
+          parseInt(str)
+    },
+    "momentary": {
+      name: "Momentary"
+      default_value: 0
+      data_type: (str) -> str.toString() == 'true'
+    }
+  }
+
   constructor: (xa, ya, xb, yb, params) ->
     @momentary = false
     @position = 0
@@ -29,6 +50,14 @@ class SwitchElm extends CircuitComponent
     super(xa, ya, xb, yb, params)
 
 
+  setPoints: ->
+#    super.setPoints()
+    super()
+
+    @calcLeads(32)
+    @ps = new Point(0, 0)
+    @ps2 = new Point(0, 0)
+
   getDumpType: ->
     "s"
 
@@ -38,7 +67,7 @@ class SwitchElm extends CircuitComponent
       stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
 
   draw: (renderContext) ->
-    @calcLeads renderContext, 32
+    @calcLeads 32
     @ps = new Point(0, 0)
     @ps2 = new Point(0, 0)
 
@@ -92,4 +121,4 @@ class SwitchElm extends CircuitComponent
     "SwitchElm"
 
 
-return SwitchElm
+module.exports = SwitchElm

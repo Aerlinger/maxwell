@@ -5,6 +5,9 @@ Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 SwitchElm = require('./SwitchElm.coffee')
 ArrayUtils = require('../../util/arrayUtils.coffee')
+DrawUtil = require('../../util/drawUtil.coffee')
+
+_ = require("lodash")
 
 ###
 Todo: Click functionality does not work
@@ -13,19 +16,19 @@ class Switch2Elm extends SwitchElm
 
   @FLAG_CENTER_OFF: 1
 
-  @ParameterDefinitions = {
+  @ParameterDefinitions = {}
+
+  _.extend(@ParameterDefinitions, SwitchElm.ParameterDefinitions, {
     "link": {
-      name: "switch"
+      name: "link"
       unit: "",
       default_value: 0,
       symbol: "",
-      data_type: "boolean"
+      data_type: parseInt
       range: [0, 1]
       type: "attribute"
     }
-    # FLAGS:
-#    @FLAG_CENTER_OFF: 1
-  }
+  })
 
   constructor: (xa, ya, xb, yb, params) ->
     @openhs = 16
@@ -35,13 +38,27 @@ class Switch2Elm extends SwitchElm
     super(xa, ya, xb, yb, params)
 
 
+  setPoints: ->
+    super()
+#    @calcLeads(32);
+
+    @swposts = ArrayUtils.newPointArray(2);
+    @swpoles = ArrayUtils.newPointArray(3);
+
+    DrawUtil.interpolateSymmetrical(@lead1, @lead2, @swpoles[0], @swpoles[1], 1, @openhs);
+    @swpoles[2] = @lead2;
+
+    DrawUtil.interpolateSymmetrical(@point1, @point2, @swposts[0], @swposts[1], 1, @openhs);
+
+    @posCount = @hasCenterOff() ? 3 : 2;
+
   getDumpType: ->
     "S"
 
   draw: (renderContext) ->
     @setBbox @point1, @point2, @openhs
 
-    @calcLeads renderContext, 32
+    @calcLeads 32
 
     @swpoles = ArrayUtils.newPointArray(3)
     @swposts = ArrayUtils.newPointArray(2)
@@ -78,7 +95,10 @@ class Switch2Elm extends SwitchElm
     @drawPosts(renderContext)
 
   getPost: (n) ->
-    if (n is 0) then @point1 else @swposts[n - 1]
+    if (n is 0)
+      @point1
+    else
+      @swposts[n - 1]
 
   getPostCount: ->
     3
@@ -88,7 +108,7 @@ class Switch2Elm extends SwitchElm
 
   stamp: (stamper) ->
     # in center?
-    return  if @position is 2
+    return if @position is 2
     stamper.stampVoltageSource @nodes[0], @nodes[@position + 1], @voltSource, 0
 
   getVoltageSourceCount: ->
@@ -122,4 +142,4 @@ class Switch2Elm extends SwitchElm
     (@flags & Switch2Elm.FLAG_CENTER_OFF) isnt 0
 
 
-return Switch2Elm
+module.exports = Switch2Elm

@@ -4,6 +4,8 @@ Circuit = require('./circuit/circuit.coffee')
 Renderer = require('./render/renderer.coffee')
 Winston = require('winston')
 
+environment = require("./environment")
+
 class Maxwell
   version = "0.0.0"
 

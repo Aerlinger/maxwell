@@ -16,7 +16,7 @@ class DiodeElm extends CircuitComponent
       unit: "Voltage"
       symbol: "V"
       default_value: DiodeElm.DEFAULT_DROP
-      data_type: "float"
+      data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"
     }
@@ -33,8 +33,6 @@ class DiodeElm extends CircuitComponent
     @fwdrop = DiodeElm.DEFAULT_DROP
     @zvoltage = 0
 
-    super(xa, ya, xb, yb, params)
-
     #    if (f & DiodeElm.FLAG_FWDROP) > 0
     #      try
     #        @fwdrop = parseFloat(st)
@@ -42,12 +40,14 @@ class DiodeElm extends CircuitComponent
     @nodes = new Array(2)
     @vt = 0
     @vdcoef = 0
-    @fwdrop = 0
+    @fwdrop = .805904783
     @zvoltage = 0
     @zoffset = 0
     @lastvoltdiff = 0
     @crit = 0
     @leakage = 1e-14
+
+    super(xa, ya, xb, yb, params)
 
     @setup()
 
@@ -61,7 +61,9 @@ class DiodeElm extends CircuitComponent
     # critical voltage for limiting; current is vt/sqrt(2) at this voltage
     @vcrit = @vt * Math.log(@vt / (Math.sqrt(2) * @leakage))
 
-    unless @zvoltage is 0
+    if @zvoltage is 0
+      @zoffset = 0
+    else
     # calculate offset which will give us 5mA at zvoltage
       i = -.005
       @zoffset = @zvoltage - Math.log(-(1 + i / @leakage)) / @vdcoef
@@ -72,7 +74,7 @@ class DiodeElm extends CircuitComponent
     "d"
 
   draw: (renderContext) ->
-    @calcLeads renderContext, 16
+    @calcLeads 16
 
     @cathode = ArrayUtils.newPointArray(2)
     [pa, pb] = renderContext.interpolateSymmetrical @lead1, @lead2, 0, @hs
@@ -117,9 +119,12 @@ class DiodeElm extends CircuitComponent
   doStep: (stamper) ->
     voltdiff = @volts[0] - @volts[1]
 
+    console.log("delta v: " + Math.abs(voltdiff - @lastvoltdiff));
+
     # used to have .1 here, but needed .01 for peak detector
     if Math.abs(voltdiff - @lastvoltdiff) > .01
-      @Circuit.converged = false
+      console.log("CONVERGE FAIL!")
+      @Circuit.Solver.converged = false
 
     voltdiff = @limitStep(voltdiff, @lastvoltdiff)
 
@@ -136,6 +141,8 @@ class DiodeElm extends CircuitComponent
 
       stamper.stampConductance @nodes[0], @nodes[1], geq
       stamper.stampCurrentSource @nodes[0], @nodes[1], nc
+
+      console.log("1 sim.stampConductance(" + @nodes[0] + ", " + @nodes[1] + ", " + geq + ", " + nc + " " + (eval_ - 1)  + " " + @leakage  + " " +  geq  + " " + voltdiff + " " + @vdcoef);
     else
       # Zener diode
       #* I(Vd) = Is * (exp[Vd*C] - exp[(-Vd-Vz)*C] - 1 )
@@ -148,11 +155,18 @@ class DiodeElm extends CircuitComponent
       stamper.stampConductance @nodes[0], @nodes[1], geq
       stamper.stampCurrentSource @nodes[0], @nodes[1], nc
 
-  calculateCurrent: ->
-    if voltdiff >= 0 or @zvoltage is 0
-      return @leakage * (Math.exp(voltdiff * @vdcoef) - 1)
+      console.log("2 sim.stampConductance(" + @nodes[0] + ", " + @nodes[1] + ", " + geq + ", " + nc);
 
-    return @leakage * (Math.exp(voltdiff * @vdcoef) - Math.exp((-voltdiff - @zoffset) * @vdcoef) - 1)
+    console.log("geq: ", geq)
+    console.log("nc: ", nc)
+
+  calculateCurrent: ->
+    voltdiff = @volts[0] - @volts[1]
+
+    if voltdiff >= 0 or @zvoltage is 0
+      @current = @leakage * (Math.exp(voltdiff * @vdcoef) - 1)
+    else
+      @current = @leakage * (Math.exp(voltdiff * @vdcoef) - Math.exp((-voltdiff - @zoffset) * @vdcoef) - 1)
 
   getInfo: (arr) ->
     super()
@@ -193,7 +207,9 @@ class DiodeElm extends CircuitComponent
         # as in linearized model from previous iteration.
         # (1/vt = slope of load line)
         vnew = @vt * Math.log(vnew / @vt)
-      @Circuit.converged = false
+
+      console.log("CONVERGE: vnew > @vcrit and Math.abs(vnew - vold) > (@vt + @vt)")
+      @Circuit.Solver.converged = false
 
     else if vnew < 0 and @zoffset isnt 0
       # for Zener breakdown, use the same logic but translate the values
@@ -212,7 +228,8 @@ class DiodeElm extends CircuitComponent
         else
           vnew = @vt * Math.log(vnew / @vt)
 
-        @Circuit.converged = false
+        console.log("CONVERGE ZENER")
+        @Circuit.Solver.converged = false
       vnew = -(vnew + @zoffset)
     vnew
 

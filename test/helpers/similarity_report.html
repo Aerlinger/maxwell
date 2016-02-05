@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="public/build/jsondiffpatch.min.js"></script>
+  <script type="text/javascript" src="public/build/jsondiffpatch-formatters.min.js"></script>
+  <link rel="stylesheet" href="public/formatters-styles/html.css" type="text/css" />
+  <link rel="stylesheet" href="public/formatters-styles/annotated.css" type="text/css" />
+</head>
+<body>
+<div id="visual"></div>
+<hr/>
+<div id="annotated"></div>
+<script>
+  var left = { a: 3, b: 4 };
+  var right = { a: 5, c: 9 };
+  var delta = jsondiffpatch.diff(left, right);
+
+  // beautiful html diff
+  document.getElementById('visual').innerHTML = jsondiffpatch.formatters.html.format(delta, left);
+
+  // self-explained json
+  document.getElementById('annotated').innerHTML = jsondiffpatch.formatters.annotated.format(delta, left);
+</script>
+</body>
+</html>
+
+
+lodash = require("lodash")
+
+#startCircuit: [ 'ohms.txt', 0, 0 ],
+#timeStep: [ 0.000005, 0, 0 ],
+#setupList: [ 'TBD', 0, 0 ],
+#circuitNonLinear: [ false, 0, 0 ],
+#voltageSourceCount: [ 7, 0, 0 ],
+#circuitMatrixSize: [ 8, 0, 0 ],
+#circuitMatrixFullSize: [ 14, 0, 0 ],
+#circuitPermute: [ [ 7, 2, 3, 3, 6, 5, 6, 7, 0, 0, 0, 0, 0, 0 ], 0, 0 ],
+#voltageSources:
+#  [ [ [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object] ],
+#    0,
+#    0 ],
+#circuitRowInfo:
+#  [ [ [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object] ],
+#    0,
+#    0 ],
+#elmList:
+#  [ [ [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object] ],
+#    0,
+#    0 ],
+#nodeList:
+#  [ [ [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object],
+#    [Object] ],
+#    0,
+#    0 ],

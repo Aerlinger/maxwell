@@ -13,7 +13,7 @@ class ZenerElm extends DiodeElm
       unit: "Voltage"
       symbol: "V"
       default_value: DiodeElm.DEFAULT_DROP
-      data_type: "float"
+      data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"
     }
@@ -31,7 +31,7 @@ class ZenerElm extends DiodeElm
     @updateDots()
     @setBboxPt(@point1, @point2, @hs)
 
-    @calcLeads renderContext, 16
+    @calcLeads 16
     pa = ArrayUtils.newPointArray(2)
     @wing = ArrayUtils.newPointArray(2)
 

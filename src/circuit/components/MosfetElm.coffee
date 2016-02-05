@@ -4,6 +4,10 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 ArrayUtils = require('../../util/arrayUtils.coffee')
+DrawUtil = require('../../util/DrawUtil.coffee')
+
+sprintf = require("sprintf-js").sprintf
+
 
 class MosfetElm extends CircuitComponent
 
@@ -13,17 +17,17 @@ class MosfetElm extends CircuitComponent
 
   @ParameterDefinitions = {
     "vt": {
-      data_type: "float"
+      data_type: parseFloat
       name: "Voltage"
       description: "Threshold voltage"
       units: "Volts"
       symbol: "V"
       default: 1.5
       range: [0, Infinity]
-      type: "physical"
+      type: sprintf
     },
     "polarity": {
-      data_type: "string"
+      data_type: sprintf
       name: "Polarity"
     }
     # Flags:
@@ -90,8 +94,8 @@ class MosfetElm extends CircuitComponent
     for i in [0...segments]
       v = @volts[1] + (@volts[2] - @volts[1]) * i / segments
       color = DrawHelper.getVoltageColor(v)
-      ps1 = DrawHelper.interpPoint @src[1], @drn[1], i * segf
-      ps2 = DrawHelper.interpPoint @src[1], @drn[1], (i + 1) * segf
+      ps1 = DrawUtil.interpolate @src[1], @drn[1], i * segf
+      ps2 = DrawUtil.interpolate @src[1], @drn[1], (i + 1) * segf
       renderContext.drawLinePt ps1, ps2, color
 
     color = DrawHelper.getVoltageColor(@volts[1])
@@ -151,7 +155,10 @@ class MosfetElm extends CircuitComponent
   getPostCount: ->
     3
 
-  setPoints: ->
+  drawDigital: ->
+    true
+
+  setPoints: () ->
     super()
     # find the coordinates of the various points we need to draw
     # the MOSFET.
@@ -159,26 +166,26 @@ class MosfetElm extends CircuitComponent
     @src = ArrayUtils.newPointArray(3)
     @drn = ArrayUtils.newPointArray(3)
 
-    [@src[0], @drn[0]] = DrawHelper.interpPoint2 @point1, @point2, 1, -hs2
-    [@src[1], @drn[1]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 22 / @dn, -hs2
-    [@src[2], @drn[2]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 22 / @dn, -hs2 * 4 / 3
+    [@src[0], @drn[0]] = DrawUtil.interpolateSymmetrical @point1, @point2, 1, -hs2
+    [@src[1], @drn[1]] = DrawUtil.interpolateSymmetrical @point1, @point2, 1 - 22 / @dn, -hs2
+    [@src[2], @drn[2]] = DrawUtil.interpolateSymmetrical @point1, @point2, 1 - 22 / @dn, -hs2 * 4 / 3
 
     @gate = ArrayUtils.newPointArray(3)
 
-    [@gate[0], @gate[2]] = DrawHelper.interpPoint2 @point1, @point2, 1 - 28 / @dn, hs2 / 2  #,  # was 1-20/dn
-    @gate[1] = DrawHelper.interpPoint @gate[0], @gate[2], .5
+    [@gate[0], @gate[2]] = DrawUtil.interpolateSymmetrical @point1, @point2, 1 - 28 / @dn, hs2 / 2  #,  # was 1-20/dn
+    @gate[1] = DrawUtil.interpolate @gate[0], @gate[2], .5
 
     if !@drawDigital()
       if @pnp is
-        @arrowPoly = DrawHelper.calcArrow(@src[1], @src[0], 10, 4)
+        @arrowPoly = DrawUtil.calcArrow(@src[1], @src[0], 10, 4)
       else
-        @arrowPoly = DrawHelper.calcArrow(@drn[0], @drn[1], 12, 5)
+        @arrowPoly = DrawUtil.calcArrow(@drn[0], @drn[1], 12, 5)
 
     else if @pnp is -1
-      @gate[1] = DrawHelper.interpPoint @point1, @point2, 1 - 36 / @dn
+      @gate[1] = DrawUtil.interpolate @point1, @point2, 1 - 36 / @dn
       dist = (if (@dsign < 0) then 32 else 31)
 
-      @pcircle = DrawHelper.interpPoint(@point1, @point2, 1 - dist / @dn)
+      @pcircle = DrawUtil.interpolate(@point1, @point2, 1 - dist / @dn)
       @pcircler = 3
 
   stamp: (stamper) ->
@@ -210,7 +217,7 @@ class MosfetElm extends CircuitComponent
     vds = vs[drain_node] - vs[source_node]
 
     if Math.abs(@lastv1 - vs[1]) > .01 or Math.abs(@lastv2 - vs[2]) > .01
-      @getParentCircuit().converged = false
+      @getParentCircuit().Solver.converged = false
 
     @lastv1 = vs[1]
     @lastv2 = vs[2]
@@ -266,17 +273,18 @@ class MosfetElm extends CircuitComponent
 
     @ids = -@ids  if (source_node is 2 and @pnp is 1) or (source_node is 1 and @pnp is -1)
 
-  getFetInfo: (arr, n) ->
-    arr[0] = ((if (@pnp is -1) then "p-" else "n-")) + n
-    arr[0] += " (Vt = " + DrawHelper.getVoltageText(@pnp * @vt) + ")"
-    arr[1] = ((if (@pnp is 1) then "Ids = " else "Isd = ")) + DrawHelper.getCurrentText(@ids)
-    arr[2] = "Vgs = " + DrawHelper.getVoltageText(@volts[0] - @volts[(if @pnp is -1 then 2 else 1)])
-    arr[3] = ((if (@pnp is 1) then "Vds = " else "Vsd = ")) + DrawHelper.getVoltageText(@volts[2] - @volts[1])
-    arr[4] = (if (@mode is 0) then "off" else (if (@mode is 1) then "linear" else "saturation"))
-    arr[5] = "gm = " + DrawHelper.getUnitText(@gm, "A/V")
+#  getFetInfo: (arr, n) ->
+#    arr[0] = ((if (@pnp is -1) then "p-" else "n-")) + n
+#    arr[0] += " (Vt = " + DrawHelper.getVoltageText(@pnp * @vt) + ")"
+#    arr[1] = ((if (@pnp is 1) then "Ids = " else "Isd = ")) + DrawHelper.getCurrentText(@ids)
+#    arr[2] = "Vgs = " + DrawHelper.getVoltageText(@volts[0] - @volts[(if @pnp is -1 then 2 else 1)])
+#    arr[3] = ((if (@pnp is 1) then "Vds = " else "Vsd = ")) + DrawHelper.getVoltageText(@volts[2] - @volts[1])
+#    arr[4] = (if (@mode is 0) then "off" else (if (@mode is 1) then "linear" else "saturation"))
+#    arr[5] = "gm = " + DrawHelper.getUnitText(@gm, "A/V")
 
   getInfo: (arr) ->
-    @getFetInfo arr, "MOSFET"
+    "MOSTFET  getInfo"
+#    @getFetInfo arr, "MOSFET"
 
   canViewInScope: ->
     true

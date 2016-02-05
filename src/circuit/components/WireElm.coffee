@@ -33,7 +33,7 @@ class WireElm extends CircuitComponent
 
 
   stamp: (stamper) ->
-    console.log("\n::Stamping WireElm::")
+#    console.log("\n::Stamping WireElm::")
     stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
 
   mustShowCurrent: ->

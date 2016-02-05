@@ -15,13 +15,14 @@ class TextElm extends CircuitComponent
       unit: "Pixel"
       symbol: ""
       default_value: 24
-      data_type: "integer"
+      data_type: parseInt
       range: [0, 500]
       type: "attribute"
     },
     text: {
       default_value: "<text>"
       type: "attribute"
+      data_type: (x) -> x
     }
     # FLAGS
 #    @FLAG_CENTER: 1
@@ -31,15 +32,18 @@ class TextElm extends CircuitComponent
   constructor: (xa, ya, xb, yb, params) ->
     @text = "hello"
     @lines = new Array() # new vector()
-    @lines.add text
+    @lines.push @text
     @size = 24
 
     super(xa, ya, xb, yb, params)
+
 #    if st
 #      st = st.split(" ")  if typeof st is "string"
 #      @size = Math.floor(st.shift())
 #      @text = st.shift()
 #      @text += " " + st.shift()  until st.length is 0
+
+  stamp: ->
 
   split: ->
     @lines = @text.split("\n")
@@ -99,4 +103,4 @@ class TextElm extends CircuitComponent
     0
 
 
-return TextElm
+module.exports = TextElm

@@ -3,6 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
+DrawUtil = require('../../util/drawUtil.coffee')
 
 class VoltageElm extends CircuitComponent
   @FLAG_COS: 2
@@ -19,65 +20,55 @@ class VoltageElm extends CircuitComponent
   @ParameterDefinitions = {
     "waveform": {
       name: "none"
-      unit: "none"
-      symbol: "none"
       default_value: 0
-      data_type: "integer"
+      data_type: parseInt
       range: [0, 6]
-      type: "categorical"
     },
     "frequency": {
       name: "Frequency"
       unit: "Hertz",
       default_value: 40,
       symbol: "Hz",
-      data_type: "float"
+      data_type: parseFloat
       range: [-Infinity, Infinity]
-      type: "physical"
     },
     "maxVoltage": {
       name: "Voltage"
       unit: "Voltage"
       symbol: "V"
       default_value: 5
-      data_type: "float"
+      data_type: parseFloat
       range: [-Infinity, Infinity]
-      type: "physical"
     },
     "bias": {
       name: "Voltage"
       unit: "Voltage"
       symbol: "V"
       default_value: 0
-      data_type: "float"
+      data_type: parseFloat
       range: [-Infinity, Infinity]
-      type: "physical"
     },
     "phaseShift": {
       name: "degrees"
       unit: "degrees",
       default_value: 0,
       symbol: "deg",
-      data_type: "float"
+      data_type: parseFloat
       range: [-360, 360]
-      type: "float"
+      type: parseFloat
     },
     "dutyCycle": {
       name: "percentage"
       unit: "",
-      default_value: 0,
+      default_value: 0.5,
       symbol: "%",
-      data_type: "float"
+      data_type: parseFloat
       range: [0, 100]
-      type: "float"
+      type: parseFloat
     }
-    # Flags:
-#    @FLAG_COS: 2
   }
 
   constructor: (xa, ya, xb, yb, params) ->
-    super(xa, ya, xb, yb, params)
-
     @waveform = VoltageElm.WF_DC
     @frequency = 40
     @maxVoltage = 5
@@ -86,18 +77,11 @@ class VoltageElm extends CircuitComponent
     @phaseShift = 0
     @dutyCycle = 0.5
 
-#    if params
-#      params = params.split(" ")  if typeof params is "string"
-#      @waveform = (if params[0] then Math.floor(parseInt(params[0])) else VoltageElm.WF_DC)
-#      @frequency = (if params[1] then parseFloat(params[1]) else 40)
-#      @maxVoltage = (if params[2] then parseFloat(params[2]) else 5)
-#      @bias = (if params[3] then parseFloat(params[3]) else 0)
-#      @phaseShift = (if params[4] then parseFloat(params[4]) else 0)
-#      @dutyCycle = (if params[5] then parseFloat(params[5]) else 0.5)
-
     if @flags & VoltageElm.FLAG_COS isnt 0
       @flags &= ~VoltageElm.FLAG_COS
       @phaseShift = Math.PI / 2
+
+    super(xa, ya, xb, yb, params)
 
     @reset()
 
@@ -107,15 +91,18 @@ class VoltageElm extends CircuitComponent
 
   reset: ->
     @freqTimeZero = 0
-    @curcount = 5
+    @curcount = 0
 
   triangleFunc: (x) ->
-    return x * (2 / Math.PI) - 1  if x < Math.PI
+    if x < Math.PI
+      return x * (2 / Math.PI) - 1
+
     1 - (x - Math.PI) * (2 / Math.PI)
 
   stamp: (stamper) ->
-    console.log("\n::Stamping Voltage Elm #{@waveform}")
+#    console.log("\n::Stamping Voltage Elm #{@waveform}")
     if @waveform is VoltageElm.WF_DC
+#      console.log("Get voltage: #{@getVoltage()}")
       stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, @getVoltage()
     else
       stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource
@@ -154,9 +141,9 @@ class VoltageElm extends CircuitComponent
     @updateDots()
 
     if(@waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR)
-      @calcLeads renderContext, 8
+      @calcLeads 8
     else
-      @calcLeads renderContext, VoltageElm.circleSize * 2
+      @calcLeads VoltageElm.circleSize * 2
 
     @setBbox @x1, @y2, @x2, @y2
     renderContext.drawLeads(this)
@@ -224,7 +211,6 @@ class VoltageElm extends CircuitComponent
 #        renderContext.drawThickLine xc - wl, yc - wl, xc - wl / 2, yc - wl, color
 #        renderContext.drawThickLine xc - wl / 2, yc - wl, xc - wl / 2, yc, color
 #        renderContext.drawThickLine xc - wl / 2, yc, xc + wl, yc, color
-
 
         renderContext.context.stroke()
         renderContext.context.moveTo xc - wl, yc

@@ -11,7 +11,7 @@ class SparkGapElm extends CircuitComponent
       unit: "Ohms",
       default_value: 1e3,
       symbol: "Ω",
-      data_type: "float"
+      data_type: parseFloat
       range: [0, Infinity]
       type: "physical"
     },
@@ -20,7 +20,7 @@ class SparkGapElm extends CircuitComponent
       unit: "Ohms",
       default_value: 1e9,
       symbol: "Ω",
-      data_type: "float"
+      data_type: parseFloat
       range: [0, Infinity]
       type: "physical"
     },
@@ -29,7 +29,7 @@ class SparkGapElm extends CircuitComponent
       unit: "Voltage"
       symbol: "V"
       default_value: 1e3
-      data_type: "float"
+      data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"
     }
@@ -38,7 +38,7 @@ class SparkGapElm extends CircuitComponent
       name: "Current",
       symbol: "A",
       default_value: 0.001,
-      data_type: "float"
+      data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"
     },
@@ -79,7 +79,7 @@ class SparkGapElm extends CircuitComponent
 
     dist = 16
     alen = 8
-    @calcLeads renderContext, dist + alen
+    @calcLeads dist + alen
 
     v1 = @volts[0]
     v2 = @volts[1]

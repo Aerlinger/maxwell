@@ -85,6 +85,8 @@ class Circuit extends Observer
   constructor: ->
     @Params = new SimulationParams()
 
+    @flags = 0
+
     @clearAndReset()
 
   write: (buffer) ->
@@ -114,7 +116,6 @@ class Circuit extends Observer
 
   # "Solders" a new element to this circuit (adds it to the element list array).
   solder: (newElement) ->
-#    console.log("\tSoldering #{newElement}: #{newElement.dump()}")
     @notifyObservers @ON_SOLDER
 
     newElement.Circuit = this
@@ -193,6 +194,10 @@ class Circuit extends Observer
     @warnMessage = message
 
   halt: (message) ->
+    e = new Error(message)
+
+    console.log(e.stack)
+
     Logger.error message
     @stopMessage = message
 
@@ -336,7 +341,6 @@ class Circuit extends Observer
       startCircuit: @Params.name
       timeStep: @timeStep()
       flags: @flags
-      setupList: "TBD"
       circuitNonLinear: @Solver.circuitNonLinear
       voltageSourceCount: @voltageSourceCount
       circuitMatrixSize: @Solver.circuitMatrixSize
@@ -353,7 +357,7 @@ class Circuit extends Observer
       nFrames: @iterations,
       t: @time,
       circuitMatrix: @Solver.circuitMatrix,
-      circuitRightSide: @Solver.circuitRightSide,
+      circuitRightSide: @Solver.circuitRightSide
       simulationFrames: @Solver.simulationFrames.map (element) -> element.toJson()
     }
 

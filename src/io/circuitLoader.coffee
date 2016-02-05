@@ -9,6 +9,10 @@ fs = require('fs')
 
 VoltageElm = require('../circuit/components/VoltageElm.coffee')
 
+Scope = require('../circuit/components/Scope.coffee')
+
+environment = require("../environment")
+
 class CircuitLoader
   @createCircuitFromJsonData: (jsonData) ->
     circuit = new Circuit()
@@ -18,6 +22,7 @@ class CircuitLoader
 
     circuitParams = jsonData.shift()
     circuit.Params = SimulationParams.deserialize(circuitParams)
+    circuit.flags = circuitParams['flags']
 
     console.log(circuit.Params.toString())
 
@@ -42,14 +47,30 @@ class CircuitLoader
 
       if !sym
         circuit.warn "No matching component for #{type}: #{sym}"
-      else if type is Hint
+      else if type is "h"
         console.log "Hint found in file!"
-      else if type is Oscilloscope
+
+        #  TODO: Proper types
+        @hintType = x1
+        @hintItem1 = x2
+        @hintItem2 = y1
+        break;
+      else if sym is Scope
         console.log "Scope found in file!"
       else if !type
         circuit.warn "Unrecognized Type"
       else
-        newCircuitElm = new sym(x1, y1, x2, y2, params, flags)
+        params['flags'] = flags
+
+        try
+          newCircuitElm = new sym(x1, y1, x2, y2, params)
+        catch e
+          console.log(e)
+          console.log("type: #{type}, sym: #{sym}")
+          console.log("elm: ", elementData)
+          console.log(e.stack)
+          process.exit(1);
+
         elms.push(newCircuitElm)
         circuit.solder newCircuitElm
 
@@ -64,7 +85,7 @@ class CircuitLoader
   Retrieves string data from a circuit text file (via AJAX GET)
   ###
   @createCircuitFromJsonFile: (circuitFileName, onComplete = null) ->
-    if $?
+    if environment.isBrowser
       $.getJSON circuitFileName, (jsonData) ->
         circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
 
