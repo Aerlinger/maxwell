@@ -69,19 +69,19 @@ class VoltageElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, params) ->
-    @waveform = VoltageElm.WF_DC
-    @frequency = 40
-    @maxVoltage = 5
-    @freqTimeZero = 0
-    @bias = 0
-    @phaseShift = 0
-    @dutyCycle = 0.5
+    if params instanceof Array && params.length > 7
+      labels = params[7..params.length]
+
+      params = params.slice(0, 7)
+      params.push(labels.join(" "))
 
     if @flags & VoltageElm.FLAG_COS isnt 0
       @flags &= ~VoltageElm.FLAG_COS
       @phaseShift = Math.PI / 2
 
     super(xa, ya, xb, yb, params)
+
+    @freqTimeZero = 0
 
     @reset()
 
