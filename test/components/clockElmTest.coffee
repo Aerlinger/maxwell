@@ -14,6 +14,7 @@ describe "ClockElmTest", ->
     expect(@clockElm.maxVoltage).to.equal(2.5)
     expect(@clockElm.bias).to.equal(2.5)
     expect(@clockElm.frequency).to.equal(100)
+    expect(@clockElm.waveform).to.equal(ClockElm.WF_SQUARE)
 
 
 describe "with explicit values", ->
@@ -24,3 +25,4 @@ describe "with explicit values", ->
     expect(@clockElm.maxVoltage).to.equal(10)
     expect(@clockElm.bias).to.equal(2)
     expect(@clockElm.frequency).to.equal(100)
+    expect(@clockElm.waveform).to.equal(ClockElm.WF_SQUARE)

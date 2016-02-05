@@ -7,7 +7,7 @@ CircuitComparator = require("../helpers/CircuitComparator.coffee")
 Maxwell = require("../../src/Maxwell.coffee")
 jsondiffpatch = require('jsondiffpatch').create({});
 
-describe.only "Testing all circuits", ->
+describe "Testing all circuits", ->
   @timeout(30000)
 
   before ->
