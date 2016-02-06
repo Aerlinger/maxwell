@@ -8,8 +8,8 @@ class WireElm extends CircuitComponent
   @FLAG_SHOWCURRENT: 1
   @FLAG_SHOWVOLTAGE: 2
 
-  constructor: (xa, ya, xb, yb, params) ->
-    super(xa, ya, xb, yb, params)
+  constructor: (xa, ya, xb, yb, params, f) ->
+    super(xa, ya, xb, yb, params, f)
 
   toString: ->
     "WireElm"

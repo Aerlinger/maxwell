@@ -6,8 +6,8 @@ Point = require('../../geom/point.coffee')
 
 class LogicInputElm extends CircuitComponent
 
-  constructor: (xa, ya, xb, yb, params) ->
-    super(xa, ya, xb, yb, params)
+  constructor: (xa, ya, xb, yb, params, f) ->
+    super(xa, ya, xb, yb, params, f)
 
 module.exports = LogicInputElm
 

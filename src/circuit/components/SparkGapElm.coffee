@@ -44,7 +44,7 @@ class SparkGapElm extends CircuitComponent
     },
   }
 
-  constructor: (xa, ya, xb, yb, params) ->
+  constructor: (xa, ya, xb, yb, params, f) ->
     @resistance = 0
     @offresistance = 1e9
     @onresistance = 1e3
@@ -52,7 +52,7 @@ class SparkGapElm extends CircuitComponent
     @holdcurrent = 0.001
     @state = false
 
-    super(xa, ya, xb, yb, params)
+    super(xa, ya, xb, yb, params, f)
 
 
 #    if st

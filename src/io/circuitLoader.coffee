@@ -61,11 +61,11 @@ class CircuitLoader
         circuit.warn "Unrecognized Type"
       else
 #        params['flags'] = flags
-        params.unshift(flags)
+#        params.unshift(flags)
 
         try
           console.log(params)
-          newCircuitElm = new sym(x1, y1, x2, y2, params)
+          newCircuitElm = new sym(x1, y1, x2, y2, params, flags)
         catch e
           console.log(e)
           console.log("type: #{type}, sym: #{sym}")

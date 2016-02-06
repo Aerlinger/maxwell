@@ -50,7 +50,7 @@ class TransistorElm extends CircuitComponent
     }
   }
 
-  constructor: (xa, ya, xb, yb, params) ->
+  constructor: (xa, ya, xb, yb, params, f) ->
     # Forward declarations:
     @beta = 100
     @rect = [] # Array of points
@@ -76,7 +76,7 @@ class TransistorElm extends CircuitComponent
     @lastvbe = 0
     @leakage = 1e-13
 
-    super(xa, ya, xb, yb, params)
+    super(xa, ya, xb, yb, params, f)
 
 #    if params and params.length > 0
 #      params = params.split(" ") if typeof params is "string"

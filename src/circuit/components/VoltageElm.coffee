@@ -68,18 +68,20 @@ class VoltageElm extends CircuitComponent
     }
   }
 
-  constructor: (xa, ya, xb, yb, params) ->
-    if params instanceof Array && params.length > 7
-      labels = params[7..params.length]
+  constructor: (xa, ya, xb, yb, params, f) ->
+    # Convert parameters to a maximum length of 7
+    # [val1, ..., val2, "Some", "strings"] -> [val1, ..., val2, "Some strings"]
+    if params instanceof Array && params.length > 6
+      labels = params[6..params.length]
 
-      params = params.slice(0, 7)
+      params = params.slice(0, 6)
       params.push(labels.join(" "))
 
     if @flags & VoltageElm.FLAG_COS isnt 0
       @flags &= ~VoltageElm.FLAG_COS
       @phaseShift = Math.PI / 2
 
-    super(xa, ya, xb, yb, params)
+    super(xa, ya, xb, yb, params, f)
 
     @freqTimeZero = 0
 

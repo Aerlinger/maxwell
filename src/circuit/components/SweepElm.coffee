@@ -51,11 +51,11 @@ class SweepElm extends CircuitComponent
 #    @FLAG_BIDIR: 2
   }
 
-  constructor: (xa, ya, xb, yb, params) ->
+  constructor: (xa, ya, xb, yb, params, f) ->
     @dir = 1
     @reset()
 
-    super(xa, ya, xb, yb, params)
+    super(xa, ya, xb, yb, params, f)
 
 
   getDumpType: ->

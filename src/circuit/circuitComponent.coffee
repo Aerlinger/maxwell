@@ -29,8 +29,9 @@ sprintf = require("sprintf-js").sprintf
 class CircuitComponent
   @ParameterDefinitions = {}
 
-  constructor: (@x1, @y1, @x2, @y2, params) ->
-    @flags = params.shift()
+  constructor: (@x1, @y1, @x2, @y2, params, f = 0) ->
+#    @flags = params.shift()
+    @flags = f
 
     @current = 0
     @curcount = 0

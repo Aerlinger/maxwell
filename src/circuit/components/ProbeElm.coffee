@@ -8,8 +8,8 @@ class ProbeElm extends CircuitComponent
 
   @FLAG_SHOWVOLTAGE: 1
 
-  constructor: (xa, ya, xb, yb, params) ->
-    super(xa, ya, xb, yb, params)
+  constructor: (xa, ya, xb, yb, params, f) ->
+    super(xa, ya, xb, yb, params, f)
 
   getDumpType: ->
     "p"

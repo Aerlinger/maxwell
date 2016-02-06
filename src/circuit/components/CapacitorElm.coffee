@@ -28,13 +28,13 @@ class CapacitorElm extends CircuitComponent
     }
   }
 
-  constructor: (xa, ya, xb, yb, params) ->
+  constructor: (xa, ya, xb, yb, params, f) ->
     @compResistance = 11
     @plate1 = []
     @plate2 = []
     @curSourceValue = 0
 
-    super(xa, ya, xb, yb, params)
+    super(xa, ya, xb, yb, params, f)
 
   isTrapezoidal: ->
     true

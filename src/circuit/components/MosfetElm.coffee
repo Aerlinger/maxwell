@@ -5,6 +5,7 @@ Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 ArrayUtils = require('../../util/arrayUtils.coffee')
 DrawUtil = require('../../util/DrawUtil.coffee')
+JFetElm = require("./JFetElm")
 
 sprintf = require("sprintf-js").sprintf
 
@@ -25,18 +26,18 @@ class MosfetElm extends CircuitComponent
       default: 1.5
       range: [0, Infinity]
       type: sprintf
-    },
-    "pnp": {
-      data_type: sprintf
-      name: "Polarity"
     }
+#    "pnp": {
+#      data_type: sprintf
+#      name: "Polarity"
+#    }
     # Flags:
     # FLAG_SHOWVT: 1
     # FLAG_SHOWVT: 2
     # FLAG_DIGITAL: 4
   }
 
-  constructor: (xa, ya, xb, yb, params) ->
+  constructor: (xa, ya, xb, yb, params, f) ->
     @lastv1 = 0
     @lastv2 = 0
     @ids = 0
@@ -50,13 +51,17 @@ class MosfetElm extends CircuitComponent
     @gate = []
     @pcircle = []
 
-    @pnp = (params["polarity"] ? -1 : 1)
+#    @pnp = (params["polarity"] ? -1 : 1)
     @noDiagonal = true
     @vt = @getDefaultThreshold()
 
     @hs = 16
 
-    super(xa, ya, xb, yb, params)
+    super(xa, ya, xb, yb, params, f)
+    @pnp = if (parseInt(@flags) & MosfetElm.FLAG_PNP) != 0 then -1 else 1
+
+    @params['pnp'] = @pnp
+
 
   getDefaultThreshold: ->
     1.5

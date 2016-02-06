@@ -27,7 +27,7 @@ class SwitchElm extends CircuitComponent
     }
   }
 
-  constructor: (xa, ya, xb, yb, params) ->
+  constructor: (xa, ya, xb, yb, params, f) ->
     @momentary = false
     @position = 0
     @posCount = 2
@@ -47,7 +47,7 @@ class SwitchElm extends CircuitComponent
 #          @position = parseInt(str)
 #          @momentary = (st.shift().toLowerCase() is "true")
 
-    super(xa, ya, xb, yb, params)
+    super(xa, ya, xb, yb, params, f)
 
 
   setPoints: ->

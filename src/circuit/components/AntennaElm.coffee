@@ -7,8 +7,8 @@ RailElm = require('./RailElm.coffee')
 
 class AntennaElm extends RailElm
 
-  constructor: (xa, ya, xb, yb, params) ->
-    super(xa, ya, xb, yb, params)
+  constructor: (xa, ya, xb, yb, params, f) ->
+    super(xa, ya, xb, yb, params, f)
     @waveform = RailElm.WF_DC
 
   doStep: (stamper) ->

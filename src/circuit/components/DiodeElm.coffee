@@ -24,7 +24,7 @@ class DiodeElm extends CircuitComponent
 #    flags: DiodeElm.FLAG_FWDROP
   }
 
-  constructor: (xa, ya, xb, yb, params) ->
+  constructor: (xa, ya, xb, yb, params, f) ->
     @hs = 8
     @poly
     @cathode = []
@@ -47,7 +47,7 @@ class DiodeElm extends CircuitComponent
     @crit = 0
     @leakage = 1e-14
 
-    super(xa, ya, xb, yb, params)
+    super(xa, ya, xb, yb, params, f)
 
     @setup()
 

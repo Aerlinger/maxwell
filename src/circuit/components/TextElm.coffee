@@ -29,13 +29,13 @@ class TextElm extends CircuitComponent
 #    @FLAG_BAR: 2
   }
 
-  constructor: (xa, ya, xb, yb, params) ->
+  constructor: (xa, ya, xb, yb, params, f) ->
     @text = "hello"
     @lines = new Array() # new vector()
     @lines.push @text
     @size = 24
 
-    super(xa, ya, xb, yb, params)
+    super(xa, ya, xb, yb, params, f)
 
 #    if st
 #      st = st.split(" ")  if typeof st is "string"

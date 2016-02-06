@@ -28,14 +28,14 @@ class InductorElm extends CircuitComponent
     }
   }
 
-  constructor: (xa, ya, xb, yb, params) ->
+  constructor: (xa, ya, xb, yb, params, f) ->
     @inductance = 0
     @nodes = new Array(2)
     @compResistance = 1e-3
     @current = 0
     @curSourceValue = 0
 
-    super(xa, ya, xb, yb, params)
+    super(xa, ya, xb, yb, params, f)
 
 
   stamp: (stamper) ->

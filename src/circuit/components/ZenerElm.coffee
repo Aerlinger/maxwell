@@ -19,11 +19,11 @@ class ZenerElm extends DiodeElm
     }
   }
 
-  constructor: (xa, ya, xb, yb, params) ->
+  constructor: (xa, ya, xb, yb, params, f) ->
     @default_z_voltage = 5.6
     @zvoltage = params[0] || @default_z_voltage
 
-    super(xa, ya, xb, yb, params)
+    super(xa, ya, xb, yb, params, f)
 
     @setup()
 

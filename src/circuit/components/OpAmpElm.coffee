@@ -50,7 +50,7 @@ class OpAmpElm extends CircuitComponent
     #    @FLAG_LOWGAIN: 4
   }
 
-  constructor: (xa, ya, xb, yb, params) ->
+  constructor: (xa, ya, xb, yb, params, f) ->
     @opsize = 0
 #      @opheight = 0
     @opwidth = 0
@@ -71,7 +71,7 @@ class OpAmpElm extends CircuitComponent
     # GBW has no effect in this version of the simulator, but we retain it to keep the file format the same
     @gbw = 1e6
 
-    super(xa, ya, xb, yb, params)
+    super(xa, ya, xb, yb, params, f)
 
 #      @lastvd = 0
 

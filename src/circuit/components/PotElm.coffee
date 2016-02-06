@@ -27,8 +27,8 @@ class PotElm extends CircuitComponent
     }
   }
 
-  constructor: (xa, ya, xb, yb, params) ->
-    super(xa, ya, xb, yb, params)
+  constructor: (xa, ya, xb, yb, params, f) ->
+    super(xa, ya, xb, yb, params, f)
 
     @sliderValue = @position * 100
 

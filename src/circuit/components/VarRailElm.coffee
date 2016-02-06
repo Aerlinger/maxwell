@@ -23,9 +23,9 @@ class VarRailElm extends RailElm
     }
   })
 
-  constructor: (xa, ya, xb, yb, params) ->
+  constructor: (xa, ya, xb, yb, params, f) ->
     @waveform = VoltageElm.WF_VAR
-    super(xa, ya, xb, yb, params)
+    super(xa, ya, xb, yb, params, f)
 
 #    console.log(@toJson())
 
