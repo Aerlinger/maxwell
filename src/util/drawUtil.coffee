@@ -35,7 +35,7 @@ class DrawUtil
 
     poly.addVertex point2.x, point2.y
 
-    [p1, p2] = DrawUtil.interpolate point1, point2, 1 - al / dist, aw
+    [p1, p2] = DrawUtil.interpolateSymmetrical point1, point2, 1 - al / dist, aw
 
     poly.addVertex p1.x, p1.y
     poly.addVertex p2.x, p2.y

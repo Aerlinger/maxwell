@@ -4,6 +4,7 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 ArrayUtils = require('../../util/arrayUtils.coffee')
+DrawUtil = require('../../util/drawUtil')
 
 class TransistorElm extends CircuitComponent
   @FLAG_FLIP: 1
@@ -98,6 +99,16 @@ class TransistorElm extends CircuitComponent
     @volts[2] = -@lastvbc
 
     @setup()
+
+    # TOOD: non-standard  method for setting param
+    @params = {
+      "beta": @beta
+      "pnp": @pnp
+      "volts": @volts
+    }
+#    @params["beta"] = @beta
+#    @params["pnp"] = @pnp
+#    @params["volts"] = @volts
 
   setup: ->
     @vcrit = @vt * Math.log(@vt / (Math.sqrt(2) * @leakage))
@@ -196,7 +207,12 @@ class TransistorElm extends CircuitComponent
     renderContext.drawPosts(renderContext, this)
 
   getPost: (n) ->
-    (if (n is 0) then @point1 else (if (n is 1) then @coll[0] else @emit[0]))
+    if (n is 0)
+      @point1
+    else if (n is 1)
+      @coll[0]
+    else
+      @emit[0]
 
   getPostCount: ->
     3
@@ -206,6 +222,42 @@ class TransistorElm extends CircuitComponent
 
   setPoints: (stamper) ->
     super()
+
+    hs = 16
+
+    if @flags & TransistorElm.FLAG_FLIP != 0
+      @dsign = -@dsign
+
+    hs2 = hs * @dsign * @pnp
+
+    @coll = ArrayUtils.newPointArray(2)
+    @emit = ArrayUtils.newPointArray(2)
+
+    [@coll[0], @emit[0]] = DrawUtil.interpolateSymmetrical(@point1, @point2, 1, hs2)
+
+    @rect = ArrayUtils.newPointArray(4)
+
+    [@rect[0], @rect[1]] = DrawUtil.interpolateSymmetrical(@point1, @point2, 1 - 16/@dn, hs)
+    [@rect[2], @rect[3]] = DrawUtil.interpolateSymmetrical(@point1, @point2, 1 - 13/@dn, hs)
+    [@coll[1], @emit[1]] = DrawUtil.interpolateSymmetrical(@point1, @point2, 1 - 13/@dn, 6 * @dsign * @pnp)
+
+    @base = DrawUtil.interpolateSymmetrical(@point1, @point2, 1 - 16 / @dn)
+
+
+    @rectPoly = DrawUtil.createPolygonFromArray(@rect)
+
+    if @pnp == 1
+      @arrowPoly = DrawUtil.calcArrow(@emit[1], @emit[0], 8, 4)
+    else
+      pt = DrawUtil.interpolate(@point1, @point2, 1 - 11 / @dn, -5 * @dsign * @pnp)
+      console.log(pt)
+      console.log(@emit)
+
+      @arrowPoly = DrawUtil.calcArrow(@emit[0], pt, 8, 4)
+
+
+
+
 
   limitStep: (vnew, vold) ->
     arg = 0  # TODO
@@ -238,7 +290,7 @@ class TransistorElm extends CircuitComponent
 
     # .01
     if Math.abs(vbc - @lastvbc) > .01 or Math.abs(vbe - @lastvbe) > .01
-      @getParentCircuit.Solver.converged = false
+      @getParentCircuit().Solver.converged = false
     @gmin = 0
     if subIterations > 100
 

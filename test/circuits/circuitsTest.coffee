@@ -26,7 +26,7 @@ describe.only "Testing all circuits", ->
 
 #    @files = ["ohms", "voltdivide", "cap", "capac", "diodecurve", "diodevar", "opamp", "diodeclip", "induct"]
 #    @files = ["capseries"]
-    @transistors = ["pnp", "npn"]
+    @transistors = ["em", "npn", "pnp"]
     @mosfets = ["pmosfet", "nmosfet"]
 
     @opamps = [
@@ -60,7 +60,7 @@ describe.only "Testing all circuits", ->
     ]
 
 #    @files = @opamps
-    @files = @mosfets
+    @files = @transistors
 #
     for circuit_name in @files
       circuit_file = "#{circuit_name}.json"
