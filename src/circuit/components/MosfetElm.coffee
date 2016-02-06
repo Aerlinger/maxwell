@@ -26,7 +26,7 @@ class MosfetElm extends CircuitComponent
       range: [0, Infinity]
       type: sprintf
     },
-    "polarity": {
+    "pnp": {
       data_type: sprintf
       name: "Polarity"
     }

@@ -144,6 +144,7 @@ class CircuitSolver
         k = 0
         while k < @Circuit.numNodes()
           cn = @Circuit.getNode(k)
+          console.log("postPt #{postPt}, cn: #{cn}")
           if postPt.x is cn.x and postPt.y is cn.y
             break
           k++

@@ -1,0 +1,63 @@
+2864 w    working
+ 918 r    working
+ 428 o    stubbed
+ 413 g    working
+ 274 R    working
+ 246 c    working
+ 149 t    wip     (transistorelm)
+ 129 M            (LogicOutputElm)
+ 121 f            (MosfetElm)
+ 117 v    working
+ 113 L            (LogicInputElm)
+ 108 x    stubbed (TextElm)
+ 104 O    stubbed
+ 101 l    working
+  78 d    working
+  66 a    working
+  51 151          (NandGate)
+  38 150
+  36 s            (SwitchElm)
+  33 I            (InverterElm)
+  31 p
+  30 171
+  22 178
+  21 S            (Switch2Elm)
+  21 172          (VarRailElm)
+  20 156
+  20 155
+  16 h            (Hint)
+  16 170
+  15 162
+  14 m
+  13 159
+  12 160
+  12 154
+  11 82
+  11 179
+  11 174
+  11 165
+  10 i
+   8 T
+   8 152
+   8
+   7 187
+   6 j
+   6 118
+   5 153
+   4 z
+   4 161
+   4 158
+   3 175
+   2 177
+   2 173
+   2 169
+   2 167
+   2 164
+   2 163
+   1 A
+   1 168
+   1 166
+   1 157
+   1
+
+# cut -d ' ' -f 1 *.txt | sort | uniq -c | sort -rn

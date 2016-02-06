@@ -8,7 +8,7 @@ ArrayUtils = require('../../util/arrayUtils.coffee')
 class TransistorElm extends CircuitComponent
   @FLAG_FLIP: 1
 
-  @ComponentParams = {
+  @ParameterDefinitions = {
     "pnp": {
       name: ""
       unit: ""
@@ -39,7 +39,7 @@ class TransistorElm extends CircuitComponent
       type: "physical"
     },
     "beta": {
-      name: ""
+      name: "beta"
       unit: ""
       symbol: ""
       description: "Current multiplier"
@@ -258,7 +258,7 @@ class TransistorElm extends CircuitComponent
     #if (expbc > 1e13 || Double.isInfinite(expbc))
     #     expbc = 1e13;
     expbe = Math.exp(vbe * pcoef)
-    expbe = 1  if expbe < 1
+    expbe = 1 if expbe < 1
 
     #if (expbe > 1e13 || Double.isInfinite(expbe))
     #     expbe = 1e13;

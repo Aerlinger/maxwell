@@ -69,10 +69,13 @@ class CircuitComponent
       param_name = Object.keys(ParameterDefinitions)[i]
       param_value = param_list[i]
 
-#      console.log("#{i}: param_name", ParameterDefinitions)
-      data_type = ParameterDefinitions[param_name].data_type
-#      console.log(data_type  + " " + param_value)
-#      console.log(param_value)
+      if ParameterDefinitions[param_name]
+        data_type = ParameterDefinitions[param_name].data_type
+      else
+        console.warn("Failed to load data_type #{data_type}: #{param_name}: #{param_value}")
+        console.log(param_value)
+        console.log("#{i}: param_name #{ParameterDefinitions}")
+#        @getParentCircuit().halt()
 
       if (!data_type?)
         console.log("Data type: #{data_type} not found for parameter #{param_name} and value #{param_value}")
