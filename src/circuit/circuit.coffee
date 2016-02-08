@@ -22,14 +22,14 @@
 #
 ####################################################################################################################
 
-Oscilloscope = require('../scope/oscilloscope.coffee')
-Logger = require('../io/logger.coffee')
-SimulationParams = require('../core/simulationParams.coffee')
-SimulationFrame = require('./simulationFrame.coffee')
-CircuitSolver = require('../engine/circuitSolver.coffee')
-Observer = require('../util/observer.coffee')
-Rectangle = require('../geom/rectangle.coffee')
-FormatUtils = require('../util/FormatUtils.coffee')
+Oscilloscope = require('../scope/oscilloscope')
+Logger = require('../io/logger')
+SimulationParams = require('../core/simulationParams')
+SimulationFrame = require('./simulationFrame')
+CircuitSolver = require('../engine/circuitSolver')
+Observer = require('../util/observer')
+Rectangle = require('../geom/rectangle')
+FormatUtils = require('../util/FormatUtils')
 
 fs = require('fs')
 

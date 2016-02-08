@@ -1,4 +1,4 @@
-Point = require('../geom/point.coffee')
+Point = require('../geom/point')
 
 
 # Add indexOf to Array prototype (useful for IE <= 8)
@@ -24,6 +24,7 @@ Array::remove = ->
 
 class ArrayUtils
 
+  #
   @zeroArray: (numElements) ->
     return [] if numElements < 1
     return (0 for i in Array(numElements))
@@ -52,5 +53,7 @@ class ArrayUtils
 
   @printArray: (arr) ->
     console.log(subarr) for subarr in arr
+
+
 
 module.exports = ArrayUtils

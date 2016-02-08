@@ -1,7 +1,7 @@
-Observer = require('../util/observer.coffee')
-Settings = require('../settings/settings.coffee')
-FormatUtils = require('../util/formatUtils.coffee')
-Point = require('../geom/point.coffee')
+Observer = require('../util/observer')
+Settings = require('../settings/settings')
+FormatUtils = require('../util/formatUtils')
+Point = require('../geom/point')
 
 class BaseRenderer extends Observer
   drawInfo: ->

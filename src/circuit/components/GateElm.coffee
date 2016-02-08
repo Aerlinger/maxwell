@@ -1,6 +1,6 @@
 CircuitComponent = require("../CircuitComponent")
-DrawUtil = require('../../util/drawUtil.coffee')
-ArrayUtil = require('../../util/arrayUtils.coffee')
+DrawUtil = require('../../util/drawUtil')
+ArrayUtil = require('../../util/arrayUtils')
 
 class GateElm extends CircuitComponent
   FLAG_SMALL: 1

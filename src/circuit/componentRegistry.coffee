@@ -1,28 +1,28 @@
-CircuitComponent = require('./circuitComponent.coffee')
+CircuitComponent = require('./circuitComponent')
 
-AntennaElm = require('./components/AntennaElm.coffee')
-WireElm = require('./components/WireElm.coffee')
-ResistorElm = require('./components/ResistorElm.coffee')
-GroundElm = require('./components/GroundElm.coffee')
-VoltageElm = require('./components/VoltageElm.coffee')
-DiodeElm = require('./components/DiodeElm.coffee')
-OutputElm = require('./components/OutputElm.coffee')
-SwitchElm = require('./components/SwitchElm.coffee')
-CapacitorElm = require('./components/CapacitorElm.coffee')
-InductorElm = require('./components/InductorElm.coffee')
-SparkGapElm = require('./components/SparkGapElm.coffee')
-CurrentElm = require('./components/CurrentElm.coffee')
-RailElm = require('./components/RailElm.coffee')
-MosfetElm = require('./components/MosfetElm.coffee')
-JFetElm = require('./components/JFetElm.coffee')
-TransistorElm = require('./components/TransistorElm.coffee')
-VarRailElm = require('./components/VarRailElm.coffee')
-OpAmpElm = require('./components/OpAmpElm.coffee')
-ZenerElm = require('./components/ZenerElm.coffee')
-Switch2Elm = require('./components/Switch2Elm.coffee')
-SweepElm = require('./components/SweepElm.coffee')
-TextElm = require('./components/TextElm.coffee')
-ProbeElm = require('./components/ProbeElm.coffee')
+AntennaElm = require('./components/AntennaElm')
+WireElm = require('./components/WireElm')
+ResistorElm = require('./components/ResistorElm')
+GroundElm = require('./components/GroundElm')
+VoltageElm = require('./components/VoltageElm')
+DiodeElm = require('./components/DiodeElm')
+OutputElm = require('./components/OutputElm')
+SwitchElm = require('./components/SwitchElm')
+CapacitorElm = require('./components/CapacitorElm')
+InductorElm = require('./components/InductorElm')
+SparkGapElm = require('./components/SparkGapElm')
+CurrentElm = require('./components/CurrentElm')
+RailElm = require('./components/RailElm')
+MosfetElm = require('./components/MosfetElm')
+JFetElm = require('./components/JFetElm')
+TransistorElm = require('./components/TransistorElm')
+VarRailElm = require('./components/VarRailElm')
+OpAmpElm = require('./components/OpAmpElm')
+ZenerElm = require('./components/ZenerElm')
+Switch2Elm = require('./components/Switch2Elm')
+SweepElm = require('./components/SweepElm')
+TextElm = require('./components/TextElm')
+ProbeElm = require('./components/ProbeElm')
 
 AndGateElm = require('./components/AndGateElm')
 NandGateElm = require('./components/NandGateElm')
@@ -32,10 +32,10 @@ XorGateElm = require('./components/XorGateElm')
 
 TransformerElm = require('./components/TransormerElm')
 
-PotElm = require('./components/PotElm.coffee')
-ClockElm = require('./components/ClockElm.coffee')
+PotElm = require('./components/PotElm')
+ClockElm = require('./components/ClockElm')
 
-Scope = require('./components/Scope.coffee')
+Scope = require('./components/Scope')
 
 ##
 # ElementMap
@@ -133,7 +133,7 @@ class ComponentRegistry
     OrGateElm: '152'
     NorGateElm: '153'
     XorGateElm: '154'
-    
+
     TransformerElm: 'T'
   }
 

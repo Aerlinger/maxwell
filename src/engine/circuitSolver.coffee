@@ -1,22 +1,22 @@
-MatrixStamper = require('./matrixStamper.coffee')
+MatrixStamper = require('./matrixStamper')
 
-Pathfinder = require('./pathfinder.coffee')
-CircuitNode = require('./circuitNode.coffee')
-CircuitNodeLink = require('./circuitNodeLink.coffee')
-RowInfo = require('./rowInfo.coffee')
-Setting = require('../settings/settings.coffee')
-ArrayUtils = require('../util/ArrayUtils.coffee')
-FormatUtils = require('../util/FormatUtils.coffee')
+Pathfinder = require('./pathfinder')
+CircuitNode = require('./circuitNode')
+CircuitNodeLink = require('./circuitNodeLink')
+RowInfo = require('./rowInfo')
+Setting = require('../settings/settings')
+ArrayUtils = require('../util/ArrayUtils')
+FormatUtils = require('../util/FormatUtils')
 
-SimulationFrame = require('../circuit/simulationFrame.coffee')
+SimulationFrame = require('../circuit/simulationFrame')
 
-GroundElm = require('../circuit/components/GroundElm.coffee')
-RailElm = require('../circuit/components/RailElm.coffee')
-VoltageElm = require('../circuit/components/VoltageElm.coffee')
-WireElm = require('../circuit/components/WireElm.coffee')
-CapacitorElm = require('../circuit/components/CapacitorElm.coffee')
-InductorElm = require('../circuit/components/InductorElm.coffee')
-CurrentElm = require('../circuit/components/CurrentElm.coffee')
+GroundElm = require('../circuit/components/GroundElm')
+RailElm = require('../circuit/components/RailElm')
+VoltageElm = require('../circuit/components/VoltageElm')
+WireElm = require('../circuit/components/WireElm')
+CapacitorElm = require('../circuit/components/CapacitorElm')
+InductorElm = require('../circuit/components/InductorElm')
+CurrentElm = require('../circuit/components/CurrentElm')
 
 sprintf = require("sprintf-js").sprintf
 

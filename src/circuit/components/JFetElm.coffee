@@ -1,10 +1,10 @@
-CircuitComponent = require('../circuitComponent.coffee')
-Settings = require('../../settings/settings.coffee')
-Polygon = require('../../geom/polygon.coffee')
-Rectangle = require('../../geom/rectangle.coffee')
-Point = require('../../geom/point.coffee')
-ArrayUtils = require('../../util/ArrayUtils.coffee')
-DrawUtils = require('../../util/DrawUtil.coffee')
+CircuitComponent = require('../circuitComponent')
+Settings = require('../../settings/settings')
+Polygon = require('../../geom/polygon')
+Rectangle = require('../../geom/rectangle')
+Point = require('../../geom/point')
+ArrayUtils = require('../../util/ArrayUtils')
+DrawUtils = require('../../util/DrawUtil')
 
 MosfetElm = require('./MosfetElm')
 

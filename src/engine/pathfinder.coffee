@@ -1,8 +1,8 @@
-VoltageElm = require('../circuit/components/VoltageElm.coffee')
-CurrentElm = require('../circuit/components/CurrentElm.coffee')
-ResistorElm = require('../circuit/components/ResistorElm.coffee')
-InductorElm = require('../circuit/components/InductorElm.coffee')
-CapacitorElm = require('../circuit/components/CapacitorElm.coffee')
+VoltageElm = require('../circuit/components/VoltageElm')
+CurrentElm = require('../circuit/components/CurrentElm')
+ResistorElm = require('../circuit/components/ResistorElm')
+InductorElm = require('../circuit/components/InductorElm')
+CapacitorElm = require('../circuit/components/CapacitorElm')
 
 class Pathfinder
   @INDUCT: 1

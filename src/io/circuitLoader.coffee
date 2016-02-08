@@ -1,15 +1,15 @@
-ComponentRegistry = require('../circuit/componentRegistry.coffee')
-SimulationParams = require('../core/simulationParams.coffee')
+ComponentRegistry = require('../circuit/componentRegistry')
+SimulationParams = require('../core/simulationParams')
 
-Circuit = require('../circuit/circuit.coffee')
-CircuitComponent = require('../circuit/circuitComponent.coffee')
-Oscilloscope = require('../scope/oscilloscope.coffee')
-Hint = require('../engine/hint.coffee')
+Circuit = require('../circuit/circuit')
+CircuitComponent = require('../circuit/circuitComponent')
+Oscilloscope = require('../scope/oscilloscope')
+Hint = require('../engine/hint')
 fs = require('fs')
 
-VoltageElm = require('../circuit/components/VoltageElm.coffee')
+VoltageElm = require('../circuit/components/VoltageElm')
 
-Scope = require('../circuit/components/Scope.coffee')
+Scope = require('../circuit/components/Scope')
 
 environment = require("../environment")
 

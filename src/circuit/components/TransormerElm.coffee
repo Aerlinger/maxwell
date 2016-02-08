@@ -1,6 +1,6 @@
-CircuitComponent = require('../circuitComponent.coffee')
-DrawUtil = require('../../util/drawUtil.coffee')
-ArrayUtil = require('../../util/arrayUtils.coffee')
+CircuitComponent = require('../circuitComponent')
+DrawUtil = require('../../util/drawUtil')
+ArrayUtil = require('../../util/arrayUtils')
 
 class TransformerElm extends CircuitElm
 
@@ -89,10 +89,10 @@ class TransformerElm extends CircuitElm
       color = renderContext.getVoltageColor(@volts[i])
       renderContext.drawLinePt(@ptEnds[i], @ptCoil[i], color)
 
-    for i in [1, 2]
-      renderContext.drawCoil(@dsign * (i == 1 ? ))
+#    for i in [1, 2]
+#      renderContext.drawCoil(@dsign * (i == 1 ? ))
 
-    renderContext.drawPosts()
+#    renderContext.drawPosts()
 
 
 

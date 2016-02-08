@@ -1,12 +1,12 @@
-CircuitComponent = require('../circuitComponent.coffee')
-Settings = require('../../settings/settings.coffee')
-Polygon = require('../../geom/polygon.coffee')
-Rectangle = require('../../geom/rectangle.coffee')
-Point = require('../../geom/point.coffee')
+CircuitComponent = require('../circuitComponent')
+Settings = require('../../settings/settings')
+Polygon = require('../../geom/polygon')
+Rectangle = require('../../geom/rectangle')
+Point = require('../../geom/point')
 DrawUtil = require("../../util/drawUtil")
 
-VoltageElm = require('./VoltageElm.coffee')
-AntennaElm = require('./AntennaElm.coffee')
+VoltageElm = require('./VoltageElm')
+AntennaElm = require('./AntennaElm')
 
 
 class RailElm extends VoltageElm

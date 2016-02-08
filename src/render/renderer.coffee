@@ -10,12 +10,12 @@
 #
 # #######################################################################
 
-BaseRenderer = require('./BaseRenderer.coffee')
-Circuit = require('../circuit/circuit.coffee')
-CircuitComponent = require('../circuit/circuitComponent.coffee')
-Settings = require('../settings/settings.coffee')
-Rectangle = require('../geom/rectangle.coffee')
-Point = require('../geom/point.coffee')
+BaseRenderer = require('./BaseRenderer')
+Circuit = require('../circuit/circuit')
+CircuitComponent = require('../circuit/circuitComponent')
+Settings = require('../settings/settings')
+Rectangle = require('../geom/rectangle')
+Point = require('../geom/point')
 
 
 # X components

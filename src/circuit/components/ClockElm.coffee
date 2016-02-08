@@ -1,5 +1,5 @@
-RailElm = require('./RailElm.coffee')
-VoltageElm = require('./VoltageElm.coffee')
+RailElm = require('./RailElm')
+VoltageElm = require('./VoltageElm')
 
 class ClockElm extends RailElm
   @ParameterDefinitions["maxVoltage"].default_value = 2.5

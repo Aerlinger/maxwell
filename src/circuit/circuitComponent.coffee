@@ -14,12 +14,12 @@
 #
 # #######################################################################
 
-Settings = require('../settings/settings.coffee')
-Rectangle = require('../geom/rectangle.coffee')
-Point = require('../geom/point.coffee')
-MathUtils = require('../util/mathUtils.coffee')
-ArrayUtils = require('../util/arrayUtils.coffee')
-FormatUtils = require('../util/formatUtils.coffee')
+Settings = require('../settings/settings')
+Rectangle = require('../geom/rectangle')
+Point = require('../geom/point')
+MathUtils = require('../util/mathUtils')
+ArrayUtils = require('../util/arrayUtils')
+FormatUtils = require('../util/formatUtils')
 DrawUtil = require("../util/drawUtil.coffee")
 
 _ = require("lodash")

@@ -1,6 +1,6 @@
 GateElm = require("./GateElm.coffee")
-DrawUtil = require('../../util/drawUtil.coffee')
-ArrayUtil = require('../../util/arrayUtils.coffee')
+DrawUtil = require('../../util/drawUtil')
+ArrayUtil = require('../../util/arrayUtils')
 
 class OrGateElm extends GateElm
 
