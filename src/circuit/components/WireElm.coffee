@@ -23,7 +23,7 @@ class WireElm extends CircuitComponent
 
     if @mustShowCurrent()
       s = @getUnitText(Math.abs(@getCurrent()), "A")
-      @drawValues s, 4, renderContext
+#      @drawValues s, 4, renderContext
     else if @mustShowVoltage()
       s = @getUnitText(@volts[0], "V")
 

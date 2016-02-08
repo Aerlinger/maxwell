@@ -60,7 +60,8 @@ describe.only "Testing all circuits", ->
       "allpass1"  # need 170
     ]
 
-    @files = @jfets
+#    @files = @jfets
+    @files = ["ohms"]
 #
     for circuit_name in @files
       circuit_file = "#{circuit_name}.json"

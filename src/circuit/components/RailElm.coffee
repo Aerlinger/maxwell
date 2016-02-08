@@ -3,7 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-DrawUtil = require("../../util/drawUtil")
+DrawUtil = require("../../util/drawUtil.coffee")
 
 VoltageElm = require('./VoltageElm.coffee')
 AntennaElm = require('./AntennaElm.coffee')
@@ -44,7 +44,7 @@ class RailElm extends VoltageElm
       s = v + "V" if Math.abs(v) < 1 #showFormat.format(v)
       s = "+" + s if @getVoltage() > 0
 
-      s = "Ant" if this instanceof AntennaElm
+#      s = "Ant" if this instanceof AntennaElm
       s = "CLK" if clock
 
       DrawUtil.drawValue 0, 0, this, s
@@ -81,7 +81,7 @@ class RailElm extends VoltageElm
 #    e = new Error("DOSTEP")
 
 #    console.log(e.stack)
-    console.log("WF", @waveform, @voltSource, @getVoltage())
+#    console.log("WF", @waveform, @voltSource, @getVoltage())
     unless @waveform is VoltageElm.WF_DC
       stamper.updateVoltageSource 0, @nodes[0], @voltSource, @getVoltage()
 

@@ -1,5 +1,5 @@
-CircuitComponent = require("../CircuitComponent")
-DrawUtil = require('../../util/drawUtil')
+CircuitComponent = require("../CircuitComponent.coffee")
+DrawUtil = require('../../util/drawUtil.coffee')
 
 class AnalogSwitchElm extends CircuitComponent
   FLAG_INVERT: 1

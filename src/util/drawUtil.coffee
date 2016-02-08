@@ -78,6 +78,8 @@ class DrawUtil
 
     return a
 
+  @drawValue: (x1, y1, circuitElm, str) ->
+
   @printArray: (arr) ->
     console.log(subarr) for subarr in arr
 

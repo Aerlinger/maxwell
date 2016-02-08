@@ -5,7 +5,7 @@ Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 ArrayUtils = require('../../util/arrayUtils.coffee')
 DrawUtil = require('../../util/DrawUtil.coffee')
-JFetElm = require("./JFetElm")
+JFetElm = require("./JFetElm.coffee")
 
 sprintf = require("sprintf-js").sprintf
 

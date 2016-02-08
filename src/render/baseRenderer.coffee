@@ -87,6 +87,8 @@ class BaseRenderer extends Observer
       @drawLine polygon.getX(i), polygon.getY(i), polygon.getX(i + 1), polygon.getY(i + 1), color
     @drawLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
 
+  drawValue: (x1, y1, circuitElm, str) ->
+
   drawCoil: (point1, point2, vStart, vEnd, renderContext) ->
     hs = 8
     segments = 40

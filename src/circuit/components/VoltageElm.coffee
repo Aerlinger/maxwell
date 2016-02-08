@@ -256,8 +256,8 @@ class VoltageElm extends CircuitComponent
     if Settings.SHOW_VALUES
       valueString = @getUnitText(@frequency, "Hz")
 
-      if @axisAligned
-        @drawValues valueString, VoltageElm.circleSize
+#      if @axisAligned
+#        @drawValues valueString, VoltageElm.circleSize
 
   getVoltageSourceCount: ->
     1

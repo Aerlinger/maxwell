@@ -100,7 +100,7 @@ class CapacitorElm extends CircuitComponent
 
   drawUnits: ->
     s = @getUnitText(@capacitance, "F")
-    @drawValues s, hs
+#    @drawValues s, hs
 
   doStep: (stamper) ->
     stamper.stampCurrentSource(@nodes[0], @nodes[1], @curSourceValue)

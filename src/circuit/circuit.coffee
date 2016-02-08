@@ -30,6 +30,7 @@ CircuitSolver = require('../engine/circuitSolver.coffee')
 Observer = require('../util/observer.coffee')
 Rectangle = require('../geom/rectangle.coffee')
 FormatUtils = require('../util/FormatUtils.coffee')
+environment = require("../environment.coffee")
 
 fs = require('fs')
 
@@ -90,7 +91,8 @@ class Circuit extends Observer
     @clearAndReset()
 
   write: (buffer) ->
-    @ostream.write(buffer)
+    unless environment.isBrowser
+      @ostream.write(buffer)
 
   ## Removes all circuit elements and scopes from the workspace and resets time to zero.
   ##   Called on initialization and reset.

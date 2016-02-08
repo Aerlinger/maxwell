@@ -11,7 +11,7 @@ VoltageElm = require('../circuit/components/VoltageElm.coffee')
 
 Scope = require('../circuit/components/Scope.coffee')
 
-environment = require("../environment")
+environment = require("../environment.coffee")
 
 class CircuitLoader
   @createCircuitFromJsonData: (jsonData) ->
@@ -80,7 +80,8 @@ class CircuitLoader
     if elms.length == 0
       console.error "No elements loaded. JSON most likely malformed"
 
-    circuit.ostream ||= fs.createWriteStream("dump/#{circuit.Params.name}")
+    unless environment.isBrowser
+      circuit.ostream ||= fs.createWriteStream("dump/#{circuit.Params.name}")
 
     return circuit
 

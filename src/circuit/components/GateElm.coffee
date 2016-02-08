@@ -1,4 +1,4 @@
-CircuitComponent = require("../CircuitComponent")
+CircuitComponent = require("../CircuitComponent.coffee")
 DrawUtil = require('../../util/drawUtil.coffee')
 ArrayUtil = require('../../util/arrayUtils.coffee')
 

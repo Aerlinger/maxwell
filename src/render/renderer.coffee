@@ -15,6 +15,7 @@ Circuit = require('../circuit/circuit.coffee')
 CircuitComponent = require('../circuit/circuitComponent.coffee')
 Settings = require('../settings/settings.coffee')
 Rectangle = require('../geom/rectangle.coffee')
+Polygon = require('../geom/Polygon.coffee')
 Point = require('../geom/point.coffee')
 
 

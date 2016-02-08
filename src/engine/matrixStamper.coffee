@@ -34,7 +34,7 @@ class MatrixStamper
 
 
   updateVoltageSource: (n1, n2, vs, voltage) ->
-    console.log("@Circuit.numNodes() #{@Circuit.numNodes()} #{vs} #{voltage}")
+#    console.log("@Circuit.numNodes() #{@Circuit.numNodes()} #{vs} #{voltage}")
 
     vn = @Circuit.numNodes() + vs
     @stampRightSide vn, voltage

@@ -2,9 +2,13 @@ CircuitComponent = require('./circuit/circuitComponent.coffee')
 CircuitLoader = require('./io/circuitLoader.coffee')
 Circuit = require('./circuit/circuit.coffee')
 Renderer = require('./render/renderer.coffee')
-Winston = require('winston')
 
-environment = require("./environment")
+environment = require("./environment.coffee")
+
+#unless environment.isBrowser
+#  Winston = require('winston')
+#end
+
 
 class Maxwell
   version = "0.0.0"
@@ -14,12 +18,12 @@ class Maxwell
 
   @Circuits = {}
 
-  @logger = new (Winston.Logger)({
-    transports: [
-      new (Winston.transports.Console)(),
-      new (Winston.transports.File)({ filename: 'log/maxwell.log' })
-    ]
-  });
+#  @logger = new (Winston.Logger)({
+#    transports: [
+#      new (Winston.transports.Console)(),
+#      new (Winston.transports.File)({ filename: 'log/maxwell.log' })
+#    ]
+#  });
 
   @loadCircuitFromFile: (circuitFileName, onComplete) ->
     circuit = CircuitLoader.createCircuitFromJsonFile(circuitFileName, onComplete)

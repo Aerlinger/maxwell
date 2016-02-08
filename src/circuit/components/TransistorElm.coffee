@@ -4,7 +4,7 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 ArrayUtils = require('../../util/arrayUtils.coffee')
-DrawUtil = require('../../util/drawUtil')
+DrawUtil = require('../../util/drawUtil.coffee')
 
 class TransistorElm extends CircuitComponent
   @FLAG_FLIP: 1
@@ -204,7 +204,7 @@ class TransistorElm extends CircuitComponent
 #        @drawCenteredText "C", @coll[0].x1 - 3 + 9 * ds, @coll[0].y + 4, Color.WHITE # x+6 if ds=1, -12 if -1
 #        @drawCenteredText "E", @emit[0].x1 - 3 + 9 * ds, @emit[0].y + 4, Color.WHITE
 
-    renderContext.drawPosts(renderContext, this)
+    renderContext.drawPosts(this)
 
   getPost: (n) ->
     if (n is 0)

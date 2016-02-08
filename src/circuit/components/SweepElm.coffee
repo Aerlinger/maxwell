@@ -3,7 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-DrawUtils = require('../../util/drawUtil')
+DrawUtils = require('../../util/drawUtil.coffee')
 
 class SweepElm extends CircuitComponent
   @FLAG_LOG: 1
@@ -110,8 +110,8 @@ class SweepElm extends CircuitComponent
 
     if Circuit.showValuesCheckItem
       s = renderContext.getShortUnitText(@frequency, "Hz")
-      if @axisAligned()
-        @drawValues s, @circleSize
+#      if @axisAligned()
+#        @drawValues s, @circleSize
 
     @drawPosts()
     @curcount = @updateDotCount(-@current, @curcount)

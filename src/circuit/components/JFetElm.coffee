@@ -6,7 +6,7 @@ Point = require('../../geom/point.coffee')
 ArrayUtils = require('../../util/ArrayUtils.coffee')
 DrawUtils = require('../../util/DrawUtil.coffee')
 
-MosfetElm = require('./MosfetElm')
+MosfetElm = require('./MosfetElm.coffee')
 
 class JFetElm extends MosfetElm
 
