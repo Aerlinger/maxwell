@@ -1,6 +1,6 @@
-Point = require('../geom/point')
-Polygon = require('../geom/polygon')
-Settings = require('../settings/settings')
+Point = require('../geom/point.coffee')
+Polygon = require('../geom/polygon.coffee')
+Settings = require('../settings/settings.coffee')
 
 class DrawUtil
   @interpolate: (ptA, ptB, u, v = 0) ->

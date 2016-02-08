@@ -1,9 +1,9 @@
-CircuitComponent = require('../circuitComponent')
-Settings = require('../../settings/settings')
-Polygon = require('../../geom/polygon')
-Rectangle = require('../../geom/rectangle')
-Point = require('../../geom/point')
-#Maxwell = require('../../Maxwell')
+CircuitComponent = require('../circuitComponent.coffee')
+Settings = require('../../settings/settings.coffee')
+Polygon = require('../../geom/polygon.coffee')
+Rectangle = require('../../geom/rectangle.coffee')
+Point = require('../../geom/point.coffee')
+#Maxwell = require('../../Maxwell.coffee')
 
 class ResistorElm extends CircuitComponent
   @ParameterDefinitions = {

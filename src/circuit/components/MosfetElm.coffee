@@ -1,10 +1,10 @@
-CircuitComponent = require('../circuitComponent')
-Settings = require('../../settings/settings')
-Polygon = require('../../geom/polygon')
-Rectangle = require('../../geom/rectangle')
-Point = require('../../geom/point')
-ArrayUtils = require('../../util/arrayUtils')
-DrawUtil = require('../../util/DrawUtil')
+CircuitComponent = require('../circuitComponent.coffee')
+Settings = require('../../settings/settings.coffee')
+Polygon = require('../../geom/polygon.coffee')
+Rectangle = require('../../geom/rectangle.coffee')
+Point = require('../../geom/point.coffee')
+ArrayUtils = require('../../util/arrayUtils.coffee')
+DrawUtil = require('../../util/DrawUtil.coffee')
 JFetElm = require("./JFetElm")
 
 sprintf = require("sprintf-js").sprintf

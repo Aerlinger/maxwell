@@ -1,5 +1,5 @@
-MathUtils = require('../util/mathUtils')
-RowInfo = require('./rowInfo')
+MathUtils = require('../util/mathUtils.coffee')
+RowInfo = require('./rowInfo.coffee')
 
 class MatrixStamper
 

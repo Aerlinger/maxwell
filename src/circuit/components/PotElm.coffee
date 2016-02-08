@@ -1,6 +1,6 @@
 CircuitComponent = require("../CircuitComponent.coffee")
 DrawUtil = require("../../util/drawUtil.coffee")
-Settings = require('../../settings/settings')
+Settings = require('../../settings/settings.coffee')
 
 Point = require("../../geom/point.coffee")
 

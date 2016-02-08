@@ -1,5 +1,5 @@
-RailElm = require('./RailElm')
-VoltageElm = require('./VoltageElm')
+RailElm = require('./RailElm.coffee')
+VoltageElm = require('./VoltageElm.coffee')
 
 class ACRailElm extends RailElm
   constructor: (xa, ya, xb, yb, params = {}, f=0) ->

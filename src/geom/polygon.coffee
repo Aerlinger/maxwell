@@ -1,4 +1,4 @@
-Point = require('./point')
+Point = require('./point.coffee')
 
 class Polygon
   constructor: (vertices) ->
