@@ -106,7 +106,6 @@ class CircuitComponent
       throw new Error("Invalid params #{unmatched_params.join(" ")} assigned to #{this}")
 
 
-
   serializeParameters: ->
     params = {}
 
@@ -458,5 +457,11 @@ class CircuitComponent
       postCount: @getPostCount()
       nonLinear: @nonLinear()
     }
+
+  ## Deprecated
+
+  getVoltageText: ->
+    Maxwell.logger.warn("GET VOLTAGE TEXT IS DEPRECATED")
+    "GET VOLTAGE TEXT IS DEPRECATED"
 
 module.exports = CircuitComponent
