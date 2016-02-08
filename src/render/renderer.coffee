@@ -17,6 +17,7 @@ Settings = require('../settings/settings.coffee')
 Rectangle = require('../geom/rectangle.coffee')
 Polygon = require('../geom/Polygon.coffee')
 Point = require('../geom/point.coffee')
+DrawUtil = require('../util/DrawUtil.coffee')
 
 
 # X components
@@ -278,7 +279,7 @@ class Renderer extends BaseRenderer
     [new Point(interpX, interpY), new Point(interpXReflection, interpYReflection)]
 
   getVoltageColor: (volts, fullScaleVRange=10) ->
-    scale =
+    RedGreen =
       [ "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
         "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
         "#7f7f7f", "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747",
@@ -290,7 +291,7 @@ class Renderer extends BaseRenderer
        "#5F6109", "#596509", "#53690A", "#4E6E0A", "#48720B", "#43760B", "#3D7B0C", "#387F0C",
        "#32840D", "#2C880E", "#278C0E", "#21910F", "#1C950F", "#169910", "#119E10", "#0BA211", "#06A712"]
 
-    scale =
+    blueScale =
       ["#EB1416", "#E91330", "#E7134A", "#E51363", "#E3137C", "#E11394", "#E013AC", "#DE13C3",
        "#DC13DA", "#C312DA", "#AA12D8", "#9012D7", "#7712D5", "#5F12D3", "#4612D1", "#2F12CF",
        "#1712CE", "#1123CC", "#1139CA", "#114FC8", "#1164C6", "#1179C4", "#118EC3", "#11A2C1",
@@ -315,7 +316,7 @@ class Renderer extends BaseRenderer
 
     poly.addVertex point2.x, point2.y
 
-    [p1, p2] = @.interpPoint2 point1, point2, 1 - al / dist, aw
+    [p1, p2] = DrawUtil.interpolateSymmetrical point1, point2, 1 - al / dist, aw
 
     poly.addVertex p1.x, p1.y
     poly.addVertex p2.x, p2.y

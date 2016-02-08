@@ -20,15 +20,15 @@ describe.only "Testing all circuits", ->
     expect({})
 
   it "tests each circuit", ->
-#    @files = ["ohms", "resistors", "inductac", "voltdivide", "thevenin", "norton", "diodelimit", "diodelimit", "pot"]
-    @epsilon_error = ["diodeclip", "diodecurve", "impedance", "lrc", "diodevar"]
+    @files = ["ohms", "resistors", "inductac", "voltdivide", "thevenin", "norton", "diodelimit", "diodelimit", "pot"]
+    @epsilon_error = ["diodeclip", "diodecurve", "impedance", "lrc", "diodevar", "opint", "mosfetamp"]
     @key_error = ["res-series"]
 
 #    @files = ["ohms", "voltdivide", "cap", "capac", "diodecurve", "diodevar", "opamp", "diodeclip", "induct"]
 #    @files = ["capseries"]
     @transistors = ["npn", "pnp"]
     @mosfets = ["pmosfet", "nmosfet"]
-    @jfets = ["jfetamp"]
+    @jfets = ["opampint"]
 
     @opamps = [
       "opamp"
@@ -61,7 +61,7 @@ describe.only "Testing all circuits", ->
     ]
 
 #    @files = @jfets
-    @files = ["ohms"]
+    @files = ["mosfetamp"]
 #
     for circuit_name in @files
       circuit_file = "#{circuit_name}.json"

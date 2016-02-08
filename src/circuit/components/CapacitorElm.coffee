@@ -3,6 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
+DrawUtil = require('../../util/drawUtil.coffee')
 
 class CapacitorElm extends CircuitComponent
   @FLAG_BACK_EULER: 2
@@ -59,18 +60,26 @@ class CapacitorElm extends CircuitComponent
   setPoints: ->
     super()
 
-  draw: (renderContext) ->
     f = (@dn / 2 - 4) / @dn
 
-    # calc leads
-    @lead1 = renderContext.interpolateSymmetrical(@point1, @point2, f)
-    @lead2 = renderContext.interpolateSymmetrical(@point1, @point2, 1 - f)
+    @lead1 = DrawUtil.interpolate(@point1, @point2, f)
+    @lead2 = DrawUtil.interpolate(@point1, @point2, 1 - f)
 
-    # calc plates
     @plate1 = [new Point(), new Point()]
     @plate2 = [new Point(), new Point()]
-    [@plate1[0], @plate1[1]] = renderContext.interpolateSymmetrical @point1, @point2, f, 12
-    [@plate2[0], @plate2[1]] = renderContext.interpolateSymmetrical @point1, @point2, 1 - f, 12
+    [@plate1[0], @plate1[1]] = DrawUtil.interpolateSymmetrical @point1, @point2, f, 12
+    [@plate2[0], @plate2[1]] = DrawUtil.interpolateSymmetrical @point1, @point2, 1 - f, 12
+
+
+
+
+  draw: (renderContext) ->
+
+
+    # calc leads
+
+
+    # calc plates
 
     hs = 12
     @setBboxPt @point1, @point2, hs

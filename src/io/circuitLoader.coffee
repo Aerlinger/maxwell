@@ -21,7 +21,6 @@ class CircuitLoader
     validName = /^[$A-Z_][0-9A-Z_$]*$/i
 
     circuitParams = jsonData.shift()
-    console.log(circuitParams)
     circuit.Params = SimulationParams.deserialize(circuitParams)
     circuit.flags = parseInt(circuitParams['flags'])
 
@@ -46,6 +45,8 @@ class CircuitLoader
 
       params = elementData['params']
 
+      console.log("#{type} #{x1} #{y1} #{x2} #{y2} #{flags} #{params}")
+
       if !sym
         circuit.warn "No matching component for #{type}: #{sym}"
       else if type is "h"
@@ -57,15 +58,11 @@ class CircuitLoader
         @hintItem2 = y1
         break;
       else if sym is Scope
-        console.log "Scope found in file!"
+        console.log "-> Scope found in file!"
       else if !type
         circuit.warn "Unrecognized Type"
       else
-#        params['flags'] = flags
-#        params.unshift(flags)
-
         try
-          console.log(params)
           newCircuitElm = new sym(x1, y1, x2, y2, params, parseInt(flags))
         catch e
           console.log(e)
@@ -82,6 +79,8 @@ class CircuitLoader
 
     unless environment.isBrowser
       circuit.ostream ||= fs.createWriteStream("dump/#{circuit.Params.name}")
+
+    console.log("--------------------------------------------------------------------\n")
 
     return circuit
 

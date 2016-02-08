@@ -145,7 +145,7 @@ class TransistorElm extends CircuitComponent
     [@coll[1], @emit[1]] = renderContext.interpolateSymmetrical @point1, @point2, 1 - 13 / @dn, 6 * @dsign * @pnp
 
     # calc point where base lead contacts rectangle
-    @base = renderContext.interpolateSymmetrical @point1, @point2, 1 - Settings.GRID_SIZE / @dn
+    @base = renderContext.interpolate @point1, @point2, 1 - Settings.GRID_SIZE / @dn
 
     # rectangle
     @rectPoly = renderContext.createPolygon(@rect[0], @rect[2], @rect[3], @rect[1])
