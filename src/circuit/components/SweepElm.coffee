@@ -3,6 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
+DrawUtils = require('../../util/drawUtil')
 
 class SweepElm extends CircuitComponent
   @FLAG_LOG: 1
@@ -12,18 +13,18 @@ class SweepElm extends CircuitComponent
   @ParameterDefinitions = {
     "minF": {
       name: "Frequency"
-      unit: "Hertz",
-      default_value: 20,
-      symbol: "Hz",
+      unit: "Hertz"
+      default_value: 20
+      symbol: "Hz"
       data_type: "float"
       range: [-Infinity, Infinity]
       type: "physical"
     },
     "maxF": {
       name: "Frequency"
-      unit: "Hertz",
-      default_value: 4e4,
-      symbol: "Hz",
+      unit: "Hertz"
+      default_value: 4e4
+      symbol: "Hz"
       data_type: "float"
       range: [-Infinity, Infinity]
       type: "physical"
@@ -38,17 +39,14 @@ class SweepElm extends CircuitComponent
       type: "physical"
     },
     "sweepTime": {
-      unit: "seconds",
-      name: "Time",
-      symbol: "s",
-      default_value: 0.1,
+      unit: "seconds"
+      name: "Time"
+      symbol: "s"
+      default_value: 0.1
       data_type: "float"
       range: [0, -Infinity]
       type: "physical"
     }
-    # FLAGS:
-#    @FLAG_LOG: 1
-#    @FLAG_BIDIR: 2
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
@@ -57,71 +55,89 @@ class SweepElm extends CircuitComponent
 
     super(xa, ya, xb, yb, params, f)
 
-
   getDumpType: ->
     170
 
   getPostCount: ->
     1
 
-
   draw: (renderContext) ->
-    @setBboxPt @point1, @point2, @circleSize
-    color = @setVoltageColor(@volts[0])
+    @setBboxPt @point1, @point2, SweepElm.circleSize
 
-    @lead1 = DrawHelper.interpPoint(@point1, @point2, 1 - @circleSize / @dn)
+    color = renderContext.getVoltageColor(@volts[0])
+    @lead1 = DrawUtils.interpolate(@point1, @point2, 1 - SweepElm.circleSize / @dn)
 
-    CircuitComponent.drawThickLinePt @point1, @lead1, color
+    renderContext.drawThickLinePt @point1, @lead1, color
 #    @setVoltageColor (if @needsHighlight() then CircuitComponent.selectColor else Color.GREY)
+#    @setVoltageColor(Color.GREY)
+#    powerColor = @setPowerColor(false)
 
-    @setVoltageColor(Color.GREY)
-
-    powerColor = @setPowerColor(false)
-    xc = @point2.x1
+    xc = @point2.x
     yc = @point2.y
-    CircuitComponent.drawCircle xc, yc, @circleSize
+
+    renderContext.drawCircle xc, yc, SweepElm.circleSize
+
     wl = 8
-    @adjustBbox xc - @circleSize, yc - @circleSize, xc + @circleSize, yc + @circleSize
-    i = undefined
+
+    @adjustBbox xc - SweepElm.circleSize, yc - SweepElm.circleSize, xc + SweepElm.circleSize, yc + SweepElm.circleSize
+
     xl = 10
     ox = -1
     oy = -1
-    tm = (new Date()).getTime() #System.currentTimeMillis();
-    #double w = (this == mouseElm ? 3 : 2);
+    tm = (new Date()).getTime() #System.currentTimeMillis()
+    #double w = (this == mouseElm ? 3 : 2)
+
     tm %= 2000
-    tm = 2000 - tm  if tm > 1000
-    w = 1 + tm * .002
-    w = 1 + 2 * (@frequency - @minF) / (@maxF - @minF)  unless Circuit.stoppedCheck
+    if tm > 1000
+      tm = 2000 - tm
+
+    if Circuit.stoppedCheck
+      w = 1 + tm * .002
+    else
+      w = 1 + 2 * (@frequency - @minF) / (@maxF - @minF)
+
     i = -xl
+
     while i <= xl
       yy = yc + Math.floor(.95 * Math.sin(i * Math.PI * w / xl) * wl)
-      CircuitComponent.drawThickLine ox, oy, xc + i, yy  unless ox is -1
+
+      unless ox is -1
+        renderContext.drawThickLine ox, oy, xc + i, yy
+
       ox = xc + i
       oy = yy
       i++
+
     if Circuit.showValuesCheckItem
-      s = CircuitComponent.getShortUnitText(@frequency, "Hz")
-      @drawValues s, @circleSize  if @axisAligned()
+      s = renderContext.getShortUnitText(@frequency, "Hz")
+      if @axisAligned()
+        @drawValues s, @circleSize
+
     @drawPosts()
     @curcount = @updateDotCount(-@current, @curcount)
-    @drawDots @point1, @lead1, @curcount  unless Circuit.dragElm is this
+#    @drawDots @point1, @lead1, @curcount  unless Circuit.dragElm is this
 
-  stamp: ->
-    Circuit.stampVoltageSource 0, @nodes[0], @voltSource
+  stamp: (stamper) ->
+    stamper.stampVoltageSource 0, @nodes[0], @voltSource
 
+  setPoints: ->
+    super()
+    DrawUtils.interpolate(@point1, @point2, 1 - SweepElm.circleSize / @dn)
 
   setParams: ->
     if @frequency < @minF or @frequency > @maxF
       @frequency = @minF
       @freqTime = 0
       @dir = 1
+
     if (@flags & SweepElm.FLAG_LOG) is 0
       @fadd = @dir * Circuit.timeStep * (@maxF - @minF) / @sweepTime
       @fmul = 1
     else
       @fadd = 0
-      @fmul = Math.pow(@maxF / @minF, @dir * Circuit.timeStep / @sweepTime)
-    @savedTimeStep = Circuit.timeStep
+      @fmul = Math.pow(@maxF / @minF, @dir * @getParentCircuit.timeStep() / @sweepTime)
+
+    @savedTimeStep = @getParentCircuit().timeStep()
 
   reset: ->
     @frequency = @minF
@@ -129,13 +145,14 @@ class SweepElm extends CircuitComponent
     @dir = 1
     @setParams()
 
-
   startIteration: ->
-
     # has timestep been changed?
-    @setParams()  unless Circuit.timeStep is @savedTimeStep
+    unless @getParentCircuit().timeStep() is @savedTimeStep
+      @setParams()
+
     @v = Math.sin(@freqTime) * @maxV
-    @freqTime += @frequency * 2 * Math.PI * Circuit.timeStep
+
+    @freqTime += @frequency * 2 * Math.PI * @getParentCircuit().timeStep()
     @frequency = @frequency * @fmul + @fadd
     if @frequency >= @maxF and @dir is 1
       unless (@flags & SweepElm.FLAG_BIDIR) is 0

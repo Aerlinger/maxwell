@@ -75,8 +75,6 @@ class ResistorElm extends CircuitComponent
     @current = (@volts[0] - @volts[1]) / @resistance
 
   stamp: (stamper) ->
-#    console.log("\n::Stamping Resistor::")
-
     if @orphaned()
       console.warn "attempting to stamp an orphaned resistor"
 

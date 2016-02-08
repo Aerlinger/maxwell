@@ -9,9 +9,6 @@ DrawUtil = require('../../util/drawUtil.coffee')
 
 _ = require("lodash")
 
-###
-Todo: Click functionality does not work
-###
 class Switch2Elm extends SwitchElm
 
   @FLAG_CENTER_OFF: 1
@@ -42,15 +39,15 @@ class Switch2Elm extends SwitchElm
     super()
 #    @calcLeads(32);
 
-    @swposts = ArrayUtils.newPointArray(2);
-    @swpoles = ArrayUtils.newPointArray(3);
+    @swposts = ArrayUtils.newPointArray(2)
+    @swpoles = ArrayUtils.newPointArray(3)
 
-    DrawUtil.interpolateSymmetrical(@lead1, @lead2, @swpoles[0], @swpoles[1], 1, @openhs);
-    @swpoles[2] = @lead2;
+    DrawUtil.interpolateSymmetrical(@lead1, @lead2, @swpoles[0], @swpoles[1], 1, @openhs)
+    @swpoles[2] = @lead2
 
-    DrawUtil.interpolateSymmetrical(@point1, @point2, @swposts[0], @swposts[1], 1, @openhs);
+    DrawUtil.interpolateSymmetrical(@point1, @point2, @swposts[0], @swposts[1], 1, @openhs)
 
-    @posCount = @hasCenterOff() ? 3 : 2;
+    @posCount = if @hasCenterOff() then 3 else 2
 
   getDumpType: ->
     "S"
@@ -140,6 +137,5 @@ class Switch2Elm extends SwitchElm
 
   hasCenterOff: ->
     (@flags & Switch2Elm.FLAG_CENTER_OFF) isnt 0
-
 
 module.exports = Switch2Elm

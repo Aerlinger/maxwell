@@ -20,8 +20,17 @@ VarRailElm = require('./components/VarRailElm.coffee')
 OpAmpElm = require('./components/OpAmpElm.coffee')
 ZenerElm = require('./components/ZenerElm.coffee')
 Switch2Elm = require('./components/Switch2Elm.coffee')
+SweepElm = require('./components/SweepElm.coffee')
 TextElm = require('./components/TextElm.coffee')
 ProbeElm = require('./components/ProbeElm.coffee')
+
+AndGateElm = require('./components/AndGateElm')
+NandGateElm = require('./components/NandGateElm')
+OrGateElm = require('./components/OrGateElm')
+NorGateElm = require('./components/NorGateElm')
+XorGateElm = require('./components/XorGateElm')
+
+TransformerElm = require('./components/TransormerElm')
 
 PotElm = require('./components/PotElm.coffee')
 ClockElm = require('./components/ClockElm.coffee')
@@ -56,17 +65,25 @@ class ComponentRegistry
   # Testing
     'A': AntennaElm
     'R': RailElm
+    '170': SweepElm
     '172': VarRailElm
     'z': ZenerElm
     'i': CurrentElm
     't': TransistorElm
     '174': PotElm
 
+    '150': AndGateElm
+    '151': NandGateElm
+    '152': OrGateElm
+    '153': NorGateElm
+    '154': XorGateElm
+
   # In progress:
     'S': Switch2Elm  # Needs interaction
     'x': TextElm
     'p': ProbeElm
     'O': OutputElm
+    'T': TransformerElm
 
     'o': Scope
 #    'h': Scope
@@ -104,11 +121,20 @@ class ComponentRegistry
     TransistorElm: 't'
 
     Switch2Elm: 'S'
+    SweepElm: '170'
     TextElm: 'x'
     ProbeElm: 'p'
     Scope: 'o'
     OutputElm: 'O'
     AntennaElm: 'A'
+
+    AndGateElm: '150'
+    NandGateElm: '151'
+    OrGateElm: '152'
+    NorGateElm: '153'
+    XorGateElm: '154'
+    
+    TransformerElm: 'T'
   }
 
 module.exports = ComponentRegistry

@@ -26,9 +26,9 @@ class VoltageElm extends CircuitComponent
     },
     "frequency": {
       name: "Frequency"
-      unit: "Hertz",
-      default_value: 40,
-      symbol: "Hz",
+      unit: "Hertz"
+      default_value: 40
+      symbol: "Hz"
       data_type: parseFloat
       range: [-Infinity, Infinity]
     },
@@ -50,18 +50,18 @@ class VoltageElm extends CircuitComponent
     },
     "phaseShift": {
       name: "degrees"
-      unit: "degrees",
-      default_value: 0,
-      symbol: "deg",
+      unit: "degrees"
+      default_value: 0
+      symbol: "deg"
       data_type: parseFloat
       range: [-360, 360]
       type: parseFloat
     },
     "dutyCycle": {
       name: "percentage"
-      unit: "",
-      default_value: 0.5,
-      symbol: "%",
+      unit: ""
+      default_value: 0.5
+      symbol: "%"
       data_type: parseFloat
       range: [0, 100]
       type: parseFloat
