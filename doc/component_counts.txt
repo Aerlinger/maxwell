@@ -5,7 +5,7 @@
  274 R    working
  246 c    working
  149 t    wip     (transistorelm)
- 129 M            (LogicOutputElm)
+ 129 M    wip     (LogicOutputElm)
  121 f    wip     (MosfetElm)
  117 v    working
  113 L            (LogicInputElm)
@@ -14,17 +14,17 @@
  101 l    working
   78 d    working
   66 a    working
-  51 151          (NandGate)
-  38 150
-  36 s            (SwitchElm)
-  33 I            (InverterElm)
-  31 p
-  30 171
-  22 178
+  51 151  wip     (NandGate)
+  38 150  wip
+  36 s    working (SwitchElm)
+  33 I    wip     (InverterElm)
+  31 p    wip     (Problm)
+  30 171          (Transmission Line)
+  22 178          (RelayElm)
   21 S            (Switch2Elm)
   21 172          (VarRailElm)
-  20 156
-  20 155
+  20 156          (JkFlipFlop)
+  20 155          (DFlipFlop)
   16 h            (Hint)
   16 170
   15 162

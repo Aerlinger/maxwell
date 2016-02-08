@@ -29,6 +29,10 @@ NandGateElm = require('./components/NandGateElm')
 OrGateElm = require('./components/OrGateElm')
 NorGateElm = require('./components/NorGateElm')
 XorGateElm = require('./components/XorGateElm')
+InverterElm = require('./components/InverterElm')
+
+LogicInputElm = require('./components/LogicInputElm')
+LogicOutputElm = require('./components/LogicOutputElm')
 
 AnalogSwitchElm = require('./components/AnalogSwitchElm')
 AnalogSwitch2Elm = require('./components/AnalogSwitch2Elm')
@@ -80,6 +84,10 @@ class ComponentRegistry
     '152': OrGateElm
     '153': NorGateElm
     '154': XorGateElm
+
+    'I': InverterElm
+    'L': LogicInputElm
+    'M': LogicOutputElm
 
     '159': AnalogSwitchElm
     '160': AnalogSwitch2Elm
@@ -139,6 +147,10 @@ class ComponentRegistry
     OrGateElm: '152'
     NorGateElm: '153'
     XorGateElm: '154'
+
+    InverterElm: 'I'
+    LogicInputElm: 'L'
+    LogicOutputElm: 'M'
 
     TransformerElm: 'T'
 
