@@ -157,4 +157,15 @@ class ComponentRegistry
     AnalogSwitch2Elm: '160'
   }
 
+  @enumerate: ->
+    elms = {}
+
+    for _, Component of @ComponentDefs
+      elms[Component] = Component.ParameterDefinitions
+
+    elms
+
+
+
+
 module.exports = ComponentRegistry

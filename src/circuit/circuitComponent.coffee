@@ -30,17 +30,13 @@ class CircuitComponent
   @ParameterDefinitions = {}
 
   constructor: (@x1, @y1, @x2, @y2, params, f = 0) ->
-#    @flags = params.shift()
-    @flags = f
+    @flags = f || 0
 
     @current = 0
     @curcount = 0
     @voltSource = 0
     @noDiagonal = false
     @Circuit = null
-
-    # TODO: Beware of slowness with 'delete' (http://stackoverflow.com/questions/208105/how-do-i-remove-a-property-from-a-javascript-object)
-    delete params['flags']
 
     @nodes = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
     @volts = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
@@ -50,17 +46,6 @@ class CircuitComponent
     @component_id = MathUtils.getRand(100000000) + (new Date()).getTime()
 
     @setParameters(params)
-
-  noop: (input) ->
-    input
-
-  @conversionTypes = {
-    "float": parseFloat,
-    "integer": parseInt,
-    "sign": Math.sign,
-    "string": sprintf,
-    "boolean": (x)-> if (x.toString() == "true") then 1 else 0
-  }
 
   convertParamsToHash: (param_list) ->
     ParameterDefinitions = @constructor.ParameterDefinitions
@@ -91,7 +76,7 @@ class CircuitComponent
     return result
 
   setParameters: (component_params) ->
-    if component_params.constructor is Array
+    if component_params && component_params.constructor is Array
       component_params = @convertParamsToHash(component_params)
 
     ParameterDefinitions = @constructor.ParameterDefinitions
@@ -102,7 +87,7 @@ class CircuitComponent
       default_value = definition.default_value
       data_type = definition.data_type
 
-      if param_name of component_params
+      if component_params && (param_name of component_params)
         param_value = data_type(component_params[param_name])
 
         this[param_name] = param_value
@@ -413,13 +398,16 @@ class CircuitComponent
 
   draw: (renderContext) ->
 #    @curcount = @updateDotCount()
+    renderContext.drawRect(@boundingBox.x, @boundingBox.y, @boundingBox.width, @boundingBox.height, 1, "#8888CC")
+
     @calcLeads 0
 
-    @updateDots(this)
-
     renderContext.drawValue 10, 0, this, @toString()
-    renderContext.drawPosts(this)
+
+    renderContext.drawPosts(this, "#FF0000")
     renderContext.drawLeads(this)
+
+    @updateDots(this)
     renderContext.drawDots(@point1, @point2, this)
 
 

@@ -253,6 +253,8 @@ class VoltageElm extends CircuitComponent
           oy = yy
           i++
 
+    renderContext.drawCircle xc, yc, VoltageElm.circleSize, 2, "#000000"
+
     if Settings.SHOW_VALUES
       valueString = @getUnitText(@frequency, "Hz")
 

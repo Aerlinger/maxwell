@@ -18,6 +18,7 @@ Rectangle = require('../geom/rectangle.coffee')
 Polygon = require('../geom/Polygon.coffee')
 Point = require('../geom/point.coffee')
 DrawUtil = require('../util/DrawUtil.coffee')
+environment = require('../environment.coffee')
 
 
 # X components
@@ -84,25 +85,27 @@ class Renderer extends BaseRenderer
     @width = @Canvas.width
     @height = @Canvas.height
 
-    @context = Sketch.augment @Canvas.getContext("2d"), {
-      draw: @draw
-      mousemove: @mousemove
-      mousedown: @mousedown
-      mouseup: @mouseup
-      # setup
-      # update
-      # touchstart
-      # touchmove
-      # touchend
-      # mouseover
-      # mouseout
-      # click
-      # keydown
-      # keyup
-      # resize
-    }
 
-    @context.lineJoin = 'miter'
+    if environment.isBrowser
+      @context = Sketch.augment @Canvas.getContext("2d"), {
+        draw: @draw
+        mousemove: @mousemove
+        mousedown: @mousedown
+        mouseup: @mouseup
+        # setup
+        # update
+        # touchstart
+        # touchmove
+        # touchend
+        # mouseover
+        # mouseout
+        # click
+        # keydown
+        # keyup
+        # resize
+      }
+
+      @context.lineJoin = 'miter'
 
     #    @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
     #    @Circuit.addObserver Circuit.ON_RESET, @clear
@@ -184,6 +187,8 @@ class Renderer extends BaseRenderer
   drawComponent: (component) ->
     if component in @selectedComponents
       @context.strokeStyle = "#FF0"
+
+    # Main entry point to draw component
     component.draw(this)
 
 
@@ -215,6 +220,7 @@ class Renderer extends BaseRenderer
     @fillText text, x, y
 
 
+  # TODO: Move to CircuitComponent
   drawDots: (ptA, ptB, component) =>
     return if @Circuit?.isStopped()
 
@@ -233,27 +239,28 @@ class Renderer extends BaseRenderer
       @fillCircle(xOffset, yOffset, Settings.CURRENT_RADIUS)
       newPos += ds
 
+  # TODO: Move to CircuitComponent
   drawLeads: (component) ->
     if component.point1? and component.lead1?
       @drawLinePt component.point1, component.lead1, @getVoltageColor(component.volts[0])
     if component.point2? and component.lead2?
       @drawLinePt component.lead2, component.point2, @getVoltageColor(component.volts[1])
 
+# TODO: Move to CircuitComponent
   drawPosts: (component) ->
     for i in [0...component.getPostCount()]
       post = component.getPost(i)
       @drawPost post.x, post.y
 
-  drawPost: (x0, y0) ->
-    fillColor = Settings.POST_COLOR
-    strokeColor = Settings.POST_COLOR
-
+# TODO: Move to DrawUtil
+  drawPost: (x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_COLOR) ->
     @fillCircle x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor
 
   ##
   # From a vector between points AB, calculate a new point in space relative to some multiple of the parallel (u)
   # and perpindicular (v) components of the the original AB vector.
   #
+# TODO: Move to DrawUtil
   interpolate: (ptA, ptB, u, v = 0) ->
     dx = ptB.y - ptA.y
     dy = ptA.x - ptB.x
@@ -265,6 +272,7 @@ class Renderer extends BaseRenderer
     new Point(interpX, interpY)
 
   # Deprecate this shit
+  # TODO: Move to DrawUtil
   interpolateSymmetrical: (ptA, ptB, u, v) ->
     dx = ptB.y - ptA.y
     dy = ptA.x - ptB.x
@@ -278,6 +286,7 @@ class Renderer extends BaseRenderer
 
     [new Point(interpX, interpY), new Point(interpXReflection, interpYReflection)]
 
+  # TODO: Move to DrawUtil
   getVoltageColor: (volts, fullScaleVRange=10) ->
     RedGreen =
       [ "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
@@ -307,6 +316,7 @@ class Renderer extends BaseRenderer
 
     return scale[value]
 
+  # TODO: Move to DrawUtil
   calcArrow: (point1, point2, al, aw) ->
     poly = new Polygon()
 
@@ -323,6 +333,7 @@ class Renderer extends BaseRenderer
 
     return poly
 
+  # TODO: Move to DrawUtil
   createPolygon: (pt1, pt2, pt3, pt4) ->
     newPoly = new Polygon()
     newPoly.addVertex pt1.x, pt1.y
@@ -332,6 +343,7 @@ class Renderer extends BaseRenderer
 
     return newPoly
 
+  # TODO: Move to DrawUtil
   createPolygonFromArray: (vertexArray) ->
     newPoly = new Polygon()
     for vertex in vertexArray

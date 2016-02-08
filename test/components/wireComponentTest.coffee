@@ -2,9 +2,13 @@ Circuit = require('../../src/circuit/circuit.coffee')
 WireElm = require('../../src/circuit/components/WireElm.coffee')
 MatrixStamper = require('../../src/engine/matrixStamper.coffee')
 
+Renderer = require("../../src/render/renderer.coffee")
+fs = require('fs')
+Canvas = require('canvas')
+
 describe "Wire Component", ->
   beforeEach ->
-    @Circuit = new Circuit()
+    @Circuit = new Circuit("BasicWire")
     @Stamper = new MatrixStamper(@Circuit)
     @wireElm = new WireElm(100, 100, 100, 200, {})
 
@@ -49,3 +53,25 @@ describe "Wire Component", ->
 
     it "correctly setPoints", ->
       @wireElm.setPoints()
+
+  describe "Rendering", ->
+    before (done) ->
+      Canvas = require('canvas')
+      @canvas = new Canvas(100, 200)
+      ctx = @canvas.getContext('2d')
+
+      @Circuit.clearAndReset()
+      @Circuit.solder(@wireElm)
+
+      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer.context = ctx
+      done()
+
+    it "renders initial circuit", ->
+      @renderer.draw()
+
+      fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())
+
+
+
+

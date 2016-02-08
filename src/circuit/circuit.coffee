@@ -83,7 +83,7 @@ class Circuit extends Observer
   @ON_WARNING = "ON_WARNING"
 
 
-  constructor: ->
+  constructor: (@name = "untitled")->
     @Params = new SimulationParams()
 
     @flags = 0
@@ -91,8 +91,8 @@ class Circuit extends Observer
     @clearAndReset()
 
   write: (buffer) ->
-    unless environment.isBrowser
-      @ostream.write(buffer)
+#    unless environment.isBrowser
+#      @ostream.write(buffer)
 
   ## Removes all circuit elements and scopes from the workspace and resets time to zero.
   ##   Called on initialization and reset.
@@ -118,6 +118,9 @@ class Circuit extends Observer
 
   # "Solders" a new element to this circuit (adds it to the element list array).
   solder: (newElement) ->
+    if newElement in @elementList
+      @halt("Circuit component #{newElement} is already in element list")
+
     @notifyObservers @ON_SOLDER
 
     newElement.Circuit = this
@@ -179,8 +182,8 @@ class Circuit extends Observer
     else
       @Solver.solveCircuit()
 
-    @write(@Solver.dumpFrame() + "\n")
-    @write(@dump() + "\n")
+#    @write(@Solver.dumpFrame() + "\n")
+#    @write(@dump() + "\n")
 
     @notifyObservers(@ON_COMPLETE_UPDATE)
 

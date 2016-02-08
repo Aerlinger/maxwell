@@ -7,9 +7,9 @@ class ClockElm extends RailElm
   @ParameterDefinitions["frequency"].default_value = 100
 
   constructor: (xa, ya, xb = null, yb = null, params = {}, f) ->
-    @waveform = VoltageElm.WF_SQUARE
-
     super(xa, ya, xa, ya, params, f)
+
+    @waveform = VoltageElm.WF_SQUARE
 
     @maxVoltage ||= 2.5
     @bias ||= 2.5

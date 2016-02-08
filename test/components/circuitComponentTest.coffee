@@ -5,7 +5,11 @@ CircuitComponent = require("../../src/circuit/circuitComponent.coffee")
 
 Circuit = require('../../src/circuit/circuit.coffee')
 
-describe.skip "Base Circuit Component", ->
+Renderer = require("../../src/render/renderer.coffee")
+fs = require('fs')
+Canvas = require('canvas')
+
+describe "Base Circuit Component", ->
   beforeEach ->
     @Circuit = new Circuit()
     @circuitElement = new CircuitComponent(10, 10, 13, 14)
@@ -128,3 +132,25 @@ describe.skip "Base Circuit Component", ->
 
         it.skip "belongs to @Circuit", ->
           @Circuit.numElements().should.equal 0
+
+
+  describe "Rendering", ->
+    before (done) ->
+      @Circuit = new Circuit("BasicComponent")
+      @circuitElement = new CircuitComponent(50, 50, 50, 150)
+
+      Canvas = require('canvas')
+      @canvas = new Canvas(200, 200)
+      ctx = @canvas.getContext('2d')
+
+      @Circuit.clearAndReset()
+      @Circuit.solder(@circuitElement)
+
+      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer.context = ctx
+      done()
+
+    it "renders initial circuit", ->
+      @renderer.draw()
+
+      fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())

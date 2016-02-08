@@ -1,7 +1,7 @@
 Circuit = require('../../src/circuit/circuit.coffee')
 CapacitorElm = require('../../src/circuit/components/CapacitorElm.coffee')
 
-describe.skip "Capacitor Component", ->
+describe "Capacitor Component", ->
   beforeEach ->
     @capacitor = new CapacitorElm(100, 100, 100, 200, { capacitance: 1e-9, voltDiff: 1.1})
 
@@ -60,3 +60,25 @@ describe.skip "Capacitor Component", ->
 
     it "should setPoints", ->
       @capacitor.setPoints()
+
+  describe "Rendering", ->
+    before (done) ->
+      @Circuit = new Circuit("BasicPotentiometer")
+
+      Canvas = require('canvas')
+      @canvas = new Canvas(200, 200)
+      ctx = @canvas.getContext('2d')
+
+      @Circuit.clearAndReset()
+      @Circuit.solder(@capacitor)
+
+      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer.context = ctx
+      done()
+
+    it "renders initial circuit", ->
+      @renderer.draw()
+
+      fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())
+
+

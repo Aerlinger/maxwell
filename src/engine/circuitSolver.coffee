@@ -459,7 +459,7 @@ class CircuitSolver
         @Circuit.halt "Singular matrix in linear circuit!", null
         return
 
-    @Circuit.write(@dump() + "\n")
+#    @Circuit.write(@dump() + "\n")
 
 
   solveCircuit: ->

@@ -2,12 +2,12 @@ glob = require("glob")
 path = require("path")
 fs = require("fs")
 
-CircuitComparator = require("../helpers/CircuitComparator.coffee")
+CircuitComparator = require("../support/CircuitComparator.coffee")
 
 Maxwell = require("../../src/Maxwell.coffee")
 jsondiffpatch = require('jsondiffpatch').create({});
 
-describe.only "Testing all circuits", ->
+describe "Testing all circuits", ->
   @timeout(30000)
 
   before ->

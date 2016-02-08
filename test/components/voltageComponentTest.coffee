@@ -2,11 +2,15 @@ Circuit = require('../../src/circuit/circuit.coffee')
 VoltageElm = require('../../src/circuit/components/VoltageElm.coffee')
 MatrixStamper = require('../../src/engine/matrixStamper.coffee')
 
+Renderer = require("../../src/render/renderer.coffee")
+fs = require('fs')
+Canvas = require('canvas')
+
 describe "Voltage Component", ->
   beforeEach ->
-    @Circuit = new Circuit()
+    @Circuit = new Circuit("BasicVoltage")
     @Stamper = new MatrixStamper(@Circuit)
-    @voltageElm = new VoltageElm(100, 100, 100, 200, {
+    @voltageElm = new VoltageElm(50, 50, 50, 150, {
       waveform: VoltageElm.WF_DC,
       frequency: 80,
       maxVoltage: 6,
@@ -60,3 +64,21 @@ describe "Voltage Component", ->
 
     it "should setPoints", ->
       @voltageElm.setPoints()
+
+  describe "Rendering", ->
+    before (done) ->
+      Canvas = require('canvas')
+      @canvas = new Canvas(100, 200)
+      ctx = @canvas.getContext('2d')
+
+      @Circuit.clearAndReset()
+      @Circuit.solder(@voltageElm)
+
+      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer.context = ctx
+      done()
+
+    it "renders initial circuit", ->
+      @renderer.drawComponents()
+
+      fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())

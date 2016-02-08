@@ -3,15 +3,14 @@ GroundElm = require('../../src/circuit/components/GroundElm.coffee')
 
 describe "Ground Component", ->
   beforeEach ->
-    @Circuit = new Circuit()
-    @groundElm = new GroundElm(100, 100, 100, 200)
-
+    @Circuit = new Circuit("BasicGround")
+    @groundElm = new GroundElm(50, 50, 50, 150)
 
   it "has correct defaults", ->
-    @groundElm.x1 == 100
-    @groundElm.y1 == 100
-    @groundElm.x2 == 100
-    @groundElm.y2 == 200
+    @groundElm.x1 == 50
+    @groundElm.y1 == 50
+    @groundElm.x2 == 50
+    @groundElm.y2 == 150
     @groundElm.flags = 0
 
   it "has correct number of posts", ->
@@ -48,3 +47,21 @@ describe "Ground Component", ->
 
     it "should setPoints", ->
       @groundElm.setPoints()
+
+  describe "Rendering", ->
+    before (done) ->
+      Canvas = require('canvas')
+      @canvas = new Canvas(100, 200)
+      ctx = @canvas.getContext('2d')
+
+      @Circuit.clearAndReset()
+      @Circuit.solder(@groundElm)
+
+      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer.context = ctx
+      done()
+
+    it "renders initial circuit", ->
+      @renderer.drawComponents()
+
+      fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())

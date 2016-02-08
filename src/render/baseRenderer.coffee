@@ -49,21 +49,29 @@ class BaseRenderer extends Observer
     @context.strokeStyle = lineColor
     @context.beginPath()
     @context.lineWidth = lineWidth
+
     @context.arc x, y, radius, 0, 2 * Math.PI, true
     @context.stroke()
+
     @context.closePath()
 
     @context.lineWidth = origLineWidth
     @context.strokeStyle = origStrokeStyle
 
+  drawRect: (x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor = "#000000") ->
+    @context.strokeStyle = lineColor
+    @context.lineJoin = 'miter'
+    @context.rect(x, y, width, height)
+    @context.stroke()
+
   drawLinePt: (pa, pb, color) ->
     @drawLine pa.x, pa.y, pb.x, pb.y, color
 
   drawLine: (x, y, x2, y2, color = Settings.FG_COLOR, lineWidth = Settings.LINE_WIDTH) ->
+    @context.lineJoin = 'miter'
+
     origLineWidth = Settings.LINE_WIDTH
     origStrokeStyle = @context.strokeStyle
-
-    @context.lineJoin = 'miter'
 
     @context.strokeStyle = color
     @context.lineWidth = lineWidth

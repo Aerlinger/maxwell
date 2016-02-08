@@ -87,10 +87,10 @@ class MosfetElm extends CircuitComponent
   draw: (renderContext) ->
     @setBboxPt @point1, @point2, @hs
 
-    color = DrawHelper.getVoltageColor(@volts[1])
+    color = renderContext.getVoltageColor(@volts[1])
     renderContext.drawLinePt @src[0], @src[1], color
 
-    color = DrawHelper.getVoltageColor(@volts[2])
+    color = renderContext.getVoltageColor(@volts[2])
     renderContext.drawLinePt @drn[0], @drn[1], color
 
     segments = 6
@@ -98,26 +98,26 @@ class MosfetElm extends CircuitComponent
     segf = 1.0 / segments
     for i in [0...segments]
       v = @volts[1] + (@volts[2] - @volts[1]) * i / segments
-      color = DrawHelper.getVoltageColor(v)
+      color = renderContext.getVoltageColor(v)
       ps1 = DrawUtil.interpolate @src[1], @drn[1], i * segf
       ps2 = DrawUtil.interpolate @src[1], @drn[1], (i + 1) * segf
       renderContext.drawLinePt ps1, ps2, color
 
-    color = DrawHelper.getVoltageColor(@volts[1])
+    color = renderContext.getVoltageColor(@volts[1])
     renderContext.drawLinePt @src[1], @src[2], color
 
-    color = DrawHelper.getVoltageColor(@volts[2])
+    color = renderContext.getVoltageColor(@volts[2])
     renderContext.drawLinePt @drn[1], @drn[2], color
 
     unless @drawDigital()
-      color = DrawHelper.getVoltageColor((if @pnp is 1 then @volts[1] else @volts[2]))
+      color = renderContext.getVoltageColor((if @pnp is 1 then @volts[1] else @volts[2]))
       renderContext.drawThickPolygonP @arrowPoly, color
 
     renderContext.drawThickPolygonP(@arrowPoly);
 #      Circuit.powerCheckItem
 
     #g.setColor(Color.gray);
-    color = DrawHelper.getVoltageColor(@volts[0])
+    color = renderContext.getVoltageColor(@volts[0])
     renderContext.drawLinePt @point1, @gate[1], color
     renderContext.drawLinePt @gate[0], @gate[2], color
     @drawDigital() and @pnp is -1
@@ -143,10 +143,10 @@ class MosfetElm extends CircuitComponent
     #        g.drawString(pnp == -1 ? "D" : "S", src[0].x - 3 + 9 * ds, src[0].y + 4); // x+6 if ds=1, -12 if -1
     #        g.drawString(pnp == -1 ? "S" : "D", drn[0].x - 3 + 9 * ds, drn[0].y + 4);
 #      @curcount = @updateDotCount(-@ids, @curcount)
-    @drawDots @src[0], @src[1], renderContext
-    @drawDots @src[1], @drn[1], renderContext
-    @drawDots @drn[1], @drn[0], renderContext
-    @drawPosts(renderContext)
+    renderContext.drawDots @src[0], @src[1], this
+    renderContext.drawDots @src[1], @drn[1], this
+    renderContext.drawDots @drn[1], @drn[0], this
+    renderContext.drawPosts(this)
 
   getPost: (n) ->
     (if (n is 0) then @point1 else (if (n is 1) then @src[0] else @drn[0]))
@@ -180,18 +180,17 @@ class MosfetElm extends CircuitComponent
     [@gate[0], @gate[2]] = DrawUtil.interpolateSymmetrical @point1, @point2, 1 - 28 / @dn, hs2 / 2  #,  # was 1-20/dn
     @gate[1] = DrawUtil.interpolate @gate[0], @gate[2], .5
 
-    if !@drawDigital()
-      if @pnp is
-        @arrowPoly = DrawUtil.calcArrow(@src[1], @src[0], 10, 4)
-      else
-        @arrowPoly = DrawUtil.calcArrow(@drn[0], @drn[1], 12, 5)
+    if @pnp
+      @arrowPoly = DrawUtil.calcArrow(@src[1], @src[0], 10, 4)
+    else
+      @arrowPoly = DrawUtil.calcArrow(@drn[0], @drn[1], 12, 5)
 
-    else if @pnp is -1
-      @gate[1] = DrawUtil.interpolate @point1, @point2, 1 - 36 / @dn
-      dist = (if (@dsign < 0) then 32 else 31)
-
-      @pcircle = DrawUtil.interpolate(@point1, @point2, 1 - dist / @dn)
-      @pcircler = 3
+#    if @pnp is -1
+#      @gate[1] = DrawUtil.interpolate @point1, @point2, 1 - 36 / @dn
+#      dist = (if (@dsign < 0) then 32 else 31)
+#
+#      @pcircle = DrawUtil.interpolate(@point1, @point2, 1 - dist / @dn)
+#      @pcircler = 3
 
   stamp: (stamper) ->
     stamper.stampNonLinear @nodes[1]

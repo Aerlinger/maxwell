@@ -19,10 +19,30 @@ describe "ClockElmTest", ->
 
 describe "with explicit values", ->
   before ->
-    @clockElm = new ClockElm(100, 200, 100, 200, {maxVoltage: 10, bias: 2, frequency: 100})
+    @clockElm = new ClockElm(50, 50, 50, 150, {maxVoltage: 10, bias: 2, frequency: 100})
 
   it "has correct values", ->
     expect(@clockElm.maxVoltage).to.equal(10)
     expect(@clockElm.bias).to.equal(2)
     expect(@clockElm.frequency).to.equal(100)
     expect(@clockElm.waveform).to.equal(ClockElm.WF_SQUARE)
+
+
+  describe "Rendering", ->
+    before (done) ->
+      Canvas = require('canvas')
+      @canvas = new Canvas(100, 200)
+      ctx = @canvas.getContext('2d')
+
+      @Circuit = new Circuit("BasicClockElm")
+      @Circuit.clearAndReset()
+      @Circuit.solder(@clockElm)
+
+      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer.context = ctx
+      done()
+
+    it "renders initial circuit", ->
+      @renderer.draw()
+
+      fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())
