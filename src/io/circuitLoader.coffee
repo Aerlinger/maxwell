@@ -21,8 +21,9 @@ class CircuitLoader
     validName = /^[$A-Z_][0-9A-Z_$]*$/i
 
     circuitParams = jsonData.shift()
+    console.log(circuitParams)
     circuit.Params = SimulationParams.deserialize(circuitParams)
-    circuit.flags = circuitParams['flags']
+    circuit.flags = parseInt(circuitParams['flags'])
 
     console.log(circuit.Params.toString())
 
@@ -65,7 +66,7 @@ class CircuitLoader
 
         try
           console.log(params)
-          newCircuitElm = new sym(x1, y1, x2, y2, params, flags)
+          newCircuitElm = new sym(x1, y1, x2, y2, params, parseInt(flags))
         catch e
           console.log(e)
           console.log("type: #{type}, sym: #{sym}")

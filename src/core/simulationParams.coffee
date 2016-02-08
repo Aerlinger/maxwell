@@ -3,16 +3,16 @@ class SimulationParams
   constructor: (paramsObj) ->
     @completionStatus = paramsObj?['completion_status'] || "in development"
     @createdAt = paramsObj?['created_at']
-    @currentSpeed = paramsObj?['current_speed'] || 63
+    @currentSpeed = parseFloat(paramsObj?['current_speed']) || 63
     @updatedAt = paramsObj?['updated_at']
     @description = paramsObj?['description'] || ""
-    @flags = paramsObj?['flags'] || 1
-    @id = paramsObj?['id'] || null
+    @flags = parseInt(paramsObj?['flags']) || 1
+    @id = parseInt(paramsObj?['id']) || null
     @name = paramsObj?['name_unique'] || "default"
-    @powerRange = paramsObj?['power_range'] || 62.0
-    @voltageRange = paramsObj?['voltage_range'] || 10.0
-    @simSpeed = SimulationParams.convertSimSpeed(paramsObj?['sim_speed'] || 10.0)
-    @timeStep = paramsObj?['time_step'] || 5.0e-06
+    @powerRange = parseFloat(paramsObj?['power_range']) || 62.0
+    @voltageRange = parseFloat(paramsObj?['voltage_range']) || 10.0
+    @simSpeed = parseFloat(SimulationParams.convertSimSpeed(paramsObj?['sim_speed']) || 10.0)
+    @timeStep = parseFloat(paramsObj?['time_step']) || 5.0e-06
     @title = paramsObj?['title'] || "Default"
     @topic = paramsObj?['topic'] || null
     #      @currentMult = 1
@@ -41,16 +41,16 @@ class SimulationParams
 
     simParams.completionStatus = jsonObj?['completion_status'] || "in development"
     simParams.createdAt = jsonObj?['created_at']
-    simParams.currentSpeed = jsonObj?['current_speed'] || 63
+    simParams.currentSpeed = parseFloat(jsonObj?['current_speed']) || 63
     simParams.updatedAt = jsonObj?['updated_at']
     simParams.description = jsonObj?['description'] || ""
-    simParams.flags = jsonObj?['flags'] || 1
+    simParams.flags = parseInt(jsonObj?['flags']) || 1
     simParams.id = jsonObj?['id'] || null
     simParams.name = jsonObj?['name_unique'] || "default"
-    simParams.powerRange = jsonObj?['power_range'] || 62.0
-    simParams.voltageRange = jsonObj?['voltage_range'] || 10.0
+    simParams.powerRange = parseFloat(jsonObj?['power_range']) || 62.0
+    simParams.voltageRange = parseFloat(jsonObj?['voltage_range']) || 10.0
     simParams.simSpeed = SimulationParams.convertSimSpeed(jsonObj?['sim_speed'] || 10.0)
-    simParams.timeStep = jsonObj?['time_step'] || 5.0e-06
+    simParams.timeStep = parseFloat(jsonObj?['time_step']) || 5.0e-06
     simParams.title = jsonObj?['title'] || "Default"
     simParams.topic = jsonObj?['topic'] || null
 

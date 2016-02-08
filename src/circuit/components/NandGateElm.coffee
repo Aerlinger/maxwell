@@ -1,6 +1,6 @@
 DrawUtil = require('../../util/drawUtil')
 ArrayUtil = require('../../util/arrayUtils')
-GateElm = require("./AndGateElm.coffee")
+AndGateElm = require("./AndGateElm.coffee")
 
 class NandGateElm extends AndGateElm
   constructor: (xa, ya, xb, yb, params, f)->

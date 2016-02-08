@@ -20,7 +20,7 @@ describe.only "Testing all circuits", ->
     expect({})
 
   it "tests each circuit", ->
-    @files = ["ohms", "resistors", "inductac", "voltdivide", "thevenin", "norton", "diodelimit", "diodelimit", "pot"]
+#    @files = ["ohms", "resistors", "inductac", "voltdivide", "thevenin", "norton", "diodelimit", "diodelimit", "pot"]
     @epsilon_error = ["diodeclip", "diodecurve", "impedance", "lrc", "diodevar"]
     @key_error = ["res-series"]
 

@@ -1,4 +1,5 @@
 CircuitComponent = require("../CircuitComponent")
+AnalogSwitchElm = require("./AnalogSwitchElm.coffee")
 DrawUtil = require('../../util/drawUtil')
 
 class AnalogSwitch2Elm extends AnalogSwitchElm

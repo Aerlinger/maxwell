@@ -2,7 +2,7 @@ CircuitComponent = require('../circuitComponent')
 DrawUtil = require('../../util/drawUtil')
 ArrayUtil = require('../../util/arrayUtils')
 
-class TransformerElm extends CircuitElm
+class TransformerElm extends CircuitComponent
 
   @ParameterDefinitions = {
     inductance: {
@@ -55,7 +55,7 @@ class TransformerElm extends CircuitElm
 
     i=0
 
-    while i < 4:
+    while i < 4
       @ptCoil[i]     = DrawUtil.interpolate(@ptEnds[i], @ptEnds[i + 1], ce)
       @ptCoil[i + 1] = DrawUtil.interpolate(@ptEnds[i], @ptEnds[i + 1], 1 - ce)
       @ptCore[i]     = DrawUtil.interpolate(@ptEnds[i], @ptEnds[i + 1], cd)

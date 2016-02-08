@@ -37,7 +37,7 @@ LogicOutputElm = require('./components/LogicOutputElm')
 AnalogSwitchElm = require('./components/AnalogSwitchElm')
 AnalogSwitch2Elm = require('./components/AnalogSwitch2Elm')
 
-TransformerElm = require('./components/TransormerElm')
+TransformerElm = require('./components/TransformerElm')
 
 PotElm = require('./components/PotElm')
 ClockElm = require('./components/ClockElm')

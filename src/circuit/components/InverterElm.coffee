@@ -1,7 +1,7 @@
 CircuitComponent = require("../CircuitComponent")
 DrawUtil = require('../../util/drawUtil')
 
-class InverterElm extends CircuitElm
+class InverterElm extends CircuitComponent
 
   @ParameterDefinitions = {
     slewRate: {
@@ -26,7 +26,7 @@ class InverterElm extends CircuitElm
     ww = 16
 
     if ww > @dn / 2
-      ww = Math.floor(dn/@2)
+      ww = Math.floor(@dn/2)
 
     @lead1 = DrawUtil.interpolate(@point1, @point2, 0.5 - ww / @dn)
     @lead2 = DrawUtil.interpolate(@point1, @point2, 0.5 + (ww + 2) / @dn)
