@@ -6,7 +6,7 @@
  246 c    working
  149 t    wip     (transistorelm)
  129 M            (LogicOutputElm)
- 121 f            (MosfetElm)
+ 121 f    wip     (MosfetElm)
  117 v    working
  113 L            (LogicInputElm)
  108 x    stubbed (TextElm)

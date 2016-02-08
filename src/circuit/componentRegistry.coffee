@@ -30,6 +30,9 @@ OrGateElm = require('./components/OrGateElm')
 NorGateElm = require('./components/NorGateElm')
 XorGateElm = require('./components/XorGateElm')
 
+AnalogSwitchElm = require('./components/AnalogSwitchElm')
+AnalogSwitch2Elm = require('./components/AnalogSwitch2Elm')
+
 TransformerElm = require('./components/TransormerElm')
 
 PotElm = require('./components/PotElm')
@@ -77,6 +80,9 @@ class ComponentRegistry
     '152': OrGateElm
     '153': NorGateElm
     '154': XorGateElm
+
+    '159': AnalogSwitchElm
+    '160': AnalogSwitch2Elm
 
   # In progress:
     'S': Switch2Elm  # Needs interaction
@@ -135,6 +141,9 @@ class ComponentRegistry
     XorGateElm: '154'
 
     TransformerElm: 'T'
+
+    AnalogSwitchElm: '159'
+    AnalogSwitch2Elm: '160'
   }
 
 module.exports = ComponentRegistry

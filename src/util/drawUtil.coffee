@@ -52,7 +52,34 @@ class DrawUtil
   @snapGrid: (x) ->
     (x + (Settings.GRID_SIZE / 2 - 1)) & ~(Settings.GRID_SIZE - 1)
 
-  
+  @zeroArray: (numElements) ->
+    return [] if numElements < 1
+    return (0 for i in Array(numElements))
+
+  @zeroArray2: (numRows, numCols) ->
+    return [] if numRows < 1
+    (@zeroArray(numCols) for i in Array(numRows))
+
+# Loops through an array, returning false and throwing an error if NaN or Inf values are found.
+#  If no NaN or Inf values are found, this array is determined to be clean and the method returns true.
+  @isCleanArray: (arr) ->
+    for element in arr
+      if element instanceof Array
+        valid = arguments.callee element
+      else
+        if !isFinite(element)
+          console.warn("Invalid number found: #{element}")
+          return false
+
+  @newPointArray = (n) ->
+    a = new Array(n)
+    while (n > 0)
+      a[--n] = new Point(0, 0)
+
+    return a
+
+  @printArray: (arr) ->
+    console.log(subarr) for subarr in arr
 
 
 
