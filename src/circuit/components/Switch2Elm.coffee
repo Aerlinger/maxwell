@@ -87,9 +87,12 @@ class Switch2Elm extends SwitchElm
     renderContext.drawLinePt @lead1, @swpoles[@position], color
 
     #      @updateDotCount()
-    @drawDots @point1, @lead1, renderContext
-    @drawDots @swpoles[@position], @swposts[@position], renderContext  unless @position is 2
-    @drawPosts(renderContext)
+    renderContext.drawDots @point1, @lead1, this
+
+    unless @position is 2
+      renderContext.drawDots @swpoles[@position], @swposts[@position], this
+
+    renderContext.drawPosts(this)
 
   getPost: (n) ->
     if (n is 0)

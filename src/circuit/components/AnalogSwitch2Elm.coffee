@@ -1,11 +1,12 @@
 CircuitComponent = require("../CircuitComponent.coffee")
 AnalogSwitchElm = require("./AnalogSwitchElm.coffee")
 DrawUtil = require('../../util/drawUtil.coffee')
+Point = require('../../geom/Point.coffee')
 
 class AnalogSwitch2Elm extends AnalogSwitchElm
 
   constructor: (xa, ya, xb, yb, params, f) ->
-    super(xa, yz, xb, yb, params, f)
+    super(xa, ya, xb, yb, params, f)
     @openhs = 16
 
 
@@ -14,7 +15,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 
     @calcLeads(32)
 
-    @swpostsosts = DrawUtil.newPointArray(2)
+    @swposts = DrawUtil.newPointArray(2)
     @swpoles = DrawUtil.newPointArray(2)
 
     [@swpoles[0], @swpoles[1]] = DrawUtil.interpolateSymmetrical(@lead1, @lead2, 1, @openhs)
@@ -65,3 +66,4 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
   getConnection: (n1, n2) ->
     !(n1 == 3 || n2 == 3)
 
+module.exports = AnalogSwitch2Elm

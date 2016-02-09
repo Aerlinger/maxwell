@@ -131,7 +131,7 @@ class SweepElm extends CircuitComponent
       @dir = 1
 
     if (@flags & SweepElm.FLAG_LOG) is 0
-      @fadd = @dir * Circuit.timeStep * (@maxF - @minF) / @sweepTime
+      @fadd = @dir * @getParentCircuit().timeStep() * (@maxF - @minF) / @sweepTime
       @fmul = 1
     else
       @fadd = 0

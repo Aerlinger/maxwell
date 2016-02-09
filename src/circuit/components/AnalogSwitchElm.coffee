@@ -1,5 +1,6 @@
 CircuitComponent = require("../CircuitComponent.coffee")
 DrawUtil = require('../../util/drawUtil.coffee')
+Point = require('../../geom/Point.coffee')
 
 class AnalogSwitchElm extends CircuitComponent
   FLAG_INVERT: 1
@@ -33,8 +34,8 @@ class AnalogSwitchElm extends CircuitComponent
     @ps = new Point()
     openhs = 16
 
-    @point3 = DrawUtil.interpolate(@points1, @point2, 0.5, -openhs)
-    @lead3 = DrawUtil.interpolate(@points1, @point2, 0.5, -openhs / 2)
+    @point3 = DrawUtil.interpolate(@point1, @point2, 0.5, -openhs)
+    @lead3 = DrawUtil.interpolate(@point1, @point2, 0.5, -openhs / 2)
 
   calculateCurrent: ->
     @current = (@volts[0] - @volts[1]) / @resistance

@@ -58,6 +58,8 @@ class TextElm extends CircuitComponent
     @y2 = yy
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
 #    color = (if @needsHighlight() then Settings.SELECT_COLOR else Settings.TEXT_COLOR)
 
     color = Settings.TEXT_COLOR

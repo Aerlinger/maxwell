@@ -78,7 +78,8 @@ class SwitchElm extends CircuitComponent
     @setBboxPt @point1, @point2, openhs
     renderContext.drawLeads(this)
 
-    renderContext.drawDots(this)  if @position is 0
+    if @position is 0
+      renderContext.drawDots(@point1, @point2, this)
 
     @ps = renderContext.interpolate @lead1, @lead2, 0, hs1
     @ps2 = renderContext.interpolate @lead1, @lead2, 1, hs2

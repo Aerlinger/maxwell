@@ -5,14 +5,16 @@ ArrayUtil = require('../../util/arrayUtils.coffee')
 class GateElm extends CircuitComponent
   FLAG_SMALL: 1
 
-  {
+  @ParameterDefinitions = {
     inputCount: {
-      name: "Input count",
+      name: "Input count"
       data_type: parseInt
+      default_value: 2
     },
     lastOutput: {
-      name: "Last Output",
+      name: "Last Output"
       data_type: parseInt
+      default_value: 0
     }
   }
 
@@ -34,10 +36,10 @@ class GateElm extends CircuitComponent
     if s == 1
       @flags = GateElm.FLAG_SMALL
     else
-      0
+      @flags = 0
 
   setPoints: ->
-    @setPoints()
+    super()
 
     if @dn > 150
       @setSize(2)
@@ -53,16 +55,16 @@ class GateElm extends CircuitComponent
 
     @calcLeads @ww*2
 
-    @inPosts = ArrayUtils.newPointArray(@inputCount)
-    @inGates = ArrayUtils.newPointArray(@inputCount)
+    @inPosts = DrawUtil.newPointArray(@inputCount)
+    @inGates = DrawUtil.newPointArray(@inputCount)
 
     @allocNodes()
 
     i0 = -@inputCount / 2
-    i=0
 
-    while i < inputCount
-      if i0==0 && inputCount & 1 == 0
+#    while i < @inputCount
+    for i in [0...@inputCount]
+      if i0==0 && @inputCount & 1 == 0
         i0 += 1
 
       @inPosts[i] = DrawUtil.interpolate(@point1, @point2, 0, hs * 10)
@@ -73,8 +75,10 @@ class GateElm extends CircuitComponent
       else
         @volts[i] = 0
 
+      i0 += 1
+
     @hs2 = @gwidth * (@inputCount / 2 + 1)
-    @setBbox(@point1, @point2, @hs2)
+    @setBboxPt(@point1, @point2, @hs2)
 
 
   doStep: (stamper) ->
@@ -120,4 +124,4 @@ class GateElm extends CircuitComponent
 
 
 
-module.exports = CircuitComponent
+module.exports = GateElm

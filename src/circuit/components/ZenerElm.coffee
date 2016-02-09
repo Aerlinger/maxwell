@@ -12,7 +12,7 @@ class ZenerElm extends DiodeElm
       name: "Voltage"
       unit: "Voltage"
       symbol: "V"
-      default_value: DiodeElm.DEFAULT_DROP
+      default_value: DiodeElm.DEFAULT_DROP || 5.6
       data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"
@@ -20,9 +20,6 @@ class ZenerElm extends DiodeElm
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
-    @default_z_voltage = 5.6
-    @zvoltage = params[0] || @default_z_voltage
-
     super(xa, ya, xb, yb, params, f)
 
     @setup()
@@ -69,7 +66,7 @@ class ZenerElm extends DiodeElm
     true
 
   setup: ->
-    @diode.leakage = 5e-6
+    @leakage = 5e-6
     super()
 
   getDumpType: ->

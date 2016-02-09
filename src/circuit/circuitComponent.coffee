@@ -32,20 +32,25 @@ class CircuitComponent
   constructor: (@x1, @y1, @x2, @y2, params, f = 0) ->
     @flags = f || 0
 
+    @setParameters(params)
+
     @current = 0
     @curcount = 0
     @voltSource = 0
     @noDiagonal = false
     @Circuit = null
 
-    @nodes = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
-    @volts = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
-
-    @setPoints()
     @setBbox(@x1, @y1, @x2, @y2)
     @component_id = MathUtils.getRand(100000000) + (new Date()).getTime()
 
-    @setParameters(params)
+    @setPoints()
+
+    @allocNodes()
+
+  allocNodes: ->
+    @nodes = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
+    @volts = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
+
 
   convertParamsToHash: (param_list) ->
     ParameterDefinitions = @constructor.ParameterDefinitions
@@ -236,7 +241,10 @@ class CircuitComponent
 
   getCenter: ->
     centerX = (@point1.x + @point2.x) / 2.0
-    centerY = (@point2.y + @point2.y) / 2.0
+    centerY = (@point1.y + @point2.y) / 2.0
+
+#    centerX = (@lead1.x + @lead2.x) / 2.0
+#    centerY = (@point1.y + @point2.y) / 2.0
 
     return new Point(centerX, centerY)
 
@@ -397,13 +405,24 @@ class CircuitComponent
 
   draw: (renderContext) ->
 #    @curcount = @updateDotCount()
+
     renderContext.drawRect(@boundingBox.x, @boundingBox.y, @boundingBox.width, @boundingBox.height, 1, "#8888CC")
+
+    renderContext.drawValue 10, 0, this, @constructor.name
+
+    renderContext.drawCircle(@getCenter().x, @getCenter().y, 5, 0, "#FF0000")
+#    renderContext.fillText(@boundingBox.x, @boundingBox.y, "Name: " + @constructor.name)
 
     @calcLeads 0
 
-    renderContext.drawValue 10, 0, this, @toString()
+#    renderContext.drawValue 10, 0, this, @toString()
 
     renderContext.drawPosts(this, "#FF0000")
+
+    for i in [0...@getPostCount()]
+      post = @getPost(i)
+      renderContext.drawCircle(post.x, post.y, 3, 0, "#FF00FF")
+
     renderContext.drawLeads(this)
 
     @updateDots(this)

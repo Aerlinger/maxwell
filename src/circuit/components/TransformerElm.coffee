@@ -94,7 +94,7 @@ class TransformerElm extends CircuitComponent
 #    for i in [1, 2]
 #      renderContext.drawCoil(@dsign * (i == 1 ? ))
 
-    renderContext.drawPosts()
+    renderContext.drawPosts(this)
 
 
 

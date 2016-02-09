@@ -82,7 +82,8 @@ class OpAmpElm extends CircuitComponent
 #        @minOut ||= parseFloat(st[1])
 
     @noDiagonal = true
-    @setSize(if params["size"] isnt 0 then 1 else 2)
+
+    @setSize(if f & OpAmpElm.FLAG_SMALL isnt 0 then 1 else 2)
     @setGain()
 
 

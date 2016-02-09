@@ -40,9 +40,9 @@ class CurrentElm extends CircuitComponent
 #      @setPowerColor false
     renderContext.drawCircle @center.x, @center.y, cr
     renderContext.drawCircle @ashaft1, @ashaft2
-    renderContext.fillPolygon @arrow
+    renderContext.drawThickPolygonP @arrow
 
-    renderContext.setBboxPt @point1, @point2, cr
+    @setBboxPt @point1, @point2, cr
 
 #      if Circuit.showValuesCheckItem
 #        s = DrawHelper.getShortUnitText(@currentValue, "A")

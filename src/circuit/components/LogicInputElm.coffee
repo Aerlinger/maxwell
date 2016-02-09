@@ -3,6 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
+DrawUtil = require('../../util/DrawUtil.coffee')
 
 class LogicInputElm extends CircuitComponent
   FLAG_TERNARY: 1
@@ -41,7 +42,7 @@ class LogicInputElm extends CircuitComponent
     1
 
   setPoints: ->
-    setPoints()
+    super()
 
     @lead1 = DrawUtil.interpolate(@point1, @point2, 1 - 12 / @dn)
 

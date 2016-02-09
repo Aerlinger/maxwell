@@ -1,6 +1,7 @@
 GateElm = require("./GateElm.coffee")
 DrawUtil = require('../../util/drawUtil.coffee')
 ArrayUtil = require('../../util/arrayUtils.coffee')
+Point = require('../../geom/Point.coffee')
 
 class AndGateElm extends GateElm
   constructor: (xa, ya, xb, yb, params, f) ->
@@ -22,8 +23,8 @@ class AndGateElm extends GateElm
     triPoints[11] = new Point(@lead2)
 
     if @isInverting()
-      @pcircle = DrawUtil.interpPoint(@point1, @point2, 0.5 + (@ww + 4) / @dn)
-      @lead2 = DrawUtil.interpPoint(@point1, @point2, 0.5 + (@ww + 8) / @dn)
+      @pcircle = DrawUtil.interpolate(@point1, @point2, 0.5 + (@ww + 4) / @dn)
+      @lead2 = DrawUtil.interpolate(@point1, @point2, 0.5 + (@ww + 8) / @dn)
 
     @gatePoly = triPoints
 

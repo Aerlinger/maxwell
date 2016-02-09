@@ -74,16 +74,18 @@ class DiodeElm extends CircuitComponent
     "d"
 
   draw: (renderContext) ->
+    super(renderContext)
+
     @calcLeads 16
 
     @cathode = ArrayUtils.newPointArray(2)
     [pa, pb] = renderContext.interpolateSymmetrical @lead1, @lead2, 0, @hs
     [@cathode[0], @cathode[1]] = renderContext.interpolateSymmetrical @lead1, @lead2, 1, @hs
-    @poly = renderContext.renderContext([pa, pb, @lead2])
+    @poly = renderContext.createPolygonFromArray([pa, pb, @lead2])
 
     @drawDiode(renderContext)
-    @drawDots(@point1, @point2, renderContext)
-    @drawPosts(renderContext)
+    renderContext.drawDots(@point1, @point2, this)
+    renderContext.drawPosts(this)
 
   reset: ->
     #    @diode.reset()
@@ -94,7 +96,8 @@ class DiodeElm extends CircuitComponent
     @setBboxPt @point1, @point2, @hs
     v1 = @volts[0]
     v2 = @volts[1]
-    @draw2Leads(renderContext)
+
+    renderContext.drawLeads(this)
 
     # TODO: RENDER DIODE
 

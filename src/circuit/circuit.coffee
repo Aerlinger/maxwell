@@ -326,6 +326,9 @@ class Circuit extends Observer
   timeStep: ->
     @Params.timeStep
 
+  getTime: ->
+    @time
+
   voltageRange: ->
     return @Params.voltageRange
 

@@ -10,6 +10,7 @@ class AntennaElm extends RailElm
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)
     @waveform = RailElm.WF_DC
+    @fmphase = 0
 
   doStep: (stamper) ->
     stamper.stampVoltageSource(0, @nodes[0], @voltSource)
@@ -18,16 +19,16 @@ class AntennaElm extends RailElm
     stamper.stampVoltageSource(0, @nodes[0], @voltSource, @getVoltage())
 
   getVoltage: ->
-    fmphase += 2 * pi * (2200 + Math.sin(2 * pi * sim.t * 13) * 100) * sim.timeStep;
+    @fmphase += 2 * Math.PI * (2200 + Math.sin(2 * Math.PI * @getParentCircuit.getTime() * 13) * 100) * @getParentCircuit().timeStep()
 
-    double fm = 3 * Math.sin(fmphase);
+    fm = 3 * Math.sin(@fmphase);
 
     pi = Math.PI
     t = @getParentCircuit().time
 
     wave1 = Math.sin(2 * pi * t * 3000) * (1.3 + Math.sin(2 * pi * t * 12)) * 3
     wave2 = Math.sin(2 * pi * t * 2710) * (1.3 + Math.sin(2 * pi * t * 13)) * 3
-    wave3 = Math.sin(2 * pi * t * 2433) * (1.3 + Math.sin(2 * pi * t * 14)) * 3
+    wave3 = Math.sin(2 * pi * t * 2433) * (1.3 + Math.sin(2 * pi * t * 14)) * 3 + fm
 
     wave1 + wave2 + wave3
 

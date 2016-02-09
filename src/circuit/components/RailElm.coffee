@@ -6,7 +6,6 @@ Point = require('../../geom/point.coffee')
 DrawUtil = require("../../util/drawUtil.coffee")
 
 VoltageElm = require('./VoltageElm.coffee')
-AntennaElm = require('./AntennaElm.coffee')
 
 
 class RailElm extends VoltageElm
