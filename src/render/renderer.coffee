@@ -13,7 +13,6 @@
 BaseRenderer = require('./BaseRenderer.coffee')
 Circuit = require('../circuit/circuit.coffee')
 CircuitComponent = require('../circuit/circuitComponent.coffee')
-OpAmpElm = require('../circuit/components/OpAmpElm.coffee')
 Settings = require('../settings/settings.coffee')
 Rectangle = require('../geom/rectangle.coffee')
 Polygon = require('../geom/Polygon.coffee')
@@ -79,16 +78,14 @@ class Renderer extends BaseRenderer
   constructor: (@Circuit, @Canvas) ->
     super()
 
-    @opAmp = new OpAmpElm(100, 100, 300, 100)
 
     @highlightedComponent = null
+    @addComponent = null
     @selectedComponents = []
 
     # TODO: Width and height are currently undefined
     @width = @Canvas.width
     @height = @Canvas.height
-
-
 
     if environment.isBrowser
       @context = Sketch.augment @Canvas.getContext("2d"), {
@@ -130,8 +127,22 @@ class Renderer extends BaseRenderer
     @snapY = @snapGrid(y)
 
     # TODO: WIP for interactive element placing
-    if @opAmp
-      @opAmp.moveTo(@snapX, @snapY)
+    if @placeComponent
+      if @placeComponent.x1
+        @placeComponent.moveTo(@snapX, @snapY)
+      else
+        x1 = @snapX - 54
+        x2 = @snapX + 54
+        y1 = @snapY
+        y2 = @snapY
+
+        @placeComponent.x1 = x1
+        @placeComponent.x2 = x2
+        @placeComponent.y1 = y1
+        @placeComponent.y2 = y2
+
+        @placeComponent.setPoints()
+        @placeComponent.setBbox(x1, y1, x2, y2)
 
     # END TODO
 
@@ -152,7 +163,6 @@ class Renderer extends BaseRenderer
       for component in @selectedComponents
         component.move(@snapX - @lastX, @snapY - @lastY)
 
-
   mousedown: (event) =>
     x = event.offsetX
     y = event.offsetY
@@ -160,6 +170,11 @@ class Renderer extends BaseRenderer
     if @highlightedComponent == null
       @selectedComponents = []
       @marquee = new SelectionMarquee(x, y)
+
+    if @placeComponent
+      @Circuit.solder(@placeComponent)
+      @placeComponent = null
+
 
     for component in @Circuit.getElements()
       if component.getBoundingBox().contains(x, y)
@@ -187,8 +202,8 @@ class Renderer extends BaseRenderer
     @Circuit.updateCircuit()
     @drawComponents()
 
-    if @context
-      @drawComponent(@opAmp)
+    if @context && @placeComponent && @placeComponent.x1
+      @drawComponent(@placeComponent)
 
 
   drawComponents: ->
@@ -217,7 +232,8 @@ class Renderer extends BaseRenderer
 
 
   snapGrid: (x) ->
-    (x + (Settings.GRID_SIZE / 2 - 1)) & ~(Settings.GRID_SIZE - 1)
+    newX = Settings.GRID_SIZE * Math.round(x/Settings.GRID_SIZE)
+#    (x + (Settings.GRID_SIZE / 2 - 1)) & ~(Settings.GRID_SIZE - 1)
 
   drawValue: (perpindicularOffset, parallelOffset, component, text = null) ->
     stringWidth = @context.measureText(text).width

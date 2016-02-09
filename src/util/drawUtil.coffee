@@ -3,6 +3,9 @@ Polygon = require('../geom/polygon.coffee')
 Settings = require('../settings/settings.coffee')
 
 class DrawUtil
+  snapGrid: (x) ->
+    (x + (Settings.GRID_SIZE / 2 - 1)) & ~(Settings.GRID_SIZE - 1)
+
   @interpolate: (ptA, ptB, u, v = 0) ->
     dx = ptB.y - ptA.y
     dy = ptA.x - ptB.x
@@ -83,6 +86,20 @@ class DrawUtil
   @printArray: (arr) ->
     console.log(subarr) for subarr in arr
 
+  @getUnitText: (value, unit, decimalPoints = 2) ->
+    absValue = Math.abs(value)
+    return "0 " + unit  if absValue < 1e-18
+    return (value * 1e15).toFixed(decimalPoints) + " f" + unit  if absValue < 1e-12
+    return (value * 1e12).toFixed(decimalPoints) + " p" + unit  if absValue < 1e-9
+    return (value * 1e9).toFixed(decimalPoints) + " n" + unit  if absValue < 1e-6
+    return (value * 1e6).toFixed(decimalPoints) + " μ" + unit  if absValue < 1e-3
+    return (value * 1e3).toFixed(decimalPoints) + " m" + unit  if absValue < 1
+    return (value).toFixed(decimalPoints) + " " + unit  if absValue < 1e3
+    return (value * 1e-3).toFixed(decimalPoints) + " k" + unit  if absValue < 1e6
+    return (value * 1e-6).toFixed(decimalPoints) + " M" + unit  if absValue < 1e9
+    (value * 1e-9).toFixed(decimalPoints) + " G" + unit
 
+  @snapGrid: (x) ->
+    Settings.GRID_SIZE * Math.round(x/Settings.GRID_SIZE)
 
 module.exports = DrawUtil

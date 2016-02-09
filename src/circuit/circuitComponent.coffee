@@ -158,7 +158,7 @@ class CircuitComponent
     @dpx1 = @dy / @dn
     @dpy1 = -@dx / @dn
 
-    @dsign = (if (@dy is 0) then MathUtils.sign(@dx) else MathUtils.sign(@dy))
+    @dsign = (if (@dy is 0) then Math.sign(@dx) else Math.sign(@dy))
 
     @point1 = new Point(@x1, @y1)
     @point2 = new Point(@x2, @y2)
@@ -517,6 +517,9 @@ class CircuitComponent
       postCount: @getPostCount()
       nonLinear: @nonLinear()
     }
+
+  onSolder: ->
+
 
   ## Deprecated
 

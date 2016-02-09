@@ -128,6 +128,9 @@ class Circuit extends Observer
 
     @elementList.push newElement
 
+    newElement.onSolder()
+
+    @invalidate()
     @recomputeBounds()
 
   # "Desolders" an existing element to this circuit (removes it to the element list array).
@@ -149,8 +152,6 @@ class Circuit extends Observer
 
   invalidate: ->
     @Solver.analyzeFlag = true
-
-
 
   dump: ->
     out = ""
@@ -337,6 +338,9 @@ class Circuit extends Observer
 
   currentSpeed: ->
     return @Params.currentSpeed
+
+  simSpeed: ->
+    return @Params.simSpeed
 
   getState: ->
     return @state

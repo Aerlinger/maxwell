@@ -101,8 +101,8 @@ class CapacitorElm extends CircuitComponent
 #      @setPowerColor false
     renderContext.drawLinePt @plate2[0], @plate2[1], color
 
+    @updateDots()
     renderContext.drawDots @point1, @lead1, this
-#      @drawDots @point2, @lead2, renderContext
     renderContext.drawDots @lead2, @point2, this
 
     renderContext.drawPosts(this)

@@ -1,21 +1,21 @@
 fs = require('fs')
 path = require('path')
 
-examples = ->
-  result = []
+#examples = ->
+#  result = []
+#
+#  for example in fs.readdirSync('./examples/templates')
+#    result.push(path.basename(example, '.jade'))
+#
+#  return result
 
-  for example in fs.readdirSync('./examples/templates')
-    result.push(path.basename(example, '.jade'))
-
-  return result
-
-enumerate_examples = ->
-  result = {}
-
-  for example in examples()
-    result['./examples/' + example + ".html"] = './examples/templates/' + example + ".jade"
-
-  return result
+#enumerate_examples = ->
+#  result = {}
+#
+#  for example in examples()
+#    result['./examples/' + example + ".html"] = './examples/templates/' + example + ".jade"
+#
+#  return result
 
 module.exports = (grunt) ->
   grunt.initConfig
@@ -77,14 +77,6 @@ module.exports = (grunt) ->
           "src/**/*.coffee"
         ]
         tasks: ["mochaTest"]
-      examples:
-        files: [
-          "examples/layout.jade"
-          "examples/templates/**/*"
-        ]
-        tasks: ["jade"]
-        options:
-          livereload: true
       compile:
         files: [
           "src/**/*.coffee"
@@ -119,15 +111,6 @@ module.exports = (grunt) ->
             '.tmp',
             'test'
           ]
-    jade:
-      compile:
-        options:
-          pretty: true
-          data:
-            debug: false
-            examples: examples()
-        files: enumerate_examples()
-
     uglify:
       mangle: true
       release:

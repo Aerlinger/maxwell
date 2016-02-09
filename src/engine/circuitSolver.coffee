@@ -83,8 +83,8 @@ class CircuitSolver
   getIterCount: ->
 #      if Settings.SPEED is 0
 #        return 0
-#      sim_speed = @Circuit.simSpeed()
-    sim_speed = 172
+    sim_speed = @Circuit.simSpeed()
+#    sim_speed = 172
     return 0.1 * Math.exp((sim_speed - 61.0) / 24.0)
 
 

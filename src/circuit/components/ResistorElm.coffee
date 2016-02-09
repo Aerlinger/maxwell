@@ -25,11 +25,7 @@ class ResistorElm extends CircuitComponent
     @resistance
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     @calcLeads 32
-    @updateDots()
 
     numSegments = 16
     width = 5
@@ -54,8 +50,13 @@ class ResistorElm extends CircuitComponent
 
     renderContext.drawValue 10, 0, this, @getUnitText(@resistance, @unitSymbol())
 
+    @updateDots()
     renderContext.drawDots(@point1, @point2, this)
+
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
   unitSymbol: ->
     "Ω"

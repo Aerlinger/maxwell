@@ -24,9 +24,26 @@ html
         var canvas = $('canvas.maxwell').get(0);
         renderer = null;
 
-        Maxwell.createCircuit("#{circuit}", circuitFileName, function (circuit) {
+        var circuit = Maxwell.createCircuit("#{circuit}", circuitFileName, function (circuit) {
           console.log("Circuit loaded! ", circuit, canvas);
           renderer = new Maxwell.Renderer(circuit, canvas);
+        });
+
+        componentList = "";
+
+        components = Maxwell.Components;
+        for (var i=0;  i<components.length; ++i) {
+          component = components[i];
+          $("#components").append("<li><a class='component' data-component-index='"+ i + "'>" + component.name + "</a></li>");
+        }
+
+        $('.component').click(function(evt) {
+          var componentIndex = $(this).data("component-index");
+
+          renderer.placeComponent = new Maxwell.Components[componentIndex];
+
+          console.log(Maxwell.Components[componentIndex]);
+          console.log($(this).data("component-index"));
         });
       });
 
@@ -40,16 +57,9 @@ html
 
     .col-md-10
       #container
-        canvas.maxwell(data-circuit="#{circuit}", width="1000", height="800")
+        canvas.maxwell(data-circuit="#{circuit}", width="800", height="600")
 
     .col-md-1
       #sidenav
-        ul.list-unstyled
-          li#components
-            a(data-component="WireElm")= "Wire"
-            a(data-component="ResistorElm")= "Resistor"
-            a(data-component="CapacitorElm")= "Capacitor"
-            a(data-component="InductorElm")= "Inductor"
-            a(data-component="OpAmpElm")= "OpAmp"
-            a(data-component="GroundElm")= "Ground"
+        ul#components.list-unstyled
 

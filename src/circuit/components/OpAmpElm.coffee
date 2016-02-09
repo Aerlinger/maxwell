@@ -50,7 +50,7 @@ class OpAmpElm extends CircuitComponent
     #    @FLAG_LOWGAIN: 4
   }
 
-  constructor: (xa, ya, xb, yb, params, f) ->
+  constructor: (xa = 104, ya = 104, xb = 208, yb = 104, params, f) ->
     @opsize = 0
 #      @opheight = 0
     @opwidth = 0
@@ -177,9 +177,9 @@ class OpAmpElm extends CircuitComponent
 
     # sometimes the voltage goes slightly outside range, to make convergence easier.  so we hide that here.
     vo = Math.max(Math.min(@volts[2], @maxOut), @minOut)
-    arr[3] = "Vout = " + @getUnitText(vo, "V")
-    arr[4] = "Iout = " + @getUnitText(@getCurrent(), "A")
-    arr[5] = "range = " + @getVoltageText(@minOut, "V") + " to " + @getVoltageText(@maxOut, "V")
+    arr[3] = "Vout = " + DrawUtil.getUnitText(vo, "V")
+    arr[4] = "Iout = " + DrawUtil.getUnitText(@getCurrent(), "A")
+    arr[5] = "range = " + DrawUtil.getUnitText(@minOut, "V") + " to " + DrawUtil.getUnitText(@maxOut, "V")
 
   stamp: (stamper) ->
 #      console.log("\nStamping OpAmpElm")

@@ -167,7 +167,6 @@ class VoltageElm extends CircuitComponent
       @setBboxPt @point1, @point2, Settings.GRID_SIZE
       [ptA, ptB] = renderContext.interpolateSymmetrical @lead1, @lead2, 1, Settings.GRID_SIZE
       renderContext.drawLinePt ptA, ptB, renderContext.getVoltageColor(@volts[1])
-
     else
       @setBboxPt @point1, @point2, VoltageElm.circleSize
       ps1 = renderContext.interpolate @lead1, @lead2, 0.5
@@ -296,9 +295,9 @@ class VoltageElm extends CircuitComponent
       arr[4] = "Vmax = " + @getUnitText(@maxVoltage, "V")
       i = 5
       unless @bias is 0
-        arr[i++] = "Voff = " + @getVoltageText(@bias)
-      else arr[i++] = "wavelength = " + @getUnitText(2.9979e8 / @frequency, "m")  if @frequency > 500
-      arr[i++] = "P = " + @getUnitText(@getPower(), "W")
+        arr[i++] = "Voff = " + DrawUtil.getUnitText(@bias, "V")
+      else arr[i++] = "wavelength = " + DrawUtil.getUnitText(2.9979e8 / @frequency, "m")  if @frequency > 500
+      arr[i++] = "P = " + DrawUtil.getUnitText(@getPower(), "W")
 
   toString: ->
     "VoltageElm"

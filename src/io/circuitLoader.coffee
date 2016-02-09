@@ -69,7 +69,9 @@ class CircuitLoader
           console.log("type: #{type}, sym: #{sym}")
           console.log("elm: ", elementData)
           console.log(e.stack)
-          process.exit(1);
+
+          unless environment.isBrowser
+            process.exit(1)
 
         elms.push(newCircuitElm)
         circuit.solder newCircuitElm

@@ -36,6 +36,9 @@ class RailElm extends VoltageElm
 
     clock = @waveform is VoltageElm.WF_SQUARE and (@flags & VoltageElm.FLAG_CLOCK) isnt 0
 
+    renderContext.drawDots @point2, @point1, this
+    renderContext.drawPosts(this)
+
     if @waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR or clock
       color = "#FFFFFF"  #((if @needsHighlight() then Settings.SELECT_COLOR else "#FFFFFF"))
 
@@ -53,8 +56,6 @@ class RailElm extends VoltageElm
     else
       @drawWaveform @point2, renderContext
 
-    renderContext.drawDots @point2, @point1, this
-    renderContext.drawPosts(this)
 
 #    renderContext.drawDots @point1, @lead1, this # @curcount  unless Circuit.dragElm is this
 

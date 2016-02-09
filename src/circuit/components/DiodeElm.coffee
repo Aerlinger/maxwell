@@ -85,8 +85,12 @@ class DiodeElm extends CircuitComponent
     @poly = renderContext.createPolygonFromArray([pa, pb, @lead2])
 
     @drawDiode(renderContext)
+
+    @updateDots()
     renderContext.drawDots(@point1, @point2, this)
+
     renderContext.drawPosts(this)
+
 
   reset: ->
     #    @diode.reset()
@@ -112,6 +116,8 @@ class DiodeElm extends CircuitComponent
     # draw the diode plate
     color = renderContext.getVoltageColor(v2)
     renderContext.drawLinePt @cathode[0], @cathode[1], color
+
+
 
   stamp: (stamper) ->
     #    @nodes[0] = n0

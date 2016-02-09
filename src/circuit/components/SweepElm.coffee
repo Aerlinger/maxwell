@@ -51,9 +51,11 @@ class SweepElm extends CircuitComponent
 
   constructor: (xa, ya, xb, yb, params, f) ->
     @dir = 1
-    @reset()
 
     super(xa, ya, xb, yb, params, f)
+
+  onSolder: ->
+    @reset()
 
   getDumpType: ->
     170
@@ -117,7 +119,10 @@ class SweepElm extends CircuitComponent
 #        @drawValues s, @circleSize
 
     @drawPosts()
-    @curcount = @updateDotCount(-@current, @curcount)
+
+    @updateDots()
+    renderContext.drawDots(@point1, @point2, this)
+#    @curcount = @updateDotCount(-@current, @curcount)
 #    @drawDots @point1, @lead1, @curcount  unless Circuit.dragElm is this
 
   stamp: (stamper) ->
@@ -183,10 +188,10 @@ class SweepElm extends CircuitComponent
 
   getInfo: (arr) ->
     arr[0] = "sweep " + ((if ((@flags & SweepElm.FLAG_LOG) is 0) then "(linear)" else "(log)"))
-    arr[1] = "I = " + CircuitComponent.getCurrentDText(@getCurrent())
-    arr[2] = "V = " + CircuitComponent.getVoltageText(@volts[0])
-    arr[3] = "f = " + CircuitComponent.getUnitText(@frequency, "Hz")
-    arr[4] = "range = " + CircuitComponent.getUnitText(@minF, "Hz") + " .. " + CircuitComponent.getUnitText(@maxF, "Hz")
-    arr[5] = "time = " + CircuitComponent.getUnitText(@sweepTime, "s")
+    arr[1] = "I = " + DrawUtil.getUnitText(@getCurrent(), "A")
+    arr[2] = "V = " + DrawUtil.getUnitText(@volts[0], "V")
+    arr[3] = "f = " + DrawUtil.getUnitText(@frequency, "Hz")
+    arr[4] = "range = " + DrawUtil.getUnitText(@minF, "Hz") + " .. " + DrawUtil.getUnitText(@maxF, "Hz")
+    arr[5] = "time = " + DrawUtil.getUnitText(@sweepTime, "s")
 
 module.exports = SweepElm

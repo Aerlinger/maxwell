@@ -3,6 +3,8 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
+DrawUtil = require('../../util/DrawUtil.coffee')
+FormatUtil = require('../../util/formatUtils.coffee')
 
 class WireElm extends CircuitComponent
   @FLAG_SHOWCURRENT: 1
@@ -25,10 +27,10 @@ class WireElm extends CircuitComponent
     @setBboxPt @point1, @point2, 3
 
     if @mustShowCurrent()
-      s = @getUnitText(Math.abs(@getCurrent()), "A")
+      s = DrawUtil.getUnitText(Math.abs(@getCurrent()), "A")
 #      @drawValues s, 4, renderContext
     else if @mustShowVoltage()
-      s = @getUnitText(@volts[0], "V")
+      s = DrawUtil.getUnitText(@volts[0], "V")
 
     renderContext.drawValue 10, 0, this, s
     renderContext.drawDots(@point1, @point2, this)
@@ -52,8 +54,8 @@ class WireElm extends CircuitComponent
     super()
 
     arr[0] = "Wire"
-    arr[1] = "I = " + getUnitText(@getCurrent(), "A")
-    arr[2] = "V = " + getVoltageText(@volts[0], "V")
+    arr[1] = "I = " + DrawUtil.getUnitText(@getCurrent(), "A")
+    arr[2] = "V = " + DrawUtil.getUnitText(@volts[0], "V")
 
   getDumpType: ->
     "w"

@@ -1,5 +1,6 @@
 CircuitComponent = require('./circuit/circuitComponent.coffee')
 CircuitLoader = require('./io/circuitLoader.coffee')
+ComponentRegistry = require('./circuit/componentRegistry.coffee')
 Circuit = require('./circuit/circuit.coffee')
 Renderer = require('./render/renderer.coffee')
 
@@ -16,9 +17,7 @@ class Maxwell
 
   @Circuits = {}
 
-  @Components = [
-
-  ]
+  @Components = (v for k,v of ComponentRegistry.ComponentDefs)
 
   if environment.isBrowser
     @logger = console
