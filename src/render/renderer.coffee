@@ -13,6 +13,7 @@
 BaseRenderer = require('./BaseRenderer.coffee')
 Circuit = require('../circuit/circuit.coffee')
 CircuitComponent = require('../circuit/circuitComponent.coffee')
+OpAmpElm = require('../circuit/components/OpAmpElm.coffee')
 Settings = require('../settings/settings.coffee')
 Rectangle = require('../geom/rectangle.coffee')
 Polygon = require('../geom/Polygon.coffee')
@@ -78,12 +79,15 @@ class Renderer extends BaseRenderer
   constructor: (@Circuit, @Canvas) ->
     super()
 
+    @opAmp = new OpAmpElm(100, 100, 300, 100)
+
     @highlightedComponent = null
     @selectedComponents = []
 
     # TODO: Width and height are currently undefined
     @width = @Canvas.width
     @height = @Canvas.height
+
 
 
     if environment.isBrowser
@@ -111,6 +115,8 @@ class Renderer extends BaseRenderer
     #    @Circuit.addObserver Circuit.ON_RESET, @clear
     #    @Circuit.addObserver Circuit.ON_END_UPDATE, @clear
 
+
+
   mousemove: (event) =>
     x = event.offsetX
     y = event.offsetY
@@ -122,6 +128,12 @@ class Renderer extends BaseRenderer
 
     @snapX = @snapGrid(x)
     @snapY = @snapGrid(y)
+
+    # TODO: WIP for interactive element placing
+    if @opAmp
+      @opAmp.moveTo(@snapX, @snapY)
+
+    # END TODO
 
     if @marquee?
       @marquee?.reposition(x, y)
@@ -174,6 +186,9 @@ class Renderer extends BaseRenderer
     @marquee?.draw(this)
     @Circuit.updateCircuit()
     @drawComponents()
+
+    if @context
+      @drawComponent(@opAmp)
 
 
   drawComponents: ->

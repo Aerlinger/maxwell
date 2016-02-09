@@ -99,7 +99,6 @@ class OpAmpElm extends CircuitComponent
     if CircuitComponent.DEBUG
       super(renderContext)
 
-    @updateDots()
     @setBboxPt @point1, @point2, @opheight * 2
 
     color = renderContext.getVoltageColor(@volts[0])
@@ -117,11 +116,14 @@ class OpAmpElm extends CircuitComponent
     color = renderContext.getVoltageColor(@volts[2])
     renderContext.drawLinePt @lead2, @point2, color
 #      @curcount = @updateDotCount(@current, @curcount)
-    renderContext.drawDots @in1p[0], @in1p[1], renderContext
-    #      @drawDots @in2p[0], @in2p[1], renderContext
-    renderContext.drawDots @point2, @lead2, this
 
-    renderContext.drawPosts(this)
+    if @getParentCircuit() && @getParentCircuit()
+      @updateDots()
+      renderContext.drawDots @in1p[0], @in1p[1], renderContext
+      #      @drawDots @in2p[0], @in2p[1], renderContext
+      renderContext.drawDots @point2, @lead2, this
+
+      renderContext.drawPosts(this)
 #      @(renderContext)
 
   getPower: ->

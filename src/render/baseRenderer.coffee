@@ -68,6 +68,9 @@ class BaseRenderer extends Observer
     @drawLine pa.x, pa.y, pb.x, pb.y, color
 
   drawLine: (x, y, x2, y2, color = Settings.FG_COLOR, lineWidth = Settings.LINE_WIDTH) ->
+    if !x || !y || !x2 || !y2
+      console.log(x, y, x2, y2)
+
     @context.lineJoin = 'miter'
 
     origLineWidth = Settings.LINE_WIDTH

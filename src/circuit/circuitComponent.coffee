@@ -287,9 +287,16 @@ class CircuitComponent
     @boundingBox.x = @x1
     @boundingBox.y = @x2
 
-    @getParentCircuit().invalidate()
+    if @getParentCircuit()
+      @getParentCircuit().invalidate()
 
     @setPoints()
+
+  moveTo: (x, y) ->
+    deltaX = x - @getCenter().x
+    deltaY = y - @getCenter().y
+
+    @move(deltaX, deltaY)
 
   stamp: ->
     @Circuit.halt("Called abstract function stamp() in Circuit #{@getDumpType()}")
@@ -421,12 +428,16 @@ class CircuitComponent
 
     renderContext.drawValue 10, -15, this, @constructor.name
 
+    height = 8
+    i = 0
+    for name, value in @params
+      console.log(name, value);
+      renderContext.drawValue 12, -15 + height * i, this, "#{name}: #{value}"
+      i += 1
+
     renderContext.drawCircle(@getCenter().x, @getCenter().y, 5, 0, "#FF0000")
-#    renderContext.fillText(@boundingBox.x, @boundingBox.y, "Name: " + @constructor.name)
 
     @calcLeads 0
-
-#    renderContext.drawValue 10, 0, this, @toString()
 
     renderContext.drawPosts(this, "#FF0000")
 
@@ -436,8 +447,8 @@ class CircuitComponent
 
     renderContext.drawLeads(this)
 
-    @updateDots(this)
-    renderContext.drawDots(@point1, @point2, this)
+#    @updateDots(this)
+#    renderContext.drawDots(@point1, @point2, this)
 
 
   updateDots: (ds = Settings.CURRENT_SEGMENT_LENGTH) ->
