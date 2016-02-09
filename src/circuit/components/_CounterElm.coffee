@@ -1,6 +1,6 @@
 CircuitComponent = require("../CircuitComponent.coffee")
 ChipElm = require("./ChipElm.coffee")
-DrawUtil = require('../../util/drawUtil.coffee')
+Util = require('../../util/util.coffee')
 
 class CounterElm extends ChipElm
 

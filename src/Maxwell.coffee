@@ -6,8 +6,8 @@ Renderer = require('./render/renderer.coffee')
 
 environment = require("./environment.coffee")
 
-#unless environment.isBrowser
-#  Winston = require('winston')
+unless environment.isBrowser
+  Winston = require('winston')
 
 class Maxwell
   version = "0.0.0"
@@ -50,10 +50,10 @@ class Maxwell
       else if typeof circuitData is "object"
         circuit = Maxwell.loadCircuitFromJson(circuitData)
       else
-        raise """
+        throw new Error("""
           Parameter must either be a path to a JSON file or raw JSON data representing the circuit.
           Use `Maxwell.createCircuit()` to create a new empty circuit object.
-        """
+        """)
     else
       circuit = new Circuit()
 

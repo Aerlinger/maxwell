@@ -1,6 +1,5 @@
 CircuitComponent = require("../CircuitComponent.coffee")
-DrawUtil = require('../../util/drawUtil.coffee')
-ArrayUtil = require('../../util/arrayUtils.coffee')
+Util = require('../../util/util.coffee')
 
 class GateElm extends CircuitComponent
   FLAG_SMALL: 1
@@ -55,8 +54,8 @@ class GateElm extends CircuitComponent
 
     @calcLeads @ww*2
 
-    @inPosts = DrawUtil.newPointArray(@inputCount)
-    @inGates = DrawUtil.newPointArray(@inputCount)
+    @inPosts = Util.newPointArray(@inputCount)
+    @inGates = Util.newPointArray(@inputCount)
 
     @allocNodes()
 
@@ -67,8 +66,8 @@ class GateElm extends CircuitComponent
       if i0==0 && @inputCount & 1 == 0
         i0 += 1
 
-      @inPosts[i] = DrawUtil.interpolate(@point1, @point2, 0, hs * 10)
-      @inGates[i] = DrawUtil.interpolate(@lead1, @lead2, 0, hs * 10)
+      @inPosts[i] = Util.interpolate(@point1, @point2, 0, hs * 10)
+      @inGates[i] = Util.interpolate(@lead1, @lead2, 0, hs * 10)
 
       if (@lastOutput ^ @isInverting())
         @volts[i] = 5

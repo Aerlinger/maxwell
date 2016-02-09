@@ -1,5 +1,3 @@
-ClockElm = require('../../src/circuit/components/ClockElm.coffee')
-
 describe "ClockElmTest", ->
   before ->
     @clockElm = new ClockElm(100, 200)

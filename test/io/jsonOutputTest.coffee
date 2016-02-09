@@ -30,7 +30,6 @@ describe "JSON output", ->
         'startCircuit',
         'timeStep',
         'flags',
-        'setupList',
         'circuitNonLinear',
         'voltageSourceCount',
         'circuitMatrixSize',
@@ -59,11 +58,11 @@ describe "JSON output", ->
 
     describe "saving to file", ->
       before (done) ->
-        @circuit.dumpFrameJson("./src/data/ohms_frames.json")
+        @circuit.dumpFrameJson("./test/fixtures/data/ohms_frames.json")
 
         done()
 
       it "dumps frame JSON", ->
-        fileJson = JSON.parse(fs.readFileSync("./src/data/ohms_frames.json"))
+        fileJson = JSON.parse(fs.readFileSync("./test/fixtures/data/ohms_frames.json"))
 
         fileJson.should.eql @circuit.frameJson()

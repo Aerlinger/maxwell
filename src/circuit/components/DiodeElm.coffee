@@ -3,7 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-ArrayUtils = require('../../util/arrayUtils.coffee')
+Util = require('../../util/util.coffee')
 
 class DiodeElm extends CircuitComponent
 
@@ -79,7 +79,7 @@ class DiodeElm extends CircuitComponent
 
     @calcLeads 16
 
-    @cathode = ArrayUtils.newPointArray(2)
+    @cathode = Util.newPointArray(2)
     [pa, pb] = renderContext.interpolateSymmetrical @lead1, @lead2, 0, @hs
     [@cathode[0], @cathode[1]] = renderContext.interpolateSymmetrical @lead1, @lead2, 1, @hs
     @poly = renderContext.createPolygonFromArray([pa, pb, @lead2])

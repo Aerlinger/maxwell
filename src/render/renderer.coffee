@@ -17,7 +17,7 @@ Settings = require('../settings/settings.coffee')
 Rectangle = require('../geom/rectangle.coffee')
 Polygon = require('../geom/Polygon.coffee')
 Point = require('../geom/point.coffee')
-DrawUtil = require('../util/DrawUtil.coffee')
+Util = require('../util/util.coffee')
 environment = require('../environment.coffee')
 
 
@@ -283,7 +283,7 @@ class Renderer extends BaseRenderer
       post = component.getPost(i)
       @drawPost post.x, post.y
 
-# TODO: Move to DrawUtil
+# TODO: Move to Util
   drawPost: (x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_COLOR) ->
     @fillCircle x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor
 
@@ -291,7 +291,7 @@ class Renderer extends BaseRenderer
   # From a vector between points AB, calculate a new point in space relative to some multiple of the parallel (u)
   # and perpindicular (v) components of the the original AB vector.
   #
-# TODO: Move to DrawUtil
+# TODO: Move to Util
   interpolate: (ptA, ptB, u, v = 0) ->
     dx = ptB.y - ptA.y
     dy = ptA.x - ptB.x
@@ -303,7 +303,7 @@ class Renderer extends BaseRenderer
     new Point(interpX, interpY)
 
   # Deprecate this shit
-  # TODO: Move to DrawUtil
+  # TODO: Move to Util
   interpolateSymmetrical: (ptA, ptB, u, v) ->
     dx = ptB.y - ptA.y
     dy = ptA.x - ptB.x
@@ -317,7 +317,7 @@ class Renderer extends BaseRenderer
 
     [new Point(interpX, interpY), new Point(interpXReflection, interpYReflection)]
 
-  # TODO: Move to DrawUtil
+  # TODO: Move to Util
   getVoltageColor: (volts, fullScaleVRange=10) ->
     RedGreen =
       [ "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
@@ -347,7 +347,7 @@ class Renderer extends BaseRenderer
 
     return scale[value]
 
-  # TODO: Move to DrawUtil
+  # TODO: Move to Util
   calcArrow: (point1, point2, al, aw) ->
     poly = new Polygon()
 
@@ -357,14 +357,14 @@ class Renderer extends BaseRenderer
 
     poly.addVertex point2.x, point2.y
 
-    [p1, p2] = DrawUtil.interpolateSymmetrical point1, point2, 1 - al / dist, aw
+    [p1, p2] = Util.interpolateSymmetrical point1, point2, 1 - al / dist, aw
 
     poly.addVertex p1.x, p1.y
     poly.addVertex p2.x, p2.y
 
     return poly
 
-  # TODO: Move to DrawUtil
+  # TODO: Move to Util
   createPolygon: (pt1, pt2, pt3, pt4) ->
     newPoly = new Polygon()
     newPoly.addVertex pt1.x, pt1.y
@@ -374,7 +374,7 @@ class Renderer extends BaseRenderer
 
     return newPoly
 
-  # TODO: Move to DrawUtil
+  # TODO: Move to Util
   createPolygonFromArray: (vertexArray) ->
     newPoly = new Polygon()
     for vertex in vertexArray

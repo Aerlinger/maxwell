@@ -1,5 +1,5 @@
 CircuitComponent = require("../CircuitComponent.coffee")
-DrawUtil = require("../../util/drawUtil.coffee")
+Util = require("../../util/util.coffee")
 Settings = require('../../settings/settings.coffee')
 
 Point = require("../../geom/point.coffee")
@@ -53,14 +53,14 @@ class PotElm extends CircuitComponent
     offset = 0
 
     if Math.abs(@dx) > Math.abs(@dy)
-      @dx = DrawUtil.snapGrid(@dx / 2) * 2
+      @dx = Util.snapGrid(@dx / 2) * 2
       @point2.x = @x2 = @point1.x + @dx
 
       offset = if (@dx < 0) then @dy else -@dy
 
       @point2.y = @point1.y
     else
-      @dy = DrawUtil.snapGrid(@dy / 2) * 2
+      @dy = Util.snapGrid(@dy / 2) * 2
       @point2.y = @y2 = @point1.y + @dy
       offset = if (@dy > 0) then @dx else -@dx
       @point2.x = @point1.x
@@ -76,14 +76,14 @@ class PotElm extends CircuitComponent
     @position = @getSliderValue() * 0.0099 + 0.005
     soff = Math.floor((@position - 0.5) * bodyLen)
 
-    @post3 = DrawUtil.interpolate(@point1, @point2, 0.5, offset)
-    @corner2 = DrawUtil.interpolate(@point1, @point2, soff / @dn + 0.5, offset);
-    @arrowPoint = DrawUtil.interpolate(@point1, @point2, soff / @dn + 0.5, 8 * Math.sign(offset))
-    @midpoint = DrawUtil.interpolate(@point1, @point2, soff / @dn + 0.5);
+    @post3 = Util.interpolate(@point1, @point2, 0.5, offset)
+    @corner2 = Util.interpolate(@point1, @point2, soff / @dn + 0.5, offset);
+    @arrowPoint = Util.interpolate(@point1, @point2, soff / @dn + 0.5, 8 * Math.sign(offset))
+    @midpoint = Util.interpolate(@point1, @point2, soff / @dn + 0.5);
 
     clen = Math.abs(offset) - 8
 
-    [@arrow1, @arrow2] = DrawUtil.interpolateSymmetrical(@corner2, @arrowPoint, (clen - 8) / clen, 8)
+    [@arrow1, @arrow2] = Util.interpolateSymmetrical(@corner2, @arrowPoint, (clen - 8) / clen, 8)
 
     @ps3 = new Point()
     @ps4 = new Point()

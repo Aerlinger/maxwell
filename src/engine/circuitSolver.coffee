@@ -5,8 +5,7 @@ CircuitNode = require('./circuitNode.coffee')
 CircuitNodeLink = require('./circuitNodeLink.coffee')
 RowInfo = require('./rowInfo.coffee')
 Setting = require('../settings/settings.coffee')
-ArrayUtils = require('../util/ArrayUtils.coffee')
-FormatUtils = require('../util/FormatUtils.coffee')
+Util = require('../util/util.coffee')
 
 SimulationFrame = require('../circuit/simulationFrame.coffee')
 
@@ -23,7 +22,7 @@ sprintf = require("sprintf-js").sprintf
 class CircuitSolver
 
   constructor: (@Circuit) ->
-    @scaleFactors = ArrayUtils.zeroArray(400)
+    @scaleFactors = Util.zeroArray(400)
     @reset()
     @Stamper = new MatrixStamper(@Circuit)
 
@@ -202,14 +201,14 @@ class CircuitSolver
 
     @circuitMatrixSize = @circuitMatrixFullSize = @matrixSize
 
-    @circuitMatrix = ArrayUtils.zeroArray2(@matrixSize, @matrixSize)
-    @origMatrix = ArrayUtils.zeroArray2(@matrixSize, @matrixSize)
+    @circuitMatrix = Util.zeroArray2(@matrixSize, @matrixSize)
+    @origMatrix = Util.zeroArray2(@matrixSize, @matrixSize)
 
     # Todo: check
-    @circuitRightSide = ArrayUtils.zeroArray @matrixSize
-    @origRightSide = ArrayUtils.zeroArray @matrixSize
-    @circuitRowInfo = ArrayUtils.zeroArray @matrixSize
-    @circuitPermute = ArrayUtils.zeroArray @matrixSize
+    @circuitRightSide = Util.zeroArray @matrixSize
+    @origRightSide = Util.zeroArray @matrixSize
+    @circuitRowInfo = Util.zeroArray @matrixSize
+    @circuitPermute = Util.zeroArray @matrixSize
 
     vs = 0
 
@@ -414,10 +413,10 @@ class CircuitSolver
 
     # make the new, simplified matrix
     newSize = newMatDim
-    newMatx = ArrayUtils.zeroArray2(newSize, newSize)
+    newMatx = Util.zeroArray2(newSize, newSize)
     newRS = new Array(newSize)
 
-    ArrayUtils.zeroArray newRS
+    Util.zeroArray newRS
     ii = 0
     for i in [0...@matrixSize]
       circuitRowInfo = @circuitRowInfo[i]
@@ -722,7 +721,7 @@ class CircuitSolver
     for rowInfo in @circuitRowInfo
       out += rowInfo.toString() + "\n"
 
-    out += "\nCircuit permute: " + FormatUtils.prettyArray(@circuitPermute)
+    out += "\nCircuit permute: " + Util.printArray(@circuitPermute)
 
     out + "\n"
 
@@ -735,12 +734,12 @@ class CircuitSolver
     circuitRightSideDump = ""
 
     for i in [0...matrixRowCount]
-      circuitRightSideDump += FormatUtils.tidyFloat(@circuitRightSide[i])
+      circuitRightSideDump += Util.tidyFloat(@circuitRightSide[i])
 #      circuitMatrixDump += @tidyFloat(@circuitRightSide[i])
 
       circuitMatrixDump += "["
       for j in [0...matrixRowCount]
-        circuitMatrixDump += FormatUtils.tidyFloat(@circuitMatrix[i][j])
+        circuitMatrixDump += Util.tidyFloat(@circuitMatrix[i][j])
 
         if(j != matrixRowCount - 1)
           circuitMatrixDump += ", "

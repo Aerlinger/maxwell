@@ -3,7 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-DrawUtil = require("../../util/drawUtil.coffee")
+Util = require("../../util/util.coffee")
 
 VoltageElm = require('./VoltageElm.coffee')
 
@@ -25,7 +25,7 @@ class RailElm extends VoltageElm
     if CircuitComponent.DEBUG
       super(renderContext)
 
-    @lead1 = DrawUtil.interpolate(@point1, @point2, 1 - VoltageElm.circleSize / @dn)
+    @lead1 = Util.interpolate(@point1, @point2, 1 - VoltageElm.circleSize / @dn)
 
     @updateDots()
 
@@ -52,7 +52,7 @@ class RailElm extends VoltageElm
 #      s = "Ant" if this instanceof AntennaElm
       s = "CLK" if clock
 
-      DrawUtil.drawValue 0, 0, this, s
+      Util.drawValue 0, 0, this, s
     else
       @drawWaveform @point2, renderContext
 
@@ -68,7 +68,7 @@ class RailElm extends VoltageElm
   setPoints: ->
     super()
 
-    @lead1 = DrawUtil.interpolate(@point1, @point2, 1 - @circleSize / @dn)
+    @lead1 = Util.interpolate(@point1, @point2, 1 - @circleSize / @dn)
 
   stamp: (stamper) ->
 #    console.log("\n::Stamping RailElm:: " + @waveform)

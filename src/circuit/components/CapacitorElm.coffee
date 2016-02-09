@@ -3,7 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-DrawUtil = require('../../util/drawUtil.coffee')
+Util = require('../../util/util.coffee')
 
 class CapacitorElm extends CircuitComponent
   @FLAG_BACK_EULER: 2
@@ -62,13 +62,13 @@ class CapacitorElm extends CircuitComponent
 
     f = (@dn / 2 - 4) / @dn
 
-    @lead1 = DrawUtil.interpolate(@point1, @point2, f)
-    @lead2 = DrawUtil.interpolate(@point1, @point2, 1 - f)
+    @lead1 = Util.interpolate(@point1, @point2, f)
+    @lead2 = Util.interpolate(@point1, @point2, 1 - f)
 
     @plate1 = [new Point(), new Point()]
     @plate2 = [new Point(), new Point()]
-    [@plate1[0], @plate1[1]] = DrawUtil.interpolateSymmetrical @point1, @point2, f, 12
-    [@plate2[0], @plate2[1]] = DrawUtil.interpolateSymmetrical @point1, @point2, 1 - f, 12
+    [@plate1[0], @plate1[1]] = Util.interpolateSymmetrical @point1, @point2, f, 12
+    [@plate2[0], @plate2[1]] = Util.interpolateSymmetrical @point1, @point2, 1 - f, 12
 
 
 

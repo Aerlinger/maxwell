@@ -1,5 +1,5 @@
-MathUtils = require('../util/mathUtils.coffee')
 RowInfo = require('./rowInfo.coffee')
+Util = require('../util/util.coffee')
 
 class MatrixStamper
 
@@ -43,7 +43,7 @@ class MatrixStamper
   stampResistor: (n1, n2, r) ->
 #    console.log("Stamp resistor: " + n1 + " " + n2 + " " + r)
     r0 = 1 / r
-    if isNaN(r0) or MathUtils.isInfinite(r0)
+    if isNaN(r0) or Util.isInfinite(r0)
       @Circuit.halt "bad resistance"
       a = 0
       a /= a
@@ -57,7 +57,7 @@ class MatrixStamper
 
 
   stampConductance: (n1, n2, r0) ->
-    if isNaN(r0) or MathUtils.isInfinite(r0)
+    if isNaN(r0) or Util.isInfinite(r0)
       @Circuit.halt "bad conductance"
 
     console.log("Stamp conductance: " + n1 + " " + n2 + " " + r0 + " ");
@@ -72,7 +72,7 @@ class MatrixStamper
   current from cn1 to cn2 is equal to voltage from vn1 to 2, divided by g
   ###
   stampVCCurrentSource: (cn1, cn2, vn1, vn2, value) ->
-    if isNaN(gain) or MathUtils.isInfinite(gain)
+    if isNaN(gain) or Util.isInfinite(gain)
       @Circuit.halt "Invalid gain on voltage controlled current source"
 
 #    console.log("stampVCCurrentSource: " + cn1 + " " + cn2 + " " + vn1 + " " + vn2 + " " + value)
@@ -94,7 +94,7 @@ class MatrixStamper
   stamp a current source from n1 to n2 depending on current through vs
   ###
   stampCCCS: (n1, n2, vs, gain) ->
-    if isNaN(gain) or MathUtils.isInfinite(gain)
+    if isNaN(gain) or Util.isInfinite(gain)
       @Circuit.halt "Invalid gain on current source"
 
 #    console.log("stampCurrentSource: " + n1 + " " + n2 + " " + vs + " " + gain);
@@ -110,7 +110,7 @@ class MatrixStamper
   (Unless i or j is a voltage source node.)
   ###
   stampMatrix: (row, col, value) ->
-    if isNaN(value) or MathUtils.isInfinite(value)
+    if isNaN(value) or Util.isInfinite(value)
       @Circuit.halt "attempted to stamp Matrix with invalid value"
 
 #    console.log("stampMatrix: " + row + " " + col + " " + value);

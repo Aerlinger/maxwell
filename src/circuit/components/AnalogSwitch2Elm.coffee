@@ -1,6 +1,6 @@
 CircuitComponent = require("../CircuitComponent.coffee")
 AnalogSwitchElm = require("./AnalogSwitchElm.coffee")
-DrawUtil = require('../../util/drawUtil.coffee')
+Util = require('../../util/util.coffee')
 Point = require('../../geom/Point.coffee')
 
 class AnalogSwitch2Elm extends AnalogSwitchElm
@@ -15,13 +15,13 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 
     @calcLeads(32)
 
-    @swposts = DrawUtil.newPointArray(2)
-    @swpoles = DrawUtil.newPointArray(2)
+    @swposts = Util.newPointArray(2)
+    @swpoles = Util.newPointArray(2)
 
-    [@swpoles[0], @swpoles[1]] = DrawUtil.interpolateSymmetrical(@lead1, @lead2, 1, @openhs)
-    [@swposts[0], @swposts[1]] = DrawUtil.interpolateSymmetrical(@point1, @point2, 1, @openhs)
+    [@swpoles[0], @swpoles[1]] = Util.interpolateSymmetrical(@lead1, @lead2, 1, @openhs)
+    [@swposts[0], @swposts[1]] = Util.interpolateSymmetrical(@point1, @point2, 1, @openhs)
 
-    @ctlPoint = DrawUtil.interpolate(@point1, @point2, 0.5, @openhs)
+    @ctlPoint = Util.interpolate(@point1, @point2, 0.5, @openhs)
 
   getPostCount: ->
     4

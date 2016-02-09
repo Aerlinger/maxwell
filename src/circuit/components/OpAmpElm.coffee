@@ -1,11 +1,9 @@
 CircuitComponent = require('../circuitComponent.coffee')
-ArrayUtils =  require('../../util/ArrayUtils.coffee')
 Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-MathUtils = require('../../util/MathUtils.coffee')
-DrawUtil = require("../../util/drawUtil.coffee")
+Util = require("../../util/util.coffee")
 
 class OpAmpElm extends CircuitComponent
   @FLAG_SWAP: 1
@@ -147,17 +145,17 @@ class OpAmpElm extends CircuitComponent
     hs = Math.floor(@opheight * @dsign)
     hs = -hs unless (@flags & OpAmpElm.FLAG_SWAP) is 0
 
-    @in1p = ArrayUtils.newPointArray(2)
-    @in2p = ArrayUtils.newPointArray(2)
-    @textp = ArrayUtils.newPointArray(2)
+    @in1p = Util.newPointArray(2)
+    @in2p = Util.newPointArray(2)
+    @textp = Util.newPointArray(2)
 
-    [@in1p[0], @in2p[0]] = DrawUtil.interpolateSymmetrical @point1, @point2, 0, hs
-    [@in1p[1], @in2p[1]] = DrawUtil.interpolateSymmetrical @lead1, @lead2, 0, hs
-    [@textp[0], @textp[1]] = DrawUtil.interpolateSymmetrical @lead1, @lead2, .2, hs
+    [@in1p[0], @in2p[0]] = Util.interpolateSymmetrical @point1, @point2, 0, hs
+    [@in1p[1], @in2p[1]] = Util.interpolateSymmetrical @lead1, @lead2, 0, hs
+    [@textp[0], @textp[1]] = Util.interpolateSymmetrical @lead1, @lead2, .2, hs
 
-    tris = ArrayUtils.newPointArray(2)
-    [tris[0], tris[1]] = DrawUtil.interpolateSymmetrical @lead1, @lead2, 0, hs * 2
-    @triangle = DrawUtil.createPolygonFromArray([tris[0], tris[1], @lead2])
+    tris = Util.newPointArray(2)
+    [tris[0], tris[1]] = Util.interpolateSymmetrical @lead1, @lead2, 0, hs * 2
+    @triangle = Util.createPolygonFromArray([tris[0], tris[1], @lead2])
 
 
   getPostCount: ->
@@ -177,9 +175,9 @@ class OpAmpElm extends CircuitComponent
 
     # sometimes the voltage goes slightly outside range, to make convergence easier.  so we hide that here.
     vo = Math.max(Math.min(@volts[2], @maxOut), @minOut)
-    arr[3] = "Vout = " + DrawUtil.getUnitText(vo, "V")
-    arr[4] = "Iout = " + DrawUtil.getUnitText(@getCurrent(), "A")
-    arr[5] = "range = " + DrawUtil.getUnitText(@minOut, "V") + " to " + DrawUtil.getUnitText(@maxOut, "V")
+    arr[3] = "Vout = " + Util.getUnitText(vo, "V")
+    arr[4] = "Iout = " + Util.getUnitText(@getCurrent(), "A")
+    arr[5] = "range = " + Util.getUnitText(@minOut, "V") + " to " + Util.getUnitText(@maxOut, "V")
 
   stamp: (stamper) ->
 #      console.log("\nStamping OpAmpElm")
@@ -198,10 +196,10 @@ class OpAmpElm extends CircuitComponent
     vn = @Circuit.numNodes() + @voltSource
     dx = 0
 
-    if vd >= @maxOut / @gain and (@lastvd >= 0 or MathUtils.getRand(4) is 1)
+    if vd >= @maxOut / @gain and (@lastvd >= 0 or Util.getRand(4) is 1)
       dx = 1e-4
       x = @maxOut - dx * @maxOut / @gain
-    else if vd <= @minOut / @gain and (@lastvd <= 0 or MathUtils.getRand(4) is 1)
+    else if vd <= @minOut / @gain and (@lastvd <= 0 or Util.getRand(4) is 1)
       dx = 1e-4
       x = @minOut - dx * @minOut / @gain
     else

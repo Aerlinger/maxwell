@@ -29,7 +29,7 @@ SimulationFrame = require('./simulationFrame.coffee')
 CircuitSolver = require('../engine/circuitSolver.coffee')
 Observer = require('../util/observer.coffee')
 Rectangle = require('../geom/rectangle.coffee')
-FormatUtils = require('../util/FormatUtils.coffee')
+Util = require('../util/util.coffee')
 environment = require("../environment.coffee")
 
 fs = require('fs')
@@ -138,7 +138,7 @@ class Circuit extends Observer
     @notifyObservers @ON_DESOLDER
 
     component.Circuit = null
-    @elementList.remove component
+    Util.removeFromArray @elementList, component
     if destroy
       component.destroy()
 

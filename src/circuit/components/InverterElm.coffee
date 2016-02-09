@@ -1,5 +1,5 @@
 CircuitComponent = require("../CircuitComponent.coffee")
-DrawUtil = require('../../util/drawUtil.coffee')
+Util = require('../../util/util.coffee')
 
 class InverterElm extends CircuitComponent
 
@@ -28,16 +28,16 @@ class InverterElm extends CircuitComponent
     if ww > @dn / 2
       ww = Math.floor(@dn/2)
 
-    @lead1 = DrawUtil.interpolate(@point1, @point2, 0.5 - ww / @dn)
-    @lead2 = DrawUtil.interpolate(@point1, @point2, 0.5 + (ww + 2) / @dn)
+    @lead1 = Util.interpolate(@point1, @point2, 0.5 - ww / @dn)
+    @lead2 = Util.interpolate(@point1, @point2, 0.5 + (ww + 2) / @dn)
 
-    @pcircle = DrawUtil.interpolate(@point1, @point2, 0.5 + (ww - 2) / @dn)
+    @pcircle = Util.interpolate(@point1, @point2, 0.5 + (ww - 2) / @dn)
 
-    triPoints = DrawUtil.newPointArray(3)
+    triPoints = Util.newPointArray(3)
 
-    DrawUtil.interpolateSymmetrical(@lead1, @lead2, triPoints[0], triPoints[1], 0, hs)
+    Util.interpolateSymmetrical(@lead1, @lead2, triPoints[0], triPoints[1], 0, hs)
 
-    triPoints[2] = DrawUtil.interpolate(@point1, @point2, 0.5 + (ww - 5) / @dn)
+    triPoints[2] = Util.interpolate(@point1, @point2, 0.5 + (ww - 5) / @dn)
 
     @gatePoly = triPoints
 

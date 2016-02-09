@@ -3,7 +3,7 @@ CircuitComponent = require('../../src/circuit/circuitComponent.coffee')
 Circuit = require('../../src/circuit/circuit.coffee')
 CircuitNode = require('../../src/engine/circuitNode.coffee')
 CircuitLoader = require('../../src/io/circuitLoader.coffee')
-ArrayUtils = require('../../src/util/arrayUtils.coffee')
+Util = require('../../src/util/util.coffee')
 SimulationParams = require('../../src/core/SimulationParams.coffee')
 Hint = require('../../src/engine/Hint.coffee')
 Oscilloscope = require('../../src/scope/Oscilloscope.coffee')
@@ -32,13 +32,13 @@ describe "Simple Voltage Divider", ->
       @circuit.numElements().should.equal 7
 
     it "valid origMatrix", ->
-      @circuit.Solver.origMatrix.should.eql ArrayUtils.zeroArray2(10, 10)
+      @circuit.Solver.origMatrix.should.eql Util.zeroArray2(10, 10)
 
     it "valid origRightSide", ->
-      @circuit.Solver.origRightSide.should.eql ArrayUtils.zeroArray(10)
+      @circuit.Solver.origRightSide.should.eql Util.zeroArray(10)
 
     it "valid circuitPermute", ->
-      @circuit.Solver.circuitPermute.should.eql ArrayUtils.zeroArray(10)
+      @circuit.Solver.circuitPermute.should.eql Util.zeroArray(10)
 
     it "valid circuitMatrix", ->
       @circuit.Solver.circuitMatrix.should.eql []
@@ -59,16 +59,16 @@ describe "Simple Voltage Divider", ->
         @rowInfo[0].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true"
 
       it "index: 1", ->
-        @rowInfo[1].toString().should.equal 'RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: 0, value: 10, rsChanges: false, lsChanges: false, dropRow: false'
+        @rowInfo[1].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true"
 
       it "index: 2", ->
         @rowInfo[2].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0, rsChanges: false, lsChanges: false, dropRow: true"
 
       it "index: 3", ->
-        @rowInfo[3].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, false false true"
+        @rowInfo[3].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true"
 
       it "index 4", ->
-        @rowInfo[4].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0, false false true"
+        @rowInfo[4].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0, rsChanges: false, lsChanges: false, dropRow: true"
 #        @rowInfo[5].toString().should.equal "RowInfo: type: 1, nodeEq: 6, mapCol: -1, mapRow: -1, value: 0.0015, false false true"
 #        @rowInfo[6].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0.0015, false false true"
 #        @rowInfo[7].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: -0.0015, false false true"

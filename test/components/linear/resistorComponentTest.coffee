@@ -1,8 +1,3 @@
-Circuit = require('../../src/circuit/circuit.coffee')
-CircuitComponent = require('../../src/circuit/circuitComponent.coffee')
-ResistorElm = require('../../src/circuit/components/ResistorElm.coffee')
-
-Renderer = require("../../src/render/renderer.coffee")
 fs = require('fs')
 Canvas = require('canvas')
 

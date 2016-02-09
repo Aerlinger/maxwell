@@ -1,5 +1,5 @@
 Circuit = require('../../src/circuit/circuit.coffee')
-ArrayUtils = require('../../src/util/arrayUtils.coffee')
+Util = require('../../src/util/util.coffee')
 
 describe "Circuit Solver", ->
   beforeEach ->
@@ -10,7 +10,7 @@ describe "Circuit Solver", ->
     it "initiates solver", ->
       @Solver != null
       @Solver.Stamper != null
-      @Solver.scaleFactors.toString().should.equal ArrayUtils.zeroArray(400).toString()
+      @Solver.scaleFactors.toString().should.equal Util.zeroArray(400).toString()
 
     it "solver belongs to @Circuit", ->
       @Solver.Circuit.should.equal @Circuit

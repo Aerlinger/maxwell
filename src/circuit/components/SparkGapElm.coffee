@@ -3,7 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-DrawUtil = require('../../util/DrawUtil.coffee')
+Util = require('../../util/util.coffee')
 
 class SparkGapElm extends CircuitComponent
   @ParameterDefinitions = {
@@ -63,11 +63,11 @@ class SparkGapElm extends CircuitComponent
 
     @calcLeads(dist + alen)
 
-    p1 = DrawUtil.interpolate(@point1, @point2, (@dn - alen) / (2 * @dn))
-    @arrow1 = DrawUtil.calcArrow(@point1, p1, alen, alen)
+    p1 = Util.interpolate(@point1, @point2, (@dn - alen) / (2 * @dn))
+    @arrow1 = Util.calcArrow(@point1, p1, alen, alen)
 
-    p1 = DrawUtil.interpolate(@point1, @point2, (@dn + alen) / (2 * @dn))
-    @arrow2 = DrawUtil.calcArrow(@point2, p1, alen, alen)
+    p1 = Util.interpolate(@point1, @point2, (@dn + alen) / (2 * @dn))
+    @arrow2 = Util.calcArrow(@point2, p1, alen, alen)
 
 
 

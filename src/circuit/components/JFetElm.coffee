@@ -3,8 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-ArrayUtils = require('../../util/ArrayUtils.coffee')
-DrawUtils = require('../../util/DrawUtil.coffee')
+Util = require('../../util/util.coffee')
 
 MosfetElm = require('./MosfetElm.coffee')
 
@@ -57,26 +56,26 @@ class JFetElm extends MosfetElm
 
     hs2 = @hs * dsign
 
-    @src = ArrayUtils.newPointArray(3)
-    @drn = ArrayUtils.newPointArray(3)
+    @src = Util.newPointArray(3)
+    @drn = Util.newPointArray(3)
 
-    [@src[0], @drn[0]] = DrawUtils.interpolateSymmetrical(@point1, @point2, 1, hs2)
-    [@src[1], @drn[1]] = DrawUtils.interpolateSymmetrical(@point1, @point2, 1, hs2 / 2)
-    [@src[2], @drn[2]] = DrawUtils.interpolateSymmetrical(@point1, @point2, 1 - 10 / @dn, hs2 / 2)
+    [@src[0], @drn[0]] = Util.interpolateSymmetrical(@point1, @point2, 1, hs2)
+    [@src[1], @drn[1]] = Util.interpolateSymmetrical(@point1, @point2, 1, hs2 / 2)
+    [@src[2], @drn[2]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 10 / @dn, hs2 / 2)
 
-    @gatePt = DrawUtils.interpolate(@point1, @point2, 1 - 14/@dn)
+    @gatePt = Util.interpolate(@point1, @point2, 1 - 14/@dn)
 
-    ra = ArrayUtils.newPointArray(4)
-    [ra[0], ra[1]] = DrawUtils.interpolateSymmetrical(@point1, @point2, 1 - 13/@dn, @hs)
-    [ra[2], ra[3]] = DrawUtils.interpolateSymmetrical(@point1, @point2, 1 - 10/@dn, @hs)
+    ra = Util.newPointArray(4)
+    [ra[0], ra[1]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 13/@dn, @hs)
+    [ra[2], ra[3]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 10/@dn, @hs)
 
-    @gatePoly = DrawUtils.createPolygonFromArray(@ra[0], @ra[1], @ra[3], @ra[2])
+    @gatePoly = Util.createPolygonFromArray(@ra[0], @ra[1], @ra[3], @ra[2])
 
     if @pnp == -1
-      x = DrawUtils.interpolate(@gatePt, @point1, 15/@dn)
-      @arrowPoly = DrawUtils.calcArray(@gatePt, x, 8, 3)
+      x = Util.interpolate(@gatePt, @point1, 15/@dn)
+      @arrowPoly = Util.calcArray(@gatePt, x, 8, 3)
     else
-      @arrowPoly = DrawUtils.calcArray(@point1, @gatePt, 8, 3)
+      @arrowPoly = Util.calcArray(@point1, @gatePt, 8, 3)
 
 
 module.exports = JFetElm

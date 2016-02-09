@@ -1,6 +1,3 @@
-Circuit = require('../../src/circuit/circuit.coffee')
-GroundElm = require('../../src/circuit/components/GroundElm.coffee')
-
 describe "Ground Component", ->
   beforeEach ->
     @Circuit = new Circuit("BasicGround")

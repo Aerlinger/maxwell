@@ -4,8 +4,7 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 SwitchElm = require('./SwitchElm.coffee')
-ArrayUtils = require('../../util/arrayUtils.coffee')
-DrawUtil = require('../../util/drawUtil.coffee')
+Util = require('../../util/util.coffee')
 
 _ = require("lodash")
 
@@ -39,13 +38,13 @@ class Switch2Elm extends SwitchElm
     super()
 #    @calcLeads(32);
 
-    @swposts = ArrayUtils.newPointArray(2)
-    @swpoles = ArrayUtils.newPointArray(3)
+    @swposts = Util.newPointArray(2)
+    @swpoles = Util.newPointArray(3)
 
-    DrawUtil.interpolateSymmetrical(@lead1, @lead2, @swpoles[0], @swpoles[1], 1, @openhs)
+    Util.interpolateSymmetrical(@lead1, @lead2, @swpoles[0], @swpoles[1], 1, @openhs)
     @swpoles[2] = @lead2
 
-    DrawUtil.interpolateSymmetrical(@point1, @point2, @swposts[0], @swposts[1], 1, @openhs)
+    Util.interpolateSymmetrical(@point1, @point2, @swposts[0], @swposts[1], 1, @openhs)
 
     @posCount = if @hasCenterOff() then 3 else 2
 
@@ -60,8 +59,8 @@ class Switch2Elm extends SwitchElm
 
     @calcLeads 32
 
-    @swpoles = ArrayUtils.newPointArray(3)
-    @swposts = ArrayUtils.newPointArray(2)
+    @swpoles = Util.newPointArray(3)
+    @swposts = Util.newPointArray(2)
 
     [@swpoles[0], @swpoles[1]] = renderContext.interpolateSymmetrical(@lead1, @lead2, 1, @openhs)
     @swpoles[2] = @lead2

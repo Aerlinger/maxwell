@@ -3,7 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-DrawUtils = require('../../util/drawUtil.coffee')
+Util = require('../../util/util.coffee')
 
 class SweepElm extends CircuitComponent
   @FLAG_LOG: 1
@@ -70,7 +70,7 @@ class SweepElm extends CircuitComponent
     @setBboxPt @point1, @point2, SweepElm.circleSize
 
     color = renderContext.getVoltageColor(@volts[0])
-    @lead1 = DrawUtils.interpolate(@point1, @point2, 1 - SweepElm.circleSize / @dn)
+    @lead1 = Util.interpolate(@point1, @point2, 1 - SweepElm.circleSize / @dn)
 
     renderContext.drawThickLinePt @point1, @lead1, color
 #    @setVoltageColor (if @needsHighlight() then CircuitComponent.selectColor else Color.GREY)
@@ -130,7 +130,7 @@ class SweepElm extends CircuitComponent
 
   setPoints: ->
     super()
-    DrawUtils.interpolate(@point1, @point2, 1 - SweepElm.circleSize / @dn)
+    Util.interpolate(@point1, @point2, 1 - SweepElm.circleSize / @dn)
 
   setParams: ->
     if @frequency < @minF or @frequency > @maxF
@@ -188,10 +188,10 @@ class SweepElm extends CircuitComponent
 
   getInfo: (arr) ->
     arr[0] = "sweep " + ((if ((@flags & SweepElm.FLAG_LOG) is 0) then "(linear)" else "(log)"))
-    arr[1] = "I = " + DrawUtil.getUnitText(@getCurrent(), "A")
-    arr[2] = "V = " + DrawUtil.getUnitText(@volts[0], "V")
-    arr[3] = "f = " + DrawUtil.getUnitText(@frequency, "Hz")
-    arr[4] = "range = " + DrawUtil.getUnitText(@minF, "Hz") + " .. " + DrawUtil.getUnitText(@maxF, "Hz")
-    arr[5] = "time = " + DrawUtil.getUnitText(@sweepTime, "s")
+    arr[1] = "I = " + Util.getUnitText(@getCurrent(), "A")
+    arr[2] = "V = " + Util.getUnitText(@volts[0], "V")
+    arr[3] = "f = " + Util.getUnitText(@frequency, "Hz")
+    arr[4] = "range = " + Util.getUnitText(@minF, "Hz") + " .. " + Util.getUnitText(@maxF, "Hz")
+    arr[5] = "time = " + Util.getUnitText(@sweepTime, "s")
 
 module.exports = SweepElm

@@ -1,6 +1,6 @@
 Observer = require('../util/observer.coffee')
 Settings = require('../settings/settings.coffee')
-FormatUtils = require('../util/formatUtils.coffee')
+Util = require('../util/util.coffee')
 Point = require('../geom/point.coffee')
 
 class BaseRenderer extends Observer
@@ -8,7 +8,7 @@ class BaseRenderer extends Observer
     # TODO: Find where to show data; below circuit, not too high unless we need it
 #    bottomTextOffset = 100
 #    ybase = @getCircuitBottom() - (1 * 15) - bottomTextOffset
-    @context.fillText("t = #{FormatUtils.longFormat(@Circuit.time)} s", 10, 10)
+    @context.fillText("t = #{Util.longFormat(@Circuit.time)} s", 10, 10)
     @context.fillText("F.T. = #{@Circuit.frames}", 10, 20)
 
   drawWarning: (context) ->

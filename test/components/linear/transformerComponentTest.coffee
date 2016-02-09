@@ -1,6 +1,3 @@
-Circuit = require('../../src/circuit/circuit.coffee')
-TransformerElm = require('../../src/circuit/components/TransformerElm.coffee')
-
 describe "Transformer Component", ->
   beforeEach ->
     @transformer = new TransformerElm(50, 50, 50, 150, ["1e-4", "5", "1e-2", 0.998])

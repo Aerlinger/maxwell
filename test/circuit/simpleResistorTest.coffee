@@ -121,7 +121,7 @@ describe "Simple single resistor circuit", ->
 
         it "sets correct voltage on resistor", ->
           resistor = @Circuit.getElmByIdx(1)
-          expect(resistor.getVoltageDiff()).to.eql(20)
+          expect(resistor.getVoltageDiff()).to.eql(5)
 
         it "increments time", ->
           expect(@Circuit.time).to.equal(0.000005)

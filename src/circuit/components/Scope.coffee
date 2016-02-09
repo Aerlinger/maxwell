@@ -1,5 +1,5 @@
 Rectangle = require("../../geom/rectangle.coffee")
-ArrayUtil = require("../../util/arrayUtils.coffee")
+Util = require("../../util/util.coffee")
 
 class Scope
 
@@ -39,10 +39,10 @@ class Scope
     while (@scopePointCount <= @rect.width)
       @scopePointCount *= 2
 
-    @minV = ArrayUtil.zeroArray(@scopePointCount)
-    @maxV = ArrayUtil.zeroArray(@scopePointCount)
-    @minI = ArrayUtil.zeroArray(@scopePointCount)
-    @maxI = ArrayUtil.zeroArray(@scopePointCount)
+    @minV = Util.zeroArray(@scopePointCount)
+    @maxV = Util.zeroArray(@scopePointCount)
+    @minI = Util.zeroArray(@scopePointCount)
+    @maxI = Util.zeroArray(@scopePointCount)
 
     @ptr = @ctr = 0
 

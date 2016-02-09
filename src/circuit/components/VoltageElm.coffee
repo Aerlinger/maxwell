@@ -3,7 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-DrawUtil = require('../../util/drawUtil.coffee')
+Util = require('../../util/util.coffee')
 
 class VoltageElm extends CircuitComponent
   @FLAG_COS: 2
@@ -295,9 +295,9 @@ class VoltageElm extends CircuitComponent
       arr[4] = "Vmax = " + @getUnitText(@maxVoltage, "V")
       i = 5
       unless @bias is 0
-        arr[i++] = "Voff = " + DrawUtil.getUnitText(@bias, "V")
-      else arr[i++] = "wavelength = " + DrawUtil.getUnitText(2.9979e8 / @frequency, "m")  if @frequency > 500
-      arr[i++] = "P = " + DrawUtil.getUnitText(@getPower(), "W")
+        arr[i++] = "Voff = " + Util.getUnitText(@bias, "V")
+      else arr[i++] = "wavelength = " + Util.getUnitText(2.9979e8 / @frequency, "m")  if @frequency > 500
+      arr[i++] = "P = " + Util.getUnitText(@getPower(), "W")
 
   toString: ->
     "VoltageElm"

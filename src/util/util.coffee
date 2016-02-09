@@ -1,9 +1,10 @@
 Point = require('../geom/point.coffee')
 Polygon = require('../geom/polygon.coffee')
 Settings = require('../settings/settings.coffee')
+sprintf = require("sprintf-js").sprintf
 
-class DrawUtil
-  snapGrid: (x) ->
+class Util
+  @snapGrid: (x) ->
     (x + (Settings.GRID_SIZE / 2 - 1)) & ~(Settings.GRID_SIZE - 1)
 
   @interpolate: (ptA, ptB, u, v = 0) ->
@@ -38,7 +39,7 @@ class DrawUtil
 
     poly.addVertex point2.x, point2.y
 
-    [p1, p2] = DrawUtil.interpolateSymmetrical point1, point2, 1 - al / dist, aw
+    [p1, p2] = Util.interpolateSymmetrical point1, point2, 1 - al / dist, aw
 
     poly.addVertex p1.x, p1.y
     poly.addVertex p2.x, p2.y
@@ -86,6 +87,19 @@ class DrawUtil
   @printArray: (arr) ->
     console.log(subarr) for subarr in arr
 
+  @removeFromArray: (arr, items...) ->
+    for item in items
+      while (ax = arr.indexOf(item)) isnt -1
+        arr.splice ax, 1
+
+    arr
+
+  @isInfinite: (x)->
+    !isFinite(x)
+
+  @getRand: (x) ->
+    Math.floor Math.random() * (x + 1)
+
   @getUnitText: (value, unit, decimalPoints = 2) ->
     absValue = Math.abs(value)
     return "0 " + unit  if absValue < 1e-18
@@ -102,4 +116,60 @@ class DrawUtil
   @snapGrid: (x) ->
     Settings.GRID_SIZE * Math.round(x/Settings.GRID_SIZE)
 
-module.exports = DrawUtil
+
+  @showFormat: (decimalNum) ->
+    decimalNum.toPrecision(2)
+
+  @shortFormat: (decimalNum) ->
+    return decimalNum.toPrecision(1);
+
+  @longFormat: (decimalNum) ->
+    decimalNum.toPrecision(4)
+
+  @tidyFloat: (f) ->
+    sprintf("%0.2f", f)
+
+  ###
+  Removes commas from a number containing a string:
+  e.g. 1,234,567.99 -> 1234567.99
+  ###
+  @noCommaFormat: (numberWithCommas) ->
+    numberWithCommas.replace(/,/g, '');
+
+  @printArray: (array) ->
+    matrixRowCount = array.length
+
+    arrayStr = "["
+
+    for i in [0...matrixRowCount]
+      arrayStr += Util.tidyFloat(array[i])
+
+      if(i != matrixRowCount - 1)
+        arrayStr += ", "
+        circuitMatrixDump += ", "
+
+    arrayStr += "]"
+
+    return arrayStr
+
+  @printMatrix: (matrix) ->
+
+
+    ###
+    Adds commas to a number, and returns the string representation of that number
+    e.g. 1234567.99 -> 1,234,567.99
+    ###
+  @commaFormat: (plainNumber) ->
+# Simple method of converting a parameter to a string
+    plainNumber += ""
+
+    # Ignore any numbers after a '.'
+    x = plainNumber.split(".")
+    x1 = x[0]
+    x2 = (if x.length > 1 then "." + x[1] else "")
+    pattern = /(\d+)(\d{3})/
+    x1 = x1.replace(pattern, "$1" + "," + "$2")  while pattern.test(x1)
+    x1 + x2
+
+
+module.exports = Util

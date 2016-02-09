@@ -1,5 +1,3 @@
-ACRailElm = require('../../src/circuit/components/ACRailElm.coffee')
-
 describe "ACRailElmTest", ->
   before ->
     @acRailElm = new ACRailElm(100, 200)

@@ -1,7 +1,3 @@
-MosfetElm = require('../../src/circuit/components/MosfetElm')
-Circuit = require("../../src/circuit/Circuit.coffee")
-
-Renderer = require("../../src/render/renderer.coffee")
 fs = require('fs')
 Canvas = require('canvas')
 

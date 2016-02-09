@@ -1,8 +1,3 @@
-Circuit = require('../../src/circuit/circuit.coffee')
-VoltageElm = require('../../src/circuit/components/VoltageElm.coffee')
-MatrixStamper = require('../../src/engine/matrixStamper.coffee')
-
-Renderer = require("../../src/render/renderer.coffee")
 fs = require('fs')
 Canvas = require('canvas')
 

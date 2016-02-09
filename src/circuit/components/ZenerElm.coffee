@@ -4,7 +4,7 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 DiodeElm = require('./DiodeElm.coffee')
-ArrayUtils = require('../../util/arrayUtils.coffee')
+Util = require('../../util/util.coffee')
 
 class ZenerElm extends DiodeElm
   @ParameterDefinitions = {
@@ -32,8 +32,8 @@ class ZenerElm extends DiodeElm
     @setBboxPt(@point1, @point2, @hs)
 
     @calcLeads 16
-    pa = ArrayUtils.newPointArray(2)
-    @wing = ArrayUtils.newPointArray(2)
+    pa = Util.newPointArray(2)
+    @wing = Util.newPointArray(2)
 
     [pa[0], pa[1]] = renderContext.interpolateSymmetrical(@lead1, @lead2, 0, @hs)
     [@cathode[0], @cathode[1]] = renderContext.interpolateSymmetrical(@lead1, @lead2, 1, @hs)

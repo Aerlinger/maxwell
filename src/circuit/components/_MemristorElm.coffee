@@ -1,5 +1,5 @@
 CircuitComponent = require("../CircuitComponent.coffee")
-DrawUtil = require('../../util/drawUtil.coffee')
+Util = require('../../util/util.coffee')
 
 class MemristorElm extends CircuitComponent
 

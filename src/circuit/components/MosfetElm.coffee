@@ -3,8 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
-ArrayUtils = require('../../util/arrayUtils.coffee')
-DrawUtil = require('../../util/DrawUtil.coffee')
+Util = require('../../util/util.coffee')
 JFetElm = require("./JFetElm.coffee")
 
 sprintf = require("sprintf-js").sprintf
@@ -102,8 +101,8 @@ class MosfetElm extends CircuitComponent
     for i in [0...segments]
       v = @volts[1] + (@volts[2] - @volts[1]) * i / segments
       color = renderContext.getVoltageColor(v)
-      ps1 = DrawUtil.interpolate @src[1], @drn[1], i * segf
-      ps2 = DrawUtil.interpolate @src[1], @drn[1], (i + 1) * segf
+      ps1 = Util.interpolate @src[1], @drn[1], i * segf
+      ps2 = Util.interpolate @src[1], @drn[1], (i + 1) * segf
       renderContext.drawLinePt ps1, ps2, color
 
     color = renderContext.getVoltageColor(@volts[1])
@@ -171,28 +170,28 @@ class MosfetElm extends CircuitComponent
     # find the coordinates of the various points we need to draw
     # the MOSFET.
     hs2 = @hs * @dsign
-    @src = ArrayUtils.newPointArray(3)
-    @drn = ArrayUtils.newPointArray(3)
+    @src = Util.newPointArray(3)
+    @drn = Util.newPointArray(3)
 
-    [@src[0], @drn[0]] = DrawUtil.interpolateSymmetrical @point1, @point2, 1, -hs2
-    [@src[1], @drn[1]] = DrawUtil.interpolateSymmetrical @point1, @point2, 1 - 22 / @dn, -hs2
-    [@src[2], @drn[2]] = DrawUtil.interpolateSymmetrical @point1, @point2, 1 - 22 / @dn, -hs2 * 4 / 3
+    [@src[0], @drn[0]] = Util.interpolateSymmetrical @point1, @point2, 1, -hs2
+    [@src[1], @drn[1]] = Util.interpolateSymmetrical @point1, @point2, 1 - 22 / @dn, -hs2
+    [@src[2], @drn[2]] = Util.interpolateSymmetrical @point1, @point2, 1 - 22 / @dn, -hs2 * 4 / 3
 
-    @gate = ArrayUtils.newPointArray(3)
+    @gate = Util.newPointArray(3)
 
-    [@gate[0], @gate[2]] = DrawUtil.interpolateSymmetrical @point1, @point2, 1 - 28 / @dn, hs2 / 2  #,  # was 1-20/dn
-    @gate[1] = DrawUtil.interpolate @gate[0], @gate[2], .5
+    [@gate[0], @gate[2]] = Util.interpolateSymmetrical @point1, @point2, 1 - 28 / @dn, hs2 / 2  #,  # was 1-20/dn
+    @gate[1] = Util.interpolate @gate[0], @gate[2], .5
 
     if @pnp
-      @arrowPoly = DrawUtil.calcArrow(@src[1], @src[0], 10, 4)
+      @arrowPoly = Util.calcArrow(@src[1], @src[0], 10, 4)
     else
-      @arrowPoly = DrawUtil.calcArrow(@drn[0], @drn[1], 12, 5)
+      @arrowPoly = Util.calcArrow(@drn[0], @drn[1], 12, 5)
 
 #    if @pnp is -1
-#      @gate[1] = DrawUtil.interpolate @point1, @point2, 1 - 36 / @dn
+#      @gate[1] = Util.interpolate @point1, @point2, 1 - 36 / @dn
 #      dist = (if (@dsign < 0) then 32 else 31)
 #
-#      @pcircle = DrawUtil.interpolate(@point1, @point2, 1 - dist / @dn)
+#      @pcircle = Util.interpolate(@point1, @point2, 1 - dist / @dn)
 #      @pcircler = 3
 
   stamp: (stamper) ->

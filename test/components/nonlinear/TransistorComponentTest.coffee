@@ -1,7 +1,3 @@
-TransistorElm = require('../../src/circuit/components/TransistorElm')
-Circuit = require("../../src/circuit/Circuit.coffee")
-
-Renderer = require("../../src/render/renderer.coffee")
 fs = require('fs')
 Canvas = require('canvas')
 

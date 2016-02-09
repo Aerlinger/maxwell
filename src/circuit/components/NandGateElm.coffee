@@ -1,5 +1,4 @@
-DrawUtil = require('../../util/drawUtil.coffee')
-ArrayUtil = require('../../util/arrayUtils.coffee')
+Util = require('../../util/util.coffee')
 AndGateElm = require("./AndGateElm.coffee")
 
 class NandGateElm extends AndGateElm

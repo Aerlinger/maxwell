@@ -1,6 +1,5 @@
 CircuitComponent = require('../circuitComponent.coffee')
-DrawUtil = require('../../util/drawUtil.coffee')
-ArrayUtil = require('../../util/arrayUtils.coffee')
+Util = require('../../util/util.coffee')
 
 class TransformerElm extends CircuitComponent
 
@@ -15,6 +14,7 @@ class TransformerElm extends CircuitComponent
       default_value: 1
       data_type: parseFloat
     }
+    # TODO: Name collision
     current: {
       name: "Current"
       data_type: parseFloat
@@ -40,15 +40,15 @@ class TransformerElm extends CircuitComponent
 
     @point2.y = @point1.y
 
-    @ptEnds = ArrayUtil.newPointArray(4)
-    @ptCoil = ArrayUtil.newPointArray(4)
-    @ptCore = ArrayUtil.newPointArray(4)
+    @ptEnds = Util.newPointArray(4)
+    @ptCoil = Util.newPointArray(4)
+    @ptCore = Util.newPointArray(4)
 
     @ptEnds[0] = @point1
     @ptEnds[1] = @point2
 
-    @ptEnds[2] = DrawUtil.interpolate(@point1, @point2, 0, -@dsign * @width)
-    @ptEnds[3] = DrawUtil.interpolate(@point1, @point2, 1, -@dsign * @width)
+    @ptEnds[2] = Util.interpolate(@point1, @point2, 0, -@dsign * @width)
+    @ptEnds[3] = Util.interpolate(@point1, @point2, 1, -@dsign * @width)
 
     ce = 0.5 - 12 / @dn
     cd = 0.5 - 2 / @dn
@@ -56,10 +56,10 @@ class TransformerElm extends CircuitComponent
     i=0
 
     while i < 4
-      @ptCoil[i]     = DrawUtil.interpolate(@ptEnds[i], @ptEnds[i + 1], ce)
-      @ptCoil[i + 1] = DrawUtil.interpolate(@ptEnds[i], @ptEnds[i + 1], 1 - ce)
-      @ptCore[i]     = DrawUtil.interpolate(@ptEnds[i], @ptEnds[i + 1], cd)
-      @ptCore[i + 1] = DrawUtil.interpolate(@ptEnds[i], @ptEnds[i + 1], 1 - cd)
+      @ptCoil[i]     = Util.interpolate(@ptEnds[i], @ptEnds[i + 1], ce)
+      @ptCoil[i + 1] = Util.interpolate(@ptEnds[i], @ptEnds[i + 1], 1 - ce)
+      @ptCore[i]     = Util.interpolate(@ptEnds[i], @ptEnds[i + 1], cd)
+      @ptCore[i + 1] = Util.interpolate(@ptEnds[i], @ptEnds[i + 1], 1 - cd)
 
       i += 2
 

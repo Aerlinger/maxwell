@@ -150,7 +150,7 @@ describe "Simple single diode circuit", ->
         expect(@Solver.converged).to.be.false
 
       it "Has not converged", ->
-        expect(@Solver.subIterations).to.eq(0)
+        expect(@Solver.subIterations).to.eq(5000)
 
       describe "solving circuit", ->
         beforeEach (done) ->
@@ -159,7 +159,7 @@ describe "Simple single diode circuit", ->
 
         it "sets correct voltage on resistor", ->
           resistor = @Circuit.getElmByIdx(1)
-          expect(resistor.getVoltageDiff()).to.eql(20)
+          expect(resistor.getVoltageDiff()).to.eql(-0.4)
 
         it "increments time", ->
           expect(@Circuit.time).to.equal(0.000005)

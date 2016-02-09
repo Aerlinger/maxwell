@@ -17,10 +17,7 @@
 Settings = require('../settings/settings.coffee')
 Rectangle = require('../geom/rectangle.coffee')
 Point = require('../geom/point.coffee')
-MathUtils = require('../util/mathUtils.coffee')
-ArrayUtils = require('../util/arrayUtils.coffee')
-FormatUtils = require('../util/formatUtils.coffee')
-DrawUtil = require("../util/drawUtil.coffee")
+Util = require('../util/util.coffee')
 
 _ = require("lodash")
 
@@ -42,7 +39,7 @@ class CircuitComponent
     @noDiagonal = false
     @Circuit = null
 
-    @component_id = MathUtils.getRand(100000000) + (new Date()).getTime()
+    @component_id = Util.getRand(100000000) + (new Date()).getTime()
 
     @setPoints()
     @setBbox(@x1, @y1, @x2, @y2)
@@ -50,8 +47,8 @@ class CircuitComponent
     @allocNodes()
 
   allocNodes: ->
-    @nodes = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
-    @volts = ArrayUtils.zeroArray(@getPostCount() + @getInternalNodeCount())
+    @nodes = Util.zeroArray(@getPostCount() + @getInternalNodeCount())
+    @volts = Util.zeroArray(@getPostCount() + @getInternalNodeCount())
 
 
   convertParamsToHash: (param_list) ->
@@ -182,7 +179,7 @@ class CircuitComponent
     0
 
   reset: ->
-    @volts = ArrayUtils.zeroArray(@volts.length)
+    @volts = Util.zeroArray(@volts.length)
     @curcount = 0
 
   setCurrent: (x, current) ->
@@ -211,8 +208,8 @@ class CircuitComponent
     @Circuit.desolder(this)
 
   dump: ->
-    tidyVoltage = FormatUtils.tidyFloat(@getVoltageDiff())
-    tidyCurrent = FormatUtils.tidyFloat(@getCurrent())
+    tidyVoltage = Util.tidyFloat(@getVoltageDiff())
+    tidyCurrent = Util.tidyFloat(@getCurrent())
 
     #    paramStr = JSON.stringify(@params)
 
@@ -235,8 +232,8 @@ class CircuitComponent
       @lead1 = @point1
       @lead2 = @point2
     else
-      @lead1 = DrawUtil.interpolate(@point1, @point2, (@dn - len) / (2 * @dn))
-      @lead2 = DrawUtil.interpolate(@point1, @point2, (@dn + len) / (2 * @dn))
+      @lead1 = Util.interpolate(@point1, @point2, (@dn - len) / (2 * @dn))
+      @lead2 = Util.interpolate(@point1, @point2, (@dn + len) / (2 * @dn))
 
   isVertical: ->
     Math.abs(@x1 - @x2) < 0.01
@@ -254,8 +251,8 @@ class CircuitComponent
     return @component_id == otherComponent.component_id
 
   drag: (newX, newY) ->
-    newX = DrawUtil.snapGrid(newX)
-    newY = DrawUtil.snapGrid(newY)
+    newX = Util.snapGrid(newX)
+    newY = Util.snapGrid(newY)
 
     if @noDiagonal
       if Math.abs(@x1 - newX) < Math.abs(@y1 - newY)
@@ -282,8 +279,8 @@ class CircuitComponent
     @setPoints()
 
   moveTo: (x, y) ->
-    deltaX = DrawUtil.snapGrid(x - @getCenter().x)
-    deltaY = DrawUtil.snapGrid(y - @getCenter().y)
+    deltaX = Util.snapGrid(x - @getCenter().x)
+    deltaY = Util.snapGrid(y - @getCenter().y)
 
     @move(deltaX, deltaY)
 

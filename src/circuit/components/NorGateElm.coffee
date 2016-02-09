@@ -1,6 +1,5 @@
 OrGateElm = require("./OrGateElm.coffee")
-DrawUtil = require('../../util/drawUtil.coffee')
-ArrayUtil = require('../../util/arrayUtils.coffee')
+Util = require('../../util/util.coffee')
 
 class NorGateElm extends OrGateElm
 
