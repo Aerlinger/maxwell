@@ -24,6 +24,9 @@ class CurrentElm extends CircuitComponent
     "i"
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     @calcLeads 26
 
     @ashaft1 = renderContext.interpolate(@lead1, @lead2, .25)

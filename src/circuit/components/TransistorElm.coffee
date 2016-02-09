@@ -126,6 +126,9 @@ class TransistorElm extends CircuitComponent
     "t"
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     @dsign = -@dsign  unless (@flags & TransistorElm.FLAG_FLIP) is 0
 
     hs2 = Settings.GRID_SIZE * @dsign * @pnp

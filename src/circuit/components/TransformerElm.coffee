@@ -85,16 +85,19 @@ class TransformerElm extends CircuitComponent
     @curcount[1] = 0
 
   draw: (renderContext) ->
-    for i in [0...4]
-      color = renderContext.getVoltageColor(@volts[i])
+#    if CircuitComponent.DEBUG
+#      super(renderContext)
 
-      console.log(@ptEnds[i], @ptCoil[i], color)
-      renderContext.drawLinePt(@ptEnds[i], @ptCoil[i], color)
+#    for i in [0...4]
+#      color = renderContext.getVoltageColor(@volts[i])
+#
+#      console.log(@ptEnds[i], @ptCoil[i], color)
+#      renderContext.drawLinePt(@ptEnds[i], @ptCoil[i], color)
 
 #    for i in [1, 2]
 #      renderContext.drawCoil(@dsign * (i == 1 ? ))
 
-    renderContext.drawPosts(this)
+#    renderContext.drawPosts(this)
 
 
 

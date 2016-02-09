@@ -85,6 +85,9 @@ class MosfetElm extends CircuitComponent
     "f"
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     @setBboxPt @point1, @point2, @hs
 
     color = renderContext.getVoltageColor(@volts[1])

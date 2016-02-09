@@ -25,6 +25,9 @@ class ResistorElm extends CircuitComponent
     @resistance
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     @calcLeads 32
     @updateDots()
 

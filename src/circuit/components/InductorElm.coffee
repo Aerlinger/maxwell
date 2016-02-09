@@ -63,6 +63,9 @@ class InductorElm extends CircuitComponent
     stamper.stampCurrentSource @nodes[0], @nodes[1], @curSourceValue
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     @calcLeads 32
 
     @updateDots()

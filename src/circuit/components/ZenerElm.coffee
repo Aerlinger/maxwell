@@ -25,6 +25,9 @@ class ZenerElm extends DiodeElm
     @setup()
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     @updateDots()
     @setBboxPt(@point1, @point2, @hs)
 

@@ -16,6 +16,9 @@ class WireElm extends CircuitComponent
 
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     @updateDots()
 
     renderContext.drawLinePt @point1, @point2, renderContext.getVoltageColor(@volts[0])

@@ -96,6 +96,9 @@ class OpAmpElm extends CircuitComponent
     true
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     @updateDots()
     @setBboxPt @point1, @point2, @opheight * 2
 

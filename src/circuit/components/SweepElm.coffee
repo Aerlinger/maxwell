@@ -62,6 +62,9 @@ class SweepElm extends CircuitComponent
     1
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     @setBboxPt @point1, @point2, SweepElm.circleSize
 
     color = renderContext.getVoltageColor(@volts[0])

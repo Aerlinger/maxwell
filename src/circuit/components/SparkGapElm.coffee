@@ -93,6 +93,9 @@ class SparkGapElm extends CircuitComponent
 #      @arrow2 = DrawHelper.calcArrow(@point2, p1, alen, alen)
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     @updateDots()
 
     dist = 16

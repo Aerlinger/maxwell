@@ -67,6 +67,9 @@ class SwitchElm extends CircuitComponent
       stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     @calcLeads 32
     @ps = new Point(0, 0)
     @ps2 = new Point(0, 0)

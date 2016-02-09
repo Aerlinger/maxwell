@@ -12,6 +12,7 @@ describe.only "Render all components", ->
     @Circuit = new Circuit("AllComponents")
 
     @renderer = new Renderer(@Circuit, @canvas)
+    ctx.imageSmoothingEnabled = true
     @renderer.context = ctx
 
     col = 0

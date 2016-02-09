@@ -16,6 +16,9 @@ class GroundElm extends CircuitComponent
     1
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     @updateDots()
 
     color = renderContext.getVoltageColor(0)

@@ -27,6 +27,8 @@ _ = require("lodash")
 sprintf = require("sprintf-js").sprintf
 
 class CircuitComponent
+  @DEBUG = true
+
   @ParameterDefinitions = {}
 
   constructor: (@x1, @y1, @x2, @y2, params, f = 0) ->
@@ -237,7 +239,7 @@ class CircuitComponent
       @lead2 = DrawUtil.interpolate(@point1, @point2, (@dn + len) / (2 * @dn))
 
   isVertical: ->
-    @dx == 0
+    Math.abs(@x1 - @x2) < 0.01
 
   getCenter: ->
     centerX = (@point1.x + @point2.x) / 2.0
@@ -356,7 +358,16 @@ class CircuitComponent
     width = Math.abs(x2 - x1) + 1
     height = Math.abs(y2 - y1) + 1
 
-    @boundingBox = new Rectangle(x, y, width, height)
+#    @boundingBox = new Rectangle(x - 10, y, 21, height)
+
+
+    if @isVertical()
+      width = 21
+      @boundingBox = new Rectangle(x - width/2, y, width, height)
+    else
+      height = 21
+      @boundingBox = new Rectangle(x, y - height/2, width, height)
+
 
   setBboxPt: (p1, p2, width) ->
     deltaX = (@dpx1 * width)
@@ -408,7 +419,7 @@ class CircuitComponent
 
     renderContext.drawRect(@boundingBox.x, @boundingBox.y, @boundingBox.width, @boundingBox.height, 1, "#8888CC")
 
-    renderContext.drawValue 10, 0, this, @constructor.name
+    renderContext.drawValue 10, -15, this, @constructor.name
 
     renderContext.drawCircle(@getCenter().x, @getCenter().y, 5, 0, "#FF0000")
 #    renderContext.fillText(@boundingBox.x, @boundingBox.y, "Name: " + @constructor.name)

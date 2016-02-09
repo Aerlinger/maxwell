@@ -29,6 +29,9 @@ class ProbeElm extends CircuitComponent
     @center = @getCenter()
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     hs = 8
     @setBboxPt @point1, @point2, hs
     #      selected = (@needsHighlight() or Circuit.plotYElm is this)

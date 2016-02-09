@@ -74,7 +74,8 @@ class DiodeElm extends CircuitComponent
     "d"
 
   draw: (renderContext) ->
-    super(renderContext)
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
     @calcLeads 16
 

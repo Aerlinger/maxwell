@@ -24,6 +24,9 @@ class JFetElm extends MosfetElm
     .00125
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     @setBboxPt(@point1, @point2, @hs)
 
     renderContext.setVoltageColor(@volts[1])

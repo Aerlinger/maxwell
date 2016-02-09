@@ -24,6 +24,9 @@ class OutputElm extends CircuitComponent
     @lead1 = new Point()
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
 #      selected = (@needsHighlight() or Circuit.plotYElm is this)
 #    selected = @needsHighlight()
 

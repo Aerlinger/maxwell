@@ -22,6 +22,9 @@ class RailElm extends VoltageElm
     1
 
   draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
     @lead1 = DrawUtil.interpolate(@point1, @point2, 1 - VoltageElm.circleSize / @dn)
 
     @updateDots()

@@ -74,7 +74,8 @@ class CapacitorElm extends CircuitComponent
 
 
   draw: (renderContext) ->
-
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
     # calc leads
 
