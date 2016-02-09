@@ -27,7 +27,7 @@ _ = require("lodash")
 sprintf = require("sprintf-js").sprintf
 
 class CircuitComponent
-  @DEBUG = true
+  @DEBUG = false
 
   @ParameterDefinitions = {}
 
@@ -37,15 +37,15 @@ class CircuitComponent
     @setParameters(params)
 
     @current = 0
-    @curcount = 0
+#    @curcount = 0
     @voltSource = 0
     @noDiagonal = false
     @Circuit = null
 
-    @setBbox(@x1, @y1, @x2, @y2)
     @component_id = MathUtils.getRand(100000000) + (new Date()).getTime()
 
     @setPoints()
+    @setBbox(@x1, @y1, @x2, @y2)
 
     @allocNodes()
 
@@ -250,29 +250,19 @@ class CircuitComponent
 
     return new Point(centerX, centerY)
 
-# TODO: Validate consistency
-  updateDotCount: (cur, cc) ->
-#      return cc  if CirSim.stoppedCheck
-    cur = @current  if (isNaN(cur) || !cur?)
-    cc = @curcount  if (isNaN(cc) || !cc?)
-
-    cadd = cur * @Circuit.Params.getCurrentMult()
-    #      cadd = cur * 48
-    cadd %= 8
-    @curcount = cc + cadd
-    @curcount
-
   equalTo: (otherComponent) ->
     return @component_id == otherComponent.component_id
 
   drag: (newX, newY) ->
-    newX = @Circuit.snapGrid(newX)
-    newY = @Circuit.snapGrid(newY)
+    newX = DrawUtil.snapGrid(newX)
+    newY = DrawUtil.snapGrid(newY)
+
     if @noDiagonal
       if Math.abs(@x1 - newX) < Math.abs(@y1 - newY)
         newX = @x1
       else
         newY = @y1
+
     @x2 = newX
     @y2 = newY
 
@@ -284,8 +274,7 @@ class CircuitComponent
     @x2 += deltaX
     @y2 += deltaY
 
-    @boundingBox.x = @x1
-    @boundingBox.y = @x2
+    @setBbox(@x1, @y1, @x2, @y2)
 
     if @getParentCircuit()
       @getParentCircuit().invalidate()
@@ -293,8 +282,8 @@ class CircuitComponent
     @setPoints()
 
   moveTo: (x, y) ->
-    deltaX = x - @getCenter().x
-    deltaY = y - @getCenter().y
+    deltaX = DrawUtil.snapGrid(x - @getCenter().x)
+    deltaY = DrawUtil.snapGrid(y - @getCenter().y)
 
     @move(deltaX, deltaY)
 
@@ -365,15 +354,16 @@ class CircuitComponent
     width = Math.abs(x2 - x1) + 1
     height = Math.abs(y2 - y1) + 1
 
-#    @boundingBox = new Rectangle(x - 10, y, 21, height)
+#    if @isVertical()
+#      width = 21
+#      @boundingBox = new Rectangle(x - width/2, y, width, height)
+#    else
+#      height = 21
+#      @boundingBox = new Rectangle(x, y - height/2, width, height)
+
+    @boundingBox = new Rectangle(x, y, width, height)
 
 
-    if @isVertical()
-      width = 21
-      @boundingBox = new Rectangle(x - width/2, y, width, height)
-    else
-      height = 21
-      @boundingBox = new Rectangle(x, y - height/2, width, height)
 
 
   setBboxPt: (p1, p2, width) ->
@@ -445,18 +435,47 @@ class CircuitComponent
       post = @getPost(i)
       renderContext.drawCircle(post.x, post.y, 3, 0, "#FF00FF")
 
+    renderContext.drawLine(@point1.x-2, @point1.y-2, @point1.x+2, @point1.y+2, "#0000FF")
+    renderContext.drawLine(@point1.x-2, @point1.y+2, @point1.x-2, @point1.y-2, "#0000FF")
+    renderContext.drawLine(@point2.x-2, @point2.y-2, @point2.x+2, @point2.y+2, "#0000FF")
+    renderContext.drawLine(@point2.x-2, @point2.y+2, @point2.x-2, @point2.y-2, "#0000FF")
+
+    if @lead1 && @lead2
+      renderContext.drawLine(@lead1.x-2, @lead1.y-2, @lead1.x+2, @lead1.y+2, "#00FF00")
+      renderContext.drawLine(@lead1.x-2, @lead1.y+2, @lead1.x-2, @lead1.y-2, "#00FF00")
+      renderContext.drawLine(@lead2.x-2, @lead2.y-2, @lead2.x+2, @lead2.y+2, "#00FF00")
+      renderContext.drawLine(@lead2.x-2, @lead2.y+2, @lead2.x-2, @lead2.y-2, "#00FF00")
+
     renderContext.drawLeads(this)
 
 #    @updateDots(this)
 #    renderContext.drawDots(@point1, @point2, this)
 
+# TODO: Validate consistency
+  updateDotCount: (cur, cc) ->
+    @curcount ||= 0
+
+    #      return cc  if CirSim.stoppedCheck
+    cur = @current  if (isNaN(cur) || !cur?)
+    cc = @curcount  if (isNaN(cc) || !cc?)
+
+    cadd = cur * @Circuit.Params.getCurrentMult()
+    console.log(cadd)
+    #      cadd = cur * 48
+    cadd %= 8
+    @curcount = cc + cadd
+    @curcount
 
   updateDots: (ds = Settings.CURRENT_SEGMENT_LENGTH) ->
-    currentIncrement = @current * @Circuit.currentSpeed()
-    @curcount = (@curcount + currentIncrement) % ds
-    @curcount += ds if @curcount < 0
+    if @Circuit
+      @curcount ||= 0
 
-    @curcount
+      currentIncrement = @current * @Circuit.Params.getCurrentMult()
+
+      @curcount = (@curcount + currentIncrement) % ds
+      @curcount += ds if @curcount < 0
+
+      @curcount
 
   getUnitText: (value, unit, decimalPoints = 2) ->
     absValue = Math.abs(value)
