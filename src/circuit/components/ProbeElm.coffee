@@ -3,6 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
+Util = require('../../util/util.coffee')
 
 class ProbeElm extends CircuitComponent
 
@@ -46,14 +47,14 @@ class ProbeElm extends CircuitComponent
 #    if @isSelected()
 #      color = Settings.SELECT_COLOR
 #    else
-    color = renderContext.getVoltageColor(@volts[0])
+    color = Util.getVoltageColor(@volts[0])
 
     renderContext.drawLinePt @point1, @lead1, color
 
 #    if @isSelected()
 #      color = Settings.SELECT_COLOR
 #    else
-    color = renderContext.getVoltageColor(@volts[1])
+    color = Util.getVoltageColor(@volts[1])
 
     renderContext.drawLinePt @lead2, @point2, color
 

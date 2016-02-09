@@ -31,7 +31,7 @@ class RailElm extends VoltageElm
 
     @setBboxPt @point1, @point2, @circleSize
 
-    color = renderContext.getVoltageColor(@volts[0])
+    color = Util.getVoltageColor(@volts[0])
     renderContext.drawLinePt @point1, @lead1, color
 
     clock = @waveform is VoltageElm.WF_SQUARE and (@flags & VoltageElm.FLAG_CLOCK) isnt 0

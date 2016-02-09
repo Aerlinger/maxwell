@@ -3,6 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
+Util = require('../../util/util.coffee')
 #Maxwell = require('../../Maxwell.coffee')
 
 class ResistorElm extends CircuitComponent
@@ -43,10 +44,10 @@ class ResistorElm extends CircuitComponent
     for n in [0...numSegments]
       resistorSegmentVoltage = @volts[0] + (@volts[1]-@volts[0]) * (n / numSegments)
 
-      startPosition = renderContext.interpolate @lead1, @lead2, n*parallelOffset, width*offsets[n % 4]
-      endPosition = renderContext.interpolate @lead1, @lead2, (n+1)*parallelOffset, width*offsets[(n+1) % 4]
+      startPosition = Util.interpolate @lead1, @lead2, n*parallelOffset, width*offsets[n % 4]
+      endPosition = Util.interpolate @lead1, @lead2, (n+1)*parallelOffset, width*offsets[(n+1) % 4]
 
-      renderContext.drawLinePt startPosition, endPosition, renderContext.getVoltageColor(resistorSegmentVoltage)
+      renderContext.drawLinePt startPosition, endPosition, Util.getVoltageColor(resistorSegmentVoltage)
 
     renderContext.drawValue 10, 0, this, @getUnitText(@resistance, @unitSymbol())
 

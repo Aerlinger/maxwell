@@ -136,35 +136,35 @@ class TransistorElm extends CircuitComponent
     @coll = Util.newPointArray(2)
     @emit = Util.newPointArray(2)
 
-    [@coll[0], @emit[0]] = renderContext.interpolateSymmetrical @point1, @point2, 1, hs2
+    [@coll[0], @emit[0]] = Util.interpolateSymmetrical @point1, @point2, 1, hs2
 
     # calc rectangle edges
     @rect = Util.newPointArray(4)
-    [@rect[0], @rect[1]] = renderContext.interpolateSymmetrical @point1, @point2, 1 - 16 / @dn, Settings.GRID_SIZE
-    [@rect[2], @rect[3]] = renderContext.interpolateSymmetrical @point1, @point2, 1 - 13 / @dn, Settings.GRID_SIZE
+    [@rect[0], @rect[1]] = Util.interpolateSymmetrical @point1, @point2, 1 - 16 / @dn, Settings.GRID_SIZE
+    [@rect[2], @rect[3]] = Util.interpolateSymmetrical @point1, @point2, 1 - 13 / @dn, Settings.GRID_SIZE
 
     # calc points where collector/emitter leads contact rectangle
-    [@coll[1], @emit[1]] = renderContext.interpolateSymmetrical @point1, @point2, 1 - 13 / @dn, 6 * @dsign * @pnp
+    [@coll[1], @emit[1]] = Util.interpolateSymmetrical @point1, @point2, 1 - 13 / @dn, 6 * @dsign * @pnp
 
     # calc point where base lead contacts rectangle
-    @base = renderContext.interpolate @point1, @point2, 1 - Settings.GRID_SIZE / @dn
+    @base = Util.interpolate @point1, @point2, 1 - Settings.GRID_SIZE / @dn
 
     # rectangle
-    @rectPoly = renderContext.createPolygon(@rect[0], @rect[2], @rect[3], @rect[1])
+    @rectPoly = Util.createPolygon(@rect[0], @rect[2], @rect[3], @rect[1])
 
     # arrow
     unless @pnp is 1
-      pt = renderContext.interpolateSymmetrical(@point1, @point2, 1 - 11 / @dn, -5 * @dsign * @pnp)
-      @arrowPoly = renderContext.calcArrow(@emit[0], pt, 8, 4)
+      pt = Util.interpolateSymmetrical(@point1, @point2, 1 - 11 / @dn, -5 * @dsign * @pnp)
+      @arrowPoly = Util.calcArrow(@emit[0], pt, 8, 4)
 
     @setBboxPt @point1, @point2, Settings.GRID_SIZE
 
     # draw collector
-    color = renderContext.getVoltageColor(@volts[1])
+    color = Util.getVoltageColor(@volts[1])
     renderContext.drawLinePt @coll[0], @coll[1], color
 
     # draw emitter
-    color = renderContext.getVoltageColor(@volts[2])
+    color = Util.getVoltageColor(@volts[2])
     renderContext.drawLinePt @emit[0], @emit[1], color
 
     # draw arrow
@@ -172,7 +172,7 @@ class TransistorElm extends CircuitComponent
     renderContext.drawThickPolygonP @arrowPoly
 
     # draw base
-    color = renderContext.getVoltageColor(@volts[0])
+    color = Util.getVoltageColor(@volts[0])
 #      g.setColor Color.gray  if Circuit.powerCheckItem
     renderContext.drawLinePt @point1, @base, color
 
@@ -190,7 +190,7 @@ class TransistorElm extends CircuitComponent
     renderContext.drawDots @emit[1], @emit[0], this
 
     # draw base rectangle
-    color = renderContext.getVoltageColor(@volts[0])
+    color = Util.getVoltageColor(@volts[0])
 #      @setPowerColor true
 
     #g.fillPolygon(rectPoly);

@@ -69,7 +69,7 @@ class SweepElm extends CircuitComponent
 
     @setBboxPt @point1, @point2, SweepElm.circleSize
 
-    color = renderContext.getVoltageColor(@volts[0])
+    color = Util.getVoltageColor(@volts[0])
     @lead1 = Util.interpolate(@point1, @point2, 1 - SweepElm.circleSize / @dn)
 
     renderContext.drawThickLinePt @point1, @lead1, color

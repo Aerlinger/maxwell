@@ -4,9 +4,8 @@ Settings = require('../settings/settings.coffee')
 sprintf = require("sprintf-js").sprintf
 
 class Util
-  @snapGrid: (x) ->
-    (x + (Settings.GRID_SIZE / 2 - 1)) & ~(Settings.GRID_SIZE - 1)
 
+  # Calculate fractional vector between AB
   @interpolate: (ptA, ptB, u, v = 0) ->
     dx = ptB.y - ptA.y
     dy = ptA.x - ptB.x
@@ -17,6 +16,10 @@ class Util
 
     new Point(interpX, interpY)
 
+  ##
+  # From a vector between points AB, calculate a new point in space relative to some multiple of the parallel (u)
+  # and perpindicular (v) components of the the original AB vector.
+  #
   @interpolateSymmetrical: (ptA, ptB, u, v) ->
     dx = ptB.y - ptA.y
     dy = ptA.x - ptB.x
@@ -46,15 +49,21 @@ class Util
 
     return poly
 
+  @createPolygon: (pt1, pt2, pt3, pt4) ->
+    newPoly = new Polygon()
+    newPoly.addVertex pt1.x, pt1.y
+    newPoly.addVertex pt2.x, pt2.y
+    newPoly.addVertex pt3.x, pt3.y
+    newPoly.addVertex pt4.x, pt4.y if pt4
+
+    return newPoly
+
   @createPolygonFromArray: (vertexArray) ->
     newPoly = new Polygon()
     for vertex in vertexArray
       newPoly.addVertex vertex.x, vertex.y
 
     return newPoly
-
-  @snapGrid: (x) ->
-    (x + (Settings.GRID_SIZE / 2 - 1)) & ~(Settings.GRID_SIZE - 1)
 
   @zeroArray: (numElements) ->
     return [] if numElements < 1
@@ -112,6 +121,35 @@ class Util
     return (value * 1e-3).toFixed(decimalPoints) + " k" + unit  if absValue < 1e6
     return (value * 1e-6).toFixed(decimalPoints) + " M" + unit  if absValue < 1e9
     (value * 1e-9).toFixed(decimalPoints) + " G" + unit
+
+  @getVoltageColor: (volts, fullScaleVRange=10) ->
+    RedGreen =
+      [ "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
+        "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
+        "#7f7f7f", "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747",
+        "#3fbf3f", "#37c737", "#2fcf2f", "#27d727", "#1fdf1f", "#17e717", "#0fef0f", "#07f707", "#00ff00" ]
+
+    scale =
+      ["#B81B00", "#B21F00", "#AC2301", "#A72801", "#A12C02", "#9C3002", "#963503", "#913903",
+        "#8B3E04", "#854205", "#804605", "#7A4B06", "#754F06", "#6F5307", "#6A5807", "#645C08",
+        "#5F6109", "#596509", "#53690A", "#4E6E0A", "#48720B", "#43760B", "#3D7B0C", "#387F0C",
+        "#32840D", "#2C880E", "#278C0E", "#21910F", "#1C950F", "#169910", "#119E10", "#0BA211", "#06A712"]
+
+    blueScale =
+      ["#EB1416", "#E91330", "#E7134A", "#E51363", "#E3137C", "#E11394", "#E013AC", "#DE13C3",
+        "#DC13DA", "#C312DA", "#AA12D8", "#9012D7", "#7712D5", "#5F12D3", "#4612D1", "#2F12CF",
+        "#1712CE", "#1123CC", "#1139CA", "#114FC8", "#1164C6", "#1179C4", "#118EC3", "#11A2C1",
+        "#11B6BF", "#10BDB1", "#10BB9B", "#10BA84", "#10B86F", "#10B659", "#10B444", "#10B230", "#10B11C"]
+
+    numColors = scale.length - 1
+
+    value = Math.floor (volts + fullScaleVRange) * numColors / (2 * fullScaleVRange)
+    if value < 0
+      value = 0
+    else if value >= numColors
+      value = numColors - 1
+
+    return scale[value]
 
   @snapGrid: (x) ->
     Settings.GRID_SIZE * Math.round(x/Settings.GRID_SIZE)

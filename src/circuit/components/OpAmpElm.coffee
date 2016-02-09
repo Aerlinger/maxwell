@@ -99,10 +99,10 @@ class OpAmpElm extends CircuitComponent
 
     @setBboxPt @point1, @point2, @opheight * 2
 
-    color = renderContext.getVoltageColor(@volts[0])
+    color = Util.getVoltageColor(@volts[0])
     renderContext.drawLinePt @in1p[0], @in1p[1], color
 
-    color = renderContext.getVoltageColor(@volts[1])
+    color = Util.getVoltageColor(@volts[1])
     renderContext.drawLinePt @in2p[0], @in2p[1], color
 
 #      #g.setColor(this.needsHighlight() ? this.selectColor : this.lightGrayColor);
@@ -111,7 +111,7 @@ class OpAmpElm extends CircuitComponent
 #
 #      #this.drawCenteredText("-", this.textp[0].x + 3, this.textp[0].y + 8, true).attr({'font-weight':'bold', 'font-size':17});
 #      #this.drawCenteredText("+", this.textp[1].x + 3, this.textp[1].y + 10, true).attr({'font-weight':'bold', 'font-size':14});
-    color = renderContext.getVoltageColor(@volts[2])
+    color = Util.getVoltageColor(@volts[2])
     renderContext.drawLinePt @lead2, @point2, color
 #      @curcount = @updateDotCount(@current, @curcount)
 

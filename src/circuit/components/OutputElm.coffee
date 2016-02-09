@@ -3,6 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
+Util = require('../../util/util.coffee')
 
 class OutputElm extends CircuitComponent
 
@@ -39,12 +40,12 @@ class OutputElm extends CircuitComponent
 #      s = "X"  if this is Circuit.plotXElm
 #      s = "Y"  if this is Circuit.plotYElm
 
-    @lead1 = renderContext.interpolate @point1, @point2, 1 - (3 * s.length / 2 + 8) / @dn
+    @lead1 = Util.interpolate @point1, @point2, 1 - (3 * s.length / 2 + 8) / @dn
 
     @setBboxPt @point1, @lead1, 0
     renderContext.drawValue 0, 0, this, s
 
-    color = renderContext.getVoltageColor(@volts[0])
+    color = Util.getVoltageColor(@volts[0])
 
     renderContext.drawLinePt @point1, @lead1, color
     renderContext.drawPosts(this)

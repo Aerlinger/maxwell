@@ -3,6 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
+Util = require('../../util/util.coffee')
 
 class CurrentElm extends CircuitComponent
   @ParameterDefinitions = {
@@ -29,17 +30,17 @@ class CurrentElm extends CircuitComponent
 
     @calcLeads 26
 
-    @ashaft1 = renderContext.interpolate(@lead1, @lead2, .25)
-    @ashaft2 = renderContext.interpolate(@lead1, @lead2, .6)
-    @center = renderContext.interpolate(@lead1, @lead2, .5)
+    @ashaft1 = Util.interpolate(@lead1, @lead2, .25)
+    @ashaft2 = Util.interpolate(@lead1, @lead2, .6)
+    @center = Util.interpolate(@lead1, @lead2, .5)
 
-    p2 = renderContext.interpolate(@lead1, @lead2, .75)
+    p2 = Util.interpolate(@lead1, @lead2, .75)
 
-    @arrow = renderContext.calcArrow(@center, p2, 4, 4)
+    @arrow = Util.calcArrow(@center, p2, 4, 4)
 
     cr = 12
     renderContext.drawLeads(this)
-    color = renderContext.getVoltageColor (@volts[0] + @volts[1]) / 2
+    color = Util.getVoltageColor (@volts[0] + @volts[1]) / 2
 #      @setPowerColor false
     renderContext.drawCircle @center.x, @center.y, cr
     renderContext.drawCircle @ashaft1, @ashaft2

@@ -22,7 +22,7 @@ class WireElm extends CircuitComponent
 
     @updateDots()
 
-    renderContext.drawLinePt @point1, @point2, renderContext.getVoltageColor(@volts[0])
+    renderContext.drawLinePt @point1, @point2, Util.getVoltageColor(@volts[0])
     @setBboxPt @point1, @point2, 3
 
     if @mustShowCurrent()

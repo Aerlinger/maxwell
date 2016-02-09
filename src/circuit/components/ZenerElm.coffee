@@ -35,12 +35,12 @@ class ZenerElm extends DiodeElm
     pa = Util.newPointArray(2)
     @wing = Util.newPointArray(2)
 
-    [pa[0], pa[1]] = renderContext.interpolateSymmetrical(@lead1, @lead2, 0, @hs)
-    [@cathode[0], @cathode[1]] = renderContext.interpolateSymmetrical(@lead1, @lead2, 1, @hs)
-    @wing[0] = renderContext.interpolate(@cathode[0], @cathode[1], -0.2, -@hs)
-    @wing[1] = renderContext.interpolate(@cathode[1], @cathode[0], -0.2, -@hs)
+    [pa[0], pa[1]] = Util.interpolateSymmetrical(@lead1, @lead2, 0, @hs)
+    [@cathode[0], @cathode[1]] = Util.interpolateSymmetrical(@lead1, @lead2, 1, @hs)
+    @wing[0] = Util.interpolate(@cathode[0], @cathode[1], -0.2, -@hs)
+    @wing[1] = Util.interpolate(@cathode[1], @cathode[0], -0.2, -@hs)
 
-    @poly = renderContext.createPolygonFromArray([pa[0], pa[1], @lead2])
+    @poly = Util.createPolygonFromArray([pa[0], pa[1], @lead2])
 
     v1 = @volts[0]
     v2 = @volts[1]
@@ -49,7 +49,7 @@ class ZenerElm extends DiodeElm
 
     # draw arrow vector
     # setPowerColor(g, true)
-    color = renderContext.getVoltageColor(v1)
+    color = Util.getVoltageColor(v1)
     renderContext.drawThickPolygonP @poly, color
 
     # PLATE:
@@ -57,7 +57,7 @@ class ZenerElm extends DiodeElm
     renderContext.drawLinePt(@cathode[0], @cathode[1], v1)
 
     # Cathode "Wings"
-    color = renderContext.getVoltageColor(v2)
+    color = Util.getVoltageColor(v2)
     renderContext.drawLinePt(@wing[0], @cathode[0], color)
     renderContext.drawLinePt(@wing[1], @cathode[1], color)
 

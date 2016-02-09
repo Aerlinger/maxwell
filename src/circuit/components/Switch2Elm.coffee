@@ -62,25 +62,25 @@ class Switch2Elm extends SwitchElm
     @swpoles = Util.newPointArray(3)
     @swposts = Util.newPointArray(2)
 
-    [@swpoles[0], @swpoles[1]] = renderContext.interpolateSymmetrical(@lead1, @lead2, 1, @openhs)
+    [@swpoles[0], @swpoles[1]] = Util.interpolateSymmetrical(@lead1, @lead2, 1, @openhs)
     @swpoles[2] = @lead2
 
-    [@swposts[0], @swposts[1]] = renderContext.interpolateSymmetrical(@point1, @point2, 1, @openhs)
+    [@swposts[0], @swposts[1]] = Util.interpolateSymmetrical(@point1, @point2, 1, @openhs)
     if @hasCenterOff()
       @posCount = 3
     else
       @posCount = 2
 
     # draw first lead
-    color = renderContext.getVoltageColor(@volts[0])
+    color = Util.getVoltageColor(@volts[0])
     renderContext.drawLinePt @point1, @lead1, color
 
     # draw second lead
-    color = renderContext.getVoltageColor(@volts[1])
+    color = Util.getVoltageColor(@volts[1])
     renderContext.drawLinePt @swpoles[0], @swposts[0], color
 
     # draw third lead
-    color = renderContext.getVoltageColor @volts[2]
+    color = Util.getVoltageColor @volts[2]
     renderContext.drawLinePt @swpoles[1], @swposts[1], color
 
     # draw: (renderContext) ->

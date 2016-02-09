@@ -86,7 +86,7 @@ class CapacitorElm extends CircuitComponent
     @setBboxPt @point1, @point2, hs
 
     # draw first lead and plate
-    color = renderContext.getVoltageColor(@volts[0])
+    color = Util.getVoltageColor(@volts[0])
     renderContext.drawLinePt @point1, @lead1, color
 #      @setPowerColor false
     renderContext.drawLinePt @plate1[0], @plate1[1], color
@@ -96,7 +96,7 @@ class CapacitorElm extends CircuitComponent
     #        g.beginFill(Color.GRAY);
 
     # draw second lead and plate
-    color = renderContext.getVoltageColor(@volts[1])
+    color = Util.getVoltageColor(@volts[1])
     renderContext.drawLinePt @point2, @lead2, color
 #      @setPowerColor false
     renderContext.drawLinePt @plate2[0], @plate2[1], color

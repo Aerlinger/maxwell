@@ -80,9 +80,9 @@ class DiodeElm extends CircuitComponent
     @calcLeads 16
 
     @cathode = Util.newPointArray(2)
-    [pa, pb] = renderContext.interpolateSymmetrical @lead1, @lead2, 0, @hs
-    [@cathode[0], @cathode[1]] = renderContext.interpolateSymmetrical @lead1, @lead2, 1, @hs
-    @poly = renderContext.createPolygonFromArray([pa, pb, @lead2])
+    [pa, pb] = Util.interpolateSymmetrical @lead1, @lead2, 0, @hs
+    [@cathode[0], @cathode[1]] = Util.interpolateSymmetrical @lead1, @lead2, 1, @hs
+    @poly = Util.createPolygonFromArray([pa, pb, @lead2])
 
     @drawDiode(renderContext)
 
@@ -108,13 +108,13 @@ class DiodeElm extends CircuitComponent
 
     # draw arrow
     #this.setPowerColor(true);
-    color = renderContext.getVoltageColor(v1)
+    color = Util.getVoltageColor(v1)
     renderContext.drawThickPolygonP @poly, color
 
     #g.fillPolygon(poly);
 
     # draw the diode plate
-    color = renderContext.getVoltageColor(v2)
+    color = Util.getVoltageColor(v2)
     renderContext.drawLinePt @cathode[0], @cathode[1], color
 
 

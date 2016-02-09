@@ -160,16 +160,16 @@ class VoltageElm extends CircuitComponent
       renderContext.drawDots(@lead2, @point2, this)
 
     if @waveform is VoltageElm.WF_DC
-      [ptA, ptB] = renderContext.interpolateSymmetrical @lead1, @lead2, 0, 10
-      renderContext.drawLinePt @lead1, ptA, renderContext.getVoltageColor(@volts[0])
-      renderContext.drawLinePt ptA, ptB, renderContext.getVoltageColor(@volts[0])
+      [ptA, ptB] = Util.interpolateSymmetrical @lead1, @lead2, 0, 10
+      renderContext.drawLinePt @lead1, ptA, Util.getVoltageColor(@volts[0])
+      renderContext.drawLinePt ptA, ptB, Util.getVoltageColor(@volts[0])
 
       @setBboxPt @point1, @point2, Settings.GRID_SIZE
-      [ptA, ptB] = renderContext.interpolateSymmetrical @lead1, @lead2, 1, Settings.GRID_SIZE
-      renderContext.drawLinePt ptA, ptB, renderContext.getVoltageColor(@volts[1])
+      [ptA, ptB] = Util.interpolateSymmetrical @lead1, @lead2, 1, Settings.GRID_SIZE
+      renderContext.drawLinePt ptA, ptB, Util.getVoltageColor(@volts[1])
     else
       @setBboxPt @point1, @point2, VoltageElm.circleSize
-      ps1 = renderContext.interpolate @lead1, @lead2, 0.5
+      ps1 = Util.interpolate @lead1, @lead2, 0.5
       @drawWaveform ps1, renderContext
 
     renderContext.drawPosts(this)

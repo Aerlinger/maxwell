@@ -3,6 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
+Util = require('../../util/util.coffee')
 
 class GroundElm extends CircuitComponent
 
@@ -21,17 +22,17 @@ class GroundElm extends CircuitComponent
 
     @updateDots()
 
-    color = renderContext.getVoltageColor(0)
+    color = Util.getVoltageColor(0)
 
     renderContext.drawLinePt @point1, @point2, color
 
     for row in [0...3]
       startPt = 10 - row * 2
       endPt = row * 3
-      [pt1, pt2] = renderContext.interpolateSymmetrical @point1, @point2, 1 + endPt / @dn, startPt
+      [pt1, pt2] = Util.interpolateSymmetrical @point1, @point2, 1 + endPt / @dn, startPt
       renderContext.drawLinePt pt1, pt2, color
 
-    pt2 = renderContext.interpolate @point1, @point2, 1 + 11.0 / @dn
+    pt2 = Util.interpolate @point1, @point2, 1 + 11.0 / @dn
     @setBboxPt @point1, pt2, 11
 
     renderContext.drawDots(@point1, @point2, this)

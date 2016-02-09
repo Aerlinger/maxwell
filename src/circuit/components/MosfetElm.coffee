@@ -89,10 +89,10 @@ class MosfetElm extends CircuitComponent
 
     @setBboxPt @point1, @point2, @hs
 
-    color = renderContext.getVoltageColor(@volts[1])
+    color = Util.getVoltageColor(@volts[1])
     renderContext.drawLinePt @src[0], @src[1], color
 
-    color = renderContext.getVoltageColor(@volts[2])
+    color = Util.getVoltageColor(@volts[2])
     renderContext.drawLinePt @drn[0], @drn[1], color
 
     segments = 6
@@ -100,26 +100,26 @@ class MosfetElm extends CircuitComponent
     segf = 1.0 / segments
     for i in [0...segments]
       v = @volts[1] + (@volts[2] - @volts[1]) * i / segments
-      color = renderContext.getVoltageColor(v)
+      color = Util.getVoltageColor(v)
       ps1 = Util.interpolate @src[1], @drn[1], i * segf
       ps2 = Util.interpolate @src[1], @drn[1], (i + 1) * segf
       renderContext.drawLinePt ps1, ps2, color
 
-    color = renderContext.getVoltageColor(@volts[1])
+    color = Util.getVoltageColor(@volts[1])
     renderContext.drawLinePt @src[1], @src[2], color
 
-    color = renderContext.getVoltageColor(@volts[2])
+    color = Util.getVoltageColor(@volts[2])
     renderContext.drawLinePt @drn[1], @drn[2], color
 
     unless @drawDigital()
-      color = renderContext.getVoltageColor((if @pnp is 1 then @volts[1] else @volts[2]))
+      color = Util.getVoltageColor((if @pnp is 1 then @volts[1] else @volts[2]))
       renderContext.drawThickPolygonP @arrowPoly, color
 
     renderContext.drawThickPolygonP(@arrowPoly);
 #      Circuit.powerCheckItem
 
     #g.setColor(Color.gray);
-    color = renderContext.getVoltageColor(@volts[0])
+    color = Util.getVoltageColor(@volts[0])
     renderContext.drawLinePt @point1, @gate[1], color
     renderContext.drawLinePt @gate[0], @gate[2], color
     @drawDigital() and @pnp is -1

@@ -3,6 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
+Util = require('../../util/util.coffee')
 
 class SwitchElm extends CircuitComponent
 
@@ -84,8 +85,8 @@ class SwitchElm extends CircuitComponent
     if @position is 0
       renderContext.drawDots(@point1, @point2, this)
 
-    @ps = renderContext.interpolate @lead1, @lead2, 0, hs1
-    @ps2 = renderContext.interpolate @lead1, @lead2, 1, hs2
+    @ps = Util.interpolate @lead1, @lead2, 0, hs1
+    @ps2 = Util.interpolate @lead1, @lead2, 1, hs2
 
     renderContext.drawLinePt @ps, @ps2, Settings.FG_COLOR
 
