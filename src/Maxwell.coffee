@@ -6,8 +6,8 @@ Renderer = require('./render/renderer.coffee')
 
 environment = require("./environment.coffee")
 
-unless environment.isBrowser
-  Winston = require('winston')
+#unless environment.isBrowser
+#  Winston = require('winston')
 
 class Maxwell
   version = "0.0.0"
@@ -63,10 +63,10 @@ class Maxwell
 
 Maxwell.Renderer = Renderer
 
-if typeof(window) == "undefined"
+if environment.isBrowser
+  window.Maxwell = Maxwell
+else
   console.log("Not in browser, declaring global Maxwell object")
   global.Maxwell = Maxwell
-else
-  window.Maxwell = Maxwell
 
 module.exports = Maxwell

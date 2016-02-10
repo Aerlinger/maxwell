@@ -78,7 +78,7 @@ class InductorElm extends CircuitComponent
     renderContext.drawLeads(this)
     renderContext.drawCoil @lead1, @lead2, v1, v2, renderContext
 
-    renderContext.drawValue 0, 0, this, @getUnitText(@inductance, "H")
+    renderContext.drawValue -12, 0, this, @getUnitText(@inductance, "H")
 
     renderContext.drawDots(@point1, @point2, this)
     renderContext.drawPosts(this)

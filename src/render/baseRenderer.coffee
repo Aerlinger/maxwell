@@ -91,12 +91,14 @@ class BaseRenderer extends Observer
     for i in [0...(xlist.length - 1)]
       @drawLine xlist[i], ylist[i], xlist[i + 1], ylist[i + 1], color
     @drawLine xlist[i], ylist[i], xlist[0], ylist[0], color
+    @context.fill()
 
   drawThickPolygonP: (polygon, color) ->
     numVertices = polygon.numPoints()
     for i in [0...(numVertices - 1)]
       @drawLine polygon.getX(i), polygon.getY(i), polygon.getX(i + 1), polygon.getY(i + 1), color
     @drawLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
+    @context.fill()
 
   drawValue: (x1, y1, circuitElm, str) ->
 

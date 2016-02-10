@@ -31,7 +31,7 @@ class WireElm extends CircuitComponent
     else if @mustShowVoltage()
       s = Util.getUnitText(@volts[0], "V")
 
-    renderContext.drawValue 10, 0, this, s
+#    renderContext.drawValue 10, 0, this, s
     renderContext.drawDots(@point1, @point2, this)
     renderContext.drawPosts(this)
 

@@ -101,12 +101,16 @@ class CapacitorElm extends CircuitComponent
 #      @setPowerColor false
     renderContext.drawLinePt @plate2[0], @plate2[1], color
 
+    renderContext.drawValue 20, 0, this, Util.getUnitText(@capacitance, @unitSymbol())
+
     @updateDots()
     renderContext.drawDots @point1, @lead1, this
     renderContext.drawDots @lead2, @point2, this
 
     renderContext.drawPosts(this)
 
+  unitSymbol: ->
+    "F"
 
   drawUnits: ->
     s = @getUnitText(@capacitance, "F")

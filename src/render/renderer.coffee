@@ -78,7 +78,6 @@ class Renderer extends BaseRenderer
   constructor: (@Circuit, @Canvas) ->
     super()
 
-
     @highlightedComponent = null
     @addComponent = null
     @selectedComponents = []
@@ -93,17 +92,9 @@ class Renderer extends BaseRenderer
         mousemove: @mousemove
         mousedown: @mousedown
         mouseup: @mouseup
-        # setup
-        # update
-        # touchstart
-        # touchmove
-        # touchend
-        # mouseover
-        # mouseout
-        # click
-        # keydown
-        # keyup
-        # resize
+        fullscreen: false
+        width: @width
+        height: @height
       }
 
       @context.lineJoin = 'miter'
@@ -230,20 +221,29 @@ class Renderer extends BaseRenderer
       for idx in [0...arr.length]
         @context.fillText(arr[idx], 500, idx * 10 + 15)
 
-  drawValue: (perpindicularOffset, parallelOffset, component, text = null) ->
+  drawValue: (perpindicularOffset, parallelOffset, component, text = null, rotation = 0) ->
+    @context.save()
+    @context.textAlign = "center";
+
     stringWidth = @context.measureText(text).width
     stringHeight = @context.measureText(text).actualBoundingBoxAscent || 0
 
-    if component.isVertical()
-      x = component.getCenter().x + perpindicularOffset
-      y = component.getCenter().y + parallelOffset - stringHeight / 2.0
-    else
-      x = component.getCenter().x + parallelOffset  - stringWidth / 2.0
-      y = component.getCenter().y - perpindicularOffset - stringHeight / 2.0
-
-
     @context.fillStyle = Settings.TEXT_COLOR
-    @fillText text, x, y
+    if component.isVertical()
+
+      x = component.getCenter().x #+ perpindicularOffset
+      y = component.getCenter().y #+ parallelOffset - stringHeight / 2.0
+
+      @context.translate(x, y)
+      @context.rotate(Math.PI/2)
+      @fillText text, parallelOffset, -perpindicularOffset
+    else
+      x = component.getCenter().x + parallelOffset
+      y = component.getCenter().y + perpindicularOffset
+
+      @fillText text, x, y
+
+    @context.restore()
 
 
   # TODO: Move to CircuitComponent

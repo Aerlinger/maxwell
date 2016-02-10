@@ -28,22 +28,15 @@ class OutputElm extends CircuitComponent
     if CircuitComponent.DEBUG
       super(renderContext)
 
-#      selected = (@needsHighlight() or Circuit.plotYElm is this)
-#    selected = @needsHighlight()
-
     #Font f = new Font("SansSerif", selected ? Font.BOLD : 0, 14);
     #g.setFont(f);
     color = "#FFF";
     s = (if (@flags & OutputElm.FLAG_VALUE) isnt 0 then @getUnitText(@volts[0], "V") else "out")
 
-    #FontMetrics fm = g.getFontMetrics();
-#      s = "X"  if this is Circuit.plotXElm
-#      s = "Y"  if this is Circuit.plotYElm
-
     @lead1 = Util.interpolate @point1, @point2, 1 - (3 * s.length / 2 + 8) / @dn
 
     @setBboxPt @point1, @lead1, 0
-    renderContext.drawValue 0, 0, this, s
+    renderContext.drawValue -5, 0, this, s
 
     color = Util.getVoltageColor(@volts[0])
 

@@ -30,7 +30,7 @@ class TextElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
-    @text = "hello"
+    @text = "<TextElm>"
     @lines = new Array() # new vector()
     @lines.push @text
     @size = 24

@@ -200,6 +200,7 @@ class Settings
   @SELECTION_MARQUEE_COLOR: ColorPalette.orange
 
   @GRID_COLOR: ColorPalette.darkyellow
+  @FILL_COLOR: ColorPalette.white
   @BG_COLOR: ColorPalette.white
   @FG_COLOR: ColorPalette.black
   @ERROR_COLOR: ColorPalette.darkred

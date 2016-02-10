@@ -632,6 +632,7 @@ class CircuitSolver
         while k < j
           matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j]
           ++k
+
         circuitMatrix[i][j] = matrix_ij
         x = Math.abs(matrix_ij)
         if x >= largest

@@ -17,6 +17,7 @@ html
     script(type='text/javascript', src='bower_components/bootstrap/dist/js/bootstrap.js')
 
     script(type="text/javascript", src="dist/maxwell.js")
+
     script.
       $(document).ready(function (event) {
         var circuitFileName = "../circuits/#{circuit}.json";
@@ -58,6 +59,8 @@ html
     .col-md-10
       #container
         canvas.maxwell(data-circuit="#{circuit}", width="800", height="600")
+        div(style="width: 300px; border: 1px solid #00F; height: 600px; float: right;")
+        div(style="width: 100%; border: 1px solid #F00; padding: 15px;")
 
     .col-md-1
       #sidenav

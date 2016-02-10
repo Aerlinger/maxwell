@@ -76,6 +76,8 @@ class TransistorElm extends CircuitComponent
     @lastvbe = 0
     @leakage = 1e-13
 
+    @renderSize = 16
+
     super(xa, ya, xb, yb, params, f)
 
 #    if params and params.length > 0
@@ -130,7 +132,7 @@ class TransistorElm extends CircuitComponent
 
     @dsign = -@dsign  unless (@flags & TransistorElm.FLAG_FLIP) is 0
 
-    hs2 = Settings.GRID_SIZE * @dsign * @pnp
+    hs2 = @renderSize * @dsign * @pnp
 
     # calc collector, emitter posts
     @coll = Util.newPointArray(2)
@@ -140,14 +142,14 @@ class TransistorElm extends CircuitComponent
 
     # calc rectangle edges
     @rect = Util.newPointArray(4)
-    [@rect[0], @rect[1]] = Util.interpolateSymmetrical @point1, @point2, 1 - 16 / @dn, Settings.GRID_SIZE
-    [@rect[2], @rect[3]] = Util.interpolateSymmetrical @point1, @point2, 1 - 13 / @dn, Settings.GRID_SIZE
+    [@rect[0], @rect[1]] = Util.interpolateSymmetrical @point1, @point2, 1 - 16 / @dn, @renderSize
+    [@rect[2], @rect[3]] = Util.interpolateSymmetrical @point1, @point2, 1 - 13 / @dn, @renderSize
 
     # calc points where collector/emitter leads contact rectangle
     [@coll[1], @emit[1]] = Util.interpolateSymmetrical @point1, @point2, 1 - 13 / @dn, 6 * @dsign * @pnp
 
     # calc point where base lead contacts rectangle
-    @base = Util.interpolate @point1, @point2, 1 - Settings.GRID_SIZE / @dn
+    @base = Util.interpolate @point1, @point2, 1 - @renderSize / @dn
 
     # rectangle
     @rectPoly = Util.createPolygon(@rect[0], @rect[2], @rect[3], @rect[1])
@@ -157,7 +159,7 @@ class TransistorElm extends CircuitComponent
       pt = Util.interpolateSymmetrical(@point1, @point2, 1 - 11 / @dn, -5 * @dsign * @pnp)
       @arrowPoly = Util.calcArrow(@emit[0], pt, 8, 4)
 
-    @setBboxPt @point1, @point2, Settings.GRID_SIZE
+    @setBboxPt @point1, @point2, @renderSize
 
     # draw collector
     color = Util.getVoltageColor(@volts[1])
@@ -189,7 +191,6 @@ class TransistorElm extends CircuitComponent
     renderContext.drawDots @coll[1], @coll[0], this
     renderContext.drawDots @emit[1], @emit[0], this
 
-    # draw base rectangle
     color = Util.getVoltageColor(@volts[0])
 #      @setPowerColor true
 
@@ -225,7 +226,7 @@ class TransistorElm extends CircuitComponent
   setPoints: (stamper) ->
     super()
 
-    hs = 16
+    hs = @renderSize
 
     if @flags & TransistorElm.FLAG_FLIP != 0
       @dsign = -@dsign
@@ -244,7 +245,6 @@ class TransistorElm extends CircuitComponent
     [@coll[1], @emit[1]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 13/@dn, 6 * @dsign * @pnp)
 
     @base = Util.interpolateSymmetrical(@point1, @point2, 1 - 16 / @dn)
-
 
     @rectPoly = Util.createPolygonFromArray(@rect)
 
