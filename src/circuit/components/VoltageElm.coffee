@@ -175,20 +175,15 @@ class VoltageElm extends CircuitComponent
     renderContext.drawPosts(this)
 
 
-
   drawWaveform: (center, renderContext) ->
-#    color = if @needsHighlight() then Settings.FG_COLOR
-    color = Settings.FG_COLOR
+    color = Settings.STROKE_COLOR
 
-    #g.beginFill();
-    #@setPowerColor false
     xc = center.x
     yc = center.y
 
     # TODO:
-#    renderContext.fillCircle xc, yc, VoltageElm.circleSize, 2, "#FFFFFF"
+    renderContext.fillCircle xc, yc, VoltageElm.circleSize, 2, Settings.FG_COLOR
 
-    #Main.getMainCanvas().drawThickCircle(xc, yc, circleSize, color);
     wl = 8
     @setBbox xc - VoltageElm.circleSize, yc - VoltageElm.circleSize, xc + VoltageElm.circleSize, yc + VoltageElm.circleSize
     xc2 = undefined

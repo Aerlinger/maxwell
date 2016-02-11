@@ -75,11 +75,6 @@ class CapacitorElm extends CircuitComponent
     if CircuitComponent.DEBUG
       super(renderContext)
 
-    # calc leads
-
-
-    # calc plates
-
     hs = 12
 #    @setBboxPt @point1, @point2, hs
 
@@ -89,14 +84,9 @@ class CapacitorElm extends CircuitComponent
 #      @setPowerColor false
     renderContext.drawLinePt @plate1[0], @plate1[1], color
 
-    # TODO:
-    #    if (CirSim.powerCheckItem)
-    #        g.beginFill(Color.GRAY);
-
     # draw second lead and plate
     color = Util.getVoltageColor(@volts[1])
     renderContext.drawLinePt @point2, @lead2, color
-#      @setPowerColor false
     renderContext.drawLinePt @plate2[0], @plate2[1], color
 
     renderContext.drawValue 20, 0, this, Util.getUnitText(@capacitance, @unitSymbol())

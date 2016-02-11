@@ -26,7 +26,7 @@ class BaseRenderer extends Observer
   fillText: (text, x, y) ->
     @context.fillText(text, x, y)
 
-  fillCircle: (x, y, radius, lineWidth = Settings.LINE_WIDTH, fillColor = '#FF0000', lineColor = "#000000") ->
+  fillCircle: (x, y, radius, lineWidth = Settings.LINE_WIDTH, fillColor = '#FFFF00', lineColor = "#000000") ->
     origLineWidth = @context.lineWidth
     origStrokeStyle = @context.strokeStyle
 
@@ -43,20 +43,17 @@ class BaseRenderer extends Observer
     @context.lineWidth = origLineWidth
 
   drawCircle: (x, y, radius, lineWidth = Settings.LINE_WIDTH, lineColor = "#000000") ->
-    origLineWidth = @context.lineWidth
-    origStrokeStyle = @context.strokeStyle
+    @context.save()
 
     @context.strokeStyle = lineColor
-    @context.beginPath()
     @context.lineWidth = lineWidth
 
+    @context.beginPath()
     @context.arc x, y, radius, 0, 2 * Math.PI, true
     @context.stroke()
-
     @context.closePath()
 
-    @context.lineWidth = origLineWidth
-    @context.strokeStyle = origStrokeStyle
+    @context.restore()
 
   drawRect: (x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor = "#000000") ->
     @context.strokeStyle = lineColor
@@ -64,10 +61,10 @@ class BaseRenderer extends Observer
     @context.rect(x, y, width, height)
     @context.stroke()
 
-  drawLinePt: (pa, pb, color) ->
+  drawLinePt: (pa, pb, color = Settings.STROKE_COLOR) ->
     @drawLine pa.x, pa.y, pb.x, pb.y, color
 
-  drawLine: (x, y, x2, y2, color = Settings.FG_COLOR, lineWidth = Settings.LINE_WIDTH) ->
+  drawLine: (x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) ->
 #    if !x || !y || !x2 || !y2
 #      console.log(x, y, x2, y2)
 
@@ -88,17 +85,37 @@ class BaseRenderer extends Observer
     @context.strokeStyle = origStrokeStyle
 
   drawThickPolygon: (xlist, ylist, color) ->
-    for i in [0...(xlist.length - 1)]
-      @drawLine xlist[i], ylist[i], xlist[i + 1], ylist[i + 1], color
-    @drawLine xlist[i], ylist[i], xlist[0], ylist[0], color
+    @context.save()
+
+    @context.fillStyle = color
+    @context.beginPath()
+
+    @context.moveTo(xlist[0], ylist[0])
+    for i in [1...xlist.length]
+      @context.lineTo(xlist[i], ylist[i])
+
+    @context.closePath()
     @context.fill()
+
+    @context.restore()
 
   drawThickPolygonP: (polygon, color) ->
     numVertices = polygon.numPoints()
-    for i in [0...(numVertices - 1)]
-      @drawLine polygon.getX(i), polygon.getY(i), polygon.getX(i + 1), polygon.getY(i + 1), color
-    @drawLine polygon.getX(i), polygon.getY(i), polygon.getX(0), polygon.getY(0), color
+
+    @context.save()
+
+    @context.fillStyle = "#FFF"
+    @context.strokeStyle = "#000"
+    @context.beginPath()
+
+    @context.moveTo(polygon.getX(0), polygon.getY(0))
+    for i in [0...numVertices]
+      @context.lineTo(polygon.getX(i), polygon.getY(i))
+
+    @context.closePath()
     @context.fill()
+    @context.stroke()
+    @context.restore()
 
   drawValue: (x1, y1, circuitElm, str) ->
 

@@ -1,6 +1,7 @@
 Point = require('../geom/point.coffee')
 Polygon = require('../geom/polygon.coffee')
 Settings = require('../settings/settings.coffee')
+Color = require('./color.coffee')
 sprintf = require("sprintf-js").sprintf
 
 class Util
@@ -140,6 +141,8 @@ class Util
         "#DC13DA", "#C312DA", "#AA12D8", "#9012D7", "#7712D5", "#5F12D3", "#4612D1", "#2F12CF",
         "#1712CE", "#1123CC", "#1139CA", "#114FC8", "#1164C6", "#1179C4", "#118EC3", "#11A2C1",
         "#11B6BF", "#10BDB1", "#10BB9B", "#10BA84", "#10B86F", "#10B659", "#10B444", "#10B230", "#10B11C"]
+
+    scale = Color.Gradients.voltage_default
 
     numColors = scale.length - 1
 

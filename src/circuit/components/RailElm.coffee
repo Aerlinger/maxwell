@@ -11,7 +11,6 @@ VoltageElm = require('./VoltageElm.coffee')
 class RailElm extends VoltageElm
   @FLAG_CLOCK: 1
 
-
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)
 
@@ -22,9 +21,6 @@ class RailElm extends VoltageElm
     1
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     @lead1 = Util.interpolate(@point1, @point2, 1 - VoltageElm.circleSize / @dn)
 
     @setBboxPt @point1, @point2, @circleSize

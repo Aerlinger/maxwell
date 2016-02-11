@@ -29,6 +29,8 @@ html
           console.log(circuitContext);
           console.log("Circuit loaded! ", circuitContext.Circuit, canvas);
 
+          var circuit = circuitContext.Circuit;
+
           circuitContext.onComponentHover = function(component) {
             console.log("ON HOVER:", component.toString());
           };
@@ -39,35 +41,30 @@ html
 
           circuitContext.onComponentClick = function (component) {
             console.log("ON CLICK:", component.toString());
+
+            $("#placeComponent").text("Selected: " + circuitContext.getSelectedComponents().toString());
+
+            if (circuitContext.getPlaceComponent())
+              $("#selectedComponent").text(circuitContext.getPlaceComponent());
           };
 
-          //          circuitContext.onComponentsSelect = function (components) {
-          //            for(var i=0; i<components.length; i++) {
-          //              console.log("SELECTED: ", components[i]);
-          //            }
-          //          };
-          //
-          //          circuitContext.onComponentsDeselect = function (components) {
-          //            for (var i = 0; i < components.length; i++) {
-          //              console.log("DESELECTED: ", components[i]);
-          //            }
-          //          };
-          //
-          //          circuitContext.onComponentsMove = function (components) {
-          //            for (var i = 0; i < components.length; i++) {
-          //              console.log("MOVED: ", components[i]);
-          //            }
-          //          };
-
           renderer = circuitContext;
+        });
+
+        $('canvas.maxwell').mousemove(function(evt) {
+          $("#coords").text("Cursor: (" + evt.offsetX +", " + evt.offsetY +")");
         });
 
         document.addEventListener("keydown", keyDownTextField, false);
 
         function keyDownTextField(e) {
           var keyCode = e.keyCode;
-          if (keyCode == 27)
+          if (keyCode == 27) {
             console.log("KEYPRESS: ESC");
+
+            renderer.clearPlaceComponent();
+            $("#selectedComponent").text("");
+          }
 
           else if (keyCode == 82)
             console.log("KEYPRESS: r");
@@ -111,7 +108,6 @@ html
             console.log("KEYPRESS: ]");
           else if (keyCode == 219)
             console.log("KEYPRESS: [");
-
           else if (keyCode == 91 || keyCode == 93)
             console.log("KEYPRESS: CMD");
           else if (keyCode == 18)
@@ -131,10 +127,10 @@ html
         components = Maxwell.Components;
         for (var i=0;  i<components.length; ++i) {
           component = components[i];
-          $("#components").append("<li><a class='component' data-component-index='"+ i + "'>" + component.name + "</a></li>");
+          $("#components").append("<a class='item' data-component-index='"+ i + "'>" + component.name + "</a>");
         }
 
-        $('.component').click(function(evt) {
+        $('#components .item').click(function(evt) {
           var componentIndex = $(this).data("component-index");
 
           renderer.placeComponent = new Maxwell.Components[componentIndex];
@@ -144,6 +140,7 @@ html
         });
 
         $('.ui.sidebar').sidebar('toggle');
+        $('.ui.dropdown').dropdown();
 
         var back_canvas = $('.grid').get(0);
 
@@ -161,18 +158,54 @@ html
 
   body
     .pusher
-      .ui.vertical.inverted.pointing.menu(style="float: left;")
+      .ui.menu
+        .ui.dropdown.item
+          | Circuit
+          i.dropdown.icon
+          .menu
+            a.item
+              span.description ctrl + s
+              | Save
+            a.item
+              i.folder.icon
+              | Permalink
+            a.item Export to SPICE
+            a.item Export to JSON
+        .ui.dropdown.item
+          | Components
+          i.dropdown.icon
+          .menu
+            a.item First
+            a.item Second
+            a.item Third
+        .ui.dropdown.item
+          | Sample Circuits
+          i.dropdown.icon
+          .menu
+            a.item First
+            a.item Second
+            a.item Third
+
+      .ui.vertical.pointing.menu.pull-left
         .item
           .header Predefined Circuits
           .menu
             - for (var i=0; i<circuit_names.length; ++i)
               a.item(href="/"+circuit_names[i])= circuit_names[i]
 
+      .ui.vertical.pointing.menu.pull-right
+        .item
+          .header Components
+          #components.menu
+
+
       .canvas-container.pull-left
         canvas.maxwell(data-circuit="#{circuit}", width="800", height="600")
         canvas.grid(width="800", height="600")
         div(style="width: 300px; border: 1px solid #00F; height: 600px; float: right;")
+          p#coords Cursor: (-, -)
           p#placeComponent
+          p#selectedComponent
           // Render component/circuit properties
 
 
@@ -181,9 +214,8 @@ html
           a.btn.btn-xs.btn-info.pull-left Stop
           a.btn.btn-xs.btn-danger.pull-left Reset
 
-            // Render form elements for component parameters
 
-      .col-md-1
+      //.col-md-1
         #sidenav
           ul#components.list-unstyled
 

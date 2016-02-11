@@ -21,18 +21,19 @@ class WireElm extends CircuitComponent
       super(renderContext)
 
     @updateDots()
+    renderContext.drawDots(@point1, @point2, this)
 
     renderContext.drawLinePt @point1, @point2, Util.getVoltageColor(@volts[0])
 #    @setBboxPt @point1, @point2, 3
 
     if @mustShowCurrent()
       s = Util.getUnitText(Math.abs(@getCurrent()), "A")
-#      @drawValues s, 4, renderContext
     else if @mustShowVoltage()
       s = Util.getUnitText(@volts[0], "V")
 
-#    renderContext.drawValue 10, 0, this, s
+    @updateDots()
     renderContext.drawDots(@point1, @point2, this)
+
     renderContext.drawPosts(this)
 
 

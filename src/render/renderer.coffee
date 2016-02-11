@@ -116,17 +116,24 @@ class Renderer extends BaseRenderer
     # @Circuit.addObserver Circuit.ON_RESET, @clear
     # @Circuit.addObserver Circuit.ON_END_UPDATE, @clear
 
+  getSelectedComponents: ->
+    @selectedComponents
+
+  getPlaceComponent: ->
+    @placeComponent
+
   pause: ->
   play: ->
   restart: ->
+
   clearPlaceComponent: ->
+    @placeComponent = null
 
 
   mousemove: (event) =>
     x = event.offsetX
     y = event.offsetY
 
-#    @highlightedComponent = null
     @newlyHighlightedComponent = null
 
     @lastX = @snapX
@@ -141,23 +148,6 @@ class Renderer extends BaseRenderer
         @placeComponent.x2 = @snapX
         @placeComponent.y2 = @snapY
         @placeComponent.setPoints()
-#        @placeComponent.setBbox(@placeComponent.x1, @placeComponent.y1, @placeComx2, y2)
-#        @placeComponent.moveTo(@snapX, @snapY)
-#      else
-#        x1 = @snapX - 54
-#        x2 = @snapX + 54
-#        y1 = @snapY
-#        y2 = @snapY
-
-#        @placeComponent.x1 = x1
-#        @placeComponent.x2 = x2
-#        @placeComponent.y1 = y1
-#        @placeComponent.y2 = y2
-
-#        @placeComponent.setPoints()
-#        @placeComponent.setBbox(x1, y1, x2, y2)
-
-    # END TODO
 
     if @marquee?
       @marquee?.reposition(x, y)
@@ -183,7 +173,6 @@ class Renderer extends BaseRenderer
 
         @highlightedComponent = null
 
-
     if @marquee is null and @selectedComponents?.length > 0 and event.which == MOUSEDOWN and (@lastX != @snapX or @lastY != @snapY)
       for component in @selectedComponents
         component.move(@snapX - @lastX, @snapY - @lastY)
@@ -197,7 +186,9 @@ class Renderer extends BaseRenderer
         @placeComponent.x2 = Util.snapGrid(x)
         @placeComponent.y2 = Util.snapGrid(y)
         @Circuit.solder(@placeComponent)
-        @placeComponent = null
+
+        placeComponentKlass = @placeComponent.constructor
+        @placeComponent = new placeComponentKlass()
       else
         @placeComponent.x1 = Util.snapGrid(x)
         @placeComponent.y1 = Util.snapGrid(y)
@@ -208,15 +199,14 @@ class Renderer extends BaseRenderer
 
     for component in @Circuit.getElements()
       if component.getBoundingBox().contains(x, y)
-
-        @onComponentClick?(component)
-
         @notifyObservers(Renderer.ON_COMPONENT_CLICKED, component)
 
-        if @selectedComponents?.length == 0
-          @selectedComponents = [component]
+        @selectedComponents = [component]
 
         component.toggle?()
+
+        component.onclick()
+        @onComponentClick?(component)
 
   mouseup: (event) =>
     @marquee = null
@@ -304,10 +294,21 @@ class Renderer extends BaseRenderer
     newPos = component.curcount
 
     while newPos < dn
+
       xOffset = ptA.x + newPos * dx / dn
       yOffset = ptA.y + newPos * dy / dn
 
-      @fillCircle(xOffset, yOffset, Settings.CURRENT_RADIUS)
+      if Settings.CURRENT_DISPLAY_TYPE == Settings.CURENT_TYPE_DOTS
+        @fillCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR)
+      else
+        xOffset0 = xOffset - 3 * dx / dn
+        yOffset0 = yOffset - 3 * dy / dn
+
+        xOffset1 = xOffset + 3 * dx / dn
+        yOffset1 = yOffset + 3 * dy / dn
+
+        @drawLine(xOffset0, yOffset0, xOffset1, yOffset1, Settings.CURRENT_COLOR, 1)
+
       newPos += ds
 
   # TODO: Move to CircuitComponent

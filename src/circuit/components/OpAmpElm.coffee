@@ -97,28 +97,26 @@ class OpAmpElm extends CircuitComponent
     if CircuitComponent.DEBUG
       super(renderContext)
 
-    @setBboxPt @point1, @point2, @opheight * 2
+    @setBbox @x1, @in1p[0].y, @x2, @in2p[0].y
 
+    # Terminal 1
     color = Util.getVoltageColor(@volts[0])
     renderContext.drawLinePt @in1p[0], @in1p[1], color
 
+    # Terminal 2
     color = Util.getVoltageColor(@volts[1])
     renderContext.drawLinePt @in2p[0], @in2p[1], color
 
-#      #g.setColor(this.needsHighlight() ? this.selectColor : this.lightGrayColor);
-#      @setPowerColor true
-    renderContext.drawThickPolygonP @triangle, Settings.FG_COLOR
-#
-#      #this.drawCenteredText("-", this.textp[0].x + 3, this.textp[0].y + 8, true).attr({'font-weight':'bold', 'font-size':17});
-#      #this.drawCenteredText("+", this.textp[1].x + 3, this.textp[1].y + 10, true).attr({'font-weight':'bold', 'font-size':14});
+    # Terminal 3
     color = Util.getVoltageColor(@volts[2])
     renderContext.drawLinePt @lead2, @point2, color
-#      @curcount = @updateDotCount(@current, @curcount)
+
+    # Body
+    renderContext.drawThickPolygonP @triangle, Settings.FG_COLOR
 
     if @getParentCircuit() && @getParentCircuit()
       @updateDots()
       renderContext.drawDots @in1p[0], @in1p[1], renderContext
-      #      @drawDots @in2p[0], @in2p[1], renderContext
       renderContext.drawDots @point2, @lead2, this
 
       renderContext.drawPosts(this)

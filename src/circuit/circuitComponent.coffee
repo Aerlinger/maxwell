@@ -24,7 +24,7 @@ _ = require("lodash")
 sprintf = require("sprintf-js").sprintf
 
 class CircuitComponent
-  @DEBUG = true
+#  @DEBUG = true
 
   @ParameterDefinitions = {}
 
@@ -67,17 +67,11 @@ class CircuitComponent
         console.warn("Failed to load data_type #{data_type}: #{param_name}: #{param_value}")
         console.log(param_value)
         console.log("#{i}: param_name #{ParameterDefinitions}")
-#        @getParentCircuit().halt()
-
-      if (!data_type?)
-        console.log("Data type: #{data_type} not found for parameter #{param_name} and value #{param_value}")
 
       if !data_type
         console.warn("No conversion found for #{data_type}")
 
       result[param_name] = data_type.call(this, param_value)
-
-#    console.log(result)
 
     return result
 
@@ -93,6 +87,7 @@ class CircuitComponent
       default_value = definition.default_value
       data_type = definition.data_type
 
+      # Parameter exists in our ParameterDefinitions attribute table...
       if component_params && (param_name of component_params)
         param_value = data_type(component_params[param_name])
 
@@ -100,10 +95,13 @@ class CircuitComponent
         @params[param_name] = param_value
 
         delete component_params[param_name]
+
+      # fallback to default
       else
-        this[param_name] = data_type(default_value)
-        @params[param_name] = data_type(default_value)
-    #        console.warn("Defined parameter #{param_name} not set for #{this} (defaulting to #{default_value}#{symbol})")
+        console.log("Assigning default value of #{default_value} for #{param_name} in #{@constructor.name} (was #{this[param_name]})")
+
+        this[param_name] ||= data_type(default_value)
+        @params[param_name] = this[param_name]
 
     unmatched_params = (param for param of component_params)
 
@@ -486,8 +484,17 @@ class CircuitComponent
       nonLinear: @nonLinear()
     }
 
+  getProperties: ->
+    result = []
+    for parameter, value of @params
+      result.push("#{parameter}: #{value}")
+
+    result
+
+
   onSolder: ->
 
+  onclick: ->
 
   ## Deprecated
 

@@ -52,7 +52,8 @@ class ResistorElm extends CircuitComponent
     renderContext.drawValue 10, 0, this, Util.getUnitText(@resistance, @unitSymbol())
 
     @updateDots()
-    renderContext.drawDots(@point1, @point2, this)
+    renderContext.drawDots(@point1, @lead1, this)
+    renderContext.drawDots(@lead2, @point2, this)
 
     renderContext.drawPosts(this)
 

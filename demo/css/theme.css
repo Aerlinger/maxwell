@@ -8,8 +8,10 @@ body {
     background: white;
 }
 
-.ui.vertical.inverted.menu .menu .item {
+.ui.vertical.menu .menu .item {
   font-size: 10px;
+  padding-top: 0.1em;
+  padding-bottom: 0.1em;
 }
 
 .canvas-container {
@@ -17,6 +19,7 @@ body {
 }
 
 canvas {
+  color: red;
   border: 1px solid grey;
   background-color: transparent;
 }
@@ -24,13 +27,17 @@ canvas {
 .maxwell {
   background-color: transparent;
   position: absolute;
-  z-index: 1000;
+  z-index: 2;
+}
+
+.ui.menu {
+  margin: 0 !important;
 }
 
 canvas.grid {
   position: relative;
   z-index: 1;
-  background-color: transparent;
+  background-color: lightblue;
 }
 
 #sidenav ul li a {

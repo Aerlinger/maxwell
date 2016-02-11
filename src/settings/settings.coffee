@@ -172,12 +172,16 @@ class Settings
     'yellowgreen': '#9acd32'
   }
 
+  @CURENT_TYPE_DOTS: "DOTS"
+  @CURENT_TYPE_DASHES: "DASHES"
+
   @FRACTIONAL_DIGITS: 2
   @CURRENT_SEGMENT_LENGTH: 16
 
   # Line Widths:
   @POST_RADIUS: 2.5
-  @CURRENT_RADIUS: 2
+  @CURRENT_RADIUS: 1
+  @CURRENT_COLOR: "rgba(255, 255, 255, 1.0)"
   @LINE_WIDTH: 2
 
   # Grid
@@ -185,6 +189,8 @@ class Settings
   @SMALL_GRID: false
 
   @SHOW_VALUES: false
+
+  @CURRENT_DISPLAY_TYPE: "DASHES"
 
   # ColorPalettes:
   @SELECT_COLOR: ColorPalette.orange
@@ -202,7 +208,8 @@ class Settings
   @GRID_COLOR: ColorPalette.darkyellow
   @FILL_COLOR: ColorPalette.white
   @BG_COLOR: ColorPalette.white
-  @FG_COLOR: ColorPalette.black
+  @FG_COLOR: ColorPalette.white
+  @STROKE_COLOR: ColorPalette.black
   @ERROR_COLOR: ColorPalette.darkred
   @WARNING_COLOR: ColorPalette.orange
 

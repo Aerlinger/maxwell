@@ -69,14 +69,14 @@ module.exports = (grunt) ->
           ]
 
     watch:
-      test:
-        files: [
-          "Gruntfile.js"
-          "test/test_helper.js"
-          "test/**/*.coffee"
-          "src/**/*.coffee"
-        ]
-        tasks: ["mochaTest"]
+#      test:
+#        files: [
+#          "Gruntfile.js"
+#          "test/test_helper.js"
+#          "test/**/*.coffee"
+#          "src/**/*.coffee"
+#        ]
+#        tasks: ["mochaTest"]
       compile:
         files: [
           "src/**/*.coffee"

@@ -69,8 +69,6 @@ class InductorElm extends CircuitComponent
 
     @calcLeads 32
 
-    @updateDots()
-
     v1 = @volts[0]
     v2 = @volts[1]
     hs = 8
@@ -81,7 +79,10 @@ class InductorElm extends CircuitComponent
 
     renderContext.drawValue -12, 0, this, Util.getUnitText(@inductance, "H")
 
-    renderContext.drawDots(@point1, @point2, this)
+    @updateDots()
+    renderContext.drawDots(@point1, @lead1, this)
+    renderContext.drawDots(@lead2, @point2, this)
+
     renderContext.drawPosts(this)
 
   getDumpType: ->

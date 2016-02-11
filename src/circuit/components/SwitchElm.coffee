@@ -88,7 +88,7 @@ class SwitchElm extends CircuitComponent
     @ps = Util.interpolate @lead1, @lead2, 0, hs1
     @ps2 = Util.interpolate @lead1, @lead2, 1, hs2
 
-    renderContext.drawLinePt @ps, @ps2, Settings.FG_COLOR
+    renderContext.drawLinePt @ps, @ps2
 
     renderContext.drawPosts(this)
 
