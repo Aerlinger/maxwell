@@ -183,6 +183,7 @@ class Settings
   @CURRENT_RADIUS: 1
   @CURRENT_COLOR: "rgba(255, 255, 255, 1.0)"
   @LINE_WIDTH: 2
+  @BOLD_LINE_WIDTH: 3
 
   # Grid
   @GRID_SIZE: 8
@@ -193,7 +194,7 @@ class Settings
   @CURRENT_DISPLAY_TYPE: "DASHES"
 
   # ColorPalettes:
-  @SELECT_COLOR: ColorPalette.orange
+  @SELECT_COLOR: ColorPalette.magenta
   @HIGHLIGHT_COLOR: ColorPalette.orange
   @POST_COLOR: ColorPalette.black
   @DOTS_COLOR: ColorPalette.yellow

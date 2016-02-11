@@ -214,7 +214,8 @@ class Renderer extends BaseRenderer
       if component.getBoundingBox().contains(x, y)
         @notifyObservers(Renderer.ON_COMPONENT_CLICKED, component)
 
-        @selectedComponents = [component]
+        unless component in @selectedComponents
+          @selectedComponents = [component]
 
         component.toggle?()
 
@@ -250,16 +251,33 @@ class Renderer extends BaseRenderer
       if @selectedNode
         @drawCircle(@selectedNode.x, @selectedNode.y, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR)
 
+      if @highlightedComponent
+        @drawCircle(@highlightedComponent.x1, @highlightedComponent.y1, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR)
+        @drawCircle(@highlightedComponent.x2, @highlightedComponent.y2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR)
+
   drawComponents: ->
     if @context
       for component in @Circuit.getElements()
         if @marquee?.collidesWithComponent(component)
           console.log("MARQUEE COLLIDE: " + component)
+
         @drawComponent(component)
 
+  drawBoldLines: ->
+    @boldLines = true
+
+  drawDefaultLines: ->
+    @boldLines = false
+
   drawComponent: (component) ->
-    if component in @selectedComponents
-      @context.strokeStyle = "#FF0"
+    if component && component in @selectedComponents
+      @drawBoldLines()
+      for i in [0...component.getPostCount()]
+        post = component.getPost(i)
+        @drawCircle(post.x, post.y, Settings.POST_RADIUS + 2, 2, Settings.SELECT_COLOR)
+
+    else
+      @drawDefaultLines()
 
     # Main entry point to draw component
     component.draw(this)
@@ -324,7 +342,17 @@ class Renderer extends BaseRenderer
         xOffset1 = xOffset + 3 * dx / dn
         yOffset1 = yOffset + 3 * dy / dn
 
-        @drawLine(xOffset0, yOffset0, xOffset1, yOffset1, Settings.CURRENT_COLOR, 1)
+        @context.save()
+        @context.strokeStyle = Settings.CURRENT_COLOR
+        @context.lineWidth = Settings.CURRENT_RADIUS
+        @context.beginPath()
+        @context.moveTo xOffset0, yOffset0
+        @context.lineTo xOffset1, yOffset1
+        @context.stroke()
+        @context.closePath()
+        @context.restore()
+
+#        @drawLine(xOffset0, yOffset0, xOffset1, yOffset1, Settings.CURRENT_COLOR, 1)
 
       newPos += ds
 
