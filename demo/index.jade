@@ -48,6 +48,14 @@ html
               $("#selectedComponent").text(circuitContext.getPlaceComponent());
           };
 
+          circuitContext.onNodeHover = function(node) {
+            console.log("NODE HOVER: ", node.x, node.y);
+          };
+
+          circuitContext.onNodeClick = function (node) {
+            console.log("NODE CLICK: ", node.x, node.y);
+          };
+
           renderer = circuitContext;
         });
 

@@ -194,7 +194,7 @@ class Settings
 
   # ColorPalettes:
   @SELECT_COLOR: ColorPalette.orange
-  @POST_COLOR_SELECTED: ColorPalette.orange
+  @HIGHLIGHT_COLOR: ColorPalette.orange
   @POST_COLOR: ColorPalette.black
   @DOTS_COLOR: ColorPalette.yellow
   @DOTS_OUTLINE: ColorPalette.orange

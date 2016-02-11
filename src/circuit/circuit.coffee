@@ -285,6 +285,11 @@ class Circuit extends Observer
   getNode: (idx) ->
     @nodeList[idx]
 
+  getNodeAtCoordinates: (x, y) ->
+    for node in @nodeList
+      if node.x == x and node.y == y
+        return node
+
   #TODO: It may be worthwhile to return a defensive copy here
   getNodes: ->
     @nodeList

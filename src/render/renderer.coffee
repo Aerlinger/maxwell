@@ -84,6 +84,7 @@ class Renderer extends BaseRenderer
 
     @highlightedComponent = null
     @addComponent = null
+    @selectedNode = null
     @selectedComponents = []
 
     # TODO: Width and height are currently undefined
@@ -109,8 +110,11 @@ class Renderer extends BaseRenderer
 
       @context.lineJoin = 'miter'
 
+    # Callbacks
     @onComponentClick = null
     @onComponentHover = null
+    @onNodeHover = null
+    @onNodeClick = null
 
     # @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
     # @Circuit.addObserver Circuit.ON_RESET, @clear
@@ -135,6 +139,7 @@ class Renderer extends BaseRenderer
     y = event.offsetY
 
     @newlyHighlightedComponent = null
+    @selectedNode = null
 
     @lastX = @snapX
     @lastY = @snapY
@@ -157,6 +162,11 @@ class Renderer extends BaseRenderer
         if @marquee?.collidesWithComponent(component)
           @selectedComponents.push(component)
     else
+      @selectedNode = @Circuit.getNodeAtCoordinates(@snapX, @snapY)
+
+      if @selectedNode
+        @onNodeHover(@selectedNode)
+
       for component in @Circuit.getElements()
         if component.getBoundingBox().contains(x, y)
           @newlyHighlightedComponent = component
@@ -180,6 +190,9 @@ class Renderer extends BaseRenderer
   mousedown: (event) =>
     x = event.offsetX
     y = event.offsetY
+
+    if @selectedNode
+      @onNodeClick(@selectedNode)
 
     if @placeComponent
       if @placeComponent.x1 && @placeComponent.y1
@@ -227,11 +240,15 @@ class Renderer extends BaseRenderer
 
     @drawComponents()
 
-    if @context && @placeComponent
-      @context.fillText("Placing #{@placeComponent.constructor.name}", @snapX, @snapY)
+    if @context
+      if @placeComponent
+        @context.fillText("Placing #{@placeComponent.constructor.name}", @snapX, @snapY)
 
-      if @placeComponent.x1 && @placeComponent.x2
-        @drawComponent(@placeComponent)
+        if @placeComponent.x1 && @placeComponent.x2
+          @drawComponent(@placeComponent)
+
+      if @selectedNode
+        @drawCircle(@selectedNode.x, @selectedNode.y, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR)
 
   drawComponents: ->
     if @context

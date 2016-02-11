@@ -26,21 +26,25 @@ class BaseRenderer extends Observer
   fillText: (text, x, y) ->
     @context.fillText(text, x, y)
 
-  fillCircle: (x, y, radius, lineWidth = Settings.LINE_WIDTH, fillColor = '#FFFF00', lineColor = "#000000") ->
-    origLineWidth = @context.lineWidth
-    origStrokeStyle = @context.strokeStyle
+  fillCircle: (x, y, radius, lineWidth = Settings.LINE_WIDTH, fillColor = '#FFFF00', lineColor = null) ->
+    @context.save()
+
+
+    @context.beginPath()
+    @context.arc x, y, radius, 0, 2 * Math.PI, true
+
+    if lineColor
+      @context.lineWidth = lineWidth
+      @context.strokeStyle = lineColor
+      @context.stroke()
 
     @context.fillStyle = fillColor
-#    @context.strokeStyle = lineColor
-    @context.beginPath()
-    @context.lineWidth = lineWidth
-    @context.arc x, y, radius, 0, 2 * Math.PI, true
-#    @context.stroke()
     @context.fill()
+
     @context.closePath()
 
-    @context.strokeStyle = origStrokeStyle
-    @context.lineWidth = origLineWidth
+    @context.restore()
+
 
   drawCircle: (x, y, radius, lineWidth = Settings.LINE_WIDTH, lineColor = "#000000") ->
     @context.save()
