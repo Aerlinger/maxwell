@@ -20,17 +20,45 @@ html
 
     script.
       $(document).ready(function (event) {
-        var circuitFileName = "../circuits/#{circuit}.json";
-
         var canvas = $('canvas.maxwell').get(0);
         renderer = null;
 
-        var circuit = Maxwell.createCircuit("#{circuit}", circuitFileName, function (circuit) {
-          console.log("Circuit loaded! ", circuit, canvas);
-          renderer = new Maxwell.Renderer(circuit, canvas);
-        });
+        Maxwell.createContext("#{circuit}", "../circuits/#{circuit}.json", canvas, function (circuitContext) {
+          console.log(circuitContext);
+          console.log("Circuit loaded! ", circuitContext.Circuit, canvas);
 
-        componentList = "";
+          circuitContext.onComponentHover = function(component) {
+            console.log("ON HOVER:", component.toString());
+          };
+
+          circuitContext.onComponentUnhover = function (component) {
+            console.log("ON UNHOVER:", component.toString());
+          };
+
+          circuitContext.onComponentClick = function (component) {
+            console.log("ON CLICK:", component.toString());
+          };
+
+          //          circuitContext.onComponentsSelect = function (components) {
+          //            for(var i=0; i<components.length; i++) {
+          //              console.log("SELECTED: ", components[i]);
+          //            }
+          //          };
+          //
+          //          circuitContext.onComponentsDeselect = function (components) {
+          //            for (var i = 0; i < components.length; i++) {
+          //              console.log("DESELECTED: ", components[i]);
+          //            }
+          //          };
+          //
+          //          circuitContext.onComponentsMove = function (components) {
+          //            for (var i = 0; i < components.length; i++) {
+          //              console.log("MOVED: ", components[i]);
+          //            }
+          //          };
+
+          renderer = circuitContext;
+        });
 
         components = Maxwell.Components;
         for (var i=0;  i<components.length; ++i) {

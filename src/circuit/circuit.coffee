@@ -125,6 +125,7 @@ class Circuit extends Observer
 
     newElement.Circuit = this
     newElement.setPoints()
+    newElement.recomputeBounds()
 
     @elementList.push newElement
 

@@ -186,12 +186,13 @@ class VoltageElm extends CircuitComponent
     yc = center.y
 
     # TODO:
-    renderContext.fillCircle xc, yc, VoltageElm.circleSize, 2, "#FFFFFF"
+#    renderContext.fillCircle xc, yc, VoltageElm.circleSize, 2, "#FFFFFF"
 
     #Main.getMainCanvas().drawThickCircle(xc, yc, circleSize, color);
     wl = 8
     @setBbox xc - VoltageElm.circleSize, yc - VoltageElm.circleSize, xc + VoltageElm.circleSize, yc + VoltageElm.circleSize
     xc2 = undefined
+
     switch @waveform
       when VoltageElm.WF_DC
         break

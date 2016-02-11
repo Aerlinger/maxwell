@@ -33,7 +33,7 @@ class GroundElm extends CircuitComponent
       renderContext.drawLinePt pt1, pt2, color
 
     pt2 = Util.interpolate @point1, @point2, 1 + 11.0 / @dn
-    @setBboxPt @point1, pt2, 11
+#    @setBboxPt @point1, pt2, 11
 
     renderContext.drawDots(@point1, @point2, this)
     renderContext.drawPosts this
@@ -54,7 +54,7 @@ class GroundElm extends CircuitComponent
   getInfo: (arr) ->
     super()
     arr[0] = "ground"
-    arr[1] = "I = " + getUnitText(@getCurrent(), "A")
+    arr[1] = "I = " + Util.getUnitText(@getCurrent(), "A")
 
   hasGroundConnection: (n1) ->
     true

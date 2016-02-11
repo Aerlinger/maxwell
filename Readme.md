@@ -21,6 +21,14 @@ A low-level javascript circuit simulation engine designed to model, simulate, an
     Clone the repo, navigate to the root directory and run:
     `bower install && grunt dist`
 
+## API
+
+```javascript
+var circuitContext = Maxwell.createCircuit("Voltage Divider", "./voltdivide.json", function(circuit) {
+
+});
+
+```
 
 ## Introduction
 

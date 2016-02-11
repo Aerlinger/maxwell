@@ -42,10 +42,11 @@ class CircuitComponent
     @component_id = Util.getRand(100000000) + (new Date()).getTime()
 
     console.log("POS: " + @x1, @y1, @x2, @y2)
-    @setBbox(@x1, @y1, @x2, @y2)
     @setPoints()
+    @recomputeBounds()
 
     @allocNodes()
+
 
   allocNodes: ->
     @nodes = Util.zeroArray(@getPostCount() + @getInternalNodeCount())
@@ -342,6 +343,9 @@ class CircuitComponent
       return @point1
     else if postIdx == 1
       return @point2
+
+  recomputeBounds: ->
+    @setBbox(@x1, @y1, @x2, @y2)
 
   getBoundingBox: ->
     @boundingBox

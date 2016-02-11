@@ -59,7 +59,30 @@ class Maxwell
 
     @Circuits[circuitName] = circuit
 
-    return circuit
+    return new Renderer(circuit, canvas)
+
+  @createContext: (circuitName, circuitData, context, onComplete) ->
+    circuit = null
+
+    if circuitName
+      if typeof circuitData is "string"
+        circuit = Maxwell.loadCircuitFromFile circuitData, (circuit) ->
+          onComplete(new Renderer(circuit, context))
+
+      else if typeof circuitData is "object"
+        circuit = Maxwell.loadCircuitFromJson(circuitData)
+      else
+        throw new Error("""
+          Parameter must either be a path to a JSON file or raw JSON data representing the circuit.
+          Use `Maxwell.createCircuit()` to create a new empty circuit object.
+        """)
+    else
+      circuit = new Circuit()
+
+    @Circuits[circuitName] = circuit
+
+#    return new Renderer(circuit, context)
+
 
 Maxwell.Renderer = Renderer
 

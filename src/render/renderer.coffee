@@ -73,6 +73,10 @@ class Renderer extends BaseRenderer
   @ON_COMPONENTS_DESELECTED = "ON_COMPONENTS_DESELECTED"
   @ON_COMPONENTS_MOVED = "ON_COMPONENTS_MOVED"
 
+  @STATE_EDIT
+  @STATE_PLACE
+  @STATE_RUN
+
   MOUSEDOWN = 1
 
   constructor: (@Circuit, @Canvas) ->
@@ -85,6 +89,8 @@ class Renderer extends BaseRenderer
     # TODO: Width and height are currently undefined
     @width = @Canvas.width
     @height = @Canvas.height
+
+    @state = @STATE_RUN
 
     if environment.isBrowser
       @context = Sketch.augment @Canvas.getContext("2d"), {
@@ -99,15 +105,19 @@ class Renderer extends BaseRenderer
 
       @context.lineJoin = 'miter'
 
-    #    @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
-    #    @Circuit.addObserver Circuit.ON_RESET, @clear
-    #    @Circuit.addObserver Circuit.ON_END_UPDATE, @clear
+    @onComponentClick = null
+    @onComponentHover = null
+
+    # @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
+    # @Circuit.addObserver Circuit.ON_RESET, @clear
+    # @Circuit.addObserver Circuit.ON_END_UPDATE, @clear
 
   mousemove: (event) =>
     x = event.offsetX
     y = event.offsetY
 
-    @highlightedComponent = null
+#    @highlightedComponent = null
+    @newlyHighlightedComponent = null
 
     @lastX = @snapX
     @lastY = @snapY
@@ -117,21 +127,25 @@ class Renderer extends BaseRenderer
 
     # TODO: WIP for interactive element placing
     if @placeComponent
-      if @placeComponent.x1
-        @placeComponent.moveTo(@snapX, @snapY)
-      else
-        x1 = @snapX - 54
-        x2 = @snapX + 54
-        y1 = @snapY
-        y2 = @snapY
-
-        @placeComponent.x1 = x1
-        @placeComponent.x2 = x2
-        @placeComponent.y1 = y1
-        @placeComponent.y2 = y2
-
+      if @placeComponent.x1 && @placeComponent.y1
+        @placeComponent.x2 = @snapX
+        @placeComponent.y2 = @snapY
         @placeComponent.setPoints()
-        @placeComponent.setBbox(x1, y1, x2, y2)
+#        @placeComponent.setBbox(@placeComponent.x1, @placeComponent.y1, @placeComx2, y2)
+#        @placeComponent.moveTo(@snapX, @snapY)
+#      else
+#        x1 = @snapX - 54
+#        x2 = @snapX + 54
+#        y1 = @snapY
+#        y2 = @snapY
+
+#        @placeComponent.x1 = x1
+#        @placeComponent.x2 = x2
+#        @placeComponent.y1 = y1
+#        @placeComponent.y2 = y2
+
+#        @placeComponent.setPoints()
+#        @placeComponent.setBbox(x1, y1, x2, y2)
 
     # END TODO
 
@@ -145,8 +159,20 @@ class Renderer extends BaseRenderer
     else
       for component in @Circuit.getElements()
         if component.getBoundingBox().contains(x, y)
-          @highlightedComponent = component
-          @notifyObservers(Renderer.ON_COMPONENT_HOVER, component)
+          @newlyHighlightedComponent = component
+
+      if @newlyHighlightedComponent
+        if @newlyHighlightedComponent != @highlightedComponent
+          @highlightedComponent = @newlyHighlightedComponent
+          @onComponentHover?(@highlightedComponent)
+          @notifyObservers(Renderer.ON_COMPONENT_HOVER, @highlightedComponent)
+
+      else
+        if @highlightedComponent != null
+          @onComponentUnhover?(@highlightedComponent)
+
+        @highlightedComponent = null
+
 
     if @marquee is null and @selectedComponents?.length > 0 and event.which == MOUSEDOWN and (@lastX != @snapX or @lastY != @snapY)
       for component in @selectedComponents
@@ -156,24 +182,31 @@ class Renderer extends BaseRenderer
     x = event.offsetX
     y = event.offsetY
 
+    if @placeComponent
+      if @placeComponent.x1 && @placeComponent.y1
+        @placeComponent.x2 = Util.snapGrid(x)
+        @placeComponent.y2 = Util.snapGrid(y)
+        @Circuit.solder(@placeComponent)
+        @placeComponent = null
+      else
+        @placeComponent.x1 = Util.snapGrid(x)
+        @placeComponent.y1 = Util.snapGrid(y)
+
     if @highlightedComponent == null
       @selectedComponents = []
       @marquee = new SelectionMarquee(x, y)
 
-    if @placeComponent
-      @Circuit.solder(@placeComponent)
-      @placeComponent = null
-
-
     for component in @Circuit.getElements()
       if component.getBoundingBox().contains(x, y)
+
+        @onComponentClick?(component)
+
         @notifyObservers(Renderer.ON_COMPONENT_CLICKED, component)
 
         if @selectedComponents?.length == 0
           @selectedComponents = [component]
 
         component.toggle?()
-
 
   mouseup: (event) =>
     @marquee = null
@@ -188,12 +221,17 @@ class Renderer extends BaseRenderer
 
     @drawInfoText()
     @marquee?.draw(this)
+
+    # UPDATE FRAME
     @Circuit.updateCircuit()
+
     @drawComponents()
 
-    if @context && @placeComponent && @placeComponent.x1
-      @drawComponent(@placeComponent)
+    if @context && @placeComponent
+      @context.fillText("Placing #{@placeComponent.constructor.name}", @snapX, @snapY)
 
+      if @placeComponent.x1 && @placeComponent.x2
+        @drawComponent(@placeComponent)
 
   drawComponents: ->
     if @context
@@ -201,7 +239,6 @@ class Renderer extends BaseRenderer
         if @marquee?.collidesWithComponent(component)
           console.log("MARQUEE COLLIDE: " + component)
         @drawComponent(component)
-
 
   drawComponent: (component) ->
     if component in @selectedComponents
@@ -278,7 +315,6 @@ class Renderer extends BaseRenderer
 
   drawPost: (x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_COLOR) ->
     @fillCircle x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor
-
 
 
 module.exports = Renderer
