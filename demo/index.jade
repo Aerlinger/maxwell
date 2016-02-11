@@ -144,6 +144,19 @@ html
         });
 
         $('.ui.sidebar').sidebar('toggle');
+
+        var back_canvas = $('.grid').get(0);
+
+        var ctx = back_canvas.getContext("2d");
+        ctx.fillStyle = "#000";
+        ctx.globalAlpha = 0.5;
+        ctx.lineWidth = 0;
+        for (i=0; i<back_canvas.width; i += 8) {
+          for (j=0; j<back_canvas.height; j += 8) {
+            ctx.moveTo(i, j);
+            ctx.fillRect(i, j, 1, 1);
+          }
+        }
       });
 
   body
@@ -155,8 +168,9 @@ html
             - for (var i=0; i<circuit_names.length; ++i)
               a.item(href="/"+circuit_names[i])= circuit_names[i]
 
-      #container.pull-left
+      .canvas-container.pull-left
         canvas.maxwell(data-circuit="#{circuit}", width="800", height="600")
+        canvas.grid(width="800", height="600")
         div(style="width: 300px; border: 1px solid #00F; height: 600px; float: right;")
           p#placeComponent
           // Render component/circuit properties

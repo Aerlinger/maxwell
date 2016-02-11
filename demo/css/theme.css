@@ -8,17 +8,29 @@ body {
     background: white;
 }
 
-.maxwell {
-    background-color: white;
-}
-
 .ui.vertical.inverted.menu .menu .item {
   font-size: 10px;
 }
 
+.canvas-container {
+  position: relative;
+}
+
 canvas {
   border: 1px solid grey;
-  background-color: lightblue;
+  background-color: transparent;
+}
+
+.maxwell {
+  background-color: transparent;
+  position: absolute;
+  z-index: 1000;
+}
+
+canvas.grid {
+  position: relative;
+  z-index: 1;
+  background-color: transparent;
 }
 
 #sidenav ul li a {
