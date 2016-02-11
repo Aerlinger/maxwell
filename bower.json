@@ -18,7 +18,8 @@
     "lodash": "*",
     "rickshaw": "1.5.0",
     "sketch.js": "*",
-    "semantic": "semantic-ui#^2.1.8"
+    "semantic": "semantic-ui#^2.1.8",
+    "jquery-ui": "^1.11.4"
   },
   "devDependencies": {
     "jquery": "*",
