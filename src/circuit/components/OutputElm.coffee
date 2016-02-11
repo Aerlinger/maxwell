@@ -28,19 +28,18 @@ class OutputElm extends CircuitComponent
     if CircuitComponent.DEBUG
       super(renderContext)
 
-    #Font f = new Font("SansSerif", selected ? Font.BOLD : 0, 14);
-    #g.setFont(f);
     color = "#FFF";
     s = (if (@flags & OutputElm.FLAG_VALUE) isnt 0 then Util.getUnitText(@volts[0], "V") else "out")
 
     @lead1 = Util.interpolate @point1, @point2, 1 - (3 * s.length / 2 + 8) / @dn
 
     @setBboxPt @point1, @lead1, 0
-    renderContext.drawValue -5, 0, this, s
+    renderContext.drawValue -5, 25, this, s
 
     color = Util.getVoltageColor(@volts[0])
 
     renderContext.drawLinePt @point1, @lead1, color
+    renderContext.drawCircle @lead1.x + Settings.POST_RADIUS, @lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR
     renderContext.drawPosts(this)
 
   getVoltageDiff: ->

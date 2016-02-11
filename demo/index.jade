@@ -7,7 +7,7 @@ html
 
     link(rel='stylesheet', href='theme.css')
     link(rel='stylesheet', href='bower_components/rickshaw/rickshaw.css')
-    link(rel='stylesheet', href='bower_components/bootstrap/dist/css/bootstrap.css')
+    //link(rel='stylesheet', href='bower_components/bootstrap/dist/css/bootstrap.css')
     link(rel="stylesheet", href="bower_components/semantic/dist/semantic.min.css")
 
     script(type="text/javascript", src="bower_components/dat.gui/dat.gui.js")
@@ -15,10 +15,12 @@ html
     script(type="text/javascript", src="bower_components/sketch.js/js/sketch.js")
     script(type="text/javascript", src="bower_components/lodash/lodash.js")
     script(type="text/javascript", src="bower_components/d3/d3.js")
-    script(type='text/javascript', src='bower_components/bootstrap/dist/js/bootstrap.js')
+    //script(type='text/javascript', src='bower_components/bootstrap/dist/js/bootstrap.js')
     script(type="text/javascript", src="bower_components/semantic/dist/semantic.min.js")
 
     script(type="text/javascript", src="dist/maxwell.js")
+
+
 
     script.
       $(document).ready(function (event) {
@@ -147,8 +149,11 @@ html
           console.log($(this).data("component-index"));
         });
 
-        $('.ui.sidebar').sidebar('toggle');
+        $('#component_sidebar').sidebar('setting', 'transition', 'overlay');
+        $('#component_sidebar').sidebar('setting', 'transition', 'overlay');
+        $('#circuit_sidebar').sidebar('show');
         $('.ui.dropdown').dropdown();
+        $('.ui.checkbox').checkbox();
 
         var back_canvas = $('.grid').get(0);
 
@@ -165,65 +170,104 @@ html
       });
 
   body
-    .pusher
-      .ui.menu
-        .ui.dropdown.item
-          | Circuit
-          i.dropdown.icon
-          .menu
-            a.item
-              span.description ctrl + s
-              | Save
-            a.item
-              i.folder.icon
-              | Permalink
-            a.item Export to SPICE
-            a.item Export to JSON
-        .ui.dropdown.item
-          | Components
-          i.dropdown.icon
-          .menu
-            a.item First
-            a.item Second
-            a.item Third
-        .ui.dropdown.item
-          | Sample Circuits
-          i.dropdown.icon
-          .menu
-            a.item First
-            a.item Second
-            a.item Third
+    .ui.menu
+      .ui.dropdown.item
+        | Circuit
+        i.dropdown.icon
+        .menu
+          a.item
+            span.description ctrl + s
+            | Save
+          a.item
+            i.folder.icon
+            | Permalink
+          a.item Export to SPICE
+          a.item Export to JSON
+      .ui.dropdown.item
+        | Components
+        i.dropdown.icon
+        .menu
+          a.item First
+          a.item Second
+          a.item Third
+      .ui.dropdown.item
+        | Sample Circuits
+        i.dropdown.icon
+        .menu
+          a.item First
+          a.item Second
+          a.item Third
 
-      .ui.vertical.pointing.menu.pull-left
+    div
+      #circuit_sidebar.ui.sidebar.thin.left.vertical.menu.visible
         .item
-          .header Predefined Circuits
+          .header Circuits
           .menu
             - for (var i=0; i<circuit_names.length; ++i)
               a.item(href="/"+circuit_names[i])= circuit_names[i]
 
-      .ui.vertical.pointing.menu.pull-right
+      #component_sidebar.ui.sidebar.right.vertical.menu.visible
         .item
-          .header Components
-          #components.menu
+          .header Circuits
+          .menu
+            - for (var i=0; i<circuit_names.length; ++i)
+              a.item(href="/" + circuit_names[i])= circuit_names[i]
 
+      #edit_sidebar.ui.bottom.sidebar.visible
+        div(style="height: 200px; border: 1px solid #FF00FF; margin-left: 150px;")
+          div(style="width: 100%; border: 1px solid #F00; padding: 5px;")
+            a.button.mini.ui.button.green Start
+            a.button.mini.ui.button.orange  Stop
+            a.button.mini.ui.button.red  Reset
+          p text
+          p text
+          p text
+          p text
 
-      .canvas-container.pull-left
-        canvas.maxwell(data-circuit="#{circuit}", width="800", height="600")
-        canvas.grid(width="800", height="600")
-        div(style="width: 300px; border: 1px solid #00F; height: 600px; float: right;")
-          p#coords Cursor: (-, -)
-          p#placeComponent
-          p#selectedComponent
-          // Render component/circuit properties
+        //.ui.vertical.pointing.menu.float-right
+          .item
+            .header Components
+            #components.menu
 
+      .pusher
+        .canvas-container(style="margin-left: 150px; width: 100%;")
+          canvas.maxwell(data-circuit="#{circuit}", width="800", height="600")
+          canvas.grid(width="800", height="600")
+          div(style="width: 300px; border: 1px solid #00F; height: 600px; display: inline-block; position: absolute;")
+            p#coords Cursor: (-, -)
+            p#placeComponent
+            p#selectedComponent
 
-        div(style="width: 100%; border: 1px solid #F00; padding: 15px;")
-          a.btn.btn-xs.btn-success.pull-left Start
-          a.btn.btn-xs.btn-info.pull-left Stop
-          a.btn.btn-xs.btn-danger.pull-left Reset
+            form.ui.form
+              h4.ui.dividing.header Simulation Settings
 
+              .inline.field
+                .ui.slider.checkbox
+                  label Toggle
+                  input(type="checkbox")
 
-      //.col-md-1
-        #sidenav
-          ul#components.list-unstyled
+              .inline.field
+                .ui.slider.range
+                  label Simulation Speed
+                  input(type="range")
+
+              .inline.field
+                .ui.slider.range
+                  label Current Speed
+                  input(type="range")
+
+              .inline.field
+                label Time Step
+                input(type="text", placeholder="0.05")
+
+            h4.ui.dividing.header Component List
+            .ui.middle.aligned.divided.list
+              - for (var i=0; i<8; ++i)
+                .item
+                  .right.floated.content
+                    button.mini.ui.button.green Edit
+                  img.ui.circuit-icon.image(src="https://placehold.it/50x50")
+                  .content
+                    | Element Name #{i}
+                // Render component/circuit properties
 

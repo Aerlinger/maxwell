@@ -102,6 +102,7 @@ class OpAmpElm extends CircuitComponent
     # Terminal 1
     color = Util.getVoltageColor(@volts[0])
     renderContext.drawLinePt @in1p[0], @in1p[1], color
+#    renderContext.drawValue(@in1p[1].x, )
 
     # Terminal 2
     color = Util.getVoltageColor(@volts[1])

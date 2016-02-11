@@ -293,7 +293,9 @@ class Renderer extends BaseRenderer
 
   drawValue: (perpindicularOffset, parallelOffset, component, text = null, rotation = 0) ->
     @context.save()
-    @context.textAlign = "center";
+    @context.textAlign = "center"
+
+    @context.font = "bold 8pt Courier"
 
     stringWidth = @context.measureText(text).width
     stringHeight = @context.measureText(text).actualBoundingBoxAscent || 0
@@ -344,7 +346,7 @@ class Renderer extends BaseRenderer
 
         @context.save()
         @context.strokeStyle = Settings.CURRENT_COLOR
-        @context.lineWidth = Settings.CURRENT_RADIUS
+        @context.lineWidth = Settings.CURRENT_RADIUS + 1
         @context.beginPath()
         @context.moveTo xOffset0, yOffset0
         @context.lineTo xOffset1, yOffset1

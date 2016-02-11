@@ -181,7 +181,7 @@ class Settings
   # Line Widths:
   @POST_RADIUS: 2.5
   @CURRENT_RADIUS: 1
-  @CURRENT_COLOR: "rgba(255, 255, 255, 1.0)"
+  @CURRENT_COLOR: "rgba(255, 255, 255, 0.8)"
   @LINE_WIDTH: 2
   @BOLD_LINE_WIDTH: 3
 
