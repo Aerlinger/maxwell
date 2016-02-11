@@ -150,7 +150,7 @@ class VoltageElm extends CircuitComponent
     else
       @calcLeads VoltageElm.circleSize * 2
 
-    @setBbox @x1, @y2, @x2, @y2
+    @setBbox @x1, @y1, @x2, @y2
     renderContext.drawLeads(this)
 
     if @waveform is VoltageElm.WF_DC
@@ -258,7 +258,7 @@ class VoltageElm extends CircuitComponent
     renderContext.drawCircle xc, yc, VoltageElm.circleSize, 2, "#000000"
 
     if Settings.SHOW_VALUES
-      valueString = @getUnitText(@frequency, "Hz")
+      valueString = Util.getUnitText(@frequency, "Hz")
 
 #      if @axisAligned
 #        @drawValues valueString, VoltageElm.circleSize
@@ -287,12 +287,12 @@ class VoltageElm extends CircuitComponent
       when VoltageElm.WF_TRIANGLE
         arr[0] = "triangle gen"
 
-    arr[1] = "I = " + @getUnitText(@getCurrent(), "A")
+    arr[1] = "I = " + Util.getUnitText(@getCurrent(), "A")
 #      arr[2] = ((if (this instanceof RailElm) then "V = " else "Vd = ")) + DrawHelper.getVoltageText(@getVoltageDiff())
 
     if @waveform isnt VoltageElm.WF_DC and @waveform isnt VoltageElm.WF_VAR
-      arr[3] = "f = " + @getUnitText(@frequency, "Hz")
-      arr[4] = "Vmax = " + @getUnitText(@maxVoltage, "V")
+      arr[3] = "f = " + Util.getUnitText(@frequency, "Hz")
+      arr[4] = "Vmax = " + Util.getUnitText(@maxVoltage, "V")
       i = 5
       unless @bias is 0
         arr[i++] = "Voff = " + Util.getUnitText(@bias, "V")

@@ -110,11 +110,11 @@ class SwitchElm extends CircuitComponent
     arr[0] = (if (@momentary) then "push switch (SPST)" else "switch (SPST)")
     if @position is 1
       arr[1] = "open"
-      arr[2] = "Vd = " + @getUnitText(@getVoltageDiff(), "V")
+      arr[2] = "Vd = " + Util.getUnitText(@getVoltageDiff(), "V")
     else
       arr[1] = "closed"
-      arr[2] = "V = " + @getUnitText(@volts[0], "V")
-      arr[3] = "I = " + @getUnitText(@getCurrent(), "A")
+      arr[2] = "V = " + Util.getUnitText(@volts[0], "V")
+      arr[3] = "I = " + Util.getUnitText(@getCurrent(), "A")
 
   getConnection: (n1, n2) ->
     @position is 0

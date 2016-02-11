@@ -31,7 +31,7 @@ class ResistorElm extends CircuitComponent
     numSegments = 16
     width = 5
 
-    @setBboxPt @point1, @point2, width
+#    @setBboxPt @point1, @point2, width
 
     renderContext.drawLeads(this)
 

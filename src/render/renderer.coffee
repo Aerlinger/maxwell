@@ -103,8 +103,6 @@ class Renderer extends BaseRenderer
     #    @Circuit.addObserver Circuit.ON_RESET, @clear
     #    @Circuit.addObserver Circuit.ON_END_UPDATE, @clear
 
-
-
   mousemove: (event) =>
     x = event.offsetX
     y = event.offsetY

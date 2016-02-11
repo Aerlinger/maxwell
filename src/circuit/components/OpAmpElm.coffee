@@ -170,8 +170,8 @@ class OpAmpElm extends CircuitComponent
   getInfo: (arr) ->
     super()
     arr[0] = "op-amp"
-    arr[1] = "V+ = " + @getUnitText(@volts[1], "V")
-    arr[2] = "V- = " + @getUnitText(@volts[0], "V")
+    arr[1] = "V+ = " + Util.getUnitText(@volts[1], "V")
+    arr[2] = "V- = " + Util.getUnitText(@volts[0], "V")
 
     # sometimes the voltage goes slightly outside range, to make convergence easier.  so we hide that here.
     vo = Math.max(Math.min(@volts[2], @maxOut), @minOut)

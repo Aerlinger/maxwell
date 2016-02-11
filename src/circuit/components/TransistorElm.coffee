@@ -365,11 +365,11 @@ class TransistorElm extends CircuitComponent
     else
       arr[1] = (if vbe * @pnp > .2 then "fwd active" else "cutoff")
 
-    arr[2] = "Ic = " + @getUnitText(@ic, "A")
-    arr[3] = "Ib = " + @getUnitText(@ib, "A")
-    arr[4] = "Vbe = " +@getUnitText(vbe, "V")
-    arr[5] = "Vbc = " +@getUnitText(vbc, "V")
-    arr[6] = "Vce = " +@getUnitText(vce, "V")
+    arr[2] = "Ic = " + Util.getUnitText(@ic, "A")
+    arr[3] = "Ib = " + Util.getUnitText(@ib, "A")
+    arr[4] = "Vbe = " +Util.getUnitText(vbe, "V")
+    arr[5] = "Vbc = " +Util.getUnitText(vbc, "V")
+    arr[6] = "Vce = " +Util.getUnitText(vce, "V")
 
   getScopeValue: (x) ->
     switch x

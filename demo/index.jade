@@ -60,7 +60,15 @@ html
       #container
         canvas.maxwell(data-circuit="#{circuit}", width="800", height="600")
         div(style="width: 300px; border: 1px solid #00F; height: 600px; float: right;")
+          // Render component/circuit properties
+
+
         div(style="width: 100%; border: 1px solid #F00; padding: 15px;")
+          a.btn.btn-xs.btn-success.pull-left Start
+          a.btn.btn-xs.btn-info.pull-left Stop
+          a.btn.btn-xs.btn-danger.pull-left Reset
+
+          // Render form elements for component parameters
 
     .col-md-1
       #sidenav

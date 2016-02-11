@@ -55,7 +55,7 @@ class Switch2Elm extends SwitchElm
     if CircuitComponent.DEBUG
       super(renderContext)
 
-    @setBbox @point1, @point2, @openhs
+    @setBboxPt @point1, @point2, @openhs
 
     @calcLeads 32
 

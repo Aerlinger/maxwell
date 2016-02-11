@@ -24,7 +24,7 @@ _ = require("lodash")
 sprintf = require("sprintf-js").sprintf
 
 class CircuitComponent
-  @DEBUG = false
+  @DEBUG = true
 
   @ParameterDefinitions = {}
 
@@ -41,8 +41,9 @@ class CircuitComponent
 
     @component_id = Util.getRand(100000000) + (new Date()).getTime()
 
-    @setPoints()
+    console.log("POS: " + @x1, @y1, @x2, @y2)
     @setBbox(@x1, @y1, @x2, @y2)
+    @setPoints()
 
     @allocNodes()
 
@@ -348,8 +349,8 @@ class CircuitComponent
   setBbox: (x1, y1, x2, y2) ->
     x = Math.min(x1, x2)
     y = Math.min(y1, y2)
-    width = Math.abs(x2 - x1) + 1
-    height = Math.abs(y2 - y1) + 1
+    width = Math.abs(x2 - x1) + 3
+    height = Math.abs(y2 - y1) + 3
 
 #    if @isVertical()
 #      width = 21
@@ -358,9 +359,7 @@ class CircuitComponent
 #      height = 21
 #      @boundingBox = new Rectangle(x, y - height/2, width, height)
 
-    @boundingBox = new Rectangle(x, y, width, height)
-
-
+    @boundingBox = new Rectangle(x-1, y-1, width, height)
 
 
   setBboxPt: (p1, p2, width) ->
@@ -375,8 +374,8 @@ class CircuitComponent
 
 # Extended by subclasses
   getBasicInfo: (arr) ->
-    arr[1] = "I = " + @getUnitText(@getCurrent(), "A")
-    arr[2] = "Vd = " + @getUnitText(@getVoltageDiff(), "V")
+    arr[1] = "I = " + Util.getUnitText(@getCurrent(), "A")
+    arr[2] = "Vd = " + Util.getUnitText(@getVoltageDiff(), "V")
     3
 
   getScopeValue: (x) ->
@@ -397,10 +396,6 @@ class CircuitComponent
   canViewInScope: ->
     return @getPostCount() <= 2
 
-#  needsHighlight: ->
-#    @focused
-#      @Circuit?.mouseElm is this or @selected
-
   needsShortcut: ->
     false
 
@@ -413,55 +408,40 @@ class CircuitComponent
 
     renderContext.drawRect(@boundingBox.x, @boundingBox.y, @boundingBox.width, @boundingBox.height, 1, "#8888CC")
 
-    renderContext.drawValue 10, -15, this, @constructor.name
+#    renderContext.drawValue 10, -15, this, @constructor.name
 
-    height = 8
-    i = 0
-    for name, value in @params
-      console.log(name, value);
-      renderContext.drawValue 12, -15 + height * i, this, "#{name}: #{value}"
-      i += 1
+#    height = 8
+#    i = 0
+#    for name, value in @params
+#      console.log(name, value);
+#      renderContext.drawValue 12, -15 + height * i, this, "#{name}: #{value}"
+#      i += 1
 
-    renderContext.drawCircle(@getCenter().x, @getCenter().y, 5, 0, "#FF0000")
+#    renderContext.drawCircle(@getCenter().x, @getCenter().y, 5, 0, "#FF0000")
 
-    @calcLeads 0
+#    @calcLeads 0
 
-    renderContext.drawPosts(this, "#FF0000")
+#    renderContext.drawPosts(this, "#FF0000")
 
-    for i in [0...@getPostCount()]
-      post = @getPost(i)
-      renderContext.drawCircle(post.x, post.y, 3, 0, "#FF00FF")
+#    for i in [0...@getPostCount()]
+#      post = @getPost(i)
+#      renderContext.drawCircle(post.x, post.y, 3, 0, "#FF00FF")
 
-    renderContext.drawLine(@point1.x-2, @point1.y-2, @point1.x+2, @point1.y+2, "#0000FF")
-    renderContext.drawLine(@point1.x-2, @point1.y+2, @point1.x-2, @point1.y-2, "#0000FF")
-    renderContext.drawLine(@point2.x-2, @point2.y-2, @point2.x+2, @point2.y+2, "#0000FF")
-    renderContext.drawLine(@point2.x-2, @point2.y+2, @point2.x-2, @point2.y-2, "#0000FF")
-
-    if @lead1 && @lead2
-      renderContext.drawLine(@lead1.x-2, @lead1.y-2, @lead1.x+2, @lead1.y+2, "#00FF00")
-      renderContext.drawLine(@lead1.x-2, @lead1.y+2, @lead1.x-2, @lead1.y-2, "#00FF00")
-      renderContext.drawLine(@lead2.x-2, @lead2.y-2, @lead2.x+2, @lead2.y+2, "#00FF00")
-      renderContext.drawLine(@lead2.x-2, @lead2.y+2, @lead2.x-2, @lead2.y-2, "#00FF00")
+#    renderContext.drawLine(@point1.x-2, @point1.y-2, @point1.x+2, @point1.y+2, "#0000FF")
+#    renderContext.drawLine(@point1.x-2, @point1.y+2, @point1.x-2, @point1.y-2, "#0000FF")
+#    renderContext.drawLine(@point2.x-2, @point2.y-2, @point2.x+2, @point2.y+2, "#0000FF")
+#    renderContext.drawLine(@point2.x-2, @point2.y+2, @point2.x-2, @point2.y-2, "#0000FF")
+#
+#    if @lead1 && @lead2
+#      renderContext.drawLine(@lead1.x-2, @lead1.y-2, @lead1.x+2, @lead1.y+2, "#00FF00")
+#      renderContext.drawLine(@lead1.x-2, @lead1.y+2, @lead1.x-2, @lead1.y-2, "#00FF00")
+#      renderContext.drawLine(@lead2.x-2, @lead2.y-2, @lead2.x+2, @lead2.y+2, "#00FF00")
+#      renderContext.drawLine(@lead2.x-2, @lead2.y+2, @lead2.x-2, @lead2.y-2, "#00FF00")
 
     renderContext.drawLeads(this)
 
 #    @updateDots(this)
 #    renderContext.drawDots(@point1, @point2, this)
-
-# TODO: Validate consistency
-  updateDotCount: (cur, cc) ->
-    @curcount ||= 0
-
-    #      return cc  if CirSim.stoppedCheck
-    cur = @current  if (isNaN(cur) || !cur?)
-    cc = @curcount  if (isNaN(cc) || !cc?)
-
-    cadd = cur * @Circuit.Params.getCurrentMult()
-    console.log(cadd)
-    #      cadd = cur * 48
-    cadd %= 8
-    @curcount = cc + cadd
-    @curcount
 
   updateDots: (ds = Settings.CURRENT_SEGMENT_LENGTH) ->
     if @Circuit
@@ -473,19 +453,6 @@ class CircuitComponent
       @curcount += ds if @curcount < 0
 
       @curcount
-
-  getUnitText: (value, unit, decimalPoints = 2) ->
-    absValue = Math.abs(value)
-    return "0 " + unit  if absValue < 1e-18
-    return (value * 1e15).toFixed(decimalPoints) + " f" + unit  if absValue < 1e-12
-    return (value * 1e12).toFixed(decimalPoints) + " p" + unit  if absValue < 1e-9
-    return (value * 1e9).toFixed(decimalPoints) + " n" + unit  if absValue < 1e-6
-    return (value * 1e6).toFixed(decimalPoints) + " μ" + unit  if absValue < 1e-3
-    return (value * 1e3).toFixed(decimalPoints) + " m" + unit  if absValue < 1
-    return (value).toFixed(decimalPoints) + " " + unit  if absValue < 1e3
-    return (value * 1e-3).toFixed(decimalPoints) + " k" + unit  if absValue < 1e6
-    return (value * 1e-6).toFixed(decimalPoints) + " M" + unit  if absValue < 1e9
-    (value * 1e-9).toFixed(decimalPoints) + " G" + unit
 
   comparePair: (x1, x2, y1, y2) ->
     (x1 == y1 && x2 == y2) || (x1 == y2 && x2 == y1)

@@ -45,7 +45,7 @@ class RailElm extends VoltageElm
       #this.setPowerColor(g, false);
       v = @getVoltage()
 
-      s = @getUnitText(v, "V")
+      s = Util.getUnitText(v, "V")
       s = v + "V" if Math.abs(v) < 1 #showFormat.format(v)
       s = "+" + s if @getVoltage() > 0
 

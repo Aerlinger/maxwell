@@ -31,7 +31,7 @@ class OutputElm extends CircuitComponent
     #Font f = new Font("SansSerif", selected ? Font.BOLD : 0, 14);
     #g.setFont(f);
     color = "#FFF";
-    s = (if (@flags & OutputElm.FLAG_VALUE) isnt 0 then @getUnitText(@volts[0], "V") else "out")
+    s = (if (@flags & OutputElm.FLAG_VALUE) isnt 0 then Util.getUnitText(@volts[0], "V") else "out")
 
     @lead1 = Util.interpolate @point1, @point2, 1 - (3 * s.length / 2 + 8) / @dn
 
@@ -48,7 +48,7 @@ class OutputElm extends CircuitComponent
 
   getInfo: (arr) ->
     arr[0] = "output"
-    arr[1] = "V = " + @getUnitText(@volts[0], "V")
+    arr[1] = "V = " + Util.getUnitText(@volts[0], "V")
 
   stamp: (stamper) ->
 

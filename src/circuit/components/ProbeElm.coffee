@@ -64,7 +64,7 @@ class ProbeElm extends CircuitComponent
     #      renderContext.drawCenteredText("Y", @center.x1, @center.y, color) if this is Circuit.plotYElm
 
     if @mustShowVoltage()
-      unit_text = @getUnitText(@volts[0], "V")
+      unit_text = Util.getUnitText(@volts[0], "V")
 #      @drawValues unit_text, 4, renderContext
 
     renderContext.drawPosts(this)

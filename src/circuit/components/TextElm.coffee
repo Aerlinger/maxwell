@@ -63,7 +63,7 @@ class TextElm extends CircuitComponent
 #    color = (if @needsHighlight() then Settings.SELECT_COLOR else Settings.TEXT_COLOR)
 
     color = Settings.TEXT_COLOR
-    @setBbox @x1, @y, @x1, @y
+    @setBbox @x1, @y1, @x2, @y2
 
 #      f = new Font("SansSerif", 0, size)
 #      g.setFont f

@@ -71,8 +71,6 @@ class CapacitorElm extends CircuitComponent
     [@plate2[0], @plate2[1]] = Util.interpolateSymmetrical @point1, @point2, 1 - f, 12
 
 
-
-
   draw: (renderContext) ->
     if CircuitComponent.DEBUG
       super(renderContext)
@@ -83,7 +81,7 @@ class CapacitorElm extends CircuitComponent
     # calc plates
 
     hs = 12
-    @setBboxPt @point1, @point2, hs
+#    @setBboxPt @point1, @point2, hs
 
     # draw first lead and plate
     color = Util.getVoltageColor(@volts[0])
@@ -113,7 +111,7 @@ class CapacitorElm extends CircuitComponent
     "F"
 
   drawUnits: ->
-    s = @getUnitText(@capacitance, "F")
+    s = Util.getUnitText(@capacitance, "F")
 #    @drawValues s, hs
 
   doStep: (stamper) ->
@@ -152,10 +150,10 @@ class CapacitorElm extends CircuitComponent
 
     arr[0] = "capacitor"
     @getBasicInfo arr
-    arr[3] = "C = " + @getUnitText(@capacitance, "F")
-    arr[4] = "P = " + @getUnitText(@getPower(), "W")
+    arr[3] = "C = " + Util.getUnitText(@capacitance, "F")
+    arr[4] = "P = " + Util.getUnitText(@getPower(), "W")
     v = @getVoltageDiff()
-    arr[4] = "U = " + @getUnitText(.5 * @capacitance * v * v, "J")
+    arr[4] = "U = " + Util.getUnitText(.5 * @capacitance * v * v, "J")
 
   needsShortcut: ->
     true

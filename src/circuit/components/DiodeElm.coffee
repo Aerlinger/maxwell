@@ -181,10 +181,10 @@ class DiodeElm extends CircuitComponent
   getInfo: (arr) ->
     super()
     arr[0] = "diode"
-    arr[1] = "I = " + @getUnitText(@getCurrent(), "A")
-    arr[2] = "Vd = " + @getUnitText(@getVoltageDiff(), "V")
-    arr[3] = "P = " + @getUnitText(@getPower(), "W")
-    arr[4] = "Vf = " + @getUnitText(@fwdrop, "V")
+    arr[1] = "I = " + Util.getUnitText(@getCurrent(), "A")
+    arr[2] = "Vd = " + Util.getUnitText(@getVoltageDiff(), "V")
+    arr[3] = "P = " + Util.getUnitText(@getPower(), "W")
+    arr[4] = "Vf = " + Util.getUnitText(@fwdrop, "V")
 
   toString: ->
     "DiodeElm"

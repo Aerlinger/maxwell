@@ -3,6 +3,7 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
+Util = require('../../util/util.coffee')
 
 class InductorElm extends CircuitComponent
   @FLAG_BACK_EULER = 2
@@ -78,7 +79,7 @@ class InductorElm extends CircuitComponent
     renderContext.drawLeads(this)
     renderContext.drawCoil @lead1, @lead2, v1, v2, renderContext
 
-    renderContext.drawValue -12, 0, this, @getUnitText(@inductance, "H")
+    renderContext.drawValue -12, 0, this, Util.getUnitText(@inductance, "H")
 
     renderContext.drawDots(@point1, @point2, this)
     renderContext.drawPosts(this)
@@ -109,8 +110,8 @@ class InductorElm extends CircuitComponent
   getInfo: (arr) ->
     arr[0] = "inductor"
     @getBasicInfo arr
-    arr[3] = "L = " + @getUnitText(@inductance, "H")
-    arr[4] = "P = " + @getUnitText(@getPower(), "W")
+    arr[3] = "L = " + Util.getUnitText(@inductance, "H")
+    arr[4] = "P = " + Util.getUnitText(@getPower(), "W")
 
   reset: ->
     @current = 0

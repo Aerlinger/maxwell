@@ -1,4 +1,4 @@
-glob = require("glob")
+  glob = require("glob")
 path = require("path")
 fs = require("fs")
 

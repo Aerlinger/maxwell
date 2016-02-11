@@ -41,7 +41,7 @@ class InverterElm extends CircuitComponent
 
     @gatePoly = triPoints
 
-    @setBbox(@point1, @point2, hs)
+    @setBboxPt(@point1, @point2, hs)
 
 
   getVoltageSourceCount: ->
