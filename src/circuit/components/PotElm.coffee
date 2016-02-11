@@ -6,7 +6,7 @@ Point = require("../../geom/point.coffee")
 
 class PotElm extends CircuitComponent
 
-  @ParameterDefinitions = {
+  @Fields = {
     "maxResistance": {
       name: "Max Resistance"
       default_value: 1e4
@@ -16,13 +16,12 @@ class PotElm extends CircuitComponent
     "position": {
       name: "Position"
       default_value: 1
+      range: [0, 1e5]
       data_type: parseFloat
     },
     "sliderText": {
       name: "sliderText"
-      unit: ""
-      default_value: "Voltage"
-      symbol: "%"
+      default_value: ""
       data_type: (x) -> x
     }
   }
@@ -73,7 +72,7 @@ class PotElm extends CircuitComponent
     bodyLen = 32
 
     @calcLeads(bodyLen)
-    @position = @getSliderValue() * 0.0099 + 0.005
+    #    @position = @getSliderValue() * 0.0099 + 0.005
     soff = Math.floor((@position - 0.5) * bodyLen)
 
     @post3 = Util.interpolate(@point1, @point2, 0.5, offset)
@@ -97,9 +96,6 @@ class PotElm extends CircuitComponent
       @post3
 
 #    return (n == 0) ? @point1 : (n == 1) ? @point2 : @post3;
-
-  getSliderValue: ->
-    @sliderValue
 
   calculateCurrent: ->
     @current1 = (@volts[0] - @volts[2]) / @resistance1;

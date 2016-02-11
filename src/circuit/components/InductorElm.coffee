@@ -8,24 +8,20 @@ Util = require('../../util/util.coffee')
 class InductorElm extends CircuitComponent
   @FLAG_BACK_EULER = 2
 
-  @ParameterDefinitions = {
+  @Fields = {
     "inductance": {
       name: "inductance"
       unit: "Henries"
       symbol: "H"
       default_value: 1e-3
-      range: [-Infinity, Infinity]
       data_type: parseFloat
-      type: "physical"
     },
     "current": {
       name: "current"
       unit: "Amperes"
       symbol: "A"
       default_value: 0
-      range: [-Infinity, Infinity]
       data_type: parseFloat
-      type: "physical"
     }
   }
 
@@ -45,9 +41,6 @@ class InductorElm extends CircuitComponent
     # source in parallel with a resistor.  Trapezoidal is more
     # accurate than backward euler but can cause oscillatory behavior.
     # The oscillation is a real problem in circuits with switches.
-#      @nodes[0] = n0
-#      @nodes[1] = n1
-
     ts = @getParentCircuit().timeStep()
 
     if @isTrapezoidal()
@@ -91,7 +84,7 @@ class InductorElm extends CircuitComponent
   startIteration: ->
     if @isTrapezoidal()
       @curSourceValue = @getVoltageDiff() / @compResistance + @current
-      # backward euler
+    # backward euler
     else
       @curSourceValue = @current
 
@@ -100,7 +93,6 @@ class InductorElm extends CircuitComponent
 
   isTrapezoidal: ->
     true
-#    (@flags & InductorElm.FLAG_BACK_EULER) is 0
 
   calculateCurrent: ->
     if @compResistance > 0

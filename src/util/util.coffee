@@ -170,6 +170,9 @@ class Util
   @tidyFloat: (f) ->
     sprintf("%0.2f", f)
 
+  @isFunction: (v) ->
+    typeof v == "function"
+
   ###
   Removes commas from a number containing a string:
   e.g. 1,234,567.99 -> 1234567.99

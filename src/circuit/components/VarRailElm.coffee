@@ -11,9 +11,9 @@ _ = require("lodash")
 
 class VarRailElm extends RailElm
 
-  @ParameterDefinitions = {}
+  @Fields = {}
 
-  _.extend(@ParameterDefinitions, RailElm.ParameterDefinitions, {
+  _.extend(@Fields, RailElm.Fields, {
     "sliderText": {
       name: "sliderText"
       unit: "",

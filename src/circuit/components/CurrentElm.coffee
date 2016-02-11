@@ -6,7 +6,7 @@ Point = require('../../geom/point.coffee')
 Util = require('../../util/util.coffee')
 
 class CurrentElm extends CircuitComponent
-  @ParameterDefinitions = {
+  @Fields = {
     "currentValue": {
       unit: "Amperes",
       name: "Current",

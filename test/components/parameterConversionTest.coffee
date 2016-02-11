@@ -17,11 +17,11 @@ describe "CircuitLoader", ->
 
     result = {}
 
-    ParameterDefinitions = VoltageElm.ParameterDefinitions
+    Fields = VoltageElm.Fields
 
     for i in [0...param_list.length]
-      param_name = Object.keys(ParameterDefinitions)[i]
-      definition = ParameterDefinitions[param_name]
+      param_name = Object.keys(Fields)[i]
+      definition = Fields[param_name]
       data_type = definition.data_type
 
       param_value = param_list[i]

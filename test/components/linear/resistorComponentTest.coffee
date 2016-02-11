@@ -1,7 +1,7 @@
 fs = require('fs')
 Canvas = require('canvas')
 
-describe "Resistor", ->
+describe "Resistor Component", ->
   beforeEach ->
     @Circuit = new Circuit("SingleResistor")
     @resistor = new ResistorElm(50, 150, 50, 50, {resistance: 50})
@@ -35,20 +35,37 @@ describe "Resistor", ->
       @resistor.getInternalNodeCount().should.equal 0
 
     it "has correct dump type", ->
-      @resistor.getDumpType().should.equal "r"
+      expect(@resistor.getDumpType()).to.equal "r"
 
     it "is orphaned", ->
-      @resistor.orphaned().should.equal true
+      expect(@resistor.orphaned()).to.equal true
+
+    it "has correct properties", ->
+      console.log("PARAMS", @resistor.getFieldWithValue("resistance"))
+      expect(@resistor.getFieldWithValue("resistance")).to.eql({
+        "default_value": 1000
+        "name": "Resistance"
+        "range": [
+          0
+          Infinity
+        ]
+        "symbol": "Ω"
+        "type": "physical"
+        "unit": "Ohms"
+        "value": 50
+      })
 
     it "has correct initial position", ->
-      @resistor.point1.x.should.eq 50
-      @resistor.point1.y.should.eq 150
-      @resistor.point2.x.should.eq 50
-      @resistor.point2.y.should.eq 50
+      expect(@resistor.point1.x).to.eq 50
+      expect(@resistor.point1.y).to.eq 150
+      expect(@resistor.point2.x).to.eq 50
+      expect(@resistor.point2.y).to.eq 50
+      @resistor.dx.should.eq 0
+      @resistor.dy.should.eq -100
+      @resistor.dn.should.eq 100
 
     it "has correct initial values", ->
       @resistor.current.should.eq 0
-  #      @resistor.curcount.should.eq 5
       @resistor.noDiagonal = false
       @resistor.dragging = false
       @resistor.parentCircuit = null
@@ -56,16 +73,11 @@ describe "Resistor", ->
     it "has correct sign (orientation)", ->
       @resistor.dsign.should.eq -1
 
-    it "has correct dx and dy", ->
-      @resistor.dx.should.eq 0
-      @resistor.dy.should.eq -100
-      @resistor.dn.should.eq 100
-
     it "has correct bounding box", ->
       @resistor.boundingBox.x.should.equal 50
       @resistor.boundingBox.y.should.equal 50
-      @resistor.boundingBox.width.should.equal 1
-      @resistor.boundingBox.height.should.equal 101
+      @resistor.boundingBox.width.should.equal 3
+      @resistor.boundingBox.height.should.equal 100
 
     it "Has 0 voltage at its terminals", ->
       @resistor.getPostVoltage(0).should.equal 0
@@ -138,7 +150,7 @@ describe "Resistor", ->
       @renderer = new Renderer(@Circuit, @canvas)
       @renderer.context = @ctx
 
-#      @ctx.clearRect(0, 0, 100, 200)
+      #      @ctx.clearRect(0, 0, 100, 200)
 
       @Circuit.clearAndReset()
       @Circuit.solder(@resistor)
@@ -165,4 +177,3 @@ describe "Resistor", ->
       @renderer.drawComponents()
 
       fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_angle.png", @canvas.toBuffer())
-

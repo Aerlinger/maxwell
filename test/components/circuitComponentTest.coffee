@@ -73,8 +73,8 @@ describe "Base Circuit Component", ->
       bBox = @circuitElement.boundingBox
       bBox.x.should.equal 10
       bBox.y.should.equal 10
-      bBox.width.should.equal 4
-      bBox.height.should.equal 5
+      bBox.width.should.equal 3
+      bBox.height.should.equal 4
 
     it "Has 0 current at its terminals", ->
       @circuitElement.getCurrent().should.equal 0

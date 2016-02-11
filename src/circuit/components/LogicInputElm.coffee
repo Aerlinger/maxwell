@@ -10,7 +10,7 @@ class LogicInputElm extends CircuitComponent
   FLAG_NUMERIC: 2
 
 
-  @ParameterDefinitions = {
+  @Fields = {
     hiV: {
       name: "Voltage High"
       data_type: parseFloat

@@ -12,17 +12,16 @@ class Switch2Elm extends SwitchElm
 
   @FLAG_CENTER_OFF: 1
 
-  @ParameterDefinitions = {}
+  @Fields = {}
 
-  _.extend(@ParameterDefinitions, SwitchElm.ParameterDefinitions, {
+  _.extend(@Fields, SwitchElm.Fields, {
     "link": {
       name: "link"
       unit: "",
       default_value: 0,
-      symbol: "",
       data_type: parseInt
       range: [0, 1]
-      type: "attribute"
+      field_type: "boolean"
     }
   })
 
@@ -33,6 +32,8 @@ class Switch2Elm extends SwitchElm
 
     super(xa, ya, xb, yb, params, f)
 
+  name: ->
+    "SPDT switch"
 
   setPoints: ->
     super()

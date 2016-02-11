@@ -3,7 +3,7 @@ Util = require('../../util/util.coffee')
 
 class LampElm extends CircuitComponent
 
-  @ParameterDefinitions = {
+  @Fields = {
     temp: {
       name: "Temperature"
       data_type: parseFloat

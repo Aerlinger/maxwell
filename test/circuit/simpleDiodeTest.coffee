@@ -100,7 +100,7 @@ describe "Simple single diode circuit", ->
         )
 
       it "Sets circuitRowInfo to correct value", ->
-        expect(_.isEqual(@Solver.circuitRowInfo, [
+        expect(@Solver.circuitRowInfo, [
           {
             "dropRow": false
             "lsChanges": true
@@ -141,13 +141,13 @@ describe "Simple single diode circuit", ->
             "type": 0
             "value": 0
           }
-        ])).to.be.true
+        ]).to.eql(@Solver.circuitRowInfo)
 
       it "Sets circuitPermute to correct value", ->
         expect(@Solver.circuitPermute).to.deep.equal([0, 0, 0, 0])
 
-      it "Has not converged", ->
-        expect(@Solver.converged).to.be.false
+      it "Has converged", ->
+        expect(@Solver.converged).to.be.true
 
       it "Has not converged", ->
         expect(@Solver.subIterations).to.eq(5000)

@@ -1,5 +1,5 @@
 #class ChipElm extends CircuitComponent
-#  @ParameterDefinitions = {
+#  @Fields = {
 #    bits: {
 #      name: "Bits"
 #      data_type: parseInt

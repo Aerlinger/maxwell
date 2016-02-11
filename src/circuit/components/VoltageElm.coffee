@@ -17,12 +17,22 @@ class VoltageElm extends CircuitComponent
 
   @circleSize: 17
 
-  @ParameterDefinitions = {
+  @Fields = {
     "waveform": {
       name: "none"
       default_value: 0
       data_type: parseInt
       range: [0, 6]
+      input_type: "select"
+      select_values: {
+        "DC Source": VoltageElm.WF_DC
+        "AC Source": VoltageElm.WF_AC
+        "Square Wave": VoltageElm.WF_SQUARE
+        "Triangle Wave": VoltageElm.WF_TRIANGLE
+        "Sawtooth Wave": VoltageElm.WF_SAWTOOTH
+        "Pulse Generator": VoltageElm.WF_PULSE
+        "Variable": VoltageElm.WF_VAR
+      }
     },
     "frequency": {
       name: "Frequency"
@@ -30,7 +40,6 @@ class VoltageElm extends CircuitComponent
       default_value: 40
       symbol: "Hz"
       data_type: parseFloat
-      range: [-Infinity, Infinity]
     },
     "maxVoltage": {
       name: "Voltage"
@@ -38,7 +47,6 @@ class VoltageElm extends CircuitComponent
       symbol: "V"
       default_value: 5
       data_type: parseFloat
-      range: [-Infinity, Infinity]
     },
     "bias": {
       name: "Voltage"
@@ -46,7 +54,6 @@ class VoltageElm extends CircuitComponent
       symbol: "V"
       default_value: 0
       data_type: parseFloat
-      range: [-Infinity, Infinity]
     },
     "phaseShift": {
       name: "degrees"
@@ -56,6 +63,7 @@ class VoltageElm extends CircuitComponent
       data_type: parseFloat
       range: [-360, 360]
       type: parseFloat
+      input_type: "range"
     },
     "dutyCycle": {
       name: "percentage"
@@ -65,6 +73,7 @@ class VoltageElm extends CircuitComponent
       data_type: parseFloat
       range: [0, 100]
       type: parseFloat
+      input_type: "range"
     }
   }
 

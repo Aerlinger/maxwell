@@ -4,11 +4,12 @@ Util = require('../../util/util.coffee')
 class GateElm extends CircuitComponent
   FLAG_SMALL: 1
 
-  @ParameterDefinitions = {
+  @Fields = {
     inputCount: {
       name: "Input count"
       data_type: parseInt
       default_value: 2
+      field: "integer"
     },
     lastOutput: {
       name: "Last Output"

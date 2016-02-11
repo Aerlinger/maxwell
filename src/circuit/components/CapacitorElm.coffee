@@ -8,7 +8,7 @@ Util = require('../../util/util.coffee')
 class CapacitorElm extends CircuitComponent
   @FLAG_BACK_EULER: 2
 
-  @ParameterDefinitions = {
+  @Fields = {
     "capacitance": {
       name: "Capacitance",
       unit: "Farads",
@@ -16,7 +16,6 @@ class CapacitorElm extends CircuitComponent
       symbol: "F",
       data_type: parseFloat
       range: [0, Infinity]
-      type: "physical"
     },
     "voltDiff": {
       name: "Volts"
@@ -25,7 +24,6 @@ class CapacitorElm extends CircuitComponent
       symbol: "V"
       data_type: parseFloat
       range: [-Infinity, Infinity]
-      type: "physical"
     }
   }
 
@@ -81,19 +79,19 @@ class CapacitorElm extends CircuitComponent
     # draw first lead and plate
     color = Util.getVoltageColor(@volts[0])
     renderContext.drawLinePt @point1, @lead1, color
-#      @setPowerColor false
-    renderContext.drawLinePt @plate1[0], @plate1[1], color
 
     # draw second lead and plate
     color = Util.getVoltageColor(@volts[1])
     renderContext.drawLinePt @point2, @lead2, color
-    renderContext.drawLinePt @plate2[0], @plate2[1], color
-
-    renderContext.drawValue 20, 0, this, Util.getUnitText(@capacitance, @unitSymbol())
 
     @updateDots()
     renderContext.drawDots @point1, @lead1, this
     renderContext.drawDots @lead2, @point2, this
+
+    renderContext.drawLinePt @plate2[0], @plate2[1], color
+    renderContext.drawLinePt @plate1[0], @plate1[1], color
+
+    renderContext.drawValue 20, 0, this, Util.getUnitText(@capacitance, @unitSymbol())
 
     renderContext.drawPosts(this)
 

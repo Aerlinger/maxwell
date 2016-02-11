@@ -117,7 +117,7 @@ class Circuit extends Observer
 
 
   # "Solders" a new element to this circuit (adds it to the element list array).
-  solder: (newElement) ->
+  solder: (newElement) =>
     if newElement in @elementList
       @halt("Circuit component #{newElement} is already in element list")
 

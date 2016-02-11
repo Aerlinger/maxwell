@@ -7,7 +7,7 @@ Util = require('../../util/util.coffee')
 
 class SwitchElm extends CircuitComponent
 
-  @ParameterDefinitions = {
+  @Fields = {
     "position": {
       name: "Position"
       default_value: 0
@@ -20,11 +20,13 @@ class SwitchElm extends CircuitComponent
           0
         else
           parseInt(str)
+      field_type: "boolean"
     },
     "momentary": {
       name: "Momentary"
       default_value: 0
       data_type: (str) -> str.toString() == 'true'
+      field_type: "boolean"
     }
   }
 
@@ -52,7 +54,6 @@ class SwitchElm extends CircuitComponent
 
 
   setPoints: ->
-#    super.setPoints()
     super()
 
     @calcLeads(32)
@@ -91,6 +92,9 @@ class SwitchElm extends CircuitComponent
     renderContext.drawLinePt @ps, @ps2
 
     renderContext.drawPosts(this)
+
+  name: ->
+    "Basic Switch"
 
   calculateCurrent: ->
     @current = 0  if @position is 1

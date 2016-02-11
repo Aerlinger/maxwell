@@ -10,42 +10,35 @@ class SweepElm extends CircuitComponent
   @FLAG_BIDIR: 2
   @circleSize: 17
 
-  @ParameterDefinitions = {
+  @Fields = {
     "minF": {
-      name: "Frequency"
+      name: "Min. Frequency"
       unit: "Hertz"
       default_value: 20
       symbol: "Hz"
-      data_type: "float"
-      range: [-Infinity, Infinity]
-      type: "physical"
+      data_type: parseFloat
     },
     "maxF": {
-      name: "Frequency"
+      name: "Min. Frequency"
       unit: "Hertz"
       default_value: 4e4
       symbol: "Hz"
-      data_type: "float"
-      range: [-Infinity, Infinity]
-      type: "physical"
+      data_type: parseFloat
     },
     "maxV": {
       name: "Voltage"
       unit: "Voltage"
       symbol: "V"
       default_value: 5
-      data_type: "float"
-      range: [-Infinity, Infinity]
-      type: "physical"
+      data_type: parseFloat
     },
     "sweepTime": {
       unit: "seconds"
       name: "Time"
       symbol: "s"
       default_value: 0.1
-      data_type: "float"
+      data_type: parseFloat
       range: [0, -Infinity]
-      type: "physical"
     }
   }
 

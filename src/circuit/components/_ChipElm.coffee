@@ -2,7 +2,7 @@ CircuitComponent = require("../CircuitComponent.coffee")
 Util = require('../../util/util.coffee')
 
 class ChipElm extends CircuitComponent
-  @ParameterDefinitions = {
+  @Fields = {
     bits: {
       name: "Bits"
       data_type: parseInt

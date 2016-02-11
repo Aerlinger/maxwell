@@ -113,16 +113,22 @@ describe "Simple single resistor circuit", ->
         expect(@Solver.circuitPermute).to.deep.equal([2, 2, 2, 0])
 
       describe "solving circuit", ->
-        beforeEach (done) ->
-          @Circuit.updateCircuit()
-          @Circuit.updateCircuit()
-          @Circuit.updateCircuit()
-          done()
-
         it "sets correct voltage on resistor", ->
+          @Circuit.updateCircuit()
           resistor = @Circuit.getElmByIdx(1)
           expect(resistor.getVoltageDiff()).to.eql(5)
 
         it "increments time", ->
-          expect(@Circuit.time).to.equal(0.000005)
+          @Circuit.updateCircuit()
+          @Circuit.updateCircuit()
+          @Circuit.updateCircuit()
+
+          expect(@Circuit.frames).to.equal(3)
+
+        it "increments time", ->
+          @Circuit.updateCircuit()
+          @Circuit.updateCircuit()
+          @Circuit.updateCircuit()
+
+          expect(@Circuit.time).to.equal(3 * 5.0e-06)
 

@@ -5,7 +5,7 @@ Point = require('../../geom/Point.coffee')
 class AnalogSwitchElm extends CircuitComponent
   FLAG_INVERT: 1
 
-  @ParameterDefinitions = {
+  @Fields = {
     r_on: {
       name: "On Resistance"
       data_type: parseFloat

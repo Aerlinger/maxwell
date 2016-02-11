@@ -4,7 +4,7 @@ Util = require('../../util/util.coffee')
 
 class LedElm extends DiodeElm
 
-  @ParameterDefinitions = {
+  @Fields = {
     colorR: {
       name: "Red Intensity"
       data_type: parseFloat

@@ -9,7 +9,7 @@ class TextElm extends CircuitComponent
   @FLAG_CENTER: 1
   @FLAG_BAR: 2
 
-  @ParameterDefinitions = {
+  @Fields = {
     size: {
       name: "Pixel"
       unit: "Pixel"

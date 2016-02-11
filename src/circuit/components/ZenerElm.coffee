@@ -7,7 +7,7 @@ DiodeElm = require('./DiodeElm.coffee')
 Util = require('../../util/util.coffee')
 
 class ZenerElm extends DiodeElm
-  @ParameterDefinitions = {
+  @Fields = {
     fwdrop: {
       name: "Voltage"
       unit: "Voltage"

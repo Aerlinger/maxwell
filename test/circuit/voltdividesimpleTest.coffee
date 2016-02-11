@@ -18,8 +18,8 @@ describe "Simple Voltage Divider", ->
     @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
 
 
-#    CircuitLoader.createCircuitFromJsonFile "../../circuits/voltdividesimple.json", (circuit) =>
-#      @circuit = circuit
+    #    CircuitLoader.createCircuitFromJsonFile "../../circuits/voltdividesimple.json", (circuit) =>
+    #      @circuit = circuit
     done()
 
   describe "should Analyze voltdividesimple.json and have", ->
@@ -54,7 +54,6 @@ describe "Simple Voltage Divider", ->
       @circuit.getVoltageSources().toString().should.equal voltageSources
 
     describe "current rowInfos", ->
-
       it "index: 0", ->
         @rowInfo[0].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true"
 
@@ -69,11 +68,11 @@ describe "Simple Voltage Divider", ->
 
       it "index 4", ->
         @rowInfo[4].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0, rsChanges: false, lsChanges: false, dropRow: true"
-#        @rowInfo[5].toString().should.equal "RowInfo: type: 1, nodeEq: 6, mapCol: -1, mapRow: -1, value: 0.0015, false false true"
-#        @rowInfo[6].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0.0015, false false true"
-#        @rowInfo[7].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: -0.0015, false false true"
-#        @rowInfo[8].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0.0005, rsChanges: false, lsChanges: false, dropRow: true"
-#        @rowInfo[9].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: -0.0005, rsChanges: false, lsChanges: false, dropRow: true"
+    #        @rowInfo[5].toString().should.equal "RowInfo: type: 1, nodeEq: 6, mapCol: -1, mapRow: -1, value: 0.0015, false false true"
+    #        @rowInfo[6].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0.0015, false false true"
+    #        @rowInfo[7].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: -0.0015, false false true"
+    #        @rowInfo[8].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 0.0005, rsChanges: false, lsChanges: false, dropRow: true"
+    #        @rowInfo[9].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: -0.0005, rsChanges: false, lsChanges: false, dropRow: true"
 
     it "10 elements in circuitRowInfo", ->
       @circuit.Solver.circuitRowInfo.length.should.equal 10
@@ -101,10 +100,91 @@ describe "Simple Voltage Divider", ->
         @resistor20k = @circuit.getElmByIdx(6)
 
       it "has correct params", ->
-        @circuit.inspect().should.eql([])
+        @circuit.inspect().should.eql([
+          {
+            "current": 0.0015
+            "params": [
+              0
+              40
+              10
+              0
+              0
+              0.5
+            ]
+            "sym": "v"
+            "voltage": 10
+            "x1": 112
+            "x2": 112
+            "xy": 48
+            "y1": 368
+          }
+          {
+            "current": 0.0015
+            "params": []
+            "sym": "w"
+            "voltage": 10
+            "x1": 112
+            "x2": 240
+            "xy": 48
+            "y1": 48
+          }
+          {
+            "current": 0.001
+            "params": [
+              10000
+            ]
+            "sym": "r"
+            "voltage": 10
+            "x1": 240
+            "x2": 240
+            "xy": 368
+            "y1": 48
+          }
+          {
+            "current": -0.0015
+            "params": []
+            "sym": "w"
+            "voltage": 0
+            "x1": 112
+            "x2": 240
+            "xy": 368
+            "y1": 368
+          }
+          {
+            "current": 0.0005
+            "params": []
+            "sym": "w"
+            "voltage": 10
+            "x1": 240
+            "x2": 432
+            "xy": 48
+            "y1": 48
+          }
+          {
+            "current": -0.0005
+            "params": []
+            "sym": "w"
+            "voltage": 0
+            "x1": 240
+            "x2": 432
+            "xy": 368
+            "y1": 368
+          }
+          {
+            "current": 0.0005
+            "params": [
+              20000
+            ]
+            "sym": "r"
+            "voltage": 10
+            "x1": 432
+            "x2": 432
+            "xy": 368
+            "y1": 48
+          }
+        ])
 
       describe "components have correct values", ->
-
         specify "Voltage Source has correct voltage", ->
           @voltageCompnt.volts.should.eql [0, 10]
 

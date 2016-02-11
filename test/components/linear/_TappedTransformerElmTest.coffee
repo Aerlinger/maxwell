@@ -1,6 +1,6 @@
 #class TappedTransformerElm extends CircuitComponent
 #
-#  @ParameterDefinitions = {
+#  @Fields = {
 #    inductance: {
 #      name: "Inductance"
 #      data_type: parseFloat

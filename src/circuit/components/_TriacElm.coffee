@@ -3,7 +3,7 @@ Util = require('../../util/util.coffee')
 
 class TriacElm extends CircuitComponent
 
-  @ParameterDefinitions = {
+  @Fields = {
     volts: {
       name: "Volts"
       data_type: parseFloat

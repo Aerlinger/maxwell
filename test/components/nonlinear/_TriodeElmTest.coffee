@@ -1,5 +1,5 @@
 #class TriodeElm extends CircuitComponent
-#  @ParameterDefinitions = {
+#  @Fields = {
 #    mu: {
 #      name: ""
 #      data_type: parseFloat

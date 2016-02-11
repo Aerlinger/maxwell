@@ -21,23 +21,6 @@ Util = require('../util/util.coffee')
 environment = require('../environment.coffee')
 
 
-# X components
-# Y nodes
-# Z Active Components
-# Timestep:
-# Frametime:
-# Active power consumption:
-# Nonlinear circuit (2nd order)
-# DE Solver: Symplectic Euler
-# Matrix Solver: LU Factorization/Crout
-# Converged in X subiterations using Newton's method
-# Residual: 0
-# Norm(Q):
-# Stability margin:
-
-# Traversal depth:
-
-
 class SelectionMarquee extends Rectangle
   constructor: (@x1, @y1) ->
 
@@ -111,10 +94,12 @@ class Renderer extends BaseRenderer
       @context.lineJoin = 'miter'
 
     # Callbacks
+    @onSelectionChanged = null
     @onComponentClick = null
     @onComponentHover = null
     @onNodeHover = null
-    @onNodeClick = null
+    @onNodeClick = null   # @onNodeClick(component)
+    @onUpdateComplete = null  # @onUpdateComplete(circuit)
 
     # @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
     # @Circuit.addObserver Circuit.ON_RESET, @clear
@@ -161,6 +146,7 @@ class Renderer extends BaseRenderer
       for component in @Circuit.getElements()
         if @marquee?.collidesWithComponent(component)
           @selectedComponents.push(component)
+          @onSelectionChanged(@selectedComponents)
     else
       @selectedNode = @Circuit.getNodeAtCoordinates(@snapX, @snapY)
 
@@ -207,6 +193,9 @@ class Renderer extends BaseRenderer
         @placeComponent.y1 = Util.snapGrid(y)
 
     if @highlightedComponent == null
+      if @selectedComponents && @selectedComponents.length > 0
+        @onSelectionChanged([])
+
       @selectedComponents = []
       @marquee = new SelectionMarquee(x, y)
 
@@ -216,6 +205,7 @@ class Renderer extends BaseRenderer
 
         unless component in @selectedComponents
           @selectedComponents = [component]
+          @onSelectionChanged(@selectedComponents)
 
         component.toggle?()
 
@@ -236,8 +226,9 @@ class Renderer extends BaseRenderer
     @drawInfoText()
     @marquee?.draw(this)
 
-    # UPDATE FRAME
+    # UPDATE FRAME ----------------------------------------------------------------
     @Circuit.updateCircuit()
+    # -----------------------------------------------------------------------------
 
     @drawComponents()
 
@@ -258,8 +249,8 @@ class Renderer extends BaseRenderer
   drawComponents: ->
     if @context
       for component in @Circuit.getElements()
-        if @marquee?.collidesWithComponent(component)
-          console.log("MARQUEE COLLIDE: " + component)
+#        if @marquee?.collidesWithComponent(component)
+#          console.log("MARQUEE COLLIDE: " + component)
 
         @drawComponent(component)
 
@@ -353,8 +344,6 @@ class Renderer extends BaseRenderer
         @context.stroke()
         @context.closePath()
         @context.restore()
-
-#        @drawLine(xOffset0, yOffset0, xOffset1, yOffset1, Settings.CURRENT_COLOR, 1)
 
       newPos += ds
 

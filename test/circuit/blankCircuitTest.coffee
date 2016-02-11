@@ -1,7 +1,7 @@
 Circuit = require('../../src/circuit/circuit.coffee')
 ResistorElm = require('../../src/circuit/components/ResistorElm.coffee')
 
-xdescribe "Circuit", ->
+describe "Circuit", ->
   beforeEach (done)->
     @Circuit = new Circuit()
     done()
@@ -44,11 +44,11 @@ xdescribe "Circuit", ->
 
       it "has a bounding box for the resistor", ->
         @resistor = @Circuit.getElements()[0]
-        expect(@resistor.getBoundingBox().toString()).to.equal("(100, 100) [w: 101, h: 201]")
+        expect(@resistor.getBoundingBox().toString()).to.equal("(100, 100) [w: 100, h: 200]")
 
       it "recomputes the bounds", ->
         bbox = @Circuit.boundingBox.toString()
-        expect(bbox).to.equal("(100, 100) [w: 101, h: 201]")
+        expect(bbox).to.equal("(100, 100) [w: 100, h: 200]")
 
       it "can also remove the component", ->
         @Circuit.desolder(@resistor)

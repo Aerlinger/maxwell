@@ -161,7 +161,7 @@ class ComponentRegistry
     elms = {}
 
     for _, Component of @ComponentDefs
-      elms[Component] = Component.ParameterDefinitions
+      elms[Component] = Component.Fields
 
     elms
 

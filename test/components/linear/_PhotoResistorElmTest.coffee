@@ -1,7 +1,7 @@
 
 #class PhotoResistorElm extends CircuitComponent
 #
-#  @ParameterDefinitions = {
+#  @Fields = {
 #    maxresistance: {
 #      name: "Max. Resistance"
 #      data_type: parseFloat

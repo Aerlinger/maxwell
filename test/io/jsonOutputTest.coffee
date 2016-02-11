@@ -65,4 +65,4 @@ describe "JSON output", ->
       it "dumps frame JSON", ->
         fileJson = JSON.parse(fs.readFileSync("./test/fixtures/data/ohms_frames.json"))
 
-        fileJson.should.eql @circuit.frameJson()
+        expect(fileJson).to.eql(@circuit.frameJson())

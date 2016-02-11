@@ -34,7 +34,7 @@ describe "CircuitLoader", ->
         @circuit.Params.powerRange.should.equal 62.0
 
       it "has correct simSpeed", ->
-        @circuit.Params.simSpeed.should.equal 10.0
+        @circuit.Params.simSpeed.should.equal 116
 
       it "has correct timeStep", ->
         @circuit.Params.timeStep.should.equal 5.0e-6

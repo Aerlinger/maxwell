@@ -3,16 +3,17 @@ Util = require('../../util/util.coffee')
 
 class TransformerElm extends CircuitComponent
 
-  @ParameterDefinitions = {
+  @Fields = {
     inductance: {
       name: "Inductance"
       default_value: 1e-3
       data_type: parseFloat
-    },
+    }
     ratio: {
       name: "Ratio"
       default_value: 1
-      data_type: parseFloat
+      data_type: parseInt
+      input_type: "integer"
     }
     # TODO: Name collision
     current: {
@@ -98,8 +99,6 @@ class TransformerElm extends CircuitComponent
 #      renderContext.drawCoil(@dsign * (i == 1 ? ))
 
 #    renderContext.drawPosts(this)
-
-
 
 
   stamp: (stamper) ->

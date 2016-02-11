@@ -10,12 +10,11 @@ sprintf = require("sprintf-js").sprintf
 
 
 class MosfetElm extends CircuitComponent
-
   @FLAG_PNP: 1
   @FLAG_SHOWVT: 2
   @FLAG_DIGITAL: 4
 
-  @ParameterDefinitions = {
+  @Fields = {
     "vt": {
       data_type: parseFloat
       name: "Voltage"
@@ -25,15 +24,15 @@ class MosfetElm extends CircuitComponent
       default: 1.5
       range: [0, Infinity]
       type: sprintf
+    },
+    "pnp": {
+      name: "Polarity"
+      description: "Current multiplier"
+      default_value: 1
+      data_type: Math.sign
+      field_type: "select"
+      select_values: { "N-Channel": -1, "P-Channel": 1 }
     }
-#    "pnp": {
-#      data_type: sprintf
-#      name: "Polarity"
-#    }
-    # Flags:
-    # FLAG_SHOWVT: 1
-    # FLAG_SHOWVT: 2
-    # FLAG_DIGITAL: 4
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
@@ -167,8 +166,7 @@ class MosfetElm extends CircuitComponent
 
   setPoints: () ->
     super()
-    # find the coordinates of the various points we need to draw
-    # the MOSFET.
+    # find the coordinates of the various points we need to draw the MOSFET.
     hs2 = @hs * @dsign
     @src = Util.newPointArray(3)
     @drn = Util.newPointArray(3)
@@ -278,19 +276,6 @@ class MosfetElm extends CircuitComponent
     stamper.stampRightSide @nodes[source_node], -rs
 
     @ids = -@ids  if (source_node is 2 and @pnp is 1) or (source_node is 1 and @pnp is -1)
-
-#  getFetInfo: (arr, n) ->
-#    arr[0] = ((if (@pnp is -1) then "p-" else "n-")) + n
-#    arr[0] += " (Vt = " + DrawHelper.getVoltageText(@pnp * @vt) + ")"
-#    arr[1] = ((if (@pnp is 1) then "Ids = " else "Isd = ")) + DrawHelper.getCurrentText(@ids)
-#    arr[2] = "Vgs = " + DrawHelper.getVoltageText(@volts[0] - @volts[(if @pnp is -1 then 2 else 1)])
-#    arr[3] = ((if (@pnp is 1) then "Vds = " else "Vsd = ")) + DrawHelper.getVoltageText(@volts[2] - @volts[1])
-#    arr[4] = (if (@mode is 0) then "off" else (if (@mode is 1) then "linear" else "saturation"))
-#    arr[5] = "gm = " + DrawHelper.getUnitText(@gm, "A/V")
-
-  getInfo: (arr) ->
-    "MOSTFET  getInfo"
-#    @getFetInfo arr, "MOSFET"
 
   canViewInScope: ->
     true

@@ -26,7 +26,7 @@ sprintf = require("sprintf-js").sprintf
 class CircuitComponent
 #  @DEBUG = true
 
-  @ParameterDefinitions = {}
+  @Fields = {}
 
   constructor: (@x1, @y1, @x2, @y2, params, f = 0) ->
     @flags = f || 0
@@ -34,17 +34,15 @@ class CircuitComponent
     @setParameters(params)
 
     @current = 0
-#    @curcount = 0
     @voltSource = 0
     @noDiagonal = false
     @Circuit = null
 
     @component_id = Util.getRand(100000000) + (new Date()).getTime()
 
-    console.log("POS: " + @x1, @y1, @x2, @y2)
+
     @setPoints()
     @recomputeBounds()
-
     @allocNodes()
 
 
@@ -53,50 +51,30 @@ class CircuitComponent
     @volts = Util.zeroArray(@getPostCount() + @getInternalNodeCount())
 
 
-  convertParamsToHash: (param_list) ->
-    ParameterDefinitions = @constructor.ParameterDefinitions
-    result = {}
-
-    for i in [0...param_list.length]
-      param_name = Object.keys(ParameterDefinitions)[i]
-      param_value = param_list[i]
-
-      if ParameterDefinitions[param_name]
-        data_type = ParameterDefinitions[param_name].data_type
-      else
-        console.warn("Failed to load data_type #{data_type}: #{param_name}: #{param_value}")
-        console.log(param_value)
-        console.log("#{i}: param_name #{ParameterDefinitions}")
-
-      if !data_type
-        console.warn("No conversion found for #{data_type}")
-
-      result[param_name] = data_type.call(this, param_value)
-
-    return result
-
   setParameters: (component_params) ->
     if component_params && component_params.constructor is Array
       component_params = @convertParamsToHash(component_params)
 
-    ParameterDefinitions = @constructor.ParameterDefinitions
+    Fields = @constructor.Fields
 
     @params = {}
 
-    for param_name, definition of ParameterDefinitions
+    for param_name, definition of Fields
       default_value = definition.default_value
       data_type = definition.data_type
 
-      # Parameter exists in our ParameterDefinitions attribute table...
+      if !Util.isFunction(data_type)
+        console.error("data_type must be a function")
+
+      # Parameter exists in our Fields attribute table...
       if component_params && (param_name of component_params)
         param_value = data_type(component_params[param_name])
 
-        this[param_name] = param_value
-        @params[param_name] = param_value
+        @setValue(param_name, param_value)
 
         delete component_params[param_name]
 
-      # fallback to default
+      # fallback to default value assigned in @Fields
       else
         console.log("Assigning default value of #{default_value} for #{param_name} in #{@constructor.name} (was #{this[param_name]})")
 
@@ -110,38 +88,31 @@ class CircuitComponent
       throw new Error("Invalid params #{unmatched_params.join(" ")} assigned to #{this}")
 
 
-  serializeParameters: ->
-    params = {}
+  # Convert list of parameters to a hash, according to matching order in @Fields
+  convertParamsToHash: (param_list) ->
+    Fields = @constructor.Fields
+    result = {}
 
-    for param_name, definition of this.constructor.ParameterDefinitions
-      params[param_name] = this[param_name]
+    for i in [0...param_list.length]
+      param_name = Object.keys(Fields)[i]
+      param_value = param_list[i]
 
-    return params
+      if Fields[param_name]
+        data_type = Fields[param_name].data_type
+      else
+        console.warn("Failed to load data_type #{data_type}: #{param_name}: #{param_value}")
+        console.log(param_value)
+        console.log("#{i}: param_name #{Fields}")
 
-  serialize: ->
-    {
-      sym: this.constructor.name,
-      x1: @x1,
-      y1: @y1,
-      x2: @x2,
-      y2: @y2,
-      params: @serializeParameters()
-    }
+      if !data_type
+        console.warn("No conversion found for #{data_type}")
 
-  @deserialize: (jsonData) ->
-    sym = jsonData['sym']
-    x1 = jsonData['x1']
-    y1 = jsonData['y1']
-    x2 = jsonData['x2']
-    y2 = jsonData['y2']
-    params = jsonData['params']
+      if !Util.isFunction(data_type)
+        console.error("data_type #{data_type} is not a function!")
 
-    params: @serializeParameters()
+      result[param_name] = data_type.call(this, param_value)
 
-    Component = eval(sym)
-
-    return new Component(x1, y2, x2, y2, params)
-
+    return result
 
   getParentCircuit: ->
     return @Circuit
@@ -164,10 +135,10 @@ class CircuitComponent
     "?"
 
   height: ->
-    @y2 - @y1
+    Math.abs(@y2 - @y1)
 
   width: ->
-    @x2 - @x1
+    Math.abs(@x2 - @x1)
 
   axisAligned: ->
     @height() is 0 or @width() is 0
@@ -197,9 +168,8 @@ class CircuitComponent
   calculateCurrent: ->
     # To be implemented by subclasses
 
-# Steps forward one frame and performs calculation
   doStep: ->
-# To be implemented by subclasses
+    # To be implemented by subclasses
 
   orphaned: ->
     return @Circuit is null or @Circuit is undefined
@@ -241,9 +211,6 @@ class CircuitComponent
   getCenter: ->
     centerX = (@point1.x + @point2.x) / 2.0
     centerY = (@point1.y + @point2.y) / 2.0
-
-#    centerX = (@lead1.x + @lead2.x) / 2.0
-#    centerY = (@point1.y + @point2.y) / 2.0
 
     return new Point(centerX, centerY)
 
@@ -287,29 +254,22 @@ class CircuitComponent
   stamp: ->
     @Circuit.halt("Called abstract function stamp() in Circuit #{@getDumpType()}")
 
-# Todo: implement needed
-  getDumpClass: ->
-    @toString()
-
   inspect: ->
     paramValues = (val for key, val of @params)
 
     {
-    sym: @getDumpType(),
-    x1: @x1,
-    y1: @y1,
-    x2: @x2,
-    xy: @y2,
-    params: paramValues,
-    voltage: @getVoltageDiff(),
-    current: @getCurrent()
+      sym: @getDumpType()
+      x1: @x1
+      y1: @y1
+      x2: @x2
+      xy: @y2
+      params: paramValues
+      voltage: @getVoltageDiff()
+      current: @getCurrent()
     }
 
-
-# Returns the class name of this element (e.x. ResistorElm)
   toString: ->
-    console.error("Virtual call on toString in circuitComponent was #{@constructor.name}")
-#      return arguments.callee.name
+    "#{@constructor.name} #{@x1} #{@y1} #{@x2} #{@y2}"
 
   getVoltageSourceCount: ->
     0
@@ -329,9 +289,12 @@ class CircuitComponent
   nonLinear: ->
     false
 
-# Two terminals by default, but likely to be overidden by subclasses
+  # Two terminals by default, but likely to be overidden by subclasses
   getPostCount: ->
     2
+
+  getName: ->
+    "#{@constructor.name}(#{@x1},#{@y1},#{@x2},#{@y2})"
 
   getNode: (nodeIdx) ->
     @nodes[nodeIdx]
@@ -351,17 +314,10 @@ class CircuitComponent
   setBbox: (x1, y1, x2, y2) ->
     x = Math.min(x1, x2)
     y = Math.min(y1, y2)
-    width = Math.abs(x2 - x1) + 3
-    height = Math.abs(y2 - y1) + 3
+    width = Math.max(Math.abs(x2 - x1), 3)
+    height = Math.max(Math.abs(y2 - y1), 3)
 
-#    if @isVertical()
-#      width = 21
-#      @boundingBox = new Rectangle(x - width/2, y, width, height)
-#    else
-#      height = 21
-#      @boundingBox = new Rectangle(x, y - height/2, width, height)
-
-    @boundingBox = new Rectangle(x-1, y-1, width, height)
+    @boundingBox = new Rectangle(x, y, width, height)
 
 
   setBboxPt: (p1, p2, width) ->
@@ -406,8 +362,6 @@ class CircuitComponent
   ### #######################################################################
 
   draw: (renderContext) ->
-#    @curcount = @updateDotCount()
-
     renderContext.drawRect(@boundingBox.x, @boundingBox.y, @boundingBox.width, @boundingBox.height, 1, "#8888CC")
 
 #    renderContext.drawValue 10, -15, this, @constructor.name
@@ -467,6 +421,9 @@ class CircuitComponent
   needsShortcut: ->
     false
 
+  hash: ->
+    "#{@constructor.name}#{@x1}#{@y1}#{@x2}#{@y2}"
+
   toJson: ->
     {
       x: @x1
@@ -485,21 +442,59 @@ class CircuitComponent
     }
 
   getProperties: ->
-    result = []
-    for parameter, value of @params
-      result.push("#{parameter}: #{value}")
+    {
+      name: @getName()
+      pos: [@x1, @y1, @x2, @y2]
+      params: @params
+      current: @getCurrent()
+      voltDiff: @getVoltageDiff()
+      power: @getPower()
+    }
 
-    result
+  setValue: (paramName, paramValue) ->
+    if paramName not in @paramNames()
+      console.error("Error while updating #{paramName}, #{paramName} is not a field in #{@getName()}")
+
+    this[paramName] = paramValue
+    @params[paramName] = paramValue
+
+  paramNames: ->
+    Object.keys(@params)
+
+  ##
+  # Returns the JSON metadata object for this field with an additional key/value pair for the assigned value.
+  # Used externally to edit/update component values
+  #
+  # Eg:
+  # voltageElm.getFieldWithValue("waveform")
+  #
+  # {
+  #   name: "none"
+  #   default_value: 0
+  #   data_type: parseInt
+  #   range: [0, 6]
+  #   input_type: "select"
+  #   select_values: ...
+  #   value: 2  // Square wave
+  # }
+  #
+  # @see @Fields
+  getFieldWithValue: (param_name) ->
+    param_value = @params[param_name]
+
+    field_metadata = {}
+
+    for key, value of @constructor.Fields[param_name]
+      unless key == "data_type"
+        field_metadata[key] = value
+
+    field_metadata['value'] = param_value
+
+    field_metadata
 
 
   onSolder: ->
 
   onclick: ->
-
-  ## Deprecated
-
-  getVoltageText: ->
-    Maxwell.logger.warn("GET VOLTAGE TEXT IS DEPRECATED")
-    "GET VOLTAGE TEXT IS DEPRECATED"
 
 module.exports = CircuitComponent

@@ -7,7 +7,7 @@ Util = require('../../util/util.coffee')
 #Maxwell = require('../../Maxwell.coffee')
 
 class ResistorElm extends CircuitComponent
-  @ParameterDefinitions = {
+  @Fields = {
     "resistance": {
       name: "Resistance"
       unit: "Ohms",
@@ -37,10 +37,13 @@ class ResistorElm extends CircuitComponent
 
     parallelOffset = 1 / numSegments
 
+    @updateDots()
+    renderContext.drawDots(@point1, @lead1, this)
+    renderContext.drawDots(@lead2, @point2, this)
+
     # Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
     offsets = [0, 1, 0, -1]
-
-    # Give "sawtooth" edges to resistor
+    # Draw resistor "zig-zags"
     for n in [0...numSegments]
       resistorSegmentVoltage = @volts[0] + (@volts[1]-@volts[0]) * (n / numSegments)
 
@@ -50,10 +53,6 @@ class ResistorElm extends CircuitComponent
       renderContext.drawLinePt startPosition, endPosition, Util.getVoltageColor(resistorSegmentVoltage)
 
     renderContext.drawValue 15, 0, this, Util.getUnitText(@resistance, @unitSymbol())
-
-    @updateDots()
-    renderContext.drawDots(@point1, @lead1, this)
-    renderContext.drawDots(@lead2, @point2, this)
 
     renderContext.drawPosts(this)
 

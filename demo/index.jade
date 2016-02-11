@@ -33,6 +33,19 @@ html
 
           var circuit = circuitContext.Circuit;
 
+          circuitContext.onSelectionChanged = function (components) {
+            componentSummary = "";
+
+            /*
+            for (var i=0; components.length; ++i) {
+              component = components[i];
+
+              componentSummary += component.toString() + "\n";
+            }*/
+
+            console.log("SELECTION CHANGED:", components);
+          };
+
           circuitContext.onComponentHover = function(component) {
             console.log("ON HOVER:", component.toString());
           };
@@ -42,12 +55,12 @@ html
           };
 
           circuitContext.onComponentClick = function (component) {
-            console.log("ON CLICK:", component.toString());
+            console.log("ON CLICK:", component.getProperties());
 
-            $("#placeComponent").text("Selected: " + circuitContext.getSelectedComponents().toString());
+            //$("#placeComponent").text("Selected: " + circuitContext.getSelectedComponents().toString());
 
-            if (circuitContext.getPlaceComponent())
-              $("#selectedComponent").text(circuitContext.getPlaceComponent());
+            //if (circuitContext.getPlaceComponent())
+              //$("#selectedComponent").text(circuitContext.getPlaceComponent());
           };
 
           circuitContext.onNodeHover = function(node) {
@@ -223,11 +236,6 @@ html
           p text
           p text
           p text
-
-        //.ui.vertical.pointing.menu.float-right
-          .item
-            .header Components
-            #components.menu
 
       .pusher
         .canvas-container(style="margin-left: 150px; width: 100%;")

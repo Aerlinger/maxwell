@@ -3,7 +3,7 @@ Util = require('../../util/util.coffee')
 
 class DiacElm extends CircuitComponent
 
-  @ParameterDefinitions = {
+  @Fields = {
     onresistance: {
       name: "On Resistance"
       data_type: parseFloat

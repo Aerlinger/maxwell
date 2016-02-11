@@ -3,7 +3,7 @@ Util = require('../../util/util.coffee')
 
 class MemristorElm extends CircuitComponent
 
-  @ParameterDefinitions = {
+  @Fields = {
     r_on: {
       name: "On resistance"
       data_type: parseFloat

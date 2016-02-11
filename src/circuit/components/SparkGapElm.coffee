@@ -6,7 +6,7 @@ Point = require('../../geom/point.coffee')
 Util = require('../../util/util.coffee')
 
 class SparkGapElm extends CircuitComponent
-  @ParameterDefinitions = {
+  @Fields = {
     "onresistance": {
       name: "Resistance"
       unit: "Ohms",

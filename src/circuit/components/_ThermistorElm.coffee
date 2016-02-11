@@ -3,7 +3,7 @@ Util = require('../../util/util.coffee')
 
 class ThermistorElm extends CircuitComponent
 
-  @ParameterDefinitions = {
+  @Fields = {
     maxresistance: {
       name: "Max. Resistance"
       data_type: parseFloat

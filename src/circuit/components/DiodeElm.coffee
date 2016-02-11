@@ -10,7 +10,7 @@ class DiodeElm extends CircuitComponent
   @FLAG_FWDROP: 1
   @DEFAULT_DROP: .805904783
 
-  @ParameterDefinitions = {
+  @Fields = {
     fwdrop: {
       name: "Voltage"
       unit: "Voltage"
@@ -20,8 +20,6 @@ class DiodeElm extends CircuitComponent
       range: [-Infinity, Infinity]
       type: "physical"
     }
-
-#    flags: DiodeElm.FLAG_FWDROP
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
@@ -29,13 +27,8 @@ class DiodeElm extends CircuitComponent
     @poly
     @cathode = []
 
-    #    @diode = new Diode(self)
     @fwdrop = DiodeElm.DEFAULT_DROP
     @zvoltage = 0
-
-    #    if (f & DiodeElm.FLAG_FWDROP) > 0
-    #      try
-    #        @fwdrop = parseFloat(st)
 
     @nodes = new Array(2)
     @vt = 0
@@ -68,8 +61,6 @@ class DiodeElm extends CircuitComponent
       i = -.005
       @zoffset = @zvoltage - Math.log(-(1 + i / @leakage)) / @vdcoef
 
-    #    @diode.setup @fwdrop, @zvoltage
-
   getDumpType: ->
     "d"
 
@@ -93,7 +84,6 @@ class DiodeElm extends CircuitComponent
 
 
   reset: ->
-    #    @diode.reset()
     @lastvoltdiff = 0
     @volts[0] = @volts[1] = @curcount = 0
 
@@ -120,11 +110,8 @@ class DiodeElm extends CircuitComponent
 
 
   stamp: (stamper) ->
-    #    @nodes[0] = n0
-    #    @nodes[1] = n1
     stamper.stampNonLinear @nodes[0]
     stamper.stampNonLinear @nodes[1]
-    #    @diode.stamp @nodes[0], @nodes[1], stamper
 
   doStep: (stamper) ->
     voltdiff = @volts[0] - @volts[1]

@@ -1,5 +1,5 @@
 #class TransLineElm extends CircuitComponent
-#  @ParameterDefinitions = {
+#  @Fields = {
 #    delay: {
 #      name: "Delay"
 #      data_type: parseFloat

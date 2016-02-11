@@ -8,25 +8,21 @@ Util = require('../../util/util.coffee')
 class TransistorElm extends CircuitComponent
   @FLAG_FLIP: 1
 
-  @ParameterDefinitions = {
+  @Fields = {
     "pnp": {
-      name: ""
-      unit: ""
-      symbol: ""
+      name: "Polarity"
       description: "Current multiplier"
-      default_value: 100
+      default_value: -1
       data_type: Math.sign
-      range: [0, Infinity]
-      type: "attribute"
+      field_type: "select"
+      select_values: { "NPN": -1, "PNP": 1 }
     },
-    #    TODO
     "lastvbe": {
       name: "Voltage"
       unit: "Voltage"
       symbol: "V"
       default_value: 0
       data_type: parseFloat
-      range: [-Infinity, Infinity]
       type: "physical"
     }
     "lastvbc": {
@@ -35,18 +31,13 @@ class TransistorElm extends CircuitComponent
       symbol: "V"
       default_value: 0
       data_type: parseFloat
-      range: [-Infinity, Infinity]
-      type: "physical"
     },
     "beta": {
       name: "beta"
-      unit: ""
-      symbol: ""
       description: "Current multiplier"
       default_value: 100
       data_type: parseFloat
       range: [0, Infinity]
-      type: "scalar"
     }
   }
 
@@ -256,8 +247,6 @@ class TransistorElm extends CircuitComponent
       console.log(@emit)
 
       @arrowPoly = Util.calcArrow(@emit[0], pt, 8, 4)
-
-
 
 
 

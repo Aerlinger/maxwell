@@ -25,16 +25,20 @@ describe "Capacitor Component", ->
     @capacitor.orphaned().should.equal true
 
   it "serializes to JSON", ->
-    expect(@capacitor.serialize()).to.deep.equal({
-      sym: "CapacitorElm",
-      x1: 100,
-      y1: 100,
-      x2: 100,
-      y2: 200,
-      params: {
-        "capacitance": 1e-9
-        "voltDiff": 1.1
-      }
+    expect(@capacitor.toJson()).to.eql({
+      x: 100
+      y: 100
+      x2: 100
+      y2: 200
+      flags: 0
+      nodes: [0, 0]
+      params: { capacitance: 1e-9, voltDiff: 1.1 }
+      selected: false
+      voltSource: 0
+      needsShortcut: true
+      dump: "c"
+      postCount: 2
+      nonLinear: false
     })
 
   describe "after soldering to circuit", ->

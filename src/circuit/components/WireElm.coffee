@@ -15,6 +15,9 @@ class WireElm extends CircuitComponent
   toString: ->
     "WireElm"
 
+  getName: ->
+    "Wire"
+
 
   draw: (renderContext) ->
     if CircuitComponent.DEBUG

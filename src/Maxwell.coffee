@@ -6,8 +6,8 @@ Renderer = require('./render/renderer.coffee')
 
 environment = require("./environment.coffee")
 
-#unless environment.isBrowser
-#  Winston = require('winston')
+unless environment.isBrowser
+  Winston = require('winston')
 
 class Maxwell
   version = "0.0.0"

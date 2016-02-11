@@ -181,7 +181,7 @@ class Settings
   # Line Widths:
   @POST_RADIUS: 2.5
   @CURRENT_RADIUS: 1
-  @CURRENT_COLOR: "rgba(255, 255, 255, 0.8)"
+  @CURRENT_COLOR: "rgba(255, 255, 255, 0.7)"
   @LINE_WIDTH: 2
   @BOLD_LINE_WIDTH: 3
 
@@ -194,7 +194,7 @@ class Settings
   @CURRENT_DISPLAY_TYPE: "DASHES"
 
   # ColorPalettes:
-  @SELECT_COLOR: ColorPalette.magenta
+  @SELECT_COLOR: ColorPalette.yellow
   @HIGHLIGHT_COLOR: ColorPalette.orange
   @POST_COLOR: ColorPalette.black
   @DOTS_COLOR: ColorPalette.yellow

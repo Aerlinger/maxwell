@@ -10,7 +10,7 @@ class OpAmpElm extends CircuitComponent
   @FLAG_SMALL: 2
   @FLAG_LOWGAIN: 4
 
-  @ParameterDefinitions = {
+  @Fields = {
     "maxOut": {
       name: "Voltage"
       unit: "Voltage"
@@ -41,11 +41,6 @@ class OpAmpElm extends CircuitComponent
       range: [-Infinity, Infinity]
       type: "physical"
     }
-
-    # FLAGS:
-    #    @FLAG_SWAP: 1
-    #    @FLAG_SMALL: 2
-    #    @FLAG_LOWGAIN: 4
   }
 
   constructor: (xa = 104, ya = 104, xb = 208, yb = 104, params, f) ->
