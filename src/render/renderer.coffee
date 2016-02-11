@@ -92,6 +92,10 @@ class Renderer extends BaseRenderer
 
     @state = @STATE_RUN
 
+    @config = {
+      keyboard: true
+    }
+
     if environment.isBrowser
       @context = Sketch.augment @Canvas.getContext("2d"), {
         draw: @draw
@@ -111,6 +115,12 @@ class Renderer extends BaseRenderer
     # @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
     # @Circuit.addObserver Circuit.ON_RESET, @clear
     # @Circuit.addObserver Circuit.ON_END_UPDATE, @clear
+
+  pause: ->
+  play: ->
+  restart: ->
+  clearPlaceComponent: ->
+
 
   mousemove: (event) =>
     x = event.offsetX

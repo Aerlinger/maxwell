@@ -8,6 +8,7 @@ html
     link(rel='stylesheet', href='theme.css')
     link(rel='stylesheet', href='bower_components/rickshaw/rickshaw.css')
     link(rel='stylesheet', href='bower_components/bootstrap/dist/css/bootstrap.css')
+    link(rel="stylesheet", href="bower_components/semantic/dist/semantic.min.css")
 
     script(type="text/javascript", src="bower_components/dat.gui/dat.gui.js")
     script(type="text/javascript", src="bower_components/jquery/dist/jquery.js")
@@ -15,6 +16,7 @@ html
     script(type="text/javascript", src="bower_components/lodash/lodash.js")
     script(type="text/javascript", src="bower_components/d3/d3.js")
     script(type='text/javascript', src='bower_components/bootstrap/dist/js/bootstrap.js')
+    script(type="text/javascript", src="bower_components/semantic/dist/semantic.min.js")
 
     script(type="text/javascript", src="dist/maxwell.js")
 
@@ -60,6 +62,72 @@ html
           renderer = circuitContext;
         });
 
+        document.addEventListener("keydown", keyDownTextField, false);
+
+        function keyDownTextField(e) {
+          var keyCode = e.keyCode;
+          if (keyCode == 27)
+            console.log("KEYPRESS: ESC");
+
+          else if (keyCode == 82)
+            console.log("KEYPRESS: r");
+          else if (keyCode == 87)
+            console.log("KEYPRESS: w");
+          else if (keyCode == 71)
+            console.log("KEYPRESS: g");
+          else if (keyCode == 8)
+            console.log("KEYPRESS: backspace");
+          else if (keyCode == 48)
+            console.log("KEYPRESS: 0");
+          else if (keyCode == 49)
+            console.log("KEYPRESS: 1");
+          else if (keyCode == 50)
+            console.log("KEYPRESS: 2");
+          else if (keyCode == 51)
+            console.log("KEYPRESS: 3");
+          else if (keyCode == 51)
+            console.log("KEYPRESS: ~");
+          else if (keyCode == 37)
+            console.log("KEYPRESS: LEFT");
+          else if (keyCode == 38)
+            console.log("KEYPRESS: UP");
+          else if (keyCode == 39)
+            console.log("KEYPRESS: RIGHT");
+          else if (keyCode == 40)
+            console.log("KEYPRESS: DOWN");
+          else if (keyCode == 187)
+            console.log("KEYPRESS: +");
+          else if (keyCode == 189)
+            console.log("KEYPRESS: -");
+          else if (keyCode == 190)
+            console.log("KEYPRESS: .");
+          else if (keyCode == 188)
+            console.log("KEYPRESS: ,");
+          else if (keyCode == 220)
+            console.log("KEYPRESS: \\");
+          else if (keyCode == 191)
+            console.log("KEYPRESS: /");
+          else if (keyCode == 221)
+            console.log("KEYPRESS: ]");
+          else if (keyCode == 219)
+            console.log("KEYPRESS: [");
+
+          else if (keyCode == 91 || keyCode == 93)
+            console.log("KEYPRESS: CMD");
+          else if (keyCode == 18)
+            console.log("KEYPRESS: ALT");
+          else if (keyCode == 17)
+            console.log("KEYPRESS: CTL");
+          else if (keyCode == 16)
+            console.log("KEYPRESS: SHIFT");
+          else if (keyCode == 9)
+            console.log("KEYPRESS: TAB");
+          else if (keyCode == 32)
+            console.log("KEYPRESS: SPACE");
+          else
+            console.log("PRESSED: " + keyCode);
+        }
+
         components = Maxwell.Components;
         for (var i=0;  i<components.length; ++i) {
           component = components[i];
@@ -74,20 +142,23 @@ html
           console.log(Maxwell.Components[componentIndex]);
           console.log($(this).data("component-index"));
         });
+
+        $('.ui.sidebar').sidebar('toggle');
       });
 
   body
-    .col-md-1
-      #sidenav
-        ul.list-unstyled
-          - for (var i=0; i<circuit_names.length; ++i)
-            li
-              a(href="/"+circuit_names[i])= circuit_names[i]
+    .pusher
+      .ui.vertical.inverted.pointing.menu(style="float: left;")
+        .item
+          .header Predefined Circuits
+          .menu
+            - for (var i=0; i<circuit_names.length; ++i)
+              a.item(href="/"+circuit_names[i])= circuit_names[i]
 
-    .col-md-10
-      #container
+      #container.pull-left
         canvas.maxwell(data-circuit="#{circuit}", width="800", height="600")
         div(style="width: 300px; border: 1px solid #00F; height: 600px; float: right;")
+          p#placeComponent
           // Render component/circuit properties
 
 
@@ -96,9 +167,9 @@ html
           a.btn.btn-xs.btn-info.pull-left Stop
           a.btn.btn-xs.btn-danger.pull-left Reset
 
-          // Render form elements for component parameters
+            // Render form elements for component parameters
 
-    .col-md-1
-      #sidenav
-        ul#components.list-unstyled
+      .col-md-1
+        #sidenav
+          ul#components.list-unstyled
 

@@ -12,6 +12,10 @@ body {
     background-color: white;
 }
 
+.ui.vertical.inverted.menu .menu .item {
+  font-size: 10px;
+}
+
 canvas {
   border: 1px solid grey;
   background-color: lightblue;
