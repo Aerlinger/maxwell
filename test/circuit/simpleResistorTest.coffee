@@ -73,7 +73,7 @@ describe "Simple single resistor circuit", ->
 
   it "has correct initialization", ->
     expect(@Circuit.time).to.equal(0)
-    expect(@Circuit.frames).to.equal(0)
+    expect(@Circuit.iterations).to.equal(0)
 
   describe "before Analysis", ->
     beforeEach (done) ->
@@ -107,7 +107,48 @@ describe "Simple single resistor circuit", ->
         expect(@Solver.circuitRightSide).to.deep.equal([0, 0, 0])
 
       it "Sets circuitRowInfo to correct value", ->
-        expect(@Solver.circuitRowInfo).to.deep.equal([])
+        expect(@Solver.circuitRowInfo).to.deep.equal([
+          {
+            "dropRow": false
+            "lsChanges": false
+            "mapCol": 0
+            "mapRow": 0
+            "nodeEq": 0
+            "rsChanges": false
+            "type": 0
+            "value": 0
+          }
+          {
+            "dropRow": false
+            "lsChanges": false
+            "mapCol": -1
+            "mapRow": 1
+            "nodeEq": 0
+            "rsChanges": false
+            "type": 1
+            "value": 0
+          }
+          {
+            "dropRow": false
+            "lsChanges": false
+            "mapCol": 1
+            "mapRow": 2
+            "nodeEq": 0
+            "rsChanges": true
+            "type": 0
+            "value": 0
+          }
+          {
+            "dropRow": true
+            "lsChanges": false
+            "mapCol": 2
+            "mapRow": -1
+            "nodeEq": 0
+            "rsChanges": false
+            "type": 0
+            "value": 0
+          }
+        ])
 
       it "Sets circuitPermute to correct value", ->
         expect(@Solver.circuitPermute).to.deep.equal([2, 2, 2, 0])
@@ -118,12 +159,12 @@ describe "Simple single resistor circuit", ->
           resistor = @Circuit.getElmByIdx(1)
           expect(resistor.getVoltageDiff()).to.eql(5)
 
-        it "increments time", ->
+        it "increments frames", ->
           @Circuit.updateCircuit()
           @Circuit.updateCircuit()
           @Circuit.updateCircuit()
 
-          expect(@Circuit.frames).to.equal(3)
+          expect(@Circuit.iterations).to.equal(3)
 
         it "increments time", ->
           @Circuit.updateCircuit()

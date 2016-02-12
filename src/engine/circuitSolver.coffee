@@ -29,7 +29,6 @@ class CircuitSolver
 
   reset: ->
     @Circuit.time = 0
-    @Circuit.frames = 0
 
     @converged = true # true if numerical analysis has converged
     @subIterations = 5000
@@ -80,10 +79,7 @@ class CircuitSolver
     return @Stamper
 
   getIterCount: ->
-#      if Settings.SPEED is 0
-#        return 0
     sim_speed = @Circuit.simSpeed()
-#    sim_speed = 172
     return 0.1 * Math.exp((sim_speed - 61.0) / 24.0)
 
 
@@ -477,8 +473,8 @@ class CircuitSolver
 
     lit = @lastIterTime
 
-    if 1000 >= stepRate * (tm - @lastIterTime)
-      return
+#    if 1000 >= stepRate * (tm - @lastIterTime)
+#      return
 
     # Main iteration
     iter = 1

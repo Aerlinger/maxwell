@@ -19,6 +19,10 @@ app.get('/', function (req, res) {
   res.redirect('/ohms')
 });
 
+app.get('/plotting', function (req, res) {
+  res.render('plotting');
+});
+
 app.get('/:circuit_name', function (req, res) {
   circuit_names = glob.sync("../circuits/*.json").map(function(filename) {
     return path.basename(filename, ".json")
@@ -31,6 +35,7 @@ app.get('/:circuit_name', function (req, res) {
     circuit_names: circuit_names
   });
 });
+
 
 app.listen(port, function () {
   console.log('Example app listening on port ' + port + '!');

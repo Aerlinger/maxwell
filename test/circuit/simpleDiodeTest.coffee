@@ -69,7 +69,7 @@ describe "Simple single diode circuit", ->
 
   it "has correct initialization", ->
     expect(@Circuit.time).to.equal(0)
-    expect(@Circuit.frames).to.equal(0)
+    expect(@Circuit.iterations).to.equal(0)
 
   describe "before Analysis", ->
     beforeEach (done) ->

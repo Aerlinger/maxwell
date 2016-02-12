@@ -1,0 +1,191 @@
+doctype
+html
+  head
+    title="Maxwell"
+
+    meta(http-equiv="content-type", content="text/html; charset=UTF8")
+
+    link(rel='stylesheet', href='theme.css')
+    link(rel='stylesheet', href='bower_components/rickshaw/rickshaw.css')
+    link(rel="stylesheet", href="bower_components/semantic/dist/semantic.min.css")
+
+    script(type="text/javascript", src="bower_components/dat.gui/dat.gui.js")
+    script(type="text/javascript", src="bower_components/jquery/dist/jquery.js")
+    script(type="text/javascript", src="bower_components/sketch.js/js/sketch.js")
+    script(type="text/javascript", src="bower_components/lodash/lodash.js")
+    script(type="text/javascript", src="bower_components/d3/d3.js")
+    script(type="text/javascript", src="bower_components/semantic/dist/semantic.min.js")
+    script(type="text/javascript", src="bower_components/jquery-ui/jquery-ui.js")
+    script(type="text/javascript", src="bower_components/d3/d3.js")
+    script(type="text/javascript", src="bower_components/rickshaw/rickshaw.js")
+
+    script(type="text/javascript", src="dist/maxwell.js")
+
+    script.
+      $(document).ready(function (event) {
+        $("#chart_container").draggable({
+          containment: "parent",
+          grid: [16, 16]
+        });
+
+
+        var tv = 20;
+
+        // instantiate our graph!
+        var graph = new Rickshaw.Graph({
+          element: document.getElementById("chart"),
+          width: 300,
+          height: 200,
+          stroke: true,
+          strokeWidth: 0.5,
+          renderer: 'line',
+          xScale: d3.time.scale(),
+          series: new Rickshaw.Series.FixedDuration([{name: 'one'}], undefined, {
+            timeInterval: tv,
+            maxDataPoints: 100,
+            timeBase: new Date().getTime() / 1000
+          })
+        });
+
+        graph.render();
+
+        var legend = document.querySelector('#legend');
+
+        // add some data every so often
+
+        var i = 0;
+
+        var hoverDetail = new Rickshaw.Graph.HoverDetail({
+          graph: graph,
+          formatter: function (series, x, y) {
+            var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
+            var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
+            var content = swatch + series.name + ": " + parseInt(y) + '<br>' + date;
+            return content;
+          }
+        });
+
+        graph.onUpdate(function() {
+          hoverDetail.update();
+        });
+
+        graph.element.addEventListener('mousemove',
+        function(e) {
+          console.log("mousemove!");
+        }, false);
+
+        var iv = setInterval(function () {
+          var data = {one: Math.floor(Math.random() * 40) + 120};
+
+          var randInt = Math.floor(Math.random() * 100);
+          data.two = (Math.sin(i++ / 40) + 4)  * (randInt + 400);
+          data.three = randInt + 300;
+
+          graph.series.addData(data);
+          graph.update();
+          graph.render();
+        }, tv);
+
+        /*
+        var Hover = Rickshaw.Class.create(Rickshaw.Graph.HoverDetail, {
+          render: function (args) {
+            legend.innerHTML = args.formattedXValue;
+
+            args.detail.sort(function (a, b) {
+              return a.order - b.order
+            }).forEach(function (d) {
+              var line = document.createElement('div');
+              line.className = 'line';
+
+              var swatch = document.createElement('div');
+              swatch.className = 'swatch';
+              swatch.style.backgroundColor = d.series.color;
+
+              var label = document.createElement('div');
+              label.className = 'label';
+              label.innerHTML = d.name + ": " + d.formattedYValue;
+
+              line.appendChild(swatch);
+              line.appendChild(label);
+
+              legend.appendChild(line);
+
+              var dot = document.createElement('div');
+              dot.className = 'dot';
+              dot.style.top = graph.y(d.value.y0 + d.value.y) + 'px';
+              dot.style.borderColor = d.series.color;
+
+              this.element.appendChild(dot);
+
+              dot.className = 'dot active';
+
+              this.show();
+            }, this);
+          }
+        });
+        */
+
+        //var hover = new Hover({graph: graph});
+      });
+
+
+  body
+    .ui.menu
+      .ui.dropdown.item
+        | Circuit
+        i.dropdown.icon
+        .menu
+          a.item
+            span.description ctrl + s
+            | Save
+          a.item
+            i.folder.icon
+            | Permalink
+          a.item Export to SPICE
+          a.item Export to JSON
+      .ui.dropdown.item
+        | Components
+        i.dropdown.icon
+        .menu
+          a.item First
+          a.item Second
+          a.item Third
+      .ui.dropdown.item
+        | Sample Circuits
+        i.dropdown.icon
+        .menu
+          a.item First
+          a.item Second
+          a.item Third
+
+    div
+      #circuit_sidebar.ui.sidebar.thin.left.vertical.menu.visible
+        .item
+          .header Circuits
+          .menu
+            a.item(href="/") Items
+
+      #component_sidebar.ui.sidebar.right.vertical.menu.visible
+        .item
+          .header Circuits
+          .menu
+            a.item(href="/")= "circuits"
+
+      #edit_sidebar.ui.bottom.sidebar.visible
+        div(style="height: 200px; border: 1px solid #FF00FF; margin-left: 150px;")
+
+
+      .pusher
+        .canvas-container(style="margin-left: 150px; width: 100%;")
+          #chart_container.draggable.ui-widget-content
+            #chart.rickshaw_graph
+            #legend_container
+              #smoother(title="Smoothing")
+              #legend
+            #slider
+          canvas.maxwell(data-circuit="circuit", width="800", height="600")
+          canvas.grid(width="800", height="600")
+
+
+
+
