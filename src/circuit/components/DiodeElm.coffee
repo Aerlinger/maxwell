@@ -117,7 +117,7 @@ class DiodeElm extends CircuitComponent
 
     # used to have .1 here, but needed .01 for peak detector
     if Math.abs(voltdiff - @lastvoltdiff) > .01
-      console.log("CONVERGE FAIL!")
+      #console.log("CONVERGE FAIL!")
       @Circuit.Solver.converged = false
 
     voltdiff = @limitStep(voltdiff, @lastvoltdiff)

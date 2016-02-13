@@ -1,8 +1,92 @@
 Circuit = require('../../src/circuit/circuit.coffee')
 GroundElm = require('../../src/circuit/components/GroundElm.coffee')
 Util = require('../../src/util/util.coffee')
+diff = require('deep-diff').diff
 
 describe "Utility test", ->
+  it "tests approximate equality", ->
+    epsilon = 0.00000001
+
+    objA = {
+      a: -0.12345
+      b: 0.12345
+      innerObj: {
+        c: {
+          d: 0.9987412
+        }
+        arr: [
+          0.0000001,
+          {
+            e: 1.000654
+            f: 1.000654
+          }
+        ]
+      }
+    }
+
+    objB = {
+      a: -0.12345 - epsilon/2
+      b: 0.12345 + epsilon/2
+      innerObj: {
+        c: {
+          d: 0.9987412 - epsilon/2
+        }
+        arr: [
+          0.0000001 + epsilon/2,
+          {
+            e: 1.000654 - epsilon/2
+            f: 1.000654 + epsilon/2
+          }
+        ]
+      }
+    }
+
+    true_deltas = approx_diff(objA, objB)
+
+    expect(true_deltas).to.eql([])
+
+  it "respects array ordering", ->
+    epsilon = 0.00000001
+
+    objA = {
+      a: -0.12345
+      b: 0.12345
+      innerObj: {
+        c: {
+          d: 0.9987412
+        }
+        arr: [
+          0.0000001,
+          {
+            e: 1.000654
+            f: 1.000654
+          }
+        ]
+      }
+    }
+
+    objB = {
+      a: -0.12345 - epsilon/2
+      b: 0.12345 + epsilon/2
+      innerObj: {
+        c: {
+          d: 0.9987412 - epsilon/2
+        }
+        arr: [
+          {
+            e: 1.000654 - epsilon/2
+            f: 1.000654 + epsilon/2
+          }
+          0.0000001 + epsilon/2,
+        ]
+      }
+    }
+
+    true_deltas = approx_diff(objA, objB)
+
+    expect(true_deltas).to.not.eql([])
+
+
   it "extends an object", ->
     capacitorFields = {
       "capacitance": {
@@ -110,7 +194,6 @@ describe "Utility test", ->
     beforeEach ->
       @Circuit = new Circuit()
       @groundElm = new GroundElm(100, 100, 100, 200)
-
 
       specify "zero ", ->
         @groundElm.getUnitText(1.99e-18, "Amps").should.equal "0.00 fAmps"

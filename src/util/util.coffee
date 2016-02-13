@@ -217,6 +217,9 @@ class Util
 
     return arrayStr
 
+  @objectEquality: (obj1, obj2) ->
+
+
   @printMatrix: (matrix) ->
     ###
     Adds commas to a number, and returns the string representation of that number
