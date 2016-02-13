@@ -90,6 +90,7 @@ sawtooth
 schmitt
 sine
 sinediode
+spark-marx
 spark-sawtooth
 spikegen
 thevenin
@@ -103,3 +104,6 @@ voltdouble
 voltdouble2
 voltquad
 volttriple
+zeneriv
+zenerref
+zenerreffollow

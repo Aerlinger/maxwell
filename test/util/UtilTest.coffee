@@ -5,7 +5,7 @@ diff = require('deep-diff').diff
 
 describe "Utility test", ->
   it "tests approximate equality", ->
-    epsilon = 0.00000001
+    epsilon = 1e-4
 
     objA = {
       a: -0.12345
@@ -46,7 +46,7 @@ describe "Utility test", ->
     expect(true_deltas).to.eql([])
 
   it "respects array ordering", ->
-    epsilon = 0.00000001
+    epsilon = 1e-4
 
     objA = {
       a: -0.12345

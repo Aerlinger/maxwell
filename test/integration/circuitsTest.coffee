@@ -10,7 +10,6 @@ chai = require('chai')
 
 chai.config.showDiff = false;
 
-
 assert = chai.assert
 expect = chai.expect
 
@@ -36,23 +35,19 @@ filenames = glob.sync "./circuits/*.txt", {}
   'potdivide','pushpullxover','rectify','relaxosc','res-par','res-series','resistors','ringing','sine',
   'spark-sawtooth','spikegen','thevenin','triangle','voltdivide','voltdouble','voltdouble2','voltquad','volttriple' ]
 
-
-
 @opamps = [
   "opamp", "opampfeedback", "amp-invert", "amp-diff", "amp-follower", "amp-fullrect", "amp-integ", "amp-invert",
   "amp-noninvert", "amp-rect", "amp-schmitt", "amp-sum", "relaxosc", "sawtooth", "howland", "logconvert", "nic-r",
   "itov", "capmult", "gyrator", "amp-dfdx", "allpass2", "opamp-regulator"
 ]
 
-
 @files = _.difference(@files, @skip)
+#@files = ["opamp-regulator"]
 
 for circuit_name in @files
   do (circuit_name) ->
     describe "All Circuits", ->
       it "STATIC #{circuit_name}", =>
-        this.simulation_type = "static"
-
         circuit_file = "#{circuit_name}.json"
 
         circuit = Maxwell.loadCircuitFromFile("./circuits/#{circuit_file}")
@@ -70,8 +65,6 @@ for circuit_name in @files
           expect(deltas).to.eql([])
 
       it "FRAME #{circuit_name}", =>
-        this.simulation_type = "frame"
-
         circuit_file = "#{circuit_name}.json"
 
         circuit = Maxwell.loadCircuitFromFile("./circuits/#{circuit_file}")

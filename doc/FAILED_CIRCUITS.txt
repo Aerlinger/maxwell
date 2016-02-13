@@ -151,10 +151,6 @@ volume
 wheatstone
 xor
 xorphasedet
-zeneriv
-zenerref
-zenerreffollow
 4way
 cc2imp
 cc2impn
-spark-marx

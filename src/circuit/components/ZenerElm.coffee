@@ -73,4 +73,7 @@ class ZenerElm extends DiodeElm
   getDumpType: ->
     "z"
 
+  needsShortcut: ->
+    false
+
 module.exports = ZenerElm
