@@ -29,17 +29,16 @@ class CircuitComponent
   @Fields = {}
 
   constructor: (@x1, @y1, @x2, @y2, params, f = 0) ->
+    @current = 0
     @flags = f || 0
 
     @setParameters(params)
 
-    @current = 0
     @voltSource = 0
     @noDiagonal = false
     @Circuit = null
 
     @component_id = Util.getRand(100000000) + (new Date()).getTime()
-
 
     @setPoints()
     @recomputeBounds()
@@ -452,14 +451,14 @@ class CircuitComponent
     }
 
   setValue: (paramName, paramValue) ->
-    if paramName not in @paramNames()
-      console.error("Error while updating #{paramName}, #{paramName} is not a field in #{@getName()}")
+    if paramName not in @getParamNames()
+      console.error("Error while setting param for #{@getName()}: #{paramName} is not a field in #{@getParamNames()}")
 
     this[paramName] = paramValue
     @params[paramName] = paramValue
 
-  paramNames: ->
-    Object.keys(@params)
+  getParamNames: ->
+    Object.keys(@constructor.Fields)
 
   ##
   # Returns the JSON metadata object for this field with an additional key/value pair for the assigned value.
