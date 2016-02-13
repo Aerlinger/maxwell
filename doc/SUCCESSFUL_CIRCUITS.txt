@@ -84,6 +84,13 @@ mosfetamp
 mosfollower
 mosmirror
 mosswitch
+mr-crossbar
+mr-sine
+mr-sine2
+mr-sine3
+mr-square
+mr-triangle
+mr
 multivib-a
 multivib-bi
 multivib-mono
@@ -139,6 +146,7 @@ ttlinverter
 ttlnand
 ttlnor
 twint
+vco
 voltdivide
 voltdouble
 voltdouble2

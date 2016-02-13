@@ -35,6 +35,7 @@ LogicInputElm = require('./components/LogicInputElm.coffee')
 LogicOutputElm = require('./components/LogicOutputElm.coffee')
 AnalogSwitchElm = require('./components/AnalogSwitchElm.coffee')
 AnalogSwitch2Elm = require('./components/AnalogSwitch2Elm.coffee')
+MemristorElm = require('./components/MemristorElm.coffee')
 
 TransformerElm = require('./components/TransformerElm.coffee')
 
@@ -105,6 +106,65 @@ class ComponentRegistry
     '?': Scope
     'B': Scope
 
+    # Incomplete
+
+    '150': AndGateElm
+    '151': NandGateElm
+    '152': OrGateElm
+    '153': NorGateElm
+    '154': XorGateElm
+#    '155': DFlipFlopElm
+#    '156': JKFlipFlopElm
+#    '157': SevenSegElm
+#    '158': VCOElm
+    '159': AnalogSwitchElm
+    '160': AnalogSwitch2Elm
+#    '161': PhaseCompElm
+#    '162': LEDElm
+#    '163': DecadeElm
+#    '164': CounterElm
+#    '165': TimerElm
+#    '166': DACElm
+#    '167': ADCElm
+#    '168': LatchElm
+#    '169': TappedTransformerElm
+    '170': SweepElm
+#    '171': TransLineElm
+    '172': VarRailElm
+#    '173': TriodeElm
+    '174': PotElm
+#    '175': TunnelDiodeElm
+#    '177': SCRElm
+#    '178': RelayElm
+#    '179': CC2Elm
+#    '181': LampElm
+    '187': SparkGapElm
+    'A': AntennaElm
+    'I': InverterElm
+    'L': LogicInputElm
+    'M': LogicOutputElm
+    'O': OutputElm
+    'R': RailElm
+    'S': Switch2Elm
+    'T': TransformerElm
+    'a': OpAmpElm
+    'c': CapacitorElm
+    'd': DiodeElm
+#    'f': NMosfetElm
+    'g': GroundElm
+    'i': CurrentElm
+#    'j': NJfetElm
+    'l': InductorElm
+    'm': MemristorElm
+    'p': ProbeElm
+    'r': ResistorElm
+    's': SwitchElm
+#    't': NTransistorElm
+#    'v': DCVoltageElm
+    'w': WireElm
+    'x': TextElm
+    'z': ZenerElm
+
 #    'L': LogicInput
 #    'M': LogicOutput
 #   'I': Inverter
@@ -155,6 +215,7 @@ class ComponentRegistry
 
     AnalogSwitchElm: '159'
     AnalogSwitch2Elm: '160'
+    MemristorElm: 'm'
   }
 
   @enumerate: ->
