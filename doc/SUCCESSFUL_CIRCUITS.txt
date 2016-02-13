@@ -1,5 +1,6 @@
 3-cgand
 3-cgor
+allpass1
 allpass2
 amp-dfdx
 amp-diff
@@ -10,6 +11,7 @@ amp-noninvert
 amp-rect
 amp-schmitt
 amp-sum
+bandpass
 besselbutter
 butter10lo
 cap
@@ -23,11 +25,15 @@ ceamp
 classd
 cmosinverter
 cmosinvertercap
+cmosmsff
 cmosnor
+cmostransgate
+cmosxor
 colpitts
 coupled1
 coupled2
 coupled3
+crossover
 currentsrc
 currentsrcelm
 currentsrcramp
@@ -44,6 +50,12 @@ dtlinverter
 dtlnand
 dtlnor
 eclosc
+filt-hipass-l
+filt-hipass
+filt-lopass-l
+filt-lopass
+filt-vcvs-hipass
+filt-vcvs-lopass
 follower
 fullrectf
 grid
@@ -58,6 +70,7 @@ inductac
 inductkick-block
 inductkick-snub
 inductkick
+inv-osc
 invertamp
 ladder
 leadingedge
@@ -74,12 +87,14 @@ mosswitch
 multivib-a
 multivib-bi
 multivib-mono
+mux
 nic-r
 nmosfet
 nmosinverter
 nmosinverter2
 nmosnand
 norton
+notch
 npn
 ohms
 opamp
@@ -104,6 +119,7 @@ ringing
 rtlinverter
 rtlnand
 rtlnor
+samplenhold
 sawtooth
 schmitt
 sine
@@ -111,6 +127,8 @@ sinediode
 spark-marx
 spark-sawtooth
 spikegen
+switchedcap
+switchfilter
 thevenin
 trans-diffamp-common
 trans-diffamp-cursrc
@@ -120,10 +138,11 @@ triangle
 ttlinverter
 ttlnand
 ttlnor
-vco
+twint
 voltdivide
 voltdouble
 voltdouble2
+voltinvert
 voltquad
 volttriple
 zeneriv

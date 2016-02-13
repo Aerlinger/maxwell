@@ -136,7 +136,7 @@ class SweepElm extends CircuitComponent
       @fmul = 1
     else
       @fadd = 0
-      @fmul = Math.pow(@maxF / @minF, @dir * @getParentCircuit.timeStep() / @sweepTime)
+      @fmul = Math.pow(@maxF / @minF, @dir * @getParentCircuit().timeStep() / @sweepTime)
 
     @savedTimeStep = @getParentCircuit().timeStep()
 

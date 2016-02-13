@@ -7,10 +7,8 @@
 555schmitt
 555square
 7segdecoder
-allpass1
 amdetect
 amp-integ
-bandpass
 cc2
 cc2n
 ccdiff
@@ -19,11 +17,7 @@ ccint
 ccitov
 ccvccs
 clockedsrff
-cmosmsff
-cmostransgate
-cmosxor
 counter8
-crossover
 cube
 deccounter
 decoder
@@ -35,12 +29,6 @@ divideby2
 divideby3
 eclnor
 edgedff
-filt-hipass-l
-filt-hipass
-filt-lopass-l
-filt-lopass
-filt-vcvs-hipass
-filt-vcvs-lopass
 flashadc
 freqdouble
 graycode
@@ -49,7 +37,6 @@ hfadc
 howland
 indmultfreq
 indmultind
-inv-osc
 itov
 jfetamp
 jfetcurrentsrc
@@ -69,10 +56,9 @@ mr-sine3
 mr-square
 mr-triangle
 mr
-mux
 mux3state
 nandff
-notch
+opamp-regulator
 opint-current
 opint-invert-amp
 opint-slew
@@ -94,11 +80,8 @@ relaytff
 relayxor
 ringmod
 rossler
-samplenhold
 scr
 scractrig
-switchedcap
-switchfilter
 swtreedac
 synccounter
 tdiode
@@ -122,8 +105,7 @@ transformerdown
 transformerup
 triode
 triodeamp
-twint
-voltinvert
+vco
 volume
 wheatstone
 xor
@@ -131,4 +113,3 @@ xorphasedet
 4way
 cc2imp
 cc2impn
-opamp-regulator

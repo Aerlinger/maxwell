@@ -7,6 +7,7 @@ class InverterElm extends CircuitComponent
     slewRate: {
       name: "Slew Rate"
       data_type: parseFloat
+      default_value: 0.5
     }
   }
 
@@ -53,7 +54,8 @@ class InverterElm extends CircuitComponent
   doStep: (stamper) ->
     v0 = @volts[1]
     out = if @volts[0] > 2.5 then 0 else 5
-    maxStep = @slewRate * @getParentCircuit.timeStep() * 1e9
+
+    maxStep = @slewRate * @getParentCircuit().timeStep() * 1e9
 
     out = Math.max(Math.min(v0 + maxStep, out), v0 - maxStep)
 

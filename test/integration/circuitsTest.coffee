@@ -33,7 +33,9 @@ filenames = glob.sync "./circuits/*.txt", {}
   'ladder','lrc-critical','lrc','moscurrentramp','moscurrentsrc','mosfetamp','mosfollower','mosmirror',
   'mosswitch','nic-r','nmosfet','norton','ohms','opamp','opampfeedback','phaseseq','phaseshiftosc','pmosfet','pot',
   'potdivide','pushpullxover','rectify','relaxosc','res-par','res-series','resistors','ringing','sine',
-  'spark-sawtooth','spikegen','thevenin','triangle','voltdivide','voltdouble','voltdouble2','voltquad','volttriple' ]
+  'spark-sawtooth','spikegen','thevenin','triangle','voltdivide','voltdouble','voltdouble2','voltquad','volttriple',
+  "inv-osc", "voltinvert", "switchedcap", "switchfilter"
+]
 
 @opamps = [
   "opamp", "opampfeedback", "amp-invert", "amp-diff", "amp-follower", "amp-fullrect", "amp-integ", "amp-invert",
@@ -42,7 +44,6 @@ filenames = glob.sync "./circuits/*.txt", {}
 ]
 
 @files = _.difference(@files, @skip)
-#@files = ["rtlinverter", "rtlnor", "rtlnand"]
 
 for circuit_name in @files
   do (circuit_name) ->
