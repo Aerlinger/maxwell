@@ -1,3 +1,5 @@
+3-cgand
+3-cgor
 allpass2
 amp-dfdx
 amp-diff
@@ -19,6 +21,9 @@ cappar
 capseries
 ceamp
 classd
+cmosinverter
+cmosinvertercap
+cmosnor
 colpitts
 coupled1
 coupled2
@@ -26,13 +31,18 @@ coupled3
 currentsrc
 currentsrcelm
 currentsrcramp
+dac
 darlington
 dcrestoration
+delayrc
 diff
 diodeclip
 diodecurve
 diodelimit
 diodevar
+dtlinverter
+dtlnand
+dtlnor
 eclosc
 follower
 fullrectf
@@ -50,6 +60,7 @@ inductkick-snub
 inductkick
 invertamp
 ladder
+leadingedge
 logconvert
 lrc-critical
 lrc
@@ -61,9 +72,13 @@ mosfollower
 mosmirror
 mosswitch
 multivib-a
+multivib-bi
 multivib-mono
 nic-r
 nmosfet
+nmosinverter
+nmosinverter2
+nmosnand
 norton
 npn
 ohms
@@ -86,6 +101,9 @@ res-par
 res-series
 resistors
 ringing
+rtlinverter
+rtlnand
+rtlnor
 sawtooth
 schmitt
 sine
@@ -99,6 +117,10 @@ trans-diffamp-cursrc
 trans-diffamp
 transswitch
 triangle
+ttlinverter
+ttlnand
+ttlnor
+vco
 voltdivide
 voltdouble
 voltdouble2

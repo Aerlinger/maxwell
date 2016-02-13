@@ -14,16 +14,13 @@ class LogicOutputElm extends CircuitComponent
     threshold: {
       name: "Threshold Voltage"
       data_type: parseFloat
-      default: 2.5
+      default_value: 2.5
     }
   }
 
 
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)
-
-    if @isTernary()
-      @posCount = 3
 
 
   isTernary: ->
@@ -47,15 +44,9 @@ class LogicOutputElm extends CircuitComponent
     @lead1 = Util.interpolate(@point1, @point2, 1 - 12 / @dn)
 
 
-  setCurrent: (vs, c) ->
-    @current = - c
-
   stamp: (stamper) ->
     if @needsPullDown()
       stamper.stampResistor(@nodes[0], 0, 1e6)
-
-  getVoltageSourceCount: ->
-    1
 
   getVoltageDiff: ->
     return @volts[0]

@@ -42,7 +42,7 @@ filenames = glob.sync "./circuits/*.txt", {}
 ]
 
 @files = _.difference(@files, @skip)
-#@files = ["opamp-regulator"]
+#@files = ["rtlinverter", "rtlnor", "rtlnand"]
 
 for circuit_name in @files
   do (circuit_name) ->

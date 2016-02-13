@@ -10,16 +10,38 @@ class LogicInputElm extends SwitchElm
   FLAG_TERNARY: 1
   FLAG_NUMERIC: 2
 
-  @Fields = Util.extend(@Fields, {
+  @Fields = {
+    "position": {
+      name: "Position"
+      default_value: 0
+      data_type: (str)->
+        str = str.toString()
+
+        if str == 'true'
+          0
+        else if str == 'false'
+          1
+        else
+          parseInt(str)
+      field_type: "boolean"
+    },
+    "momentary": {
+      name: "Momentary"
+      default_value: 0
+      data_type: (str) -> str.toString() == 'true'
+      field_type: "boolean"
+    }
     hiV: {
       name: "Voltage High"
       data_type: parseFloat
+      default_value: 5
     },
     loV: {
       name: "Voltage Low"
       data_type: parseFloat
+      default_value: 0
     }
-  })
+  }
 
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)
@@ -47,15 +69,15 @@ class LogicInputElm extends SwitchElm
 
 
   setCurrent: (vs, c) ->
-    @current = - c
+    @current = -c
 
   stamp: (stamper) ->
     v = if @position == 0 then @loV else @hiV
 
-    if @isTernary
+    if @isTernary()
       v = @position * 2.5
 
-    stamper.stampVoltageSource(@nodes[0], @voltSource, v)
+    stamper.stampVoltageSource(0, @nodes[0], @voltSource, v)
 
   getVoltageSourceCount: ->
     1
