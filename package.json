@@ -8,7 +8,9 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "dotenv": "^2.0.0"
+  },
   "devDependencies": {
     "better-require": "0.0.3",
     "sprintf-js": "*",

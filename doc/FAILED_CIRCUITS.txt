@@ -38,10 +38,6 @@ howland
 indmultfreq
 indmultind
 itov
-jfetamp
-jfetcurrentsrc
-jfetfollower-nooff
-jfetfollower
 jkff
 johnsonctr
 ledflasher
@@ -98,7 +94,6 @@ transformerdown
 transformerup
 triode
 triodeamp
-volume
 wheatstone
 xor
 xorphasedet

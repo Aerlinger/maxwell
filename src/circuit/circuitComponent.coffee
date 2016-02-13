@@ -18,6 +18,7 @@ Settings = require('../settings/settings.coffee')
 Rectangle = require('../geom/rectangle.coffee')
 Point = require('../geom/point.coffee')
 Util = require('../util/util.coffee')
+debug = require('debug')('circuitComponent')
 
 _ = require("lodash")
 
@@ -79,6 +80,9 @@ class CircuitComponent
 
         this[param_name] ||= data_type(default_value)
         @params[param_name] = this[param_name]
+
+        if (this[param_name] == null || this[param_name] == undefined || isNaN(this[param_name]))
+          debug("Parameter #{param_name} is unset: #{this[param_name]}!")
 
     unmatched_params = (param for param of component_params)
 

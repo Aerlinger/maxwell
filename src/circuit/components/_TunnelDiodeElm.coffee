@@ -7,6 +7,8 @@ class TunnelDiodeElm extends CircuitElm
 
     @setup()
 
+  getDumpType: ->
+    "175"
 
 
 module.exports = TunnelDiodeElm

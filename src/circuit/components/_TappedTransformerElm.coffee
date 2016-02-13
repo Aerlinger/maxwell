@@ -22,6 +22,8 @@ class TappedTransformerElm extends CircuitComponent
   constructor: (xa, xb, ya, yb, params, f) ->
     super(xa, xb, ya, yb, params, f)
 
+  getDumpType: ->
+    "169"
 
 
 module.exports = TappedTransformerElm

@@ -28,7 +28,7 @@ class LedElm extends DiodeElm
 
     @setup()
 
-
-
+  getDumpType: ->
+    "162"
 
 module.exports = LedElm

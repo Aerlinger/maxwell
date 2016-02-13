@@ -15,8 +15,11 @@ class PhotoResistorElm extends CircuitComponent
   }
 
 
-constructor: (xa, xb, ya, yb, params, f) ->
+  constructor: (xa, xb, ya, yb, params, f) ->
     super(xa, xb, ya, yb, params, f)
+
+  getDumpType: ->
+    "186"
 
 
 

@@ -35,7 +35,7 @@ filenames = glob.sync "./circuits/*.txt", {}
   'potdivide','pushpullxover','rectify','relaxosc','res-par','res-series','resistors','ringing','sine',
   'spark-sawtooth','spikegen','thevenin','triangle','voltdivide','voltdouble','voltdouble2','voltquad','volttriple',
   "inv-osc", "voltinvert", "switchedcap", "switchfilter", "mr", "mr-crossbar", "mr-sine", "mr-sine2", "mr-sine3",
-  "mr-square", "mr-triangle", "vco"
+  "mr-square", "mr-triangle", "vco", "jfetcurrentsrc", "jfetamp", "jfetfollower"
 ]
 
 @opamps = [
@@ -45,7 +45,6 @@ filenames = glob.sync "./circuits/*.txt", {}
 ]
 
 @files = _.difference(@files, @skip)
-#@files = ["mr", "mr-crossbar", "mr-sine", "mr-sine2", "mr-sine3", "mr-square", "mr-triangle"]
 
 for circuit_name in @files
   do (circuit_name) ->

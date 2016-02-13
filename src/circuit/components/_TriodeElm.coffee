@@ -19,6 +19,8 @@ class TriodeElm extends CircuitComponent
 
     @setup
 
+  getDumpType: ->
+    '173'
 
 
 module.exports = TriodeElm

@@ -23,4 +23,8 @@ class TransLineElm extends CircuitComponent
     @noDiagonal = true
     @reset()
 
+
+  getDumpType: ->
+    "171"
+
 module.exports = TransLineElm

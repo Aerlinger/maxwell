@@ -7,6 +7,9 @@ class SevenSegElm extends ChipElm
   constructor: (xa, xb, ya, yb, params, f) ->
     super(xa, xb, ya, yb, params, f)
 
+  getDumpType: ->
+    "157"
+
 
 
 module.exports = SevenSegElm

@@ -27,9 +27,10 @@ class LampElm extends CircuitComponent
   }
 
 
-constructor: (xa, xb, ya, yb, params, f) ->
+  constructor: (xa, xb, ya, yb, params, f) ->
     super(xa, xb, ya, yb, params, f)
 
-
+  getDumpType: ->
+    "181"
 
 module.exports = LampElm

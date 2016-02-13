@@ -7,7 +7,7 @@ Util = require('../../util/util.coffee')
 
 MosfetElm = require('./MosfetElm.coffee')
 
-class JFetElm extends MosfetElm
+class JfetElm extends MosfetElm
 
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)
@@ -54,7 +54,7 @@ class JFetElm extends MosfetElm
   setPoints: ->
     super()
 
-    hs2 = @hs * dsign
+    hs2 = @hs * @dsign
 
     @src = Util.newPointArray(3)
     @drn = Util.newPointArray(3)
@@ -69,14 +69,14 @@ class JFetElm extends MosfetElm
     [ra[0], ra[1]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 13/@dn, @hs)
     [ra[2], ra[3]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 10/@dn, @hs)
 
-    @gatePoly = Util.createPolygonFromArray(@ra[0], @ra[1], @ra[3], @ra[2])
+    @gatePoly = Util.createPolygonFromArray(ra[0], ra[1], ra[3], ra[2])
 
     if @pnp == -1
       x = Util.interpolate(@gatePt, @point1, 15/@dn)
-      @arrowPoly = Util.calcArray(@gatePt, x, 8, 3)
+      @arrowPoly = Util.calcArrow(@gatePt, x, 8, 3)
     else
-      @arrowPoly = Util.calcArray(@point1, @gatePt, 8, 3)
+      @arrowPoly = Util.calcArrow(@point1, @gatePt, 8, 3)
 
 
-module.exports = JFetElm
+module.exports = JfetElm
 

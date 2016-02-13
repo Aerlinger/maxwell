@@ -14,7 +14,7 @@ SparkGapElm = require('./components/SparkGapElm.coffee')
 CurrentElm = require('./components/CurrentElm.coffee')
 RailElm = require('./components/RailElm.coffee')
 MosfetElm = require('./components/MosfetElm.coffee')
-JFetElm = require('./components/JFetElm.coffee')
+JfetElm = require('./components/JFetElm.coffee')
 TransistorElm = require('./components/TransistorElm.coffee')
 VarRailElm = require('./components/VarRailElm.coffee')
 OpAmpElm = require('./components/OpAmpElm.coffee')
@@ -153,7 +153,7 @@ class ComponentRegistry
 #    'f': NMosfetElm
     'g': GroundElm
     'i': CurrentElm
-#    'j': NJfetElm
+    'j': JfetElm
     'l': InductorElm
     'm': MemristorElm
     'p': ProbeElm
@@ -192,6 +192,7 @@ class ComponentRegistry
     ZenerElm: 'z'
     CurrentElm: 'i'
     TransistorElm: 't'
+    JfetElm: 'j'
 
     Switch2Elm: 'S'
     SweepElm: '170'

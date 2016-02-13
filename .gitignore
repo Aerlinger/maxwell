@@ -12,3 +12,4 @@ scripts/
 dump/*.json
 dump/*.txt
 circuits/*.txt
+.env

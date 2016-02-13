@@ -72,6 +72,10 @@ inductkick-snub
 inductkick
 inv-osc
 invertamp
+jfetamp
+jfetcurrentsrc
+jfetfollower-nooff
+jfetfollower
 ladder
 leadingedge
 logconvert
@@ -153,6 +157,7 @@ voltdouble2
 voltinvert
 voltquad
 volttriple
+volume
 zeneriv
 zenerref
 zenerreffollow

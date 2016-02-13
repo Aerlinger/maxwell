@@ -9,5 +9,8 @@ class DFlipFlopElm extends ChipElm
 
     @pins[2].value = !@pins[1].value;
 
+  getDumpType: ->
+    "155"
+
 
 module.exports = DFlipFlopElm

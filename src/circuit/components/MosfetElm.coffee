@@ -4,7 +4,6 @@ Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 Util = require('../../util/util.coffee')
-JFetElm = require("./JFetElm.coffee")
 
 sprintf = require("sprintf-js").sprintf
 
@@ -237,9 +236,10 @@ class MosfetElm extends CircuitComponent
     Gds = 0
     beta = @getBeta()
 
-    if vgs > .5 and this instanceof JFetElm
-      Circuit.halt "JFET is reverse biased!", this
-      return
+#    if vgs > .5 and this instanceof JFetElm
+#      Circuit.halt "JFET is reverse biased!", this
+#      return
+
     if vgs < @vt
 
       # should be all zero, but that causes a singular matrix,

@@ -30,5 +30,8 @@ class DiacElm extends CircuitComponent
     params.put("breakdown", breakdown);
     params.put("holdcurrent", holdcurrent);
 
+  getDumpType: ->
+    "185"
+
 
 module.exports = DiacElm
