@@ -4,6 +4,11 @@
 Circuit = require('../../src/circuit/circuit.coffee')
 CircuitLoader = require('../../src/io/CircuitLoader.coffee')
 
+chai = require('chai');
+assert = chai.assert
+expect = chai.expect;
+
+
 describe "Simple single resistor circuit", ->
   beforeEach (done) ->
     @json = [
@@ -107,6 +112,8 @@ describe "Simple single resistor circuit", ->
         expect(@Solver.circuitRightSide).to.deep.equal([0, 0, 0])
 
       it "Sets circuitRowInfo to correct value", ->
+        @ctx = "asdf"
+
         expect(@Solver.circuitRowInfo).to.deep.equal([
           {
             "dropRow": false

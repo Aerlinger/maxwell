@@ -35,7 +35,7 @@ class InverterElm extends CircuitComponent
 
     triPoints = Util.newPointArray(3)
 
-    Util.interpolateSymmetrical(@lead1, @lead2, triPoints[0], triPoints[1], 0, hs)
+    [triPoints[0], triPoints[1]] = Util.interpolateSymmetrical(@lead1, @lead2, 0, hs)
 
     triPoints[2] = Util.interpolate(@point1, @point2, 0.5 + (ww - 5) / @dn)
 

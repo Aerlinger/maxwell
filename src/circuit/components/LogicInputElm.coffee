@@ -3,14 +3,14 @@ Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
+SwitchElm = require("./SwitchElm.coffee")
 Util = require('../../util/util.coffee')
 
-class LogicInputElm extends CircuitComponent
+class LogicInputElm extends SwitchElm
   FLAG_TERNARY: 1
   FLAG_NUMERIC: 2
 
-
-  @Fields = {
+  @Fields = Util.extend(@Fields, {
     hiV: {
       name: "Voltage High"
       data_type: parseFloat
@@ -19,8 +19,7 @@ class LogicInputElm extends CircuitComponent
       name: "Voltage Low"
       data_type: parseFloat
     }
-  }
-
+  })
 
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)
@@ -56,7 +55,7 @@ class LogicInputElm extends CircuitComponent
     if @isTernary
       v = @position * 2.5
 
-    stamper.stampVoltageSource(@ndoes[0], @voltSource, @)
+    stamper.stampVoltageSource(@nodes[0], @voltSource, v)
 
   getVoltageSourceCount: ->
     1

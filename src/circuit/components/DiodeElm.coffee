@@ -17,8 +17,6 @@ class DiodeElm extends CircuitComponent
       symbol: "V"
       default_value: DiodeElm.DEFAULT_DROP
       data_type: parseFloat
-      range: [-Infinity, Infinity]
-      type: "physical"
     }
   }
 

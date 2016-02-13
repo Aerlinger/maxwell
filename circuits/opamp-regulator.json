@@ -204,8 +204,7 @@
     "flags": "0",
     "params": [
       "18",
-      "Simulated",
-      "load"
+      "Simulated load"
     ]
   },
   {
@@ -217,8 +216,7 @@
     "flags": "0",
     "params": [
       "12",
-      "Variable",
-      "Current"
+      "Variable Current"
     ]
   },
   {
@@ -230,8 +228,7 @@
     "flags": "0",
     "params": [
       "12",
-      "Stable",
-      "Voltage"
+      "Stable Voltage"
     ]
   },
   {
@@ -259,8 +256,7 @@
     "flags": "0",
     "params": [
       "18",
-      "Variable",
-      "V/I"
+      "Variable V/I"
     ]
   },
   {
@@ -273,8 +269,7 @@
     "params": [
       "1000.0",
       "0.5",
-      "Load",
-      "Current"
+      "Load Current"
     ]
   },
   {

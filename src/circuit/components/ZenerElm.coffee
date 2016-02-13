@@ -8,14 +8,12 @@ Util = require('../../util/util.coffee')
 
 class ZenerElm extends DiodeElm
   @Fields = Util.extend(DiodeElm.Fields, {
-    fwdrop: {
+    zvoltage: {
       name: "Voltage"
       unit: "Voltage"
       symbol: "V"
-      default_value: DiodeElm.DEFAULT_DROP || 5.6
+      default_value: DiodeElm.DEFAULT_DROP
       data_type: parseFloat
-      range: [-Infinity, Infinity]
-      type: "physical"
     }
   })
 

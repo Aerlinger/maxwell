@@ -16,8 +16,13 @@ class TransformerElm extends CircuitComponent
       input_type: "integer"
     }
     # TODO: Name collision
-    current: {
-      name: "Current"
+    current0: {
+      name: "Current L"
+      data_type: parseFloat
+      default_value: 1e-3
+    }
+    current1: {
+      name: "Current R"
       data_type: parseFloat
       default_value: 1e-3
     }
@@ -30,6 +35,8 @@ class TransformerElm extends CircuitComponent
 
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)
+
+    @current = [@current0, @current1]
 
     @noDiagonal = true
 

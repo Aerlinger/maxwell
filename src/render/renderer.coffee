@@ -1,15 +1,3 @@
-# #######################################################################
-# CircuitCanvas:
-#     Top-level class specification for a circuit
-#
-# @author Anthony Erlinger
-# @year 2012
-#
-# Observes: Circuit, MouseHandler
-# Observed By: CircuitComponent, Circuit, MouseHandler
-#
-# #######################################################################
-
 BaseRenderer = require('./BaseRenderer.coffee')
 Circuit = require('../circuit/circuit.coffee')
 CircuitComponent = require('../circuit/circuitComponent.coffee')
