@@ -3,6 +3,108 @@ GroundElm = require('../../src/circuit/components/GroundElm.coffee')
 Util = require('../../src/util/util.coffee')
 
 describe "Utility test", ->
+  it "extends an object", ->
+    capacitorFields = {
+      "capacitance": {
+        name: "Capacitance",
+        unit: "Farads",
+        default_value: 5e-6,
+        symbol: "F",
+        data_type: parseFloat
+        range: [0, Infinity]
+      },
+      "voltdiff": {
+        name: "Volts"
+        unit: "Volts"
+        default_value: 10
+        symbol: "V"
+        data_type: parseFloat
+        range: [-Infinity, Infinity]
+      }
+    }
+
+    newFields = {
+      "link": {
+        name: "link"
+        unit: "",
+        default_value: 0,
+        data_type: parseInt
+        range: [0, 1]
+        field_type: "boolean"
+      }
+    }
+
+    extendedFields = Util.extend(capacitorFields, {
+      "link": {
+        name: "link"
+        unit: "",
+        default_value: 0,
+        data_type: parseInt
+        range: [0, 1]
+        field_type: "boolean"
+      }
+    })
+
+    expect(capacitorFields).to.eql(
+      {
+        "capacitance": {
+          name: "Capacitance",
+          unit: "Farads",
+          default_value: 5e-6,
+          symbol: "F",
+          data_type: parseFloat
+          range: [0, Infinity]
+        },
+        "voltdiff": {
+          name: "Volts"
+          unit: "Volts"
+          default_value: 10
+          symbol: "V"
+          data_type: parseFloat
+          range: [-Infinity, Infinity]
+        }
+      }
+    )
+
+    expect(newFields).to.eql(
+      {
+        "link": {
+          name: "link"
+          unit: "",
+          default_value: 0,
+          data_type: parseInt
+          range: [0, 1]
+          field_type: "boolean"
+        }
+      }
+    )
+
+    expect(extendedFields).to.eql({
+      "capacitance": {
+        name: "Capacitance",
+        unit: "Farads",
+        default_value: 5e-6,
+        symbol: "F",
+        data_type: parseFloat
+        range: [0, Infinity]
+      },
+      "voltdiff": {
+        name: "Volts"
+        unit: "Volts"
+        default_value: 10
+        symbol: "V"
+        data_type: parseFloat
+        range: [-Infinity, Infinity]
+      },
+      "link": {
+        name: "link"
+        unit: "",
+        default_value: 0,
+        data_type: parseInt
+        range: [0, 1]
+        field_type: "boolean"
+      }
+    })
 
   describe "Units test", ->
     beforeEach ->
@@ -61,35 +163,34 @@ describe "Utility test", ->
 
 
   describe "Format utilities", ->
-    #  global.showFormat = (decimalNum) ->
-    #  decimalNum.toFixed(2)
-    #
-    #global.shortFormat = (decimalNum) ->
-    #  return decimalNum.toFixed(1);
-    #
-    ####
-    #Removes commas from a number containing a string:
-    #e.g. 1,234,567.99 -> 1234567.99
-    ####
-    #global.noCommaFormat = (numberWithCommas) ->
-    #  numberWithCommas.replace(',', '');
-    #
-    ####
-    #Adds commas to a number, and returns the string representation of that number
-    #e.g. 1234567.99 -> 1,234,567.99
-    ####
-    #global.addCommas = (plainNumber) ->
-    #  # Simple method of converting a parameter to a string
-    #  plainNumber += ""
-    #
-    #  # Ignore any numbers after a '.'
-    #  x = plainNumber.split(".")
-    #  x1 = x[0]
-    #  x2 = (if x.length > 1 then "." + x[1] else "")
-    #  rgx = /(\d+)(\d{3})/
-    #  x1 = x1.replace(rgx, "$1" + "," + "$2")  while rgx.test(x1)
-    #  x1 + x2
-
+#  global.showFormat = (decimalNum) ->
+#  decimalNum.toFixed(2)
+#
+#global.shortFormat = (decimalNum) ->
+#  return decimalNum.toFixed(1);
+#
+####
+#Removes commas from a number containing a string:
+#e.g. 1,234,567.99 -> 1234567.99
+####
+#global.noCommaFormat = (numberWithCommas) ->
+#  numberWithCommas.replace(',', '');
+#
+####
+#Adds commas to a number, and returns the string representation of that number
+#e.g. 1234567.99 -> 1,234,567.99
+####
+#global.addCommas = (plainNumber) ->
+#  # Simple method of converting a parameter to a string
+#  plainNumber += ""
+#
+#  # Ignore any numbers after a '.'
+#  x = plainNumber.split(".")
+#  x1 = x[0]
+#  x2 = (if x.length > 1 then "." + x[1] else "")
+#  rgx = /(\d+)(\d{3})/
+#  x1 = x1.replace(rgx, "$1" + "," + "$2")  while rgx.test(x1)
+#  x1 + x2
     specify "NoCommaFormat(x)", ->
       Util.noCommaFormat('1,234,567.99').should.equal '1234567.99'
 
@@ -101,7 +202,6 @@ describe "Utility test", ->
 
 
   describe "Array Utilities", ->
-
     it "should build array of zeros of length 5", ->
       Util.zeroArray(5).toString().should.equal [0, 0, 0, 0, 0].toString()
 
@@ -161,4 +261,4 @@ describe "Utility test", ->
 
       specify "Nested arrays containing NaN", ->
         arr = [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, NaN, 4], [1, 2, 3, 4]]
-  #isCleanArray(arr).should.equal false
+#isCleanArray(arr).should.equal false

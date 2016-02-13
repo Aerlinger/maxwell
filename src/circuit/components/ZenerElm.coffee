@@ -7,7 +7,7 @@ DiodeElm = require('./DiodeElm.coffee')
 Util = require('../../util/util.coffee')
 
 class ZenerElm extends DiodeElm
-  @Fields = {
+  @Fields = Util.extend(DiodeElm.Fields, {
     fwdrop: {
       name: "Voltage"
       unit: "Voltage"
@@ -17,7 +17,7 @@ class ZenerElm extends DiodeElm
       range: [-Infinity, Infinity]
       type: "physical"
     }
-  }
+  })
 
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)

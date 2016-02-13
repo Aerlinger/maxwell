@@ -14,9 +14,7 @@ class Switch2Elm extends SwitchElm
 
   @FLAG_CENTER_OFF: 1
 
-  @Fields = {}
-
-  _.extend(@Fields, SwitchElm.Fields, {
+  @Fields = Util.extend(SwitchElm.Fields, {
     "link": {
       name: "link"
       unit: "",

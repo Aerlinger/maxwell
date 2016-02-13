@@ -7,13 +7,11 @@ RailElm = require('./RailElm.coffee')
 VoltageElm = require('./VoltageElm.coffee')
 
 sprintf = require("sprintf-js").sprintf
-_ = require("lodash")
+Util = require('../../util/util.coffee')
 
 class VarRailElm extends RailElm
 
-  @Fields = {}
-
-  _.extend(@Fields, RailElm.Fields, {
+  @Fields = Util.extend(RailElm.Fields, {
     "sliderText": {
       name: "sliderText"
       unit: "",

@@ -59,6 +59,22 @@ jsondiffpatch = require('jsondiffpatch').create({});
   "indpar"
   "inductac"
   "induct"
+  "allpass2"
+
+  "opamp"
+  "opampfeedback"
+  "amp-invert"
+
+  "amp-diff"
+  "amp-follower"
+  "amp-fullrect"
+  # "amp-integ"  # Failure
+  "amp-invert"
+  "amp-noninvert"
+  "amp-rect"
+  "amp-schmitt"
+  "amp-sum"
+#  "opamp-regulator"  # Failure (Zener?, PotElm?)
 ]
 
 @notWorking = ["inductac"]

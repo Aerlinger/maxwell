@@ -7,6 +7,17 @@ environment = require("../environment.coffee")
 
 class Util
 
+  @extend: (originalObj, newObject) ->
+    extendedObj = {}
+
+    for key, value of originalObj
+      extendedObj[key] = originalObj[key]
+
+    for key, value of newObject
+      extendedObj[key] = newObject[key]
+
+    extendedObj
+
   # Calculate fractional vector between AB
   @interpolate: (ptA, ptB, u, v = 0) ->
     if (arguments.length) > 4
