@@ -33,7 +33,6 @@ class DiodeElm extends CircuitComponent
     @nodes = new Array(2)
     @vt = 0
     @vdcoef = 0
-    @fwdrop = .805904783
     @zvoltage = 0
     @zoffset = 0
     @lastvoltdiff = 0
@@ -116,7 +115,7 @@ class DiodeElm extends CircuitComponent
   doStep: (stamper) ->
     voltdiff = @volts[0] - @volts[1]
 
-    console.log("delta v: " + Math.abs(voltdiff - @lastvoltdiff));
+#    console.log("delta v: " + Math.abs(voltdiff - @lastvoltdiff));
 
     # used to have .1 here, but needed .01 for peak detector
     if Math.abs(voltdiff - @lastvoltdiff) > .01
@@ -139,7 +138,7 @@ class DiodeElm extends CircuitComponent
       stamper.stampConductance @nodes[0], @nodes[1], geq
       stamper.stampCurrentSource @nodes[0], @nodes[1], nc
 
-      console.log("1 sim.stampConductance(" + @nodes[0] + ", " + @nodes[1] + ", " + geq + ", " + nc + " " + (eval_ - 1)  + " " + @leakage  + " " +  geq  + " " + voltdiff + " " + @vdcoef);
+      #console.log("1 sim.stampConductance(" + @nodes[0] + ", " + @nodes[1] + ", " + geq + ", " + nc + " " + (eval_ - 1)  + " " + @leakage  + " " +  geq  + " " + voltdiff + " " + @vdcoef);
     else
       # Zener diode
       #* I(Vd) = Is * (exp[Vd*C] - exp[(-Vd-Vz)*C] - 1 )
@@ -152,10 +151,10 @@ class DiodeElm extends CircuitComponent
       stamper.stampConductance @nodes[0], @nodes[1], geq
       stamper.stampCurrentSource @nodes[0], @nodes[1], nc
 
-      console.log("2 sim.stampConductance(" + @nodes[0] + ", " + @nodes[1] + ", " + geq + ", " + nc);
+      #console.log("2 sim.stampConductance(" + @nodes[0] + ", " + @nodes[1] + ", " + geq + ", " + nc);
 
-    console.log("geq: ", geq)
-    console.log("nc: ", nc)
+    #console.log("geq: ", geq)
+    #console.log("nc: ", nc)
 
   calculateCurrent: ->
     voltdiff = @volts[0] - @volts[1]

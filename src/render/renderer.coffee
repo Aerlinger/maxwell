@@ -228,6 +228,7 @@ class Renderer extends BaseRenderer
 
     # UPDATE FRAME ----------------------------------------------------------------
     @Circuit.updateCircuit()
+    @onUpdateComplete(@Circuit)
     # -----------------------------------------------------------------------------
 
     @drawComponents()

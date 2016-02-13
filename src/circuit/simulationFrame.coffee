@@ -13,7 +13,7 @@ class SimulationFrame
       dumpType: elm.getDumpType().toString()
       volts: elm.volts
       current: elm.current
-      curcount: elm.curcount
+      curcount: elm.curcount || 0
     } for elm in circuit.getElements())
 
   toJson: ->

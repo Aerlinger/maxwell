@@ -3,11 +3,15 @@ Polygon = require('../geom/polygon.coffee')
 Settings = require('../settings/settings.coffee')
 Color = require('./color.coffee')
 sprintf = require("sprintf-js").sprintf
+environment = require("../environment.coffee")
 
 class Util
 
   # Calculate fractional vector between AB
   @interpolate: (ptA, ptB, u, v = 0) ->
+    if (arguments.length) > 4
+      @halt("Wrong arguments (#{arguments.length}) in 'interpolate' #{arguments}")
+
     dx = ptB.y - ptA.y
     dy = ptA.x - ptB.x
     v /= Math.sqrt dx*dx + dy*dy
@@ -22,6 +26,9 @@ class Util
   # and perpindicular (v) components of the the original AB vector.
   #
   @interpolateSymmetrical: (ptA, ptB, u, v) ->
+    if (arguments.length) > 4
+      @halt("Wrong # of arguments (#{arguments.length}) in 'interpolateSymmetrical' #{arguments}")
+
     dx = ptB.y - ptA.y
     dy = ptA.x - ptB.x
     v /= Math.sqrt dx*dx + dy*dy
@@ -35,6 +42,9 @@ class Util
     [new Point(interpX, interpY), new Point(interpXReflection, interpYReflection)]
 
   @calcArrow: (point1, point2, al, aw) ->
+    if (arguments.length) != 4
+      @halt("Wrong arguments (#{arguments.length}) in 'calcArrow' #{arguments}")
+
     poly = new Polygon()
 
     dx = point2.x - point1.x
@@ -197,8 +207,6 @@ class Util
     return arrayStr
 
   @printMatrix: (matrix) ->
-
-
     ###
     Adds commas to a number, and returns the string representation of that number
     e.g. 1234567.99 -> 1,234,567.99
@@ -214,6 +222,13 @@ class Util
     pattern = /(\d+)(\d{3})/
     x1 = x1.replace(pattern, "$1" + "," + "$2")  while pattern.test(x1)
     x1 + x2
+
+  @halt: (message) ->
+    e = new Error(message)
+    console.log(e.stack)
+
+    unless environment.isBrowser
+      process.exit(1)
 
 
 module.exports = Util

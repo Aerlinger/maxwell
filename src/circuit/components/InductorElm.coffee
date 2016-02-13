@@ -26,14 +26,19 @@ class InductorElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
-    @inductance = 0
+#    @inductance = 0
     @nodes = new Array(2)
-    @compResistance = 1e-3
-    @current = 0
+    @compResistance = 0  #1e-3
+#    @current = 0
     @curSourceValue = 0
 
     super(xa, ya, xb, yb, params, f)
 
+  reset: ->
+    @current = 0
+    @volts[0] = 0
+    @volts[1] = 0
+    @curcount = 0
 
   stamp: (stamper) ->
     # Inductor companion model using trapezoidal or backward euler
@@ -60,7 +65,7 @@ class InductorElm extends CircuitComponent
     if CircuitComponent.DEBUG
       super(renderContext)
 
-    @calcLeads 32
+    @updateDots()
 
     v1 = @volts[0]
     v2 = @volts[1]
@@ -72,10 +77,7 @@ class InductorElm extends CircuitComponent
 
     renderContext.drawValue -12, 0, this, Util.getUnitText(@inductance, "H")
 
-    @updateDots()
-    renderContext.drawDots(@point1, @lead1, this)
-    renderContext.drawDots(@lead2, @point2, this)
-
+    renderContext.drawDots(@point1, @point2, this)
     renderContext.drawPosts(this)
 
   getDumpType: ->
@@ -105,12 +107,6 @@ class InductorElm extends CircuitComponent
     @getBasicInfo arr
     arr[3] = "L = " + Util.getUnitText(@inductance, "H")
     arr[4] = "P = " + Util.getUnitText(@getPower(), "W")
-
-  reset: ->
-    @current = 0
-    @volts[0] = 0
-    @volts[1] = 0
-    @curcount = 0
 
   getVoltageDiff: ->
     @volts[0] - @volts[1]

@@ -17,7 +17,7 @@ class CapacitorElm extends CircuitComponent
       data_type: parseFloat
       range: [0, Infinity]
     },
-    "voltDiff": {
+    "voltdiff": {
       name: "Volts"
       unit: "Volts"
       default_value: 10
@@ -44,13 +44,13 @@ class CapacitorElm extends CircuitComponent
 
   setNodeVoltage: (n, c) ->
     super(n, c)
-    @voltDiff = @volts[0] - @volts[1]
+    @voltdiff = @volts[0] - @volts[1]
 
   reset: ->
     @current = @curcount = 0
 
     # put small charge on caps when reset to start oscillators
-    @voltDiff = 1e-3
+    @voltdiff = 1e-3
 
   getDumpType: ->
     "c"
@@ -121,9 +121,9 @@ class CapacitorElm extends CircuitComponent
 
   startIteration: ->
     if @isTrapezoidal()
-      @curSourceValue = -@voltDiff / @compResistance - @current
+      @curSourceValue = -@voltdiff / @compResistance - @current
     else
-      @curSourceValue = -@voltDiff / @compResistance
+      @curSourceValue = -@voltdiff / @compResistance
 
   calculateCurrent: ->
     vdiff = @volts[0] - @volts[1]

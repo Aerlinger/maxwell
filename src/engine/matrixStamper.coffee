@@ -60,7 +60,7 @@ class MatrixStamper
     if isNaN(r0) or Util.isInfinite(r0)
       @Circuit.halt "bad conductance"
 
-    console.log("Stamp conductance: " + n1 + " " + n2 + " " + r0 + " ");
+    #console.log("Stamp conductance: " + n1 + " " + n2 + " " + r0 + " ");
 
     @stampMatrix n1, n1, r0
     @stampMatrix n2, n2, r0

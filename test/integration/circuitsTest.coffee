@@ -52,13 +52,13 @@ jsondiffpatch = require('jsondiffpatch').create({});
   "diodelimit",
   "pot",
   "mosfetamp",
-#  "cap",
+  "cap",
   "capac",
   "capmult",
   "lrc"
-#  "indpar"
-#  "induct"
+  "indpar"
   "inductac"
+  "induct"
 ]
 
 @notWorking = ["inductac"]

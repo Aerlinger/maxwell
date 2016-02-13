@@ -8,6 +8,8 @@ Util = require('../../util/util.coffee')
 
 _ = require("lodash")
 
+
+# Broken
 class Switch2Elm extends SwitchElm
 
   @FLAG_CENTER_OFF: 1
@@ -28,9 +30,10 @@ class Switch2Elm extends SwitchElm
   constructor: (xa, ya, xb, yb, params, f) ->
     @openhs = 16
     @noDiagonal = true
-    #    @link = parseInt(st[st.length - 1])  if st
 
     super(xa, ya, xb, yb, params, f)
+
+    @position = 0
 
   name: ->
     "SPDT switch"
@@ -42,10 +45,10 @@ class Switch2Elm extends SwitchElm
     @swposts = Util.newPointArray(2)
     @swpoles = Util.newPointArray(3)
 
-    Util.interpolateSymmetrical(@lead1, @lead2, @swpoles[0], @swpoles[1], 1, @openhs)
+    [@swpoles[0], @swpoles[1]] = Util.interpolateSymmetrical(@lead1, @lead2, 1, @openhs)
     @swpoles[2] = @lead2
 
-    Util.interpolateSymmetrical(@point1, @point2, @swposts[0], @swposts[1], 1, @openhs)
+    [@swposts[0], @swposts[1]] = Util.interpolateSymmetrical(@point1, @point2, 1, @openhs)
 
     @posCount = if @hasCenterOff() then 3 else 2
 
@@ -57,7 +60,6 @@ class Switch2Elm extends SwitchElm
       super(renderContext)
 
     @setBboxPt @point1, @point2, @openhs
-
     @calcLeads 32
 
     @swpoles = Util.newPointArray(3)
@@ -84,12 +86,9 @@ class Switch2Elm extends SwitchElm
     color = Util.getVoltageColor @volts[2]
     renderContext.drawLinePt @swpoles[1], @swposts[1], color
 
-    # draw: (renderContext) ->
-#      @setBbox @point1, @point2, @openhs
-
     renderContext.drawLinePt @lead1, @swpoles[@position], color
 
-    #      @updateDotCount()
+    @updateDots()
     renderContext.drawDots @point1, @lead1, this
 
     unless @position is 2
@@ -107,11 +106,12 @@ class Switch2Elm extends SwitchElm
     3
 
   calculateCurrent: ->
-    @current = 0  if @position is 2
+    @current = 0 if @position is 2
 
   stamp: (stamper) ->
     # in center?
-    return if @position is 2
+    if @position is 2
+      return
     stamper.stampVoltageSource @nodes[0], @nodes[@position + 1], @voltSource, 0
 
   getVoltageSourceCount: ->
@@ -124,7 +124,8 @@ class Switch2Elm extends SwitchElm
       getParentCircuit().eachComponent (component) ->
         if component instanceof Switch2Elm
           s2 = component
-          s2.position = @position  if s2.link is @link
+          if s2.link is @link
+            s2.position = @position
 
 #        while i isnt getCircuit().elementList.length
 #          o = Circuit.elementList.elementAt(i)
@@ -134,7 +135,8 @@ class Switch2Elm extends SwitchElm
 #          i++
 
   getConnection: (n1, n2) ->
-    return false  if @position is 2
+    if @position is 2
+      return false
     @comparePair n1, n2, 0, 1 + @position
 
   getInfo: (arr) ->
