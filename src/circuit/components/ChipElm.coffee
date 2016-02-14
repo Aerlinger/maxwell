@@ -6,58 +6,61 @@ Point = require('../../geom/Point.coffee')
 class ChipElm extends CircuitComponent
   FLAG_SMALL: 1
   FLAG_FLIP: 1024
-  FLAG_SMALL: 20148
+  FLAG_SMALL: 2148
 
   @SIDE_N = 0
   @SIDE_S = 1
   @SIDE_W = 2
   @SIDE_E = 3
 
-  @Fields = {
-    bits: {
-      name: "Bits"
-      data_type: parseInt
-    }
-    volts: {
-      name: "Volts"
-      data_type: (x) -> x
-    }
-  }
+  @Fields = {}
+
+#  @Fields = {
+#    bits: {
+#      name: "Bits"
+#      data_type: parseInt
+#    }
+#    volts: {
+#      name: "Volts"
+#      data_type: (x) -> x
+#    }
+#  }
 
   self = null
 
+  # TODO: Need a better way of dealing with variable length params here
   constructor: (xa, xb, ya, yb, params, f) ->
     self = @
     @pins = []
+    @bits = 0
+
     @setSize(if ((f & ChipElm.FLAG_SMALL) != 0) then 1 else 2)
 
     @setupPins()
-
-    params = [params[0], params[1...params.length]]
-
-    super(xa, xb, ya, yb, params, f)
-
-    @noDiagonal = true
+    @params = {}
 
     if @needsBits()
       @bits = params.shift()
       @params['bits'] = @bits
+    else
+      @params['bits'] = 0
 
     if Object.prototype.toString.call( params ) == '[object Array]'
-      @volts = params
+      initial_voltages = params
     else
-      @volts = params['volts']
+      initial_voltages = params['volts']
 
-    @params['volts'] = @volts
+    super(xa, xb, ya, yb, {}, f)
 
+    @noDiagonal = true
     numPosts = @getPostCount()
-
-    if numPosts != @volts.length
-      console.error("Number of posts is #{numPosts} but voltage array has length #{@volts.length}")
 
     for i in [0...numPosts]
       if @pins[i].state
+        @volts[i] = initial_voltages.shift()
         @pins[i].value = @volts[i] > 2.5
+
+    @params['volts'] = @volts
 
 
   inspect: ->
@@ -128,12 +131,13 @@ class ChipElm extends CircuitComponent
 
 
   setVoltageSource: (j, vs) ->
-    for i in [0...@getPostCount]
+    for i in [0...@getPostCount()]
       p = @pins[i]
-      if p.output && j-- == 0
+      if (p.output && j--) == 0
         p.voltSource = vs
+        return
 
-    console.log("setVoltageSource failed for " + this)
+    console.log("setVoltageSource failed for " + this + "j=#{j}, vs=#{vs}   #{@toJson()}")
 
   doStep: (stamper) ->
     for i in [0...@getPostCount()]
@@ -159,7 +163,7 @@ class ChipElm extends CircuitComponent
     @drawChip(renderContext)
 
   drawChip: (renderContext) ->
-    for i in [0...@getPostCount]
+    for i in [0...@getPostCount()]
       p = @pins[i]
 
       voltageColor = Util.getVoltageColor(volts[i])
@@ -194,7 +198,7 @@ class ChipElm extends CircuitComponent
       @setSize(2)
 
     hs = @cspc2
-    x0 = @x1
+    x0 = @x1 + @cspc2
     y0 = @y1
 
     xr = x0 - @cspc
@@ -218,6 +222,14 @@ class ChipElm extends CircuitComponent
         p.setPoint(x0, y0, 0, 1, -1, 0, 0, 0)
       else if p.side == ChipElm.SIDE_E
         p.setPoint(x0, y0, 0, 1, 1, 0, xs - @cspc2, 0)
+
+  toJson: ->
+    baseJson = super()
+
+    baseJson['bits'] = @bits
+    baseJson['pins'] = @pins.map (pin) -> pin.toJson()
+
+    baseJson
 
   class Pin
     constructor: (@pos, @side, @text) ->
@@ -288,6 +300,25 @@ class ChipElm extends CircuitComponent
         clockPointsY[1] = ya
         clockPointsX[2] = xa + dax * self.cspc + dx * self.cspc / 2
         clockPointsY[2] = ya + day * self.cspc + dy * self.cspc / 2
+
+    toJson: ->
+      {
+        post: @post
+        stub: @stub
+        textloc: @textloc
+        pos: @pos
+        side: @side
+        voltSource: @voltSource
+        bubbleX: @bubbleX
+        bubbleY: @bubbleY
+        text: @text
+        lineOver: @lineOver
+        bubble: @bubble
+        clock: @clock
+        output: @output
+        value: @value
+        state: @state
+      }
 
   @Pin = Pin
 

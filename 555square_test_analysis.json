@@ -1,0 +1,3274 @@
+{
+  "startCircuit": "555square.txt",
+  "timeStep": 0.000005,
+  "flags": 1,
+  "circuitNonLinear": true,
+  "voltageSourceCount": 10,
+  "circuitMatrixSize": 7,
+  "circuitMatrixFullSize": 23,
+  "circuitPermute": [
+    0,
+    4,
+    6,
+    4,
+    6,
+    6,
+    6,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "voltageSources": [
+    {
+      "x": 272,
+      "y": 176,
+      "x2": 240,
+      "y2": 176,
+      "flags": 0,
+      "nodes": [
+        1,
+        2
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 0,
+      "needsShortcut": true,
+      "dump": "w",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 240,
+      "x2": 272,
+      "y2": 240,
+      "flags": 0,
+      "nodes": [
+        3,
+        4
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 1,
+      "needsShortcut": true,
+      "dump": "w",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 240,
+      "x2": 240,
+      "y2": 272,
+      "flags": 0,
+      "nodes": [
+        3,
+        5
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 2,
+      "needsShortcut": true,
+      "dump": "w",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 272,
+      "x2": 272,
+      "y2": 272,
+      "flags": 0,
+      "nodes": [
+        5,
+        6
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 3,
+      "needsShortcut": true,
+      "dump": "w",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 336,
+      "x2": 240,
+      "y2": 352,
+      "flags": 0,
+      "nodes": [
+        7
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 4,
+      "needsShortcut": true,
+      "dump": "g",
+      "postCount": 1,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 112,
+      "x2": 336,
+      "y2": 112,
+      "flags": 0,
+      "nodes": [
+        8,
+        9
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 5,
+      "needsShortcut": true,
+      "dump": "w",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 112,
+      "x2": 176,
+      "y2": 112,
+      "flags": 0,
+      "nodes": [
+        8
+      ],
+      "params": {
+        "waveform": 0,
+        "frequency": 40,
+        "maxVoltage": 10,
+        "bias": 0,
+        "phaseShift": 0,
+        "dutyCycle": 0.5
+      },
+      "selected": false,
+      "voltSource": 6,
+      "needsShortcut": false,
+      "dump": "R",
+      "postCount": 1,
+      "nonLinear": false
+    },
+    {
+      "x": 272,
+      "y": 144,
+      "x2": 288,
+      "y2": 144,
+      "flags": 2,
+      "nodes": [
+        1,
+        4,
+        6,
+        9,
+        11,
+        10,
+        12
+      ],
+      "params": {
+        "bits": 0,
+        "volts": [
+          0.016600704380296337,
+          6.633905789056932,
+          6.633905789056932,
+          10,
+          6.666444451851604,
+          0,
+          10
+        ]
+      },
+      "selected": false,
+      "voltSource": 0,
+      "needsShortcut": false,
+      "dump": "165",
+      "postCount": 7,
+      "nonLinear": true,
+      "bits": 0,
+      "pins": [
+        {
+          "post": {
+            "x": 272,
+            "y": 176
+          },
+          "stub": {
+            "x": 288,
+            "y": 176
+          },
+          "textloc": {
+            "x": 304,
+            "y": 176
+          },
+          "pos": 1,
+          "side": 2,
+          "voltSource": 0,
+          "bubbleX": 0,
+          "bubbleY": 0,
+          "text": "dis",
+          "lineOver": false,
+          "bubble": false,
+          "clock": false,
+          "output": false,
+          "value": false,
+          "state": false
+        },
+        {
+          "post": {
+            "x": 272,
+            "y": 240
+          },
+          "stub": {
+            "x": 288,
+            "y": 240
+          },
+          "textloc": {
+            "x": 304,
+            "y": 240
+          },
+          "pos": 3,
+          "side": 2,
+          "voltSource": 0,
+          "bubbleX": 0,
+          "bubbleY": 0,
+          "text": "tr",
+          "lineOver": true,
+          "bubble": false,
+          "clock": false,
+          "output": false,
+          "value": false,
+          "state": false
+        },
+        {
+          "post": {
+            "x": 272,
+            "y": 272
+          },
+          "stub": {
+            "x": 288,
+            "y": 272
+          },
+          "textloc": {
+            "x": 304,
+            "y": 272
+          },
+          "pos": 4,
+          "side": 2,
+          "voltSource": 0,
+          "bubbleX": 0,
+          "bubbleY": 0,
+          "text": "th",
+          "lineOver": false,
+          "bubble": false,
+          "clock": false,
+          "output": false,
+          "value": false,
+          "state": false
+        },
+        {
+          "post": {
+            "x": 336,
+            "y": 112
+          },
+          "stub": {
+            "x": 336,
+            "y": 128
+          },
+          "textloc": {
+            "x": 336,
+            "y": 144
+          },
+          "pos": 1,
+          "side": 0,
+          "voltSource": 0,
+          "bubbleX": 0,
+          "bubbleY": 0,
+          "text": "Vin",
+          "lineOver": false,
+          "bubble": false,
+          "clock": false,
+          "output": false,
+          "value": false,
+          "state": false
+        },
+        {
+          "post": {
+            "x": 336,
+            "y": 304
+          },
+          "stub": {
+            "x": 336,
+            "y": 288
+          },
+          "textloc": {
+            "x": 336,
+            "y": 272
+          },
+          "pos": 1,
+          "side": 1,
+          "voltSource": 0,
+          "bubbleX": 0,
+          "bubbleY": 0,
+          "text": "ctl",
+          "lineOver": false,
+          "bubble": false,
+          "clock": false,
+          "output": false,
+          "value": false,
+          "state": false
+        },
+        {
+          "post": {
+            "x": 400,
+            "y": 208
+          },
+          "stub": {
+            "x": 384,
+            "y": 208
+          },
+          "textloc": {
+            "x": 368,
+            "y": 208
+          },
+          "pos": 2,
+          "side": 3,
+          "voltSource": 7,
+          "bubbleX": 0,
+          "bubbleY": 0,
+          "text": "out",
+          "lineOver": false,
+          "bubble": false,
+          "clock": false,
+          "output": true,
+          "value": true,
+          "state": true
+        },
+        {
+          "post": {
+            "x": 400,
+            "y": 176
+          },
+          "stub": {
+            "x": 384,
+            "y": 176
+          },
+          "textloc": {
+            "x": 368,
+            "y": 176
+          },
+          "pos": 1,
+          "side": 3,
+          "voltSource": 0,
+          "bubbleX": 0,
+          "bubbleY": 0,
+          "text": "rst",
+          "lineOver": false,
+          "bubble": false,
+          "clock": false,
+          "output": false,
+          "value": false,
+          "state": false
+        }
+      ]
+    },
+    {
+      "x": 336,
+      "y": 112,
+      "x2": 400,
+      "y2": 112,
+      "flags": 0,
+      "nodes": [
+        9,
+        13
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 8,
+      "needsShortcut": true,
+      "dump": "w",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 400,
+      "y": 112,
+      "x2": 400,
+      "y2": 176,
+      "flags": 0,
+      "nodes": [
+        13,
+        12
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 9,
+      "needsShortcut": true,
+      "dump": "w",
+      "postCount": 2,
+      "nonLinear": false
+    }
+  ],
+  "circuitRowInfo": [
+    {
+      "nodeEq": 1,
+      "mapCol": 0,
+      "mapRow": 0,
+      "value": 0,
+      "rsChanges": false,
+      "lsChanges": true,
+      "dropRow": false,
+      "type": 2
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": 0,
+      "mapRow": 1,
+      "value": 0,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": false,
+      "type": 0
+    },
+    {
+      "nodeEq": 3,
+      "mapCol": 1,
+      "mapRow": 2,
+      "value": 0,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": false,
+      "type": 2
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": 1,
+      "mapRow": -1,
+      "value": 0,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 0
+    },
+    {
+      "nodeEq": 3,
+      "mapCol": 1,
+      "mapRow": 3,
+      "value": 0,
+      "rsChanges": true,
+      "lsChanges": false,
+      "dropRow": false,
+      "type": 2
+    },
+    {
+      "nodeEq": 3,
+      "mapCol": 1,
+      "mapRow": -1,
+      "value": 0,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 2
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": -1,
+      "mapRow": 4,
+      "value": 0,
+      "rsChanges": true,
+      "lsChanges": false,
+      "dropRow": false,
+      "type": 1
+    },
+    {
+      "nodeEq": 8,
+      "mapCol": -1,
+      "mapRow": 5,
+      "value": 10,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": false,
+      "type": 1
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": -1,
+      "mapRow": -1,
+      "value": 10,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 1
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": 2,
+      "mapRow": -1,
+      "value": 0,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 0
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": -1,
+      "mapRow": -1,
+      "value": 6.666444451851604,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 1
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": -1,
+      "mapRow": -1,
+      "value": 10,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 1
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": -1,
+      "mapRow": -1,
+      "value": 10,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 1
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": 3,
+      "mapRow": -1,
+      "value": 0,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 0
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": -1,
+      "mapRow": -1,
+      "value": 0,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 1
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": 4,
+      "mapRow": -1,
+      "value": 0,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 0
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": -1,
+      "mapRow": -1,
+      "value": 0,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 1
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": 5,
+      "mapRow": -1,
+      "value": 0,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 0
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": -1,
+      "mapRow": -1,
+      "value": 0.0006667111096296792,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 1
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": 6,
+      "mapRow": -1,
+      "value": 0,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 0
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": -1,
+      "mapRow": 6,
+      "value": 0,
+      "rsChanges": true,
+      "lsChanges": false,
+      "dropRow": false,
+      "type": 1
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": -1,
+      "mapRow": -1,
+      "value": 0,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 1
+    },
+    {
+      "nodeEq": 0,
+      "mapCol": -1,
+      "mapRow": -1,
+      "value": 0,
+      "rsChanges": false,
+      "lsChanges": false,
+      "dropRow": true,
+      "type": 1
+    }
+  ],
+  "elmList": [
+    {
+      "x": 272,
+      "y": 176,
+      "x2": 240,
+      "y2": 176,
+      "flags": 0,
+      "nodes": [
+        1,
+        2
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 0,
+      "needsShortcut": true,
+      "dump": "w",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 176,
+      "x2": 240,
+      "y2": 240,
+      "flags": 0,
+      "nodes": [
+        2,
+        3
+      ],
+      "params": {
+        "resistance": 10000
+      },
+      "selected": false,
+      "voltSource": 0,
+      "needsShortcut": true,
+      "dump": "r",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 240,
+      "x2": 272,
+      "y2": 240,
+      "flags": 0,
+      "nodes": [
+        3,
+        4
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 1,
+      "needsShortcut": true,
+      "dump": "w",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 240,
+      "x2": 240,
+      "y2": 272,
+      "flags": 0,
+      "nodes": [
+        3,
+        5
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 2,
+      "needsShortcut": true,
+      "dump": "w",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 272,
+      "x2": 272,
+      "y2": 272,
+      "flags": 0,
+      "nodes": [
+        5,
+        6
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 3,
+      "needsShortcut": true,
+      "dump": "w",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 272,
+      "x2": 240,
+      "y2": 336,
+      "flags": 0,
+      "nodes": [
+        5,
+        7
+      ],
+      "params": {
+        "capacitance": 3e-7,
+        "voltdiff": 6.6394202099608295
+      },
+      "selected": false,
+      "voltSource": 0,
+      "needsShortcut": true,
+      "dump": "c",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 336,
+      "x2": 240,
+      "y2": 352,
+      "flags": 0,
+      "nodes": [
+        7
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 4,
+      "needsShortcut": true,
+      "dump": "g",
+      "postCount": 1,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 176,
+      "x2": 240,
+      "y2": 112,
+      "flags": 0,
+      "nodes": [
+        2,
+        8
+      ],
+      "params": {
+        "resistance": 10000
+      },
+      "selected": false,
+      "voltSource": 0,
+      "needsShortcut": true,
+      "dump": "r",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 112,
+      "x2": 336,
+      "y2": 112,
+      "flags": 0,
+      "nodes": [
+        8,
+        9
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 5,
+      "needsShortcut": true,
+      "dump": "w",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 240,
+      "y": 112,
+      "x2": 176,
+      "y2": 112,
+      "flags": 0,
+      "nodes": [
+        8
+      ],
+      "params": {
+        "waveform": 0,
+        "frequency": 40,
+        "maxVoltage": 10,
+        "bias": 0,
+        "phaseShift": 0,
+        "dutyCycle": 0.5
+      },
+      "selected": false,
+      "voltSource": 6,
+      "needsShortcut": false,
+      "dump": "R",
+      "postCount": 1,
+      "nonLinear": false
+    },
+    {
+      "x": 400,
+      "y": 208,
+      "x2": 464,
+      "y2": 208,
+      "flags": 0,
+      "nodes": [
+        10
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 0,
+      "needsShortcut": false,
+      "dump": "O",
+      "postCount": 1,
+      "nonLinear": false
+    },
+    {
+      "x": 272,
+      "y": 144,
+      "x2": 288,
+      "y2": 144,
+      "flags": 2,
+      "nodes": [
+        1,
+        4,
+        6,
+        9,
+        11,
+        10,
+        12
+      ],
+      "params": {
+        "bits": 0,
+        "volts": [
+          0.016600704380296337,
+          6.633905789056932,
+          6.633905789056932,
+          10,
+          6.666444451851604,
+          0,
+          10
+        ]
+      },
+      "selected": false,
+      "voltSource": 0,
+      "needsShortcut": false,
+      "dump": "165",
+      "postCount": 7,
+      "nonLinear": true,
+      "bits": 0,
+      "pins": [
+        {
+          "post": {
+            "x": 272,
+            "y": 176
+          },
+          "stub": {
+            "x": 288,
+            "y": 176
+          },
+          "textloc": {
+            "x": 304,
+            "y": 176
+          },
+          "pos": 1,
+          "side": 2,
+          "voltSource": 0,
+          "bubbleX": 0,
+          "bubbleY": 0,
+          "text": "dis",
+          "lineOver": false,
+          "bubble": false,
+          "clock": false,
+          "output": false,
+          "value": false,
+          "state": false
+        },
+        {
+          "post": {
+            "x": 272,
+            "y": 240
+          },
+          "stub": {
+            "x": 288,
+            "y": 240
+          },
+          "textloc": {
+            "x": 304,
+            "y": 240
+          },
+          "pos": 3,
+          "side": 2,
+          "voltSource": 0,
+          "bubbleX": 0,
+          "bubbleY": 0,
+          "text": "tr",
+          "lineOver": true,
+          "bubble": false,
+          "clock": false,
+          "output": false,
+          "value": false,
+          "state": false
+        },
+        {
+          "post": {
+            "x": 272,
+            "y": 272
+          },
+          "stub": {
+            "x": 288,
+            "y": 272
+          },
+          "textloc": {
+            "x": 304,
+            "y": 272
+          },
+          "pos": 4,
+          "side": 2,
+          "voltSource": 0,
+          "bubbleX": 0,
+          "bubbleY": 0,
+          "text": "th",
+          "lineOver": false,
+          "bubble": false,
+          "clock": false,
+          "output": false,
+          "value": false,
+          "state": false
+        },
+        {
+          "post": {
+            "x": 336,
+            "y": 112
+          },
+          "stub": {
+            "x": 336,
+            "y": 128
+          },
+          "textloc": {
+            "x": 336,
+            "y": 144
+          },
+          "pos": 1,
+          "side": 0,
+          "voltSource": 0,
+          "bubbleX": 0,
+          "bubbleY": 0,
+          "text": "Vin",
+          "lineOver": false,
+          "bubble": false,
+          "clock": false,
+          "output": false,
+          "value": false,
+          "state": false
+        },
+        {
+          "post": {
+            "x": 336,
+            "y": 304
+          },
+          "stub": {
+            "x": 336,
+            "y": 288
+          },
+          "textloc": {
+            "x": 336,
+            "y": 272
+          },
+          "pos": 1,
+          "side": 1,
+          "voltSource": 0,
+          "bubbleX": 0,
+          "bubbleY": 0,
+          "text": "ctl",
+          "lineOver": false,
+          "bubble": false,
+          "clock": false,
+          "output": false,
+          "value": false,
+          "state": false
+        },
+        {
+          "post": {
+            "x": 400,
+            "y": 208
+          },
+          "stub": {
+            "x": 384,
+            "y": 208
+          },
+          "textloc": {
+            "x": 368,
+            "y": 208
+          },
+          "pos": 2,
+          "side": 3,
+          "voltSource": 7,
+          "bubbleX": 0,
+          "bubbleY": 0,
+          "text": "out",
+          "lineOver": false,
+          "bubble": false,
+          "clock": false,
+          "output": true,
+          "value": true,
+          "state": true
+        },
+        {
+          "post": {
+            "x": 400,
+            "y": 176
+          },
+          "stub": {
+            "x": 384,
+            "y": 176
+          },
+          "textloc": {
+            "x": 368,
+            "y": 176
+          },
+          "pos": 1,
+          "side": 3,
+          "voltSource": 0,
+          "bubbleX": 0,
+          "bubbleY": 0,
+          "text": "rst",
+          "lineOver": false,
+          "bubble": false,
+          "clock": false,
+          "output": false,
+          "value": false,
+          "state": false
+        }
+      ]
+    },
+    {
+      "x": 336,
+      "y": 112,
+      "x2": 400,
+      "y2": 112,
+      "flags": 0,
+      "nodes": [
+        9,
+        13
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 8,
+      "needsShortcut": true,
+      "dump": "w",
+      "postCount": 2,
+      "nonLinear": false
+    },
+    {
+      "x": 400,
+      "y": 112,
+      "x2": 400,
+      "y2": 176,
+      "flags": 0,
+      "nodes": [
+        13,
+        12
+      ],
+      "params": {},
+      "selected": false,
+      "voltSource": 9,
+      "needsShortcut": true,
+      "dump": "w",
+      "postCount": 2,
+      "nonLinear": false
+    }
+  ],
+  "nodeList": [
+    {
+      "x": -1,
+      "y": -1,
+      "internal": false,
+      "links": []
+    },
+    {
+      "x": 272,
+      "y": 176,
+      "internal": false,
+      "links": [
+        {
+          "num": 0,
+          "elm": {
+            "x": 272,
+            "y": 176,
+            "x2": 240,
+            "y2": 176,
+            "flags": 0,
+            "nodes": [
+              1,
+              2
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": true,
+            "dump": "w",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 0,
+          "elm": {
+            "x": 272,
+            "y": 144,
+            "x2": 288,
+            "y2": 144,
+            "flags": 2,
+            "nodes": [
+              1,
+              4,
+              6,
+              9,
+              11,
+              10,
+              12
+            ],
+            "params": {
+              "bits": 0,
+              "volts": [
+                0.016600704380296337,
+                6.633905789056932,
+                6.633905789056932,
+                10,
+                6.666444451851604,
+                0,
+                10
+              ]
+            },
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": false,
+            "dump": "165",
+            "postCount": 7,
+            "nonLinear": true,
+            "bits": 0,
+            "pins": [
+              {
+                "post": {
+                  "x": 272,
+                  "y": 176
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 176
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 176
+                },
+                "pos": 1,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "dis",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 272,
+                  "y": 240
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 240
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 240
+                },
+                "pos": 3,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "tr",
+                "lineOver": true,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 272,
+                  "y": 272
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 272
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 272
+                },
+                "pos": 4,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "th",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 336,
+                  "y": 112
+                },
+                "stub": {
+                  "x": 336,
+                  "y": 128
+                },
+                "textloc": {
+                  "x": 336,
+                  "y": 144
+                },
+                "pos": 1,
+                "side": 0,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "Vin",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 336,
+                  "y": 304
+                },
+                "stub": {
+                  "x": 336,
+                  "y": 288
+                },
+                "textloc": {
+                  "x": 336,
+                  "y": 272
+                },
+                "pos": 1,
+                "side": 1,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "ctl",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 400,
+                  "y": 208
+                },
+                "stub": {
+                  "x": 384,
+                  "y": 208
+                },
+                "textloc": {
+                  "x": 368,
+                  "y": 208
+                },
+                "pos": 2,
+                "side": 3,
+                "voltSource": 7,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "out",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": true,
+                "value": true,
+                "state": true
+              },
+              {
+                "post": {
+                  "x": 400,
+                  "y": 176
+                },
+                "stub": {
+                  "x": 384,
+                  "y": 176
+                },
+                "textloc": {
+                  "x": 368,
+                  "y": 176
+                },
+                "pos": 1,
+                "side": 3,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "rst",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "x": 240,
+      "y": 176,
+      "internal": false,
+      "links": [
+        {
+          "num": 1,
+          "elm": {
+            "x": 272,
+            "y": 176,
+            "x2": 240,
+            "y2": 176,
+            "flags": 0,
+            "nodes": [
+              1,
+              2
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": true,
+            "dump": "w",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 0,
+          "elm": {
+            "x": 240,
+            "y": 176,
+            "x2": 240,
+            "y2": 240,
+            "flags": 0,
+            "nodes": [
+              2,
+              3
+            ],
+            "params": {
+              "resistance": 10000
+            },
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": true,
+            "dump": "r",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 0,
+          "elm": {
+            "x": 240,
+            "y": 176,
+            "x2": 240,
+            "y2": 112,
+            "flags": 0,
+            "nodes": [
+              2,
+              8
+            ],
+            "params": {
+              "resistance": 10000
+            },
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": true,
+            "dump": "r",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        }
+      ]
+    },
+    {
+      "x": 240,
+      "y": 240,
+      "internal": false,
+      "links": [
+        {
+          "num": 1,
+          "elm": {
+            "x": 240,
+            "y": 176,
+            "x2": 240,
+            "y2": 240,
+            "flags": 0,
+            "nodes": [
+              2,
+              3
+            ],
+            "params": {
+              "resistance": 10000
+            },
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": true,
+            "dump": "r",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 0,
+          "elm": {
+            "x": 240,
+            "y": 240,
+            "x2": 272,
+            "y2": 240,
+            "flags": 0,
+            "nodes": [
+              3,
+              4
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 1,
+            "needsShortcut": true,
+            "dump": "w",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 0,
+          "elm": {
+            "x": 240,
+            "y": 240,
+            "x2": 240,
+            "y2": 272,
+            "flags": 0,
+            "nodes": [
+              3,
+              5
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 2,
+            "needsShortcut": true,
+            "dump": "w",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        }
+      ]
+    },
+    {
+      "x": 272,
+      "y": 240,
+      "internal": false,
+      "links": [
+        {
+          "num": 1,
+          "elm": {
+            "x": 240,
+            "y": 240,
+            "x2": 272,
+            "y2": 240,
+            "flags": 0,
+            "nodes": [
+              3,
+              4
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 1,
+            "needsShortcut": true,
+            "dump": "w",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 1,
+          "elm": {
+            "x": 272,
+            "y": 144,
+            "x2": 288,
+            "y2": 144,
+            "flags": 2,
+            "nodes": [
+              1,
+              4,
+              6,
+              9,
+              11,
+              10,
+              12
+            ],
+            "params": {
+              "bits": 0,
+              "volts": [
+                0.016600704380296337,
+                6.633905789056932,
+                6.633905789056932,
+                10,
+                6.666444451851604,
+                0,
+                10
+              ]
+            },
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": false,
+            "dump": "165",
+            "postCount": 7,
+            "nonLinear": true,
+            "bits": 0,
+            "pins": [
+              {
+                "post": {
+                  "x": 272,
+                  "y": 176
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 176
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 176
+                },
+                "pos": 1,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "dis",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 272,
+                  "y": 240
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 240
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 240
+                },
+                "pos": 3,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "tr",
+                "lineOver": true,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 272,
+                  "y": 272
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 272
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 272
+                },
+                "pos": 4,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "th",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 336,
+                  "y": 112
+                },
+                "stub": {
+                  "x": 336,
+                  "y": 128
+                },
+                "textloc": {
+                  "x": 336,
+                  "y": 144
+                },
+                "pos": 1,
+                "side": 0,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "Vin",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 336,
+                  "y": 304
+                },
+                "stub": {
+                  "x": 336,
+                  "y": 288
+                },
+                "textloc": {
+                  "x": 336,
+                  "y": 272
+                },
+                "pos": 1,
+                "side": 1,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "ctl",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 400,
+                  "y": 208
+                },
+                "stub": {
+                  "x": 384,
+                  "y": 208
+                },
+                "textloc": {
+                  "x": 368,
+                  "y": 208
+                },
+                "pos": 2,
+                "side": 3,
+                "voltSource": 7,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "out",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": true,
+                "value": true,
+                "state": true
+              },
+              {
+                "post": {
+                  "x": 400,
+                  "y": 176
+                },
+                "stub": {
+                  "x": 384,
+                  "y": 176
+                },
+                "textloc": {
+                  "x": 368,
+                  "y": 176
+                },
+                "pos": 1,
+                "side": 3,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "rst",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "x": 240,
+      "y": 272,
+      "internal": false,
+      "links": [
+        {
+          "num": 1,
+          "elm": {
+            "x": 240,
+            "y": 240,
+            "x2": 240,
+            "y2": 272,
+            "flags": 0,
+            "nodes": [
+              3,
+              5
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 2,
+            "needsShortcut": true,
+            "dump": "w",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 0,
+          "elm": {
+            "x": 240,
+            "y": 272,
+            "x2": 272,
+            "y2": 272,
+            "flags": 0,
+            "nodes": [
+              5,
+              6
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 3,
+            "needsShortcut": true,
+            "dump": "w",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 0,
+          "elm": {
+            "x": 240,
+            "y": 272,
+            "x2": 240,
+            "y2": 336,
+            "flags": 0,
+            "nodes": [
+              5,
+              7
+            ],
+            "params": {
+              "capacitance": 3e-7,
+              "voltdiff": 6.6394202099608295
+            },
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": true,
+            "dump": "c",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        }
+      ]
+    },
+    {
+      "x": 272,
+      "y": 272,
+      "internal": false,
+      "links": [
+        {
+          "num": 1,
+          "elm": {
+            "x": 240,
+            "y": 272,
+            "x2": 272,
+            "y2": 272,
+            "flags": 0,
+            "nodes": [
+              5,
+              6
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 3,
+            "needsShortcut": true,
+            "dump": "w",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 2,
+          "elm": {
+            "x": 272,
+            "y": 144,
+            "x2": 288,
+            "y2": 144,
+            "flags": 2,
+            "nodes": [
+              1,
+              4,
+              6,
+              9,
+              11,
+              10,
+              12
+            ],
+            "params": {
+              "bits": 0,
+              "volts": [
+                0.016600704380296337,
+                6.633905789056932,
+                6.633905789056932,
+                10,
+                6.666444451851604,
+                0,
+                10
+              ]
+            },
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": false,
+            "dump": "165",
+            "postCount": 7,
+            "nonLinear": true,
+            "bits": 0,
+            "pins": [
+              {
+                "post": {
+                  "x": 272,
+                  "y": 176
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 176
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 176
+                },
+                "pos": 1,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "dis",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 272,
+                  "y": 240
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 240
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 240
+                },
+                "pos": 3,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "tr",
+                "lineOver": true,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 272,
+                  "y": 272
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 272
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 272
+                },
+                "pos": 4,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "th",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 336,
+                  "y": 112
+                },
+                "stub": {
+                  "x": 336,
+                  "y": 128
+                },
+                "textloc": {
+                  "x": 336,
+                  "y": 144
+                },
+                "pos": 1,
+                "side": 0,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "Vin",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 336,
+                  "y": 304
+                },
+                "stub": {
+                  "x": 336,
+                  "y": 288
+                },
+                "textloc": {
+                  "x": 336,
+                  "y": 272
+                },
+                "pos": 1,
+                "side": 1,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "ctl",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 400,
+                  "y": 208
+                },
+                "stub": {
+                  "x": 384,
+                  "y": 208
+                },
+                "textloc": {
+                  "x": 368,
+                  "y": 208
+                },
+                "pos": 2,
+                "side": 3,
+                "voltSource": 7,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "out",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": true,
+                "value": true,
+                "state": true
+              },
+              {
+                "post": {
+                  "x": 400,
+                  "y": 176
+                },
+                "stub": {
+                  "x": 384,
+                  "y": 176
+                },
+                "textloc": {
+                  "x": 368,
+                  "y": 176
+                },
+                "pos": 1,
+                "side": 3,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "rst",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "x": 240,
+      "y": 336,
+      "internal": false,
+      "links": [
+        {
+          "num": 1,
+          "elm": {
+            "x": 240,
+            "y": 272,
+            "x2": 240,
+            "y2": 336,
+            "flags": 0,
+            "nodes": [
+              5,
+              7
+            ],
+            "params": {
+              "capacitance": 3e-7,
+              "voltdiff": 6.6394202099608295
+            },
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": true,
+            "dump": "c",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 0,
+          "elm": {
+            "x": 240,
+            "y": 336,
+            "x2": 240,
+            "y2": 352,
+            "flags": 0,
+            "nodes": [
+              7
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 4,
+            "needsShortcut": true,
+            "dump": "g",
+            "postCount": 1,
+            "nonLinear": false
+          }
+        }
+      ]
+    },
+    {
+      "x": 240,
+      "y": 112,
+      "internal": false,
+      "links": [
+        {
+          "num": 1,
+          "elm": {
+            "x": 240,
+            "y": 176,
+            "x2": 240,
+            "y2": 112,
+            "flags": 0,
+            "nodes": [
+              2,
+              8
+            ],
+            "params": {
+              "resistance": 10000
+            },
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": true,
+            "dump": "r",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 0,
+          "elm": {
+            "x": 240,
+            "y": 112,
+            "x2": 336,
+            "y2": 112,
+            "flags": 0,
+            "nodes": [
+              8,
+              9
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 5,
+            "needsShortcut": true,
+            "dump": "w",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 0,
+          "elm": {
+            "x": 240,
+            "y": 112,
+            "x2": 176,
+            "y2": 112,
+            "flags": 0,
+            "nodes": [
+              8
+            ],
+            "params": {
+              "waveform": 0,
+              "frequency": 40,
+              "maxVoltage": 10,
+              "bias": 0,
+              "phaseShift": 0,
+              "dutyCycle": 0.5
+            },
+            "selected": false,
+            "voltSource": 6,
+            "needsShortcut": false,
+            "dump": "R",
+            "postCount": 1,
+            "nonLinear": false
+          }
+        }
+      ]
+    },
+    {
+      "x": 336,
+      "y": 112,
+      "internal": false,
+      "links": [
+        {
+          "num": 1,
+          "elm": {
+            "x": 240,
+            "y": 112,
+            "x2": 336,
+            "y2": 112,
+            "flags": 0,
+            "nodes": [
+              8,
+              9
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 5,
+            "needsShortcut": true,
+            "dump": "w",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 3,
+          "elm": {
+            "x": 272,
+            "y": 144,
+            "x2": 288,
+            "y2": 144,
+            "flags": 2,
+            "nodes": [
+              1,
+              4,
+              6,
+              9,
+              11,
+              10,
+              12
+            ],
+            "params": {
+              "bits": 0,
+              "volts": [
+                0.016600704380296337,
+                6.633905789056932,
+                6.633905789056932,
+                10,
+                6.666444451851604,
+                0,
+                10
+              ]
+            },
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": false,
+            "dump": "165",
+            "postCount": 7,
+            "nonLinear": true,
+            "bits": 0,
+            "pins": [
+              {
+                "post": {
+                  "x": 272,
+                  "y": 176
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 176
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 176
+                },
+                "pos": 1,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "dis",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 272,
+                  "y": 240
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 240
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 240
+                },
+                "pos": 3,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "tr",
+                "lineOver": true,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 272,
+                  "y": 272
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 272
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 272
+                },
+                "pos": 4,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "th",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 336,
+                  "y": 112
+                },
+                "stub": {
+                  "x": 336,
+                  "y": 128
+                },
+                "textloc": {
+                  "x": 336,
+                  "y": 144
+                },
+                "pos": 1,
+                "side": 0,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "Vin",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 336,
+                  "y": 304
+                },
+                "stub": {
+                  "x": 336,
+                  "y": 288
+                },
+                "textloc": {
+                  "x": 336,
+                  "y": 272
+                },
+                "pos": 1,
+                "side": 1,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "ctl",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 400,
+                  "y": 208
+                },
+                "stub": {
+                  "x": 384,
+                  "y": 208
+                },
+                "textloc": {
+                  "x": 368,
+                  "y": 208
+                },
+                "pos": 2,
+                "side": 3,
+                "voltSource": 7,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "out",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": true,
+                "value": true,
+                "state": true
+              },
+              {
+                "post": {
+                  "x": 400,
+                  "y": 176
+                },
+                "stub": {
+                  "x": 384,
+                  "y": 176
+                },
+                "textloc": {
+                  "x": 368,
+                  "y": 176
+                },
+                "pos": 1,
+                "side": 3,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "rst",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              }
+            ]
+          }
+        },
+        {
+          "num": 0,
+          "elm": {
+            "x": 336,
+            "y": 112,
+            "x2": 400,
+            "y2": 112,
+            "flags": 0,
+            "nodes": [
+              9,
+              13
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 8,
+            "needsShortcut": true,
+            "dump": "w",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        }
+      ]
+    },
+    {
+      "x": 400,
+      "y": 208,
+      "internal": false,
+      "links": [
+        {
+          "num": 0,
+          "elm": {
+            "x": 400,
+            "y": 208,
+            "x2": 464,
+            "y2": 208,
+            "flags": 0,
+            "nodes": [
+              10
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": false,
+            "dump": "O",
+            "postCount": 1,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 5,
+          "elm": {
+            "x": 272,
+            "y": 144,
+            "x2": 288,
+            "y2": 144,
+            "flags": 2,
+            "nodes": [
+              1,
+              4,
+              6,
+              9,
+              11,
+              10,
+              12
+            ],
+            "params": {
+              "bits": 0,
+              "volts": [
+                0.016600704380296337,
+                6.633905789056932,
+                6.633905789056932,
+                10,
+                6.666444451851604,
+                0,
+                10
+              ]
+            },
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": false,
+            "dump": "165",
+            "postCount": 7,
+            "nonLinear": true,
+            "bits": 0,
+            "pins": [
+              {
+                "post": {
+                  "x": 272,
+                  "y": 176
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 176
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 176
+                },
+                "pos": 1,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "dis",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 272,
+                  "y": 240
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 240
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 240
+                },
+                "pos": 3,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "tr",
+                "lineOver": true,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 272,
+                  "y": 272
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 272
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 272
+                },
+                "pos": 4,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "th",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 336,
+                  "y": 112
+                },
+                "stub": {
+                  "x": 336,
+                  "y": 128
+                },
+                "textloc": {
+                  "x": 336,
+                  "y": 144
+                },
+                "pos": 1,
+                "side": 0,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "Vin",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 336,
+                  "y": 304
+                },
+                "stub": {
+                  "x": 336,
+                  "y": 288
+                },
+                "textloc": {
+                  "x": 336,
+                  "y": 272
+                },
+                "pos": 1,
+                "side": 1,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "ctl",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 400,
+                  "y": 208
+                },
+                "stub": {
+                  "x": 384,
+                  "y": 208
+                },
+                "textloc": {
+                  "x": 368,
+                  "y": 208
+                },
+                "pos": 2,
+                "side": 3,
+                "voltSource": 7,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "out",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": true,
+                "value": true,
+                "state": true
+              },
+              {
+                "post": {
+                  "x": 400,
+                  "y": 176
+                },
+                "stub": {
+                  "x": 384,
+                  "y": 176
+                },
+                "textloc": {
+                  "x": 368,
+                  "y": 176
+                },
+                "pos": 1,
+                "side": 3,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "rst",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "x": 336,
+      "y": 304,
+      "internal": false,
+      "links": [
+        {
+          "num": 4,
+          "elm": {
+            "x": 272,
+            "y": 144,
+            "x2": 288,
+            "y2": 144,
+            "flags": 2,
+            "nodes": [
+              1,
+              4,
+              6,
+              9,
+              11,
+              10,
+              12
+            ],
+            "params": {
+              "bits": 0,
+              "volts": [
+                0.016600704380296337,
+                6.633905789056932,
+                6.633905789056932,
+                10,
+                6.666444451851604,
+                0,
+                10
+              ]
+            },
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": false,
+            "dump": "165",
+            "postCount": 7,
+            "nonLinear": true,
+            "bits": 0,
+            "pins": [
+              {
+                "post": {
+                  "x": 272,
+                  "y": 176
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 176
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 176
+                },
+                "pos": 1,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "dis",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 272,
+                  "y": 240
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 240
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 240
+                },
+                "pos": 3,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "tr",
+                "lineOver": true,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 272,
+                  "y": 272
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 272
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 272
+                },
+                "pos": 4,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "th",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 336,
+                  "y": 112
+                },
+                "stub": {
+                  "x": 336,
+                  "y": 128
+                },
+                "textloc": {
+                  "x": 336,
+                  "y": 144
+                },
+                "pos": 1,
+                "side": 0,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "Vin",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 336,
+                  "y": 304
+                },
+                "stub": {
+                  "x": 336,
+                  "y": 288
+                },
+                "textloc": {
+                  "x": 336,
+                  "y": 272
+                },
+                "pos": 1,
+                "side": 1,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "ctl",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 400,
+                  "y": 208
+                },
+                "stub": {
+                  "x": 384,
+                  "y": 208
+                },
+                "textloc": {
+                  "x": 368,
+                  "y": 208
+                },
+                "pos": 2,
+                "side": 3,
+                "voltSource": 7,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "out",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": true,
+                "value": true,
+                "state": true
+              },
+              {
+                "post": {
+                  "x": 400,
+                  "y": 176
+                },
+                "stub": {
+                  "x": 384,
+                  "y": 176
+                },
+                "textloc": {
+                  "x": 368,
+                  "y": 176
+                },
+                "pos": 1,
+                "side": 3,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "rst",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "x": 400,
+      "y": 176,
+      "internal": false,
+      "links": [
+        {
+          "num": 6,
+          "elm": {
+            "x": 272,
+            "y": 144,
+            "x2": 288,
+            "y2": 144,
+            "flags": 2,
+            "nodes": [
+              1,
+              4,
+              6,
+              9,
+              11,
+              10,
+              12
+            ],
+            "params": {
+              "bits": 0,
+              "volts": [
+                0.016600704380296337,
+                6.633905789056932,
+                6.633905789056932,
+                10,
+                6.666444451851604,
+                0,
+                10
+              ]
+            },
+            "selected": false,
+            "voltSource": 0,
+            "needsShortcut": false,
+            "dump": "165",
+            "postCount": 7,
+            "nonLinear": true,
+            "bits": 0,
+            "pins": [
+              {
+                "post": {
+                  "x": 272,
+                  "y": 176
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 176
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 176
+                },
+                "pos": 1,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "dis",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 272,
+                  "y": 240
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 240
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 240
+                },
+                "pos": 3,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "tr",
+                "lineOver": true,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 272,
+                  "y": 272
+                },
+                "stub": {
+                  "x": 288,
+                  "y": 272
+                },
+                "textloc": {
+                  "x": 304,
+                  "y": 272
+                },
+                "pos": 4,
+                "side": 2,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "th",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 336,
+                  "y": 112
+                },
+                "stub": {
+                  "x": 336,
+                  "y": 128
+                },
+                "textloc": {
+                  "x": 336,
+                  "y": 144
+                },
+                "pos": 1,
+                "side": 0,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "Vin",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 336,
+                  "y": 304
+                },
+                "stub": {
+                  "x": 336,
+                  "y": 288
+                },
+                "textloc": {
+                  "x": 336,
+                  "y": 272
+                },
+                "pos": 1,
+                "side": 1,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "ctl",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              },
+              {
+                "post": {
+                  "x": 400,
+                  "y": 208
+                },
+                "stub": {
+                  "x": 384,
+                  "y": 208
+                },
+                "textloc": {
+                  "x": 368,
+                  "y": 208
+                },
+                "pos": 2,
+                "side": 3,
+                "voltSource": 7,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "out",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": true,
+                "value": true,
+                "state": true
+              },
+              {
+                "post": {
+                  "x": 400,
+                  "y": 176
+                },
+                "stub": {
+                  "x": 384,
+                  "y": 176
+                },
+                "textloc": {
+                  "x": 368,
+                  "y": 176
+                },
+                "pos": 1,
+                "side": 3,
+                "voltSource": 0,
+                "bubbleX": 0,
+                "bubbleY": 0,
+                "text": "rst",
+                "lineOver": false,
+                "bubble": false,
+                "clock": false,
+                "output": false,
+                "value": false,
+                "state": false
+              }
+            ]
+          }
+        },
+        {
+          "num": 1,
+          "elm": {
+            "x": 400,
+            "y": 112,
+            "x2": 400,
+            "y2": 176,
+            "flags": 0,
+            "nodes": [
+              13,
+              12
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 9,
+            "needsShortcut": true,
+            "dump": "w",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        }
+      ]
+    },
+    {
+      "x": 400,
+      "y": 112,
+      "internal": false,
+      "links": [
+        {
+          "num": 1,
+          "elm": {
+            "x": 336,
+            "y": 112,
+            "x2": 400,
+            "y2": 112,
+            "flags": 0,
+            "nodes": [
+              9,
+              13
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 8,
+            "needsShortcut": true,
+            "dump": "w",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        },
+        {
+          "num": 0,
+          "elm": {
+            "x": 400,
+            "y": 112,
+            "x2": 400,
+            "y2": 176,
+            "flags": 0,
+            "nodes": [
+              13,
+              12
+            ],
+            "params": {},
+            "selected": false,
+            "voltSource": 9,
+            "needsShortcut": true,
+            "dump": "w",
+            "postCount": 2,
+            "nonLinear": false
+          }
+        }
+      ]
+    }
+  ]
+}

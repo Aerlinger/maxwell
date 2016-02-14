@@ -57,7 +57,7 @@ class CircuitComponent
 
     Fields = @constructor.Fields
 
-    @params = {}
+    @params = @params || {}
 
     for param_name, definition of Fields
       default_value = definition.default_value
