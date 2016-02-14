@@ -114,7 +114,7 @@ class ComponentRegistry
     '153': NorGateElm
     '154': XorGateElm
 #    '155': DFlipFlopElm
-#    '156': JKFlipFlopElm
+    '156': JKFlipFlopElm
 #    '157': SevenSegElm
 #    '158': VCOElm
     '159': AnalogSwitchElm
@@ -211,6 +211,7 @@ class ComponentRegistry
     InverterElm: 'I'
     LogicInputElm: 'L'
     LogicOutputElm: 'M'
+    JkFlipFlowElm: '156'
 
     TransformerElm: 'T'
 
