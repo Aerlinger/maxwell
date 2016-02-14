@@ -37,6 +37,9 @@ AnalogSwitchElm = require('./components/AnalogSwitchElm.coffee')
 AnalogSwitch2Elm = require('./components/AnalogSwitch2Elm.coffee')
 MemristorElm = require('./components/MemristorElm.coffee')
 
+DecadeElm = require('./components/DecadeElm.coffee')
+LatchElm = require('./components/LatchElm.coffee')
+
 TransformerElm = require('./components/TransformerElm.coffee')
 
 PotElm = require('./components/PotElm.coffee')
@@ -121,7 +124,7 @@ class ComponentRegistry
     '160': AnalogSwitch2Elm
 #    '161': PhaseCompElm
 #    '162': LEDElm
-#    '163': DecadeElm
+    '163': DecadeElm
 #    '164': CounterElm
 #    '165': TimerElm
 #    '166': DACElm

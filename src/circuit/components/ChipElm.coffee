@@ -3,82 +3,15 @@ Util = require('../../util/util.coffee')
 Point = require('../../geom/Point.coffee')
 
 
-class Pin
-  constructor: (@pos, @side, @text) ->
-    #@@post
-    #@stub
-    #@textloc
-    @voltSource = 0
-    @bubbleX = 0
-    @bubbleY = 0
-
-    @lineOver = false
-    @bubble = false
-    @clock = false
-    @output = false
-    @value = false
-    @state = false
-
-    @curcount = 0
-    @current = 0
-
-  updateDots: (currentMult, ds = Settings.CURRENT_SEGMENT_LENGTH) ->
-    @curcount ||= 0
-
-    currentIncrement = @current * currentMult
-
-    @curcount = (@curcount + currentIncrement) % ds
-    @curcount += ds if @curcount < 0
-
-    @curcount
-
-
-  setPoint: (@chip, px, py, dx, dy, dax, day, sx, sy) ->
-    if (@chip.flags & ChipElm.FLAG_FLIP_X) != 0
-      dx = -dx
-      dax = -dax
-      px += @chip.cspc2 * (@chip.sizeX - 1)
-      sx = -sx
-
-    if (@chip.flags & ChipElm.FLAG_FLIP_Y) != 0
-      dy = -dy
-      day = -day
-      py += @chip.cspc2 * (@chip.sizeY - 1)
-      sy = -sy
-
-    xa = Math.floor(px + @chip.cspc2 * dx * pos + sx)
-    ya = Math.floor(py + @chip.cspc2 * dy * pos + sy)
-
-    @post = new Point(xa + dax * @chip.cspc2, ya + day * @chip.cspc2)
-    @stub = new Point(xa + dax * @chip.cspc, ya + day * @chip.cspc)
-
-    @textloc = new Point(xa, ya)
-
-    if @bubble
-      @bubbleX = xa + dax * 10 * @chip.csize
-      @bubbleY = ya + day * 10 * @chip.csize
-
-    if (@clock)
-      clockPointsX = new Array(3)
-      clockPointsY = new Array(3)
-
-      clockPointsX[0] = xa + dax * @chip.cspc - dx * @chip.cspc / 2
-      clockPointsY[0] = ya + day * @chip.cspc - dy * @chip.cspc / 2
-      clockPointsX[1] = xa
-      clockPointsY[1] = ya
-      clockPointsX[2] = xa + dax * @chip.cspc + dx * @chip.cspc / 2
-      clockPointsY[2] = ya + day * @chip.cspc + dy * @chip.cspc / 2
-
-
 class ChipElm extends CircuitComponent
   FLAG_SMALL: 1
   FLAG_FLIP: 1024
   FLAG_SMALL: 20148
 
-  SIDE_N: 0
-  SIDE_S: 1
-  SIDE_W: 2
-  SIDE_E: 3
+  @SIDE_N = 0
+  @SIDE_S = 1
+  @SIDE_W = 2
+  @SIDE_E = 3
 
   @Fields = {
     bits: {
@@ -87,12 +20,41 @@ class ChipElm extends CircuitComponent
     }
     volts: {
       name: "Volts"
-      data_type: parseFloat
+      data_type: (x) -> x
     }
   }
 
+  self = null
+
   constructor: (xa, xb, ya, yb, params, f) ->
+    self = @
+
+    params = [params[0], params[1...params.length]]
+
     super(xa, xb, ya, yb, params, f)
+
+    if params && Object.prototype.toString.call( params ) == '[object Array]'
+      @volts = params[1...params.length]
+
+    @noDiagonal = true
+    @setupPins()
+
+    if Object.prototype.toString.call( params ) == '[object Array]'
+      @volts = params[1...params.length]
+    else
+      @volts = params[1...params.length]
+
+    @setSize(if ((f & ChipElm.FLAG_SMALL) != 0) then 1 else 2)
+
+    numPosts = @getPostCount()
+
+    if numPosts != @volts.length
+      console.error("Number of posts != length of the voltage array")
+
+    for i in [0...numPosts]
+      if @pins[i].state
+        @pins[i].value = @volts[i] > 2.5
+
 
   setupPins: ->
     console.warn("setupPins() to be called from subclasses of ChipElm")
@@ -127,8 +89,8 @@ class ChipElm extends CircuitComponent
     @csize = s
     @cspc = 8 * s
     @cspc2 = @cspc * 2
-    @flags = @flags & ~FLAG_SMALL
-    @flags = @flags | (if (s == 1) then FLAG_SMALL else 0)
+    @flags = @flags & ~ChipElm.FLAG_SMALL
+    @flags = @flags | (if (s == 1) then ChipElm.FLAG_SMALL else 0)
 
   getPost: (n) ->
     @pins[n].post
@@ -232,5 +194,72 @@ class ChipElm extends CircuitComponent
       else if p.side == ChipElm.SIDE_E
         p.setPoint(x0, y0, 0, 1, 1, 0, xs - @cspc2, 0)
 
+  class Pin
+    constructor: (@pos, @side, @text) ->
+    #@@post
+    #@stub
+    #@textloc
+      @voltSource = 0
+      @bubbleX = 0
+      @bubbleY = 0
+
+      @lineOver = false
+      @bubble = false
+      @clock = false
+      @output = false
+      @value = false
+      @state = false
+
+      @curcount = 0
+      @current = 0
+
+    updateDots: (currentMult, ds = Settings.CURRENT_SEGMENT_LENGTH) ->
+      @curcount ||= 0
+
+      currentIncrement = @current * currentMult
+
+      @curcount = (@curcount + currentIncrement) % ds
+      @curcount += ds if @curcount < 0
+
+      @curcount
+
+
+    setPoint: (self, px, py, dx, dy, dax, day, sx, sy) ->
+      if (self.flags & ChipElm.FLAG_FLIP_X) != 0
+        dx = -dx
+        dax = -dax
+        px += self.cspc2 * (self.sizeX - 1)
+        sx = -sx
+
+      if (self.flags & ChipElm.FLAG_FLIP_Y) != 0
+        dy = -dy
+        day = -day
+        py += self.cspc2 * (self.sizeY - 1)
+        sy = -sy
+
+      xa = Math.floor(px + self.cspc2 * dx * pos + sx)
+      ya = Math.floor(py + self.cspc2 * dy * pos + sy)
+
+      @post = new Point(xa + dax * self.cspc2, ya + day * self.cspc2)
+      @stub = new Point(xa + dax * self.cspc, ya + day * self.cspc)
+
+      @textloc = new Point(xa, ya)
+
+      if @bubble
+        @bubbleX = xa + dax * 10 * self.csize
+        @bubbleY = ya + day * 10 * self.csize
+
+      if (@clock)
+        clockPointsX = new Array(3)
+        clockPointsY = new Array(3)
+
+        clockPointsX[0] = xa + dax * self.cspc - dx * self.cspc / 2
+        clockPointsY[0] = ya + day * self.cspc - dy * self.cspc / 2
+        clockPointsX[1] = xa
+        clockPointsY[1] = ya
+        clockPointsX[2] = xa + dax * self.cspc + dx * self.cspc / 2
+        clockPointsY[2] = ya + day * self.cspc + dy * self.cspc / 2
+
+  @Pin = Pin
 
 module.exports = ChipElm
