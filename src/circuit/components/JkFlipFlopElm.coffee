@@ -26,14 +26,14 @@ class JkFlipFlopElm extends ChipElm
     @sizeY = 3
 
     @pins = new Array(5)
-    @pins[0] = new Pin(0, ChipElm.SIDE_W, "J")
-    @pins[1] = new Pin(1, ChipElm.SIDE_W, "")
+    @pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "J")
+    @pins[1] = new ChipElm.Pin(1, ChipElm.SIDE_W, "")
     @pins[1].clock = true
     @pins[1].bubble = true
-    @pins[2] = new Pin(2, ChipElm.SIDE_W, "K")
-    @pins[3] = new Pin(0, ChipElm.SIDE_E, "Q")
+    @pins[2] = new ChipElm.Pin(2, ChipElm.SIDE_W, "K")
+    @pins[3] = new ChipElm.Pin(0, ChipElm.SIDE_E, "Q")
     @pins[3].output = @pins[3].state = true
-    @pins[4] = new Pin(2, ChipElm.SIDE_E, "Q")
+    @pins[4] = new ChipElm.Pin(2, ChipElm.SIDE_E, "Q")
     @pins[4].output = true
     @pins[4].lineOver = true
 

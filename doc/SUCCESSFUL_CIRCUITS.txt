@@ -1,6 +1,11 @@
 3-cgand
 3-cgor
 555int
+555lowduty
+555pulsemod
+555saw
+555schmitt
+555square
 allpass1
 allpass2
 amp-dfdx
@@ -51,7 +56,7 @@ diodelimit
 diodevar
 dtlinverter
 dtlnand
-dtlnor
+eclnor
 eclosc
 edgedff
 filt-hipass-l
@@ -117,7 +122,6 @@ norton
 notch
 npn
 ohms
-opamp-regulator
 opamp
 opampfeedback
 opint
@@ -160,7 +164,6 @@ ttlinverter
 ttlnand
 ttlnor
 twint
-vco
 voltdivide
 voltdouble
 voltdouble2

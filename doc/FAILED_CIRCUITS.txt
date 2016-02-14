@@ -1,10 +1,5 @@
 3way
-555lowduty
 555missing
-555pulsemod
-555saw
-555schmitt
-555square
 7segdecoder
 amdetect
 amp-integ
@@ -24,7 +19,7 @@ digcompare
 digsine
 divideby2
 divideby3
-eclnor
+dtlnor
 flashadc
 freqdouble
 graycode
@@ -84,7 +79,9 @@ transformerdown
 transformerup
 triode
 triodeamp
+vco
 wheatstone
 4way
 cc2imp
 cc2impn
+opamp-regulator

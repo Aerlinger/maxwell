@@ -36,11 +36,10 @@ class ChipElm extends CircuitComponent
 
     @setSize(if ((f & ChipElm.FLAG_SMALL) != 0) then 1 else 2)
 
-    @setupPins()
     @params = {}
 
     if @needsBits()
-      @bits = params.shift()
+      @bits = parseInt(params.shift())
       @params['bits'] = @bits
     else
       @params['bits'] = 0
@@ -49,6 +48,9 @@ class ChipElm extends CircuitComponent
       initial_voltages = params
     else
       initial_voltages = params['volts']
+
+    @setupPins()
+    console.log("PINS: #{@pins}")
 
     super(xa, xb, ya, yb, {}, f)
 
@@ -214,6 +216,12 @@ class ChipElm extends CircuitComponent
     for i in [0...@getPostCount()]
       p = @pins[i]
 
+      if !p
+        console.error("Cannot set pin at index #{i} because it is not defined (bits: #{@bits})")
+
+      if i >= @pins.length
+        console.error("Pin index out of bounds: #{i}. @pins is length #{@pins.length} but there are #{@getPostCount()} posts")
+
       if p.side == ChipElm.SIDE_N
         p.setPoint(x0, y0, 1, 0, 0, -1, 0, 0)
       else if p.side == ChipElm.SIDE_S
@@ -233,9 +241,9 @@ class ChipElm extends CircuitComponent
 
   class Pin
     constructor: (@pos, @side, @text) ->
-      #@@post
-      #@stub
-      #@textloc
+      @post = null
+      @stub = null
+      @textloc = null
       @voltSource = 0
       @bubbleX = 0
       @bubbleY = 0

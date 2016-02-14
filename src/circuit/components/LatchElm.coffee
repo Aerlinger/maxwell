@@ -27,17 +27,18 @@ class LatchElm extends ChipElm
   setupPins: ->
     @sizeX = 2
     @sizeY = @bits + 1
-    @pins = new Pin[@getPostCount()]
+    @pins = new Array(@getPostCount())
 
     for i in [0...@bits]
-      @pins[i] = new Pin(@bits - 1 - i, ChipElm.SIDE_W, "I" + i)
+      @pins[i] = new ChipElm.Pin(@bits - 1 - i, ChipElm.SIDE_W, "I" + i)
 
     for i in [0...@bits]
-      @pins[i + @bits] = new Pin(@bits - 1 - i, ChipElm.SIDE_E, "O");
+      console.log(i + @bits)
+      @pins[i + @bits] = new ChipElm.Pin(@bits - 1 - i, ChipElm.SIDE_E, "O");
       @pins[i + @bits].output = true
 
     @loadPin = @bits * 2
-    @pins[@loadPin] = new Pin(@bits, ChipElm.SIDE_W, "Ld")
+    @pins[@loadPin] = new ChipElm.Pin(@bits, ChipElm.SIDE_W, "Ld")
 
     @allocNodes()
 

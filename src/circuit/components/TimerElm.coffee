@@ -74,7 +74,7 @@ class TimerElm extends ChipElm
       @out = false
 
   doStep: (stamper) ->
-    output = if @out then volts[TimerElm.N_VIN] else 0
+    output = if @out then @volts[TimerElm.N_VIN] else 0
 
     if !@out && !@setOut
       stamper.stampResistor(@nodes[TimerElm.N_DIS], 0, 10)

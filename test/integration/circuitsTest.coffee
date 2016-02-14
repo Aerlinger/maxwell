@@ -8,7 +8,7 @@ _ = require("lodash")
 
 chai = require('chai')
 
-#chai.config.showDiff = false;
+chai.config.showDiff = false;
 
 assert = chai.assert
 expect = chai.expect
@@ -45,14 +45,14 @@ filenames = glob.sync "./circuits/*.txt", {}
 ]
 
 @files = _.difference(@files, @skip)
-@files = [
-  "555square",
-  "555lowduty",
-  "555missing",
-  "555pulsemod",
-  "555saw",
-  "555schmitt"
-]
+#@files = [
+#  "555square",
+#  "555lowduty",
+#  "555missing",
+#  "555pulsemod",
+#  "555saw",
+#  "555schmitt"
+#]
 
 for circuit_name in @files
   do (circuit_name) ->
@@ -67,7 +67,7 @@ for circuit_name in @files
         analysisValidationFileName = "./dump/#{circuit_name}.txt_ANALYSIS.json"
         analysisValidationJson = JSON.parse(fs.readFileSync(analysisValidationFileName))
 
-        fs.writeFileSync("#{circuit_name}_test_analysis.json", JSON.stringify(circuit.toJson(), null, 2))
+        #fs.writeFileSync("#{circuit_name}_test_analysis.json", JSON.stringify(circuit.toJson(), null, 2))
 
         deltas = approx_diff(circuit.toJson(), analysisValidationJson)
 
