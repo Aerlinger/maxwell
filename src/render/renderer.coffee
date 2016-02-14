@@ -311,7 +311,6 @@ class Renderer extends BaseRenderer
     newPos = component.curcount
 
     while newPos < dn
-
       xOffset = ptA.x + newPos * dx / dn
       yOffset = ptA.y + newPos * dy / dn
 

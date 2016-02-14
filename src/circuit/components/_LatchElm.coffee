@@ -10,5 +10,7 @@ class LatchElm extends ChipElm
   getDumpType: ->
     "168"
 
-module.exports = LatchElm
+  needsBits: ->
+    true
 
+module.exports = LatchElm

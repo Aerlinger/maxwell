@@ -112,8 +112,8 @@ class BaseRenderer extends Observer
 
     @context.save()
 
-    @context.fillStyle = "#FFF"
-    @context.strokeStyle = "#000"
+    @context.fillStyle = Settings.FILL_COLOR
+    @context.strokeStyle = Settings.STROKE_COLOR
     @context.beginPath()
 
     @context.moveTo(polygon.getX(0), polygon.getY(0))
@@ -124,6 +124,18 @@ class BaseRenderer extends Observer
     @context.fill()
     @context.stroke()
     @context.restore()
+
+  drawPolyLine: (xList, yList, lineWidth=Settings.LINE_WIDTH, color = Settings.STROKE_COLOR) ->
+    @context.save()
+
+    @context.beginPath()
+
+    @context.moveTo(xlist[0], ylist[0])
+    for i in [1...xlist.length]
+      @context.lineTo(xlist[i], ylist[i])
+
+    @context.restore()
+
 
   drawValue: (x1, y1, circuitElm, str) ->
 

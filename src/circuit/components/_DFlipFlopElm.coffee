@@ -12,5 +12,4 @@ class DFlipFlopElm extends ChipElm
   getDumpType: ->
     "155"
 
-
 module.exports = DFlipFlopElm

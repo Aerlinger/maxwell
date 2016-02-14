@@ -10,4 +10,7 @@ class DacElm extends ChipElm
   getDumpType: ->
     "166"
 
+  needsBits: ->
+    true
+
 module.exports = DacElm

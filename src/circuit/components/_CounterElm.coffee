@@ -10,4 +10,7 @@ class CounterElm extends ChipElm
   getDumpType: ->
     "164"
 
+  needsBits: ->
+    true
+
 module.exports = CounterElm

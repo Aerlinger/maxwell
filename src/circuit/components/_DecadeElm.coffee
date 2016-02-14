@@ -10,4 +10,7 @@ class DiacElm extends ChipElm
   getDumpType: ->
     "163"
 
+  needsBits: ->
+    true
+
 module.exports = DiacElm

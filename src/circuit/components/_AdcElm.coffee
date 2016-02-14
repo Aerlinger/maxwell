@@ -10,5 +10,8 @@ class AdcElm extends ChipElm
   getDumpType: ->
     "m"
 
+  needsBits: ->
+    true
+
 module.exports = AdcElm
 
