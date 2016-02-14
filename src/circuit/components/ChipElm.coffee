@@ -177,8 +177,8 @@ class ChipElm extends CircuitComponent
 
       voltageColor = Util.getVoltageColor(volts[i])
 
-      a = p.post;
-      b = p.stub;
+      a = p.post
+      b = p.stub
 
       renderContext.drawLinePt(a, b, voltageColor)
 
@@ -192,7 +192,7 @@ class ChipElm extends CircuitComponent
 
       renderContext.drawString(p.text, p.textloc.x, p.textloc.y)
       if p.lineOver
-        renderContext.drawLine(p.textloc.x, ya, p.textloc.x, ya);
+        renderContext.drawLine(p.textloc.x, ya, p.textloc.x, ya)
 
     renderContext.drawThickPolygon(@rectPointsX, @rectPointsY, Settinsg.STROKE_COLOR)
 

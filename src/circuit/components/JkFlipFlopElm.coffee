@@ -7,7 +7,7 @@ class JkFlipFlopElm extends ChipElm
   constructor: (xa, xb, ya, yb, params, f) ->
     super(xa, xb, ya, yb, params, f)
 
-    @pins[4].value = !@pins[3].value;
+    @pins[4].value = !@pins[3].value
 
   getDumpType: ->
     "156"
@@ -30,12 +30,12 @@ class JkFlipFlopElm extends ChipElm
     @pins[1] = new Pin(1, ChipElm.SIDE_W, "")
     @pins[1].clock = true
     @pins[1].bubble = true
-    @pins[2] = new Pin(2, ChipElm.SIDE_W, "K");
-    @pins[3] = new Pin(0, ChipElm.SIDE_E, "Q");
-    @pins[3].output = @pins[3].state = true;
-    @pins[4] = new Pin(2, ChipElm.SIDE_E, "Q");
-    @pins[4].output = true;
-    @pins[4].lineOver = true;
+    @pins[2] = new Pin(2, ChipElm.SIDE_W, "K")
+    @pins[3] = new Pin(0, ChipElm.SIDE_E, "Q")
+    @pins[3].output = @pins[3].state = true
+    @pins[4] = new Pin(2, ChipElm.SIDE_E, "Q")
+    @pins[4].output = true
+    @pins[4].lineOver = true
 
   execute: ->
     if !@pins[1].value && @lastClock
