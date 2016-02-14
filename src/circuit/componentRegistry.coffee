@@ -43,6 +43,7 @@ TimerElm = require('./components/TimerElm.coffee')
 JKFlipFlopElm = require('./components/JKFlipFlopElm.coffee')
 DFlipFlopElm = require('./components/DFlipFlopElm.coffee')
 CounterElm = require('./components/CounterElm.coffee')
+DacElm = require('./components/DacElm.coffee')
 
 TransformerElm = require('./components/TransformerElm.coffee')
 
@@ -131,7 +132,7 @@ class ComponentRegistry
     '163': DecadeElm
     '164': CounterElm
     '165': TimerElm
-#    '166': DACElm
+    '166': DacElm
 #    '167': ADCElm
     '168': LatchElm
 #    '169': TappedTransformerElm

@@ -122,6 +122,7 @@ norton
 notch
 npn
 ohms
+opamp-regulator
 opamp
 opampfeedback
 opint

@@ -83,4 +83,3 @@ wheatstone
 4way
 cc2imp
 cc2impn
-opamp-regulator
