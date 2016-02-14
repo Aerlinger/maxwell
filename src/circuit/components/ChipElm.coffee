@@ -28,32 +28,57 @@ class ChipElm extends CircuitComponent
 
   constructor: (xa, xb, ya, yb, params, f) ->
     self = @
+    @pins = []
+    @setSize(if ((f & ChipElm.FLAG_SMALL) != 0) then 1 else 2)
+
+    @setupPins()
 
     params = [params[0], params[1...params.length]]
 
     super(xa, xb, ya, yb, params, f)
 
-    if params && Object.prototype.toString.call( params ) == '[object Array]'
-      @volts = params[1...params.length]
-
     @noDiagonal = true
-    @setupPins()
+
+    if @needsBits()
+      @bits = params.shift()
+      @params['bits'] = @bits
 
     if Object.prototype.toString.call( params ) == '[object Array]'
-      @volts = params[1...params.length]
+      @volts = params
     else
-      @volts = params[1...params.length]
+      @volts = params['volts']
 
-    @setSize(if ((f & ChipElm.FLAG_SMALL) != 0) then 1 else 2)
+    @params['volts'] = @volts
 
     numPosts = @getPostCount()
 
     if numPosts != @volts.length
-      console.error("Number of posts != length of the voltage array")
+      console.error("Number of posts is #{numPosts} but voltage array has length #{@volts.length}")
 
     for i in [0...numPosts]
       if @pins[i].state
         @pins[i].value = @volts[i] > 2.5
+
+
+  inspect: ->
+    paramValues = (val for key, val of @params)
+
+    {
+      sym: @getDumpType()
+      x1: @x1
+      y1: @y1
+      x2: @x2
+      xy: @y2
+
+      csize: @csize
+      cspc: @cspc
+      cspc2: @cspc2
+      flags: @flags
+      pins: @pins
+      params: paramValues
+      voltage: @getVoltageDiff()
+      current: @getCurrent()
+    }
 
 
   setupPins: ->
@@ -182,7 +207,7 @@ class ChipElm extends CircuitComponent
 
     @setBbox(xr, yr, @rectPointsX[2], @rectPointsY[2])
 
-    for i in [0...@getPostCount]
+    for i in [0...@getPostCount()]
       p = @pins[i]
 
       if p.side == ChipElm.SIDE_N
@@ -196,9 +221,9 @@ class ChipElm extends CircuitComponent
 
   class Pin
     constructor: (@pos, @side, @text) ->
-    #@@post
-    #@stub
-    #@textloc
+      #@@post
+      #@stub
+      #@textloc
       @voltSource = 0
       @bubbleX = 0
       @bubbleY = 0
@@ -223,8 +248,10 @@ class ChipElm extends CircuitComponent
 
       @curcount
 
+    getName: ->
+      self.getName()
 
-    setPoint: (self, px, py, dx, dy, dax, day, sx, sy) ->
+    setPoint: (px, py, dx, dy, dax, day, sx, sy) ->
       if (self.flags & ChipElm.FLAG_FLIP_X) != 0
         dx = -dx
         dax = -dax
@@ -237,8 +264,10 @@ class ChipElm extends CircuitComponent
         py += self.cspc2 * (self.sizeY - 1)
         sy = -sy
 
-      xa = Math.floor(px + self.cspc2 * dx * pos + sx)
-      ya = Math.floor(py + self.cspc2 * dy * pos + sy)
+      xa = Math.floor(px + self.cspc2 * dx * @pos + sx)
+      ya = Math.floor(py + self.cspc2 * dy * @pos + sy)
+
+      console.log("SET POINT", px, py, dx, dy, dax, day, sx, sy, self.cspc2, @pos)
 
       @post = new Point(xa + dax * self.cspc2, ya + day * self.cspc2)
       @stub = new Point(xa + dax * self.cspc, ya + day * self.cspc)
