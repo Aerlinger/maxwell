@@ -216,7 +216,7 @@ class Renderer extends BaseRenderer
 
     # UPDATE FRAME ----------------------------------------------------------------
     @Circuit.updateCircuit()
-    @onUpdateComplete(@Circuit)
+    @onUpdateComplete?(@Circuit)
     # -----------------------------------------------------------------------------
 
     @drawComponents()
@@ -344,10 +344,10 @@ class Renderer extends BaseRenderer
       @drawLinePt component.lead2, component.point2, Util.getVoltageColor(component.volts[1])
 
   # TODO: Move to CircuitComponent
-  drawPosts: (component) ->
+  drawPosts: (component, color = Settings.POST_COLOR) ->
     for i in [0...component.getPostCount()]
       post = component.getPost(i)
-      @drawPost post.x, post.y
+      @drawPost post.x, post.y, color, color
 
   drawPost: (x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_COLOR) ->
     @fillCircle x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor

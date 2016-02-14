@@ -1,5 +1,6 @@
 3-cgand
 3-cgor
+555int
 allpass1
 allpass2
 amp-dfdx
@@ -23,6 +24,7 @@ cappar
 capseries
 ceamp
 classd
+clockedsrff
 cmosinverter
 cmosinvertercap
 cmosmsff
@@ -40,6 +42,7 @@ currentsrcramp
 dac
 darlington
 dcrestoration
+decoder
 delayrc
 diff
 diodeclip
@@ -50,6 +53,7 @@ dtlinverter
 dtlnand
 dtlnor
 eclosc
+edgedff
 filt-hipass-l
 filt-hipass
 filt-lopass-l
@@ -61,6 +65,7 @@ fullrectf
 grid
 grid2
 gyrator
+halfadd
 hartley
 impedance
 indpar
@@ -76,11 +81,14 @@ jfetamp
 jfetcurrentsrc
 jfetfollower-nooff
 jfetfollower
+jkff
 ladder
 leadingedge
 logconvert
 lrc-critical
 lrc
+majority
+masterslaveff
 mirror
 moscurrentramp
 moscurrentsrc
@@ -99,6 +107,7 @@ multivib-a
 multivib-bi
 multivib-mono
 mux
+nandff
 nic-r
 nmosfet
 nmosinverter
@@ -108,6 +117,7 @@ norton
 notch
 npn
 ohms
+opamp-regulator
 opamp
 opampfeedback
 opint
@@ -158,6 +168,8 @@ voltinvert
 voltquad
 volttriple
 volume
+xor
+xorphasedet
 zeneriv
 zenerref
 zenerreffollow

@@ -18,8 +18,7 @@ class XorGateElm extends OrGateElm
       a = (i - 2) / 2.0
       b = 4 * (1 - a*a) - 2
 
-      if (this instanceof XorGateElm)
-        @linePoints[i] = Util.interpolate(@lead1, @lead2, (b - 5) / ww2, a * @hs2)
+      @linePoints[i] = Util.interpolate(@lead1, @lead2, Math.floor((b - 5) / ww2), a * @hs2)
 
   getGateName: ->
     "XOR Gate"

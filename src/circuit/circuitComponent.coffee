@@ -380,22 +380,22 @@ class CircuitComponent
 
 #    @calcLeads 0
 
-#    renderContext.drawPosts(this, "#FF0000")
+    renderContext.drawPosts(this, "#FF0000")
 
 #    for i in [0...@getPostCount()]
 #      post = @getPost(i)
 #      renderContext.drawCircle(post.x, post.y, 3, 0, "#FF00FF")
 
-#    renderContext.drawLine(@point1.x-2, @point1.y-2, @point1.x+2, @point1.y+2, "#0000FF")
-#    renderContext.drawLine(@point1.x-2, @point1.y+2, @point1.x-2, @point1.y-2, "#0000FF")
-#    renderContext.drawLine(@point2.x-2, @point2.y-2, @point2.x+2, @point2.y+2, "#0000FF")
-#    renderContext.drawLine(@point2.x-2, @point2.y+2, @point2.x-2, @point2.y-2, "#0000FF")
-#
-#    if @lead1 && @lead2
-#      renderContext.drawLine(@lead1.x-2, @lead1.y-2, @lead1.x+2, @lead1.y+2, "#00FF00")
-#      renderContext.drawLine(@lead1.x-2, @lead1.y+2, @lead1.x-2, @lead1.y-2, "#00FF00")
-#      renderContext.drawLine(@lead2.x-2, @lead2.y-2, @lead2.x+2, @lead2.y+2, "#00FF00")
-#      renderContext.drawLine(@lead2.x-2, @lead2.y+2, @lead2.x-2, @lead2.y-2, "#00FF00")
+    renderContext.drawLine(@point1.x-2, @point1.y-2, @point1.x+2, @point1.y+2, "#0000FF")
+    renderContext.drawLine(@point1.x-2, @point1.y+2, @point1.x+2, @point1.y-2, "#0000FF")
+    renderContext.drawLine(@point2.x-2, @point2.y-2, @point2.x+2, @point2.y+2, "#0000FF")
+    renderContext.drawLine(@point2.x-2, @point2.y+2, @point2.x+2, @point2.y-2, "#0000FF")
+
+    if @lead1 && @lead2
+      renderContext.drawLine(@lead1.x-2, @lead1.y-2, @lead1.x+2, @lead1.y+2, "#00FF00")
+      renderContext.drawLine(@lead1.x-2, @lead1.y+2, @lead1.x+2, @lead1.y-2, "#00FF00")
+      renderContext.drawLine(@lead2.x-2, @lead2.y-2, @lead2.x+2, @lead2.y+2, "#00FF00")
+      renderContext.drawLine(@lead2.x-2, @lead2.y+2, @lead2.x+2, @lead2.y-2, "#00FF00")
 
     renderContext.drawLeads(this)
 

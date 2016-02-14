@@ -5,7 +5,7 @@ class NandGateElm extends AndGateElm
   constructor: (xa, ya, xb, yb, params, f)->
     super(xa, ya, xb, yb, params, f)
 
-  isInverting: ()->
+  isInverting: ->
     true
 
   getGameName: ->

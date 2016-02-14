@@ -13,17 +13,23 @@ class GateElm extends CircuitComponent
     },
     lastOutput: {
       name: "Last Output"
-      data_type: parseInt
-      default_value: 0
+      data_type: (x) ->
+        x > 2.5
     }
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
+#    if parseInt(f) == 1
+    if parseInt(f) & GateElm.FLAG_SMALL != 0
+      size = 1
+    else
+      size = 2
+
+    @setSize(size)
     super(xa, ya, xb, yb, params, f)
 
     @noDiagonal = true
-
-    @setSize(2)
+    @linePoints = null
 
   isInverting: ->
     false
@@ -41,17 +47,17 @@ class GateElm extends CircuitComponent
   setPoints: ->
     super()
 
-    if @dn > 150
-      @setSize(2)
+#    if @dn > 150
+#      @setSize(2)
 
     hs = @gheight
-    @ww = @gwidth2
+    @ww = Math.floor(@gwidth2)
 
     if @ww > @dn/2
       @ww = Math.floor(@dn/2)
 
     if @isInverting() && (@ww + 8 > @dn/2)
-      @ww = Math.floor(@dn / 2 - 8)
+      @ww = Math.floor(@dn / 2) - 8
 
     @calcLeads @ww*2
 
@@ -60,15 +66,14 @@ class GateElm extends CircuitComponent
 
     @allocNodes()
 
-    i0 = -@inputCount / 2
+    i0 = -Math.floor(@inputCount / 2)
 
-#    while i < @inputCount
     for i in [0...@inputCount]
-      if i0==0 && @inputCount & 1 == 0
+      if i0 == 0 && (@inputCount & 1) == 0
         i0 += 1
 
-      @inPosts[i] = Util.interpolate(@point1, @point2, 0, hs * 10)
-      @inGates[i] = Util.interpolate(@lead1, @lead2, 0, hs * 10)
+      @inPosts[i] = Util.interpolate(@point1, @point2, 0, hs * i0)
+      @inGates[i] = Util.interpolate(@lead1, @lead2, 0, hs * i0)
 
       if (@lastOutput ^ @isInverting())
         @volts[i] = 5
@@ -77,24 +82,60 @@ class GateElm extends CircuitComponent
 
       i0 += 1
 
-    @hs2 = @gwidth * (@inputCount / 2 + 1)
+    console.log(@constructor.name)
+    console.log(@point1, @point2, 0, hs, i0)
+    console.log("@inPosts")
+    console.log(@inPosts)
+
+    console.log("@inGates")
+    console.log(@inGates)
+
+    @hs2 = @gwidth * (Math.floor(@inputCount / 2) + 1)
     @setBboxPt(@point1, @point2, @hs2)
 
 
   doStep: (stamper) ->
-    @calcFunction()
+    f = @calcFunction()
 
     if @isInverting()
-      @f = !@f
+      f = !f
 
-    @lastOutput = @f
+    @lastOutput = f
 
-    if @f
+    if f
       res = 5
     else
       res = 0
 
     stamper.updateVoltageSource(0, @nodes[@inputCount], @voltageSource, res)
+
+
+  draw: (renderContext)->
+    for i in [0...@inputCount]
+      voltageColor = Util.getVoltageColor(@volts[i])
+      renderContext.drawLinePt(@inPosts[i], @inGates[i], voltageColor)
+
+    voltageColor = Util.getVoltageColor(@volts[@inputCount])
+    renderContext.drawLinePt(@lead2, @point2, voltageColor)
+
+    # TODO: Linepoints
+
+    if @isInverting()
+      renderContext.fillCircle @pcircle.x, @pcircle.y, 3
+
+    @updateDots()
+    renderContext.drawDots @lead2, @point2, this
+#    renderContext.drawPosts(this)
+
+    renderContext.drawPosts(this, "#FF0000")
+
+    renderContext.drawPosts(this, "#FF0000")
+
+    for i in [0...@getPostCount()]
+      post = @getPost(i)
+      renderContext.fillCircle post.x, post.y, 1, 1, "#FF0000", "#0000FF"
+#      renderContext.drawPost post.x, post.y, color, color
+
 
   getPostCount: ->
     @inputCount + 1
