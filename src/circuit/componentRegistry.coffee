@@ -126,7 +126,7 @@ class ComponentRegistry
 #    '165': TimerElm
 #    '166': DACElm
 #    '167': ADCElm
-#    '168': LatchElm
+    '168': LatchElm
 #    '169': TappedTransformerElm
     '170': SweepElm
 #    '171': TransLineElm
@@ -211,7 +211,9 @@ class ComponentRegistry
     InverterElm: 'I'
     LogicInputElm: 'L'
     LogicOutputElm: 'M'
+
     JkFlipFlowElm: '156'
+    LatchElm: '168'
 
     TransformerElm: 'T'
 
