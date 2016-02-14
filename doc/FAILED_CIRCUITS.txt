@@ -79,7 +79,6 @@ transformerdown
 transformerup
 triode
 triodeamp
-vco
 wheatstone
 4way
 cc2imp

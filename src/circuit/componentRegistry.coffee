@@ -41,6 +41,7 @@ DecadeElm = require('./components/DecadeElm.coffee')
 LatchElm = require('./components/LatchElm.coffee')
 TimerElm = require('./components/TimerElm.coffee')
 JKFlipFlopElm = require('./components/JKFlipFlopElm.coffee')
+DFlipFlopElm = require('./components/DFlipFlopElm.coffee')
 CounterElm = require('./components/CounterElm.coffee')
 
 TransformerElm = require('./components/TransformerElm.coffee')
@@ -119,7 +120,7 @@ class ComponentRegistry
     '152': OrGateElm
     '153': NorGateElm
     '154': XorGateElm
-#    '155': DFlipFlopElm
+    '155': DFlipFlopElm
     '156': JKFlipFlopElm
 #    '157': SevenSegElm
 #    '158': VCOElm

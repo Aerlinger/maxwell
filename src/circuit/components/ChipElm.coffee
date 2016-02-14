@@ -31,6 +31,7 @@ class ChipElm extends CircuitComponent
   # TODO: Need a better way of dealing with variable length params here
   constructor: (xa, xb, ya, yb, params, f) ->
     self = @
+    @flags = f
     @pins = []
     @bits = 0
 
@@ -50,7 +51,6 @@ class ChipElm extends CircuitComponent
       initial_voltages = params['volts']
 
     @setupPins()
-    console.log("PINS: #{@pins}")
 
     super(xa, xb, ya, yb, {}, f)
 
