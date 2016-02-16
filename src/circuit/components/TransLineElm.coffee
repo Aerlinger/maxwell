@@ -26,6 +26,8 @@ class TransLineElm extends CircuitComponent
     @noDiagonal = true
 
     super(xa, xb, ya, yb, params, f)
+    delete @params['resistance']
+
     @ptr = 0
 
   onSolder: (circuit)->
@@ -48,14 +50,14 @@ class TransLineElm extends CircuitComponent
 
     ds = if (@dy == 0) then Math.sign(@dx) else -Math.sign(@dy)
 
-    p3 = Util.interpolate(@point1, @point2, 0, -(@width * ds))
-    p4 = Util.interpolate(@point1, @point2, 1, -(@width * ds))
+    p3 = Util.interpolate(@point1, @point2, 0, -Math.floor(@width * ds))
+    p4 = Util.interpolate(@point1, @point2, 1, -Math.floor(@width * ds))
 
     sep = Settings.GRID_SIZE / 2
-    p5 = Util.interpolate(@point1, @point2, 0, -(@width / 2 - sep) * ds)
-    p6 = Util.interpolate(@point1, @point2, 1, -(@width / 2 - sep) * ds)
-    p7 = Util.interpolate(@point1, @point2, 0, -(@width / 2 + sep) * ds)
-    p8 = Util.interpolate(@point1, @point2, 1, -(@width / 2 + sep) * ds)
+    p5 = Util.interpolate(@point1, @point2, 0, -Math.floor(@width / 2 - sep) * ds)
+    p6 = Util.interpolate(@point1, @point2, 1, -Math.floor(@width / 2 - sep) * ds)
+    p7 = Util.interpolate(@point1, @point2, 0, -Math.floor(@width / 2 + sep) * ds)
+    p8 = Util.interpolate(@point1, @point2, 1, -Math.floor(@width / 2 + sep) * ds)
 
     console.log("PTS: ", p3, p4, @point1, @point2)
     @posts = [p3, p4, @point1, @point2]
@@ -72,6 +74,9 @@ class TransLineElm extends CircuitComponent
     false
 
   getVoltageSourceCount: ->
+    2
+
+  getInternalNodeCount: ->
     2
 
   getPost: (n) ->
@@ -119,7 +124,6 @@ class TransLineElm extends CircuitComponent
 
     if Math.abs(@volts[0]) > 1e-5 or Math.abs(@volts[1]) > 1e-5
       console.error("Transmission line not grounded!")
-      return
 
 
 module.exports = TransLineElm

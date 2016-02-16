@@ -56,16 +56,6 @@ tdiode
 tdosc
 tdrelax
 tesla
-tl
-tlfreq
-tllight
-tllopass
-tlmatch1
-tlmatch2
-tlmis1
-tlmismatch
-tlstand
-tlterm
 traffic
 transformer
 transformerdc
@@ -77,4 +67,5 @@ wheatstone
 4way
 cc2imp
 cc2impn
+opamp-regulator
 vco

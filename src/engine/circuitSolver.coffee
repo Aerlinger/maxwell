@@ -168,8 +168,9 @@ class CircuitSolver
             circuitElm.setNodeVoltage(j, 0)
 
       for j in [0...internalNodeCount]
-        cn = new CircuitNode(null, null, true)
+        cn = new CircuitNode(-1, -1, true)
         cnl = new CircuitNodeLink()
+
         cnl.num = j + postCount
         cnl.elm = circuitElm
         cn.links.push cnl

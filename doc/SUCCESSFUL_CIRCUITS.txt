@@ -126,7 +126,6 @@ norton
 notch
 npn
 ohms
-opamp-regulator
 opamp
 opampfeedback
 opint
@@ -162,6 +161,16 @@ switchedcap
 switchfilter
 synccounter
 thevenin
+tl
+tlfreq
+tllight
+tllopass
+tlmatch1
+tlmatch2
+tlmis1
+tlmismatch
+tlstand
+tlterm
 trans-diffamp-common
 trans-diffamp-cursrc
 trans-diffamp
