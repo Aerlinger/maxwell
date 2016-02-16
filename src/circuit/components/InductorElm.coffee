@@ -111,8 +111,8 @@ class InductorElm extends CircuitComponent
   getVoltageDiff: ->
     @volts[0] - @volts[1]
 
-  toString: ->
-    "InductorElm"
+  getName: ->
+    "Inductor"
 
 
 module.exports = InductorElm

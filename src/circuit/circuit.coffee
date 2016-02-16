@@ -129,7 +129,7 @@ class Circuit extends Observer
 
     @elementList.push newElement
 
-    newElement.onSolder()
+    newElement.onSolder(this)
 
     @invalidate()
     @recomputeBounds()

@@ -146,7 +146,7 @@ class CapacitorElm extends CircuitComponent
   needsShortcut: ->
     true
 
-  toString: ->
-    "CapacitorElm"
+  getName: ->
+    "Capacitor"
 
 module.exports = CapacitorElm

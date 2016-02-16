@@ -496,7 +496,7 @@ class CircuitComponent
     field_metadata
 
 
-  onSolder: ->
+  onSolder: (circuit) ->
 
   onclick: ->
 

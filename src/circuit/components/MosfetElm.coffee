@@ -69,8 +69,8 @@ class MosfetElm extends CircuitComponent
   nonLinear: ->
     true
 
-  toString: ->
-    "MosfetElm"
+  getName: ->
+    "Mosfet"
 
 #  drawDigital: ->
 #    (@flags & MosfetElm.FLAG_DIGITAL) isnt 0

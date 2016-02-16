@@ -47,6 +47,7 @@ DacElm = require('./components/DacElm.coffee')
 AdcElm = require('./components/AdcElm.coffee')
 VcoElm = require('./components/VcoElm.coffee')
 PhaseCompElm = require('./components/PhaseCompElm.coffee')
+TransLineElm = require('./components/TransLineElm.coffee')
 
 TransformerElm = require('./components/TransformerElm.coffee')
 
@@ -141,7 +142,7 @@ class ComponentRegistry
     '168': LatchElm
 #    '169': TappedTransformerElm
     '170': SweepElm
-#    '171': TransLineElm
+    '171': TransLineElm
     '172': VarRailElm
 #    '173': TriodeElm
     '174': PotElm

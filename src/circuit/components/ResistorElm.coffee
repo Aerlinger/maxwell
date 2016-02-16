@@ -85,7 +85,4 @@ class ResistorElm extends CircuitComponent
 
     stamper.stampResistor @nodes[0], @nodes[1], @resistance
 
-  toString: ->
-    "ResistorElm"
-
 module.exports = ResistorElm

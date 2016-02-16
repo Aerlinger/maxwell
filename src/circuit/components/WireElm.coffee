@@ -12,12 +12,8 @@ class WireElm extends CircuitComponent
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)
 
-  toString: ->
-    "WireElm"
-
   getName: ->
     "Wire"
-
 
   draw: (renderContext) ->
     if CircuitComponent.DEBUG

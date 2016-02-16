@@ -47,7 +47,7 @@ class SweepElm extends CircuitComponent
 
     super(xa, ya, xb, yb, params, f)
 
-  onSolder: ->
+  onSolder: (circuit) ->
     @reset()
 
   getDumpType: ->

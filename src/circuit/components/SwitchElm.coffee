@@ -93,7 +93,7 @@ class SwitchElm extends CircuitComponent
 
     renderContext.drawPosts(this)
 
-  name: ->
+  getName: ->
     "Basic Switch"
 
   calculateCurrent: ->
@@ -125,9 +125,5 @@ class SwitchElm extends CircuitComponent
 
   isWire: ->
     true
-
-  toString: ->
-    "SwitchElm"
-
 
 module.exports = SwitchElm

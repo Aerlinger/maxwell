@@ -248,8 +248,6 @@ class TransistorElm extends CircuitComponent
 
       @arrowPoly = Util.calcArrow(@emit[0], pt, 8, 4)
 
-
-
   limitStep: (vnew, vold) ->
     arg = 0  # TODO
     oo = vnew
