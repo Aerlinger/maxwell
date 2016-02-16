@@ -44,6 +44,7 @@ JKFlipFlopElm = require('./components/JKFlipFlopElm.coffee')
 DFlipFlopElm = require('./components/DFlipFlopElm.coffee')
 CounterElm = require('./components/CounterElm.coffee')
 DacElm = require('./components/DacElm.coffee')
+AdcElm = require('./components/AdcElm.coffee')
 VcoElm = require('./components/VcoElm.coffee')
 PhaseCompElm = require('./components/PhaseCompElm.coffee')
 
@@ -136,7 +137,7 @@ class ComponentRegistry
     '164': CounterElm
     '165': TimerElm
     '166': DacElm
-#    '167': ADCElm
+    '167': AdcElm
     '168': LatchElm
 #    '169': TappedTransformerElm
     '170': SweepElm
