@@ -47,6 +47,8 @@ DacElm = require('./components/DacElm.coffee')
 AdcElm = require('./components/AdcElm.coffee')
 VcoElm = require('./components/VcoElm.coffee')
 PhaseCompElm = require('./components/PhaseCompElm.coffee')
+SevenSegElm = require('./components/SevenSegElm.coffee')
+
 TransLineElm = require('./components/TransLineElm.coffee')
 
 TransformerElm = require('./components/TransformerElm.coffee')
@@ -128,7 +130,7 @@ class ComponentRegistry
     '154': XorGateElm
     '155': DFlipFlopElm
     '156': JKFlipFlopElm
-#    '157': SevenSegElm
+    '157': SevenSegElm
     '158': VcoElm
     '159': AnalogSwitchElm
     '160': AnalogSwitch2Elm

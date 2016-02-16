@@ -171,7 +171,6 @@ ttlinverter
 ttlnand
 ttlnor
 twint
-vco
 voltdivide
 voltdouble
 voltdouble2
