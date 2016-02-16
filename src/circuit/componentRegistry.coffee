@@ -48,6 +48,7 @@ AdcElm = require('./components/AdcElm.coffee')
 VcoElm = require('./components/VcoElm.coffee')
 PhaseCompElm = require('./components/PhaseCompElm.coffee')
 SevenSegElm = require('./components/SevenSegElm.coffee')
+CC2Elm = require('./components/CC2Elm.coffee')
 
 TransLineElm = require('./components/TransLineElm.coffee')
 
@@ -151,7 +152,7 @@ class ComponentRegistry
 #    '175': TunnelDiodeElm
 #    '177': SCRElm
 #    '178': RelayElm
-#    '179': CC2Elm
+    '179': CC2Elm
 #    '181': LampElm
     '187': SparkGapElm
     'A': AntennaElm

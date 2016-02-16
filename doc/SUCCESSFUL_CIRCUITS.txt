@@ -32,6 +32,10 @@ capmultcaps
 capmultfreq
 cappar
 capseries
+cc2
+cc2n
+ccdiff
+ccint
 ceamp
 classd
 clockedsrff

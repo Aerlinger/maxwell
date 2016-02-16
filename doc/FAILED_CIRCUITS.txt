@@ -4,12 +4,8 @@
 7segdecoder
 amdetect
 amp-integ
-cc2
-cc2n
-ccdiff
 cciamp
 ccinductor
-ccint
 ccitov
 ccvccs
 cmosff

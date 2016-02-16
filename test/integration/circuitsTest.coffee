@@ -46,7 +46,10 @@ filenames = glob.sync "./circuits/*.txt", {}
 
 @files = _.difference(@files, @skip)
 #@files = [
-#  "fulladd"
+#  "cc2"
+#  "cc2imp"
+#  "cc2impn"
+#  "cc2n"
 #]
 
 for circuit_name in @files
@@ -62,7 +65,7 @@ for circuit_name in @files
         analysisValidationFileName = "./dump/#{circuit_name}.txt_ANALYSIS.json"
         analysisValidationJson = JSON.parse(fs.readFileSync(analysisValidationFileName))
 
-        fs.writeFileSync("#{circuit_name}_test_analysis.json", JSON.stringify(circuit.toJson(), null, 2))
+#        fs.writeFileSync("#{circuit_name}_test_analysis.json", JSON.stringify(circuit.toJson(), null, 2))
 
         deltas = approx_diff(circuit.toJson(), analysisValidationJson)
 

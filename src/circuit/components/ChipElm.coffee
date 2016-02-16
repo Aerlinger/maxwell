@@ -37,7 +37,7 @@ class ChipElm extends CircuitComponent
 
     @setSize(if ((f & ChipElm.FLAG_SMALL) != 0) then 1 else 2)
 
-    @params = {}
+    @params ||= {}
 
     if @needsBits()
       @bits = parseInt(params.shift())
