@@ -20,10 +20,10 @@ filenames = glob.sync "./circuits/*.txt", {}
 @files = filenames.map (file) ->
   path.basename(file, ".txt")
 
-@skip = [
-  "counter", "555monostable", "555sequencer", "3-invert", "dram", "fulladd", "fullrect", "3-f220", "3-f221", "3-f211",
-  "cmosnand", "cmosinverterslow", "cmosff", "ccinductor"
-]
+#@skip = [
+#  "counter", "555monostable", "555sequencer", "3-invert", "dram", "fulladd", "fullrect", "3-f220", "3-f221", "3-f211",
+#  "cmosnand", "cmosinverterslow", "cmosff", "ccinductor"
+#]
 
 @full_working = [
   'allpass2', 'amp-dfdx', 'amp-diff', 'amp-follower','amp-fullrect','amp-invert','amp-noninvert','amp-rect',
@@ -46,9 +46,7 @@ filenames = glob.sync "./circuits/*.txt", {}
 
 @files = _.difference(@files, @skip)
 #@files = [
-#  "tlfreq"
-#  "tllight"
-#  "tl"
+#  "fulladd"
 #]
 
 for circuit_name in @files
@@ -64,7 +62,7 @@ for circuit_name in @files
         analysisValidationFileName = "./dump/#{circuit_name}.txt_ANALYSIS.json"
         analysisValidationJson = JSON.parse(fs.readFileSync(analysisValidationFileName))
 
-        #fs.writeFileSync("#{circuit_name}_test_analysis.json", JSON.stringify(circuit.toJson(), null, 2))
+        fs.writeFileSync("#{circuit_name}_test_analysis.json", JSON.stringify(circuit.toJson(), null, 2))
 
         deltas = approx_diff(circuit.toJson(), analysisValidationJson)
 

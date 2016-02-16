@@ -1,7 +1,12 @@
 3-cgand
 3-cgor
+3-f211
+3-f220
+3-f221
+3-invert
 555int
 555lowduty
+555monostable
 555pulsemod
 555saw
 555schmitt
@@ -32,11 +37,14 @@ classd
 clockedsrff
 cmosinverter
 cmosinvertercap
+cmosinverterslow
 cmosmsff
+cmosnand
 cmosnor
 cmostransgate
 cmosxor
 colpitts
+counter
 coupled1
 coupled2
 coupled3
@@ -69,6 +77,8 @@ filt-lopass
 filt-vcvs-hipass
 filt-vcvs-lopass
 follower
+fulladd
+fullrect
 fullrectf
 graycode
 grid
@@ -126,6 +136,7 @@ norton
 notch
 npn
 ohms
+opamp-regulator
 opamp
 opampfeedback
 opint
@@ -180,6 +191,7 @@ ttlinverter
 ttlnand
 ttlnor
 twint
+vco
 voltdivide
 voltdouble
 voltdouble2

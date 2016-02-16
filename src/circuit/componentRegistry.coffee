@@ -161,7 +161,7 @@ class ComponentRegistry
     'O': OutputElm
     'R': RailElm
     'S': Switch2Elm
-    'T': TransformerElm
+#    'T': TransformerElm
     'a': OpAmpElm
     'c': CapacitorElm
     'd': DiodeElm

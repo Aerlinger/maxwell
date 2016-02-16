@@ -1,5 +1,6 @@
 3way
 555missing
+555sequencer
 7segdecoder
 amdetect
 amp-integ
@@ -7,15 +8,18 @@ cc2
 cc2n
 ccdiff
 cciamp
+ccinductor
 ccint
 ccitov
 ccvccs
+cmosff
 counter8
 cube
 default
 deltasigma
 digcompare
 digsine
+dram
 dtlnor
 flashadc
 freqdouble
@@ -67,5 +71,3 @@ wheatstone
 4way
 cc2imp
 cc2impn
-opamp-regulator
-vco
