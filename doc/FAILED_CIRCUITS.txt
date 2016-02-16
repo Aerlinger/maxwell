@@ -12,17 +12,13 @@ ccitov
 ccvccs
 counter8
 cube
-deccounter
 default
 deltasigma
 digcompare
 digsine
-divideby2
-divideby3
 dtlnor
 flashadc
 freqdouble
-graycode
 hfadc
 howland
 indmultfreq
@@ -36,7 +32,6 @@ mux3state
 opint-current
 opint-invert-amp
 opint-slew
-phasecomp
 phasecompint
 pll
 pll2
@@ -57,7 +52,6 @@ rossler
 scr
 scractrig
 swtreedac
-synccounter
 tdiode
 tdosc
 tdrelax
@@ -83,4 +77,3 @@ wheatstone
 4way
 cc2imp
 cc2impn
-opamp-regulator

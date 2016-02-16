@@ -7,4 +7,3 @@ class PushSwitchElm extends SwitchElm
     super(xa, xb, true)
 
 module.exports = PushSwitchElm
-

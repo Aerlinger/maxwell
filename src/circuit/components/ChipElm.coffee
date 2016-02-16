@@ -152,7 +152,7 @@ class ChipElm extends CircuitComponent
     for i in [0...@getPostCount()]
       p = @pins[i]
       if p.output
-        stamper.updateVoltageSourc(0, @nodes[i], p.voltSource, p.value ? 5 : 0)
+        stamper.updateVoltageSource(0, @nodes[i], p.voltSource, p.value ? 5 : 0)
 
   stamp: (stamper) ->
     for i in [0...@getPostCount()]

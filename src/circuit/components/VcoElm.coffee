@@ -27,6 +27,8 @@ class VcoElm extends ChipElm
     158
 
   setupPins: ->
+    @sizeX = 2
+    @sizeY = 4
     @pins = new Array(6)
 
     @pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "Vi")
@@ -76,8 +78,8 @@ class VcoElm extends ChipElm
 
     @updateVoltageSource(0, @nodes[1], @pins[1].voltSource, vo)
 
-    cur1 = @getParentCircuit().getNodeList().length + @pins[4].voltSource
-    cur2 = @getParentCircuit().getNodeList().length + @pins[5].voltSource
+    cur1 = @getParentCircuit().getNodes().length + @pins[4].voltSource
+    cur2 = @getParentCircuit().getNodes().length + @pins[5].voltSource
 
     stamper.stampMatrix(@nodes[2], cur1, dir)
     stamper.stampMatrix(@nodes[2], cur2, dir)

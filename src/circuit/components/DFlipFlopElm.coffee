@@ -26,6 +26,9 @@ class DFlipFlopElm extends ChipElm
     (@flags & DFlipFlopElm.FLAG_RESET) != 0
 
   setupPins: ->
+    @sizeX = 2
+    @sizeY = 3
+
     @pins = new Array(@getPostCount())
 
     @pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "D")

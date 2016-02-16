@@ -72,7 +72,7 @@ class MatrixStamper
   current from cn1 to cn2 is equal to voltage from vn1 to 2, divided by g
   ###
   stampVCCurrentSource: (cn1, cn2, vn1, vn2, value) ->
-    if isNaN(gain) or Util.isInfinite(gain)
+    if isNaN(value) or Util.isInfinite(value)
       @Circuit.halt "Invalid gain on voltage controlled current source"
 
 #    console.log("stampVCCurrentSource: " + cn1 + " " + cn2 + " " + vn1 + " " + vn2 + " " + value)

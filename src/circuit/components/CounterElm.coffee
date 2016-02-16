@@ -30,14 +30,14 @@ class CounterElm extends ChipElm
     @bits
 
   setupPins: ->
-    sizeX = 2
-    sizeY = if (@bits > 2) then @bits else 2
+    @sizeX = 2
+    @sizeY = if (@bits > 2) then @bits else 2
 
     @pins = new Array(@getPostCount())
 
     @pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "")
     @pins[0].clock = true
-    @pins[1] = new ChipElm.Pin(sizeY - 1, ChipElm.SIDE_W, "R")
+    @pins[1] = new ChipElm.Pin(@sizeY - 1, ChipElm.SIDE_W, "R")
     @pins[1].bubble = true
 
     for i in [0...@bits]
@@ -46,7 +46,7 @@ class CounterElm extends ChipElm
       @pins[ii].output = @pins[ii].state = true
 
     if (@hasEnable())
-      @pins[@bits + 2] = new ChipElm.Pin(sizeY - 2, ChipElm.SIDE_W, "En")
+      @pins[@bits + 2] = new ChipElm.Pin(@sizeY - 2, ChipElm.SIDE_W, "En")
 
     @allocNodes()
 

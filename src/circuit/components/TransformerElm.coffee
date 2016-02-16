@@ -2,6 +2,7 @@ CircuitComponent = require('../circuitComponent.coffee')
 Util = require('../../util/util.coffee')
 
 class TransformerElm extends CircuitComponent
+  @FLAG_BACK_EULER = 2
 
   @Fields = {
     inductance: {
@@ -41,7 +42,7 @@ class TransformerElm extends CircuitComponent
     @noDiagonal = true
 
   isTrapezoidal: ->
-    true
+    (@flags & TransformerElm.FLAG_BACK_EULER) == 0
 
   setPoints: ->
     super()
@@ -73,6 +74,13 @@ class TransformerElm extends CircuitComponent
 
   getPost: (n) ->
     @ptEnds[n]
+
+  calculateCurrent: ->
+    voltdiff1 = @volts[0] - @volts[2]
+    voltdiff2 = @volts[1] - @volts[3]
+    @current[0] = voltdiff1 * @a1 + voltdiff2 * @a2 + @curSourceValue1
+    @current[1] = voltdiff1 * @a3 + voltdiff2 * @a4 + @curSourceValue2
+
 
   getPostCount: ->
     4
@@ -109,6 +117,25 @@ class TransformerElm extends CircuitComponent
 
 
   stamp: (stamper) ->
+#    double l1 = inductance;
+#    double l2 = inductance * ratio * ratio;
+#    double m = couplingCoef * Math.sqrt(l1 * l2);
+#    // build inverted matrix
+#    double deti = 1 / (l1 * l2 - m * m);
+#    double ts = isTrapezoidal() ? sim.timeStep / 2 : sim.timeStep;
+#    a1 = l2 * deti * ts; // we multiply dt/2 into a1..a4 here
+#    a2 = -m * deti * ts;
+#    a3 = -m * deti * ts;
+#    a4 = l1 * deti * ts;
+#    sim.stampConductance(nodes[0], nodes[2], a1);
+#    sim.stampVCCurrentSource(nodes[0], nodes[2], nodes[1], nodes[3], a2);
+#    sim.stampVCCurrentSource(nodes[1], nodes[3], nodes[0], nodes[2], a3);
+#    sim.stampConductance(nodes[1], nodes[3], a4);
+#    sim.stampRightSide(nodes[0]);
+#    sim.stampRightSide(nodes[1]);
+#    sim.stampRightSide(nodes[2]);
+#    sim.stampRightSide(nodes[3]);
+
     l1 = @inductance
     l2 = @inductance * @ratio * @ratio
 
@@ -121,15 +148,15 @@ class TransformerElm extends CircuitComponent
     else
       ts = @getParentCircuit().timeStep()
 
-    a1 = l2 * deti * ts
-    a2 = -m * deti * ts
-    a3 = -m * deti * ts
-    a4 = l1 * deti * ts
+    @a1 = l2 * deti * ts
+    @a2 = -m * deti * ts
+    @a3 = -m * deti * ts
+    @a4 = l1 * deti * ts
 
-    stamper.stampConductance(@nodes[0], @nodes[2], a1)
-    stamper.stampVCCurrentSource(@nodes[0], @nodes[2], @nodes[1], @nodes[3], a2)
-    stamper.stampVCCurrentSource(@nodes[1], @nodes[3], @nodes[0], @nodes[2], a3)
-    stamper.stampConductance(@nodes[1], @nodes[3], a4)
+    stamper.stampConductance(@nodes[0], @nodes[2], @a1)
+    stamper.stampVCCurrentSource(@nodes[0], @nodes[2], @nodes[1], @nodes[3], @a2)
+    stamper.stampVCCurrentSource(@nodes[1], @nodes[3], @nodes[0], @nodes[2], @a3)
+    stamper.stampConductance(@nodes[1], @nodes[3], @a4)
 
     stamper.stampRightSide(@nodes[0])
     stamper.stampRightSide(@nodes[1])
@@ -145,8 +172,8 @@ class TransformerElm extends CircuitComponent
     voltdiff2 = @volts[1] - @volts[3]
 
     if @isTrapezoidal()
-      @curSourceValue1 = voltdiff1 * a1 + voltdiff2 * a2 + @current[0]
-      @curSourceValue2 = voltdiff1 * a3 + voltdiff2 * a4 + @current[1]
+      @curSourceValue1 = voltdiff1 * @a1 + voltdiff2 * @a2 + @current[0]
+      @curSourceValue2 = voltdiff1 * @a3 + voltdiff2 * @a4 + @current[1]
     else
       @curSourceValue1 = @current[0]
       @curSourceValue2 = @current[1]
@@ -156,7 +183,7 @@ class TransformerElm extends CircuitComponent
       return true
 
     if @comparePair(n1, n2, 1, 3)
-      return false
+      return true
 
     return false
 

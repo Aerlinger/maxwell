@@ -47,6 +47,7 @@ currentsrcramp
 dac
 darlington
 dcrestoration
+deccounter
 decoder
 delayrc
 diff
@@ -54,6 +55,8 @@ diodeclip
 diodecurve
 diodelimit
 diodevar
+divideby2
+divideby3
 dtlinverter
 dtlnand
 eclnor
@@ -67,6 +70,7 @@ filt-vcvs-hipass
 filt-vcvs-lopass
 follower
 fullrectf
+graycode
 grid
 grid2
 gyrator
@@ -122,10 +126,12 @@ norton
 notch
 npn
 ohms
+opamp-regulator
 opamp
 opampfeedback
 opint
 peak-detect
+phasecomp
 phaseseq
 phaseshiftosc
 phasesplit
@@ -154,6 +160,7 @@ spark-sawtooth
 spikegen
 switchedcap
 switchfilter
+synccounter
 thevenin
 trans-diffamp-common
 trans-diffamp-cursrc
