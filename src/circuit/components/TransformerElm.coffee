@@ -35,11 +35,21 @@ class TransformerElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
+    @width = Math.max(32, Math.abs(yb - ya))
+
     super(xa, ya, xb, yb, params, f)
 
+    @curcount = 0
+
     @current = [@current0, @current1]
+    @params["current"] = [@current0, @current1]
+
+    delete @params["current0"]
+    delete @params["current1"]
 
     @noDiagonal = true
+
+#    @setPoints()
 
   isTrapezoidal: ->
     (@flags & TransformerElm.FLAG_BACK_EULER) == 0
@@ -56,14 +66,14 @@ class TransformerElm extends CircuitComponent
     @ptEnds[0] = @point1
     @ptEnds[1] = @point2
 
+#    console.log("SP: ", @point1, @point2, 0, -@dsign, @width)
     @ptEnds[2] = Util.interpolate(@point1, @point2, 0, -@dsign * @width)
     @ptEnds[3] = Util.interpolate(@point1, @point2, 1, -@dsign * @width)
 
     ce = 0.5 - 12 / @dn
     cd = 0.5 - 2 / @dn
 
-    i=0
-
+    i = 0
     while i < 4
       @ptCoil[i]     = Util.interpolate(@ptEnds[i], @ptEnds[i + 1], ce)
       @ptCoil[i + 1] = Util.interpolate(@ptEnds[i], @ptEnds[i + 1], 1 - ce)
@@ -75,12 +85,16 @@ class TransformerElm extends CircuitComponent
   getPost: (n) ->
     @ptEnds[n]
 
-  calculateCurrent: ->
-    voltdiff1 = @volts[0] - @volts[2]
-    voltdiff2 = @volts[1] - @volts[3]
-    @current[0] = voltdiff1 * @a1 + voltdiff2 * @a2 + @curSourceValue1
-    @current[1] = voltdiff1 * @a3 + voltdiff2 * @a4 + @curSourceValue2
 
+  #CURRENT: 0.0 0.0 0.0 4.076513432371698E-11
+  #CURRENT: 3.8782799757450996E-4 0.0 0.0 4.076513432371698E-11
+  #CURRENT: 3.8782799757450996E-4 -4.5613036132278495 0.0 4.076513432371698E-11
+  #CURRENT: 3.8782799757450996E-4 -4.5613036132278495 0.0 4.076513432371698E-11
+
+  #CALC CURRENT: 0,0,0,4.967879427950679
+  #CALC CURRENT: 0.00038782799757450996,0,0,4.967879427950679
+  #CALC CURRENT: 0.00038782799757450996,0.4065758146820641,0,4.967879427950679
+  #CALC CURRENT: 0.00038782799757450996,0.4065758146820641,0,4.967879427950679
 
   getPostCount: ->
     4
@@ -139,7 +153,8 @@ class TransformerElm extends CircuitComponent
     l1 = @inductance
     l2 = @inductance * @ratio * @ratio
 
-    m = @couplingCoef  * Math.sqrt(l1, l2)
+    #    deti = 1 / (l1 * l2 - m * m);
+    m = @couplingCoef  * Math.sqrt(l1 * l2)
 
     deti = 1.0 / (l1 * l2 - m * m)
 
@@ -148,26 +163,58 @@ class TransformerElm extends CircuitComponent
     else
       ts = @getParentCircuit().timeStep()
 
+#    console.log("STAMP", l1, l2, deti, ts)
     @a1 = l2 * deti * ts
     @a2 = -m * deti * ts
     @a3 = -m * deti * ts
     @a4 = l1 * deti * ts
+#    console.log("STAMP", @a1, @a2, @a3, @a4)
 
     stamper.stampConductance(@nodes[0], @nodes[2], @a1)
     stamper.stampVCCurrentSource(@nodes[0], @nodes[2], @nodes[1], @nodes[3], @a2)
     stamper.stampVCCurrentSource(@nodes[1], @nodes[3], @nodes[0], @nodes[2], @a3)
     stamper.stampConductance(@nodes[1], @nodes[3], @a4)
 
+#    console.log(@nodes)
     stamper.stampRightSide(@nodes[0])
     stamper.stampRightSide(@nodes[1])
     stamper.stampRightSide(@nodes[2])
     stamper.stampRightSide(@nodes[3])
 
+  calculateCurrent: ->
+#    console.log("CALC CURRENT (volts): #{@volts} #{@curSourceValue1} #{@curSourceValue2}")
+
+    voltdiff1 = @volts[0] - @volts[2]
+    voltdiff2 = @volts[1] - @volts[3]
+    @current[0] = voltdiff1 * @a1 + voltdiff2 * @a2 + @curSourceValue1
+    @current[1] = voltdiff1 * @a3 + voltdiff2 * @a4 + @curSourceValue2
+
+#  setNode: (j, k) ->
+#    super()
+#    if j==3
+#      console.log("K = #{k}")
+#      console.trace()
+
   doStep: (stamper) ->
+#    console.log("DO STEP", @curSourceValue1, @curSourceValue2, @isTrapezoidal())
+#    console.log(@nodes)
     stamper.stampCurrentSource(@nodes[0], @nodes[2], @curSourceValue1)
     stamper.stampCurrentSource(@nodes[1], @nodes[3], @curSourceValue2)
 
+#    console.log(@Circuit.Solver.circuitRightSide)
+
   startIteration: ->
+
+    #    double voltdiff1 = volts[0] - volts[2];
+    #    double voltdiff2 = volts[1] - volts[3];
+    #    if (isTrapezoidal()) {
+    #    curSourceValue1 = voltdiff1 * a1 + voltdiff2 * a2 + current[0];
+    #      curSourceValue2 = voltdiff1 * a3 + voltdiff2 * a4 + current[1];
+    #    } else {
+    #  curSourceValue1 = current[0];
+    #    curSourceValue2 = current[1];
+    #    }
+
     voltdiff1 = @volts[0] - @volts[2]
     voltdiff2 = @volts[1] - @volts[3]
 
@@ -177,6 +224,8 @@ class TransformerElm extends CircuitComponent
     else
       @curSourceValue1 = @current[0]
       @curSourceValue2 = @current[1]
+
+#    console.log("START ITERATION ", voltdiff1, voltdiff2, @curSourceValue1, @curSourceValue2)
 
   getConnection: (n1, n2) ->
     if @comparePair(n1, n2, 0, 2)

@@ -166,7 +166,7 @@ class CircuitComponent
     @volts[0] - @volts[1]
 
   getPower: ->
-    @getVoltageDiff() * @current
+    @getVoltageDiff() * @getCurrent()
 
   calculateCurrent: ->
     # To be implemented by subclasses
@@ -191,12 +191,13 @@ class CircuitComponent
     "[v #{tidyVoltage}, i #{tidyCurrent}]\t#{@getDumpType()} #{@x1} #{@y1} #{@x2} #{@y2}"
 
   startIteration: ->
-# Called on reactive elements such as inductors and capacitors.
+    # Called on reactive elements such as inductors and capacitors.
 
   getPostVoltage: (post_idx) ->
     @volts[post_idx]
 
   setNodeVoltage: (node_idx, voltage) ->
+#    console.log(node_idx + " -> " + voltage)
     @volts[node_idx] = voltage
     @calculateCurrent()
 

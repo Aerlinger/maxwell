@@ -8,7 +8,7 @@ _ = require("lodash")
 
 chai = require('chai')
 
-chai.config.showDiff = false
+#chai.config.showDiff = false
 
 assert = chai.assert
 expect = chai.expect
@@ -45,12 +45,10 @@ filenames = glob.sync "./circuits/*.txt", {}
 ]
 
 @files = _.difference(@files, @skip)
-#@files = [
-#  "cc2"
-#  "cc2imp"
-#  "cc2impn"
-#  "cc2n"
-#]
+@files = [
+  "transformer"
+#  "ringmod"
+]
 
 for circuit_name in @files
   do (circuit_name) ->

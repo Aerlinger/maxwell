@@ -139,11 +139,15 @@ class CircuitSolver
         k = 0
         while k < @Circuit.numNodes()
           cn = @Circuit.getNode(k)
-#          console.log("postPt #{postPt}, cn: #{cn}")
+#          console.log("#{i} #{j} #{k}: postPt #{postPt}, cn: #{cn}")
           if postPt.x is cn.x and postPt.y is cn.y
             break
           k++
 
+#        if (k==7 && @Circuit.numNodes() == 7)
+#          console.log("ce = #{circuitElm} post: #{postPt} cn=#{@Circuit.getNode(k)}")
+#
+#        console.log("k, nn = ", k, @Circuit.numNodes())
         if k is @Circuit.numNodes()
           cn = new CircuitNode(postPt.x, postPt.y)
 
@@ -428,6 +432,7 @@ class CircuitSolver
       for j in [0...@matrixSize]
         rowInfo = @circuitRowInfo[j]
         if rowInfo.type is RowInfo.ROW_CONST
+#          console.log("newRS", rowInfo.value * @circuitMatrix[i][j])
           newRS[ii] -= rowInfo.value * @circuitMatrix[i][j]
         else
           newMatx[ii][rowInfo.mapCol] += @circuitMatrix[i][j]
@@ -517,24 +522,34 @@ class CircuitSolver
             @Circuit.halt "Singular matrix in nonlinear circuit!", null
             return
 
+#        console.log("PRE SOLVE ", @circuitRightSide)
+#        console.log("PREMUTE", @circuitPermute)
+
         @luSolve @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide
+
+#        console.log("POST SOLVE ", @circuitRightSide)
 
         for j in [0...@circuitMatrixFullSize]
           rowInfo = @circuitRowInfo[j]
           res = 0
           if rowInfo.type is RowInfo.ROW_CONST
             res = rowInfo.value
+#            console.log("RowInfo.ROW_CONST ->", res)
           else
             res = @circuitRightSide[rowInfo.mapCol]
+#            console.log("ELSE ->", res)
+
           if isNaN(res)
             @converged = false
             break
           if j < (@Circuit.numNodes() - 1)
             circuitNode = @Circuit.nodeList[j + 1]
-            for cn1 in circuitNode.links
-              cn1.elm.setNodeVoltage cn1.num, res
+            for cnl in circuitNode.links
+#              console.log("SET NODE VOLTAGE`", cnl.num, res, " #{rowInfo}")
+              cnl.elm.setNodeVoltage cnl.num, res
           else
             ji = j - (@Circuit.numNodes() - 1)
+#            console.log "RES", ji, res
             @Circuit.voltageSources[ji].setCurrent ji, res
 
         break unless @circuitNonLinear
@@ -684,6 +699,8 @@ class CircuitSolver
       break unless swap is 0
       ++i
 
+#    console.log("2: ", @circuitRightSide)
+
     bi = i++
     while i < numRows
       row = pivotVector[i]
@@ -697,19 +714,25 @@ class CircuitSolver
         ++j
       circuitRightSide[i] = tot
       ++i
-    i = numRows - 1
 
+#    console.log("3: ", @circuitRightSide)
+
+    i = numRows - 1
     while i >= 0
       total = circuitRightSide[i]
 
       # back-substitution using the upper triangular matrix
       j = i + 1
-      while j isnt numRows
+      while j != numRows
         total -= circuitMatrix[i][j] * circuitRightSide[j]
+#        console.log(i, j, total, circuitRightSide[j], circuitMatrix[i][j])
         ++j
+
       circuitRightSide[i] = total / circuitMatrix[i][i]
 
       i--
+
+#    console.log("4: ", @circuitRightSide)
 
   dump: ->
     out = ""

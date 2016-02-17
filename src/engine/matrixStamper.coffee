@@ -60,7 +60,7 @@ class MatrixStamper
     if isNaN(r0) or Util.isInfinite(r0)
       @Circuit.halt "bad conductance"
 
-    #console.log("Stamp conductance: " + n1 + " " + n2 + " " + r0 + " ");
+#    console.log("Stamp conductance: " + n1 + " " + n2 + " " + r0 + " ");
 
     @stampMatrix n1, n1, r0
     @stampMatrix n2, n2, r0
@@ -76,6 +76,11 @@ class MatrixStamper
       @Circuit.halt "Invalid gain on voltage controlled current source"
 
 #    console.log("stampVCCurrentSource: " + cn1 + " " + cn2 + " " + vn1 + " " + vn2 + " " + value)
+
+#    stampMatrix(cn1, vn1, g);
+#    stampMatrix(cn2, vn2, g);
+#    stampMatrix(cn1, vn2, -g);
+#    stampMatrix(cn2, vn1, -g);
 
     @stampMatrix cn1, vn1, value
     @stampMatrix cn2, vn2, value
@@ -121,7 +126,7 @@ class MatrixStamper
         row = @Circuit.Solver.circuitRowInfo[row - 1].mapRow
         rowInfo = @Circuit.Solver.circuitRowInfo[col - 1]
         if rowInfo.type is RowInfo.ROW_CONST
-#          console.log("if rowInfo.type is RowInfo.ROW_CONST", row, col, value)
+#          console.log("if rowInfo.type is RowInfo.ROW_CONST", row, value * rowInfo.value)
           @Circuit.Solver.circuitRightSide[row] -= value * rowInfo.value
           return
         col = rowInfo.mapCol
@@ -141,15 +146,17 @@ class MatrixStamper
       if row > 0
 #        console.log("rschanges true " + (row - 1));
         @Circuit.Solver.circuitRowInfo[row - 1].rsChanges = true
-#        console.log("rschanges true " + (row-1))
     else
       if row > 0
         if @Circuit.Solver.circuitNeedsMap
+#          console.log("ELSE " + row + " " + value)
           row = @Circuit.Solver.circuitRowInfo[row - 1].mapRow
 #          console.log("if @Circuit.Solver.circuitNeedsMap", row, value)
 #            console.log("stamping rs " + row + " " + value);
         else
           row--
+
+#        console.log("circuitRightSide", row, value)
         @Circuit.Solver.circuitRightSide[row] += value
 
 

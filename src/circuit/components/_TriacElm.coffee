@@ -2,7 +2,6 @@ CircuitComponent = require("../CircuitComponent.coffee")
 Util = require('../../util/util.coffee')
 
 class TriacElm extends CircuitComponent
-
   @Fields = {
     volts: {
       name: "Volts"
@@ -22,11 +21,8 @@ class TriacElm extends CircuitComponent
     }
   }
 
-
   constructor: (xa, xb, ya, yb, params, f) ->
     super(xa, xb, ya, yb, params, f)
-
-
 
 
 module.exports = TriacElm

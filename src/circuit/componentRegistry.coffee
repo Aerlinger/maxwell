@@ -53,6 +53,7 @@ CC2Elm = require('./components/CC2Elm.coffee')
 TransLineElm = require('./components/TransLineElm.coffee')
 
 TransformerElm = require('./components/TransformerElm.coffee')
+TappedTransformerElm = require('./components/TappedTransformerElm.coffee')
 
 LedElm = require('./components/LedElm.coffee')
 PotElm = require('./components/PotElm.coffee')
@@ -143,7 +144,7 @@ class ComponentRegistry
     '166': DacElm
     '167': AdcElm
     '168': LatchElm
-#    '169': TappedTransformerElm
+    '169': TappedTransformerElm
     '170': SweepElm
     '171': TransLineElm
     '172': VarRailElm
