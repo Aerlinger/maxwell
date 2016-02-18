@@ -59,12 +59,10 @@ traffic
 transformerdc
 transformerdown
 transformerup
-triode
-triodeamp
+vco
 wheatstone
 4way
 cc2imp
 cc2impn
-opamp-regulator
 tesla
 transformer

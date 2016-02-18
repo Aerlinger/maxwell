@@ -140,6 +140,7 @@ norton
 notch
 npn
 ohms
+opamp-regulator
 opamp
 opampfeedback
 opint
@@ -190,11 +191,12 @@ trans-diffamp-cursrc
 trans-diffamp
 transswitch
 triangle
+triode
+triodeamp
 ttlinverter
 ttlnand
 ttlnor
 twint
-vco
 voltdivide
 voltdouble
 voltdouble2
