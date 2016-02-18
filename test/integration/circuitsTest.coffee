@@ -46,7 +46,8 @@ filenames = glob.sync "./circuits/*.txt", {}
 
 @files = _.difference(@files, @skip)
 @files = [
-  "relay"
+#  "scr"
+  "scractrig"
 ]
 
 for circuit_name in @files

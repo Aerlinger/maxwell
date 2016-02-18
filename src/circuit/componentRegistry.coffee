@@ -37,6 +37,7 @@ AnalogSwitchElm = require('./components/AnalogSwitchElm.coffee')
 AnalogSwitch2Elm = require('./components/AnalogSwitch2Elm.coffee')
 MemristorElm = require('./components/MemristorElm.coffee')
 RelayElm = require('./components/RelayElm.coffee')
+ScrElm = require('./components/SCRElm.coffee')
 
 DecadeElm = require('./components/DecadeElm.coffee')
 LatchElm = require('./components/LatchElm.coffee')
@@ -152,8 +153,8 @@ class ComponentRegistry
 #    '173': TriodeElm
     '174': PotElm
 #    '175': TunnelDiodeElm
-#    '177': SCRElm
-#    '178': RelayElm
+    '177': ScrElm
+    '178': RelayElm
     '179': CC2Elm
 #    '181': LampElm
     '187': SparkGapElm
@@ -164,7 +165,6 @@ class ComponentRegistry
     'O': OutputElm
     'R': RailElm
     'S': Switch2Elm
-#    'T': TransformerElm
     'a': OpAmpElm
     'c': CapacitorElm
     'd': DiodeElm
@@ -183,11 +183,6 @@ class ComponentRegistry
     'x': TextElm
     'z': ZenerElm
 
-#    'L': LogicInput
-#    'M': LogicOutput
-#   'I': Inverter
-#  171: TransmissionLine
-    178: RelayElm
 
   @InverseComponentDefs: {
     WireElm: 'w'
