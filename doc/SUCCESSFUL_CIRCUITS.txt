@@ -140,7 +140,6 @@ norton
 notch
 npn
 ohms
-opamp-regulator
 opamp
 opampfeedback
 opint
@@ -157,6 +156,11 @@ pushpull
 pushpullxover
 rectify
 relaxosc
+relay
+relayand
+relayff
+relayor
+relayxor
 res-par
 res-series
 resistors

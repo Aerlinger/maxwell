@@ -42,6 +42,9 @@ class LedElm extends DiodeElm
     @ledLead2 = Util.interpolate(@point1, @point2, .5 + cr / @dn)
     @ledCenter = Util.interpolate(@point1, @point2, .5)
 
+  needsShortcut: ->
+    false
+
   draw: (renderContext) ->
     if (@needsHighlight() || this == @dragElm)
       super(renderContext)

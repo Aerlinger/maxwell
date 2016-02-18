@@ -39,14 +39,8 @@ pll2a
 powerfactor1
 powerfactor2
 r2rladder
-relay
-relayand
-relayctr
-relayff
 relaymux
-relayor
 relaytff
-relayxor
 ringmod
 rossler
 scr
@@ -64,5 +58,7 @@ wheatstone
 4way
 cc2imp
 cc2impn
+opamp-regulator
+relayctr
 tesla
 transformer

@@ -11,12 +11,12 @@ define [], () ->
       @flags = 0
       @inductance = 0
       @compResistance = 0
-      @current = 0
+      @coilCurrent = 0
       @curSourceValue = 0
 
     setup: (ic, cr, f) ->
       @inductance = ic
-      @current = cr
+      @coilCurrent = cr
       @flags = f
 
     isTrapezoidal: ->
@@ -24,7 +24,7 @@ define [], () ->
 
     # @deprecated
     reset: ->
-      @current = 0
+      @coilCurrent = 0
 
     # @deprecated
     stamp: (stamper, n0, n1) ->
@@ -51,17 +51,17 @@ define [], () ->
 
     startIteration: (voltdiff) ->
       if @isTrapezoidal()
-        @curSourceValue = voltdiff / @compResistance + @current
+        @curSourceValue = voltdiff / @compResistance + @coilCurrent
       # backward euler
       else
-        @curSourceValue = @current
+        @curSourceValue = @coilCurrent
 
     calculateCurrent: (voltdiff) ->
       # we check compResistance because this might get called
       # before stamp(), which sets compResistance, causing
       # infinite current
-      @current = voltdiff / @compResistance + @curSourceValue  if @compResistance > 0
-      @current
+      @coilCurrent = voltdiff / @compResistance + @curSourceValue  if @compResistance > 0
+      @coilCurrent
 
     doStep: (stamper, voltdiff) ->
       stamper.stampCurrentSource @nodes[0], @nodes[1], @curSourceValue

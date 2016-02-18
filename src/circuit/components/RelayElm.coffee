@@ -42,7 +42,7 @@ class RelayElm extends CircuitComponent
 
 #    ind.setup(@inductance, @coilCurrent, Inductor.FLAG_BACK_EULER)
 #    @flags = RelayElm.FLAG_BACK_EULER
-    @current = @coilCurrent
+    @tempCurrent = @coilCurrent
     @compResistance = 0
     @curSourceValue = 0
 
@@ -70,6 +70,10 @@ class RelayElm extends CircuitComponent
     @swpoles = (new Point() for i in [0...3] for j in [0...@poleCount])
 
     for i in [0...@poleCount]
+      for j in [0...3]
+        @swposts[i][j] = new Point()
+        @swpoles[i][j] = new Point()
+
       @swpoles[i][0] = Util.interpolate(@lead1, @lead2, 0, -@openhs * 3 * i)
       @swpoles[i][1] = Util.interpolate(@lead1, @lead2, 1, -@openhs * 3 * i - @openhs)
       @swpoles[i][2] = Util.interpolate(@lead1, @lead2, 1, -@openhs * 3 * i + @openhs)
@@ -91,8 +95,6 @@ class RelayElm extends CircuitComponent
     @lines = new Array(@poleCount * 2)
 
   getPost: (n) ->
-    console.log(n, @swposts)
-
     if n < 3 * @poleCount
       return @swposts[Math.floor(n / 3)][n % 3]
 
@@ -105,8 +107,7 @@ class RelayElm extends CircuitComponent
     1
 
   isTrapezoidal: ->
-#    (@flags & RelayElm.FLAG_BACK_EULER) == 0
-    true
+    (@flags & RelayElm.FLAG_BACK_EULER) == 0
 
   getDumpType: ->
     178
@@ -115,6 +116,7 @@ class RelayElm extends CircuitComponent
     super()
 
     @current = 0
+    @tempCurrent = 0
     @coilCurrent = 0
     @coilCurCount = 0
 
@@ -122,34 +124,27 @@ class RelayElm extends CircuitComponent
       @switchCurrent[i] = @switchCurCount[i] = 0
 
   stamp: (stamper) ->
-    console.log(@nodes, @coilR, @compResistance, @inductance)
-    console.log(@getParentCircuit().Solver.circuitMatrix)
+#    @nodes[0] = @nodes[@nCoil1]
+#    @nodes[1] = @nodes[@nCoil3]
 
-    @nodes[0] = @nodes[@nCoil1]
-    @nodes[1] = @nodes[@nCoil3]
-
-#    console.log("isTrap", @isTrapezoidal())
     if @isTrapezoidal()
       @compResistance = 2 * @inductance / @getParentCircuit().timeStep()
     # backward euler
     else
       @compResistance = @inductance / @getParentCircuit().timeStep()
 
-    console.log(@compResistance)
-    stamper.stampResistor @nodes[0], @nodes[1], @compResistance
-    stamper.stampRightSide @nodes[0]
-    stamper.stampRightSide @nodes[1]
+    stamper.stampResistor @nodes[@nCoil1],  @nodes[@nCoil3], @compResistance
+    stamper.stampRightSide @nodes[@nCoil1]
+    stamper.stampRightSide @nodes[@nCoil3]
 
-    console.log(@coilR)
     stamper.stampResistor(@nodes[@nCoil3], @nodes[@nCoil2], @coilR)
+
+    console.log("STAMP!");
 
     for i in [0...(3 * @poleCount)]
       console.log(@nodes[@nSwitch0 + i])
       stamper.stampNonLinear(@nodes[@nSwitch0 + i])
 
-    console.log(@getParentCircuit().Solver.circuitMatrix)
-
-    console.log("STAMP", @nodes, @coilR, @compResistance, @inductance)
 
   startIteration: ->
 #    ind.startIteration(@volts[@nCoil1] - @volts[@nCoil3])
@@ -157,14 +152,14 @@ class RelayElm extends CircuitComponent
     voltdiff = @volts[@nCoil1] - @volts[@nCoil3]
 
     if @isTrapezoidal()
-      @curSourceValue = voltdiff / @compResistance + @current
+      @curSourceValue = voltdiff / @compResistance + @tempCurrent
     # backward euler
     else
-      @curSourceValue = @current
+      @curSourceValue = @tempCurrent
 
-#    magic = 1.3
-#    pmult = Math.sqrt(@magic + 1)
-    p = @coilCurrent * @pmult / @onCurrent
+    magic = 1.3
+    pmult = Math.sqrt(magic + 1)
+    p = @coilCurrent * pmult / @onCurrent
 
     @d_position = Math.abs(p * p) - 1.3
 
@@ -181,11 +176,8 @@ class RelayElm extends CircuitComponent
 
 
   doStep: (stamper) ->
-    voltdiff = @volts[@nCoil1] - @volts[@nCoil3]
+    stamper.stampCurrentSource @nodes[@nCoil1], @nodes[@nCoil3], @curSourceValue
 
-    stamper.stampCurrentSource @nodes[0], @nodes[1], @curSourceValue
-
-    console.log(@i_position)
     res0 = if @i_position == 0 then @r_on else @r_off
     res1 = if @i_position == 1 then @r_on else @r_off
 
@@ -193,6 +185,8 @@ class RelayElm extends CircuitComponent
     while p < 3 * @poleCount
       stamper.stampResistor(@nodes[@nSwitch0 + p], @nodes[@nSwitch1 + p], res0)
       stamper.stampResistor(@nodes[@nSwitch0 + p], @nodes[@nSwitch2 + p], res1)
+
+      @nSwitch0 + p
 
       p += 3
 
@@ -202,16 +196,16 @@ class RelayElm extends CircuitComponent
     #  @coilCurrent = ind.calculateCurrent(voltdiff)
 
     if @compResistance > 0
-      @coilCurrent = voltdiff / @compResistance + @curSourceValue
+      @tempCurrent = voltdiff / @compResistance + @curSourceValue
 
-    p = 0
-    while p < 3 * @poleCount
+    @coilCurrent = @tempCurrent
+
+    for p in [0...@poleCount]
       if @i_position == 2
         @switchCurrent[p] = 0
       else
         @switchCurrent[p] = (@volts[@nSwitch0 + p * 3] - @volts[@nSwitch1 + p * 3 + @i_position]) / @r_on
 
-      p += 3
 
   getConnection: (n1, n2) ->
     Math.floor(n1 / 3) == Math.floor(n2 / 3)
