@@ -35,7 +35,7 @@ class TextElm extends CircuitComponent
     @lines.push @text
     @size = 24
 
-    super(xa, ya, xb, yb, params, f)
+    super(xa, ya, xb, yb - 1, params, f)
 
 #    if st
 #      st = st.split(" ")  if typeof st is "string"
@@ -53,7 +53,7 @@ class TextElm extends CircuitComponent
 
   drag: (xx, yy) ->
     @x1 = xx
-    @y = yy
+    @y1 = yy
     @x2 = xx + 16
     @y2 = yy
 
@@ -93,7 +93,7 @@ class TextElm extends CircuitComponent
       i++
 
     @x2 = @boundingBox.x1 + @boundingBox.width
-    @y2 = @boundingBox.y + @boundingBox.height
+    @y2 = @boundingBox.y1 + @boundingBox.height
 
   isCenteredText: ->
     (@flags & TextElm.FLAG_CENTER) isnt 0

@@ -243,8 +243,8 @@ class TransistorElm extends CircuitComponent
       @arrowPoly = Util.calcArrow(@emit[1], @emit[0], 8, 4)
     else
       pt = Util.interpolate(@point1, @point2, 1 - 11 / @dn, -5 * @dsign * @pnp)
-      console.log(pt)
-      console.log(@emit)
+#      console.log(pt)
+#      console.log(@emit)
 
       @arrowPoly = Util.calcArrow(@emit[0], pt, 8, 4)
 

@@ -99,7 +99,10 @@ grid2
 gyrator
 halfadd
 hartley
+howland
 impedance
+indmultfreq
+indmultind
 indpar
 indseries
 induct
@@ -167,6 +170,8 @@ pmosfet
 pnp
 pot
 potdivide
+powerfactor1
+powerfactor2
 pushpull
 pushpullxover
 r2rladder

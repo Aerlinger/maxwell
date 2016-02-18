@@ -139,10 +139,10 @@ class RelayElm extends CircuitComponent
 
     stamper.stampResistor(@nodes[@nCoil3], @nodes[@nCoil2], @coilR)
 
-    console.log("STAMP!")
+#    console.log("STAMP!")
 
     for i in [0...(3 * @poleCount)]
-      console.log(@nodes[@nSwitch0 + i])
+#      console.log(@nodes[@nSwitch0 + i])
       stamper.stampNonLinear(@nodes[@nSwitch0 + i])
 
 

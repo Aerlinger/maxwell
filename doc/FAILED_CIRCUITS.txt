@@ -14,9 +14,6 @@ dram
 dtlnor
 flashadc
 hfadc
-howland
-indmultfreq
-indmultind
 ledflasher
 lissa
 longdist
@@ -25,8 +22,6 @@ opint-current
 opint-invert-amp
 opint-slew
 phasecompint
-powerfactor1
-powerfactor2
 relayctr
 relaymux
 relaytff
