@@ -556,8 +556,8 @@ class CircuitSolver
         subiter++
       # End for
 
-      if (subiter > 5)
-        console.log("converged after " + subiter + " iterations\n")
+#      if (subiter > 5)
+#        console.log("converged after " + subiter + " iterations\n")
       if subiter >= subiterCount
         @halt "Convergence failed: " + subiter, null
         break

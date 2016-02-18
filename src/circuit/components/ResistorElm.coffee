@@ -52,7 +52,7 @@ class ResistorElm extends CircuitComponent
 
       renderContext.drawLinePt startPosition, endPosition, Util.getVoltageColor(resistorSegmentVoltage)
 
-    renderContext.drawValue 10, 0, this, Util.getUnitText(@resistance, @unitSymbol())
+    renderContext.drawValue 12, 0, this, Util.getUnitText(@resistance, @unitSymbol())
 
     renderContext.drawPosts(this)
 

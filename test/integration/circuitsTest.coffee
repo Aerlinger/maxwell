@@ -63,7 +63,7 @@ filenames = glob.sync "./circuits/*.txt", {}
 #  "relayctr"
 #  "relaymux"
 #  "relaytff"
-#  "halfadd"
+#  "scr"
 #]
 
 for circuit_name in @files

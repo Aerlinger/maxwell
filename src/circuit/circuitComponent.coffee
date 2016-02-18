@@ -76,7 +76,7 @@ class CircuitComponent
 
       # fallback to default value assigned in @Fields
       else
-        console.log("Assigning default value of #{default_value} for #{param_name} in #{@constructor.name} (was #{this[param_name]})")
+#        console.log("Assigning default value of #{default_value} for #{param_name} in #{@constructor.name} (was #{this[param_name]})")
 
         this[param_name] ||= data_type(default_value)
         @params[param_name] = this[param_name]

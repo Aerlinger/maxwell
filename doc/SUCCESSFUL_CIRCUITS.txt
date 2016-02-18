@@ -41,6 +41,7 @@ cc2impn
 cc2n
 ccdiff
 ccint
+ccitov
 ceamp
 classd
 clockedsrff
@@ -108,6 +109,7 @@ inductkick-snub
 inductkick
 inv-osc
 invertamp
+itov
 jfetamp
 jfetcurrentsrc
 jfetfollower-nooff
@@ -185,6 +187,8 @@ rtlnor
 samplenhold
 sawtooth
 schmitt
+scr
+scractrig
 sine
 sinediode
 spark-marx

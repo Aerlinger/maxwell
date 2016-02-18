@@ -4,7 +4,6 @@
 amp-integ
 cciamp
 ccinductor
-ccitov
 ccvccs
 cmosff
 cube
@@ -18,7 +17,6 @@ hfadc
 howland
 indmultfreq
 indmultind
-itov
 ledflasher
 lissa
 longdist
@@ -34,8 +32,6 @@ relaymux
 relaytff
 ringmod
 rossler
-scr
-scractrig
 swtreedac
 traffic
 transformerdown

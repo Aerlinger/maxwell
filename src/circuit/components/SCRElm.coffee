@@ -51,6 +51,11 @@ class ScrElm extends CircuitComponent
     @volts[@cnode] = -@lastvac
     @volts[@gnode] = -@lastvag
 
+    @params['volts'] = @volts
+
+    delete @params['lastvac']
+    delete @params['lastvag']
+
     @setup()
 
   setPoints: ->
@@ -58,10 +63,10 @@ class ScrElm extends CircuitComponent
 
     dir = 0
     if (Math.abs(@dx) > Math.abs(@dy))
-      @dir = -Math.sign(@dx) * Math.sign(@dy)
+      dir = -Math.sign(@dx) * Math.sign(@dy)
       @point2.y = @point1.y
     else
-      @dir = Math.sign(@dy) * Math.sign(@dx)
+      dir = Math.sign(@dy) * Math.sign(@dx)
       @point2.x = @point1.x
 
     if (dir == 0)
@@ -83,12 +88,45 @@ class ScrElm extends CircuitComponent
     gatelen += leadlen % Settings.GRID_SIZE
 
     if (leadlen < gatelen)
-      @x2 = @x
-      @y2 = @y
+      @x2 = @x1
+      @y2 = @y1
       return
 
     @gate[0] = Util.interpolate(@lead2, @point2, gatelen / leadlen, gatelen * dir)
     @gate[1] = Util.interpolate(@lead2, @point2, gatelen / leadlen, Settings.GRID_SIZE * 2 * dir)
+
+  nonLinear: ->
+    true
+
+  draw: (renderContext) ->
+#    @setBbox(@point1, @point2, @hs)
+#    adjustBbox(@gate[0], @gate[1])
+
+    v1 = @volts[@anode]
+    v2 = @volts[@cnode]
+
+    renderContext.drawLeads(this)
+
+    color = Util.getVoltageColor(v1);
+    renderContext.drawThickPolygonP(@poly, color)
+
+    # draw thing arrow is pointing to
+    color = Util.getVoltageColor(v2)
+    renderContext.drawLinePt(@cathode[0], @cathode[1], color)
+
+    renderContext.drawLinePt(@lead2, @gate[0], color)
+    renderContext.drawLinePt(@gate[0], @gate[1], color)
+
+    @curcount_a = @updateDots(@ia, @curcount_a)
+    @curcount_c = @updateDots(@ic, @curcount_c)
+    @curcount_g = @updateDots(@ig, @curcount_g)
+
+    renderContext.drawDots(@point1, @lead2, @curcount_a)
+    renderContext.drawDots(@point2, @lead2, @curcount_c)
+    renderContext.drawDots(@gate[1], @gate[0], @curcount_g)
+#    renderContext.drawDots(@gate[0], @lead2, @curcount_g + distance(@gate[1], @gate[0]))
+
+    renderContext.drawPosts(this)
 
   setDefaults: ->
     @leakage = 1e-14  # Paramter?

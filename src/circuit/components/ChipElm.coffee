@@ -288,7 +288,7 @@ class ChipElm extends CircuitComponent
       xa = Math.floor(px + self.cspc2 * dx * @pos + sx)
       ya = Math.floor(py + self.cspc2 * dy * @pos + sy)
 
-      console.log("SET POINT", px, py, dx, dy, dax, day, sx, sy, self.cspc2, @pos)
+#      console.log("SET POINT", px, py, dx, dy, dax, day, sx, sy, self.cspc2, @pos)
 
       @post = new Point(xa + dax * self.cspc2, ya + day * self.cspc2)
       @stub = new Point(xa + dax * self.cspc, ya + day * self.cspc)

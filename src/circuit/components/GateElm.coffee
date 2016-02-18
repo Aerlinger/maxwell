@@ -83,14 +83,6 @@ class GateElm extends CircuitComponent
 
       i0 += 1
 
-#    console.log(@constructor.name)
-#    console.log(@point1, @point2, 0, hs, i0)
-#    console.log("@inPosts")
-#    console.log(@inPosts)
-
-#    console.log("@inGates")
-#    console.log(@inGates)
-
     @hs2 = @gwidth * (Math.floor(@inputCount / 2) + 1)
     @setBboxPt(@point1, @point2, @hs2)
 
@@ -120,11 +112,9 @@ class GateElm extends CircuitComponent
     voltageColor = Util.getVoltageColor(@volts[@inputCount])
     renderContext.drawLinePt(@lead2, @point2, voltageColor)
 
-    console.log(@toString(), @gatePoly)
     renderContext.drawThickPolygonP(@gatePoly, Settings.STROKE_COLOR)
     if @linePoints != null
       for i in [0...(@linePoints.length - 1)]
-        console.log(@linePoints[i])
         renderContext.drawLinePt(@linePoints[i], @linePoints[i + 1])
 
     if @isInverting()

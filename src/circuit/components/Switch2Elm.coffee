@@ -31,7 +31,7 @@ class Switch2Elm extends SwitchElm
 
     super(xa, ya, xb, yb, params, f)
 
-    @position = 0
+#    @position = 0
 
   name: ->
     "SPDT switch"

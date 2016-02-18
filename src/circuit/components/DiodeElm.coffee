@@ -202,7 +202,7 @@ class DiodeElm extends CircuitComponent
         # (1/vt = slope of load line)
         vnew = @vt * Math.log(vnew / @vt)
 
-      console.log("CONVERGE: vnew > @vcrit and Math.abs(vnew - vold) > (@vt + @vt)")
+#      console.log("CONVERGE: vnew > @vcrit and Math.abs(vnew - vold) > (@vt + @vt)")
       @Circuit.Solver.converged = false
 
     else if vnew < 0 and @zoffset isnt 0

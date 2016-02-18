@@ -109,13 +109,13 @@ class BaseRenderer extends Observer
 
     @context.restore()
 
-  drawThickPolygonP: (polygon, color) ->
+  drawThickPolygonP: (polygon, color = Settings.STROKE_COLOR, fill = Settings.FILL_COLOR) ->
     numVertices = polygon.numPoints()
 
     @context.save()
 
-    @context.fillStyle = Settings.FILL_COLOR
-    @context.strokeStyle = Settings.STROKE_COLOR
+    @context.fillStyle = fill
+    @context.strokeStyle = color
     @context.beginPath()
 
     @context.moveTo(polygon.getX(0), polygon.getY(0))

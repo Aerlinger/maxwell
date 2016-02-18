@@ -20,7 +20,6 @@ class OrGateElm extends GateElm
       a = i / 16.0
       b = 1 - a * a
 
-      console.log("OR", @lead1, @lead2, 0.5 + a/2, b * @hs2)
       [triPoints[i], triPoints[32 - i]] = Util.interpolateSymmetrical(@lead1, @lead2, 0.5 + a/2, b * @hs2)
 
     ww2 = if (@ww == 0) then @dn * 2 else @ww * 2

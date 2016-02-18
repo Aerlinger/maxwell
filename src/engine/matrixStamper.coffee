@@ -35,7 +35,7 @@ class MatrixStamper
 
   updateVoltageSource: (n1, n2, vs, voltage) ->
     if isNaN(voltage) or Util.isInfinite(voltage)
-      @Circuit.halt "bad voltage"
+      @Circuit.halt "updateVoltageSource: bad voltage at #{n1} #{n2} #{vs}"
 #    console.log("@Circuit.numNodes() #{@Circuit.numNodes()} #{vs} #{voltage}")
 
     vn = @Circuit.numNodes() + vs
@@ -60,7 +60,7 @@ class MatrixStamper
 
   stampConductance: (n1, n2, r0) ->
     if isNaN(r0) or Util.isInfinite(r0)
-      @Circuit.halt "bad conductance"
+      @Circuit.halt "bad conductance at #{n1} #{n2}"
 
 #    console.log("Stamp conductance: " + n1 + " " + n2 + " " + r0 + " ");
 
@@ -118,7 +118,7 @@ class MatrixStamper
   ###
   stampMatrix: (row, col, value) ->
     if isNaN(value) or Util.isInfinite(value)
-      @Circuit.halt "attempted to stamp Matrix with invalid value"
+      @Circuit.halt "attempted to stamp Matrix with invalid value (#{value}) at #{row} #{col}"
 
 #    console.log("stampMatrix: " + row + " " + col + " " + value);
 

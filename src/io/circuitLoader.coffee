@@ -24,7 +24,7 @@ class CircuitLoader
     circuit.Params = SimulationParams.deserialize(circuitParams)
     circuit.flags = parseInt(circuitParams['flags'])
 
-    console.log(circuit.Params.toString())
+#    console.log(circuit.Params.toString())
 
     # Load each Circuit component from JSON data:
     elms = []
@@ -32,8 +32,8 @@ class CircuitLoader
     for elementData in jsonData
       type = elementData['sym']
 
-      if type in Circuit.components
-        console.log("Found #{type}...")
+#      if type in Circuit.components
+#        console.log("Found #{type}...")
 
       sym = ComponentRegistry.ComponentDefs[type]
       x1 = parseInt elementData['x1']
@@ -45,7 +45,7 @@ class CircuitLoader
 
       params = elementData['params']
 
-      console.log("#{type} #{x1} #{y1} #{x2} #{y2} #{flags} #{params}")
+#      console.log("#{type} #{x1} #{y1} #{x2} #{y2} #{flags} #{params}")
 
       if !sym
         circuit.warn "No matching component for #{type}: #{sym}"
@@ -58,7 +58,7 @@ class CircuitLoader
         @hintItem2 = y1
         break
       else if sym is Scope
-        console.log "-> Scope found in file!"
+#        console.log "-> Scope found in file!"
       else if !type
         circuit.warn "Unrecognized Type #{type}"
       else
@@ -82,7 +82,7 @@ class CircuitLoader
     unless environment.isBrowser
       circuit.ostream ||= fs.createWriteStream("dump/#{circuit.Params.name}")
 
-    console.log("--------------------------------------------------------------------\n")
+#    console.log("--------------------------------------------------------------------\n")
 
     return circuit
 
