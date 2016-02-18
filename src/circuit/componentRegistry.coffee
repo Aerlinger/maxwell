@@ -36,6 +36,7 @@ LogicOutputElm = require('./components/LogicOutputElm.coffee')
 AnalogSwitchElm = require('./components/AnalogSwitchElm.coffee')
 AnalogSwitch2Elm = require('./components/AnalogSwitch2Elm.coffee')
 MemristorElm = require('./components/MemristorElm.coffee')
+RelayElm = require('./components/RelayElm.coffee')
 
 DecadeElm = require('./components/DecadeElm.coffee')
 LatchElm = require('./components/LatchElm.coffee')
@@ -185,10 +186,8 @@ class ComponentRegistry
 #    'L': LogicInput
 #    'M': LogicOutput
 #   'I': Inverter
-#  151: NandGate
-#  151: AndGate
 #  171: TransmissionLine
-#  178: RelayElm
+    178: RelayElm
 
   @InverseComponentDefs: {
     WireElm: 'w'

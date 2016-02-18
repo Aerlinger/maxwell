@@ -34,6 +34,8 @@ class MatrixStamper
 
 
   updateVoltageSource: (n1, n2, vs, voltage) ->
+    if isNaN(voltage) or Util.isInfinite(voltage)
+      @Circuit.halt "bad voltage"
 #    console.log("@Circuit.numNodes() #{@Circuit.numNodes()} #{vs} #{voltage}")
 
     vn = @Circuit.numNodes() + vs

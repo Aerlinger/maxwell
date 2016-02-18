@@ -55,9 +55,7 @@ swtreedac
 tdiode
 tdosc
 tdrelax
-tesla
 traffic
-transformer
 transformerdc
 transformerdown
 transformerup
@@ -67,3 +65,6 @@ wheatstone
 4way
 cc2imp
 cc2impn
+opamp-regulator
+tesla
+transformer
