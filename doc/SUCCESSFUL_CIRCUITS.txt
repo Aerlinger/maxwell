@@ -148,6 +148,9 @@ phasecomp
 phaseseq
 phaseshiftosc
 phasesplit
+pll
+pll2
+pll2a
 pmosfet
 pnp
 pot
@@ -201,6 +204,7 @@ ttlinverter
 ttlnand
 ttlnor
 twint
+vco
 voltdivide
 voltdouble
 voltdouble2

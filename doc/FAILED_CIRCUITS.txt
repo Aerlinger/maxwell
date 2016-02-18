@@ -18,7 +18,6 @@ digsine
 dram
 dtlnor
 flashadc
-freqdouble
 hfadc
 howland
 indmultfreq
@@ -29,13 +28,11 @@ ledflasher
 lissa
 longdist
 mux3state
+opamp-regulator
 opint-current
 opint-invert-amp
 opint-slew
 phasecompint
-pll
-pll2
-pll2a
 powerfactor1
 powerfactor2
 r2rladder
@@ -53,12 +50,11 @@ traffic
 transformerdc
 transformerdown
 transformerup
-vco
 wheatstone
 4way
 cc2imp
 cc2impn
-opamp-regulator
+freqdouble
 relayctr
 tesla
 transformer

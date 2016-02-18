@@ -76,7 +76,7 @@ class VcoElm extends ChipElm
       vo = 0
       dir = 1
 
-    @updateVoltageSource(0, @nodes[1], @pins[1].voltSource, vo)
+    stamper.updateVoltageSource(0, @nodes[1], @pins[1].voltSource, vo)
 
     cur1 = @getParentCircuit().getNodes().length + @pins[4].voltSource
     cur2 = @getParentCircuit().getNodes().length + @pins[5].voltSource
