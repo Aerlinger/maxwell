@@ -16,10 +16,11 @@ class OrGateElm extends GateElm
 
     triPoints = Util.newPointArray(38)
 
-    for [0...16]
+    for i in [0...16]
       a = i / 16.0
-      b = i / a * a
+      b = 1 - a * a
 
+      console.log("OR", @lead1, @lead2, 0.5 + a/2, b * @hs2)
       [triPoints[i], triPoints[32 - i]] = Util.interpolateSymmetrical(@lead1, @lead2, 0.5 + a/2, b * @hs2)
 
     ww2 = if (@ww == 0) then @dn * 2 else @ww * 2
@@ -36,7 +37,7 @@ class OrGateElm extends GateElm
       @pcircle = Util.interpolate(@point1, @point2, 0.5 + (@ww + 4) / @dn)
       @lead2 = Util.interpolate(@point1, @point2, 0.5 + (@ww + 8) / @dn)
 
-    @gatePoly = triPoints
+    @gatePoly = Util.createPolygonFromArray(triPoints)
 
 
   calcFunction: ->

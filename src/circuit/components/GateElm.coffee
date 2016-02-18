@@ -1,5 +1,6 @@
 CircuitComponent = require("../CircuitComponent.coffee")
 Util = require('../../util/util.coffee')
+Settings = require('../../settings/settings.coffee')
 
 class GateElm extends CircuitComponent
   @FLAG_SMALL = 1
@@ -82,13 +83,13 @@ class GateElm extends CircuitComponent
 
       i0 += 1
 
-    console.log(@constructor.name)
-    console.log(@point1, @point2, 0, hs, i0)
-    console.log("@inPosts")
-    console.log(@inPosts)
+#    console.log(@constructor.name)
+#    console.log(@point1, @point2, 0, hs, i0)
+#    console.log("@inPosts")
+#    console.log(@inPosts)
 
-    console.log("@inGates")
-    console.log(@inGates)
+#    console.log("@inGates")
+#    console.log(@inGates)
 
     @hs2 = @gwidth * (Math.floor(@inputCount / 2) + 1)
     @setBboxPt(@point1, @point2, @hs2)
@@ -101,6 +102,7 @@ class GateElm extends CircuitComponent
       f = !f
 
     @lastOutput = f
+#    @params['lastOutput'] = f
 
     if f
       res = 5
@@ -118,7 +120,12 @@ class GateElm extends CircuitComponent
     voltageColor = Util.getVoltageColor(@volts[@inputCount])
     renderContext.drawLinePt(@lead2, @point2, voltageColor)
 
-    # TODO: Linepoints
+    console.log(@toString(), @gatePoly)
+    renderContext.drawThickPolygonP(@gatePoly, Settings.STROKE_COLOR)
+    if @linePoints != null
+      for i in [0...(@linePoints.length - 1)]
+        console.log(@linePoints[i])
+        renderContext.drawLinePt(@linePoints[i], @linePoints[i + 1])
 
     if @isInverting()
       renderContext.fillCircle @pcircle.x, @pcircle.y, 3
@@ -128,7 +135,6 @@ class GateElm extends CircuitComponent
 #    renderContext.drawPosts(this)
 
     renderContext.drawPosts(this, "#FF0000")
-
     renderContext.drawPosts(this, "#FF0000")
 
     for i in [0...@getPostCount()]

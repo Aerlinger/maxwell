@@ -24,12 +24,12 @@ class SevenSegElm extends ChipElm
 
     @pins = new Array(7)
 
-    @pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "A")
-    @pins[1] = new ChipElm.Pin(1, ChipElm.SIDE_W, "B")
-    @pins[2] = new ChipElm.Pin(2, ChipElm.SIDE_W, "C")
-    @pins[3] = new ChipElm.Pin(3, ChipElm.SIDE_W, "D")
-    @pins[4] = new ChipElm.Pin(1, ChipElm.SIDE_S, "E")
-    @pins[5] = new ChipElm.Pin(2, ChipElm.SIDE_S, "F")
-    @pins[6] = new ChipElm.Pin(3, ChipElm.SIDE_S, "G")
+    @pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "a")
+    @pins[1] = new ChipElm.Pin(1, ChipElm.SIDE_W, "b")
+    @pins[2] = new ChipElm.Pin(2, ChipElm.SIDE_W, "c")
+    @pins[3] = new ChipElm.Pin(3, ChipElm.SIDE_W, "d")
+    @pins[4] = new ChipElm.Pin(1, ChipElm.SIDE_S, "e")
+    @pins[5] = new ChipElm.Pin(2, ChipElm.SIDE_S, "f")
+    @pins[6] = new ChipElm.Pin(3, ChipElm.SIDE_S, "g")
 
 module.exports = SevenSegElm

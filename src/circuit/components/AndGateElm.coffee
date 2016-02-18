@@ -19,13 +19,13 @@ class AndGateElm extends GateElm
 
       [triPoints[i + 1], triPoints[21 - i]] = Util.interpolateSymmetrical(@lead1, @lead2, 0.5 + a / 2, b * @hs2)
 
-    triPoints[11] = new Point(@lead2)
+    triPoints[11] = new Point(@lead2.x, @lead2.y)
 
     if @isInverting()
       @pcircle = Util.interpolate(@point1, @point2, 0.5 + (@ww + 4) / @dn)
       @lead2 = Util.interpolate(@point1, @point2, 0.5 + (@ww + 8) / @dn)
 
-    @gatePoly = triPoints
+    @gatePoly = Util.createPolygonFromArray(triPoints)
 
   getGateName: ->
     "AND Gate"

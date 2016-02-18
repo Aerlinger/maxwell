@@ -12,6 +12,7 @@
 555saw
 555schmitt
 555square
+7segdecoder
 allpass1
 allpass2
 amdetect

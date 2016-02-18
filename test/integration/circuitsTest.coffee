@@ -47,6 +47,7 @@ filenames = glob.sync "./circuits/*.txt", {}
 
 @files = _.difference(@files, @skip)
 #@files = [
+#  "7segdecoder"
 #  "jfetamp"
 #  "jfetfollower"
 #  "digsine"
@@ -55,7 +56,6 @@ filenames = glob.sync "./circuits/*.txt", {}
 #  "tdosc"
 #  "tdrelax"
 #  "tdiode"
-#]
 #  "pll"
 #  "pll2"
 #  "pll2a"
@@ -63,6 +63,7 @@ filenames = glob.sync "./circuits/*.txt", {}
 #  "relayctr"
 #  "relaymux"
 #  "relaytff"
+#  "halfadd"
 #]
 
 for circuit_name in @files

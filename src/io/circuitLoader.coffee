@@ -60,7 +60,7 @@ class CircuitLoader
       else if sym is Scope
         console.log "-> Scope found in file!"
       else if !type
-        circuit.warn "Unrecognized Type"
+        circuit.warn "Unrecognized Type #{type}"
       else
         try
           newCircuitElm = new sym(x1, y1, x2, y2, params, parseInt(flags))
