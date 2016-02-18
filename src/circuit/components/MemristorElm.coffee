@@ -42,7 +42,7 @@ class MemristorElm extends CircuitComponent
 
   setPoints: () ->
     super()
-    @calcLeads(32);
+    @calcLeads(32)
     @ps3 = new Point()
     @ps4 = new Point()
 

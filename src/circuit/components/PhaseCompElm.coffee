@@ -47,9 +47,9 @@ class PhaseCompElm extends ChipElm
     v2 = @volts[1] > 2.5
 
     if (v1 && !@pins[0].value)
-      @ff1 = true;
+      @ff1 = true
     if (v2 && !@pins[1].value)
-      @ff2 = true;
+      @ff2 = true
     if (@ff1 && @ff2)
       @ff1 = @ff2 = false
 

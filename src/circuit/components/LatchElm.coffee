@@ -5,9 +5,9 @@ Util = require('../../util/util.coffee')
 class LatchElm extends ChipElm
 
   constructor: (xa, xb, ya, yb, params, f) ->
-    super(xa, xb, ya, yb, params, f)
     @lastLoad = false
     @loadPin = 0
+    super(xa, xb, ya, yb, params, f)
 
   getName: ->
     "Latch"
@@ -34,7 +34,7 @@ class LatchElm extends ChipElm
 
     for i in [0...@bits]
       console.log(i + @bits)
-      @pins[i + @bits] = new ChipElm.Pin(@bits - 1 - i, ChipElm.SIDE_E, "O");
+      @pins[i + @bits] = new ChipElm.Pin(@bits - 1 - i, ChipElm.SIDE_E, "O")
       @pins[i + @bits].output = true
 
     @loadPin = @bits * 2

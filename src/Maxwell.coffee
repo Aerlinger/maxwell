@@ -27,7 +27,7 @@ class Maxwell
         new (Winston.transports.Console)(),
         new (Winston.transports.File)({ filename: 'log/maxwell.log' })
       ]
-    });
+    })
 
   @loadCircuitFromFile: (circuitFileName, onComplete) ->
     circuit = CircuitLoader.createCircuitFromJsonFile(circuitFileName, onComplete)

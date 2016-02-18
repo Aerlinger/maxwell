@@ -4,6 +4,7 @@
 3-f220
 3-f221
 3-invert
+4way
 555int
 555lowduty
 555monostable
@@ -13,6 +14,7 @@
 555square
 allpass1
 allpass2
+amdetect
 amp-dfdx
 amp-diff
 amp-follower
@@ -34,6 +36,7 @@ cappar
 capseries
 cc2
 cc2imp
+cc2impn
 cc2n
 ccdiff
 ccint
@@ -50,6 +53,7 @@ cmostransgate
 cmosxor
 colpitts
 counter
+counter8
 coupled1
 coupled2
 coupled3
@@ -64,6 +68,7 @@ deccounter
 decoder
 delayrc
 diff
+digsine
 diodeclip
 diodecurve
 diodelimit
@@ -82,6 +87,7 @@ filt-lopass
 filt-vcvs-hipass
 filt-vcvs-lopass
 follower
+freqdouble
 fulladd
 fullrect
 fullrectf
@@ -106,6 +112,7 @@ jfetcurrentsrc
 jfetfollower-nooff
 jfetfollower
 jkff
+johnsonctr
 ladder
 leadingedge
 logconvert
@@ -159,6 +166,7 @@ pot
 potdivide
 pushpull
 pushpullxover
+r2rladder
 rectify
 relaxosc
 relay
@@ -184,7 +192,10 @@ spikegen
 switchedcap
 switchfilter
 synccounter
+tdiode
 tdosc
+tdrelax
+tesla
 thevenin
 tl
 tlfreq
@@ -199,6 +210,9 @@ tlterm
 trans-diffamp-common
 trans-diffamp-cursrc
 trans-diffamp
+transformer
+transformerdc
+transformerup
 transswitch
 triangle
 triode
@@ -207,6 +221,7 @@ ttlinverter
 ttlnand
 ttlnor
 twint
+vco
 voltdivide
 voltdouble
 voltdouble2

@@ -28,7 +28,7 @@ class OutputElm extends CircuitComponent
     if CircuitComponent.DEBUG
       super(renderContext)
 
-    color = "#FFF";
+    color = "#FFF"
     s = (if (@flags & OutputElm.FLAG_VALUE) isnt 0 then Util.getUnitText(@volts[0], "V") else "out")
 
     @lead1 = Util.interpolate @point1, @point2, 1 - (3 * s.length / 2 + 8) / @dn

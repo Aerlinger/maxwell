@@ -28,11 +28,6 @@ class DiacElm extends CircuitComponent
   constructor: (xa, xb, ya, yb, params, f) ->
     super(xa, xb, ya, yb, params, f)
 
-    params.put("onresistance", onresistance);
-    params.put("offresistance", offresistance);
-    params.put("breakdown", breakdown);
-    params.put("holdcurrent", holdcurrent);
-
   getDumpType: ->
     "185"
 

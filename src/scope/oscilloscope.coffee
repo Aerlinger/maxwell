@@ -16,7 +16,7 @@ class Oscilloscope
 
     step: ->
       @frames += 1
-      @removeData(1);
+      @removeData(1)
       if @targetComponent
         @addData @targetComponent.getScopeValue()
 

@@ -13,15 +13,16 @@ class AntennaElm extends RailElm
     @fmphase = 0
 
   doStep: (stamper) ->
-    stamper.stampVoltageSource(0, @nodes[0], @voltSource)
+    stamper.updateVoltageSource(0, @nodes[0], @voltSource, @getVoltage())
 
   stamp: (stamper) ->
-    stamper.stampVoltageSource(0, @nodes[0], @voltSource, @getVoltage())
+    stamper.stampVoltageSource(0, @nodes[0], @voltSource)
+
 
   getVoltage: ->
-    @fmphase += 2 * Math.PI * (2200 + Math.sin(2 * Math.PI * @getParentCircuit.getTime() * 13) * 100) * @getParentCircuit().timeStep()
+    @fmphase += 2 * Math.PI * (2200 + Math.sin(2 * Math.PI * @getParentCircuit().getTime() * 13) * 100) * @getParentCircuit().timeStep()
 
-    fm = 3 * Math.sin(@fmphase);
+    fm = 3 * Math.sin(@fmphase)
 
     pi = Math.PI
     t = @getParentCircuit().time

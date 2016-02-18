@@ -133,7 +133,7 @@ module.exports = (grunt) ->
   grunt.registerTask "test", ["mochaTest", "mocha"]
   grunt.registerTask "default", ["test", "coffeeify"]
 
-  grunt.registerTask('heroku:development', 'coffeeify');
+  grunt.registerTask('heroku:development', 'coffeeify')
 
 #  grunt.registerTask 'examples', 'Creates base example jade files', ->
 #    files = [

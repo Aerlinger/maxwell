@@ -27,7 +27,7 @@ class VarRailElm extends RailElm
 
 #    console.log(@toJson())
 
-    @sliderValue = Math.floor((@frequency - @bias) * 100 / (@maxVoltage - @bias));
+    @sliderValue = Math.floor((@frequency - @bias) * 100 / (@maxVoltage - @bias))
 
 #    console.log("value: #{@sliderValue}")
 
@@ -54,7 +54,7 @@ class VarRailElm extends RailElm
 
     # Todo: implement
   getVoltage: ->
-    @frequency = @getSliderValue() * (@maxVoltage - @bias) / 100.0 + @bias;
+    @frequency = @getSliderValue() * (@maxVoltage - @bias) / 100.0 + @bias
 
 #    console.log("frequency: #{@frequency}")
     return @frequency

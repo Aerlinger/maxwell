@@ -86,7 +86,8 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
 
 # Components in progress
 
-- 118
+- 82 ?
+- 118: ?
 - 157: SevenSegElm 1
 - 160: AnalogSwitch2Elm 3
 - 162: LEDElm 3
@@ -95,7 +96,6 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
 - 167: ADCElm 1
 - 168: LatchElm 1
 - 169: TappedTransformerElm 1
-- 175: TunnelDiodeElm 3
 - 177: SCRElm 2
 
 #####Querying computed values within the circuit:

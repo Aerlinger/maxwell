@@ -4,6 +4,7 @@ fs = require("fs")
 Maxwell = require("../../src/Maxwell.coffee")
 jsondiffpatch = require('jsondiffpatch').create({});
 CircuitComparator = require("../support/CircuitComparator.coffee")
+Renderer = require('../../src/render/renderer.coffee')
 _ = require("lodash")
 
 chai = require('chai')
@@ -46,6 +47,11 @@ filenames = glob.sync "./circuits/*.txt", {}
 
 @files = _.difference(@files, @skip)
 #@files = [
+#  "jfetamp"
+#  "jfetfollower"
+#  "digsine"
+#  "cube"
+#  "deltasigma"
 #  "tdosc"
 #  "tdrelax"
 #  "tdiode"
@@ -99,3 +105,33 @@ for circuit_name in @files
           assert.deepEqual(circuit.frameJson(), simulationValidationJson)
         else
           expect(deltas).to.eql([])
+
+      it "RENDERS #{circuit_name}", =>
+        circuit_file = "#{circuit_name}.json"
+
+        circuit = Maxwell.loadCircuitFromFile("./circuits/#{circuit_file}")
+
+#        circuit.updateCircuit()
+
+        Canvas = require('canvas')
+        @canvas = new Canvas(800, 600)
+        ctx = @canvas.getContext('2d')
+
+        @renderer = new Renderer(circuit, @canvas)
+        @renderer.context = ctx
+
+        @renderer.draw()
+
+        fs.writeFileSync("test/fixtures/circuitRenders/#{circuit_name}_init.png", @canvas.toBuffer())
+
+#        simulationValidationFileName = "./dump/#{circuit_name}.txt_FRAMES.json"
+#        simulationValidationJson = JSON.parse(fs.readFileSync(simulationValidationFileName))
+
+        #        fs.writeFileSync("#{circuit_name}_test_frame.json", JSON.stringify(circuit.frameJson(), null, 2))
+
+#        deltas = approx_diff(circuit.frameJson(), simulationValidationJson)
+
+#        if deltas.length > 0
+#          assert.deepEqual(circuit.frameJson(), simulationValidationJson)
+#        else
+#          expect(deltas).to.eql([])

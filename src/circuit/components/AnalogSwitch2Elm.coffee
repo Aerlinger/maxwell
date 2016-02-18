@@ -51,9 +51,9 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
     stamper.stampNonLinear(@nodes[2])
 
   doStep: (stamper) ->
-    @open = @voltes[3] < 3
+    @open = @volts[3] < 2.5
 
-    if @flags & AnalogSwitch2Elm.FLAG_INVERT != 0
+    if (@flags & AnalogSwitch2Elm.FLAG_INVERT) != 0
       @open = !@open
 
     if @open
@@ -64,6 +64,8 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
       stamper.stampResistor(@nodes[0], @nodes[2], @r_off)
 
   getConnection: (n1, n2) ->
-    !(n1 == 3 || n2 == 3)
+    if (n1 == 3 || n2 == 3)
+      return false
+    return true
 
 module.exports = AnalogSwitch2Elm

@@ -76,9 +76,9 @@ class PotElm extends CircuitComponent
     soff = Math.floor((@position - 0.5) * bodyLen)
 
     @post3 = Util.interpolate(@point1, @point2, 0.5, offset)
-    @corner2 = Util.interpolate(@point1, @point2, soff / @dn + 0.5, offset);
+    @corner2 = Util.interpolate(@point1, @point2, soff / @dn + 0.5, offset)
     @arrowPoint = Util.interpolate(@point1, @point2, soff / @dn + 0.5, 8 * Math.sign(offset))
-    @midpoint = Util.interpolate(@point1, @point2, soff / @dn + 0.5);
+    @midpoint = Util.interpolate(@point1, @point2, soff / @dn + 0.5)
 
     clen = Math.abs(offset) - 8
 
@@ -98,9 +98,9 @@ class PotElm extends CircuitComponent
 #    return (n == 0) ? @point1 : (n == 1) ? @point2 : @post3;
 
   calculateCurrent: ->
-    @current1 = (@volts[0] - @volts[2]) / @resistance1;
-    @current2 = (@volts[1] - @volts[2]) / @resistance2;
-    @current3 = -@current1 - @current2;
+    @current1 = (@volts[0] - @volts[2]) / @resistance1
+    @current2 = (@volts[1] - @volts[2]) / @resistance2
+    @current3 = -@current1 - @current2
 
   stamp: (stamper) ->
     @resistance1 = @maxResistance * @position

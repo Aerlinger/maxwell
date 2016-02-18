@@ -92,7 +92,7 @@ class BaseRenderer extends Observer
 
     @context.restore()
 
-  drawThickPolygon: (xlist, ylist, color) ->
+  drawThickPolygon: (xlist, ylist, color=null) ->
     @context.save()
 
     @context.fillStyle = color
@@ -103,7 +103,9 @@ class BaseRenderer extends Observer
       @context.lineTo(xlist[i], ylist[i])
 
     @context.closePath()
-    @context.fill()
+    @context.stroke()
+    if color
+      @context.fill()
 
     @context.restore()
 

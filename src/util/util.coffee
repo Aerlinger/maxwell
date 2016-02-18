@@ -183,7 +183,7 @@ class Util
     decimalNum.toPrecision(2)
 
   @shortFormat: (decimalNum) ->
-    return decimalNum.toPrecision(1);
+    return decimalNum.toPrecision(1)
 
   @longFormat: (decimalNum) ->
     decimalNum.toPrecision(4)
@@ -199,7 +199,7 @@ class Util
   e.g. 1,234,567.99 -> 1234567.99
   ###
   @noCommaFormat: (numberWithCommas) ->
-    numberWithCommas.replace(/,/g, '');
+    numberWithCommas.replace(/,/g, '')
 
   @printArray: (array) ->
     matrixRowCount = array.length

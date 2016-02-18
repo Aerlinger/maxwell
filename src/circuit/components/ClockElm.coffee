@@ -9,7 +9,7 @@ class ClockElm extends RailElm
     @bias ||= 2.5
     @frequency ||= 100
 
-    @flags |= RailElm.FLAG_CLOCK;
+    @flags |= RailElm.FLAG_CLOCK
 
     super(xa, ya, xa, ya, params, f)
 

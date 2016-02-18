@@ -65,7 +65,7 @@ class SweepElm extends CircuitComponent
     color = Util.getVoltageColor(@volts[0])
     @lead1 = Util.interpolate(@point1, @point2, 1 - SweepElm.circleSize / @dn)
 
-    renderContext.drawThickLinePt @point1, @lead1, color
+    renderContext.drawLinePt @point1, @lead1, color
 #    @setVoltageColor (if @needsHighlight() then CircuitComponent.selectColor else Color.GREY)
 #    @setVoltageColor(Color.GREY)
 #    powerColor = @setPowerColor(false)
@@ -77,7 +77,7 @@ class SweepElm extends CircuitComponent
 
     wl = 8
 
-    @adjustBbox xc - SweepElm.circleSize, yc - SweepElm.circleSize, xc + SweepElm.circleSize, yc + SweepElm.circleSize
+#    @adjustBbox xc - SweepElm.circleSize, yc - SweepElm.circleSize, xc + SweepElm.circleSize, yc + SweepElm.circleSize
 
     xl = 10
     ox = -1
@@ -89,10 +89,10 @@ class SweepElm extends CircuitComponent
     if tm > 1000
       tm = 2000 - tm
 
-    if Circuit.stoppedCheck
-      w = 1 + tm * .002
-    else
-      w = 1 + 2 * (@frequency - @minF) / (@maxF - @minF)
+#    if Circuit.stoppedCheck
+#      w = 1 + tm * .002
+#    else
+    w = 1 + 2 * (@frequency - @minF) / (@maxF - @minF)
 
     i = -xl
 
@@ -100,18 +100,18 @@ class SweepElm extends CircuitComponent
       yy = yc + Math.floor(.95 * Math.sin(i * Math.PI * w / xl) * wl)
 
       unless ox is -1
-        renderContext.drawThickLine ox, oy, xc + i, yy
+        renderContext.drawLine ox, oy, xc + i, yy
 
       ox = xc + i
       oy = yy
       i++
 
-    if Circuit.showValuesCheckItem
-      s = renderContext.getShortUnitText(@frequency, "Hz")
+#    if Circuit.showValuesCheckItem
+#      s = renderContext.getShortUnitText(@frequency, "Hz")
 #      if @axisAligned()
 #        @drawValues s, @circleSize
 
-    @drawPosts()
+    renderContext.drawPosts(this)
 
     @updateDots()
     renderContext.drawDots(@point1, @point2, this)

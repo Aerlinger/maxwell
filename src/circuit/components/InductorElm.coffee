@@ -40,6 +40,10 @@ class InductorElm extends CircuitComponent
     @volts[1] = 0
     @curcount = 0
 
+  setPoints: ->
+    super()
+    @calcLeads(32)
+
   stamp: (stamper) ->
     # Inductor companion model using trapezoidal or backward euler
     # approximations (Norton equivalent) consists of a current

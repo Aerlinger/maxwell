@@ -56,7 +56,7 @@ class CircuitLoader
         @hintType = x1
         @hintItem1 = x2
         @hintItem2 = y1
-        break;
+        break
       else if sym is Scope
         console.log "-> Scope found in file!"
       else if !type

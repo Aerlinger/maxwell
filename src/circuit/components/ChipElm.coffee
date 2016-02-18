@@ -1,12 +1,12 @@
 CircuitComponent = require("../CircuitComponent.coffee")
 Util = require('../../util/util.coffee')
 Point = require('../../geom/Point.coffee')
-
+Settings = require('../../settings/settings.coffee')
 
 class ChipElm extends CircuitComponent
-  FLAG_SMALL: 1
-  FLAG_FLIP: 1024
-  FLAG_SMALL: 2148
+  @FLAG_SMALL = 1
+  FLAG_FLIP_X: 1024
+  FLAG_FLIP_Y: 2148
 
   @SIDE_N = 0
   @SIDE_S = 1
@@ -168,7 +168,7 @@ class ChipElm extends CircuitComponent
     for i in [0...@getPostCount()]
       p = @pins[i]
 
-      voltageColor = Util.getVoltageColor(volts[i])
+      voltageColor = Util.getVoltageColor(@volts[i])
 
       a = p.post
       b = p.stub
@@ -183,11 +183,12 @@ class ChipElm extends CircuitComponent
         renderContext.drawCircle(p.bubbleX, p.bubbleY, 1, Settings.FILL_COLOR)
         renderContext.drawCircle(p.bubbleX, p.bubbleY, 3, Settings.STROKE_COLOR)
 
-      renderContext.drawString(p.text, p.textloc.x, p.textloc.y)
+      renderContext.fillText(p.text, p.textloc.x, p.textloc.y)
       if p.lineOver
+        ya = p.textloc.y - 10
         renderContext.drawLine(p.textloc.x, ya, p.textloc.x, ya)
 
-    renderContext.drawThickPolygon(@rectPointsX, @rectPointsY, Settinsg.STROKE_COLOR)
+    renderContext.drawThickPolygon(@rectPointsX, @rectPointsY)
 
     if @clockPointsX && @clockPointsY
       renderContext.drawPolyline(@clockPointsX, @clockPointsY, 3)
@@ -196,7 +197,7 @@ class ChipElm extends CircuitComponent
       renderContext.drawPost(@pins[i].post.x, @pins[i].post.y, @nodes[i])
 
   setPoints: ->
-    if @x2 - @ > @sizeX*@cspc2 # dragging
+    if @x2 - @x1 > @sizeX*@cspc2 # dragging
       @setSize(2)
 
     hs = @cspc2

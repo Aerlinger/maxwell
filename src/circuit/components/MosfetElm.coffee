@@ -113,7 +113,7 @@ class MosfetElm extends CircuitComponent
       color = Util.getVoltageColor((if @pnp is 1 then @volts[1] else @volts[2]))
       renderContext.drawThickPolygonP @arrowPoly, color
 
-    renderContext.drawThickPolygonP(@arrowPoly);
+    renderContext.drawThickPolygonP(@arrowPoly)
 #      Circuit.powerCheckItem
 
     #g.setColor(Color.gray);

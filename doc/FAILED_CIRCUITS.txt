@@ -2,19 +2,16 @@
 555missing
 555sequencer
 7segdecoder
-amdetect
 amp-integ
 cciamp
 ccinductor
 ccitov
 ccvccs
 cmosff
-counter8
 cube
 default
 deltasigma
 digcompare
-digsine
 dram
 dtlnor
 flashadc
@@ -23,7 +20,6 @@ howland
 indmultfreq
 indmultind
 itov
-johnsonctr
 ledflasher
 lissa
 longdist
@@ -34,7 +30,6 @@ opint-slew
 phasecompint
 powerfactor1
 powerfactor2
-r2rladder
 relayctr
 relaymux
 relaytff
@@ -55,4 +50,3 @@ tesla
 transformer
 transformerdc
 transformerup
-vco

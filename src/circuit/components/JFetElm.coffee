@@ -22,35 +22,6 @@ class JfetElm extends MosfetElm
   getBeta: ->
     .00125
 
-  draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
-    @setBboxPt(@point1, @point2, @hs)
-
-    renderContext.setVoltageColor(@volts[1])
-    renderContext.drawthickLine(@src[0], @src[1])
-    renderContext.drawthickLine(@src[1], @src[2])
-
-    renderContext.setVoltageColor(@volts[2])
-    renderContext.drawthickLine(@drn[0], @drn[1])
-    renderContext.drawthickLine(@drn[1], @drn[2])
-
-    renderContext.setVoltageColor(@volts[0])
-    renderContext.drawthickLine(@point1, @gatePt)
-
-    renderContext.fillPolygon(@arrowPoly())
-    renderContext.fillPolygon(@arrowPoly())
-
-    if @curcount != 0
-      renderContext.drawDots(@src[0], @src[1], this)
-      renderContext.drawDots(@src[1], @src[2], this)
-      renderContext.drawDots(@drn[0], @drn[1], this)
-      renderContext.drawDots(@drn[1], @drn[2], this)
-
-    renderContext.drawPosts(this)
-
-
   setPoints: ->
     super()
 
@@ -76,6 +47,35 @@ class JfetElm extends MosfetElm
       @arrowPoly = Util.calcArrow(@gatePt, x, 8, 3)
     else
       @arrowPoly = Util.calcArrow(@point1, @gatePt, 8, 3)
+
+
+  draw: (renderContext) ->
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
+    @setBboxPt(@point1, @point2, @hs)
+
+    color = Util.getVoltageColor(@volts[1])
+    renderContext.drawLinePt(@src[0], @src[1], color)
+    renderContext.drawLinePt(@src[1], @src[2], color)
+
+    color = Util.getVoltageColor(@volts[2])
+    renderContext.drawLinePt(@drn[0], @drn[1], color)
+    renderContext.drawLinePt(@drn[1], @drn[2], color)
+
+    color = Util.getVoltageColor(@volts[0])
+    renderContext.drawLinePt(@point1, @gatePt, color)
+
+    renderContext.drawThickPolygonP(@arrowPoly)
+    renderContext.drawThickPolygonP(@arrowPoly)
+
+    if @curcount != 0
+      renderContext.drawDots(@src[0], @src[1], this)
+      renderContext.drawDots(@src[1], @src[2], this)
+      renderContext.drawDots(@drn[0], @drn[1], this)
+      renderContext.drawDots(@drn[1], @drn[2], this)
+
+    renderContext.drawPosts(this)
 
 
 module.exports = JfetElm

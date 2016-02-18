@@ -62,24 +62,24 @@ class LedElm extends DiodeElm
       return
 
     voltageColor = Util.getVoltageColor(@volts[0])
-    renderContext.drawThickLinePt(@point1, @ledLead1 voltageColor)
+    renderContext.drawLine(@point1, @ledLead1 voltageColor)
 
     voltageColor = Util.getVoltageColor(volts[0])
-    renderContext.drawThickLine(@ledLead2, @point2, voltageColor)
+    renderContext.drawLine(@ledLead2, @point2, voltageColor)
 
     renderContext.setColor(Settings.GREY)
     int cr = 12
 
-    renderContext.drawThickCircle(@ledCenter.x, @ledCenter.y, cr);
+    renderContext.drawThickCircle(@ledCenter.x, @ledCenter.y, cr)
 
 
     # TODO: Finish color
-    cr -= 4;
+    cr -= 4
 
-    w = 255 * @current / .01;
+    w = 255 * @current / .01
 
     if (w > 255)
-      w = 255;
+      w = 255
 
 #    Color cc = new Color((int) (colorR * w), (int) (colorG * w), (int) (colorB * w));
 

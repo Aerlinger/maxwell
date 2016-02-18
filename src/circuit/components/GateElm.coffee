@@ -2,7 +2,7 @@ CircuitComponent = require("../CircuitComponent.coffee")
 Util = require('../../util/util.coffee')
 
 class GateElm extends CircuitComponent
-  FLAG_SMALL: 1
+  @FLAG_SMALL = 1
 
   @Fields = {
     inputCount: {
