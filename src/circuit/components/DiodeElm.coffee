@@ -25,7 +25,7 @@ class DiodeElm extends CircuitComponent
     @poly
     @cathode = []
 
-    @fwdrop = DiodeElm.DEFAULT_DROP
+#    @fwdrop = DiodeElm.DEFAULT_DROP
     @zvoltage = 0
 
     @nodes = new Array(2)

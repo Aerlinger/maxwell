@@ -46,6 +46,10 @@ filenames = glob.sync "./circuits/*.txt", {}
 
 @files = _.difference(@files, @skip)
 #@files = [
+#  "tdosc"
+#  "tdrelax"
+#  "tdiode"
+#]
 #  "pll"
 #  "pll2"
 #  "pll2a"
@@ -68,7 +72,7 @@ for circuit_name in @files
         analysisValidationFileName = "./dump/#{circuit_name}.txt_ANALYSIS.json"
         analysisValidationJson = JSON.parse(fs.readFileSync(analysisValidationFileName))
 
-        fs.writeFileSync("#{circuit_name}_test_analysis.json", JSON.stringify(circuit.toJson(), null, 2))
+#        fs.writeFileSync("#{circuit_name}_test_analysis.json", JSON.stringify(circuit.toJson(), null, 2))
 
         deltas = approx_diff(circuit.toJson(), analysisValidationJson)
 
@@ -87,7 +91,7 @@ for circuit_name in @files
         simulationValidationFileName = "./dump/#{circuit_name}.txt_FRAMES.json"
         simulationValidationJson = JSON.parse(fs.readFileSync(simulationValidationFileName))
 
-        fs.writeFileSync("#{circuit_name}_test_frame.json", JSON.stringify(circuit.frameJson(), null, 2))
+#        fs.writeFileSync("#{circuit_name}_test_frame.json", JSON.stringify(circuit.frameJson(), null, 2))
 
         deltas = approx_diff(circuit.frameJson(), simulationValidationJson)
 

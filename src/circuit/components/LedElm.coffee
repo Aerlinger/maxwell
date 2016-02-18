@@ -4,27 +4,38 @@ Util = require('../../util/util.coffee')
 
 class LedElm extends DiodeElm
 
-  @Fields = Util.extend(@Fields, {
+  @Fields = {
     colorR: {
       name: "Red Intensity"
       data_type: parseFloat
+      default_value: 0
     }
     colorG: {
       name: "Green Intensity"
       data_type: parseFloat
+      default_value: 0
     }
     colorB: {
       name: "Blue Intensity"
       data_type: parseFloat
+      default_value: 0
     }
-  })
+    fwdrop: {
+      name: "Voltage drop"
+      data_type: parseFloat
+      default_value: DiodeElm.DEFAULT_DROP
+    }
+  }
 
 
   constructor: (xa, xb, ya, yb, params, f) ->
+#    if (f & DiodeElm.FLAG_FWDROP) == 0
+#      @fwdrop = 2.1024259
+
     super(xa, xb, ya, yb, params, f)
 
-    if ((f & DiodeElm.FLAG_FWDROP) == 0)
-      @fwdrop = 2.1024259
+#    if (f & DiodeElm.FLAG_FWDROP) == 0
+#      @fwdrop = 2.1024259
 
     @setup()
 
@@ -38,9 +49,9 @@ class LedElm extends DiodeElm
     super()
 
     cr = 12
-    @ledLead1 = Util.interpolate(@point1, @point2, .5 - cr / @dn)
-    @ledLead2 = Util.interpolate(@point1, @point2, .5 + cr / @dn)
-    @ledCenter = Util.interpolate(@point1, @point2, .5)
+    @ledLead1 = Util.interpolate(@point1, @point2, 0.5 - cr / @dn)
+    @ledLead2 = Util.interpolate(@point1, @point2, 0.5 + cr / @dn)
+    @ledCenter = Util.interpolate(@point1, @point2, 0.5)
 
   needsShortcut: ->
     false

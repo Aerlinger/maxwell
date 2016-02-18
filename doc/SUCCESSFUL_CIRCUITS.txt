@@ -33,6 +33,7 @@ capmultfreq
 cappar
 capseries
 cc2
+cc2imp
 cc2n
 ccdiff
 ccint
@@ -140,6 +141,7 @@ norton
 notch
 npn
 ohms
+opamp-regulator
 opamp
 opampfeedback
 opint
@@ -182,6 +184,7 @@ spikegen
 switchedcap
 switchfilter
 synccounter
+tdosc
 thevenin
 tl
 tlfreq
@@ -204,7 +207,6 @@ ttlinverter
 ttlnand
 ttlnor
 twint
-vco
 voltdivide
 voltdouble
 voltdouble2
