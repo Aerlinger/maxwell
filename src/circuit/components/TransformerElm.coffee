@@ -13,7 +13,7 @@ class TransformerElm extends CircuitComponent
     ratio: {
       name: "Ratio"
       default_value: 1
-      data_type: parseInt
+      data_type: parseFloat
       input_type: "integer"
     }
     # TODO: Name collision
@@ -163,7 +163,7 @@ class TransformerElm extends CircuitComponent
     else
       ts = @getParentCircuit().timeStep()
 
-#    console.log("STAMP", l1, l2, deti, ts)
+    console.log("STAMP li: #{l1} l2: #{l2} deti #{deti} ts: #{ts} ratio: #{@ratio} m: #{m}")
     @a1 = l2 * deti * ts
     @a2 = -m * deti * ts
     @a3 = -m * deti * ts
