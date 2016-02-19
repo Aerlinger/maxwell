@@ -25,7 +25,7 @@ class ProbeElm extends CircuitComponent
     if @point2.y < @point1.y
       x = @point1
       @point1 = @point2
-      @point2 = @x1
+      @point2 = x
 
     @center = @getCenter()
 

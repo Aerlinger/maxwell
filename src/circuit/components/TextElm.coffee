@@ -6,8 +6,8 @@ Point = require('../../geom/point.coffee')
 
 class TextElm extends CircuitComponent
 
-  @FLAG_CENTER: 1
-  @FLAG_BAR: 2
+  @FLAG_CENTER = 1
+  @FLAG_BAR = 2
 
   @Fields = {
     size: {

@@ -45,7 +45,7 @@ class CircuitLoader
 
       params = elementData['params']
 
-#      console.log("#{type} #{x1} #{y1} #{x2} #{y2} #{flags} #{params}")
+      console.log("#{type} #{x1} #{y1} #{x2} #{y2} #{flags} #{params}")
 
       if !sym
         circuit.warn "No matching component for #{type}: #{sym}"
@@ -58,7 +58,7 @@ class CircuitLoader
         @hintItem2 = y1
         break
       else if sym is Scope
-#        console.log "-> Scope found in file!"
+        console.log "-> Scope found in file!"
       else if !type
         circuit.warn "Unrecognized Type #{type}"
       else

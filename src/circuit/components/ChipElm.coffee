@@ -5,8 +5,8 @@ Settings = require('../../settings/settings.coffee')
 
 class ChipElm extends CircuitComponent
   @FLAG_SMALL = 1
-  FLAG_FLIP_X: 1024
-  FLAG_FLIP_Y: 2148
+  @FLAG_FLIP_X = 1024
+  @FLAG_FLIP_Y = 2148
 
   @SIDE_N = 0
   @SIDE_S = 1
@@ -30,7 +30,6 @@ class ChipElm extends CircuitComponent
 
   # TODO: Need a better way of dealing with variable length params here
   constructor: (xa, xb, ya, yb, params, f) ->
-    self = @
     @flags = f
     @pins = []
     @bits = 0
@@ -50,6 +49,7 @@ class ChipElm extends CircuitComponent
     else
       initial_voltages = params['volts']
 
+    self = @
     @setupPins()
 
     super(xa, xb, ya, yb, {}, f)

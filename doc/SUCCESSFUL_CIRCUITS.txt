@@ -40,6 +40,7 @@ cc2imp
 cc2impn
 cc2n
 ccdiff
+ccinductor
 ccint
 ccitov
 ceamp
@@ -231,7 +232,6 @@ ttlinverter
 ttlnand
 ttlnor
 twint
-vco
 voltdivide
 voltdouble
 voltdouble2

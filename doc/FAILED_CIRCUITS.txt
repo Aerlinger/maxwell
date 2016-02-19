@@ -3,7 +3,6 @@
 555sequencer
 amp-integ
 cciamp
-ccinductor
 ccvccs
 cmosff
 cube
@@ -30,6 +29,7 @@ rossler
 swtreedac
 traffic
 transformerdown
+vco
 wheatstone
 4way
 cc2impn

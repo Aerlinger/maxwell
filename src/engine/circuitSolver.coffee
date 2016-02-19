@@ -101,10 +101,10 @@ class CircuitSolver
 #        console.log("Found ground")
         gotGround = true
         break
-      if ce instanceof RailElm
+      if Util.typeOf(ce, RailElm)
 #        console.log("Got rail")
         gotRail = true
-      if !volt? and ce instanceof VoltageElm
+      if !volt? and Util.typeOf(ce, VoltageElm)
 #        console.log("Ve")
         volt = ce
 
@@ -275,7 +275,7 @@ class CircuitSolver
           @Circuit.halt "No path for current source!", ce
           return
       # Look for voltage source loops:
-      if (ce instanceof VoltageElm and ce.getPostCount() is 2) or ce instanceof WireElm
+      if (Util.typeOf(ce, VoltageElm) and ce.getPostCount() is 2) or ce instanceof WireElm
         pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
 
         if pathfinder.findPath(ce.getNode(0))

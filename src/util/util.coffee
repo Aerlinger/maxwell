@@ -237,6 +237,19 @@ class Util
     x1 = x1.replace(pattern, "$1" + "," + "$2")  while pattern.test(x1)
     x1 + x2
 
+  @typeOf: (obj, klassType) ->
+    klass = obj.constructor
+
+    return true if klass is klassType
+
+    while klass.__super__?
+      if klass.__super__ is klassType::
+        return true
+
+      klass = klass.__super__.constructor
+
+    false
+
   @halt: (message) ->
     e = new Error(message)
     console.log(e.stack)

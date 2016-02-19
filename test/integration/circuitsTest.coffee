@@ -9,7 +9,7 @@ _ = require("lodash")
 
 chai = require('chai')
 
-chai.config.showDiff = false
+#chai.config.showDiff = false
 
 assert = chai.assert
 expect = chai.expect
@@ -45,31 +45,45 @@ filenames = glob.sync "./circuits/*.txt", {}
   "itov", "capmult", "gyrator", "amp-dfdx", "allpass2", "opamp-regulator"
 ]
 
-@files = _.difference(@files, @skip)
-#@files = [
-#  "7segdecoder"
-#  "jfetamp"
-#  "jfetfollower"
-#  "digsine"
-#  "cube"
-#  "deltasigma"
-#  "tdosc"
-#  "tdrelax"
-#  "tdiode"
-#  "pll"
-#  "pll2"
-#  "pll2a"
-#  "freqdouble"
-#  "relayctr"
-#  "relaymux"
-#  "relaytff"
-#  "howland"
-#  "powerfactor1"
-#]
+#@files = _.difference(@files, @skip)
+@files = [
+#  '3way',
+#  '555missing',
+#  '555sequencer',
+  'amp-integ'
+#  'cciamp',   # Numerical error
+#  'ccvccs',
+#  'cmosff',
+#  'cube',
+#  'default',
+#  'deltasigma',
+#  'digcompare',
+#  'dram',
+#  'dtlnor',
+#  'flashadc',
+#  'hfadc',
+#  'ledflasher',
+#  'lissa',
+#  'longdist',
+#  'mux3state',
+#  'opint-current',
+#  'opint-invert-amp',
+#  'opint-slew',
+#  'phasecompint',
+#  'relayctr',
+#  'relaymux',
+#  'relaytff',
+#  'ringmod',
+#  'rossler',
+#  'swtreedac',
+#  'traffic',
+#  'transformerdown',
+#  'wheatstone' # Missing
+]
 
 for circuit_name in @files
   do (circuit_name) ->
-    describe "All Circuits", ->
+    describe "#{circuit_name} test", ->
       it "STATIC #{circuit_name}", =>
         circuit_file = "#{circuit_name}.json"
 

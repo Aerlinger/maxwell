@@ -86,6 +86,14 @@ describe "Utility test", ->
 
     expect(true_deltas).to.not.eql([])
 
+  it "detects subtype", ->
+    ve = new VarRailElm()
+
+    expect(Util.typeOf(ve, CircuitComponent)).to.be.true
+    expect(Util.typeOf(ve, VoltageElm)).to.be.true
+    expect(Util.typeOf(ve, RailElm)).to.be.true
+    expect(Util.typeOf(ve, VarRailElm)).to.be.true
+
 
   it "extends an object", ->
     capacitorFields = {

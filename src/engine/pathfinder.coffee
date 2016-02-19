@@ -3,6 +3,7 @@ CurrentElm = require('../circuit/components/CurrentElm.coffee')
 ResistorElm = require('../circuit/components/ResistorElm.coffee')
 InductorElm = require('../circuit/components/InductorElm.coffee')
 CapacitorElm = require('../circuit/components/CapacitorElm.coffee')
+Util = require('../util/util.coffee')
 
 class Pathfinder
   @INDUCT: 1
@@ -34,14 +35,14 @@ class Pathfinder
       if (ce instanceof CurrentElm) and (@type is Pathfinder.INDUCT)
         continue
       if @type is Pathfinder.VOLTAGE
-        if !(ce.isWire() or ce instanceof VoltageElm)
+        if !(ce.isWire() or Util.typeOf(ce, VoltageElm))
 #          console.log("type == VOLTAGE")
           continue
       if @type is Pathfinder.SHORT and !ce.isWire()
 #        console.log("(type == SHORT && !ce.isWire())")
         continue
       if (@type is Pathfinder.CAP_V)
-        if !(ce.isWire() or ce instanceof CapacitorElm or ce instanceof VoltageElm)
+        if !(ce.isWire() or ce instanceof CapacitorElm or Util.typeOf(ce, VoltageElm))
 #          console.log("if !(ce.isWire() or ce instanceof CapacitorElm or ce instanceof VoltageElm)")
           continue
 
