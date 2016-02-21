@@ -21,7 +21,7 @@ filenames = glob.sync "./circuits/*.txt", {}
 @files = filenames.map (file) ->
   path.basename(file, ".txt")
 
-#@skip = [
+@skip = ['vco', 'transformerup']
 #  "counter", "555monostable", "555sequencer", "3-invert", "dram", "fulladd", "fullrect", "3-f220", "3-f221", "3-f211",
 #  "cmosnand", "cmosinverterslow", "cmosff", "ccinductor"
 #]
@@ -45,7 +45,7 @@ filenames = glob.sync "./circuits/*.txt", {}
   "itov", "capmult", "gyrator", "amp-dfdx", "allpass2", "opamp-regulator"
 ]
 
-#@files = _.difference(@files, @skip)
+@files = _.difference(@files, @skip)
 #@files = [
 #  '3way',
 #  '555missing',  # 82

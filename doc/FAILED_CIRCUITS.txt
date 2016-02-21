@@ -31,4 +31,3 @@ tesla
 transformer
 transformerdc
 transformerdown
-transformerup

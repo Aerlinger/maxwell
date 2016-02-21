@@ -231,7 +231,6 @@ trans-diffamp
 transformer
 transformerdc
 transformerdown
-transformerup
 transswitch
 triangle
 triode
@@ -240,7 +239,6 @@ ttlinverter
 ttlnand
 ttlnor
 twint
-vco
 voltdivide
 voltdouble
 voltdouble2
