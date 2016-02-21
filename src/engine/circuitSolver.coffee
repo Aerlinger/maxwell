@@ -21,6 +21,7 @@ sprintf = require("sprintf-js").sprintf
 
 class CircuitSolver
   @SIZE_LIMIT = 100
+  @MAXIMUM_SUBITERATIONS = 5000
 
   constructor: (@Circuit) ->
     @scaleFactors = Util.zeroArray(400)
@@ -60,20 +61,9 @@ class CircuitSolver
     @Circuit.clearErrors()
     @Circuit.resetNodes()
 
-    @establishGroundNode()
-    @allocateNodes()
-
-    @circuitMatrixSize = @circuitMatrixFullSize = @matrixSize
-
-    @circuitMatrix = Util.zeroArray2(@matrixSize, @matrixSize)
-    @origMatrix = Util.zeroArray2(@matrixSize, @matrixSize)
-
-    @circuitRightSide = Util.zeroArray @matrixSize
-    @origRightSide = Util.zeroArray @matrixSize
-    @circuitRowInfo = Util.zeroArray @matrixSize
-    @circuitPermute = Util.zeroArray @matrixSize
-
-    @buildMatrices()
+    @discoverGroundReference()
+    @constructCircuitGraph()
+    @constructMatrixEquations()
     @checkConnectivity()
     @findInvalidPaths()
     @optimize()
@@ -87,7 +77,7 @@ class CircuitSolver
 
     if not @circuitMatrix? or @Circuit.numElements() is 0
       @circuitMatrix = null
-      console.log("Called solve circuit when circuit Matrix not initialized")
+      console.error("Called solve circuit when circuit Matrix not initialized")
       return
 
     stepRate = Math.floor(160 * @getIterCount())
@@ -101,20 +91,16 @@ class CircuitSolver
     loop
       ++@steps
 
-      # The number of maximum allowable iterations
-      subiterCount = 5000
-
       for circuitElm in @Circuit.getElements()
         circuitElm.startIteration()
 
       # Sub iteration
-      for subiter in [0...subiterCount]
+      for subiter in [0...CircuitSolver.MAXIMUM_SUBITERATIONS]
         @converged = true
         @subIterations = subiter
 
         @restoreOriginalMatrixState()
 
-        # Step each element this iteration
         for circuitElm in @Circuit.getElements()
           circuitElm.doStep(@Stamper)
 
@@ -129,9 +115,9 @@ class CircuitSolver
           res = @getValueFromNode(j)
           break unless @updateComponent(j, res)
 
-        break unless @circuitNonLinear
+        break if @circuitLinear()
 
-      if subiter >= subiterCount
+      if subiter >= CircuitSolver.MAXIMUM_SUBITERATIONS
         @halt "Convergence failed: " + subiter, null
         break
 
@@ -144,9 +130,7 @@ class CircuitSolver
       tm = (new Date()).getTime()
       lit = tm
 
-      if iter * 1000 >= stepRate * (tm - @lastIterTime)
-        break
-      else if (tm - @lastFrameTime) > 500
+      if (iter * 1000 >= stepRate * (tm - @lastIterTime)) or (tm - @lastFrameTime) > 500
         break
 
       ++iter
@@ -189,7 +173,7 @@ class CircuitSolver
     sim_speed = @Circuit.simSpeed()
     return 0.1 * Math.exp((sim_speed - 61.0) / 24.0)
 
-  establishGroundNode: ->
+  discoverGroundReference: ->
     gotGround = false
     gotRail = false
     volt = null
@@ -204,66 +188,70 @@ class CircuitSolver
       if !volt? and Util.typeOf(ce, VoltageElm)
         volt = ce
 
-    cn = new CircuitNode(@)
-    cn.x = cn.y = -1
+    circuitNode = new CircuitNode(@)
+    circuitNode.x = circuitNode.y = -1
 
     # If no ground and no rails then voltage element's first terminal is referenced to ground:
     if !gotGround and !gotRail and volt?
       pt = volt.getPost(0)
 
-      cn.x = pt.x
-      cn.y = pt.y
+      circuitNode.x = pt.x
+      circuitNode.y = pt.y
 
-    @Circuit.addCircuitNode cn
+    @Circuit.addCircuitNode circuitNode
 
-  allocateNodes: ->
+  buildComponentNodes: ->
     voltageSourceCount = 0
 
-    # Allocate nodes and voltage sources
-    for i in [0...@Circuit.numElements()]
-      circuitElm = @Circuit.getElmByIdx(i)
+    for circuitElm in @Circuit.getElements()
       internalNodeCount = circuitElm.getInternalNodeCount()
       internalVSCount = circuitElm.getVoltageSourceCount()
       postCount = circuitElm.getPostCount()
 
       # allocate a node for each post and match postCount to nodes
-      for j in [0...postCount]
-        postPt = circuitElm.getPost(j)
+      for postIdx in [0...postCount]
+        postPt = circuitElm.getPost(postIdx)
 
-        for k in [0...@Circuit.numNodes()]
-          cn = @Circuit.getNode(k)
-          if postPt.x is cn.x and postPt.y is cn.y
+        for nodeIdx in [0...@Circuit.numNodes()]
+          circuitNode = @Circuit.getNode(nodeIdx)
+          if Util.overlappingPoints(postPt, circuitNode)
             break
 
-        cnl = new CircuitNodeLink()
-        cnl.num = j
-        cnl.elm = circuitElm
+        nodeLink = new CircuitNodeLink()
+        nodeLink.num = postIdx
+        nodeLink.elm = circuitElm
 
-        if k is @Circuit.numNodes()
-          cn = new CircuitNode(@, postPt.x, postPt.y)
-          cn.links.push cnl
+        if nodeIdx == @Circuit.numNodes()
+          circuitNode = new CircuitNode(@, postPt.x, postPt.y)
+          circuitNode.links.push nodeLink
 
-          circuitElm.setNode j, @Circuit.numNodes()
-          @Circuit.addCircuitNode cn
+          circuitElm.setNode postIdx, @Circuit.numNodes()
+          @Circuit.addCircuitNode circuitNode
 
         else
-          @Circuit.getNode(k).links.push cnl
-          circuitElm.setNode(j, k)
+          @Circuit.getNode(nodeIdx).links.push nodeLink
+          circuitElm.setNode(postIdx, nodeIdx)
 
-          if k is 0
-            circuitElm.setNodeVoltage(j, 0)
+          if nodeIdx is 0
+            circuitElm.setNodeVoltage(postIdx, 0)
 
-      for j in [0...internalNodeCount]
-        cnl = new CircuitNodeLink()
-        cnl.num = j + postCount
-        cnl.elm = circuitElm
+      for internalNodeIdx in [0...internalNodeCount]
+        internalLink = new CircuitNodeLink()
+        internalLink.num = internalNodeIdx + postCount
+        internalLink.elm = circuitElm
 
-        cn = new CircuitNode(@, -1, -1, true)
-        cn.links.push cnl
-        circuitElm.setNode cnl.num, @Circuit.numNodes()
-        @Circuit.addCircuitNode cn
+        internalNode = new CircuitNode(@, -1, -1, true)
+        internalNode.links.push internalLink
+        circuitElm.setNode internalLink.num, @Circuit.numNodes()
+
+        @Circuit.addCircuitNode internalNode
 
       voltageSourceCount += internalVSCount
+
+
+  constructCircuitGraph: ->
+    # Allocate nodes and voltage sources
+    @buildComponentNodes()
 
     @Circuit.voltageSources = new Array(voltageSourceCount)
 
@@ -275,17 +263,27 @@ class CircuitSolver
       if circuitElement.nonLinear()
         @circuitNonLinear = true
 
-      for j in [0...circuitElement.getVoltageSourceCount()]
+      for voltSourceIdx in [0...circuitElement.getVoltageSourceCount()]
         @Circuit.voltageSources[voltageSourceCount] = circuitElement
-        circuitElement.setVoltageSource j, voltageSourceCount++
+        circuitElement.setVoltageSource voltSourceIdx, voltageSourceCount++
 
     @Circuit.voltageSourceCount = voltageSourceCount
 
     @matrixSize = @Circuit.numNodes() + voltageSourceCount - 1
 
-  buildMatrices: ->
-    for i in [0...@matrixSize]
-      @circuitRowInfo[i] = new RowInfo()
+  constructMatrixEquations: ->
+    @circuitMatrixSize = @circuitMatrixFullSize = @matrixSize
+
+    @circuitMatrix = Util.zeroArray2(@matrixSize, @matrixSize)
+    @origMatrix = Util.zeroArray2(@matrixSize, @matrixSize)
+
+    @circuitRightSide = Util.zeroArray @matrixSize
+    @origRightSide = Util.zeroArray @matrixSize
+    @circuitRowInfo = Util.zeroArray @matrixSize
+    @circuitPermute = Util.zeroArray @matrixSize
+
+    for rowIdx in [0...@matrixSize]
+      @circuitRowInfo[rowIdx] = new RowInfo()
 
     @circuitNeedsMap = false
 
@@ -300,43 +298,42 @@ class CircuitSolver
 
     while changed
       changed = false
-      for i in [0...@Circuit.numElements()]
-        circuitElm = @Circuit.getElmByIdx(i)
+      for circuitElm in @Circuit.getElements()
 
         # Loop through all ce's nodes to see if they are connected to other nodes not in closure
-        for j in [0...circuitElm.getPostCount()]
-          unless closure[circuitElm.getNode(j)]
-            if circuitElm.hasGroundConnection(j)
+        for postIdx in [0...circuitElm.getPostCount()]
+          unless closure[circuitElm.getNode(postIdx)]
+            if circuitElm.hasGroundConnection(postIdx)
               changed = true
-              closure[circuitElm.getNode(j)] = true
+              closure[circuitElm.getNode(postIdx)] = true
             continue
-          for k in [0...circuitElm.getPostCount()]
-            continue if j is k
-            kn = circuitElm.getNode(k)
-            if circuitElm.getConnection(j, k) and !closure[kn]
-              closure[kn] = true
+
+          for siblingPostIdx in [0...circuitElm.getPostCount()]
+            if postIdx is siblingPostIdx
+              continue
+
+            siblingNode = circuitElm.getNode(siblingPostIdx)
+            if circuitElm.getConnection(postIdx, siblingPostIdx) and !closure[siblingNode]
+              closure[siblingNode] = true
               changed = true
 
       continue if changed
 
       # connect unconnected nodes
-      for i in [0...@Circuit.numNodes()]
-        if !closure[i] and !@Circuit.nodeList[i].intern
-          console.warn("Node #{i} unconnected! -> #{@Circuit.nodeList[i].toString()}")
-          @Stamper.stampResistor 0, i, 1e8
-          closure[i] = true
+      for nodeIdx in [0...@Circuit.numNodes()]
+        if !closure[nodeIdx] and !@Circuit.nodeList[nodeIdx].intern
+          console.warn("Node #{nodeIdx} unconnected! -> #{@Circuit.nodeList[nodeIdx].toString()}")
+          @Stamper.stampResistor 0, nodeIdx, 1e8
+          closure[nodeIdx] = true
           changed = true
           break
 
 
   findInvalidPaths: ->
-    for i in [0...@Circuit.numElements()]
-      ce = @Circuit.getElmByIdx(i)
-
+    for ce in @Circuit.getElements()
       if ce instanceof InductorElm
         fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
 
-        # try findPath with maximum depth of 5, to avoid slowdown
         if not fpi.findPath(ce.getNode(0), 5) and not fpi.findPath(ce.getNode(0))
           ce.reset()
 
@@ -482,24 +479,24 @@ class CircuitSolver
 
     Util.zeroArray newRS
 
-    ii = 0
+    newIdx = 0
     for row in [0...@matrixSize]
       circuitRowInfo = @circuitRowInfo[row]
 
       if circuitRowInfo.dropRow
         circuitRowInfo.mapRow = -1
       else
-        newRS[ii] = @circuitRightSide[row]
+        newRS[newIdx] = @circuitRightSide[row]
 
-        circuitRowInfo.mapRow = ii
+        circuitRowInfo.mapRow = newIdx
         for col in [0...@matrixSize]
           rowInfo = @circuitRowInfo[col]
           if rowInfo.type is RowInfo.ROW_CONST
-            newRS[ii] -= rowInfo.value * @circuitMatrix[row][col]
+            newRS[newIdx] -= rowInfo.value * @circuitMatrix[row][col]
           else
-            newMatx[ii][rowInfo.mapCol] += @circuitMatrix[row][col]
+            newMatx[newIdx][rowInfo.mapCol] += @circuitMatrix[row][col]
 
-        ii++
+        newIdx++
 
     @circuitMatrix = newMatx
     @circuitRightSide = newRS
@@ -512,22 +509,22 @@ class CircuitSolver
 
 
   saveOriginalMatrixState: ->
-    for i in [0...@matrixSize]
-      @origRightSide[i] = @circuitRightSide[i]
+    for row in [0...@matrixSize]
+      @origRightSide[row] = @circuitRightSide[row]
 
     if @circuitNonLinear
-      for i in [0...@matrixSize]
-        for j in [0...@matrixSize]
-          @origMatrix[i][j] = @circuitMatrix[i][j]
+      for row in [0...@matrixSize]
+        for col in [0...@matrixSize]
+          @origMatrix[row][col] = @circuitMatrix[row][col]
 
   restoreOriginalMatrixState: ->
-    for i in [0...@circuitMatrixSize]
-      @circuitRightSide[i] = @origRightSide[i]
+    for row in [0...@circuitMatrixSize]
+      @circuitRightSide[row] = @origRightSide[row]
 
     if @circuitNonLinear
-      for i in [0...@circuitMatrixSize]
-        for j in [0...@circuitMatrixSize]
-          @circuitMatrix[i][j] = @origMatrix[i][j]
+      for row in [0...@circuitMatrixSize]
+        for col in [0...@circuitMatrixSize]
+          @circuitMatrix[row][col] = @origMatrix[row][col]
 
   getValueFromNode: (idx) ->
     rowInfo = @circuitRowInfo[idx]
@@ -537,18 +534,18 @@ class CircuitSolver
     else
       return @circuitRightSide[rowInfo.mapCol]
 
-  updateComponent: (idx, value) ->
+  updateComponent: (nodeIdx, value) ->
     if isNaN(value)
       @converged = false
       return false
 
-    if idx < (@Circuit.numNodes() - 1)
-      circuitNode = @Circuit.nodeList[idx + 1]
-      for cnl in circuitNode.links
-        cnl.elm.setNodeVoltage cnl.num, value
+    if nodeIdx < (@Circuit.numNodes() - 1)
+      circuitNode = @Circuit.nodeList[nodeIdx + 1]
+      for circuitNodeLink in circuitNode.links
+        circuitNodeLink.elm.setNodeVoltage circuitNodeLink.num, value
 
     else
-      ji = idx - (@Circuit.numNodes() - 1)
+      ji = nodeIdx - (@Circuit.numNodes() - 1)
       @Circuit.voltageSources[ji].setCurrent ji, value
 
     true
@@ -733,7 +730,5 @@ class CircuitSolver
     out += circuitRightSideDump
 
     out
-
-
 
 module.exports = CircuitSolver

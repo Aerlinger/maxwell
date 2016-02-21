@@ -260,6 +260,8 @@ class Util
   @comparePair: (x1, x2, y1, y2) ->
     (x1 == y1 && x2 == y2) || (x1 == y2 && x2 == y1)
 
+  @overlappingPoints: (pt1, pt2) ->
+    pt1.x == pt2.x && pt1.y == pt2.y
 
 
 module.exports = Util
