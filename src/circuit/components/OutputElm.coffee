@@ -24,6 +24,8 @@ class OutputElm extends CircuitComponent
     super()
     @lead1 = new Point()
 
+    @setBboxPt(@lead1, @point1, 8)
+
   draw: (renderContext) ->
     if CircuitComponent.DEBUG
       super(renderContext)
@@ -33,7 +35,6 @@ class OutputElm extends CircuitComponent
 
     @lead1 = Util.interpolate @point1, @point2, 1 - (3 * s.length / 2 + 8) / @dn
 
-    @setBboxPt @point1, @lead1, 0
     renderContext.drawValue -5, 25, this, s
 
     color = Util.getVoltageColor(@volts[0])

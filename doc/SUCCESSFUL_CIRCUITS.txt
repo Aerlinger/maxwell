@@ -76,6 +76,7 @@ dcrestoration
 deccounter
 decoder
 delayrc
+deltasigma
 diff
 digcompare
 digsine
@@ -96,6 +97,7 @@ filt-lopass-l
 filt-lopass
 filt-vcvs-hipass
 filt-vcvs-lopass
+flashadc
 follower
 freqdouble
 fulladd
@@ -107,6 +109,7 @@ grid2
 gyrator
 halfadd
 hartley
+hfadc
 howland
 impedance
 indmultfreq
@@ -194,6 +197,7 @@ res-par
 res-series
 resistors
 ringing
+rossler
 rtlinverter
 rtlnand
 rtlnor

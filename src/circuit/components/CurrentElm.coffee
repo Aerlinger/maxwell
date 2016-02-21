@@ -46,8 +46,6 @@ class CurrentElm extends CircuitComponent
     renderContext.drawCircle @ashaft1, @ashaft2
     renderContext.drawThickPolygonP @arrow
 
-    @setBboxPt @point1, @point2, cr
-
 #      if Circuit.showValuesCheckItem
 #        s = DrawHelper.getShortUnitText(@currentValue, "A")
 #        @drawValues s, cr  if @dx is 0 or @dy is 0

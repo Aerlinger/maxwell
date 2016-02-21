@@ -161,7 +161,6 @@ class VoltageElm extends CircuitComponent
     else
       @calcLeads VoltageElm.circleSize * 2
 
-    @setBbox @x1, @y1, @x2, @y2
     renderContext.drawLeads(this)
 
     if @waveform is VoltageElm.WF_DC

@@ -5,7 +5,6 @@ Rectangle = require('../../geom/rectangle.coffee')
 Point = require('../../geom/point.coffee')
 
 class TextElm extends CircuitComponent
-
   @FLAG_CENTER = 1
   @FLAG_BAR = 2
 
@@ -24,9 +23,6 @@ class TextElm extends CircuitComponent
       type: "attribute"
       data_type: (x) -> x
     }
-    # FLAGS
-#    @FLAG_CENTER: 1
-#    @FLAG_BAR: 2
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
@@ -36,12 +32,6 @@ class TextElm extends CircuitComponent
     @size = 24
 
     super(xa, ya, xb, yb, params, f)
-
-#    if st
-#      st = st.split(" ")  if typeof st is "string"
-#      @size = Math.floor(st.shift())
-#      @text = st.shift()
-#      @text += " " + st.shift()  until st.length is 0
 
   stamp: ->
 

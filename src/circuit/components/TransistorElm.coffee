@@ -150,8 +150,6 @@ class TransistorElm extends CircuitComponent
       pt = Util.interpolateSymmetrical(@point1, @point2, 1 - 11 / @dn, -5 * @dsign * @pnp)
       @arrowPoly = Util.calcArrow(@emit[0], pt, 8, 4)
 
-    @setBboxPt @point1, @point2, @renderSize
-
     # draw collector
     color = Util.getVoltageColor(@volts[1])
     renderContext.drawLinePt @coll[0], @coll[1], color
@@ -238,6 +236,8 @@ class TransistorElm extends CircuitComponent
     @base = Util.interpolateSymmetrical(@point1, @point2, 1 - 16 / @dn)
 
     @rectPoly = Util.createPolygonFromArray(@rect)
+
+    @setBbox(@point1.x, @point1.y, @point2.x, @point2.y)
 
     if @pnp == 1
       @arrowPoly = Util.calcArrow(@emit[1], @emit[0], 8, 4)

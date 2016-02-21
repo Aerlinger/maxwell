@@ -60,6 +60,9 @@ class SwitchElm extends CircuitComponent
     @ps = new Point(0, 0)
     @ps2 = new Point(0, 0)
 
+    openhs = 16
+    @setBboxPt @point1, @point2, openhs
+
   getDumpType: ->
     "s"
 
@@ -80,7 +83,6 @@ class SwitchElm extends CircuitComponent
     hs1 = (if (@position is 1) then 0 else 2)
     hs2 = (if (@position is 1) then openhs else 2)
 
-    @setBboxPt @point1, @point2, openhs
     renderContext.drawLeads(this)
 
     if @position is 0

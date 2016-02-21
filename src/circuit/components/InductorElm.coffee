@@ -75,7 +75,7 @@ class InductorElm extends CircuitComponent
     v2 = @volts[1]
     hs = 8
 
-    @setBboxPt @point1, @point2, hs
+#    @setBboxPt @point1, @point2, hs
     renderContext.drawLeads(this)
     renderContext.drawCoil @lead1, @lead2, v1, v2, renderContext
 

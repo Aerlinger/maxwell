@@ -27,8 +27,6 @@ class ZenerElm extends DiodeElm
       super(renderContext)
 
     @updateDots()
-    @setBboxPt(@point1, @point2, @hs)
-
     @calcLeads 16
     pa = Util.newPointArray(2)
     @wing = Util.newPointArray(2)

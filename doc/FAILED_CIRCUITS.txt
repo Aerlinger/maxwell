@@ -1,10 +1,7 @@
 cciamp
 ccvccs
-deltasigma
 dram
 dtlnor
-flashadc
-hfadc
 ledflasher
 lissa
 longdist
@@ -17,10 +14,10 @@ relayctr
 relaymux
 relaytff
 ringmod
-rossler
 traffic
 wheatstone
 cc2impn
+deltasigma
 freqdouble
 swtreedac
 tdiode

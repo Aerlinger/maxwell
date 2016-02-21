@@ -60,8 +60,6 @@ class SweepElm extends CircuitComponent
     if CircuitComponent.DEBUG
       super(renderContext)
 
-    @setBboxPt @point1, @point2, SweepElm.circleSize
-
     color = Util.getVoltageColor(@volts[0])
     @lead1 = Util.interpolate(@point1, @point2, 1 - SweepElm.circleSize / @dn)
 

@@ -25,7 +25,7 @@ _ = require("lodash")
 sprintf = require("sprintf-js").sprintf
 
 class CircuitComponent
-#  @DEBUG = true
+  @DEBUG = true
 
   @Fields = {}
 

@@ -69,8 +69,7 @@ class SparkGapElm extends CircuitComponent
     p1 = Util.interpolate(@point1, @point2, (@dn + alen) / (2 * @dn))
     @arrow2 = Util.calcArrow(@point2, p1, alen, alen)
 
-
-
+    @setBboxPt @point1, @point2, 8
 
 
 #    if st
@@ -104,8 +103,6 @@ class SparkGapElm extends CircuitComponent
 
     v1 = @volts[0]
     v2 = @volts[1]
-
-    @setBboxPt @point1, @point2, 8
 
     renderContext.drawLeads(this)
 

@@ -50,6 +50,8 @@ class Switch2Elm extends SwitchElm
 
     @posCount = if @hasCenterOff() then 3 else 2
 
+    @setBboxPt @point1, @point2, @openhs
+
   getDumpType: ->
     "S"
 
@@ -57,7 +59,6 @@ class Switch2Elm extends SwitchElm
     if CircuitComponent.DEBUG
       super(renderContext)
 
-    @setBboxPt @point1, @point2, @openhs
     @calcLeads 32
 
     @swpoles = Util.newPointArray(3)

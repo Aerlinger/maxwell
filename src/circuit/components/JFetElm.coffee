@@ -48,12 +48,12 @@ class JfetElm extends MosfetElm
     else
       @arrowPoly = Util.calcArrow(@point1, @gatePt, 8, 3)
 
+    @setBboxPt(@point1, @point2, @hs)
+
 
   draw: (renderContext) ->
     if CircuitComponent.DEBUG
       super(renderContext)
-
-    @setBboxPt(@point1, @point2, @hs)
 
     color = Util.getVoltageColor(@volts[1])
     renderContext.drawLinePt(@src[0], @src[1], color)
