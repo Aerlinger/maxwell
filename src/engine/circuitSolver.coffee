@@ -522,24 +522,10 @@ class CircuitSolver
 
         @luSolve @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide
 
+        # backsolve...
         for j in [0...@circuitMatrixFullSize]
-          rowInfo = @circuitRowInfo[j]
-          res = 0
-          if rowInfo.type is RowInfo.ROW_CONST
-            res = rowInfo.value
-          else
-            res = @circuitRightSide[rowInfo.mapCol]
-
-          if isNaN(res)
-            @converged = false
-            break
-          if j < (@Circuit.numNodes() - 1)
-            circuitNode = @Circuit.nodeList[j + 1]
-            for cnl in circuitNode.links
-              cnl.elm.setNodeVoltage cnl.num, res
-          else
-            ji = j - (@Circuit.numNodes() - 1)
-            @Circuit.voltageSources[ji].setCurrent ji, res
+          res = @getValueFromNode(j)
+          break unless @updateComponent(j, res)
 
         break unless @circuitNonLinear
         subiter++
@@ -550,8 +536,6 @@ class CircuitSolver
 
       @Circuit.time += @Circuit.timeStep()
 
-#      console.log("ts: #{@Circuit.time}, #{@Circuit.timeStep()} #{iter} #{stepRate}")
-
       # TODO: Update scopes here
       #        for scope in @Circuit.scopes
       #          scope.timeStep()
@@ -559,14 +543,10 @@ class CircuitSolver
       tm = (new Date()).getTime()
       lit = tm
 
-
       if iter * 1000 >= stepRate * (tm - @lastIterTime)
-#        console.log("1 breaking from iteration: " + " sr: " + @steprate + " iter: " + subiter + " time: " + (tm - @lastIterTime) + " lastIterTime: " + @lastIterTime + " lastFrametime: " + @lastFrameTime );
         break
       else if (tm - @lastFrameTime) > 500
-#        console.log("> 500: " + " sr: " + @steprate + " iter: " + iter + " subiter: " + subiter + " subitertime " + (tm - @lastFrameTime) + " iter time: " + (tm - @lastIterTime) + " lastIterTime: " + @lastIterTime + " lastFrametime: " + @lastFrameTime );
         break
-
 
       ++iter
     # END: `loop`
@@ -577,6 +557,30 @@ class CircuitSolver
     @simulationFrames.push(new SimulationFrame(@Circuit))
 
     @_updateTimings(lit)
+
+  getValueFromNode: (idx) ->
+    rowInfo = @circuitRowInfo[idx]
+
+    if rowInfo.type is RowInfo.ROW_CONST
+      return rowInfo.value
+    else
+      return @circuitRightSide[rowInfo.mapCol]
+
+  updateComponent: (idx, value) ->
+    if isNaN(value)
+      @converged = false
+      return false
+
+    if idx < (@Circuit.numNodes() - 1)
+      circuitNode = @Circuit.nodeList[idx + 1]
+      for cnl in circuitNode.links
+        cnl.elm.setNodeVoltage cnl.num, value
+    else
+      ji = idx - (@Circuit.numNodes() - 1)
+      @Circuit.voltageSources[ji].setCurrent ji, value
+
+    true
+
 
   ###
     luFactor: finds a solution to a factored matrix through LU (Lower-Upper) factorization
