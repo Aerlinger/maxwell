@@ -130,7 +130,640 @@
 },{}],8:[function(require,module,exports){
 // nothing to see here... no file methods for the browser
 
-},{}],4:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
+// shim for using process in browser
+
+var process = module.exports = {};
+
+process.nextTick = (function () {
+    var canSetImmediate = typeof window !== 'undefined'
+    && window.setImmediate;
+    var canPost = typeof window !== 'undefined'
+    && window.postMessage && window.addEventListener
+    ;
+
+    if (canSetImmediate) {
+        return function (f) { return window.setImmediate(f) };
+    }
+
+    if (canPost) {
+        var queue = [];
+        window.addEventListener('message', function (ev) {
+            var source = ev.source;
+            if ((source === window || source === null) && ev.data === 'process-tick') {
+                ev.stopPropagation();
+                if (queue.length > 0) {
+                    var fn = queue.shift();
+                    fn();
+                }
+            }
+        }, true);
+
+        return function nextTick(fn) {
+            queue.push(fn);
+            window.postMessage('process-tick', '*');
+        };
+    }
+
+    return function nextTick(fn) {
+        setTimeout(fn, 0);
+    };
+})();
+
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+}
+
+// TODO(shtylman)
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+
+},{}],3:[function(require,module,exports){
+(function(process){(function() {
+  var Circuit, CircuitComponent, CircuitLoader, ComponentRegistry, Hint, Oscilloscope, Scope, SimulationParams, VoltageElm, environment, fs;
+
+  ComponentRegistry = require('../circuit/componentRegistry.coffee');
+
+  SimulationParams = require('../core/simulationParams.coffee');
+
+  Circuit = require('../circuit/circuit.coffee');
+
+  CircuitComponent = require('../circuit/circuitComponent.coffee');
+
+  Oscilloscope = require('../scope/oscilloscope.coffee');
+
+  Hint = require('../engine/hint.coffee');
+
+  fs = require('fs');
+
+  VoltageElm = require('../circuit/components/VoltageElm.coffee');
+
+  Scope = require('../circuit/components/Scope.coffee');
+
+  environment = require("../environment.coffee");
+
+  CircuitLoader = (function() {
+    function CircuitLoader() {}
+
+    CircuitLoader.createCircuitFromJsonData = function(jsonData) {
+      var circuit, circuitParams, e, elementData, elms, flags, newCircuitElm, params, sym, type, validName, x1, x2, y1, y2, _i, _len;
+      circuit = new Circuit();
+      validName = /^[$A-Z_][0-9A-Z_$]*$/i;
+      circuitParams = jsonData.shift();
+      circuit.Params = SimulationParams.deserialize(circuitParams);
+      circuit.flags = parseInt(circuitParams['flags']);
+      elms = [];
+      for (_i = 0, _len = jsonData.length; _i < _len; _i++) {
+        elementData = jsonData[_i];
+        type = elementData['sym'];
+        sym = ComponentRegistry.ComponentDefs[type];
+        x1 = parseInt(elementData['x1']);
+        y1 = parseInt(elementData['y1']);
+        x2 = parseInt(elementData['x2']);
+        y2 = parseInt(elementData['y2']);
+        flags = parseInt(elementData['flags']) || 0;
+        params = elementData['params'];
+        console.log("" + type + " " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + flags + " " + params);
+        if (!sym) {
+          circuit.warn("No matching component for " + type + ": " + sym);
+        } else if (type === "h") {
+          console.log("Hint found in file!");
+          this.hintType = x1;
+          this.hintItem1 = x2;
+          this.hintItem2 = y1;
+          break;
+        } else if (sym === Scope) {
+          console.log("-> Scope found in file!");
+        } else if (!type) {
+          circuit.warn("Unrecognized Type " + type);
+        } else {
+          try {
+            newCircuitElm = new sym(x1, y1, x2, y2, params, parseInt(flags));
+          } catch (_error) {
+            e = _error;
+            console.log(e);
+            console.log("type: " + type + ", sym: " + sym);
+            console.log("elm: ", elementData);
+            console.log(e.stack);
+            if (!environment.isBrowser) {
+              process.exit(1);
+            }
+          }
+          elms.push(newCircuitElm);
+          circuit.solder(newCircuitElm);
+        }
+      }
+      if (elms.length === 0) {
+        console.error("No elements loaded. JSON most likely malformed");
+      }
+      if (!environment.isBrowser) {
+        circuit.ostream || (circuit.ostream = fs.createWriteStream("dump/" + circuit.Params.name));
+      }
+      return circuit;
+    };
+
+    /*
+    Retrieves string data from a circuit text file (via AJAX GET)
+    */
+
+
+    CircuitLoader.createCircuitFromJsonFile = function(circuitFileName, onComplete) {
+      var jsonData;
+      if (onComplete == null) {
+        onComplete = null;
+      }
+      if (environment.isBrowser) {
+        return $.getJSON(circuitFileName, function(jsonData) {
+          var circuit;
+          circuit = CircuitLoader.createCircuitFromJsonData(jsonData);
+          return typeof onComplete === "function" ? onComplete(circuit) : void 0;
+        });
+      } else {
+        jsonData = JSON.parse(fs.readFileSync(circuitFileName));
+        return CircuitLoader.createCircuitFromJsonData(jsonData);
+      }
+    };
+
+    return CircuitLoader;
+
+  })();
+
+  module.exports = CircuitLoader;
+
+}).call(this);
+
+
+})(require("__browserify_process"))
+},{"fs":8,"../circuit/componentRegistry.coffee":4,"../core/simulationParams.coffee":10,"../circuit/circuit.coffee":5,"../circuit/circuitComponent.coffee":2,"../scope/oscilloscope.coffee":11,"../engine/hint.coffee":12,"../circuit/components/VoltageElm.coffee":13,"../circuit/components/Scope.coffee":14,"../environment.coffee":7,"__browserify_process":9}],6:[function(require,module,exports){
+(function() {
+  var BaseRenderer, Circuit, CircuitComponent, Point, Polygon, Rectangle, Renderer, SelectionMarquee, Settings, Util, environment,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+  BaseRenderer = require('./BaseRenderer.coffee');
+
+  Circuit = require('../circuit/circuit.coffee');
+
+  CircuitComponent = require('../circuit/circuitComponent.coffee');
+
+  Settings = require('../settings/settings.coffee');
+
+  Rectangle = require('../geom/rectangle.coffee');
+
+  Polygon = require('../geom/Polygon.coffee');
+
+  Point = require('../geom/point.coffee');
+
+  Util = require('../util/util.coffee');
+
+  environment = require('../environment.coffee');
+
+  SelectionMarquee = (function(_super) {
+    __extends(SelectionMarquee, _super);
+
+    function SelectionMarquee(x1, y1) {
+      this.x1 = x1;
+      this.y1 = y1;
+    }
+
+    SelectionMarquee.prototype.reposition = function(x, y) {
+      var _x1, _x2, _y1, _y2;
+      _x1 = Math.min(x, this.x1);
+      _x2 = Math.max(x, this.x1);
+      _y1 = Math.min(y, this.y1);
+      _y2 = Math.max(y, this.y1);
+      this.x2 = _x2;
+      this.y2 = _y2;
+      this.x = this.x1 = _x1;
+      this.y = this.y1 = _y1;
+      this.width = _x2 - _x1;
+      return this.height = _y2 - _y1;
+    };
+
+    SelectionMarquee.prototype.draw = function(renderContext) {
+      renderContext.lineWidth = 0.1;
+      if ((this.x1 != null) && (this.x2 != null) && (this.y1 != null) && (this.y2 != null)) {
+        renderContext.drawLine(this.x1, this.y1, this.x2, this.y1);
+        renderContext.drawLine(this.x1, this.y2, this.x2, this.y2);
+        renderContext.drawLine(this.x1, this.y1, this.x1, this.y2);
+        return renderContext.drawLine(this.x2, this.y1, this.x2, this.y2);
+      }
+    };
+
+    return SelectionMarquee;
+
+  })(Rectangle);
+
+  Renderer = (function(_super) {
+    var MOUSEDOWN;
+
+    __extends(Renderer, _super);
+
+    Renderer.ON_COMPONENT_HOVER = "ON_COMPONENT_HOVER";
+
+    Renderer.ON_COMPONENT_CLICKED = "ON_COMPONENT_CLICKED";
+
+    Renderer.ON_COMPONENTS_SELECTED = "ON_COMPONENTS_SELECTED";
+
+    Renderer.ON_COMPONENTS_DESELECTED = "ON_COMPONENTS_DESELECTED";
+
+    Renderer.ON_COMPONENTS_MOVED = "ON_COMPONENTS_MOVED";
+
+    Renderer.STATE_EDIT;
+
+    Renderer.STATE_PLACE;
+
+    Renderer.STATE_RUN;
+
+    MOUSEDOWN = 1;
+
+    function Renderer(Circuit, Canvas) {
+      this.Circuit = Circuit;
+      this.Canvas = Canvas;
+      this.drawDots = __bind(this.drawDots, this);
+      this.draw = __bind(this.draw, this);
+      this.mouseup = __bind(this.mouseup, this);
+      this.mousedown = __bind(this.mousedown, this);
+      this.mousemove = __bind(this.mousemove, this);
+      Renderer.__super__.constructor.call(this);
+      this.highlightedComponent = null;
+      this.addComponent = null;
+      this.selectedNode = null;
+      this.selectedComponents = [];
+      this.width = this.Canvas.width;
+      this.height = this.Canvas.height;
+      this.state = this.STATE_RUN;
+      this.config = {
+        keyboard: true
+      };
+      if (environment.isBrowser) {
+        this.context = Sketch.augment(this.Canvas.getContext("2d"), {
+          draw: this.draw,
+          mousemove: this.mousemove,
+          mousedown: this.mousedown,
+          mouseup: this.mouseup,
+          fullscreen: false,
+          width: this.width,
+          height: this.height
+        });
+        this.context.lineJoin = 'miter';
+      }
+      this.onSelectionChanged = null;
+      this.onComponentClick = null;
+      this.onComponentHover = null;
+      this.onNodeHover = null;
+      this.onNodeClick = null;
+      this.onUpdateComplete = null;
+    }
+
+    Renderer.prototype.getSelectedComponents = function() {
+      return this.selectedComponents;
+    };
+
+    Renderer.prototype.getPlaceComponent = function() {
+      return this.placeComponent;
+    };
+
+    Renderer.prototype.pause = function() {};
+
+    Renderer.prototype.play = function() {};
+
+    Renderer.prototype.restart = function() {};
+
+    Renderer.prototype.clearPlaceComponent = function() {
+      return this.placeComponent = null;
+    };
+
+    Renderer.prototype.mousemove = function(event) {
+      var component, x, y, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _results;
+      x = event.offsetX;
+      y = event.offsetY;
+      this.newlyHighlightedComponent = null;
+      this.selectedNode = null;
+      this.lastX = this.snapX;
+      this.lastY = this.snapY;
+      this.snapX = Util.snapGrid(x);
+      this.snapY = Util.snapGrid(y);
+      if (this.placeComponent) {
+        if (this.placeComponent.x1 && this.placeComponent.y1) {
+          this.placeComponent.x2 = this.snapX;
+          this.placeComponent.y2 = this.snapY;
+          this.placeComponent.setPoints();
+        }
+      }
+      if (this.marquee != null) {
+        if ((_ref = this.marquee) != null) {
+          _ref.reposition(x, y);
+        }
+        this.selectedComponents = [];
+        _ref1 = this.Circuit.getElements();
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          component = _ref1[_i];
+          if ((_ref2 = this.marquee) != null ? _ref2.collidesWithComponent(component) : void 0) {
+            this.selectedComponents.push(component);
+            if (typeof this.onSelectionChanged === "function") {
+              this.onSelectionChanged(this.selectedComponents);
+            }
+          }
+        }
+      } else {
+        this.selectedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
+        if (this.selectedNode) {
+          if (typeof this.onNodeHover === "function") {
+            this.onNodeHover(this.selectedNode);
+          }
+        }
+        _ref3 = this.Circuit.getElements();
+        for (_j = 0, _len1 = _ref3.length; _j < _len1; _j++) {
+          component = _ref3[_j];
+          if (component.getBoundingBox().contains(x, y)) {
+            this.newlyHighlightedComponent = component;
+          }
+        }
+        if (this.newlyHighlightedComponent) {
+          if (this.newlyHighlightedComponent !== this.highlightedComponent) {
+            this.highlightedComponent = this.newlyHighlightedComponent;
+            if (typeof this.onComponentHover === "function") {
+              this.onComponentHover(this.highlightedComponent);
+            }
+            this.notifyObservers(Renderer.ON_COMPONENT_HOVER, this.highlightedComponent);
+          }
+        } else {
+          if (this.highlightedComponent !== null) {
+            if (typeof this.onComponentUnhover === "function") {
+              this.onComponentUnhover(this.highlightedComponent);
+            }
+          }
+          this.highlightedComponent = null;
+        }
+      }
+      if (this.marquee === null && ((_ref4 = this.selectedComponents) != null ? _ref4.length : void 0) > 0 && event.which === MOUSEDOWN && (this.lastX !== this.snapX || this.lastY !== this.snapY)) {
+        _ref5 = this.selectedComponents;
+        _results = [];
+        for (_k = 0, _len2 = _ref5.length; _k < _len2; _k++) {
+          component = _ref5[_k];
+          _results.push(component.move(this.snapX - this.lastX, this.snapY - this.lastY));
+        }
+        return _results;
+      }
+    };
+
+    Renderer.prototype.mousedown = function(event) {
+      var component, placeComponentKlass, x, y, _i, _len, _ref, _results;
+      x = event.offsetX;
+      y = event.offsetY;
+      if (this.selectedNode) {
+        if (typeof this.onNodeClick === "function") {
+          this.onNodeClick(this.selectedNode);
+        }
+      }
+      if (this.placeComponent) {
+        if (this.placeComponent.x1 && this.placeComponent.y1) {
+          this.placeComponent.x2 = Util.snapGrid(x);
+          this.placeComponent.y2 = Util.snapGrid(y);
+          this.Circuit.solder(this.placeComponent);
+          placeComponentKlass = this.placeComponent.constructor;
+          this.placeComponent = new placeComponentKlass();
+        } else {
+          this.placeComponent.x1 = Util.snapGrid(x);
+          this.placeComponent.y1 = Util.snapGrid(y);
+        }
+      }
+      if (this.highlightedComponent === null) {
+        if (this.selectedComponents && this.selectedComponents.length > 0) {
+          if (typeof this.onSelectionChanged === "function") {
+            this.onSelectionChanged([]);
+          }
+        }
+        this.selectedComponents = [];
+        this.marquee = new SelectionMarquee(x, y);
+      }
+      _ref = this.Circuit.getElements();
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        component = _ref[_i];
+        if (component.getBoundingBox().contains(x, y)) {
+          this.notifyObservers(Renderer.ON_COMPONENT_CLICKED, component);
+          if (__indexOf.call(this.selectedComponents, component) < 0) {
+            this.selectedComponents = [component];
+            if (typeof this.onSelectionChanged === "function") {
+              this.onSelectionChanged(this.selectedComponents);
+            }
+          }
+          if (typeof component.toggle === "function") {
+            component.toggle();
+          }
+          component.onclick();
+          _results.push(typeof this.onComponentClick === "function" ? this.onComponentClick(component) : void 0);
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    };
+
+    Renderer.prototype.mouseup = function(event) {
+      var _ref;
+      this.marquee = null;
+      if (((_ref = this.selectedComponents) != null ? _ref.length : void 0) > 0) {
+        return this.notifyObservers(Renderer.ON_COMPONENTS_DESELECTED, this.selectedComponents);
+      }
+    };
+
+    Renderer.prototype.draw = function() {
+      var _ref;
+      if ((this.snapX != null) && (this.snapY != null)) {
+        this.drawCircle(this.snapX, this.snapY, 3, "#F00");
+      }
+      this.drawInfoText();
+      if ((_ref = this.marquee) != null) {
+        _ref.draw(this);
+      }
+      this.Circuit.updateCircuit();
+      if (typeof this.onUpdateComplete === "function") {
+        this.onUpdateComplete(this);
+      }
+      this.drawComponents();
+      if (this.context) {
+        if (this.placeComponent) {
+          this.context.fillText("Placing " + this.placeComponent.constructor.name, this.snapX, this.snapY);
+          if (this.placeComponent.x1 && this.placeComponent.x2) {
+            this.drawComponent(this.placeComponent);
+          }
+        }
+        if (this.selectedNode) {
+          this.drawCircle(this.selectedNode.x, this.selectedNode.y, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+        }
+        if (this.highlightedComponent) {
+          this.drawCircle(this.highlightedComponent.x1, this.highlightedComponent.y1, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+          return this.drawCircle(this.highlightedComponent.x2, this.highlightedComponent.y2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+        }
+      }
+    };
+
+    Renderer.prototype.drawComponents = function() {
+      var component, _i, _len, _ref, _results;
+      if (this.context) {
+        _ref = this.Circuit.getElements();
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          component = _ref[_i];
+          _results.push(this.drawComponent(component));
+        }
+        return _results;
+      }
+    };
+
+    Renderer.prototype.drawBoldLines = function() {
+      return this.boldLines = true;
+    };
+
+    Renderer.prototype.drawDefaultLines = function() {
+      return this.boldLines = false;
+    };
+
+    Renderer.prototype.drawComponent = function(component) {
+      var i, post, _i, _ref;
+      if (component && __indexOf.call(this.selectedComponents, component) >= 0) {
+        this.drawBoldLines();
+        for (i = _i = 0, _ref = component.getPostCount(); 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+          post = component.getPost(i);
+          this.drawCircle(post.x, post.y, Settings.POST_RADIUS + 2, 2, Settings.SELECT_COLOR);
+        }
+      } else {
+        this.drawDefaultLines();
+      }
+      return component.draw(this);
+    };
+
+    Renderer.prototype.drawInfoText = function() {
+      var arr, idx, _i, _ref, _results;
+      if (this.highlightedComponent != null) {
+        arr = [];
+        this.highlightedComponent.getInfo(arr);
+        _results = [];
+        for (idx = _i = 0, _ref = arr.length; 0 <= _ref ? _i < _ref : _i > _ref; idx = 0 <= _ref ? ++_i : --_i) {
+          _results.push(this.context.fillText(arr[idx], 500, idx * 10 + 15));
+        }
+        return _results;
+      }
+    };
+
+    Renderer.prototype.drawValue = function(perpindicularOffset, parallelOffset, component, text, rotation) {
+      var stringHeight, stringWidth, x, y;
+      if (text == null) {
+        text = null;
+      }
+      if (rotation == null) {
+        rotation = 0;
+      }
+      this.context.save();
+      this.context.textAlign = "center";
+      this.context.font = "bold 8pt Courier";
+      stringWidth = this.context.measureText(text).width;
+      stringHeight = this.context.measureText(text).actualBoundingBoxAscent || 0;
+      this.context.fillStyle = Settings.TEXT_COLOR;
+      if (component.isVertical()) {
+        x = component.getCenter().x;
+        y = component.getCenter().y;
+        this.context.translate(x, y);
+        this.context.rotate(Math.PI / 2);
+        this.fillText(text, parallelOffset, -perpindicularOffset);
+      } else {
+        x = component.getCenter().x + parallelOffset;
+        y = component.getCenter().y + perpindicularOffset;
+        this.fillText(text, x, y);
+      }
+      return this.context.restore();
+    };
+
+    Renderer.prototype.drawDots = function(ptA, ptB, component) {
+      var dn, ds, dx, dy, newPos, xOffset, xOffset0, xOffset1, yOffset, yOffset0, yOffset1, _ref, _results;
+      if ((_ref = this.Circuit) != null ? _ref.isStopped() : void 0) {
+        return;
+      }
+      ds = Settings.CURRENT_SEGMENT_LENGTH;
+      dx = ptB.x - ptA.x;
+      dy = ptB.y - ptA.y;
+      dn = Math.sqrt(dx * dx + dy * dy);
+      newPos = component.curcount;
+      _results = [];
+      while (newPos < dn) {
+        xOffset = ptA.x + newPos * dx / dn;
+        yOffset = ptA.y + newPos * dy / dn;
+        if (Settings.CURRENT_DISPLAY_TYPE === Settings.CURENT_TYPE_DOTS) {
+          this.fillCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR);
+        } else {
+          xOffset0 = xOffset - 3 * dx / dn;
+          yOffset0 = yOffset - 3 * dy / dn;
+          xOffset1 = xOffset + 3 * dx / dn;
+          yOffset1 = yOffset + 3 * dy / dn;
+          this.context.save();
+          this.context.strokeStyle = Settings.CURRENT_COLOR;
+          this.context.lineWidth = Settings.CURRENT_RADIUS + 1;
+          this.context.beginPath();
+          this.context.moveTo(xOffset0, yOffset0);
+          this.context.lineTo(xOffset1, yOffset1);
+          this.context.stroke();
+          this.context.closePath();
+          this.context.restore();
+        }
+        _results.push(newPos += ds);
+      }
+      return _results;
+    };
+
+    Renderer.prototype.drawLeads = function(component) {
+      if ((component.point1 != null) && (component.lead1 != null)) {
+        this.drawLinePt(component.point1, component.lead1, Util.getVoltageColor(component.volts[0]));
+      }
+      if ((component.point2 != null) && (component.lead2 != null)) {
+        return this.drawLinePt(component.lead2, component.point2, Util.getVoltageColor(component.volts[1]));
+      }
+    };
+
+    Renderer.prototype.drawPosts = function(component, color) {
+      var i, post, _i, _ref, _results;
+      if (color == null) {
+        color = Settings.POST_COLOR;
+      }
+      _results = [];
+      for (i = _i = 0, _ref = component.getPostCount(); 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        post = component.getPost(i);
+        _results.push(this.drawPost(post.x, post.y, color, color));
+      }
+      return _results;
+    };
+
+    Renderer.prototype.drawPost = function(x0, y0, fillColor, strokeColor) {
+      if (fillColor == null) {
+        fillColor = Settings.POST_COLOR;
+      }
+      if (strokeColor == null) {
+        strokeColor = Settings.POST_COLOR;
+      }
+      return this.fillCircle(x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor);
+    };
+
+    return Renderer;
+
+  })(BaseRenderer);
+
+  module.exports = Renderer;
+
+}).call(this);
+
+
+},{"./BaseRenderer.coffee":15,"../circuit/circuit.coffee":5,"../circuit/circuitComponent.coffee":2,"../settings/settings.coffee":16,"../geom/rectangle.coffee":17,"../geom/point.coffee":18,"../util/util.coffee":19,"../environment.coffee":7,"../geom/Polygon.coffee":20}],4:[function(require,module,exports){
 (function() {
   var AdcElm, AnalogSwitch2Elm, AnalogSwitchElm, AndGateElm, AntennaElm, CC2Elm, CapacitorElm, CircuitComponent, ClockElm, ComponentRegistry, CounterElm, CurrentElm, DFlipFlopElm, DacElm, DecadeElm, DiodeElm, GroundElm, InductorElm, InverterElm, JKFlipFlopElm, JfetElm, LatchElm, LedElm, LogicInputElm, LogicOutputElm, MemristorElm, MosfetElm, NandGateElm, NorGateElm, OpAmpElm, OrGateElm, OutputElm, PhaseCompElm, PotElm, ProbeElm, RailElm, RelayElm, ResistorElm, Scope, ScrElm, SevenSegElm, SparkGapElm, SweepElm, Switch2Elm, SwitchElm, TappedTransformerElm, TextElm, TimerElm, TransLineElm, TransformerElm, TransistorElm, TriodeElm, TunnelDiodeElm, VarRailElm, VcoElm, VoltageElm, WireElm, XorGateElm, ZenerElm;
 
@@ -409,184 +1042,7 @@
 }).call(this);
 
 
-},{"./components/AntennaElm.coffee":9,"./circuitComponent.coffee":2,"./components/WireElm.coffee":10,"./components/ResistorElm.coffee":11,"./components/GroundElm.coffee":12,"./components/VoltageElm.coffee":13,"./components/DiodeElm.coffee":14,"./components/OutputElm.coffee":15,"./components/SwitchElm.coffee":16,"./components/CapacitorElm.coffee":17,"./components/InductorElm.coffee":18,"./components/SparkGapElm.coffee":19,"./components/RailElm.coffee":20,"./components/MosfetElm.coffee":21,"./components/CurrentElm.coffee":22,"./components/JFetElm.coffee":23,"./components/TransistorElm.coffee":24,"./components/VarRailElm.coffee":25,"./components/OpAmpElm.coffee":26,"./components/ZenerElm.coffee":27,"./components/Switch2Elm.coffee":28,"./components/SweepElm.coffee":29,"./components/TextElm.coffee":30,"./components/ProbeElm.coffee":31,"./components/AndGateElm.coffee":32,"./components/NandGateElm.coffee":33,"./components/OrGateElm.coffee":34,"./components/NorGateElm.coffee":35,"./components/XorGateElm.coffee":36,"./components/InverterElm.coffee":37,"./components/LogicInputElm.coffee":38,"./components/LogicOutputElm.coffee":39,"./components/AnalogSwitchElm.coffee":40,"./components/AnalogSwitch2Elm.coffee":41,"./components/MemristorElm.coffee":42,"./components/SCRElm.coffee":43,"./components/TriodeElm.coffee":44,"./components/TunnelDiodeElm.coffee":45,"./components/DecadeElm.coffee":46,"./components/RelayElm.coffee":47,"./components/LatchElm.coffee":48,"./components/TimerElm.coffee":49,"./components/JKFlipFlopElm.coffee":50,"./components/DFlipFlopElm.coffee":51,"./components/DacElm.coffee":52,"./components/CounterElm.coffee":53,"./components/AdcElm.coffee":54,"./components/VcoElm.coffee":55,"./components/PhaseCompElm.coffee":56,"./components/CC2Elm.coffee":57,"./components/SevenSegElm.coffee":58,"./components/TransLineElm.coffee":59,"./components/TransformerElm.coffee":60,"./components/TappedTransformerElm.coffee":61,"./components/LedElm.coffee":62,"./components/PotElm.coffee":63,"./components/ClockElm.coffee":64,"./components/Scope.coffee":65}],66:[function(require,module,exports){
-// shim for using process in browser
-
-var process = module.exports = {};
-
-process.nextTick = (function () {
-    var canSetImmediate = typeof window !== 'undefined'
-    && window.setImmediate;
-    var canPost = typeof window !== 'undefined'
-    && window.postMessage && window.addEventListener
-    ;
-
-    if (canSetImmediate) {
-        return function (f) { return window.setImmediate(f) };
-    }
-
-    if (canPost) {
-        var queue = [];
-        window.addEventListener('message', function (ev) {
-            var source = ev.source;
-            if ((source === window || source === null) && ev.data === 'process-tick') {
-                ev.stopPropagation();
-                if (queue.length > 0) {
-                    var fn = queue.shift();
-                    fn();
-                }
-            }
-        }, true);
-
-        return function nextTick(fn) {
-            queue.push(fn);
-            window.postMessage('process-tick', '*');
-        };
-    }
-
-    return function nextTick(fn) {
-        setTimeout(fn, 0);
-    };
-})();
-
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-}
-
-// TODO(shtylman)
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-
-},{}],3:[function(require,module,exports){
-(function(process){(function() {
-  var Circuit, CircuitComponent, CircuitLoader, ComponentRegistry, Hint, Oscilloscope, Scope, SimulationParams, VoltageElm, environment, fs,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
-  ComponentRegistry = require('../circuit/componentRegistry.coffee');
-
-  SimulationParams = require('../core/simulationParams.coffee');
-
-  Circuit = require('../circuit/circuit.coffee');
-
-  CircuitComponent = require('../circuit/circuitComponent.coffee');
-
-  Oscilloscope = require('../scope/oscilloscope.coffee');
-
-  Hint = require('../engine/hint.coffee');
-
-  fs = require('fs');
-
-  VoltageElm = require('../circuit/components/VoltageElm.coffee');
-
-  Scope = require('../circuit/components/Scope.coffee');
-
-  environment = require("../environment.coffee");
-
-  CircuitLoader = (function() {
-    function CircuitLoader() {}
-
-    CircuitLoader.createCircuitFromJsonData = function(jsonData) {
-      var circuit, circuitParams, e, elementData, elms, flags, newCircuitElm, params, sym, type, validName, x1, x2, y1, y2, _i, _len;
-      circuit = new Circuit();
-      validName = /^[$A-Z_][0-9A-Z_$]*$/i;
-      circuitParams = jsonData.shift();
-      circuit.Params = SimulationParams.deserialize(circuitParams);
-      circuit.flags = parseInt(circuitParams['flags']);
-      console.log(circuit.Params.toString());
-      elms = [];
-      for (_i = 0, _len = jsonData.length; _i < _len; _i++) {
-        elementData = jsonData[_i];
-        type = elementData['sym'];
-        if (__indexOf.call(Circuit.components, type) >= 0) {
-          console.log("Found " + type + "...");
-        }
-        sym = ComponentRegistry.ComponentDefs[type];
-        x1 = parseInt(elementData['x1']);
-        y1 = parseInt(elementData['y1']);
-        x2 = parseInt(elementData['x2']);
-        y2 = parseInt(elementData['y2']);
-        flags = parseInt(elementData['flags']) || 0;
-        params = elementData['params'];
-        console.log("" + type + " " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + flags + " " + params);
-        if (!sym) {
-          circuit.warn("No matching component for " + type + ": " + sym);
-        } else if (type === "h") {
-          console.log("Hint found in file!");
-          this.hintType = x1;
-          this.hintItem1 = x2;
-          this.hintItem2 = y1;
-          break;
-        } else if (sym === Scope) {
-          console.log("-> Scope found in file!");
-        } else if (!type) {
-          circuit.warn("Unrecognized Type");
-        } else {
-          try {
-            newCircuitElm = new sym(x1, y1, x2, y2, params, parseInt(flags));
-          } catch (_error) {
-            e = _error;
-            console.log(e);
-            console.log("type: " + type + ", sym: " + sym);
-            console.log("elm: ", elementData);
-            console.log(e.stack);
-            if (!environment.isBrowser) {
-              process.exit(1);
-            }
-          }
-          elms.push(newCircuitElm);
-          circuit.solder(newCircuitElm);
-        }
-      }
-      if (elms.length === 0) {
-        console.error("No elements loaded. JSON most likely malformed");
-      }
-      if (!environment.isBrowser) {
-        circuit.ostream || (circuit.ostream = fs.createWriteStream("dump/" + circuit.Params.name));
-      }
-      console.log("--------------------------------------------------------------------\n");
-      return circuit;
-    };
-
-    /*
-    Retrieves string data from a circuit text file (via AJAX GET)
-    */
-
-
-    CircuitLoader.createCircuitFromJsonFile = function(circuitFileName, onComplete) {
-      var jsonData;
-      if (onComplete == null) {
-        onComplete = null;
-      }
-      if (environment.isBrowser) {
-        return $.getJSON(circuitFileName, function(jsonData) {
-          var circuit;
-          circuit = CircuitLoader.createCircuitFromJsonData(jsonData);
-          return typeof onComplete === "function" ? onComplete(circuit) : void 0;
-        });
-      } else {
-        jsonData = JSON.parse(fs.readFileSync(circuitFileName));
-        return CircuitLoader.createCircuitFromJsonData(jsonData);
-      }
-    };
-
-    return CircuitLoader;
-
-  })();
-
-  module.exports = CircuitLoader;
-
-}).call(this);
-
-
-})(require("__browserify_process"))
-},{"fs":8,"../circuit/componentRegistry.coffee":4,"../core/simulationParams.coffee":67,"../circuit/circuit.coffee":5,"../scope/oscilloscope.coffee":68,"../circuit/circuitComponent.coffee":2,"../engine/hint.coffee":69,"../circuit/components/VoltageElm.coffee":13,"../environment.coffee":7,"../circuit/components/Scope.coffee":65,"__browserify_process":66}],5:[function(require,module,exports){
+},{"./circuitComponent.coffee":2,"./components/AntennaElm.coffee":21,"./components/WireElm.coffee":22,"./components/ResistorElm.coffee":23,"./components/GroundElm.coffee":24,"./components/VoltageElm.coffee":13,"./components/DiodeElm.coffee":25,"./components/OutputElm.coffee":26,"./components/SwitchElm.coffee":27,"./components/CapacitorElm.coffee":28,"./components/InductorElm.coffee":29,"./components/SparkGapElm.coffee":30,"./components/CurrentElm.coffee":31,"./components/RailElm.coffee":32,"./components/MosfetElm.coffee":33,"./components/JFetElm.coffee":34,"./components/TransistorElm.coffee":35,"./components/VarRailElm.coffee":36,"./components/OpAmpElm.coffee":37,"./components/ZenerElm.coffee":38,"./components/Switch2Elm.coffee":39,"./components/SweepElm.coffee":40,"./components/TextElm.coffee":41,"./components/ProbeElm.coffee":42,"./components/AndGateElm.coffee":43,"./components/NandGateElm.coffee":44,"./components/OrGateElm.coffee":45,"./components/NorGateElm.coffee":46,"./components/XorGateElm.coffee":47,"./components/InverterElm.coffee":48,"./components/LogicInputElm.coffee":49,"./components/LogicOutputElm.coffee":50,"./components/AnalogSwitchElm.coffee":51,"./components/AnalogSwitch2Elm.coffee":52,"./components/MemristorElm.coffee":53,"./components/RelayElm.coffee":54,"./components/TunnelDiodeElm.coffee":55,"./components/SCRElm.coffee":56,"./components/TriodeElm.coffee":57,"./components/DecadeElm.coffee":58,"./components/LatchElm.coffee":59,"./components/TimerElm.coffee":60,"./components/DFlipFlopElm.coffee":61,"./components/CounterElm.coffee":62,"./components/DacElm.coffee":63,"./components/AdcElm.coffee":64,"./components/JKFlipFlopElm.coffee":65,"./components/VcoElm.coffee":66,"./components/PhaseCompElm.coffee":67,"./components/SevenSegElm.coffee":68,"./components/CC2Elm.coffee":69,"./components/TransLineElm.coffee":70,"./components/TransformerElm.coffee":71,"./components/TappedTransformerElm.coffee":72,"./components/LedElm.coffee":73,"./components/PotElm.coffee":74,"./components/ClockElm.coffee":75,"./components/Scope.coffee":14}],5:[function(require,module,exports){
 (function() {
   var Circuit, CircuitSolver, Logger, Observer, Oscilloscope, Rectangle, SimulationFrame, SimulationParams, Util, environment, fs,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
@@ -1022,507 +1478,283 @@ process.chdir = function (dir) {
 }).call(this);
 
 
-},{"fs":8,"./simulationFrame.coffee":70,"../engine/circuitSolver.coffee":71,"../core/simulationParams.coffee":67,"../util/observer.coffee":72,"../geom/rectangle.coffee":73,"../util/util.coffee":74,"../environment.coffee":7,"../io/logger.coffee":75,"../scope/oscilloscope.coffee":68}],6:[function(require,module,exports){
+},{"fs":8,"../scope/oscilloscope.coffee":11,"../io/logger.coffee":76,"../core/simulationParams.coffee":10,"./simulationFrame.coffee":77,"../engine/circuitSolver.coffee":78,"../util/observer.coffee":79,"../geom/rectangle.coffee":17,"../util/util.coffee":19,"../environment.coffee":7}],10:[function(require,module,exports){
 (function() {
-  var BaseRenderer, Circuit, CircuitComponent, Point, Polygon, Rectangle, Renderer, SelectionMarquee, Settings, Util, environment,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  var SimulationParams;
 
-  BaseRenderer = require('./BaseRenderer.coffee');
-
-  Circuit = require('../circuit/circuit.coffee');
-
-  CircuitComponent = require('../circuit/circuitComponent.coffee');
-
-  Settings = require('../settings/settings.coffee');
-
-  Rectangle = require('../geom/rectangle.coffee');
-
-  Polygon = require('../geom/Polygon.coffee');
-
-  Point = require('../geom/point.coffee');
-
-  Util = require('../util/util.coffee');
-
-  environment = require('../environment.coffee');
-
-  SelectionMarquee = (function(_super) {
-    __extends(SelectionMarquee, _super);
-
-    function SelectionMarquee(x1, y1) {
-      this.x1 = x1;
-      this.y1 = y1;
+  SimulationParams = (function() {
+    function SimulationParams(paramsObj) {
+      this.completionStatus = (paramsObj != null ? paramsObj['completion_status'] : void 0) || "in development";
+      this.createdAt = paramsObj != null ? paramsObj['created_at'] : void 0;
+      this.currentSpeed = parseFloat(paramsObj != null ? paramsObj['current_speed'] : void 0) || 63;
+      this.updatedAt = paramsObj != null ? paramsObj['updated_at'] : void 0;
+      this.description = (paramsObj != null ? paramsObj['description'] : void 0) || "";
+      this.flags = parseInt(paramsObj != null ? paramsObj['flags'] : void 0) || 1;
+      this.id = parseInt(paramsObj != null ? paramsObj['id'] : void 0) || null;
+      this.name = (paramsObj != null ? paramsObj['name_unique'] : void 0) || "default";
+      this.powerRange = parseFloat(paramsObj != null ? paramsObj['power_range'] : void 0) || 62.0;
+      this.voltageRange = parseFloat(paramsObj != null ? paramsObj['voltage_range'] : void 0) || 10.0;
+      this.simSpeed = parseFloat(SimulationParams.convertSimSpeed(paramsObj != null ? paramsObj['sim_speed'] : void 0) || 10.0);
+      this.timeStep = parseFloat(paramsObj != null ? paramsObj['time_step'] : void 0) || 5.0e-06;
+      this.title = (paramsObj != null ? paramsObj['title'] : void 0) || "Default";
+      this.topic = (paramsObj != null ? paramsObj['topic'] : void 0) || null;
+      if (this.timeStep == null) {
+        throw new Error("Circuit params is missing its time step (was null)!");
+      }
     }
 
-    SelectionMarquee.prototype.reposition = function(x, y) {
-      var _x1, _x2, _y1, _y2;
-      _x1 = Math.min(x, this.x1);
-      _x2 = Math.max(x, this.x1);
-      _y1 = Math.min(y, this.y1);
-      _y2 = Math.max(y, this.y1);
-      this.x2 = _x2;
-      this.y2 = _y2;
-      this.x = this.x1 = _x1;
-      this.y = this.y1 = _y1;
-      this.width = _x2 - _x1;
-      return this.height = _y2 - _y1;
-    };
-
-    SelectionMarquee.prototype.draw = function(renderContext) {
-      renderContext.lineWidth = 0.1;
-      if ((this.x1 != null) && (this.x2 != null) && (this.y1 != null) && (this.y2 != null)) {
-        renderContext.drawLine(this.x1, this.y1, this.x2, this.y1);
-        renderContext.drawLine(this.x1, this.y2, this.x2, this.y2);
-        renderContext.drawLine(this.x1, this.y1, this.x1, this.y2);
-        return renderContext.drawLine(this.x2, this.y1, this.x2, this.y2);
-      }
-    };
-
-    return SelectionMarquee;
-
-  })(Rectangle);
-
-  Renderer = (function(_super) {
-    var MOUSEDOWN;
-
-    __extends(Renderer, _super);
-
-    Renderer.ON_COMPONENT_HOVER = "ON_COMPONENT_HOVER";
-
-    Renderer.ON_COMPONENT_CLICKED = "ON_COMPONENT_CLICKED";
-
-    Renderer.ON_COMPONENTS_SELECTED = "ON_COMPONENTS_SELECTED";
-
-    Renderer.ON_COMPONENTS_DESELECTED = "ON_COMPONENTS_DESELECTED";
-
-    Renderer.ON_COMPONENTS_MOVED = "ON_COMPONENTS_MOVED";
-
-    Renderer.STATE_EDIT;
-
-    Renderer.STATE_PLACE;
-
-    Renderer.STATE_RUN;
-
-    MOUSEDOWN = 1;
-
-    function Renderer(Circuit, Canvas) {
-      this.Circuit = Circuit;
-      this.Canvas = Canvas;
-      this.drawDots = __bind(this.drawDots, this);
-      this.draw = __bind(this.draw, this);
-      this.mouseup = __bind(this.mouseup, this);
-      this.mousedown = __bind(this.mousedown, this);
-      this.mousemove = __bind(this.mousemove, this);
-      Renderer.__super__.constructor.call(this);
-      this.highlightedComponent = null;
-      this.addComponent = null;
-      this.selectedNode = null;
-      this.selectedComponents = [];
-      this.width = this.Canvas.width;
-      this.height = this.Canvas.height;
-      this.state = this.STATE_RUN;
-      this.config = {
-        keyboard: true
+    SimulationParams.serialize = function(simParams) {
+      return {
+        completion_status: simParams.completionStatus,
+        created_at: simParams.createdAt,
+        current_speed: simParams.currentSpeed,
+        updated_at: simParams.updatedAt,
+        description: simParams.description,
+        flags: simParams.flags,
+        id: simParams.id,
+        name_unique: simParams.name,
+        power_range: simParams.powerRange,
+        voltage_range: simParams.voltageRange,
+        sim_speed: simParams.simSpeed,
+        time_step: simParams.timeStep,
+        title: simParams.title,
+        topic: simParams.topic
       };
-      if (environment.isBrowser) {
-        this.context = Sketch.augment(this.Canvas.getContext("2d"), {
-          draw: this.draw,
-          mousemove: this.mousemove,
-          mousedown: this.mousedown,
-          mouseup: this.mouseup,
-          fullscreen: false,
-          width: this.width,
-          height: this.height
-        });
-        this.context.lineJoin = 'miter';
-      }
-      this.onSelectionChanged = null;
-      this.onComponentClick = null;
-      this.onComponentHover = null;
-      this.onNodeHover = null;
-      this.onNodeClick = null;
-      this.onUpdateComplete = null;
-    }
-
-    Renderer.prototype.getSelectedComponents = function() {
-      return this.selectedComponents;
     };
 
-    Renderer.prototype.getPlaceComponent = function() {
-      return this.placeComponent;
+    SimulationParams.deserialize = function(jsonObj) {
+      var simParams;
+      simParams = new SimulationParams();
+      simParams.completionStatus = (jsonObj != null ? jsonObj['completion_status'] : void 0) || "in development";
+      simParams.createdAt = jsonObj != null ? jsonObj['created_at'] : void 0;
+      simParams.currentSpeed = parseFloat(jsonObj != null ? jsonObj['current_speed'] : void 0) || 63;
+      simParams.updatedAt = jsonObj != null ? jsonObj['updated_at'] : void 0;
+      simParams.description = (jsonObj != null ? jsonObj['description'] : void 0) || "";
+      simParams.flags = parseInt(jsonObj != null ? jsonObj['flags'] : void 0) || 1;
+      simParams.id = (jsonObj != null ? jsonObj['id'] : void 0) || null;
+      simParams.name = (jsonObj != null ? jsonObj['name_unique'] : void 0) || "default";
+      simParams.powerRange = parseFloat(jsonObj != null ? jsonObj['power_range'] : void 0) || 62.0;
+      simParams.voltageRange = parseFloat(jsonObj != null ? jsonObj['voltage_range'] : void 0) || 10.0;
+      simParams.simSpeed = SimulationParams.convertSimSpeed((jsonObj != null ? jsonObj['sim_speed'] : void 0) || 10.0);
+      simParams.timeStep = parseFloat(jsonObj != null ? jsonObj['time_step'] : void 0) || 5.0e-06;
+      simParams.title = (jsonObj != null ? jsonObj['title'] : void 0) || "Default";
+      simParams.topic = (jsonObj != null ? jsonObj['topic'] : void 0) || null;
+      if (simParams.timeStep == null) {
+        throw new Error("Time step param is required (was null)");
+      }
+      return simParams;
     };
 
-    Renderer.prototype.pause = function() {};
-
-    Renderer.prototype.play = function() {};
-
-    Renderer.prototype.restart = function() {};
-
-    Renderer.prototype.clearPlaceComponent = function() {
-      return this.placeComponent = null;
+    SimulationParams.prototype.details = function() {
+      return ["\tName:        " + this.name, "\tTopic:       " + this.topic, "\tStatus:      " + this.completionStatus, "\tCreated at:  " + this.createdAt || "?", "\tUpdated At:  " + this.updatedAt || "?", "\tDescription: " + this.description, "\tId:          " + this.id, "\tTitle:       " + this.title].join("\n");
     };
 
-    Renderer.prototype.mousemove = function(event) {
-      var component, x, y, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _results;
-      x = event.offsetX;
-      y = event.offsetY;
-      this.newlyHighlightedComponent = null;
-      this.selectedNode = null;
-      this.lastX = this.snapX;
-      this.lastY = this.snapY;
-      this.snapX = Util.snapGrid(x);
-      this.snapY = Util.snapGrid(y);
-      if (this.placeComponent) {
-        if (this.placeComponent.x1 && this.placeComponent.y1) {
-          this.placeComponent.x2 = this.snapX;
-          this.placeComponent.y2 = this.snapY;
-          this.placeComponent.setPoints();
-        }
-      }
-      if (this.marquee != null) {
-        if ((_ref = this.marquee) != null) {
-          _ref.reposition(x, y);
-        }
-        this.selectedComponents = [];
-        _ref1 = this.Circuit.getElements();
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          component = _ref1[_i];
-          if ((_ref2 = this.marquee) != null ? _ref2.collidesWithComponent(component) : void 0) {
-            this.selectedComponents.push(component);
-            this.onSelectionChanged(this.selectedComponents);
-          }
-        }
-      } else {
-        this.selectedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
-        if (this.selectedNode) {
-          this.onNodeHover(this.selectedNode);
-        }
-        _ref3 = this.Circuit.getElements();
-        for (_j = 0, _len1 = _ref3.length; _j < _len1; _j++) {
-          component = _ref3[_j];
-          if (component.getBoundingBox().contains(x, y)) {
-            this.newlyHighlightedComponent = component;
-          }
-        }
-        if (this.newlyHighlightedComponent) {
-          if (this.newlyHighlightedComponent !== this.highlightedComponent) {
-            this.highlightedComponent = this.newlyHighlightedComponent;
-            if (typeof this.onComponentHover === "function") {
-              this.onComponentHover(this.highlightedComponent);
-            }
-            this.notifyObservers(Renderer.ON_COMPONENT_HOVER, this.highlightedComponent);
-          }
-        } else {
-          if (this.highlightedComponent !== null) {
-            if (typeof this.onComponentUnhover === "function") {
-              this.onComponentUnhover(this.highlightedComponent);
-            }
-          }
-          this.highlightedComponent = null;
-        }
-      }
-      if (this.marquee === null && ((_ref4 = this.selectedComponents) != null ? _ref4.length : void 0) > 0 && event.which === MOUSEDOWN && (this.lastX !== this.snapX || this.lastY !== this.snapY)) {
-        _ref5 = this.selectedComponents;
-        _results = [];
-        for (_k = 0, _len2 = _ref5.length; _k < _len2; _k++) {
-          component = _ref5[_k];
-          _results.push(component.move(this.snapX - this.lastX, this.snapY - this.lastY));
-        }
-        return _results;
-      }
+    SimulationParams.prototype.toString = function() {
+      return ["" + this.name, "================================================================", "\tFlags:       " + this.flags, "\tTimeStep:    " + this.timeStep.toFixed(7), "\tSim Speed:   " + this.simSpeed, "\tCur Speed:   " + this.currentSpeed, "\tVolt. Range: " + this.voltageRange.toFixed(2), "\tPwr Range:   " + this.powerRange, "----------------------------------------------------------------", ""].join("\n");
     };
 
-    Renderer.prototype.mousedown = function(event) {
-      var component, placeComponentKlass, x, y, _i, _len, _ref, _results;
-      x = event.offsetX;
-      y = event.offsetY;
-      if (this.selectedNode) {
-        this.onNodeClick(this.selectedNode);
-      }
-      if (this.placeComponent) {
-        if (this.placeComponent.x1 && this.placeComponent.y1) {
-          this.placeComponent.x2 = Util.snapGrid(x);
-          this.placeComponent.y2 = Util.snapGrid(y);
-          this.Circuit.solder(this.placeComponent);
-          placeComponentKlass = this.placeComponent.constructor;
-          this.placeComponent = new placeComponentKlass();
-        } else {
-          this.placeComponent.x1 = Util.snapGrid(x);
-          this.placeComponent.y1 = Util.snapGrid(y);
-        }
-      }
-      if (this.highlightedComponent === null) {
-        if (this.selectedComponents && this.selectedComponents.length > 0) {
-          this.onSelectionChanged([]);
-        }
-        this.selectedComponents = [];
-        this.marquee = new SelectionMarquee(x, y);
-      }
-      _ref = this.Circuit.getElements();
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        component = _ref[_i];
-        if (component.getBoundingBox().contains(x, y)) {
-          this.notifyObservers(Renderer.ON_COMPONENT_CLICKED, component);
-          if (__indexOf.call(this.selectedComponents, component) < 0) {
-            this.selectedComponents = [component];
-            this.onSelectionChanged(this.selectedComponents);
-          }
-          if (typeof component.toggle === "function") {
-            component.toggle();
-          }
-          component.onclick();
-          _results.push(typeof this.onComponentClick === "function" ? this.onComponentClick(component) : void 0);
-        } else {
-          _results.push(void 0);
-        }
-      }
-      return _results;
+    SimulationParams.convertSimSpeed = function(sim_speed) {
+      return Math.floor(Math.log(10 * sim_speed) * 24.0 + 61.5);
     };
 
-    Renderer.prototype.mouseup = function(event) {
-      var _ref;
-      this.marquee = null;
-      if (((_ref = this.selectedComponents) != null ? _ref.length : void 0) > 0) {
-        return this.notifyObservers(Renderer.ON_COMPONENTS_DESELECTED, this.selectedComponents);
-      }
+    SimulationParams.prototype.setCurrentMult = function(mult) {
+      return this.currentMult = mult;
     };
 
-    Renderer.prototype.draw = function() {
-      var _ref;
-      if ((this.snapX != null) && (this.snapY != null)) {
-        this.drawCircle(this.snapX, this.snapY, 3, "#F00");
-      }
-      this.drawInfoText();
-      if ((_ref = this.marquee) != null) {
-        _ref.draw(this);
-      }
-      this.Circuit.updateCircuit();
-      if (typeof this.onUpdateComplete === "function") {
-        this.onUpdateComplete(this.Circuit);
-      }
-      this.drawComponents();
-      if (this.context) {
-        if (this.placeComponent) {
-          this.context.fillText("Placing " + this.placeComponent.constructor.name, this.snapX, this.snapY);
-          if (this.placeComponent.x1 && this.placeComponent.x2) {
-            this.drawComponent(this.placeComponent);
-          }
-        }
-        if (this.selectedNode) {
-          this.drawCircle(this.selectedNode.x, this.selectedNode.y, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
-        }
-        if (this.highlightedComponent) {
-          this.drawCircle(this.highlightedComponent.x1, this.highlightedComponent.y1, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
-          return this.drawCircle(this.highlightedComponent.x2, this.highlightedComponent.y2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
-        }
-      }
+    SimulationParams.prototype.getCurrentMult = function() {
+      return this.currentMult;
     };
 
-    Renderer.prototype.drawComponents = function() {
-      var component, _i, _len, _ref, _results;
-      if (this.context) {
-        _ref = this.Circuit.getElements();
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          component = _ref[_i];
-          _results.push(this.drawComponent(component));
-        }
-        return _results;
-      }
-    };
-
-    Renderer.prototype.drawBoldLines = function() {
-      return this.boldLines = true;
-    };
-
-    Renderer.prototype.drawDefaultLines = function() {
-      return this.boldLines = false;
-    };
-
-    Renderer.prototype.drawComponent = function(component) {
-      var i, post, _i, _ref;
-      if (component && __indexOf.call(this.selectedComponents, component) >= 0) {
-        this.drawBoldLines();
-        for (i = _i = 0, _ref = component.getPostCount(); 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-          post = component.getPost(i);
-          this.drawCircle(post.x, post.y, Settings.POST_RADIUS + 2, 2, Settings.SELECT_COLOR);
-        }
-      } else {
-        this.drawDefaultLines();
-      }
-      return component.draw(this);
-    };
-
-    Renderer.prototype.drawInfoText = function() {
-      var arr, idx, _i, _ref, _results;
-      if (this.highlightedComponent != null) {
-        arr = [];
-        this.highlightedComponent.getInfo(arr);
-        _results = [];
-        for (idx = _i = 0, _ref = arr.length; 0 <= _ref ? _i < _ref : _i > _ref; idx = 0 <= _ref ? ++_i : --_i) {
-          _results.push(this.context.fillText(arr[idx], 500, idx * 10 + 15));
-        }
-        return _results;
-      }
-    };
-
-    Renderer.prototype.drawValue = function(perpindicularOffset, parallelOffset, component, text, rotation) {
-      var stringHeight, stringWidth, x, y;
-      if (text == null) {
-        text = null;
-      }
-      if (rotation == null) {
-        rotation = 0;
-      }
-      this.context.save();
-      this.context.textAlign = "center";
-      this.context.font = "bold 8pt Courier";
-      stringWidth = this.context.measureText(text).width;
-      stringHeight = this.context.measureText(text).actualBoundingBoxAscent || 0;
-      this.context.fillStyle = Settings.TEXT_COLOR;
-      if (component.isVertical()) {
-        x = component.getCenter().x;
-        y = component.getCenter().y;
-        this.context.translate(x, y);
-        this.context.rotate(Math.PI / 2);
-        this.fillText(text, parallelOffset, -perpindicularOffset);
-      } else {
-        x = component.getCenter().x + parallelOffset;
-        y = component.getCenter().y + perpindicularOffset;
-        this.fillText(text, x, y);
-      }
-      return this.context.restore();
-    };
-
-    Renderer.prototype.drawDots = function(ptA, ptB, component) {
-      var dn, ds, dx, dy, newPos, xOffset, xOffset0, xOffset1, yOffset, yOffset0, yOffset1, _ref, _results;
-      if ((_ref = this.Circuit) != null ? _ref.isStopped() : void 0) {
-        return;
-      }
-      ds = Settings.CURRENT_SEGMENT_LENGTH;
-      dx = ptB.x - ptA.x;
-      dy = ptB.y - ptA.y;
-      dn = Math.sqrt(dx * dx + dy * dy);
-      newPos = component.curcount;
-      _results = [];
-      while (newPos < dn) {
-        xOffset = ptA.x + newPos * dx / dn;
-        yOffset = ptA.y + newPos * dy / dn;
-        if (Settings.CURRENT_DISPLAY_TYPE === Settings.CURENT_TYPE_DOTS) {
-          this.fillCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR);
-        } else {
-          xOffset0 = xOffset - 3 * dx / dn;
-          yOffset0 = yOffset - 3 * dy / dn;
-          xOffset1 = xOffset + 3 * dx / dn;
-          yOffset1 = yOffset + 3 * dy / dn;
-          this.context.save();
-          this.context.strokeStyle = Settings.CURRENT_COLOR;
-          this.context.lineWidth = Settings.CURRENT_RADIUS + 1;
-          this.context.beginPath();
-          this.context.moveTo(xOffset0, yOffset0);
-          this.context.lineTo(xOffset1, yOffset1);
-          this.context.stroke();
-          this.context.closePath();
-          this.context.restore();
-        }
-        _results.push(newPos += ds);
-      }
-      return _results;
-    };
-
-    Renderer.prototype.drawLeads = function(component) {
-      if ((component.point1 != null) && (component.lead1 != null)) {
-        this.drawLinePt(component.point1, component.lead1, Util.getVoltageColor(component.volts[0]));
-      }
-      if ((component.point2 != null) && (component.lead2 != null)) {
-        return this.drawLinePt(component.lead2, component.point2, Util.getVoltageColor(component.volts[1]));
-      }
-    };
-
-    Renderer.prototype.drawPosts = function(component, color) {
-      var i, post, _i, _ref, _results;
-      if (color == null) {
-        color = Settings.POST_COLOR;
-      }
-      _results = [];
-      for (i = _i = 0, _ref = component.getPostCount(); 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        post = component.getPost(i);
-        _results.push(this.drawPost(post.x, post.y, color, color));
-      }
-      return _results;
-    };
-
-    Renderer.prototype.drawPost = function(x0, y0, fillColor, strokeColor) {
-      if (fillColor == null) {
-        fillColor = Settings.POST_COLOR;
-      }
-      if (strokeColor == null) {
-        strokeColor = Settings.POST_COLOR;
-      }
-      return this.fillCircle(x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor);
-    };
-
-    return Renderer;
-
-  })(BaseRenderer);
-
-  module.exports = Renderer;
-
-}).call(this);
-
-
-},{"./BaseRenderer.coffee":76,"../circuit/circuit.coffee":5,"../circuit/circuitComponent.coffee":2,"../settings/settings.coffee":77,"../geom/rectangle.coffee":73,"../geom/Polygon.coffee":78,"../geom/point.coffee":79,"../util/util.coffee":74,"../environment.coffee":7}],79:[function(require,module,exports){
-(function() {
-  var Point;
-
-  Point = (function() {
-    function Point(x, y) {
-      this.x = x != null ? x : 0;
-      this.y = y != null ? y : 0;
-    }
-
-    Point.prototype.equals = function(otherPoint) {
-      return this.x === otherPoint.x && this.y === otherPoint.y;
-    };
-
-    Point.toArray = function(num) {
-      var i, _i, _len, _ref, _results;
-      _ref = Array(num);
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        i = _ref[_i];
-        _results.push(new Point(0, 0));
-      }
-      return _results;
-    };
-
-    Point.comparePair = function(x1, x2, y1, y2) {
-      return (x1 === y1 && x2 === y2) || (x1 === y2 && x2 === y1);
-    };
-
-    Point.distanceSq = function(x1, y1, x2, y2) {
-      x2 -= x1;
-      y2 -= y1;
-      return x2 * x2 + y2 * y2;
-    };
-
-    Point.prototype.toString = function() {
-      return "[\t" + this.x + ", \t" + this.y + "]";
-    };
-
-    return Point;
+    return SimulationParams;
 
   })();
 
-  module.exports = Point;
+  module.exports = SimulationParams;
 
 }).call(this);
 
 
-},{}],77:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
+(function() {
+  var Hint;
+
+  Hint = (function() {
+    Hint.HINT_LC = "@HINT_LC";
+
+    Hint.HINT_RC = "@HINT_RC";
+
+    Hint.HINT_3DB_C = "@HINT_3DB_C";
+
+    Hint.HINT_TWINT = "@HINT_TWINT";
+
+    Hint.HINT_3DB_L = "@HINT_3DB_L";
+
+    Hint.hintType = -1;
+
+    Hint.hintItem1 = -1;
+
+    Hint.hintItem2 = -1;
+
+    function Hint(Circuit) {
+      this.Circuit = Circuit;
+    }
+
+    Hint.prototype.readHint = function(st) {
+      if (typeof st === 'string') {
+        st = st.split(' ');
+      }
+      this.hintType = st[0];
+      this.hintItem1 = st[1];
+      return this.hintItem2 = st[2];
+    };
+
+    Hint.prototype.getHint = function() {
+      var c1, c2, ce, ie, re;
+      c1 = this.Circuit.getElmByIdx(this.hintItem1);
+      c2 = this.Circuit.getElmByIdx(this.hintItem2);
+      if ((c1 == null) || (c2 == null)) {
+        return null;
+      }
+      if (this.hintType === this.HINT_LC) {
+        if (!(c1 instanceof InductorElm)) {
+          return null;
+        }
+        if (!(c2 instanceof CapacitorElm)) {
+          return null;
+        }
+        ie = c1;
+        ce = c2;
+        return "res.f = " + getUnitText(1 / (2 * Math.PI * Math.sqrt(ie.inductance * ce.capacitance)), "Hz");
+      }
+      if (this.hintType === this.HINT_RC) {
+        if (!(c1 instanceof ResistorElm)) {
+          return null;
+        }
+        if (!(c2 instanceof CapacitorElm)) {
+          return null;
+        }
+        re = c1;
+        ce = c2;
+        return "RC = " + getUnitText(re.resistance * ce.capacitance, "s");
+      }
+      if (this.hintType === this.HINT_3DB_C) {
+        if (!(c1 instanceof ResistorElm)) {
+          return null;
+        }
+        if (!(c2 instanceof CapacitorElm)) {
+          return null;
+        }
+        re = c1;
+        ce = c2;
+        return "f.3db = " + getUnitText(1 / (2 * Math.PI * re.resistance * ce.capacitance), "Hz");
+      }
+      if (this.hintType === this.HINT_3DB_L) {
+        if (!(c1 instanceof ResistorElm)) {
+          return null;
+        }
+        if (!(c2 instanceof InductorElm)) {
+          return null;
+        }
+        re = c1;
+        ie = c2;
+        return "f.3db = " + getUnitText(re.resistance / (2 * Math.PI * ie.inductance), "Hz");
+      }
+      if (this.hintType === this.HINT_TWINT) {
+        if (!(c1 instanceof ResistorElm)) {
+          return null;
+        }
+        if (!(c2 instanceof CapacitorElm)) {
+          return null;
+        }
+        re = c1;
+        ce = c2;
+        return "fc = " + getUnitText(1 / (2 * Math.PI * re.resistance * ce.capacitance), "Hz");
+      }
+      return null;
+    };
+
+    return Hint;
+
+  })();
+
+  module.exports = Hint;
+
+}).call(this);
+
+
+},{}],11:[function(require,module,exports){
+(function() {
+  var Oscilloscope;
+
+  Oscilloscope = (function() {
+    function Oscilloscope(timeStep) {
+      var chartDiv, i, xbuffer_size, _i,
+        _this = this;
+      this.timeStep = timeStep != null ? timeStep : 1;
+      this.timeBase = 0;
+      this.frames = 0;
+      this.seriesData = [[], [], [], [], [], [], [], [], []];
+      xbuffer_size = 150;
+      chartDiv = document.getElementById("chart");
+      for (i = _i = 0; 0 <= xbuffer_size ? _i <= xbuffer_size : _i >= xbuffer_size; i = 0 <= xbuffer_size ? ++_i : --_i) {
+        this.addData(0);
+      }
+      ({
+        step: function() {
+          this.frames += 1;
+          this.removeData(1);
+          if (this.targetComponent) {
+            return this.addData(this.targetComponent.getScopeValue());
+          }
+        }
+      });
+      setInterval(function() {
+        _this.step();
+        return graph.update();
+      }, 40);
+    }
+
+    Oscilloscope.prototype.step = function() {
+      this.frames += 1;
+      this.removeData(1);
+      return this.addData(0.5 * Math.sin(this.frames / 10) + 0.5);
+    };
+
+    Oscilloscope.prototype.addData = function(value) {
+      var index, item, _i, _len, _ref, _results;
+      index = this.seriesData[0].length;
+      _ref = this.seriesData;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
+        _results.push(item.push({
+          x: index * this.timeStep + this.timeBase,
+          y: value
+        }));
+      }
+      return _results;
+    };
+
+    Oscilloscope.prototype.removeData = function(data) {
+      var item, _i, _len, _ref;
+      _ref = this.seriesData;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
+        item.shift();
+      }
+      return this.timeBase += this.timeStep;
+    };
+
+    return Oscilloscope;
+
+  })();
+
+  module.exports = Oscilloscope;
+
+}).call(this);
+
+
+},{}],16:[function(require,module,exports){
 (function(){/*
 Stores Environment-specific settings
 
@@ -1708,7 +1940,7 @@ Settings do not change by loading a new circuit.
 
     Settings.BOLD_LINE_WIDTH = 3;
 
-    Settings.GRID_SIZE = 8;
+    Settings.GRID_SIZE = 16;
 
     Settings.SMALL_GRID = false;
 
@@ -1758,7 +1990,7 @@ Settings do not change by loading a new circuit.
 
 
 })()
-},{}],73:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 (function() {
   var Rectangle;
 
@@ -1811,283 +2043,131 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{}],67:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function() {
-  var SimulationParams;
+  var Point;
 
-  SimulationParams = (function() {
-    function SimulationParams(paramsObj) {
-      this.completionStatus = (paramsObj != null ? paramsObj['completion_status'] : void 0) || "in development";
-      this.createdAt = paramsObj != null ? paramsObj['created_at'] : void 0;
-      this.currentSpeed = parseFloat(paramsObj != null ? paramsObj['current_speed'] : void 0) || 63;
-      this.updatedAt = paramsObj != null ? paramsObj['updated_at'] : void 0;
-      this.description = (paramsObj != null ? paramsObj['description'] : void 0) || "";
-      this.flags = parseInt(paramsObj != null ? paramsObj['flags'] : void 0) || 1;
-      this.id = parseInt(paramsObj != null ? paramsObj['id'] : void 0) || null;
-      this.name = (paramsObj != null ? paramsObj['name_unique'] : void 0) || "default";
-      this.powerRange = parseFloat(paramsObj != null ? paramsObj['power_range'] : void 0) || 62.0;
-      this.voltageRange = parseFloat(paramsObj != null ? paramsObj['voltage_range'] : void 0) || 10.0;
-      this.simSpeed = parseFloat(SimulationParams.convertSimSpeed(paramsObj != null ? paramsObj['sim_speed'] : void 0) || 10.0);
-      this.timeStep = parseFloat(paramsObj != null ? paramsObj['time_step'] : void 0) || 5.0e-06;
-      this.title = (paramsObj != null ? paramsObj['title'] : void 0) || "Default";
-      this.topic = (paramsObj != null ? paramsObj['topic'] : void 0) || null;
-      if (this.timeStep == null) {
-        throw new Error("Circuit params is missing its time step (was null)!");
-      }
+  Point = (function() {
+    function Point(x, y) {
+      this.x = x != null ? x : 0;
+      this.y = y != null ? y : 0;
     }
 
-    SimulationParams.serialize = function(simParams) {
-      return {
-        completion_status: simParams.completionStatus,
-        created_at: simParams.createdAt,
-        current_speed: simParams.currentSpeed,
-        updated_at: simParams.updatedAt,
-        description: simParams.description,
-        flags: simParams.flags,
-        id: simParams.id,
-        name_unique: simParams.name,
-        power_range: simParams.powerRange,
-        voltage_range: simParams.voltageRange,
-        sim_speed: simParams.simSpeed,
-        time_step: simParams.timeStep,
-        title: simParams.title,
-        topic: simParams.topic
-      };
+    Point.prototype.equals = function(otherPoint) {
+      return this.x === otherPoint.x && this.y === otherPoint.y;
     };
 
-    SimulationParams.deserialize = function(jsonObj) {
-      var simParams;
-      simParams = new SimulationParams();
-      simParams.completionStatus = (jsonObj != null ? jsonObj['completion_status'] : void 0) || "in development";
-      simParams.createdAt = jsonObj != null ? jsonObj['created_at'] : void 0;
-      simParams.currentSpeed = parseFloat(jsonObj != null ? jsonObj['current_speed'] : void 0) || 63;
-      simParams.updatedAt = jsonObj != null ? jsonObj['updated_at'] : void 0;
-      simParams.description = (jsonObj != null ? jsonObj['description'] : void 0) || "";
-      simParams.flags = parseInt(jsonObj != null ? jsonObj['flags'] : void 0) || 1;
-      simParams.id = (jsonObj != null ? jsonObj['id'] : void 0) || null;
-      simParams.name = (jsonObj != null ? jsonObj['name_unique'] : void 0) || "default";
-      simParams.powerRange = parseFloat(jsonObj != null ? jsonObj['power_range'] : void 0) || 62.0;
-      simParams.voltageRange = parseFloat(jsonObj != null ? jsonObj['voltage_range'] : void 0) || 10.0;
-      simParams.simSpeed = SimulationParams.convertSimSpeed((jsonObj != null ? jsonObj['sim_speed'] : void 0) || 10.0);
-      simParams.timeStep = parseFloat(jsonObj != null ? jsonObj['time_step'] : void 0) || 5.0e-06;
-      simParams.title = (jsonObj != null ? jsonObj['title'] : void 0) || "Default";
-      simParams.topic = (jsonObj != null ? jsonObj['topic'] : void 0) || null;
-      if (simParams.timeStep == null) {
-        throw new Error("Time step param is required (was null)");
-      }
-      return simParams;
-    };
-
-    SimulationParams.prototype.details = function() {
-      return ["\tName:        " + this.name, "\tTopic:       " + this.topic, "\tStatus:      " + this.completionStatus, "\tCreated at:  " + this.createdAt || "?", "\tUpdated At:  " + this.updatedAt || "?", "\tDescription: " + this.description, "\tId:          " + this.id, "\tTitle:       " + this.title].join("\n");
-    };
-
-    SimulationParams.prototype.toString = function() {
-      return ["" + this.name, "================================================================", "\tFlags:       " + this.flags, "\tTimeStep:    " + this.timeStep.toFixed(7), "\tSim Speed:   " + this.simSpeed, "\tCur Speed:   " + this.currentSpeed, "\tVolt. Range: " + this.voltageRange.toFixed(2), "\tPwr Range:   " + this.powerRange, "----------------------------------------------------------------", ""].join("\n");
-    };
-
-    SimulationParams.convertSimSpeed = function(sim_speed) {
-      return Math.floor(Math.log(10 * sim_speed) * 24.0 + 61.5);
-    };
-
-    SimulationParams.prototype.setCurrentMult = function(mult) {
-      return this.currentMult = mult;
-    };
-
-    SimulationParams.prototype.getCurrentMult = function() {
-      return this.currentMult;
-    };
-
-    return SimulationParams;
-
-  })();
-
-  module.exports = SimulationParams;
-
-}).call(this);
-
-
-},{}],68:[function(require,module,exports){
-(function() {
-  var Oscilloscope;
-
-  Oscilloscope = (function() {
-    function Oscilloscope(timeStep) {
-      var chartDiv, i, xbuffer_size, _i,
-        _this = this;
-      this.timeStep = timeStep != null ? timeStep : 1;
-      this.timeBase = 0;
-      this.frames = 0;
-      this.seriesData = [[], [], [], [], [], [], [], [], []];
-      xbuffer_size = 150;
-      chartDiv = document.getElementById("chart");
-      for (i = _i = 0; 0 <= xbuffer_size ? _i <= xbuffer_size : _i >= xbuffer_size; i = 0 <= xbuffer_size ? ++_i : --_i) {
-        this.addData(0);
-      }
-      ({
-        step: function() {
-          this.frames += 1;
-          this.removeData(1);
-          if (this.targetComponent) {
-            return this.addData(this.targetComponent.getScopeValue());
-          }
-        }
-      });
-      setInterval(function() {
-        _this.step();
-        return graph.update();
-      }, 40);
-    }
-
-    Oscilloscope.prototype.step = function() {
-      this.frames += 1;
-      this.removeData(1);
-      return this.addData(0.5 * Math.sin(this.frames / 10) + 0.5);
-    };
-
-    Oscilloscope.prototype.addData = function(value) {
-      var index, item, _i, _len, _ref, _results;
-      index = this.seriesData[0].length;
-      _ref = this.seriesData;
+    Point.toArray = function(num) {
+      var i, _i, _len, _ref, _results;
+      _ref = Array(num);
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        item = _ref[_i];
-        _results.push(item.push({
-          x: index * this.timeStep + this.timeBase,
-          y: value
-        }));
+        i = _ref[_i];
+        _results.push(new Point(0, 0));
       }
       return _results;
     };
 
-    Oscilloscope.prototype.removeData = function(data) {
-      var item, _i, _len, _ref;
-      _ref = this.seriesData;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        item = _ref[_i];
-        item.shift();
-      }
-      return this.timeBase += this.timeStep;
+    Point.distanceSq = function(x1, y1, x2, y2) {
+      x2 -= x1;
+      y2 -= y1;
+      return x2 * x2 + y2 * y2;
     };
 
-    return Oscilloscope;
+    Point.prototype.toString = function() {
+      return "[\t" + this.x + ", \t" + this.y + "]";
+    };
+
+    return Point;
 
   })();
 
-  module.exports = Oscilloscope;
+  module.exports = Point;
 
 }).call(this);
 
 
-},{}],69:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 (function() {
-  var Hint;
+  var Logger;
 
-  Hint = (function() {
-    Hint.HINT_LC = "@HINT_LC";
+  Logger = (function() {
+    var errorStack, warningStack;
 
-    Hint.HINT_RC = "@HINT_RC";
+    function Logger() {}
 
-    Hint.HINT_3DB_C = "@HINT_3DB_C";
+    errorStack = new Array();
 
-    Hint.HINT_TWINT = "@HINT_TWINT";
+    warningStack = new Array();
 
-    Hint.HINT_3DB_L = "@HINT_3DB_L";
+    Logger.error = function(msg) {
+      console.error("Error: " + msg);
+      return errorStack.push(msg);
+    };
 
-    Hint.hintType = -1;
+    Logger.warn = function(msg) {
+      console.error("Warning: " + msg);
+      return warningStack.push(msg);
+    };
 
-    Hint.hintItem1 = -1;
+    return Logger;
 
-    Hint.hintItem2 = -1;
+  })();
 
-    function Hint(Circuit) {
-      this.Circuit = Circuit;
+  module.exports = Logger;
+
+}).call(this);
+
+
+},{}],77:[function(require,module,exports){
+(function() {
+  var SimulationFrame;
+
+  SimulationFrame = (function() {
+    function SimulationFrame(circuit) {
+      var elm, solver;
+      solver = circuit.Solver;
+      this.frameNumber = circuit.iterations;
+      this.time = circuit.time;
+      this.circuitMatrix = solver.circuitMatrix;
+      this.circuitRightSide = solver.circuitRightSide;
+      this.elementStates = (function() {
+        var _i, _len, _ref, _results;
+        _ref = circuit.getElements();
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          elm = _ref[_i];
+          _results.push({
+            dumpType: elm.getDumpType().toString(),
+            volts: elm.volts,
+            current: elm.current,
+            curcount: elm.curcount || 0
+          });
+        }
+        return _results;
+      })();
     }
 
-    Hint.prototype.readHint = function(st) {
-      if (typeof st === 'string') {
-        st = st.split(' ');
-      }
-      this.hintType = st[0];
-      this.hintItem1 = st[1];
-      return this.hintItem2 = st[2];
+    SimulationFrame.prototype.toJson = function() {
+      return {
+        frameNumber: this.frameNumber,
+        time: this.time,
+        circuitMatrix: this.circuitMatrix,
+        circuitRightSide: this.circuitRightSide,
+        elementStates: this.elementStates
+      };
     };
 
-    Hint.prototype.getHint = function() {
-      var c1, c2, ce, ie, re;
-      c1 = this.Circuit.getElmByIdx(this.hintItem1);
-      c2 = this.Circuit.getElmByIdx(this.hintItem2);
-      if ((c1 == null) || (c2 == null)) {
-        return null;
-      }
-      if (this.hintType === this.HINT_LC) {
-        if (!(c1 instanceof InductorElm)) {
-          return null;
-        }
-        if (!(c2 instanceof CapacitorElm)) {
-          return null;
-        }
-        ie = c1;
-        ce = c2;
-        return "res.f = " + getUnitText(1 / (2 * Math.PI * Math.sqrt(ie.inductance * ce.capacitance)), "Hz");
-      }
-      if (this.hintType === this.HINT_RC) {
-        if (!(c1 instanceof ResistorElm)) {
-          return null;
-        }
-        if (!(c2 instanceof CapacitorElm)) {
-          return null;
-        }
-        re = c1;
-        ce = c2;
-        return "RC = " + getUnitText(re.resistance * ce.capacitance, "s");
-      }
-      if (this.hintType === this.HINT_3DB_C) {
-        if (!(c1 instanceof ResistorElm)) {
-          return null;
-        }
-        if (!(c2 instanceof CapacitorElm)) {
-          return null;
-        }
-        re = c1;
-        ce = c2;
-        return "f.3db = " + getUnitText(1 / (2 * Math.PI * re.resistance * ce.capacitance), "Hz");
-      }
-      if (this.hintType === this.HINT_3DB_L) {
-        if (!(c1 instanceof ResistorElm)) {
-          return null;
-        }
-        if (!(c2 instanceof InductorElm)) {
-          return null;
-        }
-        re = c1;
-        ie = c2;
-        return "f.3db = " + getUnitText(re.resistance / (2 * Math.PI * ie.inductance), "Hz");
-      }
-      if (this.hintType === this.HINT_TWINT) {
-        if (!(c1 instanceof ResistorElm)) {
-          return null;
-        }
-        if (!(c2 instanceof CapacitorElm)) {
-          return null;
-        }
-        re = c1;
-        ce = c2;
-        return "fc = " + getUnitText(1 / (2 * Math.PI * re.resistance * ce.capacitance), "Hz");
-      }
-      return null;
-    };
-
-    return Hint;
+    return SimulationFrame;
 
   })();
 
-  module.exports = Hint;
+  module.exports = SimulationFrame;
 
 }).call(this);
 
 
-},{}],72:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 (function() {
   var Observer,
     __slice = [].slice;
@@ -2137,530 +2217,281 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{}],70:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 (function() {
-  var SimulationFrame;
+  var BaseRenderer, Observer, Point, Settings, Util, _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  SimulationFrame = (function() {
-    function SimulationFrame(circuit) {
-      var elm, solver;
-      solver = circuit.Solver;
-      this.frameNumber = circuit.iterations;
-      this.time = circuit.time;
-      this.circuitMatrix = solver.circuitMatrix;
-      this.circuitRightSide = solver.circuitRightSide;
-      this.elementStates = (function() {
-        var _i, _len, _ref, _results;
-        _ref = circuit.getElements();
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          elm = _ref[_i];
-          _results.push({
-            dumpType: elm.getDumpType().toString(),
-            volts: elm.volts,
-            current: elm.current,
-            curcount: elm.curcount || 0
-          });
+  Observer = require('../util/observer.coffee');
+
+  Settings = require('../settings/settings.coffee');
+
+  Util = require('../util/util.coffee');
+
+  Point = require('../geom/point.coffee');
+
+  BaseRenderer = (function(_super) {
+    __extends(BaseRenderer, _super);
+
+    function BaseRenderer() {
+      _ref = BaseRenderer.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    BaseRenderer.prototype.drawInfo = function() {
+      this.context.fillText("t = " + (Util.longFormat(this.Circuit.time)) + " s", 10, 10);
+      return this.context.fillText("F.T. = " + this.Circuit.frames, 10, 20);
+    };
+
+    BaseRenderer.prototype.drawWarning = function(context) {
+      var msg, warning, _i, _len;
+      msg = "";
+      for (_i = 0, _len = warningStack.length; _i < _len; _i++) {
+        warning = warningStack[_i];
+        msg += warning + "\n";
+      }
+      return console.error("Simulation Warning: " + msg);
+    };
+
+    BaseRenderer.prototype.drawError = function(context) {
+      var error, msg, _i, _len;
+      msg = "";
+      for (_i = 0, _len = errorStack.length; _i < _len; _i++) {
+        error = errorStack[_i];
+        msg += error + "\n";
+      }
+      return console.error("Simulation Error: " + msg);
+    };
+
+    BaseRenderer.prototype.fillText = function(text, x, y) {
+      return this.context.fillText(text, x, y);
+    };
+
+    BaseRenderer.prototype.fillCircle = function(x, y, radius, lineWidth, fillColor, lineColor) {
+      if (lineWidth == null) {
+        lineWidth = Settings.LINE_WIDTH;
+      }
+      if (fillColor == null) {
+        fillColor = '#FFFF00';
+      }
+      if (lineColor == null) {
+        lineColor = null;
+      }
+      this.context.save();
+      this.context.beginPath();
+      this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
+      if (lineColor) {
+        this.context.lineWidth = lineWidth;
+        this.context.strokeStyle = lineColor;
+        this.context.stroke();
+      }
+      this.context.fillStyle = fillColor;
+      this.context.fill();
+      this.context.closePath();
+      return this.context.restore();
+    };
+
+    BaseRenderer.prototype.drawCircle = function(x, y, radius, lineWidth, lineColor) {
+      if (lineWidth == null) {
+        lineWidth = Settings.LINE_WIDTH;
+      }
+      if (lineColor == null) {
+        lineColor = "#000000";
+      }
+      this.context.save();
+      this.context.strokeStyle = lineColor;
+      this.context.lineWidth = lineWidth;
+      this.context.beginPath();
+      this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
+      this.context.stroke();
+      this.context.closePath();
+      return this.context.restore();
+    };
+
+    BaseRenderer.prototype.drawRect = function(x, y, width, height, lineWidth, lineColor) {
+      if (lineWidth == null) {
+        lineWidth = Settings.LINE_WIDTH;
+      }
+      if (lineColor == null) {
+        lineColor = "#000000";
+      }
+      this.context.strokeStyle = lineColor;
+      this.context.lineJoin = 'miter';
+      this.context.rect(x, y, width, height);
+      return this.context.stroke();
+    };
+
+    BaseRenderer.prototype.drawLinePt = function(pa, pb, color) {
+      if (color == null) {
+        color = Settings.STROKE_COLOR;
+      }
+      return this.drawLine(pa.x, pa.y, pb.x, pb.y, color);
+    };
+
+    BaseRenderer.prototype.drawLine = function(x, y, x2, y2, color, lineWidth) {
+      if (color == null) {
+        color = Settings.STROKE_COLOR;
+      }
+      if (lineWidth == null) {
+        lineWidth = Settings.LINE_WIDTH;
+      }
+      this.context.save();
+      this.context.beginPath();
+      if (this.boldLines) {
+        this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
+        this.context.strokeStyle = Settings.SELECT_COLOR;
+        this.context.moveTo(x, y);
+        this.context.lineTo(x2, y2);
+        this.context.stroke();
+      }
+      this.context.strokeStyle = color;
+      this.context.lineWidth = lineWidth;
+      this.context.moveTo(x, y);
+      this.context.lineTo(x2, y2);
+      this.context.stroke();
+      this.context.closePath();
+      return this.context.restore();
+    };
+
+    BaseRenderer.prototype.drawThickPolygon = function(xlist, ylist, color) {
+      var i, _i, _ref1;
+      if (color == null) {
+        color = null;
+      }
+      this.context.save();
+      this.context.fillStyle = color;
+      this.context.beginPath();
+      this.context.moveTo(xlist[0], ylist[0]);
+      for (i = _i = 1, _ref1 = xlist.length; 1 <= _ref1 ? _i < _ref1 : _i > _ref1; i = 1 <= _ref1 ? ++_i : --_i) {
+        this.context.lineTo(xlist[i], ylist[i]);
+      }
+      this.context.closePath();
+      this.context.stroke();
+      if (color) {
+        this.context.fill();
+      }
+      return this.context.restore();
+    };
+
+    BaseRenderer.prototype.drawThickPolygonP = function(polygon, color, fill) {
+      var i, numVertices, _i;
+      if (color == null) {
+        color = Settings.STROKE_COLOR;
+      }
+      if (fill == null) {
+        fill = Settings.FILL_COLOR;
+      }
+      numVertices = polygon.numPoints();
+      this.context.save();
+      this.context.fillStyle = fill;
+      this.context.strokeStyle = color;
+      this.context.beginPath();
+      this.context.moveTo(polygon.getX(0), polygon.getY(0));
+      for (i = _i = 0; 0 <= numVertices ? _i < numVertices : _i > numVertices; i = 0 <= numVertices ? ++_i : --_i) {
+        this.context.lineTo(polygon.getX(i), polygon.getY(i));
+      }
+      this.context.closePath();
+      this.context.fill();
+      this.context.stroke();
+      return this.context.restore();
+    };
+
+    BaseRenderer.prototype.drawPolyLine = function(xList, yList, lineWidth, color) {
+      var i, _i, _ref1;
+      if (lineWidth == null) {
+        lineWidth = Settings.LINE_WIDTH;
+      }
+      if (color == null) {
+        color = Settings.STROKE_COLOR;
+      }
+      this.context.save();
+      this.context.beginPath();
+      this.context.moveTo(xlist[0], ylist[0]);
+      for (i = _i = 1, _ref1 = xlist.length; 1 <= _ref1 ? _i < _ref1 : _i > _ref1; i = 1 <= _ref1 ? ++_i : --_i) {
+        this.context.lineTo(xlist[i], ylist[i]);
+      }
+      return this.context.restore();
+    };
+
+    BaseRenderer.prototype.drawValue = function(x1, y1, circuitElm, str) {};
+
+    BaseRenderer.prototype.drawCoil = function(point1, point2, vStart, vEnd, renderContext) {
+      var color, cx, hs, hsx, i, ps1, ps2, segments, voltageLevel, _i, _results;
+      hs = 8;
+      segments = 40;
+      ps1 = new Point(0, 0);
+      ps2 = new Point(0, 0);
+      ps1.x = point1.x;
+      ps1.y = point1.y;
+      _results = [];
+      for (i = _i = 0; 0 <= segments ? _i < segments : _i > segments; i = 0 <= segments ? ++_i : --_i) {
+        cx = (((i + 1) * 8 / segments) % 2) - 1;
+        hsx = Math.sqrt(1 - cx * cx);
+        ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs);
+        voltageLevel = vStart + (vEnd - vStart) * i / segments;
+        color = Util.getVoltageColor(voltageLevel);
+        renderContext.drawLinePt(ps1, ps2, color);
+        ps1.x = ps2.x;
+        _results.push(ps1.y = ps2.y);
+      }
+      return _results;
+    };
+
+    return BaseRenderer;
+
+  })(Observer);
+
+  module.exports = BaseRenderer;
+
+}).call(this);
+
+
+},{"../util/observer.coffee":79,"../settings/settings.coffee":16,"../util/util.coffee":19,"../geom/point.coffee":18}],20:[function(require,module,exports){
+(function() {
+  var Point, Polygon;
+
+  Point = require('./point.coffee');
+
+  Polygon = (function() {
+    function Polygon(vertices) {
+      var i;
+      this.vertices = [];
+      if (vertices && vertices.length % 2 === 0) {
+        i = 0;
+        while (i < vertices.length) {
+          this.addVertex(vertices[i], vertices[i + 1]);
+          i += 2;
         }
-        return _results;
-      })();
+      }
     }
 
-    SimulationFrame.prototype.toJson = function() {
-      return {
-        frameNumber: this.frameNumber,
-        time: this.time,
-        circuitMatrix: this.circuitMatrix,
-        circuitRightSide: this.circuitRightSide,
-        elementStates: this.elementStates
-      };
+    Polygon.prototype.addVertex = function(x, y) {
+      return this.vertices.push(new Point(x, y));
     };
 
-    return SimulationFrame;
+    Polygon.prototype.getX = function(n) {
+      return this.vertices[n].x;
+    };
+
+    Polygon.prototype.getY = function(n) {
+      return this.vertices[n].y;
+    };
+
+    Polygon.prototype.numPoints = function() {
+      return this.vertices.length;
+    };
+
+    return Polygon;
 
   })();
 
-  module.exports = SimulationFrame;
+  module.exports = Polygon;
 
 }).call(this);
 
 
-},{}],75:[function(require,module,exports){
-(function() {
-  var Logger;
-
-  Logger = (function() {
-    var errorStack, warningStack;
-
-    function Logger() {}
-
-    errorStack = new Array();
-
-    warningStack = new Array();
-
-    Logger.error = function(msg) {
-      console.error("Error: " + msg);
-      return errorStack.push(msg);
-    };
-
-    Logger.warn = function(msg) {
-      console.error("Warning: " + msg);
-      return warningStack.push(msg);
-    };
-
-    return Logger;
-
-  })();
-
-  module.exports = Logger;
-
-}).call(this);
-
-
-},{}],10:[function(require,module,exports){
-(function() {
-  var CircuitComponent, Point, Polygon, Rectangle, Settings, Util, WireElm,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require('../circuitComponent.coffee');
-
-  Settings = require('../../settings/settings.coffee');
-
-  Polygon = require('../../geom/polygon.coffee');
-
-  Rectangle = require('../../geom/rectangle.coffee');
-
-  Point = require('../../geom/point.coffee');
-
-  Util = require('../../util/util.coffee');
-
-  WireElm = (function(_super) {
-    __extends(WireElm, _super);
-
-    WireElm.FLAG_SHOWCURRENT = 1;
-
-    WireElm.FLAG_SHOWVOLTAGE = 2;
-
-    function WireElm(xa, ya, xb, yb, params, f) {
-      WireElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-    }
-
-    WireElm.prototype.getName = function() {
-      return "Wire";
-    };
-
-    WireElm.prototype.draw = function(renderContext) {
-      var s;
-      if (CircuitComponent.DEBUG) {
-        WireElm.__super__.draw.call(this, renderContext);
-      }
-      this.updateDots();
-      renderContext.drawDots(this.point1, this.point2, this);
-      renderContext.drawLinePt(this.point1, this.point2, Util.getVoltageColor(this.volts[0]));
-      if (this.mustShowCurrent()) {
-        s = Util.getUnitText(Math.abs(this.getCurrent()), "A");
-      } else if (this.mustShowVoltage()) {
-        s = Util.getUnitText(this.volts[0], "V");
-      }
-      this.updateDots();
-      renderContext.drawDots(this.point1, this.point2, this);
-      return renderContext.drawPosts(this);
-    };
-
-    WireElm.prototype.stamp = function(stamper) {
-      return stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, 0);
-    };
-
-    WireElm.prototype.mustShowCurrent = function() {
-      return (this.flags & WireElm.FLAG_SHOWCURRENT) !== 0;
-    };
-
-    WireElm.prototype.mustShowVoltage = function() {
-      return (this.flags & WireElm.FLAG_SHOWVOLTAGE) !== 0;
-    };
-
-    WireElm.prototype.getVoltageSourceCount = function() {
-      return 1;
-    };
-
-    WireElm.prototype.getInfo = function(arr) {
-      WireElm.__super__.getInfo.call(this);
-      arr[0] = "Wire";
-      arr[1] = "I = " + Util.getUnitText(this.getCurrent(), "A");
-      return arr[2] = "V = " + Util.getUnitText(this.volts[0], "V");
-    };
-
-    WireElm.prototype.getDumpType = function() {
-      return "w";
-    };
-
-    WireElm.prototype.getPower = function() {
-      return 0;
-    };
-
-    WireElm.prototype.getVoltageDiff = function() {
-      return this.volts[0];
-    };
-
-    WireElm.prototype.isWire = function() {
-      return true;
-    };
-
-    WireElm.prototype.needsShortcut = function() {
-      return true;
-    };
-
-    return WireElm;
-
-  })(CircuitComponent);
-
-  module.exports = WireElm;
-
-}).call(this);
-
-
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],12:[function(require,module,exports){
-(function() {
-  var CircuitComponent, GroundElm, Point, Polygon, Rectangle, Settings, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require('../circuitComponent.coffee');
-
-  Settings = require('../../settings/settings.coffee');
-
-  Polygon = require('../../geom/polygon.coffee');
-
-  Rectangle = require('../../geom/rectangle.coffee');
-
-  Point = require('../../geom/point.coffee');
-
-  Util = require('../../util/util.coffee');
-
-  GroundElm = (function(_super) {
-    __extends(GroundElm, _super);
-
-    function GroundElm(xa, ya, xb, yb, params, f) {
-      GroundElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-    }
-
-    GroundElm.prototype.getDumpType = function() {
-      return "g";
-    };
-
-    GroundElm.prototype.getPostCount = function() {
-      return 1;
-    };
-
-    GroundElm.prototype.draw = function(renderContext) {
-      var color, endPt, pt1, pt2, row, startPt, _i, _ref;
-      if (CircuitComponent.DEBUG) {
-        GroundElm.__super__.draw.call(this, renderContext);
-      }
-      this.updateDots();
-      color = Util.getVoltageColor(0);
-      renderContext.drawLinePt(this.point1, this.point2, color);
-      for (row = _i = 0; _i < 3; row = ++_i) {
-        startPt = 10 - row * 2;
-        endPt = row * 3;
-        _ref = Util.interpolateSymmetrical(this.point1, this.point2, 1 + endPt / this.dn, startPt), pt1 = _ref[0], pt2 = _ref[1];
-        renderContext.drawLinePt(pt1, pt2, color);
-      }
-      pt2 = Util.interpolate(this.point1, this.point2, 1 + 11.0 / this.dn);
-      renderContext.drawDots(this.point1, this.point2, this);
-      return renderContext.drawPosts(this);
-    };
-
-    GroundElm.prototype.setCurrent = function(x, currentVal) {
-      return this.current = -currentVal;
-    };
-
-    GroundElm.prototype.stamp = function(stamper) {
-      return stamper.stampVoltageSource(0, this.nodes[0], this.voltSource, 0);
-    };
-
-    GroundElm.prototype.getVoltageDiff = function() {
-      return 0;
-    };
-
-    GroundElm.prototype.getVoltageSourceCount = function() {
-      return 1;
-    };
-
-    GroundElm.prototype.getInfo = function(arr) {
-      GroundElm.__super__.getInfo.call(this);
-      arr[0] = "ground";
-      return arr[1] = "I = " + Util.getUnitText(this.getCurrent(), "A");
-    };
-
-    GroundElm.prototype.hasGroundConnection = function(n1) {
-      return true;
-    };
-
-    GroundElm.prototype.needsShortcut = function() {
-      return true;
-    };
-
-    GroundElm.prototype.toString = function() {
-      return "GroundElm";
-    };
-
-    return GroundElm;
-
-  })(CircuitComponent);
-
-  module.exports = GroundElm;
-
-}).call(this);
-
-
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],11:[function(require,module,exports){
-(function() {
-  var CircuitComponent, Point, Polygon, Rectangle, ResistorElm, Settings, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require('../circuitComponent.coffee');
-
-  Settings = require('../../settings/settings.coffee');
-
-  Polygon = require('../../geom/polygon.coffee');
-
-  Rectangle = require('../../geom/rectangle.coffee');
-
-  Point = require('../../geom/point.coffee');
-
-  Util = require('../../util/util.coffee');
-
-  ResistorElm = (function(_super) {
-    __extends(ResistorElm, _super);
-
-    ResistorElm.Fields = {
-      "resistance": {
-        name: "Resistance",
-        unit: "Ohms",
-        default_value: 1000,
-        symbol: "Ω",
-        data_type: parseFloat,
-        range: [0, Infinity],
-        type: "physical"
-      }
-    };
-
-    function ResistorElm(xa, ya, xb, yb, params, f) {
-      ResistorElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-    }
-
-    ResistorElm.prototype.value = function() {
-      return this.resistance;
-    };
-
-    ResistorElm.prototype.draw = function(renderContext) {
-      var endPosition, n, numSegments, offsets, parallelOffset, resistorSegmentVoltage, startPosition, width, _i;
-      this.calcLeads(32);
-      numSegments = 16;
-      width = 5;
-      renderContext.drawLeads(this);
-      parallelOffset = 1 / numSegments;
-      this.updateDots();
-      renderContext.drawDots(this.point1, this.lead1, this);
-      renderContext.drawDots(this.lead2, this.point2, this);
-      offsets = [0, 1, 0, -1];
-      for (n = _i = 0; 0 <= numSegments ? _i < numSegments : _i > numSegments; n = 0 <= numSegments ? ++_i : --_i) {
-        resistorSegmentVoltage = this.volts[0] + (this.volts[1] - this.volts[0]) * (n / numSegments);
-        startPosition = Util.interpolate(this.lead1, this.lead2, n * parallelOffset, width * offsets[n % 4]);
-        endPosition = Util.interpolate(this.lead1, this.lead2, (n + 1) * parallelOffset, width * offsets[(n + 1) % 4]);
-        renderContext.drawLinePt(startPosition, endPosition, Util.getVoltageColor(resistorSegmentVoltage));
-      }
-      renderContext.drawValue(15, 0, this, Util.getUnitText(this.resistance, this.unitSymbol()));
-      renderContext.drawPosts(this);
-      if (CircuitComponent.DEBUG) {
-        return ResistorElm.__super__.draw.call(this, renderContext);
-      }
-    };
-
-    ResistorElm.prototype.unitSymbol = function() {
-      return "Ω";
-    };
-
-    ResistorElm.prototype.getDumpType = function() {
-      return "r";
-    };
-
-    ResistorElm.prototype.getInfo = function(arr) {
-      arr[0] = "resistor";
-      this.getBasicInfo(arr);
-      arr[3] = "R = " + Util.getUnitText(this.resistance, this.unitSymbol);
-      arr[4] = "P = " + Util.getUnitText(this.getPower(), "W");
-      return arr;
-    };
-
-    ResistorElm.prototype.needsShortcut = function() {
-      return true;
-    };
-
-    ResistorElm.prototype.calculateCurrent = function() {
-      return this.current = (this.volts[0] - this.volts[1]) / this.resistance;
-    };
-
-    ResistorElm.prototype.stamp = function(stamper) {
-      if (this.orphaned()) {
-        console.warn("attempting to stamp an orphaned resistor");
-      }
-      return stamper.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
-    };
-
-    return ResistorElm;
-
-  })(CircuitComponent);
-
-  module.exports = ResistorElm;
-
-}).call(this);
-
-
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],9:[function(require,module,exports){
-(function() {
-  var AntennaElm, CircuitComponent, Point, Polygon, RailElm, Rectangle, Settings,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require('../circuitComponent.coffee');
-
-  Settings = require('../../settings/settings.coffee');
-
-  Polygon = require('../../geom/polygon.coffee');
-
-  Rectangle = require('../../geom/rectangle.coffee');
-
-  Point = require('../../geom/point.coffee');
-
-  RailElm = require('./RailElm.coffee');
-
-  AntennaElm = (function(_super) {
-    __extends(AntennaElm, _super);
-
-    function AntennaElm(xa, ya, xb, yb, params, f) {
-      AntennaElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-      this.waveform = RailElm.WF_DC;
-      this.fmphase = 0;
-    }
-
-    AntennaElm.prototype.doStep = function(stamper) {
-      return stamper.updateVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
-    };
-
-    AntennaElm.prototype.stamp = function(stamper) {
-      return stamper.stampVoltageSource(0, this.nodes[0], this.voltSource);
-    };
-
-    AntennaElm.prototype.getVoltage = function() {
-      var fm, pi, t, wave1, wave2, wave3;
-      this.fmphase += 2 * Math.PI * (2200 + Math.sin(2 * Math.PI * this.getParentCircuit().getTime() * 13) * 100) * this.getParentCircuit().timeStep();
-      fm = 3 * Math.sin(this.fmphase);
-      pi = Math.PI;
-      t = this.getParentCircuit().time;
-      wave1 = Math.sin(2 * pi * t * 3000) * (1.3 + Math.sin(2 * pi * t * 12)) * 3;
-      wave2 = Math.sin(2 * pi * t * 2710) * (1.3 + Math.sin(2 * pi * t * 13)) * 3;
-      wave3 = Math.sin(2 * pi * t * 2433) * (1.3 + Math.sin(2 * pi * t * 14)) * 3 + fm;
-      return wave1 + wave2 + wave3;
-    };
-
-    AntennaElm.prototype.getDumpType = function() {
-      return 'A';
-    };
-
-    return AntennaElm;
-
-  })(RailElm);
-
-  module.exports = AntennaElm;
-
-}).call(this);
-
-
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"./RailElm.coffee":20}],15:[function(require,module,exports){
-(function() {
-  var CircuitComponent, OutputElm, Point, Polygon, Rectangle, Settings, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require('../circuitComponent.coffee');
-
-  Settings = require('../../settings/settings.coffee');
-
-  Polygon = require('../../geom/polygon.coffee');
-
-  Rectangle = require('../../geom/rectangle.coffee');
-
-  Point = require('../../geom/point.coffee');
-
-  Util = require('../../util/util.coffee');
-
-  OutputElm = (function(_super) {
-    __extends(OutputElm, _super);
-
-    OutputElm.FLAG_VALUE = 1;
-
-    function OutputElm(xa, ya, xb, yb, params, f) {
-      OutputElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-    }
-
-    OutputElm.prototype.getDumpType = function() {
-      return "O";
-    };
-
-    OutputElm.prototype.getPostCount = function() {
-      return 1;
-    };
-
-    OutputElm.prototype.setPoints = function() {
-      OutputElm.__super__.setPoints.call(this);
-      return this.lead1 = new Point();
-    };
-
-    OutputElm.prototype.draw = function(renderContext) {
-      var color, s;
-      if (CircuitComponent.DEBUG) {
-        OutputElm.__super__.draw.call(this, renderContext);
-      }
-      color = "#FFF";
-      s = ((this.flags & OutputElm.FLAG_VALUE) !== 0 ? Util.getUnitText(this.volts[0], "V") : "out");
-      this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (3 * s.length / 2 + 8) / this.dn);
-      this.setBboxPt(this.point1, this.lead1, 0);
-      renderContext.drawValue(-5, 25, this, s);
-      color = Util.getVoltageColor(this.volts[0]);
-      renderContext.drawLinePt(this.point1, this.lead1, color);
-      renderContext.drawCircle(this.lead1.x + Settings.POST_RADIUS, this.lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR);
-      return renderContext.drawPosts(this);
-    };
-
-    OutputElm.prototype.getVoltageDiff = function() {
-      return this.volts[0];
-    };
-
-    OutputElm.prototype.getInfo = function(arr) {
-      arr[0] = "output";
-      return arr[1] = "V = " + Util.getUnitText(this.volts[0], "V");
-    };
-
-    OutputElm.prototype.stamp = function(stamper) {};
-
-    OutputElm.prototype.toString = function() {
-      return "OutputElm";
-    };
-
-    return OutputElm;
-
-  })(CircuitComponent);
-
-  module.exports = OutputElm;
-
-}).call(this);
-
-
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],13:[function(require,module,exports){
+},{"./point.coffee":18}],13:[function(require,module,exports){
 (function() {
   var CircuitComponent, Point, Polygon, Rectangle, Settings, Util, VoltageElm,
     __hasProp = {}.hasOwnProperty,
@@ -2761,16 +2592,17 @@ Settings do not change by loading a new circuit.
 
     function VoltageElm(xa, ya, xb, yb, params, f) {
       var labels;
+      this.flags = f;
       if (params instanceof Array && params.length > 6) {
         labels = params.slice(6, +params.length + 1 || 9e9);
         params = params.slice(0, 6);
         params.push(labels.join(" "));
       }
-      if (this.flags & VoltageElm.FLAG_COS !== 0) {
+      if (this.flags & VoltageElm.FLAG_COS) {
         this.flags &= ~VoltageElm.FLAG_COS;
         this.phaseShift = Math.PI / 2;
       }
-      VoltageElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+      VoltageElm.__super__.constructor.call(this, xa, ya, xb, yb, params, this.flags);
       this.freqTimeZero = 0;
       this.reset();
     }
@@ -2995,9 +2827,144 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],18:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],14:[function(require,module,exports){
 (function() {
-  var CircuitComponent, InductorElm, Point, Polygon, Rectangle, Settings, Util,
+  var Rectangle, Scope, Util;
+
+  Rectangle = require("../../geom/rectangle.coffee");
+
+  Util = require("../../util/util.coffee");
+
+  Scope = (function() {
+    Scope.VAL_POWER = 1;
+
+    Scope.VAL_IB = 1;
+
+    Scope.VAL_IC = 2;
+
+    Scope.VAL_IE = 3;
+
+    Scope.VAL_VBE = 4;
+
+    Scope.VAL_VBC = 5;
+
+    Scope.VAL_VCE = 6;
+
+    Scope.VAL_R = 2;
+
+    function Scope() {
+      this.rect = Rectangle(0, 500, 200, 100);
+    }
+
+    Scope.prototype.reset = function() {
+      var lockScale, showMax, showMin, showV;
+      this.minMaxV = 5;
+      this.minMaxI = .1;
+      this.speed = 64;
+      this.showI = showV = showMax = true;
+      this.showFreq = lockScale = showMin = false;
+      this.plot2d = false;
+      if (elm !== null && (this.elm instanceof OutputElm || this.elm instanceof LogicOutputElm || this.elm instanceof ProbeElm)) {
+        this.showI = false;
+      }
+      this.value = this.ivalue = 0;
+      if (this.elm instanceof TransistorElm) {
+        return this.value = VAL_VCE;
+      }
+    };
+
+    Scope.prototype.resetGraph = function() {
+      this.scopePointCount = 1;
+      while (this.scopePointCount <= this.rect.width) {
+        this.scopePointCount *= 2;
+      }
+      this.minV = Util.zeroArray(this.scopePointCount);
+      this.maxV = Util.zeroArray(this.scopePointCount);
+      this.minI = Util.zeroArray(this.scopePointCount);
+      this.maxI = Util.zeroArray(this.scopePointCount);
+      return this.ptr = this.ctr = 0;
+    };
+
+    Scope.prototype.draw = function(renderContext) {
+      return renderContext.drawLinePt(this.rect.x, this.rect.y, this.rect.x + this.rect.width, this.rect.y + this.rect.height);
+    };
+
+    Scope.prototype.setElm = function(ce) {
+      return this.elm = ce;
+    };
+
+    return Scope;
+
+  })();
+
+  module.exports = Scope;
+
+}).call(this);
+
+
+},{"../../geom/rectangle.coffee":17,"../../util/util.coffee":19}],21:[function(require,module,exports){
+(function() {
+  var AntennaElm, CircuitComponent, Point, Polygon, RailElm, Rectangle, Settings,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require('../circuitComponent.coffee');
+
+  Settings = require('../../settings/settings.coffee');
+
+  Polygon = require('../../geom/polygon.coffee');
+
+  Rectangle = require('../../geom/rectangle.coffee');
+
+  Point = require('../../geom/point.coffee');
+
+  RailElm = require('./RailElm.coffee');
+
+  AntennaElm = (function(_super) {
+    __extends(AntennaElm, _super);
+
+    function AntennaElm(xa, ya, xb, yb, params, f) {
+      AntennaElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+      this.waveform = RailElm.WF_DC;
+      this.fmphase = 0;
+    }
+
+    AntennaElm.prototype.doStep = function(stamper) {
+      return stamper.updateVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
+    };
+
+    AntennaElm.prototype.stamp = function(stamper) {
+      return stamper.stampVoltageSource(0, this.nodes[0], this.voltSource);
+    };
+
+    AntennaElm.prototype.getVoltage = function() {
+      var fm, pi, t, wave1, wave2, wave3;
+      this.fmphase += 2 * Math.PI * (2200 + Math.sin(2 * Math.PI * this.getParentCircuit().getTime() * 13) * 100) * this.getParentCircuit().timeStep();
+      fm = 3 * Math.sin(this.fmphase);
+      pi = Math.PI;
+      t = this.getParentCircuit().time;
+      wave1 = Math.sin(2 * pi * t * 3000) * (1.3 + Math.sin(2 * pi * t * 12)) * 3;
+      wave2 = Math.sin(2 * pi * t * 2710) * (1.3 + Math.sin(2 * pi * t * 13)) * 3;
+      wave3 = Math.sin(2 * pi * t * 2433) * (1.3 + Math.sin(2 * pi * t * 14)) * 3 + fm;
+      return wave1 + wave2 + wave3;
+    };
+
+    AntennaElm.prototype.getDumpType = function() {
+      return 'A';
+    };
+
+    return AntennaElm;
+
+  })(RailElm);
+
+  module.exports = AntennaElm;
+
+}).call(this);
+
+
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"./RailElm.coffee":32}],23:[function(require,module,exports){
+(function() {
+  var CircuitComponent, Point, Polygon, Rectangle, ResistorElm, Settings, Util,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -3013,289 +2980,94 @@ Settings do not change by loading a new circuit.
 
   Util = require('../../util/util.coffee');
 
-  InductorElm = (function(_super) {
-    __extends(InductorElm, _super);
+  ResistorElm = (function(_super) {
+    __extends(ResistorElm, _super);
 
-    InductorElm.FLAG_BACK_EULER = 2;
-
-    InductorElm.Fields = {
-      "inductance": {
-        name: "inductance",
-        unit: "Henries",
-        symbol: "H",
-        default_value: 1e-3,
-        data_type: parseFloat
-      },
-      "current": {
-        name: "current",
-        unit: "Amperes",
-        symbol: "A",
-        default_value: 0,
-        data_type: parseFloat
+    ResistorElm.Fields = {
+      "resistance": {
+        name: "Resistance",
+        unit: "Ohms",
+        default_value: 1000,
+        symbol: "Ω",
+        data_type: parseFloat,
+        range: [0, Infinity],
+        type: "physical"
       }
     };
 
-    function InductorElm(xa, ya, xb, yb, params, f) {
-      this.nodes = new Array(2);
-      this.compResistance = 0;
-      this.curSourceValue = 0;
-      InductorElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+    function ResistorElm(xa, ya, xb, yb, params, f) {
+      ResistorElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
     }
 
-    InductorElm.prototype.reset = function() {
-      this.current = 0;
-      this.volts[0] = 0;
-      this.volts[1] = 0;
-      return this.curcount = 0;
+    ResistorElm.prototype.value = function() {
+      return this.resistance;
     };
 
-    InductorElm.prototype.setPoints = function() {
-      InductorElm.__super__.setPoints.call(this);
-      return this.calcLeads(32);
-    };
-
-    InductorElm.prototype.stamp = function(stamper) {
-      var ts;
-      ts = this.getParentCircuit().timeStep();
-      if (this.isTrapezoidal()) {
-        this.compResistance = 2 * this.inductance / ts;
-      } else {
-        this.compResistance = this.inductance / ts;
-      }
-      stamper.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
-      stamper.stampRightSide(this.nodes[0]);
-      return stamper.stampRightSide(this.nodes[1]);
-    };
-
-    InductorElm.prototype.doStep = function(stamper) {
-      return stamper.stampCurrentSource(this.nodes[0], this.nodes[1], this.curSourceValue);
-    };
-
-    InductorElm.prototype.draw = function(renderContext) {
-      var hs, v1, v2;
-      if (CircuitComponent.DEBUG) {
-        InductorElm.__super__.draw.call(this, renderContext);
-      }
+    ResistorElm.prototype.draw = function(renderContext) {
+      var endPosition, n, numSegments, offsets, parallelOffset, resistorSegmentVoltage, startPosition, width, _i;
+      this.calcLeads(32);
+      numSegments = 16;
+      width = 5;
+      renderContext.drawLeads(this);
+      parallelOffset = 1 / numSegments;
       this.updateDots();
-      v1 = this.volts[0];
-      v2 = this.volts[1];
-      hs = 8;
-      this.setBboxPt(this.point1, this.point2, hs);
-      renderContext.drawLeads(this);
-      renderContext.drawCoil(this.lead1, this.lead2, v1, v2, renderContext);
-      renderContext.drawValue(-12, 0, this, Util.getUnitText(this.inductance, "H"));
-      renderContext.drawDots(this.point1, this.point2, this);
-      return renderContext.drawPosts(this);
-    };
-
-    InductorElm.prototype.getDumpType = function() {
-      return "l";
-    };
-
-    InductorElm.prototype.startIteration = function() {
-      if (this.isTrapezoidal()) {
-        return this.curSourceValue = this.getVoltageDiff() / this.compResistance + this.current;
-      } else {
-        return this.curSourceValue = this.current;
+      renderContext.drawDots(this.point1, this.lead1, this);
+      renderContext.drawDots(this.lead2, this.point2, this);
+      offsets = [0, 1, 0, -1];
+      for (n = _i = 0; 0 <= numSegments ? _i < numSegments : _i > numSegments; n = 0 <= numSegments ? ++_i : --_i) {
+        resistorSegmentVoltage = this.volts[0] + (this.volts[1] - this.volts[0]) * (n / numSegments);
+        startPosition = Util.interpolate(this.lead1, this.lead2, n * parallelOffset, width * offsets[n % 4]);
+        endPosition = Util.interpolate(this.lead1, this.lead2, (n + 1) * parallelOffset, width * offsets[(n + 1) % 4]);
+        renderContext.drawLinePt(startPosition, endPosition, Util.getVoltageColor(resistorSegmentVoltage));
       }
-    };
-
-    InductorElm.prototype.nonLinear = function() {
-      return false;
-    };
-
-    InductorElm.prototype.isTrapezoidal = function() {
-      return true;
-    };
-
-    InductorElm.prototype.calculateCurrent = function() {
-      if (this.compResistance > 0) {
-        this.current = this.getVoltageDiff() / this.compResistance + this.curSourceValue;
-      }
-      return this.current;
-    };
-
-    InductorElm.prototype.getInfo = function(arr) {
-      arr[0] = "inductor";
-      this.getBasicInfo(arr);
-      arr[3] = "L = " + Util.getUnitText(this.inductance, "H");
-      return arr[4] = "P = " + Util.getUnitText(this.getPower(), "W");
-    };
-
-    InductorElm.prototype.getVoltageDiff = function() {
-      return this.volts[0] - this.volts[1];
-    };
-
-    InductorElm.prototype.getName = function() {
-      return "Inductor";
-    };
-
-    return InductorElm;
-
-  })(CircuitComponent);
-
-  module.exports = InductorElm;
-
-}).call(this);
-
-
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],16:[function(require,module,exports){
-(function() {
-  var CircuitComponent, Point, Polygon, Rectangle, Settings, SwitchElm, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require('../circuitComponent.coffee');
-
-  Settings = require('../../settings/settings.coffee');
-
-  Polygon = require('../../geom/polygon.coffee');
-
-  Rectangle = require('../../geom/rectangle.coffee');
-
-  Point = require('../../geom/point.coffee');
-
-  Util = require('../../util/util.coffee');
-
-  SwitchElm = (function(_super) {
-    __extends(SwitchElm, _super);
-
-    SwitchElm.Fields = {
-      "position": {
-        name: "Position",
-        default_value: 0,
-        data_type: function(str) {
-          str = str.toString();
-          if (str === 'true') {
-            return 1;
-          } else if (str === 'false') {
-            return 0;
-          } else {
-            return parseInt(str);
-          }
-        },
-        field_type: "boolean"
-      },
-      "momentary": {
-        name: "Momentary",
-        default_value: 0,
-        data_type: function(str) {
-          return str.toString() === 'true';
-        },
-        field_type: "boolean"
-      }
-    };
-
-    function SwitchElm(xa, ya, xb, yb, params, f) {
-      this.momentary = false;
-      this.position = 0;
-      this.posCount = 2;
-      this.ps = new Point(0, 0);
-      this.ps2 = new Point(0, 0);
-      SwitchElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-    }
-
-    SwitchElm.prototype.setPoints = function() {
-      SwitchElm.__super__.setPoints.call(this);
-      this.calcLeads(32);
-      this.ps = new Point(0, 0);
-      return this.ps2 = new Point(0, 0);
-    };
-
-    SwitchElm.prototype.getDumpType = function() {
-      return "s";
-    };
-
-    SwitchElm.prototype.stamp = function(stamper) {
-      if (this.position === 0) {
-        return stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, 0);
-      }
-    };
-
-    SwitchElm.prototype.draw = function(renderContext) {
-      var hs1, hs2, openhs;
+      renderContext.drawValue(12, 0, this, Util.getUnitText(this.resistance, this.unitSymbol()));
+      renderContext.drawPosts(this);
       if (CircuitComponent.DEBUG) {
-        SwitchElm.__super__.draw.call(this, renderContext);
-      }
-      this.calcLeads(32);
-      this.ps = new Point(0, 0);
-      this.ps2 = new Point(0, 0);
-      openhs = 16;
-      hs1 = (this.position === 1 ? 0 : 2);
-      hs2 = (this.position === 1 ? openhs : 2);
-      this.setBboxPt(this.point1, this.point2, openhs);
-      renderContext.drawLeads(this);
-      if (this.position === 0) {
-        renderContext.drawDots(this.point1, this.point2, this);
-      }
-      this.ps = Util.interpolate(this.lead1, this.lead2, 0, hs1);
-      this.ps2 = Util.interpolate(this.lead1, this.lead2, 1, hs2);
-      renderContext.drawLinePt(this.ps, this.ps2);
-      return renderContext.drawPosts(this);
-    };
-
-    SwitchElm.prototype.getName = function() {
-      return "Basic Switch";
-    };
-
-    SwitchElm.prototype.calculateCurrent = function() {
-      if (this.position === 1) {
-        return this.current = 0;
+        return ResistorElm.__super__.draw.call(this, renderContext);
       }
     };
 
-    SwitchElm.prototype.getVoltageSourceCount = function() {
-      if (this.position === 1) {
-        return 0;
-      } else {
-        return 1;
-      }
+    ResistorElm.prototype.unitSymbol = function() {
+      return "Ω";
     };
 
-    SwitchElm.prototype.mouseUp = function() {
-      if (this.momentary) {
-        return this.toggle();
-      }
+    ResistorElm.prototype.getDumpType = function() {
+      return "r";
     };
 
-    SwitchElm.prototype.toggle = function() {
-      this.position++;
-      if (this.position >= this.posCount) {
-        this.position = 0;
-      }
-      return this.Circuit.Solver.analyzeFlag = true;
+    ResistorElm.prototype.getInfo = function(arr) {
+      arr[0] = "resistor";
+      this.getBasicInfo(arr);
+      arr[3] = "R = " + Util.getUnitText(this.resistance, this.unitSymbol);
+      arr[4] = "P = " + Util.getUnitText(this.getPower(), "W");
+      return arr;
     };
 
-    SwitchElm.prototype.getInfo = function(arr) {
-      arr[0] = (this.momentary ? "push switch (SPST)" : "switch (SPST)");
-      if (this.position === 1) {
-        arr[1] = "open";
-        return arr[2] = "Vd = " + Util.getUnitText(this.getVoltageDiff(), "V");
-      } else {
-        arr[1] = "closed";
-        arr[2] = "V = " + Util.getUnitText(this.volts[0], "V");
-        return arr[3] = "I = " + Util.getUnitText(this.getCurrent(), "A");
-      }
-    };
-
-    SwitchElm.prototype.getConnection = function(n1, n2) {
-      return this.position === 0;
-    };
-
-    SwitchElm.prototype.isWire = function() {
+    ResistorElm.prototype.needsShortcut = function() {
       return true;
     };
 
-    return SwitchElm;
+    ResistorElm.prototype.calculateCurrent = function() {
+      return this.current = (this.volts[0] - this.volts[1]) / this.resistance;
+    };
+
+    ResistorElm.prototype.stamp = function(stamper) {
+      if (this.orphaned()) {
+        console.warn("attempting to stamp an orphaned resistor");
+      }
+      return stamper.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
+    };
+
+    return ResistorElm;
 
   })(CircuitComponent);
 
-  module.exports = SwitchElm;
+  module.exports = ResistorElm;
 
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],14:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],25:[function(require,module,exports){
 (function() {
   var CircuitComponent, DiodeElm, Point, Polygon, Rectangle, Settings, Util,
     __hasProp = {}.hasOwnProperty,
@@ -3475,7 +3247,6 @@ Settings do not change by loading a new circuit.
         } else {
           vnew = this.vt * Math.log(vnew / this.vt);
         }
-        console.log("CONVERGE: vnew > @vcrit and Math.abs(vnew - vold) > (@vt + @vt)");
         this.Circuit.Solver.converged = false;
       } else if (vnew < 0 && this.zoffset !== 0) {
         vnew = -vnew - this.zoffset;
@@ -3510,7 +3281,584 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],17:[function(require,module,exports){
+},{"../../settings/settings.coffee":16,"../circuitComponent.coffee":2,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],22:[function(require,module,exports){
+(function() {
+  var CircuitComponent, Point, Polygon, Rectangle, Settings, Util, WireElm,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require('../circuitComponent.coffee');
+
+  Settings = require('../../settings/settings.coffee');
+
+  Polygon = require('../../geom/polygon.coffee');
+
+  Rectangle = require('../../geom/rectangle.coffee');
+
+  Point = require('../../geom/point.coffee');
+
+  Util = require('../../util/util.coffee');
+
+  WireElm = (function(_super) {
+    __extends(WireElm, _super);
+
+    WireElm.FLAG_SHOWCURRENT = 1;
+
+    WireElm.FLAG_SHOWVOLTAGE = 2;
+
+    function WireElm(xa, ya, xb, yb, params, f) {
+      WireElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+    }
+
+    WireElm.prototype.getName = function() {
+      return "Wire";
+    };
+
+    WireElm.prototype.draw = function(renderContext) {
+      var s;
+      if (CircuitComponent.DEBUG) {
+        WireElm.__super__.draw.call(this, renderContext);
+      }
+      this.updateDots();
+      renderContext.drawDots(this.point1, this.point2, this);
+      renderContext.drawLinePt(this.point1, this.point2, Util.getVoltageColor(this.volts[0]));
+      if (this.mustShowCurrent()) {
+        s = Util.getUnitText(Math.abs(this.getCurrent()), "A");
+      } else if (this.mustShowVoltage()) {
+        s = Util.getUnitText(this.volts[0], "V");
+      }
+      this.updateDots();
+      return renderContext.drawDots(this.point1, this.point2, this);
+    };
+
+    WireElm.prototype.stamp = function(stamper) {
+      return stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, 0);
+    };
+
+    WireElm.prototype.mustShowCurrent = function() {
+      return (this.flags & WireElm.FLAG_SHOWCURRENT) !== 0;
+    };
+
+    WireElm.prototype.mustShowVoltage = function() {
+      return (this.flags & WireElm.FLAG_SHOWVOLTAGE) !== 0;
+    };
+
+    WireElm.prototype.getVoltageSourceCount = function() {
+      return 1;
+    };
+
+    WireElm.prototype.getInfo = function(arr) {
+      WireElm.__super__.getInfo.call(this);
+      arr[0] = "Wire";
+      arr[1] = "I = " + Util.getUnitText(this.getCurrent(), "A");
+      return arr[2] = "V = " + Util.getUnitText(this.volts[0], "V");
+    };
+
+    WireElm.prototype.getDumpType = function() {
+      return "w";
+    };
+
+    WireElm.prototype.getPower = function() {
+      return 0;
+    };
+
+    WireElm.prototype.getVoltageDiff = function() {
+      return this.volts[0];
+    };
+
+    WireElm.prototype.isWire = function() {
+      return true;
+    };
+
+    WireElm.prototype.needsShortcut = function() {
+      return true;
+    };
+
+    return WireElm;
+
+  })(CircuitComponent);
+
+  module.exports = WireElm;
+
+}).call(this);
+
+
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],24:[function(require,module,exports){
+(function() {
+  var CircuitComponent, GroundElm, Point, Polygon, Rectangle, Settings, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require('../circuitComponent.coffee');
+
+  Settings = require('../../settings/settings.coffee');
+
+  Polygon = require('../../geom/polygon.coffee');
+
+  Rectangle = require('../../geom/rectangle.coffee');
+
+  Point = require('../../geom/point.coffee');
+
+  Util = require('../../util/util.coffee');
+
+  GroundElm = (function(_super) {
+    __extends(GroundElm, _super);
+
+    function GroundElm(xa, ya, xb, yb, params, f) {
+      GroundElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+    }
+
+    GroundElm.prototype.getDumpType = function() {
+      return "g";
+    };
+
+    GroundElm.prototype.getPostCount = function() {
+      return 1;
+    };
+
+    GroundElm.prototype.draw = function(renderContext) {
+      var color, endPt, pt1, pt2, row, startPt, _i, _ref;
+      if (CircuitComponent.DEBUG) {
+        GroundElm.__super__.draw.call(this, renderContext);
+      }
+      this.updateDots();
+      color = Util.getVoltageColor(0);
+      renderContext.drawLinePt(this.point1, this.point2, color);
+      for (row = _i = 0; _i < 3; row = ++_i) {
+        startPt = 10 - row * 2;
+        endPt = row * 3;
+        _ref = Util.interpolateSymmetrical(this.point1, this.point2, 1 + endPt / this.dn, startPt), pt1 = _ref[0], pt2 = _ref[1];
+        renderContext.drawLinePt(pt1, pt2, color);
+      }
+      pt2 = Util.interpolate(this.point1, this.point2, 1 + 11.0 / this.dn);
+      renderContext.drawDots(this.point1, this.point2, this);
+      return renderContext.drawPosts(this);
+    };
+
+    GroundElm.prototype.setCurrent = function(x, currentVal) {
+      return this.current = -currentVal;
+    };
+
+    GroundElm.prototype.stamp = function(stamper) {
+      return stamper.stampVoltageSource(0, this.nodes[0], this.voltSource, 0);
+    };
+
+    GroundElm.prototype.getVoltageDiff = function() {
+      return 0;
+    };
+
+    GroundElm.prototype.getVoltageSourceCount = function() {
+      return 1;
+    };
+
+    GroundElm.prototype.getInfo = function(arr) {
+      GroundElm.__super__.getInfo.call(this);
+      arr[0] = "ground";
+      return arr[1] = "I = " + Util.getUnitText(this.getCurrent(), "A");
+    };
+
+    GroundElm.prototype.hasGroundConnection = function(n1) {
+      return true;
+    };
+
+    GroundElm.prototype.needsShortcut = function() {
+      return true;
+    };
+
+    GroundElm.prototype.toString = function() {
+      return "GroundElm";
+    };
+
+    return GroundElm;
+
+  })(CircuitComponent);
+
+  module.exports = GroundElm;
+
+}).call(this);
+
+
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],26:[function(require,module,exports){
+(function() {
+  var CircuitComponent, OutputElm, Point, Polygon, Rectangle, Settings, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require('../circuitComponent.coffee');
+
+  Settings = require('../../settings/settings.coffee');
+
+  Polygon = require('../../geom/polygon.coffee');
+
+  Rectangle = require('../../geom/rectangle.coffee');
+
+  Point = require('../../geom/point.coffee');
+
+  Util = require('../../util/util.coffee');
+
+  OutputElm = (function(_super) {
+    __extends(OutputElm, _super);
+
+    OutputElm.FLAG_VALUE = 1;
+
+    function OutputElm(xa, ya, xb, yb, params, f) {
+      OutputElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+    }
+
+    OutputElm.prototype.getDumpType = function() {
+      return "O";
+    };
+
+    OutputElm.prototype.getPostCount = function() {
+      return 1;
+    };
+
+    OutputElm.prototype.setPoints = function() {
+      OutputElm.__super__.setPoints.call(this);
+      return this.lead1 = new Point();
+    };
+
+    OutputElm.prototype.draw = function(renderContext) {
+      var color, s;
+      if (CircuitComponent.DEBUG) {
+        OutputElm.__super__.draw.call(this, renderContext);
+      }
+      color = "#FFF";
+      s = ((this.flags & OutputElm.FLAG_VALUE) !== 0 ? Util.getUnitText(this.volts[0], "V") : "out");
+      this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (3 * s.length / 2 + 8) / this.dn);
+      this.setBboxPt(this.point1, this.lead1, 0);
+      renderContext.drawValue(-5, 25, this, s);
+      color = Util.getVoltageColor(this.volts[0]);
+      renderContext.drawLinePt(this.point1, this.lead1, color);
+      renderContext.drawCircle(this.lead1.x + Settings.POST_RADIUS, this.lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR);
+      return renderContext.drawPosts(this);
+    };
+
+    OutputElm.prototype.getVoltageDiff = function() {
+      return this.volts[0];
+    };
+
+    OutputElm.prototype.getInfo = function(arr) {
+      arr[0] = "output";
+      return arr[1] = "V = " + Util.getUnitText(this.volts[0], "V");
+    };
+
+    OutputElm.prototype.stamp = function(stamper) {};
+
+    OutputElm.prototype.toString = function() {
+      return "OutputElm";
+    };
+
+    return OutputElm;
+
+  })(CircuitComponent);
+
+  module.exports = OutputElm;
+
+}).call(this);
+
+
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],27:[function(require,module,exports){
+(function() {
+  var CircuitComponent, Point, Polygon, Rectangle, Settings, SwitchElm, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require('../circuitComponent.coffee');
+
+  Settings = require('../../settings/settings.coffee');
+
+  Polygon = require('../../geom/polygon.coffee');
+
+  Rectangle = require('../../geom/rectangle.coffee');
+
+  Point = require('../../geom/point.coffee');
+
+  Util = require('../../util/util.coffee');
+
+  SwitchElm = (function(_super) {
+    __extends(SwitchElm, _super);
+
+    SwitchElm.Fields = {
+      "position": {
+        name: "Position",
+        default_value: 0,
+        data_type: function(str) {
+          str = str.toString();
+          if (str === 'true') {
+            return 1;
+          } else if (str === 'false') {
+            return 0;
+          } else {
+            return parseInt(str);
+          }
+        },
+        field_type: "boolean"
+      },
+      "momentary": {
+        name: "Momentary",
+        default_value: 0,
+        data_type: function(str) {
+          return str.toString() === 'true';
+        },
+        field_type: "boolean"
+      }
+    };
+
+    function SwitchElm(xa, ya, xb, yb, params, f) {
+      this.momentary = false;
+      this.position = 0;
+      this.posCount = 2;
+      this.ps = new Point(0, 0);
+      this.ps2 = new Point(0, 0);
+      SwitchElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+    }
+
+    SwitchElm.prototype.setPoints = function() {
+      SwitchElm.__super__.setPoints.call(this);
+      this.calcLeads(32);
+      this.ps = new Point(0, 0);
+      return this.ps2 = new Point(0, 0);
+    };
+
+    SwitchElm.prototype.getDumpType = function() {
+      return "s";
+    };
+
+    SwitchElm.prototype.stamp = function(stamper) {
+      if (this.position === 0) {
+        return stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, 0);
+      }
+    };
+
+    SwitchElm.prototype.draw = function(renderContext) {
+      var hs1, hs2, openhs;
+      if (CircuitComponent.DEBUG) {
+        SwitchElm.__super__.draw.call(this, renderContext);
+      }
+      this.calcLeads(32);
+      this.ps = new Point(0, 0);
+      this.ps2 = new Point(0, 0);
+      openhs = 16;
+      hs1 = (this.position === 1 ? 0 : 2);
+      hs2 = (this.position === 1 ? openhs : 2);
+      this.setBboxPt(this.point1, this.point2, openhs);
+      renderContext.drawLeads(this);
+      if (this.position === 0) {
+        renderContext.drawDots(this.point1, this.point2, this);
+      }
+      this.ps = Util.interpolate(this.lead1, this.lead2, 0, hs1);
+      this.ps2 = Util.interpolate(this.lead1, this.lead2, 1, hs2);
+      renderContext.drawLinePt(this.ps, this.ps2);
+      return renderContext.drawPosts(this);
+    };
+
+    SwitchElm.prototype.getName = function() {
+      return "Basic Switch";
+    };
+
+    SwitchElm.prototype.calculateCurrent = function() {
+      if (this.position === 1) {
+        return this.current = 0;
+      }
+    };
+
+    SwitchElm.prototype.getVoltageSourceCount = function() {
+      if (this.position === 1) {
+        return 0;
+      } else {
+        return 1;
+      }
+    };
+
+    SwitchElm.prototype.mouseUp = function() {
+      if (this.momentary) {
+        return this.toggle();
+      }
+    };
+
+    SwitchElm.prototype.toggle = function() {
+      this.position++;
+      if (this.position >= this.posCount) {
+        this.position = 0;
+      }
+      return this.Circuit.Solver.analyzeFlag = true;
+    };
+
+    SwitchElm.prototype.getInfo = function(arr) {
+      arr[0] = (this.momentary ? "push switch (SPST)" : "switch (SPST)");
+      if (this.position === 1) {
+        arr[1] = "open";
+        return arr[2] = "Vd = " + Util.getUnitText(this.getVoltageDiff(), "V");
+      } else {
+        arr[1] = "closed";
+        arr[2] = "V = " + Util.getUnitText(this.volts[0], "V");
+        return arr[3] = "I = " + Util.getUnitText(this.getCurrent(), "A");
+      }
+    };
+
+    SwitchElm.prototype.getConnection = function(n1, n2) {
+      return this.position === 0;
+    };
+
+    SwitchElm.prototype.isWire = function() {
+      return true;
+    };
+
+    return SwitchElm;
+
+  })(CircuitComponent);
+
+  module.exports = SwitchElm;
+
+}).call(this);
+
+
+},{"../../settings/settings.coffee":16,"../circuitComponent.coffee":2,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],29:[function(require,module,exports){
+(function() {
+  var CircuitComponent, InductorElm, Point, Polygon, Rectangle, Settings, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require('../circuitComponent.coffee');
+
+  Settings = require('../../settings/settings.coffee');
+
+  Polygon = require('../../geom/polygon.coffee');
+
+  Rectangle = require('../../geom/rectangle.coffee');
+
+  Point = require('../../geom/point.coffee');
+
+  Util = require('../../util/util.coffee');
+
+  InductorElm = (function(_super) {
+    __extends(InductorElm, _super);
+
+    InductorElm.FLAG_BACK_EULER = 2;
+
+    InductorElm.Fields = {
+      "inductance": {
+        name: "inductance",
+        unit: "Henries",
+        symbol: "H",
+        default_value: 1e-3,
+        data_type: parseFloat
+      },
+      "current": {
+        name: "current",
+        unit: "Amperes",
+        symbol: "A",
+        default_value: 0,
+        data_type: parseFloat
+      }
+    };
+
+    function InductorElm(xa, ya, xb, yb, params, f) {
+      this.nodes = new Array(2);
+      this.compResistance = 0;
+      this.curSourceValue = 0;
+      InductorElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+    }
+
+    InductorElm.prototype.reset = function() {
+      this.current = 0;
+      this.volts[0] = 0;
+      this.volts[1] = 0;
+      return this.curcount = 0;
+    };
+
+    InductorElm.prototype.setPoints = function() {
+      InductorElm.__super__.setPoints.call(this);
+      return this.calcLeads(32);
+    };
+
+    InductorElm.prototype.stamp = function(stamper) {
+      var ts;
+      ts = this.getParentCircuit().timeStep();
+      if (this.isTrapezoidal()) {
+        this.compResistance = 2 * this.inductance / ts;
+      } else {
+        this.compResistance = this.inductance / ts;
+      }
+      stamper.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
+      stamper.stampRightSide(this.nodes[0]);
+      return stamper.stampRightSide(this.nodes[1]);
+    };
+
+    InductorElm.prototype.doStep = function(stamper) {
+      return stamper.stampCurrentSource(this.nodes[0], this.nodes[1], this.curSourceValue);
+    };
+
+    InductorElm.prototype.draw = function(renderContext) {
+      var hs, v1, v2;
+      if (CircuitComponent.DEBUG) {
+        InductorElm.__super__.draw.call(this, renderContext);
+      }
+      this.updateDots();
+      v1 = this.volts[0];
+      v2 = this.volts[1];
+      hs = 8;
+      this.setBboxPt(this.point1, this.point2, hs);
+      renderContext.drawLeads(this);
+      renderContext.drawCoil(this.lead1, this.lead2, v1, v2, renderContext);
+      renderContext.drawValue(-12, 0, this, Util.getUnitText(this.inductance, "H"));
+      renderContext.drawDots(this.point1, this.point2, this);
+      return renderContext.drawPosts(this);
+    };
+
+    InductorElm.prototype.getDumpType = function() {
+      return "l";
+    };
+
+    InductorElm.prototype.startIteration = function() {
+      if (this.isTrapezoidal()) {
+        return this.curSourceValue = this.getVoltageDiff() / this.compResistance + this.current;
+      } else {
+        return this.curSourceValue = this.current;
+      }
+    };
+
+    InductorElm.prototype.nonLinear = function() {
+      return false;
+    };
+
+    InductorElm.prototype.isTrapezoidal = function() {
+      return true;
+    };
+
+    InductorElm.prototype.calculateCurrent = function() {
+      if (this.compResistance > 0) {
+        this.current = this.getVoltageDiff() / this.compResistance + this.curSourceValue;
+      }
+      return this.current;
+    };
+
+    InductorElm.prototype.getInfo = function(arr) {
+      arr[0] = "inductor";
+      this.getBasicInfo(arr);
+      arr[3] = "L = " + Util.getUnitText(this.inductance, "H");
+      return arr[4] = "P = " + Util.getUnitText(this.getPower(), "W");
+    };
+
+    InductorElm.prototype.getVoltageDiff = function() {
+      return this.volts[0] - this.volts[1];
+    };
+
+    InductorElm.prototype.getName = function() {
+      return "Inductor";
+    };
+
+    return InductorElm;
+
+  })(CircuitComponent);
+
+  module.exports = InductorElm;
+
+}).call(this);
+
+
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],28:[function(require,module,exports){
 (function() {
   var CapacitorElm, CircuitComponent, Point, Polygon, Rectangle, Settings, Util,
     __hasProp = {}.hasOwnProperty,
@@ -3681,7 +4029,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],19:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],30:[function(require,module,exports){
 (function() {
   var CircuitComponent, Point, Polygon, Rectangle, Settings, SparkGapElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -3854,7 +4202,94 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],20:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],31:[function(require,module,exports){
+(function() {
+  var CircuitComponent, CurrentElm, Point, Polygon, Rectangle, Settings, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require('../circuitComponent.coffee');
+
+  Settings = require('../../settings/settings.coffee');
+
+  Polygon = require('../../geom/polygon.coffee');
+
+  Rectangle = require('../../geom/rectangle.coffee');
+
+  Point = require('../../geom/point.coffee');
+
+  Util = require('../../util/util.coffee');
+
+  CurrentElm = (function(_super) {
+    __extends(CurrentElm, _super);
+
+    CurrentElm.Fields = {
+      "currentValue": {
+        unit: "Amperes",
+        name: "Current",
+        symbol: "A",
+        default_value: 0.01,
+        data_type: parseFloat,
+        range: [-Infinity, Infinity],
+        type: "physical"
+      }
+    };
+
+    function CurrentElm(xa, ya, xb, yb, params, f) {
+      CurrentElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+    }
+
+    CurrentElm.prototype.getDumpType = function() {
+      return "i";
+    };
+
+    CurrentElm.prototype.draw = function(renderContext) {
+      var color, cr, p2;
+      if (CircuitComponent.DEBUG) {
+        CurrentElm.__super__.draw.call(this, renderContext);
+      }
+      this.calcLeads(26);
+      this.ashaft1 = Util.interpolate(this.lead1, this.lead2, .25);
+      this.ashaft2 = Util.interpolate(this.lead1, this.lead2, .6);
+      this.center = Util.interpolate(this.lead1, this.lead2, .5);
+      p2 = Util.interpolate(this.lead1, this.lead2, .75);
+      this.arrow = Util.calcArrow(this.center, p2, 4, 4);
+      cr = 12;
+      renderContext.drawLeads(this);
+      color = Util.getVoltageColor((this.volts[0] + this.volts[1]) / 2);
+      renderContext.drawCircle(this.center.x, this.center.y, cr);
+      renderContext.drawCircle(this.ashaft1, this.ashaft2);
+      renderContext.drawThickPolygonP(this.arrow);
+      this.setBboxPt(this.point1, this.point2, cr);
+      renderContext.drawPosts(this);
+      return renderContext.drawDots(this.point1, this.lead1, this);
+    };
+
+    CurrentElm.prototype.stamp = function(stamper) {
+      this.current = this.currentValue;
+      return stamper.stampCurrentSource(this.nodes[0], this.nodes[1], this.current);
+    };
+
+    CurrentElm.prototype.getInfo = function(arr) {
+      CurrentElm.__super__.getInfo.call(this);
+      arr[0] = "current source";
+      return this.getBasicInfo(arr);
+    };
+
+    CurrentElm.prototype.getVoltageDiff = function() {
+      return this.volts[1] - this.volts[0];
+    };
+
+    return CurrentElm;
+
+  })(CircuitComponent);
+
+  module.exports = CurrentElm;
+
+}).call(this);
+
+
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],32:[function(require,module,exports){
 (function() {
   var CircuitComponent, Point, Polygon, RailElm, Rectangle, Settings, Util, VoltageElm,
     __hasProp = {}.hasOwnProperty,
@@ -3956,94 +4391,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74,"./VoltageElm.coffee":13}],22:[function(require,module,exports){
-(function() {
-  var CircuitComponent, CurrentElm, Point, Polygon, Rectangle, Settings, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require('../circuitComponent.coffee');
-
-  Settings = require('../../settings/settings.coffee');
-
-  Polygon = require('../../geom/polygon.coffee');
-
-  Rectangle = require('../../geom/rectangle.coffee');
-
-  Point = require('../../geom/point.coffee');
-
-  Util = require('../../util/util.coffee');
-
-  CurrentElm = (function(_super) {
-    __extends(CurrentElm, _super);
-
-    CurrentElm.Fields = {
-      "currentValue": {
-        unit: "Amperes",
-        name: "Current",
-        symbol: "A",
-        default_value: 0.01,
-        data_type: parseFloat,
-        range: [-Infinity, Infinity],
-        type: "physical"
-      }
-    };
-
-    function CurrentElm(xa, ya, xb, yb, params, f) {
-      CurrentElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-    }
-
-    CurrentElm.prototype.getDumpType = function() {
-      return "i";
-    };
-
-    CurrentElm.prototype.draw = function(renderContext) {
-      var color, cr, p2;
-      if (CircuitComponent.DEBUG) {
-        CurrentElm.__super__.draw.call(this, renderContext);
-      }
-      this.calcLeads(26);
-      this.ashaft1 = Util.interpolate(this.lead1, this.lead2, .25);
-      this.ashaft2 = Util.interpolate(this.lead1, this.lead2, .6);
-      this.center = Util.interpolate(this.lead1, this.lead2, .5);
-      p2 = Util.interpolate(this.lead1, this.lead2, .75);
-      this.arrow = Util.calcArrow(this.center, p2, 4, 4);
-      cr = 12;
-      renderContext.drawLeads(this);
-      color = Util.getVoltageColor((this.volts[0] + this.volts[1]) / 2);
-      renderContext.drawCircle(this.center.x, this.center.y, cr);
-      renderContext.drawCircle(this.ashaft1, this.ashaft2);
-      renderContext.drawThickPolygonP(this.arrow);
-      this.setBboxPt(this.point1, this.point2, cr);
-      renderContext.drawPosts(this);
-      return renderContext.drawDots(this.point1, this.lead1, this);
-    };
-
-    CurrentElm.prototype.stamp = function(stamper) {
-      this.current = this.currentValue;
-      return stamper.stampCurrentSource(this.nodes[0], this.nodes[1], this.current);
-    };
-
-    CurrentElm.prototype.getInfo = function(arr) {
-      CurrentElm.__super__.getInfo.call(this);
-      arr[0] = "current source";
-      return this.getBasicInfo(arr);
-    };
-
-    CurrentElm.prototype.getVoltageDiff = function() {
-      return this.volts[1] - this.volts[0];
-    };
-
-    return CurrentElm;
-
-  })(CircuitComponent);
-
-  module.exports = CurrentElm;
-
-}).call(this);
-
-
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],23:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19,"./VoltageElm.coffee":13}],34:[function(require,module,exports){
 (function() {
   var CircuitComponent, JfetElm, MosfetElm, Point, Polygon, Rectangle, Settings, Util,
     __hasProp = {}.hasOwnProperty,
@@ -4083,30 +4431,6 @@ Settings do not change by loading a new circuit.
       return .00125;
     };
 
-    JfetElm.prototype.draw = function(renderContext) {
-      if (CircuitComponent.DEBUG) {
-        JfetElm.__super__.draw.call(this, renderContext);
-      }
-      this.setBboxPt(this.point1, this.point2, this.hs);
-      renderContext.setVoltageColor(this.volts[1]);
-      renderContext.drawthickLine(this.src[0], this.src[1]);
-      renderContext.drawthickLine(this.src[1], this.src[2]);
-      renderContext.setVoltageColor(this.volts[2]);
-      renderContext.drawLine(this.drn[0], this.drn[1]);
-      renderContext.drawLine(this.drn[1], this.drn[2]);
-      renderContext.setVoltageColor(this.volts[0]);
-      renderContext.drawLine(this.point1, this.gatePt);
-      renderContext.fillPolygon(this.arrowPoly());
-      renderContext.fillPolygon(this.arrowPoly());
-      if (this.curcount !== 0) {
-        renderContext.drawDots(this.src[0], this.src[1], this);
-        renderContext.drawDots(this.src[1], this.src[2], this);
-        renderContext.drawDots(this.drn[0], this.drn[1], this);
-        renderContext.drawDots(this.drn[1], this.drn[2], this);
-      }
-      return renderContext.drawPosts(this);
-    };
-
     JfetElm.prototype.setPoints = function() {
       var hs2, ra, x, _ref, _ref1, _ref2, _ref3, _ref4;
       JfetElm.__super__.setPoints.call(this);
@@ -4129,6 +4453,31 @@ Settings do not change by loading a new circuit.
       }
     };
 
+    JfetElm.prototype.draw = function(renderContext) {
+      var color;
+      if (CircuitComponent.DEBUG) {
+        JfetElm.__super__.draw.call(this, renderContext);
+      }
+      this.setBboxPt(this.point1, this.point2, this.hs);
+      color = Util.getVoltageColor(this.volts[1]);
+      renderContext.drawLinePt(this.src[0], this.src[1], color);
+      renderContext.drawLinePt(this.src[1], this.src[2], color);
+      color = Util.getVoltageColor(this.volts[2]);
+      renderContext.drawLinePt(this.drn[0], this.drn[1], color);
+      renderContext.drawLinePt(this.drn[1], this.drn[2], color);
+      color = Util.getVoltageColor(this.volts[0]);
+      renderContext.drawLinePt(this.point1, this.gatePt, color);
+      renderContext.drawThickPolygonP(this.arrowPoly);
+      renderContext.drawThickPolygonP(this.arrowPoly);
+      if (this.curcount !== 0) {
+        renderContext.drawDots(this.src[0], this.src[1], this);
+        renderContext.drawDots(this.src[1], this.src[2], this);
+        renderContext.drawDots(this.drn[0], this.drn[1], this);
+        renderContext.drawDots(this.drn[1], this.drn[2], this);
+      }
+      return renderContext.drawPosts(this);
+    };
+
     return JfetElm;
 
   })(MosfetElm);
@@ -4138,7 +4487,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74,"./MosfetElm.coffee":21}],24:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../util/util.coffee":19,"../../geom/point.coffee":18,"./MosfetElm.coffee":33}],35:[function(require,module,exports){
 (function() {
   var CircuitComponent, Point, Polygon, Rectangle, Settings, TransistorElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -4325,8 +4674,6 @@ Settings do not change by loading a new circuit.
         return this.arrowPoly = Util.calcArrow(this.emit[1], this.emit[0], 8, 4);
       } else {
         pt = Util.interpolate(this.point1, this.point2, 1 - 11 / this.dn, -5 * this.dsign * this.pnp);
-        console.log(pt);
-        console.log(this.emit);
         return this.arrowPoly = Util.calcArrow(this.emit[0], pt, 8, 4);
       }
     };
@@ -4464,7 +4811,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],26:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],37:[function(require,module,exports){
 (function() {
   var CircuitComponent, OpAmpElm, Point, Polygon, Rectangle, Settings, Util,
     __hasProp = {}.hasOwnProperty,
@@ -4552,7 +4899,7 @@ Settings do not change by loading a new circuit.
       this.gbw = 1e6;
       OpAmpElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
       this.noDiagonal = true;
-      this.setSize(f & OpAmpElm.FLAG_SMALL !== 0 ? 1 : 2);
+      this.setSize((f & OpAmpElm.FLAG_SMALL) !== 0 ? 1 : 2);
       this.setGain();
     }
 
@@ -4576,7 +4923,7 @@ Settings do not change by loading a new circuit.
       renderContext.drawLinePt(this.in2p[0], this.in2p[1], color);
       color = Util.getVoltageColor(this.volts[2]);
       renderContext.drawLinePt(this.lead2, this.point2, color);
-      renderContext.drawThickPolygonP(this.triangle, Settings.FG_COLOR);
+      renderContext.drawThickPolygonP(this.triangle, Settings.STROKE_COLOR, Settings.FG_COLOR);
       if (this.getParentCircuit() && this.getParentCircuit()) {
         this.updateDots();
         renderContext.drawDots(this.in1p[0], this.in1p[1], renderContext);
@@ -4598,7 +4945,6 @@ Settings do not change by loading a new circuit.
     OpAmpElm.prototype.setPoints = function() {
       var hs, tris, ww, _ref, _ref1, _ref2, _ref3;
       OpAmpElm.__super__.setPoints.call(this);
-      this.setSize(2);
       if (ww > this.dn / 2) {
         ww = Math.floor(this.dn / 2);
       } else {
@@ -4715,7 +5061,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],27:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],38:[function(require,module,exports){
 (function() {
   var CircuitComponent, DiodeElm, Point, Polygon, Rectangle, Settings, Util, ZenerElm,
     __hasProp = {}.hasOwnProperty,
@@ -4807,7 +5153,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"./DiodeElm.coffee":14,"../../util/util.coffee":74}],29:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"./DiodeElm.coffee":25,"../../util/util.coffee":19}],40:[function(require,module,exports){
 (function() {
   var CircuitComponent, Point, Polygon, Rectangle, Settings, SweepElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -5009,7 +5355,96 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],30:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],42:[function(require,module,exports){
+(function() {
+  var CircuitComponent, Point, Polygon, ProbeElm, Rectangle, Settings, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require('../circuitComponent.coffee');
+
+  Settings = require('../../settings/settings.coffee');
+
+  Polygon = require('../../geom/polygon.coffee');
+
+  Rectangle = require('../../geom/rectangle.coffee');
+
+  Point = require('../../geom/point.coffee');
+
+  Util = require('../../util/util.coffee');
+
+  ProbeElm = (function(_super) {
+    __extends(ProbeElm, _super);
+
+    ProbeElm.FLAG_SHOWVOLTAGE = 1;
+
+    function ProbeElm(xa, ya, xb, yb, params, f) {
+      ProbeElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+    }
+
+    ProbeElm.prototype.getDumpType = function() {
+      return "p";
+    };
+
+    ProbeElm.prototype.toString = function() {
+      return "ProbeElm";
+    };
+
+    ProbeElm.prototype.setPoints = function() {
+      var x;
+      ProbeElm.__super__.setPoints.call(this);
+      if (this.point2.y < this.point1.y) {
+        x = this.point1;
+        this.point1 = this.point2;
+        this.point2 = x;
+      }
+      return this.center = this.getCenter();
+    };
+
+    ProbeElm.prototype.draw = function(renderContext) {
+      var color, hs, len, unit_text;
+      if (CircuitComponent.DEBUG) {
+        ProbeElm.__super__.draw.call(this, renderContext);
+      }
+      hs = 8;
+      this.setBboxPt(this.point1, this.point2, hs);
+      len = this.dn - 32;
+      this.calcLeads(Math.floor(len));
+      color = Util.getVoltageColor(this.volts[0]);
+      renderContext.drawLinePt(this.point1, this.lead1, color);
+      color = Util.getVoltageColor(this.volts[1]);
+      renderContext.drawLinePt(this.lead2, this.point2, color);
+      if (this.mustShowVoltage()) {
+        unit_text = Util.getUnitText(this.volts[0], "V");
+      }
+      return renderContext.drawPosts(this);
+    };
+
+    ProbeElm.prototype.mustShowVoltage = function() {
+      return (this.flags & ProbeElm.FLAG_SHOWVOLTAGE) !== 0;
+    };
+
+    ProbeElm.prototype.getInfo = function(arr) {
+      arr[0] = "scope probe";
+      return arr[1] = "Vd = " + getUnitText(this.getVoltageDiff(), "V");
+    };
+
+    ProbeElm.prototype.stamp = function(stamper) {};
+
+    ProbeElm.prototype.getConnection = function(n1, n2) {
+      return false;
+    };
+
+    return ProbeElm;
+
+  })(CircuitComponent);
+
+  module.exports = ProbeElm;
+
+}).call(this);
+
+
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19}],41:[function(require,module,exports){
 (function() {
   var CircuitComponent, Point, Polygon, Rectangle, Settings, TextElm,
     __hasProp = {}.hasOwnProperty,
@@ -5071,7 +5506,7 @@ Settings do not change by loading a new circuit.
 
     TextElm.prototype.drag = function(xx, yy) {
       this.x1 = xx;
-      this.y = yy;
+      this.y1 = yy;
       this.x2 = xx + 16;
       return this.y2 = yy;
     };
@@ -5091,7 +5526,7 @@ Settings do not change by loading a new circuit.
         i++;
       }
       this.x2 = this.boundingBox.x1 + this.boundingBox.width;
-      return this.y2 = this.boundingBox.y + this.boundingBox.height;
+      return this.y2 = this.boundingBox.y1 + this.boundingBox.height;
     };
 
     TextElm.prototype.isCenteredText = function() {
@@ -5115,96 +5550,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79}],31:[function(require,module,exports){
-(function() {
-  var CircuitComponent, Point, Polygon, ProbeElm, Rectangle, Settings, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require('../circuitComponent.coffee');
-
-  Settings = require('../../settings/settings.coffee');
-
-  Polygon = require('../../geom/polygon.coffee');
-
-  Rectangle = require('../../geom/rectangle.coffee');
-
-  Point = require('../../geom/point.coffee');
-
-  Util = require('../../util/util.coffee');
-
-  ProbeElm = (function(_super) {
-    __extends(ProbeElm, _super);
-
-    ProbeElm.FLAG_SHOWVOLTAGE = 1;
-
-    function ProbeElm(xa, ya, xb, yb, params, f) {
-      ProbeElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-    }
-
-    ProbeElm.prototype.getDumpType = function() {
-      return "p";
-    };
-
-    ProbeElm.prototype.toString = function() {
-      return "ProbeElm";
-    };
-
-    ProbeElm.prototype.setPoints = function() {
-      var x;
-      ProbeElm.__super__.setPoints.call(this);
-      if (this.point2.y < this.point1.y) {
-        x = this.point1;
-        this.point1 = this.point2;
-        this.point2 = this.x1;
-      }
-      return this.center = this.getCenter();
-    };
-
-    ProbeElm.prototype.draw = function(renderContext) {
-      var color, hs, len, unit_text;
-      if (CircuitComponent.DEBUG) {
-        ProbeElm.__super__.draw.call(this, renderContext);
-      }
-      hs = 8;
-      this.setBboxPt(this.point1, this.point2, hs);
-      len = this.dn - 32;
-      this.calcLeads(Math.floor(len));
-      color = Util.getVoltageColor(this.volts[0]);
-      renderContext.drawLinePt(this.point1, this.lead1, color);
-      color = Util.getVoltageColor(this.volts[1]);
-      renderContext.drawLinePt(this.lead2, this.point2, color);
-      if (this.mustShowVoltage()) {
-        unit_text = Util.getUnitText(this.volts[0], "V");
-      }
-      return renderContext.drawPosts(this);
-    };
-
-    ProbeElm.prototype.mustShowVoltage = function() {
-      return (this.flags & ProbeElm.FLAG_SHOWVOLTAGE) !== 0;
-    };
-
-    ProbeElm.prototype.getInfo = function(arr) {
-      arr[0] = "scope probe";
-      return arr[1] = "Vd = " + getUnitText(this.getVoltageDiff(), "V");
-    };
-
-    ProbeElm.prototype.stamp = function(stamper) {};
-
-    ProbeElm.prototype.getConnection = function(n1, n2) {
-      return false;
-    };
-
-    return ProbeElm;
-
-  })(CircuitComponent);
-
-  module.exports = ProbeElm;
-
-}).call(this);
-
-
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],32:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18}],43:[function(require,module,exports){
 (function() {
   var AndGateElm, GateElm, Point, Util,
     __hasProp = {}.hasOwnProperty,
@@ -5233,12 +5579,12 @@ Settings do not change by loading a new circuit.
         b = Math.sqrt(1 - a * a);
         _ref1 = Util.interpolateSymmetrical(this.lead1, this.lead2, 0.5 + a / 2, b * this.hs2), triPoints[i + 1] = _ref1[0], triPoints[21 - i] = _ref1[1];
       }
-      triPoints[11] = new Point(this.lead2);
+      triPoints[11] = new Point(this.lead2.x, this.lead2.y);
       if (this.isInverting()) {
         this.pcircle = Util.interpolate(this.point1, this.point2, 0.5 + (this.ww + 4) / this.dn);
         this.lead2 = Util.interpolate(this.point1, this.point2, 0.5 + (this.ww + 8) / this.dn);
       }
-      return this.gatePoly = triPoints;
+      return this.gatePoly = Util.createPolygonFromArray(triPoints);
     };
 
     AndGateElm.prototype.getGateName = function() {
@@ -5267,75 +5613,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../../util/util.coffee":74,"./GateElm.coffee":81,"../../geom/Point.coffee":82}],34:[function(require,module,exports){
-(function() {
-  var GateElm, OrGateElm, Point, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  GateElm = require("./GateElm.coffee");
-
-  Util = require('../../util/util.coffee');
-
-  Point = require('../../geom/Point.coffee');
-
-  OrGateElm = (function(_super) {
-    __extends(OrGateElm, _super);
-
-    function OrGateElm(xa, ya, xb, yb, params, f) {
-      OrGateElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-    }
-
-    OrGateElm.prototype.getGateName = function() {
-      return "OR Gate";
-    };
-
-    OrGateElm.prototype.setPoints = function() {
-      var a, b, i, triPoints, ww2, _i, _j, _ref;
-      OrGateElm.__super__.setPoints.call(this);
-      triPoints = Util.newPointArray(38);
-      for (_i = 0; _i < 16; _i++) {
-        a = i / 16.0;
-        b = i / a * a;
-        _ref = Util.interpolateSymmetrical(this.lead1, this.lead2, 0.5 + a / 2, b * this.hs2), triPoints[i] = _ref[0], triPoints[32 - i] = _ref[1];
-      }
-      ww2 = this.ww === 0 ? this.dn * 2 : this.ww * 2;
-      for (i = _j = 0; _j < 5; i = ++_j) {
-        a = (i - 2) / 2.0;
-        b = 4 * (1 - a * a) - 2;
-        triPoints[33 + i] = Util.interpolate(this.lead1, this.lead2, b / ww2, a * this.hs2);
-      }
-      triPoints[16] = new Point(this.lead2.x, this.lead2.y);
-      if (this.isInverting()) {
-        this.pcircle = Util.interpolate(this.point1, this.point2, 0.5 + (this.ww + 4) / this.dn);
-        this.lead2 = Util.interpolate(this.point1, this.point2, 0.5 + (this.ww + 8) / this.dn);
-      }
-      return this.gatePoly = triPoints;
-    };
-
-    OrGateElm.prototype.calcFunction = function() {
-      var f, i, _i, _ref;
-      f = true;
-      for (i = _i = 0, _ref = this.inputCount; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        f = f | this.getInput(i);
-      }
-      return f;
-    };
-
-    OrGateElm.prototype.getDumpType = function() {
-      return 152;
-    };
-
-    return OrGateElm;
-
-  })(GateElm);
-
-  module.exports = OrGateElm;
-
-}).call(this);
-
-
-},{"./GateElm.coffee":81,"../../util/util.coffee":74,"../../geom/Point.coffee":82}],33:[function(require,module,exports){
+},{"./GateElm.coffee":81,"../../util/util.coffee":19,"../../geom/Point.coffee":82}],44:[function(require,module,exports){
 (function() {
   var AndGateElm, NandGateElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -5373,7 +5651,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../../util/util.coffee":74,"./AndGateElm.coffee":32}],35:[function(require,module,exports){
+},{"../../util/util.coffee":19,"./AndGateElm.coffee":43}],46:[function(require,module,exports){
 (function() {
   var NorGateElm, OrGateElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -5411,90 +5689,220 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"./OrGateElm.coffee":34,"../../util/util.coffee":74}],39:[function(require,module,exports){
+},{"./OrGateElm.coffee":45,"../../util/util.coffee":19}],45:[function(require,module,exports){
 (function() {
-  var CircuitComponent, LogicOutputElm, Point, Polygon, Rectangle, Settings, Util,
+  var GateElm, OrGateElm, Point, Util,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  CircuitComponent = require('../circuitComponent.coffee');
-
-  Settings = require('../../settings/settings.coffee');
-
-  Polygon = require('../../geom/polygon.coffee');
-
-  Rectangle = require('../../geom/rectangle.coffee');
-
-  Point = require('../../geom/point.coffee');
+  GateElm = require("./GateElm.coffee");
 
   Util = require('../../util/util.coffee');
 
-  LogicOutputElm = (function(_super) {
-    __extends(LogicOutputElm, _super);
+  Point = require('../../geom/Point.coffee');
 
-    LogicOutputElm.prototype.FLAG_TERNARY = 1;
+  OrGateElm = (function(_super) {
+    __extends(OrGateElm, _super);
 
-    LogicOutputElm.prototype.FLAG_NUMERIC = 2;
-
-    LogicOutputElm.prototype.FLAG_PULLDOWN = 4;
-
-    LogicOutputElm.Fields = {
-      threshold: {
-        name: "Threshold Voltage",
-        data_type: parseFloat,
-        default_value: 2.5
-      }
-    };
-
-    function LogicOutputElm(xa, ya, xb, yb, params, f) {
-      LogicOutputElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+    function OrGateElm(xa, ya, xb, yb, params, f) {
+      OrGateElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
     }
 
-    LogicOutputElm.prototype.isTernary = function() {
-      return this.flags & LogicOutputElm.FLAG_TERNARY !== 0;
+    OrGateElm.prototype.getGateName = function() {
+      return "OR Gate";
     };
 
-    LogicOutputElm.prototype.isNumeric = function() {
-      return this.flags & (LogicOutputElm.FLAG_TERNARY | LogicOutputElm.FLAG_NUMERIC) !== 0;
-    };
-
-    LogicOutputElm.prototype.needsPullDown = function() {
-      return (this.flags & LogicOutputElm.FLAG_PULLDOWN) !== 0;
-    };
-
-    LogicOutputElm.prototype.getDumpType = function() {
-      return 'M';
-    };
-
-    LogicOutputElm.prototype.getPostCount = function() {
-      return 1;
-    };
-
-    LogicOutputElm.prototype.setPoints = function() {
-      LogicOutputElm.__super__.setPoints.call(this);
-      return this.lead1 = Util.interpolate(this.point1, this.point2, 1 - 12 / this.dn);
-    };
-
-    LogicOutputElm.prototype.stamp = function(stamper) {
-      if (this.needsPullDown()) {
-        return stamper.stampResistor(this.nodes[0], 0, 1e6);
+    OrGateElm.prototype.setPoints = function() {
+      var a, b, i, triPoints, ww2, _i, _j, _ref;
+      OrGateElm.__super__.setPoints.call(this);
+      triPoints = Util.newPointArray(38);
+      for (i = _i = 0; _i < 16; i = ++_i) {
+        a = i / 16.0;
+        b = 1 - a * a;
+        _ref = Util.interpolateSymmetrical(this.lead1, this.lead2, 0.5 + a / 2, b * this.hs2), triPoints[i] = _ref[0], triPoints[32 - i] = _ref[1];
       }
+      ww2 = this.ww === 0 ? this.dn * 2 : this.ww * 2;
+      for (i = _j = 0; _j < 5; i = ++_j) {
+        a = (i - 2) / 2.0;
+        b = 4 * (1 - a * a) - 2;
+        triPoints[33 + i] = Util.interpolate(this.lead1, this.lead2, b / ww2, a * this.hs2);
+      }
+      triPoints[16] = new Point(this.lead2.x, this.lead2.y);
+      if (this.isInverting()) {
+        this.pcircle = Util.interpolate(this.point1, this.point2, 0.5 + (this.ww + 4) / this.dn);
+        this.lead2 = Util.interpolate(this.point1, this.point2, 0.5 + (this.ww + 8) / this.dn);
+      }
+      return this.gatePoly = Util.createPolygonFromArray(triPoints);
     };
 
-    LogicOutputElm.prototype.getVoltageDiff = function() {
-      return this.volts[0];
+    OrGateElm.prototype.calcFunction = function() {
+      var f, i, _i, _ref;
+      f = true;
+      for (i = _i = 0, _ref = this.inputCount; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        f = f | this.getInput(i);
+      }
+      return f;
     };
 
-    return LogicOutputElm;
+    OrGateElm.prototype.getDumpType = function() {
+      return 152;
+    };
 
-  })(CircuitComponent);
+    return OrGateElm;
 
-  module.exports = LogicOutputElm;
+  })(GateElm);
+
+  module.exports = OrGateElm;
 
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74}],38:[function(require,module,exports){
+},{"./GateElm.coffee":81,"../../util/util.coffee":19,"../../geom/Point.coffee":82}],47:[function(require,module,exports){
+(function() {
+  var OrGateElm, Point, Util, XorGateElm,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  OrGateElm = require("./OrGateElm.coffee");
+
+  Util = require('../../util/util.coffee');
+
+  Point = require('../../geom/Point.coffee');
+
+  XorGateElm = (function(_super) {
+    __extends(XorGateElm, _super);
+
+    function XorGateElm(xa, ya, xb, yb, params, f) {
+      XorGateElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+    }
+
+    XorGateElm.prototype.setPoints = function() {
+      var a, b, i, ww2, _i, _results;
+      XorGateElm.__super__.setPoints.call(this);
+      this.linePoints = Util.newPointArray(5);
+      ww2 = this.ww === 0 ? this.dn * 2 : this.ww * 2;
+      _results = [];
+      for (i = _i = 0; _i < 5; i = ++_i) {
+        a = (i - 2) / 2.0;
+        b = 4 * (1 - a * a) - 2;
+        _results.push(this.linePoints[i] = Util.interpolate(this.lead1, this.lead2, (b - 5) / ww2, a * this.hs2));
+      }
+      return _results;
+    };
+
+    XorGateElm.prototype.getGateName = function() {
+      return "XOR Gate";
+    };
+
+    XorGateElm.prototype.calcFunction = function() {
+      var f, i, _i, _ref;
+      f = true;
+      for (i = _i = 0, _ref = this.inputCount; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        f = f ^ this.getInput(i);
+      }
+      return f > 1;
+    };
+
+    XorGateElm.prototype.getDumpType = function() {
+      return 154;
+    };
+
+    return XorGateElm;
+
+  })(OrGateElm);
+
+  module.exports = XorGateElm;
+
+}).call(this);
+
+
+},{"./OrGateElm.coffee":45,"../../util/util.coffee":19,"../../geom/Point.coffee":82}],48:[function(require,module,exports){
+(function() {
+  var CircuitComponent, InverterElm, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require("../CircuitComponent.coffee");
+
+  Util = require('../../util/util.coffee');
+
+  InverterElm = (function(_super) {
+    __extends(InverterElm, _super);
+
+    InverterElm.Fields = {
+      slewRate: {
+        name: "Slew Rate",
+        data_type: parseFloat,
+        default_value: 0.5
+      }
+    };
+
+    function InverterElm(xa, ya, xb, yb, params, f) {
+      InverterElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+      this.noDiagonal = true;
+    }
+
+    InverterElm.prototype.getDumpType = function() {
+      return 'I';
+    };
+
+    InverterElm.prototype.setPoints = function() {
+      var hs, triPoints, ww, _ref;
+      InverterElm.__super__.setPoints.call(this);
+      hs = 16;
+      ww = 16;
+      if (ww > this.dn / 2) {
+        ww = Math.floor(this.dn / 2);
+      }
+      this.lead1 = Util.interpolate(this.point1, this.point2, 0.5 - ww / this.dn);
+      this.lead2 = Util.interpolate(this.point1, this.point2, 0.5 + (ww + 2) / this.dn);
+      this.pcircle = Util.interpolate(this.point1, this.point2, 0.5 + (ww - 2) / this.dn);
+      triPoints = Util.newPointArray(3);
+      _ref = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, hs), triPoints[0] = _ref[0], triPoints[1] = _ref[1];
+      triPoints[2] = Util.interpolate(this.point1, this.point2, 0.5 + (ww - 5) / this.dn);
+      this.gatePoly = triPoints;
+      return this.setBboxPt(this.point1, this.point2, hs);
+    };
+
+    InverterElm.prototype.getVoltageSourceCount = function() {
+      return 1;
+    };
+
+    InverterElm.prototype.stamp = function(stamper) {
+      return stamper.stampVoltageSource(0, this.nodes[1], this.voltSource);
+    };
+
+    InverterElm.prototype.doStep = function(stamper) {
+      var maxStep, out, v0;
+      v0 = this.volts[1];
+      out = this.volts[0] > 2.5 ? 0 : 5;
+      maxStep = this.slewRate * this.getParentCircuit().timeStep() * 1e9;
+      out = Math.max(Math.min(v0 + maxStep, out), v0 - maxStep);
+      return stamper.updateVoltageSource(0, this.nodes[1], this.voltSource, out);
+    };
+
+    InverterElm.prototype.getVoltageDiff = function() {
+      return this.volts[0];
+    };
+
+    InverterElm.prototype.getConnection = function(n1, n2) {
+      return false;
+    };
+
+    InverterElm.prototype.hasGroundConnection = function(n1) {
+      return n1 === 1;
+    };
+
+    return InverterElm;
+
+  })(CircuitComponent);
+
+  module.exports = InverterElm;
+
+}).call(this);
+
+
+},{"../CircuitComponent.coffee":83,"../../util/util.coffee":19}],49:[function(require,module,exports){
 (function() {
   var CircuitComponent, LogicInputElm, Point, Polygon, Rectangle, Settings, SwitchElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -5619,152 +6027,90 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"./SwitchElm.coffee":16,"../../util/util.coffee":74}],37:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"./SwitchElm.coffee":27,"../../util/util.coffee":19}],50:[function(require,module,exports){
 (function() {
-  var CircuitComponent, InverterElm, Util,
+  var CircuitComponent, LogicOutputElm, Point, Polygon, Rectangle, Settings, Util,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  CircuitComponent = require("../CircuitComponent.coffee");
+  CircuitComponent = require('../circuitComponent.coffee');
+
+  Settings = require('../../settings/settings.coffee');
+
+  Polygon = require('../../geom/polygon.coffee');
+
+  Rectangle = require('../../geom/rectangle.coffee');
+
+  Point = require('../../geom/point.coffee');
 
   Util = require('../../util/util.coffee');
 
-  InverterElm = (function(_super) {
-    __extends(InverterElm, _super);
+  LogicOutputElm = (function(_super) {
+    __extends(LogicOutputElm, _super);
 
-    InverterElm.Fields = {
-      slewRate: {
-        name: "Slew Rate",
+    LogicOutputElm.prototype.FLAG_TERNARY = 1;
+
+    LogicOutputElm.prototype.FLAG_NUMERIC = 2;
+
+    LogicOutputElm.prototype.FLAG_PULLDOWN = 4;
+
+    LogicOutputElm.Fields = {
+      threshold: {
+        name: "Threshold Voltage",
         data_type: parseFloat,
-        default_value: 0.5
+        default_value: 2.5
       }
     };
 
-    function InverterElm(xa, ya, xb, yb, params, f) {
-      InverterElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-      this.noDiagonal = true;
+    function LogicOutputElm(xa, ya, xb, yb, params, f) {
+      LogicOutputElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
     }
 
-    InverterElm.prototype.getDumpType = function() {
-      return 'I';
+    LogicOutputElm.prototype.isTernary = function() {
+      return this.flags & LogicOutputElm.FLAG_TERNARY !== 0;
     };
 
-    InverterElm.prototype.setPoints = function() {
-      var hs, triPoints, ww, _ref;
-      InverterElm.__super__.setPoints.call(this);
-      hs = 16;
-      ww = 16;
-      if (ww > this.dn / 2) {
-        ww = Math.floor(this.dn / 2);
-      }
-      this.lead1 = Util.interpolate(this.point1, this.point2, 0.5 - ww / this.dn);
-      this.lead2 = Util.interpolate(this.point1, this.point2, 0.5 + (ww + 2) / this.dn);
-      this.pcircle = Util.interpolate(this.point1, this.point2, 0.5 + (ww - 2) / this.dn);
-      triPoints = Util.newPointArray(3);
-      _ref = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, hs), triPoints[0] = _ref[0], triPoints[1] = _ref[1];
-      triPoints[2] = Util.interpolate(this.point1, this.point2, 0.5 + (ww - 5) / this.dn);
-      this.gatePoly = triPoints;
-      return this.setBboxPt(this.point1, this.point2, hs);
+    LogicOutputElm.prototype.isNumeric = function() {
+      return this.flags & (LogicOutputElm.FLAG_TERNARY | LogicOutputElm.FLAG_NUMERIC) !== 0;
     };
 
-    InverterElm.prototype.getVoltageSourceCount = function() {
+    LogicOutputElm.prototype.needsPullDown = function() {
+      return (this.flags & LogicOutputElm.FLAG_PULLDOWN) !== 0;
+    };
+
+    LogicOutputElm.prototype.getDumpType = function() {
+      return 'M';
+    };
+
+    LogicOutputElm.prototype.getPostCount = function() {
       return 1;
     };
 
-    InverterElm.prototype.stamp = function(stamper) {
-      return stamper.stampVoltageSource(0, this.nodes[1], this.voltSource);
+    LogicOutputElm.prototype.setPoints = function() {
+      LogicOutputElm.__super__.setPoints.call(this);
+      return this.lead1 = Util.interpolate(this.point1, this.point2, 1 - 12 / this.dn);
     };
 
-    InverterElm.prototype.doStep = function(stamper) {
-      var maxStep, out, v0;
-      v0 = this.volts[1];
-      out = this.volts[0] > 2.5 ? 0 : 5;
-      maxStep = this.slewRate * this.getParentCircuit().timeStep() * 1e9;
-      out = Math.max(Math.min(v0 + maxStep, out), v0 - maxStep);
-      return stamper.updateVoltageSource(0, this.nodes[1], this.voltSource, out);
+    LogicOutputElm.prototype.stamp = function(stamper) {
+      if (this.needsPullDown()) {
+        return stamper.stampResistor(this.nodes[0], 0, 1e6);
+      }
     };
 
-    InverterElm.prototype.getVoltageDiff = function() {
+    LogicOutputElm.prototype.getVoltageDiff = function() {
       return this.volts[0];
     };
 
-    InverterElm.prototype.getConnection = function(n1, n2) {
-      return false;
-    };
-
-    InverterElm.prototype.hasGroundConnection = function(n1) {
-      return n1 === 1;
-    };
-
-    return InverterElm;
+    return LogicOutputElm;
 
   })(CircuitComponent);
 
-  module.exports = InverterElm;
+  module.exports = LogicOutputElm;
 
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"../../util/util.coffee":74}],36:[function(require,module,exports){
-(function() {
-  var OrGateElm, Point, Util, XorGateElm,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  OrGateElm = require("./OrGateElm.coffee");
-
-  Util = require('../../util/util.coffee');
-
-  Point = require('../../geom/Point.coffee');
-
-  XorGateElm = (function(_super) {
-    __extends(XorGateElm, _super);
-
-    function XorGateElm(xa, ya, xb, yb, params, f) {
-      XorGateElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-    }
-
-    XorGateElm.prototype.setPoints = function() {
-      var a, b, i, ww2, _i, _results;
-      XorGateElm.__super__.setPoints.call(this);
-      this.linePoints = Util.newPointArray(5);
-      ww2 = this.ww === 0 ? this.dn * 2 : this.ww * 2;
-      _results = [];
-      for (i = _i = 0; _i < 5; i = ++_i) {
-        a = (i - 2) / 2.0;
-        b = 4 * (1 - a * a) - 2;
-        _results.push(this.linePoints[i] = Util.interpolate(this.lead1, this.lead2, Math.floor((b - 5) / ww2), a * this.hs2));
-      }
-      return _results;
-    };
-
-    XorGateElm.prototype.getGateName = function() {
-      return "XOR Gate";
-    };
-
-    XorGateElm.prototype.calcFunction = function() {
-      var f, i, _i, _ref;
-      f = true;
-      for (i = _i = 0, _ref = this.inputCount; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        f = f ^ this.getInput(i);
-      }
-      return f;
-    };
-
-    XorGateElm.prototype.getDumpType = function() {
-      return 154;
-    };
-
-    return XorGateElm;
-
-  })(OrGateElm);
-
-  module.exports = XorGateElm;
-
-}).call(this);
-
-
-},{"./OrGateElm.coffee":34,"../../util/util.coffee":74,"../../geom/Point.coffee":82}],40:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/point.coffee":18,"../../geom/rectangle.coffee":17,"../../util/util.coffee":19}],51:[function(require,module,exports){
 (function() {
   var AnalogSwitchElm, CircuitComponent, Point, Util,
     __hasProp = {}.hasOwnProperty,
@@ -5863,7 +6209,104 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"../../util/util.coffee":74,"../../geom/Point.coffee":82}],42:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"../../util/util.coffee":19,"../../geom/Point.coffee":82}],52:[function(require,module,exports){
+(function() {
+  var AnalogSwitch2Elm, AnalogSwitchElm, CircuitComponent, Point, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require("../CircuitComponent.coffee");
+
+  AnalogSwitchElm = require("./AnalogSwitchElm.coffee");
+
+  Util = require('../../util/util.coffee');
+
+  Point = require('../../geom/Point.coffee');
+
+  AnalogSwitch2Elm = (function(_super) {
+    __extends(AnalogSwitch2Elm, _super);
+
+    function AnalogSwitch2Elm(xa, ya, xb, yb, params, f) {
+      AnalogSwitch2Elm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+      this.openhs = 16;
+    }
+
+    AnalogSwitch2Elm.prototype.setPoints = function() {
+      var _ref, _ref1;
+      AnalogSwitch2Elm.__super__.setPoints.call(this);
+      this.calcLeads(32);
+      this.swposts = Util.newPointArray(2);
+      this.swpoles = Util.newPointArray(2);
+      _ref = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, this.openhs), this.swpoles[0] = _ref[0], this.swpoles[1] = _ref[1];
+      _ref1 = Util.interpolateSymmetrical(this.point1, this.point2, 1, this.openhs), this.swposts[0] = _ref1[0], this.swposts[1] = _ref1[1];
+      return this.ctlPoint = Util.interpolate(this.point1, this.point2, 0.5, this.openhs);
+    };
+
+    AnalogSwitch2Elm.prototype.getPostCount = function() {
+      return 4;
+    };
+
+    AnalogSwitch2Elm.prototype.getPost = function(n) {
+      if (n === 0) {
+        return this.point1;
+      } else {
+        if (n === 3) {
+          return this.ctlPoint;
+        } else {
+          return this.swposts[n - 1];
+        }
+      }
+    };
+
+    AnalogSwitch2Elm.prototype.getDumpType = function() {
+      return 160;
+    };
+
+    AnalogSwitch2Elm.prototype.calculateCurrent = function() {
+      if (this.open) {
+        return this.current = (this.volts[0] - this.volts[2]) / this.r_on;
+      } else {
+        return this.current = (this.volts[0] - this.volts[1]) / this.r_on;
+      }
+    };
+
+    AnalogSwitch2Elm.prototype.stamp = function(stamper) {
+      stamper.stampNonLinear(this.nodes[0]);
+      stamper.stampNonLinear(this.nodes[1]);
+      return stamper.stampNonLinear(this.nodes[2]);
+    };
+
+    AnalogSwitch2Elm.prototype.doStep = function(stamper) {
+      this.open = this.volts[3] < 2.5;
+      if ((this.flags & AnalogSwitch2Elm.FLAG_INVERT) !== 0) {
+        this.open = !this.open;
+      }
+      if (this.open) {
+        stamper.stampResistor(this.nodes[0], this.nodes[2], this.r_on);
+        return stamper.stampResistor(this.nodes[0], this.nodes[1], this.r_off);
+      } else {
+        stamper.stampResistor(this.nodes[0], this.nodes[1], this.r_on);
+        return stamper.stampResistor(this.nodes[0], this.nodes[2], this.r_off);
+      }
+    };
+
+    AnalogSwitch2Elm.prototype.getConnection = function(n1, n2) {
+      if (n1 === 3 || n2 === 3) {
+        return false;
+      }
+      return true;
+    };
+
+    return AnalogSwitch2Elm;
+
+  })(AnalogSwitchElm);
+
+  module.exports = AnalogSwitch2Elm;
+
+}).call(this);
+
+
+},{"../CircuitComponent.coffee":83,"./AnalogSwitchElm.coffee":51,"../../util/util.coffee":19,"../../geom/Point.coffee":82}],53:[function(require,module,exports){
 (function() {
   var CircuitComponent, MemristorElm, Point, Util,
     __hasProp = {}.hasOwnProperty,
@@ -5964,449 +6407,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"../../util/util.coffee":74,"../../geom/Point.coffee":82}],41:[function(require,module,exports){
-(function() {
-  var AnalogSwitch2Elm, AnalogSwitchElm, CircuitComponent, Point, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require("../CircuitComponent.coffee");
-
-  AnalogSwitchElm = require("./AnalogSwitchElm.coffee");
-
-  Util = require('../../util/util.coffee');
-
-  Point = require('../../geom/Point.coffee');
-
-  AnalogSwitch2Elm = (function(_super) {
-    __extends(AnalogSwitch2Elm, _super);
-
-    function AnalogSwitch2Elm(xa, ya, xb, yb, params, f) {
-      AnalogSwitch2Elm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-      this.openhs = 16;
-    }
-
-    AnalogSwitch2Elm.prototype.setPoints = function() {
-      var _ref, _ref1;
-      AnalogSwitch2Elm.__super__.setPoints.call(this);
-      this.calcLeads(32);
-      this.swposts = Util.newPointArray(2);
-      this.swpoles = Util.newPointArray(2);
-      _ref = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, this.openhs), this.swpoles[0] = _ref[0], this.swpoles[1] = _ref[1];
-      _ref1 = Util.interpolateSymmetrical(this.point1, this.point2, 1, this.openhs), this.swposts[0] = _ref1[0], this.swposts[1] = _ref1[1];
-      return this.ctlPoint = Util.interpolate(this.point1, this.point2, 0.5, this.openhs);
-    };
-
-    AnalogSwitch2Elm.prototype.getPostCount = function() {
-      return 4;
-    };
-
-    AnalogSwitch2Elm.prototype.getPost = function(n) {
-      if (n === 0) {
-        return this.point1;
-      } else {
-        if (n === 3) {
-          return this.ctlPoint;
-        } else {
-          return this.swposts[n - 1];
-        }
-      }
-    };
-
-    AnalogSwitch2Elm.prototype.getDumpType = function() {
-      return 160;
-    };
-
-    AnalogSwitch2Elm.prototype.calculateCurrent = function() {
-      if (this.open) {
-        return this.current = (this.volts[0] - this.volts[2]) / this.r_on;
-      } else {
-        return this.current = (this.volts[0] - this.volts[1]) / this.r_on;
-      }
-    };
-
-    AnalogSwitch2Elm.prototype.stamp = function(stamper) {
-      stamper.stampNonLinear(this.nodes[0]);
-      stamper.stampNonLinear(this.nodes[1]);
-      return stamper.stampNonLinear(this.nodes[2]);
-    };
-
-    AnalogSwitch2Elm.prototype.doStep = function(stamper) {
-      this.open = this.volts[3] < 2.5;
-      if ((this.flags & AnalogSwitch2Elm.FLAG_INVERT) !== 0) {
-        this.open = !this.open;
-      }
-      if (this.open) {
-        stamper.stampResistor(this.nodes[0], this.nodes[2], this.r_on);
-        return stamper.stampResistor(this.nodes[0], this.nodes[1], this.r_off);
-      } else {
-        stamper.stampResistor(this.nodes[0], this.nodes[1], this.r_on);
-        return stamper.stampResistor(this.nodes[0], this.nodes[2], this.r_off);
-      }
-    };
-
-    AnalogSwitch2Elm.prototype.getConnection = function(n1, n2) {
-      if (n1 === 3 || n2 === 3) {
-        return false;
-      }
-      return true;
-    };
-
-    return AnalogSwitch2Elm;
-
-  })(AnalogSwitchElm);
-
-  module.exports = AnalogSwitch2Elm;
-
-}).call(this);
-
-
-},{"./AnalogSwitchElm.coffee":40,"../CircuitComponent.coffee":83,"../../util/util.coffee":74,"../../geom/Point.coffee":82}],43:[function(require,module,exports){
-(function() {
-  var CircuitComponent, Point, ScrElm, Settings, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require('../circuitComponent.coffee');
-
-  Settings = require('../../settings/settings.coffee');
-
-  Point = require('../../geom/point.coffee');
-
-  Util = require('../../util/util.coffee');
-
-  ScrElm = (function(_super) {
-    __extends(ScrElm, _super);
-
-    ScrElm.Fields = {
-      lastvac: {
-        data_type: parseFloat
-      },
-      lastvag: {
-        data_type: parseFloat
-      },
-      triggerI: {
-        data_type: parseFloat,
-        default_value: 0.01
-      },
-      holdingI: {
-        data_type: parseFloat,
-        default_value: 0.0082
-      },
-      cresistance: {
-        data_type: parseFloat,
-        default_value: 50
-      }
-    };
-
-    function ScrElm(xa, ya, xb, yb, params, f) {
-      this.anode = 0;
-      this.cnode = 1;
-      this.gnode = 2;
-      this.inode = 3;
-      this.hs = 8;
-      ScrElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-      this.setDefaults();
-      this.vt = 0;
-      this.vdcoef = 0;
-      this.fwdrop = 0;
-      this.zvoltage = 0;
-      this.zoffset = 0;
-      this.lastvoltdiff = 0;
-      this.crit = 0;
-      this.leakage = 1e-14;
-      this.volts[this.anode] = 0;
-      this.volts[this.cnode] = -this.lastvac;
-      this.volts[this.gnode] = -this.lastvag;
-      this.setup();
-    }
-
-    ScrElm.prototype.setPoints = function() {
-      var dir, gatelen, leadlen, pa, _ref, _ref1;
-      ScrElm.__super__.setPoints.call(this);
-      dir = 0;
-      if (Math.abs(this.dx) > Math.abs(this.dy)) {
-        this.dir = -Math.sign(this.dx) * Math.sign(this.dy);
-        this.point2.y = this.point1.y;
-      } else {
-        this.dir = Math.sign(this.dy) * Math.sign(this.dx);
-        this.point2.x = this.point1.x;
-      }
-      if (dir === 0) {
-        dir = 1;
-      }
-      this.calcLeads(16);
-      this.cathode = new Array(2);
-      pa = new Array(2);
-      _ref = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, this.hs), pa[0] = _ref[0], pa[1] = _ref[1];
-      _ref1 = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, this.hs), this.cathode[0] = _ref1[0], this.cathode[1] = _ref1[1];
-      this.poly = Util.createPolygon(pa[0], pa[1], this.lead2);
-      this.gate = new Array(2);
-      leadlen = (this.dn - 16) / 2;
-      gatelen = Settings.GRID_SIZE;
-      gatelen += leadlen % Settings.GRID_SIZE;
-      if (leadlen < gatelen) {
-        this.x2 = this.x;
-        this.y2 = this.y;
-        return;
-      }
-      this.gate[0] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, gatelen * dir);
-      return this.gate[1] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, Settings.GRID_SIZE * 2 * dir);
-    };
-
-    ScrElm.prototype.setDefaults = function() {
-      this.leakage = 1e-14;
-      this.cresistance = 50;
-      this.holdingI = .0082;
-      return this.triggerI = .01;
-    };
-
-    ScrElm.prototype.getName = function() {
-      return "Silicon Controlled Rectifier";
-    };
-
-    ScrElm.prototype.getDumpType = function() {
-      return 177;
-    };
-
-    ScrElm.prototype.setup = function() {
-      var i;
-      this.fwdrop = 0.8;
-      this.zvoltage = 0;
-      this.vdcoef = Math.log(1 / this.leakage + 1) / this.fwdrop;
-      this.vt = 1 / this.vdcoef;
-      this.vcrit = this.vt * Math.log(this.vt / (Math.sqrt(2) * this.leakage));
-      if (this.zvoltage === 0) {
-        return this.zoffset = 0;
-      } else {
-        i = -0.005;
-        return this.zoffset = this.zvoltage - Math.log(-(1 + i / this.leakage)) / this.vdcoef;
-      }
-    };
-
-    ScrElm.prototype.reset = function() {
-      this.volts[this.anode] = this.volts[this.cnode] = this.volts[this.gnode] = 0;
-      this.lastvoltdiff = 0;
-      return this.lastvag = this.lastvac = this.curcount_a = this.curcount_c = this.curcount_g = 0;
-    };
-
-    ScrElm.prototype.getPost = function(n) {
-      if (n === 0) {
-        return this.point1;
-      } else {
-        if (n === 1) {
-          return this.point2;
-        } else {
-          return this.gate[1];
-        }
-      }
-    };
-
-    ScrElm.prototype.getPostCount = function() {
-      return 3;
-    };
-
-    ScrElm.prototype.getInternalNodeCount = function() {
-      return 1;
-    };
-
-    ScrElm.prototype.getPower = function() {
-      return (this.volts[this.anode] - this.volts[this.gnode]) * this.ia + (this.volts[this.cnode] - this.volts[this.gnode]) * this.ic;
-    };
-
-    ScrElm.prototype.stamp = function(stamper) {
-      stamper.stampNonLinear(this.nodes[this.anode]);
-      stamper.stampNonLinear(this.nodes[this.cnode]);
-      stamper.stampNonLinear(this.nodes[this.gnode]);
-      stamper.stampNonLinear(this.nodes[this.inode]);
-      stamper.stampResistor(this.nodes[this.gnode], this.nodes[this.cnode], this.cresistance);
-      stamper.stampNonLinear(this.nodes[this.inode]);
-      return stamper.stampNonLinear(this.nodes[this.gnode]);
-    };
-
-    ScrElm.prototype.limitStep = function(vnew, vold) {
-      var arg, oo, v0;
-      arg = void 0;
-      oo = vnew;
-      if (vnew > this.vcrit && Math.abs(vnew - vold) > (this.vt + this.vt)) {
-        if (vold > 0) {
-          arg = 1 + (vnew - vold) / this.vt;
-          if (arg > 0) {
-            vnew = vold + this.vt * Math.log(arg);
-            v0 = Math.log(1e-6 / this.leakage) * this.vt;
-            vnew = Math.max(v0, vnew);
-          } else {
-            vnew = this.vcrit;
-          }
-        } else {
-          vnew = this.vt * Math.log(vnew / this.vt);
-        }
-        this.getParentCircuit().Solver.converged = false;
-      } else if (vnew < 0 && this.zoffset !== 0) {
-        vnew = -vnew - this.zoffset;
-        vold = -vold - this.zoffset;
-        if (vnew > this.vcrit && Math.abs(vnew - vold) > (this.vt + this.vt)) {
-          if (vold > 0) {
-            arg = 1 + (vnew - vold) / this.vt;
-            if (arg > 0) {
-              vnew = vold + this.vt * Math.log(arg);
-              v0 = Math.log(1e-6 / this.leakage) * this.vt;
-              vnew = Math.max(v0, vnew);
-            } else {
-              vnew = this.vcrit;
-            }
-          } else {
-            vnew = this.vt * Math.log(vnew / this.vt);
-          }
-          this.getParentCircuit().Solver.converged = false;
-        }
-        vnew = -(vnew + this.zoffset);
-      }
-      return vnew;
-    };
-
-    ScrElm.prototype.doStep = function(stamper) {
-      var eval_, exp0, exp1, geq, iamult, icmult, nc, voltdiff;
-      this.vac = this.volts[this.anode] - this.volts[this.cnode];
-      this.vag = this.volts[this.anode] - this.volts[this.gnode];
-      if (Math.abs(this.vac - this.lastvac) > .01 || Math.abs(this.vag - this.lastvag) > 0.01) {
-        this.getParentCircuit().converged = false;
-      }
-      this.lastvac = this.vac;
-      this.lastvag = this.vag;
-      voltdiff = this.volts[this.inode] - this.volts[this.gnode];
-      if (Math.abs(voltdiff - this.lastvoltdiff) > .01) {
-        this.getParentCircuit().Solver.converged = false;
-      }
-      voltdiff = this.limitStep(voltdiff, this.lastvoltdiff);
-      this.lastvoltdiff = voltdiff;
-      if (voltdiff >= 0 || this.zvoltage === 0) {
-        eval_ = Math.exp(voltdiff * this.vdcoef);
-        if (voltdiff < 0) {
-          eval_ = 1;
-        }
-        geq = this.vdcoef * this.leakage * eval_;
-        nc = (eval_ - 1) * this.leakage - geq * voltdiff;
-        stamper.stampConductance(this.nodes[this.inode], this.nodes[this.gnode], geq);
-        stamper.stampCurrentSource(this.nodes[this.inode], this.nodes[this.gnode], nc);
-      } else {
-        exp0 = Math.exp(voltdiff * this.vdcoef);
-        exp1 = Math.exp((-voltdiff - this.zoffset) * this.vdcoef);
-        geq = this.leakage * (exp0 + exp1) * this.vdcoef;
-        nc = this.leakage * (exp0 - exp1 - 1) + geq * -voltdiff;
-        stamper.stampConductance(this.nodes[this.inode], this.nodes[this.gnode], geq);
-        stamper.stampCurrentSource(this.nodes[this.inode], this.nodes[this.gnode], nc);
-      }
-      icmult = 1 / this.triggerI;
-      iamult = 1 / this.holdingI - icmult;
-      this.aresistance = -icmult * this.ic + this.ia * iamult > 1 ? 0.0105 : 10e5;
-      return stamper.stampResistor(this.nodes[this.anode], this.nodes[this.inode], this.aresistance);
-    };
-
-    ScrElm.prototype.calculateCurrent = function() {
-      this.ic = (this.volts[this.cnode] - this.volts[this.gnode]) / this.cresistance;
-      this.ia = (this.volts[this.anode] - this.volts[this.inode]) / this.aresistance;
-      return this.ig = -this.ic - this.ia;
-    };
-
-    return ScrElm;
-
-  })(CircuitComponent);
-
-  module.exports = ScrElm;
-
-}).call(this);
-
-
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/point.coffee":79,"../../util/util.coffee":74}],46:[function(require,module,exports){
-(function() {
-  var ChipElm, CircuitComponent, DecadeElm, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require("../CircuitComponent.coffee");
-
-  ChipElm = require("./ChipElm.coffee");
-
-  Util = require('../../util/util.coffee');
-
-  DecadeElm = (function(_super) {
-    __extends(DecadeElm, _super);
-
-    function DecadeElm(xa, xb, ya, yb, params, f) {
-      DecadeElm.__super__.constructor.call(this, xa, xb, ya, yb, params, f);
-    }
-
-    DecadeElm.prototype.getName = function() {
-      return "Decade counter";
-    };
-
-    DecadeElm.prototype.getDumpType = function() {
-      return "163";
-    };
-
-    DecadeElm.prototype.needsBits = function() {
-      return true;
-    };
-
-    DecadeElm.prototype.getPostCount = function() {
-      return this.bits + 2;
-    };
-
-    DecadeElm.prototype.getVoltageSourceCount = function() {
-      return this.bits;
-    };
-
-    DecadeElm.prototype.setupPins = function() {
-      var i, ii, _i, _ref;
-      this.sizeX = this.bits > 2 ? this.bits : 2;
-      this.sizeY = 2;
-      this.pins = new Array(this.getPostCount());
-      this.pins[0] = new ChipElm.Pin(1, ChipElm.SIDE_W, "");
-      this.pins[0].clock = true;
-      this.pins[1] = new ChipElm.Pin(this.sizeX - 1, ChipElm.SIDE_S, "R");
-      this.pins[1].bubble = true;
-      for (i = _i = 0, _ref = this.bits; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        ii = i + 2;
-        this.pins[ii] = new ChipElm.Pin(i, ChipElm.SIDE_N, "Q" + i);
-        this.pins[ii].output = this.pins[ii].state = true;
-      }
-      return this.allocNodes();
-    };
-
-    DecadeElm.prototype.execute = function() {
-      var i, _i, _j, _ref, _ref1;
-      if (this.pins[0].value && !this.lastClock) {
-        for (i = _i = 0, _ref = this.bits; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-          if (this.pins[i + 2].value) {
-            break;
-          }
-        }
-        if (i < this.bits) {
-          this.pins[i++ + 2].value = false;
-        }
-        i %= this.bits;
-        this.pins[i + 2].value = true;
-      }
-      if (!this.pins[1].value) {
-        for (i = _j = 1, _ref1 = this.bits; 1 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 1 <= _ref1 ? ++_j : --_j) {
-          this.pins[i + 2].value = false;
-        }
-        this.pins[2].value = true;
-      }
-      return this.lastClock = this.pins[0].value;
-    };
-
-    return DecadeElm;
-
-  })(ChipElm);
-
-  module.exports = DecadeElm;
-
-}).call(this);
-
-
-},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":74}],45:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"../../util/util.coffee":19,"../../geom/Point.coffee":82}],55:[function(require,module,exports){
 (function() {
   var CircuitComponent, TunnelDiodeElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -6508,7 +6509,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"../../util/util.coffee":74}],47:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"../../util/util.coffee":19}],54:[function(require,module,exports){
 (function() {
   var CircuitComponent, Point, RelayElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -6682,10 +6683,8 @@ Settings do not change by loading a new circuit.
       stamper.stampRightSide(this.nodes[this.nCoil1]);
       stamper.stampRightSide(this.nodes[this.nCoil3]);
       stamper.stampResistor(this.nodes[this.nCoil3], this.nodes[this.nCoil2], this.coilR);
-      console.log("STAMP!");
       _results = [];
       for (i = _i = 0, _ref = 3 * this.poleCount; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        console.log(this.nodes[this.nSwitch0 + i]);
         _results.push(stamper.stampNonLinear(this.nodes[this.nSwitch0 + i]));
       }
       return _results;
@@ -6769,7 +6768,291 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../util/util.coffee":74,"../../geom/point.coffee":79}],44:[function(require,module,exports){
+},{"../../util/util.coffee":19,"../circuitComponent.coffee":2,"../../geom/point.coffee":18}],56:[function(require,module,exports){
+(function() {
+  var CircuitComponent, Point, ScrElm, Settings, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require('../circuitComponent.coffee');
+
+  Settings = require('../../settings/settings.coffee');
+
+  Point = require('../../geom/point.coffee');
+
+  Util = require('../../util/util.coffee');
+
+  ScrElm = (function(_super) {
+    __extends(ScrElm, _super);
+
+    ScrElm.Fields = {
+      lastvac: {
+        data_type: parseFloat
+      },
+      lastvag: {
+        data_type: parseFloat
+      },
+      triggerI: {
+        data_type: parseFloat,
+        default_value: 0.01
+      },
+      holdingI: {
+        data_type: parseFloat,
+        default_value: 0.0082
+      },
+      cresistance: {
+        data_type: parseFloat,
+        default_value: 50
+      }
+    };
+
+    function ScrElm(xa, ya, xb, yb, params, f) {
+      this.anode = 0;
+      this.cnode = 1;
+      this.gnode = 2;
+      this.inode = 3;
+      this.hs = 8;
+      ScrElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+      this.setDefaults();
+      this.vt = 0;
+      this.vdcoef = 0;
+      this.fwdrop = 0;
+      this.zvoltage = 0;
+      this.zoffset = 0;
+      this.lastvoltdiff = 0;
+      this.crit = 0;
+      this.leakage = 1e-14;
+      this.volts[this.anode] = 0;
+      this.volts[this.cnode] = -this.lastvac;
+      this.volts[this.gnode] = -this.lastvag;
+      this.params['volts'] = this.volts;
+      delete this.params['lastvac'];
+      delete this.params['lastvag'];
+      this.setup();
+    }
+
+    ScrElm.prototype.setPoints = function() {
+      var dir, gatelen, leadlen, pa, _ref, _ref1;
+      ScrElm.__super__.setPoints.call(this);
+      dir = 0;
+      if (Math.abs(this.dx) > Math.abs(this.dy)) {
+        dir = -Math.sign(this.dx) * Math.sign(this.dy);
+        this.point2.y = this.point1.y;
+      } else {
+        dir = Math.sign(this.dy) * Math.sign(this.dx);
+        this.point2.x = this.point1.x;
+      }
+      if (dir === 0) {
+        dir = 1;
+      }
+      this.calcLeads(16);
+      this.cathode = new Array(2);
+      pa = new Array(2);
+      _ref = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, this.hs), pa[0] = _ref[0], pa[1] = _ref[1];
+      _ref1 = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, this.hs), this.cathode[0] = _ref1[0], this.cathode[1] = _ref1[1];
+      this.poly = Util.createPolygon(pa[0], pa[1], this.lead2);
+      this.gate = new Array(2);
+      leadlen = (this.dn - 16) / 2;
+      gatelen = Settings.GRID_SIZE;
+      gatelen += leadlen % Settings.GRID_SIZE;
+      if (leadlen < gatelen) {
+        this.x2 = this.x1;
+        this.y2 = this.y1;
+        return;
+      }
+      this.gate[0] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, gatelen * dir);
+      return this.gate[1] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, Settings.GRID_SIZE * 2 * dir);
+    };
+
+    ScrElm.prototype.nonLinear = function() {
+      return true;
+    };
+
+    ScrElm.prototype.draw = function(renderContext) {
+      var color, v1, v2;
+      v1 = this.volts[this.anode];
+      v2 = this.volts[this.cnode];
+      renderContext.drawLeads(this);
+      color = Util.getVoltageColor(v1);
+      renderContext.drawThickPolygonP(this.poly, color);
+      color = Util.getVoltageColor(v2);
+      renderContext.drawLinePt(this.cathode[0], this.cathode[1], color);
+      renderContext.drawLinePt(this.lead2, this.gate[0], color);
+      renderContext.drawLinePt(this.gate[0], this.gate[1], color);
+      this.curcount_a = this.updateDots(this.ia, this.curcount_a);
+      this.curcount_c = this.updateDots(this.ic, this.curcount_c);
+      this.curcount_g = this.updateDots(this.ig, this.curcount_g);
+      renderContext.drawDots(this.point1, this.lead2, this.curcount_a);
+      renderContext.drawDots(this.point2, this.lead2, this.curcount_c);
+      renderContext.drawDots(this.gate[1], this.gate[0], this.curcount_g);
+      return renderContext.drawPosts(this);
+    };
+
+    ScrElm.prototype.setDefaults = function() {
+      this.leakage = 1e-14;
+      this.cresistance = 50;
+      this.holdingI = .0082;
+      return this.triggerI = .01;
+    };
+
+    ScrElm.prototype.getName = function() {
+      return "Silicon Controlled Rectifier";
+    };
+
+    ScrElm.prototype.getDumpType = function() {
+      return 177;
+    };
+
+    ScrElm.prototype.setup = function() {
+      var i;
+      this.fwdrop = 0.8;
+      this.zvoltage = 0;
+      this.vdcoef = Math.log(1 / this.leakage + 1) / this.fwdrop;
+      this.vt = 1 / this.vdcoef;
+      this.vcrit = this.vt * Math.log(this.vt / (Math.sqrt(2) * this.leakage));
+      if (this.zvoltage === 0) {
+        return this.zoffset = 0;
+      } else {
+        i = -0.005;
+        return this.zoffset = this.zvoltage - Math.log(-(1 + i / this.leakage)) / this.vdcoef;
+      }
+    };
+
+    ScrElm.prototype.reset = function() {
+      this.volts[this.anode] = this.volts[this.cnode] = this.volts[this.gnode] = 0;
+      this.lastvoltdiff = 0;
+      return this.lastvag = this.lastvac = this.curcount_a = this.curcount_c = this.curcount_g = 0;
+    };
+
+    ScrElm.prototype.getPost = function(n) {
+      if (n === 0) {
+        return this.point1;
+      } else {
+        if (n === 1) {
+          return this.point2;
+        } else {
+          return this.gate[1];
+        }
+      }
+    };
+
+    ScrElm.prototype.getPostCount = function() {
+      return 3;
+    };
+
+    ScrElm.prototype.getInternalNodeCount = function() {
+      return 1;
+    };
+
+    ScrElm.prototype.getPower = function() {
+      return (this.volts[this.anode] - this.volts[this.gnode]) * this.ia + (this.volts[this.cnode] - this.volts[this.gnode]) * this.ic;
+    };
+
+    ScrElm.prototype.stamp = function(stamper) {
+      stamper.stampNonLinear(this.nodes[this.anode]);
+      stamper.stampNonLinear(this.nodes[this.cnode]);
+      stamper.stampNonLinear(this.nodes[this.gnode]);
+      stamper.stampNonLinear(this.nodes[this.inode]);
+      stamper.stampResistor(this.nodes[this.gnode], this.nodes[this.cnode], this.cresistance);
+      stamper.stampNonLinear(this.nodes[this.inode]);
+      return stamper.stampNonLinear(this.nodes[this.gnode]);
+    };
+
+    ScrElm.prototype.limitStep = function(vnew, vold) {
+      var arg, oo, v0;
+      arg = void 0;
+      oo = vnew;
+      if (vnew > this.vcrit && Math.abs(vnew - vold) > (this.vt + this.vt)) {
+        if (vold > 0) {
+          arg = 1 + (vnew - vold) / this.vt;
+          if (arg > 0) {
+            vnew = vold + this.vt * Math.log(arg);
+            v0 = Math.log(1e-6 / this.leakage) * this.vt;
+            vnew = Math.max(v0, vnew);
+          } else {
+            vnew = this.vcrit;
+          }
+        } else {
+          vnew = this.vt * Math.log(vnew / this.vt);
+        }
+        this.getParentCircuit().Solver.converged = false;
+      } else if (vnew < 0 && this.zoffset !== 0) {
+        vnew = -vnew - this.zoffset;
+        vold = -vold - this.zoffset;
+        if (vnew > this.vcrit && Math.abs(vnew - vold) > (this.vt + this.vt)) {
+          if (vold > 0) {
+            arg = 1 + (vnew - vold) / this.vt;
+            if (arg > 0) {
+              vnew = vold + this.vt * Math.log(arg);
+              v0 = Math.log(1e-6 / this.leakage) * this.vt;
+              vnew = Math.max(v0, vnew);
+            } else {
+              vnew = this.vcrit;
+            }
+          } else {
+            vnew = this.vt * Math.log(vnew / this.vt);
+          }
+          this.getParentCircuit().Solver.converged = false;
+        }
+        vnew = -(vnew + this.zoffset);
+      }
+      return vnew;
+    };
+
+    ScrElm.prototype.doStep = function(stamper) {
+      var eval_, exp0, exp1, geq, iamult, icmult, nc, voltdiff;
+      this.vac = this.volts[this.anode] - this.volts[this.cnode];
+      this.vag = this.volts[this.anode] - this.volts[this.gnode];
+      if (Math.abs(this.vac - this.lastvac) > .01 || Math.abs(this.vag - this.lastvag) > 0.01) {
+        this.getParentCircuit().converged = false;
+      }
+      this.lastvac = this.vac;
+      this.lastvag = this.vag;
+      voltdiff = this.volts[this.inode] - this.volts[this.gnode];
+      if (Math.abs(voltdiff - this.lastvoltdiff) > .01) {
+        this.getParentCircuit().Solver.converged = false;
+      }
+      voltdiff = this.limitStep(voltdiff, this.lastvoltdiff);
+      this.lastvoltdiff = voltdiff;
+      if (voltdiff >= 0 || this.zvoltage === 0) {
+        eval_ = Math.exp(voltdiff * this.vdcoef);
+        if (voltdiff < 0) {
+          eval_ = 1;
+        }
+        geq = this.vdcoef * this.leakage * eval_;
+        nc = (eval_ - 1) * this.leakage - geq * voltdiff;
+        stamper.stampConductance(this.nodes[this.inode], this.nodes[this.gnode], geq);
+        stamper.stampCurrentSource(this.nodes[this.inode], this.nodes[this.gnode], nc);
+      } else {
+        exp0 = Math.exp(voltdiff * this.vdcoef);
+        exp1 = Math.exp((-voltdiff - this.zoffset) * this.vdcoef);
+        geq = this.leakage * (exp0 + exp1) * this.vdcoef;
+        nc = this.leakage * (exp0 - exp1 - 1) + geq * -voltdiff;
+        stamper.stampConductance(this.nodes[this.inode], this.nodes[this.gnode], geq);
+        stamper.stampCurrentSource(this.nodes[this.inode], this.nodes[this.gnode], nc);
+      }
+      icmult = 1 / this.triggerI;
+      iamult = 1 / this.holdingI - icmult;
+      this.aresistance = -icmult * this.ic + this.ia * iamult > 1 ? 0.0105 : 10e5;
+      return stamper.stampResistor(this.nodes[this.anode], this.nodes[this.inode], this.aresistance);
+    };
+
+    ScrElm.prototype.calculateCurrent = function() {
+      this.ic = (this.volts[this.cnode] - this.volts[this.gnode]) / this.cresistance;
+      this.ia = (this.volts[this.anode] - this.volts[this.inode]) / this.aresistance;
+      return this.ig = -this.ic - this.ia;
+    };
+
+    return ScrElm;
+
+  })(CircuitComponent);
+
+  module.exports = ScrElm;
+
+}).call(this);
+
+
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/point.coffee":18,"../../util/util.coffee":19}],57:[function(require,module,exports){
 (function() {
   var CircuitComponent, TriodeElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -6948,7 +7231,95 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"../../util/util.coffee":74}],48:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"../../util/util.coffee":19}],58:[function(require,module,exports){
+(function() {
+  var ChipElm, CircuitComponent, DecadeElm, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require("../CircuitComponent.coffee");
+
+  ChipElm = require("./ChipElm.coffee");
+
+  Util = require('../../util/util.coffee');
+
+  DecadeElm = (function(_super) {
+    __extends(DecadeElm, _super);
+
+    function DecadeElm(xa, xb, ya, yb, params, f) {
+      DecadeElm.__super__.constructor.call(this, xa, xb, ya, yb, params, f);
+    }
+
+    DecadeElm.prototype.getName = function() {
+      return "Decade counter";
+    };
+
+    DecadeElm.prototype.getDumpType = function() {
+      return "163";
+    };
+
+    DecadeElm.prototype.needsBits = function() {
+      return true;
+    };
+
+    DecadeElm.prototype.getPostCount = function() {
+      return this.bits + 2;
+    };
+
+    DecadeElm.prototype.getVoltageSourceCount = function() {
+      return this.bits;
+    };
+
+    DecadeElm.prototype.setupPins = function() {
+      var i, ii, _i, _ref;
+      this.sizeX = this.bits > 2 ? this.bits : 2;
+      this.sizeY = 2;
+      this.pins = new Array(this.getPostCount());
+      this.pins[0] = new ChipElm.Pin(1, ChipElm.SIDE_W, "");
+      this.pins[0].clock = true;
+      this.pins[1] = new ChipElm.Pin(this.sizeX - 1, ChipElm.SIDE_S, "R");
+      this.pins[1].bubble = true;
+      for (i = _i = 0, _ref = this.bits; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        ii = i + 2;
+        this.pins[ii] = new ChipElm.Pin(i, ChipElm.SIDE_N, "Q" + i);
+        this.pins[ii].output = this.pins[ii].state = true;
+      }
+      return this.allocNodes();
+    };
+
+    DecadeElm.prototype.execute = function() {
+      var i, _i, _j, _ref, _ref1;
+      if (this.pins[0].value && !this.lastClock) {
+        for (i = _i = 0, _ref = this.bits; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+          if (this.pins[i + 2].value) {
+            break;
+          }
+        }
+        if (i < this.bits) {
+          this.pins[i++ + 2].value = false;
+        }
+        i %= this.bits;
+        this.pins[i + 2].value = true;
+      }
+      if (!this.pins[1].value) {
+        for (i = _j = 1, _ref1 = this.bits; 1 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 1 <= _ref1 ? ++_j : --_j) {
+          this.pins[i + 2].value = false;
+        }
+        this.pins[2].value = true;
+      }
+      return this.lastClock = this.pins[0].value;
+    };
+
+    return DecadeElm;
+
+  })(ChipElm);
+
+  module.exports = DecadeElm;
+
+}).call(this);
+
+
+},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":19}],59:[function(require,module,exports){
 (function() {
   var ChipElm, CircuitComponent, LatchElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -7026,7 +7397,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":74}],49:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":19}],60:[function(require,module,exports){
 (function() {
   var ChipElm, CircuitComponent, TimerElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -7152,7 +7523,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":74}],51:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":19}],61:[function(require,module,exports){
 (function() {
   var ChipElm, CircuitComponent, DFlipFlopElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -7236,9 +7607,9 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":74}],50:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":19}],62:[function(require,module,exports){
 (function() {
-  var ChipElm, CircuitComponent, JkFlipFlopElm, Util,
+  var ChipElm, CircuitComponent, CounterElm, Util,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -7248,75 +7619,246 @@ Settings do not change by loading a new circuit.
 
   Util = require('../../util/util.coffee');
 
-  JkFlipFlopElm = (function(_super) {
-    __extends(JkFlipFlopElm, _super);
+  CounterElm = (function(_super) {
+    __extends(CounterElm, _super);
 
-    function JkFlipFlopElm(xa, xb, ya, yb, params, f) {
-      JkFlipFlopElm.__super__.constructor.call(this, xa, xb, ya, yb, params, f);
-      this.pins[4].value = !this.pins[3].value;
+    CounterElm.FLAG_ENABLE = 2;
+
+    function CounterElm(xa, xb, ya, yb, params, f) {
+      CounterElm.__super__.constructor.call(this, xa, xb, ya, yb, params, f);
     }
 
-    JkFlipFlopElm.prototype.getDumpType = function() {
-      return "156";
+    CounterElm.prototype.getDumpType = function() {
+      return "164";
     };
 
-    JkFlipFlopElm.prototype.getName = function() {
-      return "JK flip-flop";
+    CounterElm.prototype.needsBits = function() {
+      return true;
     };
 
-    JkFlipFlopElm.prototype.getPostCount = function() {
-      return 5;
+    CounterElm.prototype.getName = function() {
+      return "Counter";
     };
 
-    JkFlipFlopElm.prototype.getVoltageSourceCount = function() {
-      return 2;
-    };
-
-    JkFlipFlopElm.prototype.setupPins = function() {
-      this.sizeX = 2;
-      this.sizeY = 3;
-      this.pins = new Array(5);
-      this.pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "J");
-      this.pins[1] = new ChipElm.Pin(1, ChipElm.SIDE_W, "");
-      this.pins[1].clock = true;
-      this.pins[1].bubble = true;
-      this.pins[2] = new ChipElm.Pin(2, ChipElm.SIDE_W, "K");
-      this.pins[3] = new ChipElm.Pin(0, ChipElm.SIDE_E, "Q");
-      this.pins[3].output = this.pins[3].state = true;
-      this.pins[4] = new ChipElm.Pin(2, ChipElm.SIDE_E, "Q");
-      this.pins[4].output = true;
-      return this.pins[4].lineOver = true;
-    };
-
-    JkFlipFlopElm.prototype.execute = function() {
-      var q;
-      if (!this.pins[1].value && this.lastClock) {
-        q = this.pins[3].value;
-        if (this.pins[0].value) {
-          if (this.pins[2].value) {
-            q = !q;
-          } else {
-            q = true;
-          }
-        } else if (this.pins[2].value) {
-          q = false;
-        }
-        this.pins[3].value = q;
-        this.pins[4].value = !q;
+    CounterElm.prototype.getPostCount = function() {
+      if (this.hasEnable()) {
+        return this.bits + 3;
+      } else {
+        return this.bits + 2;
       }
-      return this.lastClock = this.pins[1].value;
     };
 
-    return JkFlipFlopElm;
+    CounterElm.prototype.hasEnable = function() {
+      return (this.flags & CounterElm.FLAG_ENABLE) !== 0;
+    };
+
+    CounterElm.prototype.getVoltageSourceCount = function() {
+      return this.bits;
+    };
+
+    CounterElm.prototype.setupPins = function() {
+      var i, ii, _i, _ref;
+      this.sizeX = 2;
+      this.sizeY = this.bits > 2 ? this.bits : 2;
+      this.pins = new Array(this.getPostCount());
+      this.pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "");
+      this.pins[0].clock = true;
+      this.pins[1] = new ChipElm.Pin(this.sizeY - 1, ChipElm.SIDE_W, "R");
+      this.pins[1].bubble = true;
+      for (i = _i = 0, _ref = this.bits; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        ii = i + 2;
+        this.pins[ii] = new ChipElm.Pin(i, ChipElm.SIDE_E, "Q" + (this.bits - i - 1));
+        this.pins[ii].output = this.pins[ii].state = true;
+      }
+      if (this.hasEnable()) {
+        this.pins[this.bits + 2] = new ChipElm.Pin(this.sizeY - 2, ChipElm.SIDE_W, "En");
+      }
+      return this.allocNodes();
+    };
+
+    CounterElm.prototype.execute = function() {
+      var en, i, ii, _i, _j, _ref, _ref1;
+      en = true;
+      if (this.hasEnable()) {
+        en = this.pins[this.bits + 2].value;
+      }
+      if (this.pins[0].value && !this.lastClock && en) {
+        for (i = _i = _ref = this.bits - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
+          ii = i + 2;
+          if (!this.pins[ii].value) {
+            this.pins[ii].value = true;
+            break;
+          }
+          this.pins[ii].value = false;
+        }
+      }
+      if (!this.pins[1].value) {
+        for (i = _j = 0, _ref1 = this.bits; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
+          this.pins[i + 2].value = false;
+        }
+      }
+      return this.lastClock = this.pins[0].value;
+    };
+
+    return CounterElm;
 
   })(ChipElm);
 
-  module.exports = JkFlipFlopElm;
+  module.exports = CounterElm;
 
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":74}],55:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":19}],63:[function(require,module,exports){
+(function() {
+  var ChipElm, CircuitComponent, DacElm, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require("../CircuitComponent.coffee");
+
+  ChipElm = require("./ChipElm.coffee");
+
+  Util = require('../../util/util.coffee');
+
+  DacElm = (function(_super) {
+    __extends(DacElm, _super);
+
+    function DacElm(xa, xb, ya, yb, params, f) {
+      DacElm.__super__.constructor.call(this, xa, xb, ya, yb, params, f);
+    }
+
+    DacElm.prototype.getDumpType = function() {
+      return "166";
+    };
+
+    DacElm.prototype.needsBits = function() {
+      return true;
+    };
+
+    DacElm.prototype.getName = function() {
+      return "DAC";
+    };
+
+    DacElm.prototype.getVoltageSourceCount = function() {
+      return 1;
+    };
+
+    DacElm.prototype.getPostCount = function() {
+      return this.bits + 2;
+    };
+
+    DacElm.prototype.setupPins = function() {
+      var i, _i, _ref;
+      this.sizeX = 2;
+      this.sizeY = this.bits > 2 ? this.bits : 2;
+      this.pins = new Array(this.getPostCount());
+      for (i = _i = 0, _ref = this.bits; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        this.pins[i] = new ChipElm.Pin(this.bits - 1 - i, ChipElm.SIDE_W, "D" + i);
+        this.pins[this.bits] = new ChipElm.Pin(0, ChipElm.SIDE_E, "O");
+        this.pins[this.bits].output = true;
+        this.pins[this.bits + 1] = new ChipElm.Pin(this.sizeY - 1, ChipElm.SIDE_E, "V+");
+      }
+      return this.allocNodes();
+    };
+
+    DacElm.prototype.doStep = function(stamper) {
+      var i, ival, ivalmax, v, _i, _ref;
+      ival = 0;
+      for (i = _i = 0, _ref = this.bits; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        if (this.volts[i] > 2.5) {
+          ival |= 1 << i;
+        }
+      }
+      ivalmax = (1 << this.bits) - 1;
+      v = ival * this.volts[this.bits + 1] / ivalmax;
+      return stamper.updateVoltageSource(0, this.nodes[this.bits], this.pins[this.bits].voltSource, v);
+    };
+
+    return DacElm;
+
+  })(ChipElm);
+
+  module.exports = DacElm;
+
+}).call(this);
+
+
+},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":19}],64:[function(require,module,exports){
+(function() {
+  var AdcElm, ChipElm, CircuitComponent, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require("../CircuitComponent.coffee");
+
+  ChipElm = require("./ChipElm.coffee");
+
+  Util = require('../../util/util.coffee');
+
+  AdcElm = (function(_super) {
+    __extends(AdcElm, _super);
+
+    function AdcElm(xa, xb, ya, yb, params, f) {
+      AdcElm.__super__.constructor.call(this, xa, xb, ya, yb, params, f);
+    }
+
+    AdcElm.prototype.getName = function() {
+      return "ADC";
+    };
+
+    AdcElm.prototype.getVoltageSourceCount = function() {
+      return this.bits;
+    };
+
+    AdcElm.prototype.getPostCount = function() {
+      return this.bits + 2;
+    };
+
+    AdcElm.prototype.getDumpType = function() {
+      return "167";
+    };
+
+    AdcElm.prototype.needsBits = function() {
+      return true;
+    };
+
+    AdcElm.prototype.setupPins = function() {
+      var i, _i, _ref;
+      this.sizeX = 2;
+      this.sizeY = this.bits > 2 ? this.bits : 2;
+      this.pins = new Array(this.getPostCount());
+      for (i = _i = 0, _ref = this.bits; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        this.pins[i] = new ChipElm.Pin(this.bits - 1 - i, ChipElm.SIDE_E, "D" + i);
+        this.pins[i].output = true;
+      }
+      this.pins[this.bits] = new ChipElm.Pin(0, ChipElm.SIDE_W, "In");
+      return this.pins[this.bits + 1] = new ChipElm.Pin(this.sizeY - 1, ChipElm.SIDE_W, "V+");
+    };
+
+    AdcElm.prototype.execute = function() {
+      var i, imax, ival, val, _i, _ref, _results;
+      imax = (1 << this.bits) - 1;
+      val = imax * this.volts[this.bits] / this.volts[this.bits + 1];
+      ival = Math.floor(val);
+      ival = Math.min(imax, Math.max(0, ival));
+      _results = [];
+      for (i = _i = 0, _ref = this.bits; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        _results.push(this.pins[i].value = (ival & (1 << i)) !== 0);
+      }
+      return _results;
+    };
+
+    return AdcElm;
+
+  })(ChipElm);
+
+  module.exports = AdcElm;
+
+}).call(this);
+
+
+},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":19}],66:[function(require,module,exports){
 (function() {
   var ChipElm, CircuitComponent, Util, VcoElm,
     __hasProp = {}.hasOwnProperty,
@@ -7432,9 +7974,9 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":74}],54:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":19}],65:[function(require,module,exports){
 (function() {
-  var AdcElm, ChipElm, CircuitComponent, Util,
+  var ChipElm, CircuitComponent, JkFlipFlopElm, Util,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -7444,136 +7986,75 @@ Settings do not change by loading a new circuit.
 
   Util = require('../../util/util.coffee');
 
-  AdcElm = (function(_super) {
-    __extends(AdcElm, _super);
+  JkFlipFlopElm = (function(_super) {
+    __extends(JkFlipFlopElm, _super);
 
-    function AdcElm(xa, xb, ya, yb, params, f) {
-      AdcElm.__super__.constructor.call(this, xa, xb, ya, yb, params, f);
+    function JkFlipFlopElm(xa, xb, ya, yb, params, f) {
+      JkFlipFlopElm.__super__.constructor.call(this, xa, xb, ya, yb, params, f);
+      this.pins[4].value = !this.pins[3].value;
     }
 
-    AdcElm.prototype.getName = function() {
-      return "ADC";
+    JkFlipFlopElm.prototype.getDumpType = function() {
+      return "156";
     };
 
-    AdcElm.prototype.getVoltageSourceCount = function() {
-      return this.bits;
+    JkFlipFlopElm.prototype.getName = function() {
+      return "JK flip-flop";
     };
 
-    AdcElm.prototype.getPostCount = function() {
-      return this.bits + 2;
+    JkFlipFlopElm.prototype.getPostCount = function() {
+      return 5;
     };
 
-    AdcElm.prototype.getDumpType = function() {
-      return "m";
+    JkFlipFlopElm.prototype.getVoltageSourceCount = function() {
+      return 2;
     };
 
-    AdcElm.prototype.needsBits = function() {
-      return true;
-    };
-
-    AdcElm.prototype.setupPins = function() {
-      var i, _i, _ref;
-      this.sizeX = 2;
-      this.sizeY = this.bits > 2 ? this.bits : 2;
-      this.pins = new Array(this.getPostCount());
-      for (i = _i = 0, _ref = this.bits; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        this.pins[i] = new ChipElm.Pin(this.bits - 1 - i, ChipElm.SIDE_E, "D" + i);
-        this.pins[i].output = true;
-      }
-      this.pins[this.bits] = new ChipElm.Pin(0, ChipElm.SIDE_W, "In");
-      return this.pins[this.bits + 1] = new ChipElm.Pin(this.sizeY - 1, ChipElm.SIDE_W, "V+");
-    };
-
-    AdcElm.prototype.execute = function() {
-      var i, imax, ival, val, _i, _ref, _results;
-      imax = (1 << this.bits) - 1;
-      val = imax * this.volts[this.bits] / this.volts[this.bits + 1];
-      ival = Math.floor(val);
-      ival = Math.min(imax, Math.max(0, ival));
-      _results = [];
-      for (i = _i = 0, _ref = this.bits; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        _results.push(this.pins[i].value = (ival & (1 << i)) !== 0);
-      }
-      return _results;
-    };
-
-    return AdcElm;
-
-  })(ChipElm);
-
-  module.exports = AdcElm;
-
-}).call(this);
-
-
-},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":74}],57:[function(require,module,exports){
-(function() {
-  var CC2Elm, ChipElm, CircuitComponent, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require("../CircuitComponent.coffee");
-
-  ChipElm = require("./ChipElm.coffee");
-
-  Util = require('../../util/util.coffee');
-
-  CC2Elm = (function(_super) {
-    __extends(CC2Elm, _super);
-
-    function CC2Elm(xa, xb, ya, yb, params, f) {
-      CC2Elm.__super__.constructor.call(this, xa, xb, ya, yb, params, f);
-      this.gain = parseFloat(params[0]);
-      this.params['gain'] = this.gain;
-    }
-
-    CC2Elm.prototype.getName = function() {
-      return "CC2";
-    };
-
-    CC2Elm.prototype.setupPins = function() {
+    JkFlipFlopElm.prototype.setupPins = function() {
       this.sizeX = 2;
       this.sizeY = 3;
-      this.pins = new Array(3);
-      this.pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "X");
-      this.pins[0].output = true;
-      this.pins[1] = new ChipElm.Pin(2, ChipElm.SIDE_W, "Y");
-      return this.pins[2] = new ChipElm.Pin(1, ChipElm.SIDE_E, "Z");
+      this.pins = new Array(5);
+      this.pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "J");
+      this.pins[1] = new ChipElm.Pin(1, ChipElm.SIDE_W, "");
+      this.pins[1].clock = true;
+      this.pins[1].bubble = true;
+      this.pins[2] = new ChipElm.Pin(2, ChipElm.SIDE_W, "K");
+      this.pins[3] = new ChipElm.Pin(0, ChipElm.SIDE_E, "Q");
+      this.pins[3].output = this.pins[3].state = true;
+      this.pins[4] = new ChipElm.Pin(2, ChipElm.SIDE_E, "Q");
+      this.pins[4].output = true;
+      return this.pins[4].lineOver = true;
     };
 
-    CC2Elm.prototype.stamp = function(stamper) {
-      stamper.stampVoltageSource(0, this.nodes[0], this.pins[0].voltSource);
-      stamper.stampVCVS(0, this.nodes[1], 1, this.pins[0].voltSource);
-      return stamper.stampCCCS(0, this.nodes[2], this.pins[0].voltSource, this.gain);
+    JkFlipFlopElm.prototype.execute = function() {
+      var q;
+      if (!this.pins[1].value && this.lastClock) {
+        q = this.pins[3].value;
+        if (this.pins[0].value) {
+          if (this.pins[2].value) {
+            q = !q;
+          } else {
+            q = true;
+          }
+        } else if (this.pins[2].value) {
+          q = false;
+        }
+        this.pins[3].value = q;
+        this.pins[4].value = !q;
+      }
+      return this.lastClock = this.pins[1].value;
     };
 
-    CC2Elm.prototype.draw = function(renderContext) {
-      this.pins[2].current = this.pins[0].current * this.gain;
-      return this.drawChip(renderContext);
-    };
-
-    CC2Elm.prototype.getPostCount = function() {
-      return 3;
-    };
-
-    CC2Elm.prototype.getVoltageSourceCount = function() {
-      return 1;
-    };
-
-    CC2Elm.prototype.getDumpType = function() {
-      return "179";
-    };
-
-    return CC2Elm;
+    return JkFlipFlopElm;
 
   })(ChipElm);
 
-  module.exports = CC2Elm;
+  module.exports = JkFlipFlopElm;
 
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":74}],56:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":19}],67:[function(require,module,exports){
 (function() {
   var ChipElm, CircuitComponent, PhaseCompElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -7673,184 +8154,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":74}],52:[function(require,module,exports){
-(function() {
-  var ChipElm, CircuitComponent, DacElm, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require("../CircuitComponent.coffee");
-
-  ChipElm = require("./ChipElm.coffee");
-
-  Util = require('../../util/util.coffee');
-
-  DacElm = (function(_super) {
-    __extends(DacElm, _super);
-
-    function DacElm(xa, xb, ya, yb, params, f) {
-      DacElm.__super__.constructor.call(this, xa, xb, ya, yb, params, f);
-    }
-
-    DacElm.prototype.getDumpType = function() {
-      return "166";
-    };
-
-    DacElm.prototype.needsBits = function() {
-      return true;
-    };
-
-    DacElm.prototype.getName = function() {
-      return "DAC";
-    };
-
-    DacElm.prototype.getVoltageSourceCount = function() {
-      return 1;
-    };
-
-    DacElm.prototype.getPostCount = function() {
-      return this.bits + 2;
-    };
-
-    DacElm.prototype.setupPins = function() {
-      var i, _i, _ref;
-      this.sizeX = 2;
-      this.sizeY = this.bits > 2 ? this.bits : 2;
-      this.pins = new Array(this.getPostCount());
-      for (i = _i = 0, _ref = this.bits; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        this.pins[i] = new ChipElm.Pin(this.bits - 1 - i, ChipElm.SIDE_W, "D" + i);
-        this.pins[this.bits] = new ChipElm.Pin(0, ChipElm.SIDE_E, "O");
-        this.pins[this.bits].output = true;
-        this.pins[this.bits + 1] = new ChipElm.Pin(this.sizeY - 1, ChipElm.SIDE_E, "V+");
-      }
-      return this.allocNodes();
-    };
-
-    DacElm.prototype.doStep = function(stamper) {
-      var i, ival, ivalmax, v, _i, _ref;
-      ival = 0;
-      for (i = _i = 0, _ref = this.bits; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        if (this.volts[i] > 2.5) {
-          ival |= 1 << i;
-        }
-      }
-      ivalmax = (1 << this.bits) - 1;
-      v = ival * this.volts[this.bits + 1] / ivalmax;
-      return stamper.updateVoltageSource(0, this.nodes[this.bits], this.pins[this.bits].voltSource, v);
-    };
-
-    return DacElm;
-
-  })(ChipElm);
-
-  module.exports = DacElm;
-
-}).call(this);
-
-
-},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":74}],53:[function(require,module,exports){
-(function() {
-  var ChipElm, CircuitComponent, CounterElm, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require("../CircuitComponent.coffee");
-
-  ChipElm = require("./ChipElm.coffee");
-
-  Util = require('../../util/util.coffee');
-
-  CounterElm = (function(_super) {
-    __extends(CounterElm, _super);
-
-    CounterElm.FLAG_ENABLE = 2;
-
-    function CounterElm(xa, xb, ya, yb, params, f) {
-      CounterElm.__super__.constructor.call(this, xa, xb, ya, yb, params, f);
-    }
-
-    CounterElm.prototype.getDumpType = function() {
-      return "164";
-    };
-
-    CounterElm.prototype.needsBits = function() {
-      return true;
-    };
-
-    CounterElm.prototype.getName = function() {
-      return "Counter";
-    };
-
-    CounterElm.prototype.getPostCount = function() {
-      if (this.hasEnable()) {
-        return this.bits + 3;
-      } else {
-        return this.bits + 2;
-      }
-    };
-
-    CounterElm.prototype.hasEnable = function() {
-      return (this.flags & CounterElm.FLAG_ENABLE) !== 0;
-    };
-
-    CounterElm.prototype.getVoltageSourceCount = function() {
-      return this.bits;
-    };
-
-    CounterElm.prototype.setupPins = function() {
-      var i, ii, _i, _ref;
-      this.sizeX = 2;
-      this.sizeY = this.bits > 2 ? this.bits : 2;
-      this.pins = new Array(this.getPostCount());
-      this.pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "");
-      this.pins[0].clock = true;
-      this.pins[1] = new ChipElm.Pin(this.sizeY - 1, ChipElm.SIDE_W, "R");
-      this.pins[1].bubble = true;
-      for (i = _i = 0, _ref = this.bits; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        ii = i + 2;
-        this.pins[ii] = new ChipElm.Pin(i, ChipElm.SIDE_E, "Q" + (this.bits - i - 1));
-        this.pins[ii].output = this.pins[ii].state = true;
-      }
-      if (this.hasEnable()) {
-        this.pins[this.bits + 2] = new ChipElm.Pin(this.sizeY - 2, ChipElm.SIDE_W, "En");
-      }
-      return this.allocNodes();
-    };
-
-    CounterElm.prototype.execute = function() {
-      var en, i, ii, _i, _j, _ref, _ref1;
-      en = true;
-      if (this.hasEnable()) {
-        en = this.pins[this.bits + 2].value;
-      }
-      if (this.pins[0].value && !this.lastClock && en) {
-        for (i = _i = _ref = this.bits - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
-          ii = i + 2;
-          if (!this.pins[ii].value) {
-            this.pins[ii].value = true;
-            break;
-          }
-          this.pins[ii].value = false;
-        }
-      }
-      if (!this.pins[1].value) {
-        for (i = _j = 0, _ref1 = this.bits; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
-          this.pins[i + 2].value = false;
-        }
-      }
-      return this.lastClock = this.pins[0].value;
-    };
-
-    return CounterElm;
-
-  })(ChipElm);
-
-  module.exports = CounterElm;
-
-}).call(this);
-
-
-},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":74}],58:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":19}],68:[function(require,module,exports){
 (function() {
   var ChipElm, CircuitComponent, SevenSegElm,
     __hasProp = {}.hasOwnProperty,
@@ -7887,13 +8191,13 @@ Settings do not change by loading a new circuit.
       this.sizeX = 4;
       this.sizeY = 4;
       this.pins = new Array(7);
-      this.pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "A");
-      this.pins[1] = new ChipElm.Pin(1, ChipElm.SIDE_W, "B");
-      this.pins[2] = new ChipElm.Pin(2, ChipElm.SIDE_W, "C");
-      this.pins[3] = new ChipElm.Pin(3, ChipElm.SIDE_W, "D");
-      this.pins[4] = new ChipElm.Pin(1, ChipElm.SIDE_S, "E");
-      this.pins[5] = new ChipElm.Pin(2, ChipElm.SIDE_S, "F");
-      return this.pins[6] = new ChipElm.Pin(3, ChipElm.SIDE_S, "G");
+      this.pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "a");
+      this.pins[1] = new ChipElm.Pin(1, ChipElm.SIDE_W, "b");
+      this.pins[2] = new ChipElm.Pin(2, ChipElm.SIDE_W, "c");
+      this.pins[3] = new ChipElm.Pin(3, ChipElm.SIDE_W, "d");
+      this.pins[4] = new ChipElm.Pin(1, ChipElm.SIDE_S, "e");
+      this.pins[5] = new ChipElm.Pin(2, ChipElm.SIDE_S, "f");
+      return this.pins[6] = new ChipElm.Pin(3, ChipElm.SIDE_S, "g");
     };
 
     return SevenSegElm;
@@ -7905,7 +8209,74 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84}],59:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84}],69:[function(require,module,exports){
+(function() {
+  var CC2Elm, ChipElm, CircuitComponent, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require("../CircuitComponent.coffee");
+
+  ChipElm = require("./ChipElm.coffee");
+
+  Util = require('../../util/util.coffee');
+
+  CC2Elm = (function(_super) {
+    __extends(CC2Elm, _super);
+
+    function CC2Elm(xa, xb, ya, yb, params, f) {
+      CC2Elm.__super__.constructor.call(this, xa, xb, ya, yb, params, f);
+      this.gain = parseFloat(params[0]);
+      this.params['gain'] = this.gain;
+    }
+
+    CC2Elm.prototype.getName = function() {
+      return "CC2";
+    };
+
+    CC2Elm.prototype.setupPins = function() {
+      this.sizeX = 2;
+      this.sizeY = 3;
+      this.pins = new Array(3);
+      this.pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "X");
+      this.pins[0].output = true;
+      this.pins[1] = new ChipElm.Pin(2, ChipElm.SIDE_W, "Y");
+      return this.pins[2] = new ChipElm.Pin(1, ChipElm.SIDE_E, "Z");
+    };
+
+    CC2Elm.prototype.stamp = function(stamper) {
+      stamper.stampVoltageSource(0, this.nodes[0], this.pins[0].voltSource);
+      stamper.stampVCVS(0, this.nodes[1], 1, this.pins[0].voltSource);
+      return stamper.stampCCCS(0, this.nodes[2], this.pins[0].voltSource, this.gain);
+    };
+
+    CC2Elm.prototype.draw = function(renderContext) {
+      this.pins[2].current = this.pins[0].current * this.gain;
+      return this.drawChip(renderContext);
+    };
+
+    CC2Elm.prototype.getPostCount = function() {
+      return 3;
+    };
+
+    CC2Elm.prototype.getVoltageSourceCount = function() {
+      return 1;
+    };
+
+    CC2Elm.prototype.getDumpType = function() {
+      return "179";
+    };
+
+    return CC2Elm;
+
+  })(ChipElm);
+
+  module.exports = CC2Elm;
+
+}).call(this);
+
+
+},{"../CircuitComponent.coffee":83,"./ChipElm.coffee":84,"../../util/util.coffee":19}],70:[function(require,module,exports){
 (function() {
   var CircuitComponent, Settings, TransLineElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -7970,7 +8341,6 @@ Settings do not change by loading a new circuit.
       p6 = Util.interpolate(this.point1, this.point2, 1, -Math.floor(this.width / 2 - sep) * ds);
       p7 = Util.interpolate(this.point1, this.point2, 0, -Math.floor(this.width / 2 + sep) * ds);
       p8 = Util.interpolate(this.point1, this.point2, 1, -Math.floor(this.width / 2 + sep) * ds);
-      console.log("PTS: ", p3, p4, this.point1, this.point2);
       this.posts = [p3, p4, this.point1, this.point2];
       return this.inner = [p7, p8, p5, p6];
     };
@@ -8057,7 +8427,187 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"../../util/util.coffee":74,"../../settings/settings.coffee":77}],61:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"../../util/util.coffee":19,"../../settings/settings.coffee":16}],71:[function(require,module,exports){
+(function() {
+  var CircuitComponent, TransformerElm, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require('../circuitComponent.coffee');
+
+  Util = require('../../util/util.coffee');
+
+  TransformerElm = (function(_super) {
+    __extends(TransformerElm, _super);
+
+    TransformerElm.FLAG_BACK_EULER = 2;
+
+    TransformerElm.Fields = {
+      inductance: {
+        name: "Inductance",
+        default_value: 1e-3,
+        data_type: parseFloat
+      },
+      ratio: {
+        name: "Ratio",
+        default_value: 1,
+        data_type: parseFloat,
+        input_type: "integer"
+      },
+      current0: {
+        name: "Current L",
+        data_type: parseFloat,
+        default_value: 1e-3
+      },
+      current1: {
+        name: "Current R",
+        data_type: parseFloat,
+        default_value: 1e-3
+      },
+      couplingCoef: {
+        name: "Coupling Coefficient",
+        default_value: 0.999,
+        data_type: parseFloat
+      }
+    };
+
+    function TransformerElm(xa, ya, xb, yb, params, f) {
+      this.width = Math.max(32, Math.abs(yb - ya));
+      TransformerElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+      this.curcount = 0;
+      this.current = [this.current0, this.current1];
+      this.params["current"] = [this.current0, this.current1];
+      delete this.params["current0"];
+      delete this.params["current1"];
+      this.noDiagonal = true;
+    }
+
+    TransformerElm.prototype.isTrapezoidal = function() {
+      return (this.flags & TransformerElm.FLAG_BACK_EULER) === 0;
+    };
+
+    TransformerElm.prototype.setPoints = function() {
+      var cd, ce, i, _results;
+      TransformerElm.__super__.setPoints.call(this);
+      this.point2.y = this.point1.y;
+      this.ptEnds = Util.newPointArray(4);
+      this.ptCoil = Util.newPointArray(4);
+      this.ptCore = Util.newPointArray(4);
+      this.ptEnds[0] = this.point1;
+      this.ptEnds[1] = this.point2;
+      this.ptEnds[2] = Util.interpolate(this.point1, this.point2, 0, -this.dsign * this.width);
+      this.ptEnds[3] = Util.interpolate(this.point1, this.point2, 1, -this.dsign * this.width);
+      ce = 0.5 - 12 / this.dn;
+      cd = 0.5 - 2 / this.dn;
+      i = 0;
+      _results = [];
+      while (i < 4) {
+        this.ptCoil[i] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], ce);
+        this.ptCoil[i + 1] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], 1 - ce);
+        this.ptCore[i] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], cd);
+        this.ptCore[i + 1] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], 1 - cd);
+        _results.push(i += 2);
+      }
+      return _results;
+    };
+
+    TransformerElm.prototype.getPost = function(n) {
+      return this.ptEnds[n];
+    };
+
+    TransformerElm.prototype.getPostCount = function() {
+      return 4;
+    };
+
+    TransformerElm.prototype.getDumpType = function() {
+      return 'T';
+    };
+
+    TransformerElm.prototype.reset = function() {
+      this.current[0] = 0;
+      this.current[1] = 0;
+      this.volts[0] = 0;
+      this.volts[1] = 0;
+      this.volts[2] = 0;
+      this.volts[3] = 0;
+      this.curcount[0] = 0;
+      return this.curcount[1] = 0;
+    };
+
+    TransformerElm.prototype.draw = function(renderContext) {};
+
+    TransformerElm.prototype.stamp = function(stamper) {
+      var deti, l1, l2, m, ts;
+      l1 = this.inductance;
+      l2 = this.inductance * this.ratio * this.ratio;
+      m = this.couplingCoef * Math.sqrt(l1 * l2);
+      deti = 1.0 / (l1 * l2 - m * m);
+      if (this.isTrapezoidal()) {
+        ts = this.getParentCircuit().timeStep() / 2;
+      } else {
+        ts = this.getParentCircuit().timeStep();
+      }
+      console.log("STAMP li: " + l1 + " l2: " + l2 + " deti " + deti + " ts: " + ts + " ratio: " + this.ratio + " m: " + m);
+      this.a1 = l2 * deti * ts;
+      this.a2 = -m * deti * ts;
+      this.a3 = -m * deti * ts;
+      this.a4 = l1 * deti * ts;
+      stamper.stampConductance(this.nodes[0], this.nodes[2], this.a1);
+      stamper.stampVCCurrentSource(this.nodes[0], this.nodes[2], this.nodes[1], this.nodes[3], this.a2);
+      stamper.stampVCCurrentSource(this.nodes[1], this.nodes[3], this.nodes[0], this.nodes[2], this.a3);
+      stamper.stampConductance(this.nodes[1], this.nodes[3], this.a4);
+      stamper.stampRightSide(this.nodes[0]);
+      stamper.stampRightSide(this.nodes[1]);
+      stamper.stampRightSide(this.nodes[2]);
+      return stamper.stampRightSide(this.nodes[3]);
+    };
+
+    TransformerElm.prototype.calculateCurrent = function() {
+      var voltdiff1, voltdiff2;
+      voltdiff1 = this.volts[0] - this.volts[2];
+      voltdiff2 = this.volts[1] - this.volts[3];
+      this.current[0] = voltdiff1 * this.a1 + voltdiff2 * this.a2 + this.curSourceValue1;
+      return this.current[1] = voltdiff1 * this.a3 + voltdiff2 * this.a4 + this.curSourceValue2;
+    };
+
+    TransformerElm.prototype.doStep = function(stamper) {
+      stamper.stampCurrentSource(this.nodes[0], this.nodes[2], this.curSourceValue1);
+      return stamper.stampCurrentSource(this.nodes[1], this.nodes[3], this.curSourceValue2);
+    };
+
+    TransformerElm.prototype.startIteration = function() {
+      var voltdiff1, voltdiff2;
+      voltdiff1 = this.volts[0] - this.volts[2];
+      voltdiff2 = this.volts[1] - this.volts[3];
+      if (this.isTrapezoidal()) {
+        this.curSourceValue1 = voltdiff1 * this.a1 + voltdiff2 * this.a2 + this.current[0];
+        return this.curSourceValue2 = voltdiff1 * this.a3 + voltdiff2 * this.a4 + this.current[1];
+      } else {
+        this.curSourceValue1 = this.current[0];
+        return this.curSourceValue2 = this.current[1];
+      }
+    };
+
+    TransformerElm.prototype.getConnection = function(n1, n2) {
+      if (Util.comparePair(n1, n2, 0, 2)) {
+        return true;
+      }
+      if (Util.comparePair(n1, n2, 1, 3)) {
+        return true;
+      }
+      return false;
+    };
+
+    return TransformerElm;
+
+  })(CircuitComponent);
+
+  module.exports = TransformerElm;
+
+}).call(this);
+
+
+},{"../circuitComponent.coffee":2,"../../util/util.coffee":19}],72:[function(require,module,exports){
 (function() {
   var CircuitComponent, TappedTransformerElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -8106,7 +8656,7 @@ Settings do not change by loading a new circuit.
     }
 
     TappedTransformerElm.prototype.draw = function(renderContext) {
-      TappedTransformerElm.__super__.draw.call(this);
+      TappedTransformerElm.__super__.draw.call(this, renderContext);
       return this.current[3] = this.current[1] - this.current[2];
     };
 
@@ -8243,16 +8793,16 @@ Settings do not change by loading a new circuit.
     };
 
     TappedTransformerElm.prototype.getConnection = function(n1, n2) {
-      if (this.comparePair(n1, n2, 0, 1)) {
+      if (Util.comparePair(n1, n2, 0, 1)) {
         return true;
       }
-      if (this.comparePair(n1, n2, 2, 3)) {
+      if (Util.comparePair(n1, n2, 2, 3)) {
         return true;
       }
-      if (this.comparePair(n1, n2, 3, 4)) {
+      if (Util.comparePair(n1, n2, 3, 4)) {
         return true;
       }
-      if (this.comparePair(n1, n2, 2, 4)) {
+      if (Util.comparePair(n1, n2, 2, 4)) {
         return true;
       }
       return false;
@@ -8267,186 +8817,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"../../util/util.coffee":74}],60:[function(require,module,exports){
-(function() {
-  var CircuitComponent, TransformerElm, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  CircuitComponent = require('../circuitComponent.coffee');
-
-  Util = require('../../util/util.coffee');
-
-  TransformerElm = (function(_super) {
-    __extends(TransformerElm, _super);
-
-    TransformerElm.FLAG_BACK_EULER = 2;
-
-    TransformerElm.Fields = {
-      inductance: {
-        name: "Inductance",
-        default_value: 1e-3,
-        data_type: parseFloat
-      },
-      ratio: {
-        name: "Ratio",
-        default_value: 1,
-        data_type: parseInt,
-        input_type: "integer"
-      },
-      current0: {
-        name: "Current L",
-        data_type: parseFloat,
-        default_value: 1e-3
-      },
-      current1: {
-        name: "Current R",
-        data_type: parseFloat,
-        default_value: 1e-3
-      },
-      couplingCoef: {
-        name: "Coupling Coefficient",
-        default_value: 0.999,
-        data_type: parseFloat
-      }
-    };
-
-    function TransformerElm(xa, ya, xb, yb, params, f) {
-      this.width = Math.max(32, Math.abs(yb - ya));
-      TransformerElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-      this.curcount = 0;
-      this.current = [this.current0, this.current1];
-      this.params["current"] = [this.current0, this.current1];
-      delete this.params["current0"];
-      delete this.params["current1"];
-      this.noDiagonal = true;
-    }
-
-    TransformerElm.prototype.isTrapezoidal = function() {
-      return (this.flags & TransformerElm.FLAG_BACK_EULER) === 0;
-    };
-
-    TransformerElm.prototype.setPoints = function() {
-      var cd, ce, i, _results;
-      TransformerElm.__super__.setPoints.call(this);
-      this.point2.y = this.point1.y;
-      this.ptEnds = Util.newPointArray(4);
-      this.ptCoil = Util.newPointArray(4);
-      this.ptCore = Util.newPointArray(4);
-      this.ptEnds[0] = this.point1;
-      this.ptEnds[1] = this.point2;
-      this.ptEnds[2] = Util.interpolate(this.point1, this.point2, 0, -this.dsign * this.width);
-      this.ptEnds[3] = Util.interpolate(this.point1, this.point2, 1, -this.dsign * this.width);
-      ce = 0.5 - 12 / this.dn;
-      cd = 0.5 - 2 / this.dn;
-      i = 0;
-      _results = [];
-      while (i < 4) {
-        this.ptCoil[i] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], ce);
-        this.ptCoil[i + 1] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], 1 - ce);
-        this.ptCore[i] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], cd);
-        this.ptCore[i + 1] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], 1 - cd);
-        _results.push(i += 2);
-      }
-      return _results;
-    };
-
-    TransformerElm.prototype.getPost = function(n) {
-      return this.ptEnds[n];
-    };
-
-    TransformerElm.prototype.getPostCount = function() {
-      return 4;
-    };
-
-    TransformerElm.prototype.getDumpType = function() {
-      return 'T';
-    };
-
-    TransformerElm.prototype.reset = function() {
-      this.current[0] = 0;
-      this.current[1] = 0;
-      this.volts[0] = 0;
-      this.volts[1] = 0;
-      this.volts[2] = 0;
-      this.volts[3] = 0;
-      this.curcount[0] = 0;
-      return this.curcount[1] = 0;
-    };
-
-    TransformerElm.prototype.draw = function(renderContext) {};
-
-    TransformerElm.prototype.stamp = function(stamper) {
-      var deti, l1, l2, m, ts;
-      l1 = this.inductance;
-      l2 = this.inductance * this.ratio * this.ratio;
-      m = this.couplingCoef * Math.sqrt(l1 * l2);
-      deti = 1.0 / (l1 * l2 - m * m);
-      if (this.isTrapezoidal()) {
-        ts = this.getParentCircuit().timeStep() / 2;
-      } else {
-        ts = this.getParentCircuit().timeStep();
-      }
-      this.a1 = l2 * deti * ts;
-      this.a2 = -m * deti * ts;
-      this.a3 = -m * deti * ts;
-      this.a4 = l1 * deti * ts;
-      stamper.stampConductance(this.nodes[0], this.nodes[2], this.a1);
-      stamper.stampVCCurrentSource(this.nodes[0], this.nodes[2], this.nodes[1], this.nodes[3], this.a2);
-      stamper.stampVCCurrentSource(this.nodes[1], this.nodes[3], this.nodes[0], this.nodes[2], this.a3);
-      stamper.stampConductance(this.nodes[1], this.nodes[3], this.a4);
-      stamper.stampRightSide(this.nodes[0]);
-      stamper.stampRightSide(this.nodes[1]);
-      stamper.stampRightSide(this.nodes[2]);
-      return stamper.stampRightSide(this.nodes[3]);
-    };
-
-    TransformerElm.prototype.calculateCurrent = function() {
-      var voltdiff1, voltdiff2;
-      voltdiff1 = this.volts[0] - this.volts[2];
-      voltdiff2 = this.volts[1] - this.volts[3];
-      this.current[0] = voltdiff1 * this.a1 + voltdiff2 * this.a2 + this.curSourceValue1;
-      return this.current[1] = voltdiff1 * this.a3 + voltdiff2 * this.a4 + this.curSourceValue2;
-    };
-
-    TransformerElm.prototype.doStep = function(stamper) {
-      stamper.stampCurrentSource(this.nodes[0], this.nodes[2], this.curSourceValue1);
-      return stamper.stampCurrentSource(this.nodes[1], this.nodes[3], this.curSourceValue2);
-    };
-
-    TransformerElm.prototype.startIteration = function() {
-      var voltdiff1, voltdiff2;
-      voltdiff1 = this.volts[0] - this.volts[2];
-      voltdiff2 = this.volts[1] - this.volts[3];
-      if (this.isTrapezoidal()) {
-        this.curSourceValue1 = voltdiff1 * this.a1 + voltdiff2 * this.a2 + this.current[0];
-        return this.curSourceValue2 = voltdiff1 * this.a3 + voltdiff2 * this.a4 + this.current[1];
-      } else {
-        this.curSourceValue1 = this.current[0];
-        return this.curSourceValue2 = this.current[1];
-      }
-    };
-
-    TransformerElm.prototype.getConnection = function(n1, n2) {
-      if (this.comparePair(n1, n2, 0, 2)) {
-        return true;
-      }
-      if (this.comparePair(n1, n2, 1, 3)) {
-        return true;
-      }
-      return false;
-    };
-
-    return TransformerElm;
-
-  })(CircuitComponent);
-
-  module.exports = TransformerElm;
-
-}).call(this);
-
-
-},{"../circuitComponent.coffee":2,"../../util/util.coffee":74}],62:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"../../util/util.coffee":19}],73:[function(require,module,exports){
 (function() {
   var CircuitComponent, DiodeElm, LedElm, Util,
     __hasProp = {}.hasOwnProperty,
@@ -8544,7 +8915,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"../../util/util.coffee":74,"./DiodeElm.coffee":14}],63:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"./DiodeElm.coffee":25,"../../util/util.coffee":19}],74:[function(require,module,exports){
 (function() {
   var CircuitComponent, Point, PotElm, Settings, Util,
     __hasProp = {}.hasOwnProperty,
@@ -8665,7 +9036,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"../../util/util.coffee":74,"../../settings/settings.coffee":77,"../../geom/point.coffee":79}],64:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"../../util/util.coffee":19,"../../settings/settings.coffee":16,"../../geom/point.coffee":18}],75:[function(require,module,exports){
 (function() {
   var ClockElm, RailElm, VoltageElm,
     __hasProp = {}.hasOwnProperty,
@@ -8705,398 +9076,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"./RailElm.coffee":20,"./VoltageElm.coffee":13}],76:[function(require,module,exports){
-(function() {
-  var BaseRenderer, Observer, Point, Settings, Util, _ref,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  Observer = require('../util/observer.coffee');
-
-  Settings = require('../settings/settings.coffee');
-
-  Util = require('../util/util.coffee');
-
-  Point = require('../geom/point.coffee');
-
-  BaseRenderer = (function(_super) {
-    __extends(BaseRenderer, _super);
-
-    function BaseRenderer() {
-      _ref = BaseRenderer.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    BaseRenderer.prototype.drawInfo = function() {
-      this.context.fillText("t = " + (Util.longFormat(this.Circuit.time)) + " s", 10, 10);
-      return this.context.fillText("F.T. = " + this.Circuit.frames, 10, 20);
-    };
-
-    BaseRenderer.prototype.drawWarning = function(context) {
-      var msg, warning, _i, _len;
-      msg = "";
-      for (_i = 0, _len = warningStack.length; _i < _len; _i++) {
-        warning = warningStack[_i];
-        msg += warning + "\n";
-      }
-      return console.error("Simulation Warning: " + msg);
-    };
-
-    BaseRenderer.prototype.drawError = function(context) {
-      var error, msg, _i, _len;
-      msg = "";
-      for (_i = 0, _len = errorStack.length; _i < _len; _i++) {
-        error = errorStack[_i];
-        msg += error + "\n";
-      }
-      return console.error("Simulation Error: " + msg);
-    };
-
-    BaseRenderer.prototype.fillText = function(text, x, y) {
-      return this.context.fillText(text, x, y);
-    };
-
-    BaseRenderer.prototype.fillCircle = function(x, y, radius, lineWidth, fillColor, lineColor) {
-      if (lineWidth == null) {
-        lineWidth = Settings.LINE_WIDTH;
-      }
-      if (fillColor == null) {
-        fillColor = '#FFFF00';
-      }
-      if (lineColor == null) {
-        lineColor = null;
-      }
-      this.context.save();
-      this.context.beginPath();
-      this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
-      if (lineColor) {
-        this.context.lineWidth = lineWidth;
-        this.context.strokeStyle = lineColor;
-        this.context.stroke();
-      }
-      this.context.fillStyle = fillColor;
-      this.context.fill();
-      this.context.closePath();
-      return this.context.restore();
-    };
-
-    BaseRenderer.prototype.drawCircle = function(x, y, radius, lineWidth, lineColor) {
-      if (lineWidth == null) {
-        lineWidth = Settings.LINE_WIDTH;
-      }
-      if (lineColor == null) {
-        lineColor = "#000000";
-      }
-      this.context.save();
-      this.context.strokeStyle = lineColor;
-      this.context.lineWidth = lineWidth;
-      this.context.beginPath();
-      this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
-      this.context.stroke();
-      this.context.closePath();
-      return this.context.restore();
-    };
-
-    BaseRenderer.prototype.drawRect = function(x, y, width, height, lineWidth, lineColor) {
-      if (lineWidth == null) {
-        lineWidth = Settings.LINE_WIDTH;
-      }
-      if (lineColor == null) {
-        lineColor = "#000000";
-      }
-      this.context.strokeStyle = lineColor;
-      this.context.lineJoin = 'miter';
-      this.context.rect(x, y, width, height);
-      return this.context.stroke();
-    };
-
-    BaseRenderer.prototype.drawLinePt = function(pa, pb, color) {
-      if (color == null) {
-        color = Settings.STROKE_COLOR;
-      }
-      return this.drawLine(pa.x, pa.y, pb.x, pb.y, color);
-    };
-
-    BaseRenderer.prototype.drawLine = function(x, y, x2, y2, color, lineWidth) {
-      if (color == null) {
-        color = Settings.STROKE_COLOR;
-      }
-      if (lineWidth == null) {
-        lineWidth = Settings.LINE_WIDTH;
-      }
-      this.context.save();
-      this.context.beginPath();
-      if (this.boldLines) {
-        this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
-        this.context.strokeStyle = Settings.SELECT_COLOR;
-        this.context.moveTo(x, y);
-        this.context.lineTo(x2, y2);
-        this.context.stroke();
-      }
-      this.context.strokeStyle = color;
-      this.context.lineWidth = lineWidth;
-      this.context.moveTo(x, y);
-      this.context.lineTo(x2, y2);
-      this.context.stroke();
-      this.context.closePath();
-      return this.context.restore();
-    };
-
-    BaseRenderer.prototype.drawThickPolygon = function(xlist, ylist, color) {
-      var i, _i, _ref1;
-      if (color == null) {
-        color = null;
-      }
-      this.context.save();
-      this.context.fillStyle = color;
-      this.context.beginPath();
-      this.context.moveTo(xlist[0], ylist[0]);
-      for (i = _i = 1, _ref1 = xlist.length; 1 <= _ref1 ? _i < _ref1 : _i > _ref1; i = 1 <= _ref1 ? ++_i : --_i) {
-        this.context.lineTo(xlist[i], ylist[i]);
-      }
-      this.context.closePath();
-      this.context.stroke();
-      if (color) {
-        this.context.fill();
-      }
-      return this.context.restore();
-    };
-
-    BaseRenderer.prototype.drawThickPolygonP = function(polygon, color) {
-      var i, numVertices, _i;
-      numVertices = polygon.numPoints();
-      this.context.save();
-      this.context.fillStyle = Settings.FILL_COLOR;
-      this.context.strokeStyle = Settings.STROKE_COLOR;
-      this.context.beginPath();
-      this.context.moveTo(polygon.getX(0), polygon.getY(0));
-      for (i = _i = 0; 0 <= numVertices ? _i < numVertices : _i > numVertices; i = 0 <= numVertices ? ++_i : --_i) {
-        this.context.lineTo(polygon.getX(i), polygon.getY(i));
-      }
-      this.context.closePath();
-      this.context.fill();
-      this.context.stroke();
-      return this.context.restore();
-    };
-
-    BaseRenderer.prototype.drawPolyLine = function(xList, yList, lineWidth, color) {
-      var i, _i, _ref1;
-      if (lineWidth == null) {
-        lineWidth = Settings.LINE_WIDTH;
-      }
-      if (color == null) {
-        color = Settings.STROKE_COLOR;
-      }
-      this.context.save();
-      this.context.beginPath();
-      this.context.moveTo(xlist[0], ylist[0]);
-      for (i = _i = 1, _ref1 = xlist.length; 1 <= _ref1 ? _i < _ref1 : _i > _ref1; i = 1 <= _ref1 ? ++_i : --_i) {
-        this.context.lineTo(xlist[i], ylist[i]);
-      }
-      return this.context.restore();
-    };
-
-    BaseRenderer.prototype.drawValue = function(x1, y1, circuitElm, str) {};
-
-    BaseRenderer.prototype.drawCoil = function(point1, point2, vStart, vEnd, renderContext) {
-      var color, cx, hs, hsx, i, ps1, ps2, segments, voltageLevel, _i, _results;
-      hs = 8;
-      segments = 40;
-      ps1 = new Point(0, 0);
-      ps2 = new Point(0, 0);
-      ps1.x = point1.x;
-      ps1.y = point1.y;
-      _results = [];
-      for (i = _i = 0; 0 <= segments ? _i < segments : _i > segments; i = 0 <= segments ? ++_i : --_i) {
-        cx = (((i + 1) * 8 / segments) % 2) - 1;
-        hsx = Math.sqrt(1 - cx * cx);
-        ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs);
-        voltageLevel = vStart + (vEnd - vStart) * i / segments;
-        color = Util.getVoltageColor(voltageLevel);
-        renderContext.drawLinePt(ps1, ps2, color);
-        ps1.x = ps2.x;
-        _results.push(ps1.y = ps2.y);
-      }
-      return _results;
-    };
-
-    return BaseRenderer;
-
-  })(Observer);
-
-  module.exports = BaseRenderer;
-
-}).call(this);
-
-
-},{"../util/observer.coffee":72,"../settings/settings.coffee":77,"../util/util.coffee":74,"../geom/point.coffee":79}],78:[function(require,module,exports){
-(function() {
-  var Point, Polygon;
-
-  Point = require('./point.coffee');
-
-  Polygon = (function() {
-    function Polygon(vertices) {
-      var i;
-      this.vertices = [];
-      if (vertices && vertices.length % 2 === 0) {
-        i = 0;
-        while (i < vertices.length) {
-          this.addVertex(vertices[i], vertices[i + 1]);
-          i += 2;
-        }
-      }
-    }
-
-    Polygon.prototype.addVertex = function(x, y) {
-      return this.vertices.push(new Point(x, y));
-    };
-
-    Polygon.prototype.getX = function(n) {
-      return this.vertices[n].x;
-    };
-
-    Polygon.prototype.getY = function(n) {
-      return this.vertices[n].y;
-    };
-
-    Polygon.prototype.numPoints = function() {
-      return this.vertices.length;
-    };
-
-    return Polygon;
-
-  })();
-
-  module.exports = Polygon;
-
-}).call(this);
-
-
-},{"./point.coffee":79}],65:[function(require,module,exports){
-(function() {
-  var Rectangle, Scope, Util;
-
-  Rectangle = require("../../geom/rectangle.coffee");
-
-  Util = require("../../util/util.coffee");
-
-  Scope = (function() {
-    Scope.VAL_POWER = 1;
-
-    Scope.VAL_IB = 1;
-
-    Scope.VAL_IC = 2;
-
-    Scope.VAL_IE = 3;
-
-    Scope.VAL_VBE = 4;
-
-    Scope.VAL_VBC = 5;
-
-    Scope.VAL_VCE = 6;
-
-    Scope.VAL_R = 2;
-
-    function Scope() {
-      this.rect = Rectangle(0, 500, 200, 100);
-    }
-
-    Scope.prototype.reset = function() {
-      var lockScale, showMax, showMin, showV;
-      this.minMaxV = 5;
-      this.minMaxI = .1;
-      this.speed = 64;
-      this.showI = showV = showMax = true;
-      this.showFreq = lockScale = showMin = false;
-      this.plot2d = false;
-      if (elm !== null && (this.elm instanceof OutputElm || this.elm instanceof LogicOutputElm || this.elm instanceof ProbeElm)) {
-        this.showI = false;
-      }
-      this.value = this.ivalue = 0;
-      if (this.elm instanceof TransistorElm) {
-        return this.value = VAL_VCE;
-      }
-    };
-
-    Scope.prototype.resetGraph = function() {
-      this.scopePointCount = 1;
-      while (this.scopePointCount <= this.rect.width) {
-        this.scopePointCount *= 2;
-      }
-      this.minV = Util.zeroArray(this.scopePointCount);
-      this.maxV = Util.zeroArray(this.scopePointCount);
-      this.minI = Util.zeroArray(this.scopePointCount);
-      this.maxI = Util.zeroArray(this.scopePointCount);
-      return this.ptr = this.ctr = 0;
-    };
-
-    Scope.prototype.draw = function(renderContext) {
-      return renderContext.drawLinePt(this.rect.x, this.rect.y, this.rect.x + this.rect.width, this.rect.y + this.rect.height);
-    };
-
-    Scope.prototype.setElm = function(ce) {
-      return this.elm = ce;
-    };
-
-    return Scope;
-
-  })();
-
-  module.exports = Scope;
-
-}).call(this);
-
-
-},{"../../geom/rectangle.coffee":73,"../../util/util.coffee":74}],82:[function(require,module,exports){
-(function() {
-  var Point;
-
-  Point = (function() {
-    function Point(x, y) {
-      this.x = x != null ? x : 0;
-      this.y = y != null ? y : 0;
-    }
-
-    Point.prototype.equals = function(otherPoint) {
-      return this.x === otherPoint.x && this.y === otherPoint.y;
-    };
-
-    Point.toArray = function(num) {
-      var i, _i, _len, _ref, _results;
-      _ref = Array(num);
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        i = _ref[_i];
-        _results.push(new Point(0, 0));
-      }
-      return _results;
-    };
-
-    Point.comparePair = function(x1, x2, y1, y2) {
-      return (x1 === y1 && x2 === y2) || (x1 === y2 && x2 === y1);
-    };
-
-    Point.distanceSq = function(x1, y1, x2, y2) {
-      x2 -= x1;
-      y2 -= y1;
-      return x2 * x2 + y2 * y2;
-    };
-
-    Point.prototype.toString = function() {
-      return "[\t" + this.x + ", \t" + this.y + "]";
-    };
-
-    return Point;
-
-  })();
-
-  module.exports = Point;
-
-}).call(this);
-
-
-},{}],85:[function(require,module,exports){
+},{"./RailElm.coffee":32,"./VoltageElm.coffee":13}],85:[function(require,module,exports){
 (function() {
   var Color;
 
@@ -9259,12 +9239,57 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
+},{}],82:[function(require,module,exports){
+(function() {
+  var Point;
+
+  Point = (function() {
+    function Point(x, y) {
+      this.x = x != null ? x : 0;
+      this.y = y != null ? y : 0;
+    }
+
+    Point.prototype.equals = function(otherPoint) {
+      return this.x === otherPoint.x && this.y === otherPoint.y;
+    };
+
+    Point.toArray = function(num) {
+      var i, _i, _len, _ref, _results;
+      _ref = Array(num);
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        i = _ref[_i];
+        _results.push(new Point(0, 0));
+      }
+      return _results;
+    };
+
+    Point.distanceSq = function(x1, y1, x2, y2) {
+      x2 -= x1;
+      y2 -= y1;
+      return x2 * x2 + y2 * y2;
+    };
+
+    Point.prototype.toString = function() {
+      return "[\t" + this.x + ", \t" + this.y + "]";
+    };
+
+    return Point;
+
+  })();
+
+  module.exports = Point;
+
+}).call(this);
+
+
 },{}],86:[function(require,module,exports){
 (function() {
   var CircuitNode;
 
   CircuitNode = (function() {
-    function CircuitNode(x, y, intern, links) {
+    function CircuitNode(solver, x, y, intern, links) {
+      this.solver = solver;
       this.x = x != null ? x : 0;
       this.y = y != null ? y : 0;
       this.intern = intern != null ? intern : false;
@@ -9284,6 +9309,12 @@ Settings do not change by loading a new circuit.
 
     CircuitNode.prototype.toString = function() {
       return "CircuitNode: " + this.x + " " + this.y + " " + this.intern + " [" + (this.links.toString()) + "]";
+    };
+
+    CircuitNode.prototype.getVoltage = function() {
+      return this.links.map(function(link) {
+        return link.elm.nodes;
+      });
     };
 
     return CircuitNode;
@@ -9441,7 +9472,6 @@ Settings do not change by loading a new circuit.
           this.setValue(param_name, param_value);
           delete component_params[param_name];
         } else {
-          console.log("Assigning default value of " + default_value + " for " + param_name + " in " + this.constructor.name + " (was " + this[param_name] + ")");
           this[param_name] || (this[param_name] = data_type(default_value));
           this.params[param_name] = this[param_name];
           if (this[param_name] === null || this[param_name] === void 0 || isNaN(this[param_name])) {
@@ -9832,11 +9862,6 @@ Settings do not change by loading a new circuit.
       }
     };
 
-    CircuitComponent.prototype.comparePair = function(x1, x2, y1, y2) {
-      (x1 === y1 && x2 === y2) || (x1 === y2 && x2 === y1);
-      return this.Circuit.Params;
-    };
-
     CircuitComponent.prototype.timeStep = function() {
       return this.Circuit.timeStep();
     };
@@ -9918,352 +9943,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../settings/settings.coffee":77,"../geom/rectangle.coffee":73,"../geom/point.coffee":79,"../util/util.coffee":74,"lodash":89,"debug":90,"sprintf-js":91}],80:[function(require,module,exports){
-(function() {
-  var Point, Polygon;
-
-  Point = require('./point.coffee');
-
-  Polygon = (function() {
-    function Polygon(vertices) {
-      var i;
-      this.vertices = [];
-      if (vertices && vertices.length % 2 === 0) {
-        i = 0;
-        while (i < vertices.length) {
-          this.addVertex(vertices[i], vertices[i + 1]);
-          i += 2;
-        }
-      }
-    }
-
-    Polygon.prototype.addVertex = function(x, y) {
-      return this.vertices.push(new Point(x, y));
-    };
-
-    Polygon.prototype.getX = function(n) {
-      return this.vertices[n].x;
-    };
-
-    Polygon.prototype.getY = function(n) {
-      return this.vertices[n].y;
-    };
-
-    Polygon.prototype.numPoints = function() {
-      return this.vertices.length;
-    };
-
-    return Polygon;
-
-  })();
-
-  module.exports = Polygon;
-
-}).call(this);
-
-
-},{"./point.coffee":79}],92:[function(require,module,exports){
-(function() {
-  var CapacitorElm, CurrentElm, InductorElm, Pathfinder, ResistorElm, VoltageElm;
-
-  VoltageElm = require('../circuit/components/VoltageElm.coffee');
-
-  CurrentElm = require('../circuit/components/CurrentElm.coffee');
-
-  ResistorElm = require('../circuit/components/ResistorElm.coffee');
-
-  InductorElm = require('../circuit/components/InductorElm.coffee');
-
-  CapacitorElm = require('../circuit/components/CapacitorElm.coffee');
-
-  Pathfinder = (function() {
-    Pathfinder.INDUCT = 1;
-
-    Pathfinder.VOLTAGE = 2;
-
-    Pathfinder.SHORT = 3;
-
-    Pathfinder.CAP_V = 4;
-
-    function Pathfinder(type, firstElm, dest, elementList, numNodes) {
-      this.type = type;
-      this.firstElm = firstElm;
-      this.dest = dest;
-      this.elementList = elementList;
-      this.used = new Array(numNodes);
-    }
-
-    Pathfinder.prototype.findPath = function(n1, depth) {
-      var c, ce, j, k, _i, _j, _k, _l, _len, _ref, _ref1, _ref2, _ref3;
-      if (n1 === this.dest) {
-        return true;
-      }
-      if (depth-- === 0) {
-        return false;
-      }
-      if (this.used[n1]) {
-        return false;
-      }
-      this.used[n1] = true;
-      _ref = this.elementList;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        ce = _ref[_i];
-        if (ce === this.firstElm) {
-          continue;
-        }
-        if ((ce instanceof CurrentElm) && (this.type === Pathfinder.INDUCT)) {
-          continue;
-        }
-        if (this.type === Pathfinder.VOLTAGE) {
-          if (!(ce.isWire() || ce instanceof VoltageElm)) {
-            continue;
-          }
-        }
-        if (this.type === Pathfinder.SHORT && !ce.isWire()) {
-          continue;
-        }
-        if (this.type === Pathfinder.CAP_V) {
-          if (!(ce.isWire() || ce instanceof CapacitorElm || ce instanceof VoltageElm)) {
-            continue;
-          }
-        }
-        if (n1 === 0) {
-          for (j = _j = 0, _ref1 = ce.getPostCount(); 0 <= _ref1 ? _j < _ref1 : _j > _ref1; j = 0 <= _ref1 ? ++_j : --_j) {
-            if (ce.hasGroundConnection(j) && this.findPath(ce.getNode(j), depth)) {
-              this.used[n1] = false;
-              return true;
-            }
-          }
-        }
-        for (j = _k = 0, _ref2 = ce.getPostCount(); 0 <= _ref2 ? _k < _ref2 : _k > _ref2; j = 0 <= _ref2 ? ++_k : --_k) {
-          if (ce.getNode(j) === n1) {
-            break;
-          }
-        }
-        if (j === ce.getPostCount()) {
-          continue;
-        }
-        if (ce.hasGroundConnection(j) && this.findPath(0, depth)) {
-          this.used[n1] = false;
-          return true;
-        }
-        if (this.type === Pathfinder.INDUCT && ce instanceof InductorElm) {
-          c = ce.getCurrent();
-          if (j === 0) {
-            c = -c;
-          }
-          if (Math.abs(c - this.firstElm.getCurrent()) > 1e-10) {
-            continue;
-          }
-        }
-        for (k = _l = 0, _ref3 = ce.getPostCount(); 0 <= _ref3 ? _l < _ref3 : _l > _ref3; k = 0 <= _ref3 ? ++_l : --_l) {
-          if (j === k) {
-            continue;
-          }
-          if (ce.getConnection(j, k) && this.findPath(ce.getNode(k), depth)) {
-            this.used[n1] = false;
-            return true;
-          }
-        }
-      }
-      this.used[n1] = false;
-      return false;
-    };
-
-    return Pathfinder;
-
-  })();
-
-  module.exports = Pathfinder;
-
-}).call(this);
-
-
-},{"../circuit/components/VoltageElm.coffee":13,"../circuit/components/CurrentElm.coffee":22,"../circuit/components/ResistorElm.coffee":11,"../circuit/components/InductorElm.coffee":18,"../circuit/components/CapacitorElm.coffee":17}],93:[function(require,module,exports){
-(function() {
-  var MatrixStamper, RowInfo, Util;
-
-  RowInfo = require('./rowInfo.coffee');
-
-  Util = require('../util/util.coffee');
-
-  MatrixStamper = (function() {
-    function MatrixStamper(Circuit) {
-      this.Circuit = Circuit;
-    }
-
-    /*
-    control voltage source vs with voltage from n1 to n2 (must also call stampVoltageSource())
-    */
-
-
-    MatrixStamper.prototype.stampVCVS = function(n1, n2, coef, vs) {
-      var vn;
-      if (isNaN(vs) || isNaN(coef)) {
-        console.warn("NaN in stampVCVS");
-      }
-      vn = this.Circuit.numNodes() + vs;
-      this.stampMatrix(vn, n1, coef);
-      return this.stampMatrix(vn, n2, -coef);
-    };
-
-    MatrixStamper.prototype.stampVoltageSource = function(n1, n2, vs, v) {
-      var vn;
-      if (v == null) {
-        v = null;
-      }
-      vn = this.Circuit.numNodes() + vs;
-      this.stampMatrix(vn, n1, -1);
-      this.stampMatrix(vn, n2, 1);
-      this.stampRightSide(vn, v);
-      this.stampMatrix(n1, vn, 1);
-      return this.stampMatrix(n2, vn, -1);
-    };
-
-    MatrixStamper.prototype.updateVoltageSource = function(n1, n2, vs, voltage) {
-      var vn;
-      if (isNaN(voltage) || Util.isInfinite(voltage)) {
-        this.Circuit.halt("bad voltage");
-      }
-      vn = this.Circuit.numNodes() + vs;
-      return this.stampRightSide(vn, voltage);
-    };
-
-    MatrixStamper.prototype.stampResistor = function(n1, n2, r) {
-      var a, r0;
-      r0 = 1 / r;
-      if (isNaN(r0) || Util.isInfinite(r0)) {
-        this.Circuit.halt("bad resistance");
-        a = 0;
-        a /= a;
-      }
-      this.stampMatrix(n1, n1, r0);
-      this.stampMatrix(n2, n2, r0);
-      this.stampMatrix(n1, n2, -r0);
-      return this.stampMatrix(n2, n1, -r0);
-    };
-
-    MatrixStamper.prototype.stampConductance = function(n1, n2, r0) {
-      if (isNaN(r0) || Util.isInfinite(r0)) {
-        this.Circuit.halt("bad conductance");
-      }
-      this.stampMatrix(n1, n1, r0);
-      this.stampMatrix(n2, n2, r0);
-      this.stampMatrix(n1, n2, -r0);
-      return this.stampMatrix(n2, n1, -r0);
-    };
-
-    /*
-    current from cn1 to cn2 is equal to voltage from vn1 to 2, divided by g
-    */
-
-
-    MatrixStamper.prototype.stampVCCurrentSource = function(cn1, cn2, vn1, vn2, value) {
-      if (isNaN(value) || Util.isInfinite(value)) {
-        this.Circuit.halt("Invalid gain on voltage controlled current source");
-      }
-      this.stampMatrix(cn1, vn1, value);
-      this.stampMatrix(cn2, vn2, value);
-      this.stampMatrix(cn1, vn2, -value);
-      return this.stampMatrix(cn2, vn1, -value);
-    };
-
-    MatrixStamper.prototype.stampCurrentSource = function(n1, n2, value) {
-      this.stampRightSide(n1, -value);
-      return this.stampRightSide(n2, value);
-    };
-
-    /*
-    stamp a current source from n1 to n2 depending on current through vs
-    */
-
-
-    MatrixStamper.prototype.stampCCCS = function(n1, n2, vs, gain) {
-      var vn;
-      if (isNaN(gain) || Util.isInfinite(gain)) {
-        this.Circuit.halt("Invalid gain on current source");
-      }
-      vn = this.Circuit.numNodes() + vs;
-      this.stampMatrix(n1, vn, gain);
-      return this.stampMatrix(n2, vn, -gain);
-    };
-
-    /*
-    stamp value x in row i, column j, meaning that a voltage change
-    of dv in node j will increase the current into node i by x dv.
-    (Unless i or j is a voltage source node.)
-    */
-
-
-    MatrixStamper.prototype.stampMatrix = function(row, col, value) {
-      var rowInfo;
-      if (isNaN(value) || Util.isInfinite(value)) {
-        this.Circuit.halt("attempted to stamp Matrix with invalid value");
-      }
-      if (row > 0 && col > 0) {
-        if (this.Circuit.Solver.circuitNeedsMap) {
-          row = this.Circuit.Solver.circuitRowInfo[row - 1].mapRow;
-          rowInfo = this.Circuit.Solver.circuitRowInfo[col - 1];
-          if (rowInfo.type === RowInfo.ROW_CONST) {
-            this.Circuit.Solver.circuitRightSide[row] -= value * rowInfo.value;
-            return;
-          }
-          col = rowInfo.mapCol;
-        } else {
-          row--;
-          col--;
-        }
-        return this.Circuit.Solver.circuitMatrix[row][col] += value;
-      }
-    };
-
-    /*
-    Stamp value x on the right side of row i, representing an
-    independent current source flowing into node i
-    */
-
-
-    MatrixStamper.prototype.stampRightSide = function(row, value) {
-      if (isNaN(value) || value === null) {
-        if (row > 0) {
-          return this.Circuit.Solver.circuitRowInfo[row - 1].rsChanges = true;
-        }
-      } else {
-        if (row > 0) {
-          if (this.Circuit.Solver.circuitNeedsMap) {
-            row = this.Circuit.Solver.circuitRowInfo[row - 1].mapRow;
-          } else {
-            row--;
-          }
-          return this.Circuit.Solver.circuitRightSide[row] += value;
-        }
-      }
-    };
-
-    /*
-    Indicate that the values on the left side of row i change in doStep()
-    */
-
-
-    MatrixStamper.prototype.stampNonLinear = function(row) {
-      if (isNaN(row) || (row === null)) {
-        console.error("null/NaN in stampNonlinear");
-      }
-      if (row > 0) {
-        return this.Circuit.Solver.circuitRowInfo[row - 1].lsChanges = true;
-      }
-    };
-
-    return MatrixStamper;
-
-  })();
-
-  module.exports = MatrixStamper;
-
-}).call(this);
-
-
-},{"./rowInfo.coffee":88,"../util/util.coffee":74}],91:[function(require,module,exports){
+},{"../settings/settings.coffee":16,"../geom/rectangle.coffee":17,"../geom/point.coffee":18,"../util/util.coffee":19,"debug":89,"sprintf-js":90,"lodash":91}],90:[function(require,module,exports){
 (function(window) {
     var re = {
         not_string: /[^s]/,
@@ -10473,185 +10153,51 @@ Settings do not change by loading a new circuit.
     }
 })(typeof window === "undefined" ? this : window);
 
-},{}],81:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 (function() {
-  var CircuitComponent, GateElm, Util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  var Point, Polygon;
 
-  CircuitComponent = require("../CircuitComponent.coffee");
+  Point = require('./point.coffee');
 
-  Util = require('../../util/util.coffee');
-
-  GateElm = (function(_super) {
-    __extends(GateElm, _super);
-
-    GateElm.prototype.FLAG_SMALL = 1;
-
-    GateElm.Fields = {
-      inputCount: {
-        name: "Input count",
-        data_type: parseInt,
-        default_value: 2,
-        field: "integer"
-      },
-      lastOutput: {
-        name: "Last Output",
-        data_type: function(x) {
-          return x > 2.5;
+  Polygon = (function() {
+    function Polygon(vertices) {
+      var i;
+      this.vertices = [];
+      if (vertices && vertices.length % 2 === 0) {
+        i = 0;
+        while (i < vertices.length) {
+          this.addVertex(vertices[i], vertices[i + 1]);
+          i += 2;
         }
       }
-    };
-
-    function GateElm(xa, ya, xb, yb, params, f) {
-      var size;
-      if (parseInt(f) & GateElm.FLAG_SMALL !== 0) {
-        size = 1;
-      } else {
-        size = 2;
-      }
-      this.setSize(size);
-      GateElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-      this.noDiagonal = true;
-      this.linePoints = null;
     }
 
-    GateElm.prototype.isInverting = function() {
-      return false;
+    Polygon.prototype.addVertex = function(x, y) {
+      return this.vertices.push(new Point(x, y));
     };
 
-    GateElm.prototype.setSize = function(s) {
-      this.gsize = s;
-      this.gwidth = 7 * s;
-      this.gwidth2 = 14 * s;
-      this.gheight = 8 * s;
-      if (s === 1) {
-        return this.flags = GateElm.FLAG_SMALL;
-      } else {
-        return this.flags = 0;
-      }
+    Polygon.prototype.getX = function(n) {
+      return this.vertices[n].x;
     };
 
-    GateElm.prototype.setPoints = function() {
-      var hs, i, i0, _i, _ref;
-      GateElm.__super__.setPoints.call(this);
-      hs = this.gheight;
-      this.ww = Math.floor(this.gwidth2);
-      if (this.ww > this.dn / 2) {
-        this.ww = Math.floor(this.dn / 2);
-      }
-      if (this.isInverting() && (this.ww + 8 > this.dn / 2)) {
-        this.ww = Math.floor(this.dn / 2) - 8;
-      }
-      this.calcLeads(this.ww * 2);
-      this.inPosts = Util.newPointArray(this.inputCount);
-      this.inGates = Util.newPointArray(this.inputCount);
-      this.allocNodes();
-      i0 = -Math.floor(this.inputCount / 2);
-      for (i = _i = 0, _ref = this.inputCount; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        if (i0 === 0 && (this.inputCount & 1) === 0) {
-          i0 += 1;
-        }
-        this.inPosts[i] = Util.interpolate(this.point1, this.point2, 0, hs * i0);
-        this.inGates[i] = Util.interpolate(this.lead1, this.lead2, 0, hs * i0);
-        if (this.lastOutput ^ this.isInverting()) {
-          this.volts[i] = 5;
-        } else {
-          this.volts[i] = 0;
-        }
-        i0 += 1;
-      }
-      console.log(this.constructor.name);
-      console.log(this.point1, this.point2, 0, hs, i0);
-      console.log("@inPosts");
-      console.log(this.inPosts);
-      console.log("@inGates");
-      console.log(this.inGates);
-      this.hs2 = this.gwidth * (Math.floor(this.inputCount / 2) + 1);
-      return this.setBboxPt(this.point1, this.point2, this.hs2);
+    Polygon.prototype.getY = function(n) {
+      return this.vertices[n].y;
     };
 
-    GateElm.prototype.doStep = function(stamper) {
-      var f, res;
-      f = this.calcFunction();
-      if (this.isInverting()) {
-        f = !f;
-      }
-      this.lastOutput = f;
-      if (f) {
-        res = 5;
-      } else {
-        res = 0;
-      }
-      return stamper.updateVoltageSource(0, this.nodes[this.inputCount], this.voltageSource, res);
+    Polygon.prototype.numPoints = function() {
+      return this.vertices.length;
     };
 
-    GateElm.prototype.draw = function(renderContext) {
-      var i, post, voltageColor, _i, _j, _ref, _ref1, _results;
-      for (i = _i = 0, _ref = this.inputCount; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        voltageColor = Util.getVoltageColor(this.volts[i]);
-        renderContext.drawLinePt(this.inPosts[i], this.inGates[i], voltageColor);
-      }
-      voltageColor = Util.getVoltageColor(this.volts[this.inputCount]);
-      renderContext.drawLinePt(this.lead2, this.point2, voltageColor);
-      if (this.isInverting()) {
-        renderContext.fillCircle(this.pcircle.x, this.pcircle.y, 3);
-      }
-      this.updateDots();
-      renderContext.drawDots(this.lead2, this.point2, this);
-      renderContext.drawPosts(this, "#FF0000");
-      renderContext.drawPosts(this, "#FF0000");
-      _results = [];
-      for (i = _j = 0, _ref1 = this.getPostCount(); 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
-        post = this.getPost(i);
-        _results.push(renderContext.fillCircle(post.x, post.y, 1, 1, "#FF0000", "#0000FF"));
-      }
-      return _results;
-    };
+    return Polygon;
 
-    GateElm.prototype.getPostCount = function() {
-      return this.inputCount + 1;
-    };
+  })();
 
-    GateElm.prototype.getVoltageSourceCount = function() {
-      return 1;
-    };
-
-    GateElm.prototype.getPost = function(n) {
-      if (n === this.inputCount) {
-        return this.point2;
-      }
-      return this.inPosts[n];
-    };
-
-    GateElm.prototype.getInput = function(n) {
-      return this.volts[n] > 2.5;
-    };
-
-    GateElm.prototype.getConnection = function(n1, n2) {
-      return false;
-    };
-
-    GateElm.prototype.hasGroundConnection = function(n1) {
-      return n1 === this.inputCount;
-    };
-
-    GateElm.prototype.getGetName = function() {};
-
-    GateElm.prototype.stamp = function(stamper) {
-      return stamper.stampVoltageSource(0, this.nodes[this.inputCount], this.voltSource);
-    };
-
-    return GateElm;
-
-  })(CircuitComponent);
-
-  module.exports = GateElm;
+  module.exports = Polygon;
 
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"../../util/util.coffee":74}],89:[function(require,module,exports){
+},{"./point.coffee":18}],91:[function(require,module,exports){
 (function(global){/**
  * @license
  * lodash 4.1.0 (Custom Build) <https://lodash.com/>
@@ -25205,7 +24751,478 @@ Settings do not change by loading a new circuit.
 }.call(this));
 
 })(window)
-},{}],84:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
+(function() {
+  var CapacitorElm, CurrentElm, InductorElm, Pathfinder, ResistorElm, Util, VoltageElm;
+
+  VoltageElm = require('../circuit/components/VoltageElm.coffee');
+
+  CurrentElm = require('../circuit/components/CurrentElm.coffee');
+
+  ResistorElm = require('../circuit/components/ResistorElm.coffee');
+
+  InductorElm = require('../circuit/components/InductorElm.coffee');
+
+  CapacitorElm = require('../circuit/components/CapacitorElm.coffee');
+
+  Util = require('../util/util.coffee');
+
+  Pathfinder = (function() {
+    Pathfinder.INDUCT = 1;
+
+    Pathfinder.VOLTAGE = 2;
+
+    Pathfinder.SHORT = 3;
+
+    Pathfinder.CAP_V = 4;
+
+    function Pathfinder(type, firstElm, dest, elementList, numNodes) {
+      this.type = type;
+      this.firstElm = firstElm;
+      this.dest = dest;
+      this.elementList = elementList;
+      this.used = new Array(numNodes);
+    }
+
+    Pathfinder.prototype.validElm = function(ce) {
+      return (ce === this.firstElm) || ((ce instanceof CurrentElm) && (this.type === Pathfinder.INDUCT)) || (this.type === Pathfinder.VOLTAGE && !(ce.isWire() || Util.typeOf(ce, VoltageElm))) || (this.type === Pathfinder.SHORT && !ce.isWire()) || (this.type === Pathfinder.CAP_V) && !(ce.isWire() || ce instanceof CapacitorElm || Util.typeOf(ce, VoltageElm));
+    };
+
+    Pathfinder.prototype.findPath = function(n1, depth) {
+      var ce, current, j, k, _i, _j, _k, _l, _len, _ref, _ref1, _ref2, _ref3;
+      if (n1 === this.dest) {
+        return true;
+      }
+      if (depth-- === 0) {
+        return false;
+      }
+      if (this.used[n1]) {
+        return false;
+      }
+      this.used[n1] = true;
+      _ref = this.elementList;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        ce = _ref[_i];
+        if (this.validElm(ce)) {
+          continue;
+        }
+        if (n1 === 0) {
+          for (j = _j = 0, _ref1 = ce.getPostCount(); 0 <= _ref1 ? _j < _ref1 : _j > _ref1; j = 0 <= _ref1 ? ++_j : --_j) {
+            if (ce.hasGroundConnection(j) && this.findPath(ce.getNode(j), depth)) {
+              this.used[0] = false;
+              return true;
+            }
+          }
+        }
+        for (j = _k = 0, _ref2 = ce.getPostCount(); 0 <= _ref2 ? _k < _ref2 : _k > _ref2; j = 0 <= _ref2 ? ++_k : --_k) {
+          if (ce.getNode(j) === n1) {
+            break;
+          }
+        }
+        if (j === ce.getPostCount()) {
+          continue;
+        }
+        if (ce.hasGroundConnection(j) && this.findPath(0, depth)) {
+          this.used[n1] = false;
+          return true;
+        }
+        if (this.type === Pathfinder.INDUCT && ce instanceof InductorElm) {
+          current = ce.getCurrent();
+          if (j === 0) {
+            current = -current;
+          }
+          if (Math.abs(current - this.firstElm.getCurrent()) > 1e-10) {
+            continue;
+          }
+        }
+        for (k = _l = 0, _ref3 = ce.getPostCount(); 0 <= _ref3 ? _l < _ref3 : _l > _ref3; k = 0 <= _ref3 ? ++_l : --_l) {
+          if (j === k) {
+            continue;
+          }
+          if (ce.getConnection(j, k) && this.findPath(ce.getNode(k), depth)) {
+            this.used[n1] = false;
+            return true;
+          }
+        }
+      }
+      this.used[n1] = false;
+      return false;
+    };
+
+    return Pathfinder;
+
+  })();
+
+  module.exports = Pathfinder;
+
+}).call(this);
+
+
+},{"../circuit/components/VoltageElm.coffee":13,"../circuit/components/CurrentElm.coffee":31,"../circuit/components/ResistorElm.coffee":23,"../circuit/components/InductorElm.coffee":29,"../circuit/components/CapacitorElm.coffee":28,"../util/util.coffee":19}],93:[function(require,module,exports){
+(function() {
+  var MatrixStamper, RowInfo, Util;
+
+  RowInfo = require('./rowInfo.coffee');
+
+  Util = require('../util/util.coffee');
+
+  MatrixStamper = (function() {
+    function MatrixStamper(Circuit) {
+      this.Circuit = Circuit;
+    }
+
+    /*
+    control voltage source vs with voltage from n1 to n2 (must also call stampVoltageSource())
+    */
+
+
+    MatrixStamper.prototype.stampVCVS = function(n1, n2, coef, vs) {
+      var vn;
+      if (isNaN(vs) || isNaN(coef)) {
+        console.warn("NaN in stampVCVS");
+      }
+      vn = this.Circuit.numNodes() + vs;
+      this.stampMatrix(vn, n1, coef);
+      return this.stampMatrix(vn, n2, -coef);
+    };
+
+    MatrixStamper.prototype.stampVoltageSource = function(n1, n2, vs, v) {
+      var vn;
+      if (v == null) {
+        v = null;
+      }
+      vn = this.Circuit.numNodes() + vs;
+      this.stampMatrix(vn, n1, -1);
+      this.stampMatrix(vn, n2, 1);
+      this.stampRightSide(vn, v);
+      this.stampMatrix(n1, vn, 1);
+      return this.stampMatrix(n2, vn, -1);
+    };
+
+    MatrixStamper.prototype.updateVoltageSource = function(n1, n2, vs, voltage) {
+      var vn;
+      if (isNaN(voltage) || Util.isInfinite(voltage)) {
+        this.Circuit.halt("updateVoltageSource: bad voltage at " + n1 + " " + n2 + " " + vs);
+      }
+      vn = this.Circuit.numNodes() + vs;
+      return this.stampRightSide(vn, voltage);
+    };
+
+    MatrixStamper.prototype.stampResistor = function(n1, n2, r) {
+      var a, r0;
+      r0 = 1 / r;
+      if (isNaN(r0) || Util.isInfinite(r0)) {
+        this.Circuit.halt("bad resistance");
+        a = 0;
+        a /= a;
+      }
+      this.stampMatrix(n1, n1, r0);
+      this.stampMatrix(n2, n2, r0);
+      this.stampMatrix(n1, n2, -r0);
+      return this.stampMatrix(n2, n1, -r0);
+    };
+
+    MatrixStamper.prototype.stampConductance = function(n1, n2, r0) {
+      if (isNaN(r0) || Util.isInfinite(r0)) {
+        this.Circuit.halt("bad conductance at " + n1 + " " + n2);
+      }
+      this.stampMatrix(n1, n1, r0);
+      this.stampMatrix(n2, n2, r0);
+      this.stampMatrix(n1, n2, -r0);
+      return this.stampMatrix(n2, n1, -r0);
+    };
+
+    /*
+    current from cn1 to cn2 is equal to voltage from vn1 to 2, divided by g
+    */
+
+
+    MatrixStamper.prototype.stampVCCurrentSource = function(cn1, cn2, vn1, vn2, value) {
+      if (isNaN(value) || Util.isInfinite(value)) {
+        this.Circuit.halt("Invalid gain on voltage controlled current source");
+      }
+      this.stampMatrix(cn1, vn1, value);
+      this.stampMatrix(cn2, vn2, value);
+      this.stampMatrix(cn1, vn2, -value);
+      return this.stampMatrix(cn2, vn1, -value);
+    };
+
+    MatrixStamper.prototype.stampCurrentSource = function(n1, n2, value) {
+      this.stampRightSide(n1, -value);
+      return this.stampRightSide(n2, value);
+    };
+
+    /*
+    stamp a current source from n1 to n2 depending on current through vs
+    */
+
+
+    MatrixStamper.prototype.stampCCCS = function(n1, n2, vs, gain) {
+      var vn;
+      if (isNaN(gain) || Util.isInfinite(gain)) {
+        this.Circuit.halt("Invalid gain on current source");
+      }
+      vn = this.Circuit.numNodes() + vs;
+      this.stampMatrix(n1, vn, gain);
+      return this.stampMatrix(n2, vn, -gain);
+    };
+
+    /*
+    stamp value x in row i, column j, meaning that a voltage change
+    of dv in node j will increase the current into node i by x dv.
+    (Unless i or j is a voltage source node.)
+    */
+
+
+    MatrixStamper.prototype.stampMatrix = function(row, col, value) {
+      var rowInfo;
+      if (isNaN(value) || Util.isInfinite(value)) {
+        this.Circuit.halt("attempted to stamp Matrix with invalid value (" + value + ") at " + row + " " + col);
+      }
+      if (row > 0 && col > 0) {
+        if (this.Circuit.Solver.circuitNeedsMap) {
+          row = this.Circuit.Solver.circuitRowInfo[row - 1].mapRow;
+          rowInfo = this.Circuit.Solver.circuitRowInfo[col - 1];
+          if (rowInfo.type === RowInfo.ROW_CONST) {
+            this.Circuit.Solver.circuitRightSide[row] -= value * rowInfo.value;
+            return;
+          }
+          col = rowInfo.mapCol;
+        } else {
+          row--;
+          col--;
+        }
+        return this.Circuit.Solver.circuitMatrix[row][col] += value;
+      }
+    };
+
+    /*
+    Stamp value x on the right side of row i, representing an
+    independent current source flowing into node i
+    */
+
+
+    MatrixStamper.prototype.stampRightSide = function(row, value) {
+      if (isNaN(value) || value === null) {
+        if (row > 0) {
+          return this.Circuit.Solver.circuitRowInfo[row - 1].rsChanges = true;
+        }
+      } else {
+        if (row > 0) {
+          if (this.Circuit.Solver.circuitNeedsMap) {
+            row = this.Circuit.Solver.circuitRowInfo[row - 1].mapRow;
+          } else {
+            row--;
+          }
+          return this.Circuit.Solver.circuitRightSide[row] += value;
+        }
+      }
+    };
+
+    /*
+    Indicate that the values on the left side of row i change in doStep()
+    */
+
+
+    MatrixStamper.prototype.stampNonLinear = function(row) {
+      if (isNaN(row) || (row === null)) {
+        console.error("null/NaN in stampNonlinear");
+      }
+      if (row > 0) {
+        return this.Circuit.Solver.circuitRowInfo[row - 1].lsChanges = true;
+      }
+    };
+
+    return MatrixStamper;
+
+  })();
+
+  module.exports = MatrixStamper;
+
+}).call(this);
+
+
+},{"./rowInfo.coffee":88,"../util/util.coffee":19}],81:[function(require,module,exports){
+(function() {
+  var CircuitComponent, GateElm, Settings, Util,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  CircuitComponent = require("../CircuitComponent.coffee");
+
+  Util = require('../../util/util.coffee');
+
+  Settings = require('../../settings/settings.coffee');
+
+  GateElm = (function(_super) {
+    __extends(GateElm, _super);
+
+    GateElm.FLAG_SMALL = 1;
+
+    GateElm.Fields = {
+      inputCount: {
+        name: "Input count",
+        data_type: parseInt,
+        default_value: 2,
+        field: "integer"
+      },
+      lastOutput: {
+        name: "Last Output",
+        data_type: function(x) {
+          return x > 2.5;
+        }
+      }
+    };
+
+    function GateElm(xa, ya, xb, yb, params, f) {
+      var size;
+      if (parseInt(f) & GateElm.FLAG_SMALL !== 0) {
+        size = 1;
+      } else {
+        size = 2;
+      }
+      this.setSize(size);
+      GateElm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
+      this.noDiagonal = true;
+      this.linePoints = null;
+    }
+
+    GateElm.prototype.isInverting = function() {
+      return false;
+    };
+
+    GateElm.prototype.setSize = function(s) {
+      this.gsize = s;
+      this.gwidth = 7 * s;
+      this.gwidth2 = 14 * s;
+      this.gheight = 8 * s;
+      if (s === 1) {
+        return this.flags = GateElm.FLAG_SMALL;
+      } else {
+        return this.flags = 0;
+      }
+    };
+
+    GateElm.prototype.setPoints = function() {
+      var hs, i, i0, _i, _ref;
+      GateElm.__super__.setPoints.call(this);
+      hs = this.gheight;
+      this.ww = Math.floor(this.gwidth2);
+      if (this.ww > this.dn / 2) {
+        this.ww = Math.floor(this.dn / 2);
+      }
+      if (this.isInverting() && (this.ww + 8 > this.dn / 2)) {
+        this.ww = Math.floor(this.dn / 2) - 8;
+      }
+      this.calcLeads(this.ww * 2);
+      this.inPosts = Util.newPointArray(this.inputCount);
+      this.inGates = Util.newPointArray(this.inputCount);
+      this.allocNodes();
+      i0 = -Math.floor(this.inputCount / 2);
+      for (i = _i = 0, _ref = this.inputCount; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        if (i0 === 0 && (this.inputCount & 1) === 0) {
+          i0 += 1;
+        }
+        this.inPosts[i] = Util.interpolate(this.point1, this.point2, 0, hs * i0);
+        this.inGates[i] = Util.interpolate(this.lead1, this.lead2, 0, hs * i0);
+        if (this.lastOutput ^ this.isInverting()) {
+          this.volts[i] = 5;
+        } else {
+          this.volts[i] = 0;
+        }
+        i0 += 1;
+      }
+      this.hs2 = this.gwidth * (Math.floor(this.inputCount / 2) + 1);
+      return this.setBboxPt(this.point1, this.point2, this.hs2);
+    };
+
+    GateElm.prototype.doStep = function(stamper) {
+      var f, res;
+      f = this.calcFunction();
+      if (this.isInverting()) {
+        f = !f;
+      }
+      this.lastOutput = f;
+      if (f) {
+        res = 5;
+      } else {
+        res = 0;
+      }
+      return stamper.updateVoltageSource(0, this.nodes[this.inputCount], this.voltageSource, res);
+    };
+
+    GateElm.prototype.draw = function(renderContext) {
+      var i, post, voltageColor, _i, _j, _k, _ref, _ref1, _ref2, _results;
+      for (i = _i = 0, _ref = this.inputCount; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        voltageColor = Util.getVoltageColor(this.volts[i]);
+        renderContext.drawLinePt(this.inPosts[i], this.inGates[i], voltageColor);
+      }
+      voltageColor = Util.getVoltageColor(this.volts[this.inputCount]);
+      renderContext.drawLinePt(this.lead2, this.point2, voltageColor);
+      renderContext.drawThickPolygonP(this.gatePoly, Settings.STROKE_COLOR);
+      if (this.linePoints !== null) {
+        for (i = _j = 0, _ref1 = this.linePoints.length - 1; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
+          renderContext.drawLinePt(this.linePoints[i], this.linePoints[i + 1]);
+        }
+      }
+      if (this.isInverting()) {
+        renderContext.fillCircle(this.pcircle.x, this.pcircle.y, 3);
+      }
+      this.updateDots();
+      renderContext.drawDots(this.lead2, this.point2, this);
+      renderContext.drawPosts(this, "#FF0000");
+      renderContext.drawPosts(this, "#FF0000");
+      _results = [];
+      for (i = _k = 0, _ref2 = this.getPostCount(); 0 <= _ref2 ? _k < _ref2 : _k > _ref2; i = 0 <= _ref2 ? ++_k : --_k) {
+        post = this.getPost(i);
+        _results.push(renderContext.fillCircle(post.x, post.y, 1, 1, "#FF0000", "#0000FF"));
+      }
+      return _results;
+    };
+
+    GateElm.prototype.getPostCount = function() {
+      return this.inputCount + 1;
+    };
+
+    GateElm.prototype.getVoltageSourceCount = function() {
+      return 1;
+    };
+
+    GateElm.prototype.getPost = function(n) {
+      if (n === this.inputCount) {
+        return this.point2;
+      }
+      return this.inPosts[n];
+    };
+
+    GateElm.prototype.getInput = function(n) {
+      return this.volts[n] > 2.5;
+    };
+
+    GateElm.prototype.getConnection = function(n1, n2) {
+      return false;
+    };
+
+    GateElm.prototype.hasGroundConnection = function(n1) {
+      return n1 === this.inputCount;
+    };
+
+    GateElm.prototype.getGetName = function() {};
+
+    GateElm.prototype.stamp = function(stamper) {
+      return stamper.stampVoltageSource(0, this.nodes[this.inputCount], this.voltSource);
+    };
+
+    return GateElm;
+
+  })(CircuitComponent);
+
+  module.exports = GateElm;
+
+}).call(this);
+
+
+},{"../CircuitComponent.coffee":83,"../../util/util.coffee":19,"../../settings/settings.coffee":16}],84:[function(require,module,exports){
 (function() {
   var ChipElm, CircuitComponent, Point, Settings, Util,
     __hasProp = {}.hasOwnProperty,
@@ -25224,11 +25241,11 @@ Settings do not change by loading a new circuit.
 
     __extends(ChipElm, _super);
 
-    ChipElm.prototype.FLAG_SMALL = 1;
+    ChipElm.FLAG_SMALL = 1;
 
-    ChipElm.prototype.FLAG_FLIP = 1024;
+    ChipElm.FLAG_FLIP_X = 1024;
 
-    ChipElm.prototype.FLAG_SMALL = 2148;
+    ChipElm.FLAG_FLIP_Y = 2148;
 
     ChipElm.SIDE_N = 0;
 
@@ -25244,10 +25261,10 @@ Settings do not change by loading a new circuit.
 
     function ChipElm(xa, xb, ya, yb, params, f) {
       var i, initial_voltages, numPosts, _i;
-      self = this;
       this.flags = f;
       this.pins = [];
       this.bits = 0;
+      console.log("flags " + this.flags + " -> " + ((f & ChipElm.FLAG_SMALL) !== 0));
       this.setSize((f & ChipElm.FLAG_SMALL) !== 0 ? 1 : 2);
       this.params || (this.params = {});
       if (this.needsBits()) {
@@ -25261,6 +25278,7 @@ Settings do not change by loading a new circuit.
       } else {
         initial_voltages = params['volts'];
       }
+      self = this;
       this.setupPins();
       ChipElm.__super__.constructor.call(this, xa, xb, ya, yb, {}, f);
       this.noDiagonal = true;
@@ -25342,6 +25360,7 @@ Settings do not change by loading a new circuit.
     };
 
     ChipElm.prototype.setSize = function(s) {
+      console.log("" + (this.getName()) + " Set size: " + s);
       this.csize = s;
       this.cspc = 8 * s;
       this.cspc2 = this.cspc * 2;
@@ -25453,9 +25472,6 @@ Settings do not change by loading a new circuit.
 
     ChipElm.prototype.setPoints = function() {
       var hs, i, p, x0, xr, xs, y0, yr, ys, _i, _ref, _results;
-      if (this.x2 - this > this.sizeX * this.cspc2) {
-        this.setSize(2);
-      }
       hs = this.cspc2;
       x0 = this.x1 + this.cspc2;
       y0 = this.y1;
@@ -25555,7 +25571,6 @@ Settings do not change by loading a new circuit.
         }
         xa = Math.floor(px + self.cspc2 * dx * this.pos + sx);
         ya = Math.floor(py + self.cspc2 * dy * this.pos + sy);
-        console.log("SET POINT", px, py, dx, dy, dax, day, sx, sy, self.cspc2, this.pos);
         this.post = new Point(xa + dax * self.cspc2, ya + day * self.cspc2);
         this.stub = new Point(xa + dax * self.cspc, ya + day * self.cspc);
         this.textloc = new Point(xa, ya);
@@ -25610,7 +25625,177 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"../CircuitComponent.coffee":83,"../../util/util.coffee":74,"../../geom/Point.coffee":82,"../../settings/settings.coffee":77}],74:[function(require,module,exports){
+},{"../CircuitComponent.coffee":83,"../../geom/Point.coffee":82,"../../settings/settings.coffee":16,"../../util/util.coffee":19}],89:[function(require,module,exports){
+
+/**
+ * This is the web browser implementation of `debug()`.
+ *
+ * Expose `debug()` as the module.
+ */
+
+exports = module.exports = require('./debug');
+exports.log = log;
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+exports.storage = 'undefined' != typeof chrome
+               && 'undefined' != typeof chrome.storage
+                  ? chrome.storage.local
+                  : localstorage();
+
+/**
+ * Colors.
+ */
+
+exports.colors = [
+  'lightseagreen',
+  'forestgreen',
+  'goldenrod',
+  'dodgerblue',
+  'darkorchid',
+  'crimson'
+];
+
+/**
+ * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+ * and the Firebug extension (any Firefox version) are known
+ * to support "%c" CSS customizations.
+ *
+ * TODO: add a `localStorage` variable to explicitly enable/disable colors
+ */
+
+function useColors() {
+  // is webkit? http://stackoverflow.com/a/16459606/376773
+  return ('WebkitAppearance' in document.documentElement.style) ||
+    // is firebug? http://stackoverflow.com/a/398120/376773
+    (window.console && (console.firebug || (console.exception && console.table))) ||
+    // is firefox >= v31?
+    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
+}
+
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+exports.formatters.j = function(v) {
+  return JSON.stringify(v);
+};
+
+
+/**
+ * Colorize log arguments if enabled.
+ *
+ * @api public
+ */
+
+function formatArgs() {
+  var args = arguments;
+  var useColors = this.useColors;
+
+  args[0] = (useColors ? '%c' : '')
+    + this.namespace
+    + (useColors ? ' %c' : ' ')
+    + args[0]
+    + (useColors ? '%c ' : ' ')
+    + '+' + exports.humanize(this.diff);
+
+  if (!useColors) return args;
+
+  var c = 'color: ' + this.color;
+  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
+
+  // the final "%c" is somewhat tricky, because there could be other
+  // arguments passed either before or after the %c, so we need to
+  // figure out the correct index to insert the CSS into
+  var index = 0;
+  var lastC = 0;
+  args[0].replace(/%[a-z%]/g, function(match) {
+    if ('%%' === match) return;
+    index++;
+    if ('%c' === match) {
+      // we only are interested in the *last* %c
+      // (the user may have provided their own)
+      lastC = index;
+    }
+  });
+
+  args.splice(lastC, 0, c);
+  return args;
+}
+
+/**
+ * Invokes `console.log()` when available.
+ * No-op when `console.log` is not a "function".
+ *
+ * @api public
+ */
+
+function log() {
+  // this hackery is required for IE8/9, where
+  // the `console.log` function doesn't have 'apply'
+  return 'object' === typeof console
+    && console.log
+    && Function.prototype.apply.call(console.log, console, arguments);
+}
+
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+
+function save(namespaces) {
+  try {
+    if (null == namespaces) {
+      exports.storage.removeItem('debug');
+    } else {
+      exports.storage.debug = namespaces;
+    }
+  } catch(e) {}
+}
+
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+
+function load() {
+  var r;
+  try {
+    r = exports.storage.debug;
+  } catch(e) {}
+  return r;
+}
+
+/**
+ * Enable namespaces listed in `localStorage.debug` initially.
+ */
+
+exports.enable(load());
+
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+function localstorage(){
+  try {
+    return window.localStorage;
+  } catch (e) {}
+}
+
+},{"./debug":94}],19:[function(require,module,exports){
 (function(process){(function() {
   var Color, Point, Polygon, Settings, Util, environment, sprintf,
     __slice = [].slice;
@@ -25927,6 +26112,21 @@ Settings do not change by loading a new circuit.
       return x1 + x2;
     };
 
+    Util.typeOf = function(obj, klassType) {
+      var klass;
+      klass = obj.constructor;
+      if (klass === klassType) {
+        return true;
+      }
+      while (klass.__super__ != null) {
+        if (klass.__super__ === klassType.prototype) {
+          return true;
+        }
+        klass = klass.__super__.constructor;
+      }
+      return false;
+    };
+
     Util.halt = function(message) {
       var e;
       e = new Error(message);
@@ -25934,6 +26134,10 @@ Settings do not change by loading a new circuit.
       if (!environment.isBrowser) {
         return process.exit(1);
       }
+    };
+
+    Util.comparePair = function(x1, x2, y1, y2) {
+      return (x1 === y1 && x2 === y2) || (x1 === y2 && x2 === y1);
     };
 
     return Util;
@@ -25946,7 +26150,7 @@ Settings do not change by loading a new circuit.
 
 
 })(require("__browserify_process"))
-},{"../geom/polygon.coffee":80,"../geom/point.coffee":79,"../settings/settings.coffee":77,"./color.coffee":85,"../environment.coffee":7,"sprintf-js":91,"__browserify_process":66}],71:[function(require,module,exports){
+},{"../geom/point.coffee":18,"../geom/polygon.coffee":80,"../settings/settings.coffee":16,"./color.coffee":85,"../environment.coffee":7,"sprintf-js":90,"__browserify_process":9}],78:[function(require,module,exports){
 (function() {
   var CapacitorElm, CircuitNode, CircuitNodeLink, CircuitSolver, CurrentElm, GroundElm, InductorElm, MatrixStamper, Pathfinder, RailElm, RowInfo, Setting, SimulationFrame, Util, VoltageElm, WireElm, sprintf;
 
@@ -25983,6 +26187,8 @@ Settings do not change by loading a new circuit.
   sprintf = require("sprintf-js").sprintf;
 
   CircuitSolver = (function() {
+    CircuitSolver.SIZE_LIMIT = 100;
+
     function CircuitSolver(Circuit) {
       this.Circuit = Circuit;
       this.scaleFactors = Util.zeroArray(400);
@@ -26007,6 +26213,100 @@ Settings do not change by loading a new circuit.
       this.lastIterTime = 0;
       this.analyzeFlag = true;
       return this.simulationFrames = [];
+    };
+
+    CircuitSolver.prototype.reconstruct = function() {
+      if (!this.analyzeFlag || (this.Circuit.numElements() === 0)) {
+        return;
+      }
+      this.Circuit.clearErrors();
+      this.Circuit.resetNodes();
+      this.establishGroundNode();
+      this.allocateNodes();
+      this.circuitMatrixSize = this.circuitMatrixFullSize = this.matrixSize;
+      this.circuitMatrix = Util.zeroArray2(this.matrixSize, this.matrixSize);
+      this.origMatrix = Util.zeroArray2(this.matrixSize, this.matrixSize);
+      this.circuitRightSide = Util.zeroArray(this.matrixSize);
+      this.origRightSide = Util.zeroArray(this.matrixSize);
+      this.circuitRowInfo = Util.zeroArray(this.matrixSize);
+      this.circuitPermute = Util.zeroArray(this.matrixSize);
+      this.buildMatrices();
+      this.checkConnectivity();
+      this.findInvalidPaths();
+      this.optimize();
+      if (this.circuitLinear()) {
+        return this.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute);
+      }
+    };
+
+    CircuitSolver.prototype.solveCircuit = function() {
+      var circuitElm, iter, j, lit, res, stepRate, subiter, subiterCount, tm, _i, _j, _k, _l, _len, _len1, _ref, _ref1, _ref2;
+      this.sysTime = (new Date()).getTime();
+      if ((this.circuitMatrix == null) || this.Circuit.numElements() === 0) {
+        this.circuitMatrix = null;
+        console.log("Called solve circuit when circuit Matrix not initialized");
+        return;
+      }
+      stepRate = Math.floor(160 * this.getIterCount());
+      tm = (new Date()).getTime();
+      lit = this.lastIterTime;
+      iter = 1;
+      while (true) {
+        ++this.steps;
+        subiterCount = 5000;
+        _ref = this.Circuit.getElements();
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          circuitElm = _ref[_i];
+          circuitElm.startIteration();
+        }
+        for (subiter = _j = 0; 0 <= subiterCount ? _j < subiterCount : _j > subiterCount; subiter = 0 <= subiterCount ? ++_j : --_j) {
+          this.converged = true;
+          this.subIterations = subiter;
+          this.restoreOriginalMatrixState();
+          _ref1 = this.Circuit.getElements();
+          for (_k = 0, _len1 = _ref1.length; _k < _len1; _k++) {
+            circuitElm = _ref1[_k];
+            circuitElm.doStep(this.Stamper);
+          }
+          if (this.circuitNonLinear) {
+            if (this.converged && subiter > 0) {
+              break;
+            }
+            this.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute);
+          }
+          this.luSolve(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute, this.circuitRightSide);
+          for (j = _l = 0, _ref2 = this.circuitMatrixFullSize; 0 <= _ref2 ? _l < _ref2 : _l > _ref2; j = 0 <= _ref2 ? ++_l : --_l) {
+            res = this.getValueFromNode(j);
+            if (!this.updateComponent(j, res)) {
+              break;
+            }
+          }
+          if (!this.circuitNonLinear) {
+            break;
+          }
+        }
+        if (subiter >= subiterCount) {
+          this.halt("Convergence failed: " + subiter, null);
+          break;
+        }
+        this.Circuit.time += this.Circuit.timeStep();
+        tm = (new Date()).getTime();
+        lit = tm;
+        if (iter * 1000 >= stepRate * (tm - this.lastIterTime)) {
+          break;
+        } else if ((tm - this.lastFrameTime) > 500) {
+          break;
+        }
+        ++iter;
+      }
+      this.frames++;
+      this.Circuit.iterations++;
+      this.simulationFrames.push(new SimulationFrame(this.Circuit));
+      return this._updateTimings(lit);
+    };
+
+    CircuitSolver.prototype.circuitLinear = function() {
+      return !this.circuitNonLinear;
     };
 
     CircuitSolver.prototype._updateTimings = function(lastIterationTime) {
@@ -26037,14 +26337,8 @@ Settings do not change by loading a new circuit.
       return 0.1 * Math.exp((sim_speed - 61.0) / 24.0);
     };
 
-    CircuitSolver.prototype.reconstruct = function() {
-      var ce, changed, circuitElement, circuitElm, circuitNodeLink, circuitRowInfo, closure, cn, cnl, elt, fpi, gotGround, gotRail, i, ii, internalNodeCount, internalVSCount, j, k, kn, newMatDim, newMatx, newRS, newSize, pathfinder, postCount, postPt, pt, q, qm, qp, qq, qv, re, rowInfo, rowNodeEq, rsadd, tempclosure, volt, voltageSourceCount, vs, _aa, _ab, _ac, _ad, _i, _j, _k, _l, _len, _len1, _len2, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9, _results, _s, _t, _u, _v, _w, _x, _y, _z;
-      if (!this.analyzeFlag || (this.Circuit.numElements() === 0)) {
-        return;
-      }
-      this.Circuit.clearErrors();
-      this.Circuit.resetNodes();
-      voltageSourceCount = 0;
+    CircuitSolver.prototype.establishGroundNode = function() {
+      var ce, cn, gotGround, gotRail, pt, volt, _i, _len, _ref;
       gotGround = false;
       gotRail = false;
       volt = null;
@@ -26055,51 +26349,48 @@ Settings do not change by loading a new circuit.
           gotGround = true;
           break;
         }
-        if (ce instanceof RailElm) {
+        if (Util.typeOf(ce, RailElm)) {
           gotRail = true;
         }
-        if ((volt == null) && ce instanceof VoltageElm) {
+        if ((volt == null) && Util.typeOf(ce, VoltageElm)) {
           volt = ce;
         }
       }
-      if (!gotGround && (volt != null) && !gotRail) {
-        cn = new CircuitNode();
+      cn = new CircuitNode(this);
+      cn.x = cn.y = -1;
+      if (!gotGround && !gotRail && (volt != null)) {
         pt = volt.getPost(0);
         cn.x = pt.x;
         cn.y = pt.y;
-        this.Circuit.addCircuitNode(cn);
-      } else {
-        cn = new CircuitNode();
-        cn.x = cn.y = -1;
-        this.Circuit.addCircuitNode(cn);
       }
-      for (i = _j = 0, _ref1 = this.Circuit.numElements(); 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
+      return this.Circuit.addCircuitNode(cn);
+    };
+
+    CircuitSolver.prototype.allocateNodes = function() {
+      var circuitElement, circuitElm, cn, cnl, i, internalNodeCount, internalVSCount, j, k, postCount, postPt, voltageSourceCount, _i, _j, _k, _l, _len, _m, _n, _ref, _ref1, _ref2, _ref3;
+      voltageSourceCount = 0;
+      for (i = _i = 0, _ref = this.Circuit.numElements(); 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
         circuitElm = this.Circuit.getElmByIdx(i);
         internalNodeCount = circuitElm.getInternalNodeCount();
         internalVSCount = circuitElm.getVoltageSourceCount();
         postCount = circuitElm.getPostCount();
-        for (j = _k = 0; 0 <= postCount ? _k < postCount : _k > postCount; j = 0 <= postCount ? ++_k : --_k) {
+        for (j = _j = 0; 0 <= postCount ? _j < postCount : _j > postCount; j = 0 <= postCount ? ++_j : --_j) {
           postPt = circuitElm.getPost(j);
-          k = 0;
-          while (k < this.Circuit.numNodes()) {
+          for (k = _k = 0, _ref1 = this.Circuit.numNodes(); 0 <= _ref1 ? _k < _ref1 : _k > _ref1; k = 0 <= _ref1 ? ++_k : --_k) {
             cn = this.Circuit.getNode(k);
             if (postPt.x === cn.x && postPt.y === cn.y) {
               break;
             }
-            k++;
           }
+          cnl = new CircuitNodeLink();
+          cnl.num = j;
+          cnl.elm = circuitElm;
           if (k === this.Circuit.numNodes()) {
-            cn = new CircuitNode(postPt.x, postPt.y);
-            circuitNodeLink = new CircuitNodeLink();
-            circuitNodeLink.num = j;
-            circuitNodeLink.elm = circuitElm;
-            cn.links.push(circuitNodeLink);
+            cn = new CircuitNode(this, postPt.x, postPt.y);
+            cn.links.push(cnl);
             circuitElm.setNode(j, this.Circuit.numNodes());
             this.Circuit.addCircuitNode(cn);
           } else {
-            cnl = new CircuitNodeLink();
-            cnl.num = j;
-            cnl.elm = circuitElm;
             this.Circuit.getNode(k).links.push(cnl);
             circuitElm.setNode(j, k);
             if (k === 0) {
@@ -26108,10 +26399,10 @@ Settings do not change by loading a new circuit.
           }
         }
         for (j = _l = 0; 0 <= internalNodeCount ? _l < internalNodeCount : _l > internalNodeCount; j = 0 <= internalNodeCount ? ++_l : --_l) {
-          cn = new CircuitNode(-1, -1, true);
           cnl = new CircuitNodeLink();
           cnl.num = j + postCount;
           cnl.elm = circuitElm;
+          cn = new CircuitNode(this, -1, -1, true);
           cn.links.push(cnl);
           circuitElm.setNode(cnl.num, this.Circuit.numNodes());
           this.Circuit.addCircuitNode(cn);
@@ -26122,45 +26413,46 @@ Settings do not change by loading a new circuit.
       voltageSourceCount = 0;
       this.circuitNonLinear = false;
       _ref2 = this.Circuit.getElements();
-      for (_m = 0, _len1 = _ref2.length; _m < _len1; _m++) {
+      for (_m = 0, _len = _ref2.length; _m < _len; _m++) {
         circuitElement = _ref2[_m];
         if (circuitElement.nonLinear()) {
           this.circuitNonLinear = true;
         }
-        internalVSCount = circuitElement.getVoltageSourceCount();
-        for (j = _n = 0; 0 <= internalVSCount ? _n < internalVSCount : _n > internalVSCount; j = 0 <= internalVSCount ? ++_n : --_n) {
+        for (j = _n = 0, _ref3 = circuitElement.getVoltageSourceCount(); 0 <= _ref3 ? _n < _ref3 : _n > _ref3; j = 0 <= _ref3 ? ++_n : --_n) {
           this.Circuit.voltageSources[voltageSourceCount] = circuitElement;
           circuitElement.setVoltageSource(j, voltageSourceCount++);
         }
       }
       this.Circuit.voltageSourceCount = voltageSourceCount;
-      this.matrixSize = this.Circuit.numNodes() - 1 + voltageSourceCount;
-      this.circuitMatrixSize = this.circuitMatrixFullSize = this.matrixSize;
-      this.circuitMatrix = Util.zeroArray2(this.matrixSize, this.matrixSize);
-      this.origMatrix = Util.zeroArray2(this.matrixSize, this.matrixSize);
-      this.circuitRightSide = Util.zeroArray(this.matrixSize);
-      this.origRightSide = Util.zeroArray(this.matrixSize);
-      this.circuitRowInfo = Util.zeroArray(this.matrixSize);
-      this.circuitPermute = Util.zeroArray(this.matrixSize);
-      vs = 0;
-      for (i = _o = 0, _ref3 = this.matrixSize; 0 <= _ref3 ? _o < _ref3 : _o > _ref3; i = 0 <= _ref3 ? ++_o : --_o) {
+      return this.matrixSize = this.Circuit.numNodes() + voltageSourceCount - 1;
+    };
+
+    CircuitSolver.prototype.buildMatrices = function() {
+      var circuitElm, i, _i, _j, _len, _ref, _ref1, _results;
+      for (i = _i = 0, _ref = this.matrixSize; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
         this.circuitRowInfo[i] = new RowInfo();
       }
       this.circuitNeedsMap = false;
-      _ref4 = this.Circuit.getElements();
-      for (_p = 0, _len2 = _ref4.length; _p < _len2; _p++) {
-        circuitElm = _ref4[_p];
-        circuitElm.stamp(this.Stamper);
+      _ref1 = this.Circuit.getElements();
+      _results = [];
+      for (_j = 0, _len = _ref1.length; _j < _len; _j++) {
+        circuitElm = _ref1[_j];
+        _results.push(circuitElm.stamp(this.Stamper));
       }
+      return _results;
+    };
+
+    CircuitSolver.prototype.checkConnectivity = function() {
+      var changed, circuitElm, closure, i, j, k, kn, _i, _j, _k, _ref, _ref1, _ref2, _results;
       closure = new Array(this.Circuit.numNodes());
-      tempclosure = new Array(this.Circuit.numNodes());
       closure[0] = true;
       changed = true;
+      _results = [];
       while (changed) {
         changed = false;
-        for (i = _q = 0, _ref5 = this.Circuit.numElements(); 0 <= _ref5 ? _q < _ref5 : _q > _ref5; i = 0 <= _ref5 ? ++_q : --_q) {
+        for (i = _i = 0, _ref = this.Circuit.numElements(); 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
           circuitElm = this.Circuit.getElmByIdx(i);
-          for (j = _r = 0, _ref6 = circuitElm.getPostCount(); 0 <= _ref6 ? _r < _ref6 : _r > _ref6; j = 0 <= _ref6 ? ++_r : --_r) {
+          for (j = _j = 0, _ref1 = circuitElm.getPostCount(); 0 <= _ref1 ? _j < _ref1 : _j > _ref1; j = 0 <= _ref1 ? ++_j : --_j) {
             if (!closure[circuitElm.getNode(j)]) {
               if (circuitElm.hasGroundConnection(j)) {
                 changed = true;
@@ -26168,7 +26460,7 @@ Settings do not change by loading a new circuit.
               }
               continue;
             }
-            for (k = _s = 0, _ref7 = circuitElm.getPostCount(); 0 <= _ref7 ? _s < _ref7 : _s > _ref7; k = 0 <= _ref7 ? ++_s : --_s) {
+            for (k = _k = 0, _ref2 = circuitElm.getPostCount(); 0 <= _ref2 ? _k < _ref2 : _k > _ref2; k = 0 <= _ref2 ? ++_k : --_k) {
               if (j === k) {
                 continue;
               }
@@ -26183,17 +26475,29 @@ Settings do not change by loading a new circuit.
         if (changed) {
           continue;
         }
-        for (i = _t = 0, _ref8 = this.Circuit.numNodes(); 0 <= _ref8 ? _t < _ref8 : _t > _ref8; i = 0 <= _ref8 ? ++_t : --_t) {
-          if (!closure[i] && !this.Circuit.nodeList[i].intern) {
-            console.warn("Node " + i + " unconnected! -> " + (this.Circuit.nodeList[i].toString()));
-            this.Stamper.stampResistor(0, i, 1e8);
-            closure[i] = true;
-            changed = true;
-            break;
+        _results.push((function() {
+          var _l, _ref3, _results1;
+          _results1 = [];
+          for (i = _l = 0, _ref3 = this.Circuit.numNodes(); 0 <= _ref3 ? _l < _ref3 : _l > _ref3; i = 0 <= _ref3 ? ++_l : --_l) {
+            if (!closure[i] && !this.Circuit.nodeList[i].intern) {
+              console.warn("Node " + i + " unconnected! -> " + (this.Circuit.nodeList[i].toString()));
+              this.Stamper.stampResistor(0, i, 1e8);
+              closure[i] = true;
+              changed = true;
+              break;
+            } else {
+              _results1.push(void 0);
+            }
           }
-        }
+          return _results1;
+        }).call(this));
       }
-      for (i = _u = 0, _ref9 = this.Circuit.numElements(); 0 <= _ref9 ? _u < _ref9 : _u > _ref9; i = 0 <= _ref9 ? ++_u : --_u) {
+      return _results;
+    };
+
+    CircuitSolver.prototype.findInvalidPaths = function() {
+      var ce, fpi, i, pathfinder, _i, _ref;
+      for (i = _i = 0, _ref = this.Circuit.numElements(); 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
         ce = this.Circuit.getElmByIdx(i);
         if (ce instanceof InductorElm) {
           fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
@@ -26208,7 +26512,7 @@ Settings do not change by loading a new circuit.
             return;
           }
         }
-        if ((ce instanceof VoltageElm && ce.getPostCount() === 2) || ce instanceof WireElm) {
+        if ((Util.typeOf(ce, VoltageElm) && ce.getPostCount() === 2) || ce instanceof WireElm) {
           pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
           if (pathfinder.findPath(ce.getNode(0))) {
             this.Circuit.halt("Voltage source/wire loop with no resistance!", ce);
@@ -26227,62 +26531,59 @@ Settings do not change by loading a new circuit.
           }
         }
       }
-      i = -1;
-      while (i < this.matrixSize - 1) {
-        i += 1;
-        qm = -1;
-        qp = -1;
-        qv = 0;
-        re = this.circuitRowInfo[i];
+    };
+
+    CircuitSolver.prototype.optimize = function() {
+      var circuitRowInfo, col, elt, ii, j, k, lastVal, newMatDim, newMatx, newRS, newSize, qm, qp, qq, re, row, rowInfo, rowNodeEq, rsadd, _i, _j, _k, _l, _m, _n, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+      row = -1;
+      while (row < this.matrixSize - 1) {
+        row += 1;
+        re = this.circuitRowInfo[row];
         if (re.lsChanges || re.dropRow || re.rsChanges) {
           continue;
         }
         rsadd = 0;
-        for (j = _v = 0, _ref10 = this.matrixSize; 0 <= _ref10 ? _v < _ref10 : _v > _ref10; j = 0 <= _ref10 ? ++_v : --_v) {
-          q = this.circuitMatrix[i][j];
-          if (this.circuitRowInfo[j].type === RowInfo.ROW_CONST) {
-            rsadd -= this.circuitRowInfo[j].value * q;
-            continue;
+        qm = -1;
+        qp = -1;
+        lastVal = 0;
+        for (col = _i = 0, _ref = this.matrixSize; 0 <= _ref ? _i < _ref : _i > _ref; col = 0 <= _ref ? ++_i : --_i) {
+          if (this.circuitRowInfo[col].type === RowInfo.ROW_CONST) {
+            rsadd -= this.circuitRowInfo[col].value * this.circuitMatrix[row][col];
+          } else if (this.circuitMatrix[row][col] === 0) {
+
+          } else if (qp === -1) {
+            qp = col;
+            lastVal = this.circuitMatrix[row][col];
+          } else if (qm === -1 && (this.circuitMatrix[row][col] === -lastVal)) {
+            qm = col;
+          } else {
+            break;
           }
-          if (q === 0) {
-            continue;
-          }
-          if (qp === -1) {
-            qp = j;
-            qv = q;
-            continue;
-          }
-          if (qm === -1 && (q === -qv)) {
-            qm = j;
-            continue;
-          }
-          break;
         }
-        if (j === this.matrixSize) {
+        if (col === this.matrixSize) {
           if (qp === -1) {
-            this.Circuit.halt("Matrix error qp (rsadd = " + rsadd + ")", null);
+            this.Circuit.halt("Matrix error qp (row with all zeros) (rsadd = " + rsadd + ")", null);
             return;
           }
           elt = this.circuitRowInfo[qp];
           if (qm === -1) {
             k = 0;
-            while (elt.type === RowInfo.ROW_EQUAL && k < 100) {
+            while (elt.type === RowInfo.ROW_EQUAL && k < CircuitSolver.SIZE_LIMIT) {
               qp = elt.nodeEq;
               elt = this.circuitRowInfo[qp];
               ++k;
             }
             if (elt.type === RowInfo.ROW_EQUAL) {
               elt.type = RowInfo.ROW_NORMAL;
-              continue;
+            } else if (elt.type !== RowInfo.ROW_NORMAL) {
+
+            } else {
+              elt.type = RowInfo.ROW_CONST;
+              elt.value = (this.circuitRightSide[row] + rsadd) / lastVal;
+              this.circuitRowInfo[row].dropRow = true;
+              row = -1;
             }
-            if (elt.type !== RowInfo.ROW_NORMAL) {
-              continue;
-            }
-            elt.type = RowInfo.ROW_CONST;
-            elt.value = (this.circuitRightSide[i] + rsadd) / qv;
-            this.circuitRowInfo[i].dropRow = true;
-            i = -1;
-          } else if ((this.circuitRightSide[i] + rsadd) === 0) {
+          } else if ((this.circuitRightSide[row] + rsadd) === 0) {
             if (elt.type !== RowInfo.ROW_NORMAL) {
               qq = qm;
               qm = qp;
@@ -26295,39 +26596,32 @@ Settings do not change by loading a new circuit.
             }
             elt.type = RowInfo.ROW_EQUAL;
             elt.nodeEq = qm;
-            this.circuitRowInfo[i].dropRow = true;
+            this.circuitRowInfo[row].dropRow = true;
           }
         }
       }
       newMatDim = 0;
-      for (i = _w = 0, _ref11 = this.matrixSize; 0 <= _ref11 ? _w < _ref11 : _w > _ref11; i = 0 <= _ref11 ? ++_w : --_w) {
-        rowInfo = this.circuitRowInfo[i];
+      for (row = _j = 0, _ref1 = this.matrixSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; row = 0 <= _ref1 ? ++_j : --_j) {
+        rowInfo = this.circuitRowInfo[row];
         if (rowInfo.type === RowInfo.ROW_NORMAL) {
           rowInfo.mapCol = newMatDim++;
-          continue;
-        }
-        if (rowInfo.type === RowInfo.ROW_EQUAL) {
-          while (j !== (function() {
-              _results = [];
-              for (_x = 0; _x < 100; _x++){ _results.push(_x); }
-              return _results;
-            }).apply(this)) {
-            rowNodeEq = this.circuitRowInfo[rowInfo.nodeEq];
-            if (rowNodeEq.type !== RowInfo.ROW_EQUAL) {
-              break;
+        } else {
+          if (rowInfo.type === RowInfo.ROW_EQUAL) {
+            for (j = _k = 0, _ref2 = CircuitSolver.SIZE_LIMIT; 0 <= _ref2 ? _k < _ref2 : _k > _ref2; j = 0 <= _ref2 ? ++_k : --_k) {
+              rowNodeEq = this.circuitRowInfo[rowInfo.nodeEq];
+              if ((rowNodeEq.type !== RowInfo.ROW_EQUAL) || (row === rowNodeEq.nodeEq)) {
+                break;
+              }
+              rowInfo.nodeEq = rowNodeEq.nodeEq;
             }
-            if (i === rowNodeEq.nodeEq) {
-              break;
-            }
-            rowInfo.nodeEq = rowNodeEq.nodeEq;
+          }
+          if (rowInfo.type === RowInfo.ROW_CONST) {
+            rowInfo.mapCol = -1;
           }
         }
-        if (rowInfo.type === RowInfo.ROW_CONST) {
-          rowInfo.mapCol = -1;
-        }
       }
-      for (i = _y = 0, _ref12 = this.matrixSize; 0 <= _ref12 ? _y < _ref12 : _y > _ref12; i = 0 <= _ref12 ? ++_y : --_y) {
-        rowInfo = this.circuitRowInfo[i];
+      for (row = _l = 0, _ref3 = this.matrixSize; 0 <= _ref3 ? _l < _ref3 : _l > _ref3; row = 0 <= _ref3 ? ++_l : --_l) {
+        rowInfo = this.circuitRowInfo[row];
         if (rowInfo.type === RowInfo.ROW_EQUAL) {
           rowNodeEq = this.circuitRowInfo[rowInfo.nodeEq];
           if (rowNodeEq.type === RowInfo.ROW_CONST) {
@@ -26344,147 +26638,102 @@ Settings do not change by loading a new circuit.
       newRS = new Array(newSize);
       Util.zeroArray(newRS);
       ii = 0;
-      for (i = _z = 0, _ref13 = this.matrixSize; 0 <= _ref13 ? _z < _ref13 : _z > _ref13; i = 0 <= _ref13 ? ++_z : --_z) {
-        circuitRowInfo = this.circuitRowInfo[i];
+      for (row = _m = 0, _ref4 = this.matrixSize; 0 <= _ref4 ? _m < _ref4 : _m > _ref4; row = 0 <= _ref4 ? ++_m : --_m) {
+        circuitRowInfo = this.circuitRowInfo[row];
         if (circuitRowInfo.dropRow) {
           circuitRowInfo.mapRow = -1;
-          continue;
-        }
-        newRS[ii] = this.circuitRightSide[i];
-        circuitRowInfo.mapRow = ii;
-        for (j = _aa = 0, _ref14 = this.matrixSize; 0 <= _ref14 ? _aa < _ref14 : _aa > _ref14; j = 0 <= _ref14 ? ++_aa : --_aa) {
-          rowInfo = this.circuitRowInfo[j];
-          if (rowInfo.type === RowInfo.ROW_CONST) {
-            newRS[ii] -= rowInfo.value * this.circuitMatrix[i][j];
-          } else {
-            newMatx[ii][rowInfo.mapCol] += this.circuitMatrix[i][j];
+        } else {
+          newRS[ii] = this.circuitRightSide[row];
+          circuitRowInfo.mapRow = ii;
+          for (col = _n = 0, _ref5 = this.matrixSize; 0 <= _ref5 ? _n < _ref5 : _n > _ref5; col = 0 <= _ref5 ? ++_n : --_n) {
+            rowInfo = this.circuitRowInfo[col];
+            if (rowInfo.type === RowInfo.ROW_CONST) {
+              newRS[ii] -= rowInfo.value * this.circuitMatrix[row][col];
+            } else {
+              newMatx[ii][rowInfo.mapCol] += this.circuitMatrix[row][col];
+            }
           }
+          ii++;
         }
-        ii++;
       }
       this.circuitMatrix = newMatx;
       this.circuitRightSide = newRS;
       this.matrixSize = this.circuitMatrixSize = newSize;
-      for (i = _ab = 0, _ref15 = this.matrixSize; 0 <= _ref15 ? _ab < _ref15 : _ab > _ref15; i = 0 <= _ref15 ? ++_ab : --_ab) {
+      this.saveOriginalMatrixState();
+      this.circuitNeedsMap = true;
+      return this.analyzeFlag = false;
+    };
+
+    CircuitSolver.prototype.saveOriginalMatrixState = function() {
+      var i, j, _i, _j, _ref, _ref1, _results;
+      for (i = _i = 0, _ref = this.matrixSize; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
         this.origRightSide[i] = this.circuitRightSide[i];
       }
-      for (i = _ac = 0, _ref16 = this.matrixSize; 0 <= _ref16 ? _ac < _ref16 : _ac > _ref16; i = 0 <= _ref16 ? ++_ac : --_ac) {
-        for (j = _ad = 0, _ref17 = this.matrixSize; 0 <= _ref17 ? _ad < _ref17 : _ad > _ref17; j = 0 <= _ref17 ? ++_ad : --_ad) {
-          this.origMatrix[i][j] = this.circuitMatrix[i][j];
+      if (this.circuitNonLinear) {
+        _results = [];
+        for (i = _j = 0, _ref1 = this.matrixSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
+          _results.push((function() {
+            var _k, _ref2, _results1;
+            _results1 = [];
+            for (j = _k = 0, _ref2 = this.matrixSize; 0 <= _ref2 ? _k < _ref2 : _k > _ref2; j = 0 <= _ref2 ? ++_k : --_k) {
+              _results1.push(this.origMatrix[i][j] = this.circuitMatrix[i][j]);
+            }
+            return _results1;
+          }).call(this));
         }
-      }
-      this.circuitNeedsMap = true;
-      this.analyzeFlag = false;
-      if (!this.circuitNonLinear) {
-        if (!this.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute)) {
-          this.Circuit.halt("Singular matrix in linear circuit!", null);
-        }
+        return _results;
       }
     };
 
-    CircuitSolver.prototype.solveCircuit = function() {
-      var circuitElm, circuitNode, cnl, debugPrint, i, iter, j, ji, lit, res, rowInfo, stepRate, subiter, subiterCount, tm, _i, _j, _k, _l, _len, _len1, _len2, _m, _n, _o, _p, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
-      this.sysTime = (new Date()).getTime();
-      if ((this.circuitMatrix == null) || this.Circuit.numElements() === 0) {
-        this.circuitMatrix = null;
-        return;
+    CircuitSolver.prototype.restoreOriginalMatrixState = function() {
+      var i, j, _i, _j, _ref, _ref1, _results;
+      for (i = _i = 0, _ref = this.circuitMatrixSize; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        this.circuitRightSide[i] = this.origRightSide[i];
       }
-      debugPrint = this.dumpMatrix;
-      this.dumpMatrix = false;
-      stepRate = Math.floor(160 * this.getIterCount());
-      tm = (new Date()).getTime();
-      lit = this.lastIterTime;
-      iter = 1;
-      while (true) {
-        _ref = this.Circuit.getElements();
+      if (this.circuitNonLinear) {
+        _results = [];
+        for (i = _j = 0, _ref1 = this.circuitMatrixSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
+          _results.push((function() {
+            var _k, _ref2, _results1;
+            _results1 = [];
+            for (j = _k = 0, _ref2 = this.circuitMatrixSize; 0 <= _ref2 ? _k < _ref2 : _k > _ref2; j = 0 <= _ref2 ? ++_k : --_k) {
+              _results1.push(this.circuitMatrix[i][j] = this.origMatrix[i][j]);
+            }
+            return _results1;
+          }).call(this));
+        }
+        return _results;
+      }
+    };
+
+    CircuitSolver.prototype.getValueFromNode = function(idx) {
+      var rowInfo;
+      rowInfo = this.circuitRowInfo[idx];
+      if (rowInfo.type === RowInfo.ROW_CONST) {
+        return rowInfo.value;
+      } else {
+        return this.circuitRightSide[rowInfo.mapCol];
+      }
+    };
+
+    CircuitSolver.prototype.updateComponent = function(idx, value) {
+      var circuitNode, cnl, ji, _i, _len, _ref;
+      if (isNaN(value)) {
+        this.converged = false;
+        return false;
+      }
+      if (idx < (this.Circuit.numNodes() - 1)) {
+        circuitNode = this.Circuit.nodeList[idx + 1];
+        _ref = circuitNode.links;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          circuitElm = _ref[_i];
-          circuitElm.startIteration();
+          cnl = _ref[_i];
+          cnl.elm.setNodeVoltage(cnl.num, value);
         }
-        ++this.steps;
-        subiterCount = 5000;
-        for (subiter = _j = 0; 0 <= subiterCount ? _j < subiterCount : _j > subiterCount; subiter = 0 <= subiterCount ? ++_j : --_j) {
-          this.converged = true;
-          this.subIterations = subiter;
-          for (i = _k = 0, _ref1 = this.circuitMatrixSize; 0 <= _ref1 ? _k < _ref1 : _k > _ref1; i = 0 <= _ref1 ? ++_k : --_k) {
-            this.circuitRightSide[i] = this.origRightSide[i];
-          }
-          if (this.circuitNonLinear) {
-            for (i = _l = 0, _ref2 = this.circuitMatrixSize; 0 <= _ref2 ? _l < _ref2 : _l > _ref2; i = 0 <= _ref2 ? ++_l : --_l) {
-              for (j = _m = 0, _ref3 = this.circuitMatrixSize; 0 <= _ref3 ? _m < _ref3 : _m > _ref3; j = 0 <= _ref3 ? ++_m : --_m) {
-                this.circuitMatrix[i][j] = this.origMatrix[i][j];
-              }
-            }
-          }
-          _ref4 = this.Circuit.getElements();
-          for (_n = 0, _len1 = _ref4.length; _n < _len1; _n++) {
-            circuitElm = _ref4[_n];
-            circuitElm.doStep(this.Stamper);
-          }
-          if (this.stopMessage != null) {
-            return;
-          }
-          debugPrint = false;
-          if (this.circuitNonLinear) {
-            if (this.converged && subiter > 0) {
-              break;
-            }
-            if (!this.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute)) {
-              this.Circuit.halt("Singular matrix in nonlinear circuit!", null);
-              return;
-            }
-          }
-          this.luSolve(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute, this.circuitRightSide);
-          for (j = _o = 0, _ref5 = this.circuitMatrixFullSize; 0 <= _ref5 ? _o < _ref5 : _o > _ref5; j = 0 <= _ref5 ? ++_o : --_o) {
-            rowInfo = this.circuitRowInfo[j];
-            res = 0;
-            if (rowInfo.type === RowInfo.ROW_CONST) {
-              res = rowInfo.value;
-            } else {
-              res = this.circuitRightSide[rowInfo.mapCol];
-            }
-            if (isNaN(res)) {
-              this.converged = false;
-              break;
-            }
-            if (j < (this.Circuit.numNodes() - 1)) {
-              circuitNode = this.Circuit.nodeList[j + 1];
-              _ref6 = circuitNode.links;
-              for (_p = 0, _len2 = _ref6.length; _p < _len2; _p++) {
-                cnl = _ref6[_p];
-                cnl.elm.setNodeVoltage(cnl.num, res);
-              }
-            } else {
-              ji = j - (this.Circuit.numNodes() - 1);
-              this.Circuit.voltageSources[ji].setCurrent(ji, res);
-            }
-          }
-          if (!this.circuitNonLinear) {
-            break;
-          }
-          subiter++;
-        }
-        if (subiter > 5) {
-          console.log("converged after " + subiter + " iterations\n");
-        }
-        if (subiter >= subiterCount) {
-          this.halt("Convergence failed: " + subiter, null);
-          break;
-        }
-        this.Circuit.time += this.Circuit.timeStep();
-        tm = (new Date()).getTime();
-        lit = tm;
-        if (iter * 1000 >= stepRate * (tm - this.lastIterTime)) {
-          break;
-        } else if ((tm - this.lastFrameTime) > 500) {
-          break;
-        }
-        ++iter;
+      } else {
+        ji = idx - (this.Circuit.numNodes() - 1);
+        this.Circuit.voltageSources[ji].setCurrent(ji, value);
       }
-      this.frames++;
-      this.Circuit.iterations++;
-      this.simulationFrames.push(new SimulationFrame(this.Circuit));
-      return this._updateTimings(lit);
+      return true;
     };
 
     /*
@@ -26514,7 +26763,7 @@ Settings do not change by loading a new circuit.
           ++j;
         }
         if (largest === 0) {
-          return false;
+          throw new Error("Singular matrix (" + i + ", " + j + ") -> " + largest);
         }
         this.scaleFactors[i] = 1.0 / largest;
         ++i;
@@ -26680,177 +26929,7 @@ Settings do not change by loading a new circuit.
 }).call(this);
 
 
-},{"./matrixStamper.coffee":93,"./pathfinder.coffee":92,"./circuitNode.coffee":86,"./circuitNodeLink.coffee":87,"./rowInfo.coffee":88,"../settings/settings.coffee":77,"../util/util.coffee":74,"../circuit/simulationFrame.coffee":70,"../circuit/components/GroundElm.coffee":12,"../circuit/components/RailElm.coffee":20,"../circuit/components/VoltageElm.coffee":13,"../circuit/components/WireElm.coffee":10,"../circuit/components/CapacitorElm.coffee":17,"../circuit/components/InductorElm.coffee":18,"../circuit/components/CurrentElm.coffee":22,"sprintf-js":91}],90:[function(require,module,exports){
-
-/**
- * This is the web browser implementation of `debug()`.
- *
- * Expose `debug()` as the module.
- */
-
-exports = module.exports = require('./debug');
-exports.log = log;
-exports.formatArgs = formatArgs;
-exports.save = save;
-exports.load = load;
-exports.useColors = useColors;
-exports.storage = 'undefined' != typeof chrome
-               && 'undefined' != typeof chrome.storage
-                  ? chrome.storage.local
-                  : localstorage();
-
-/**
- * Colors.
- */
-
-exports.colors = [
-  'lightseagreen',
-  'forestgreen',
-  'goldenrod',
-  'dodgerblue',
-  'darkorchid',
-  'crimson'
-];
-
-/**
- * Currently only WebKit-based Web Inspectors, Firefox >= v31,
- * and the Firebug extension (any Firefox version) are known
- * to support "%c" CSS customizations.
- *
- * TODO: add a `localStorage` variable to explicitly enable/disable colors
- */
-
-function useColors() {
-  // is webkit? http://stackoverflow.com/a/16459606/376773
-  return ('WebkitAppearance' in document.documentElement.style) ||
-    // is firebug? http://stackoverflow.com/a/398120/376773
-    (window.console && (console.firebug || (console.exception && console.table))) ||
-    // is firefox >= v31?
-    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
-}
-
-/**
- * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
- */
-
-exports.formatters.j = function(v) {
-  return JSON.stringify(v);
-};
-
-
-/**
- * Colorize log arguments if enabled.
- *
- * @api public
- */
-
-function formatArgs() {
-  var args = arguments;
-  var useColors = this.useColors;
-
-  args[0] = (useColors ? '%c' : '')
-    + this.namespace
-    + (useColors ? ' %c' : ' ')
-    + args[0]
-    + (useColors ? '%c ' : ' ')
-    + '+' + exports.humanize(this.diff);
-
-  if (!useColors) return args;
-
-  var c = 'color: ' + this.color;
-  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
-
-  // the final "%c" is somewhat tricky, because there could be other
-  // arguments passed either before or after the %c, so we need to
-  // figure out the correct index to insert the CSS into
-  var index = 0;
-  var lastC = 0;
-  args[0].replace(/%[a-z%]/g, function(match) {
-    if ('%%' === match) return;
-    index++;
-    if ('%c' === match) {
-      // we only are interested in the *last* %c
-      // (the user may have provided their own)
-      lastC = index;
-    }
-  });
-
-  args.splice(lastC, 0, c);
-  return args;
-}
-
-/**
- * Invokes `console.log()` when available.
- * No-op when `console.log` is not a "function".
- *
- * @api public
- */
-
-function log() {
-  // this hackery is required for IE8/9, where
-  // the `console.log` function doesn't have 'apply'
-  return 'object' === typeof console
-    && console.log
-    && Function.prototype.apply.call(console.log, console, arguments);
-}
-
-/**
- * Save `namespaces`.
- *
- * @param {String} namespaces
- * @api private
- */
-
-function save(namespaces) {
-  try {
-    if (null == namespaces) {
-      exports.storage.removeItem('debug');
-    } else {
-      exports.storage.debug = namespaces;
-    }
-  } catch(e) {}
-}
-
-/**
- * Load `namespaces`.
- *
- * @return {String} returns the previously persisted debug modes
- * @api private
- */
-
-function load() {
-  var r;
-  try {
-    r = exports.storage.debug;
-  } catch(e) {}
-  return r;
-}
-
-/**
- * Enable namespaces listed in `localStorage.debug` initially.
- */
-
-exports.enable(load());
-
-/**
- * Localstorage attempts to return the localstorage.
- *
- * This is necessary because safari throws
- * when a user disables cookies/localstorage
- * and you attempt to access it.
- *
- * @return {LocalStorage}
- * @api private
- */
-
-function localstorage(){
-  try {
-    return window.localStorage;
-  } catch (e) {}
-}
-
-},{"./debug":94}],21:[function(require,module,exports){
+},{"./matrixStamper.coffee":93,"./pathfinder.coffee":92,"./circuitNode.coffee":86,"./circuitNodeLink.coffee":87,"./rowInfo.coffee":88,"../settings/settings.coffee":16,"../util/util.coffee":19,"../circuit/simulationFrame.coffee":77,"../circuit/components/GroundElm.coffee":24,"../circuit/components/RailElm.coffee":32,"../circuit/components/VoltageElm.coffee":13,"../circuit/components/WireElm.coffee":22,"../circuit/components/CapacitorElm.coffee":28,"../circuit/components/InductorElm.coffee":29,"../circuit/components/CurrentElm.coffee":31,"sprintf-js":90}],33:[function(require,module,exports){
 (function() {
   var CircuitComponent, MosfetElm, Point, Polygon, Rectangle, Settings, Util, sprintf,
     __hasProp = {}.hasOwnProperty,
@@ -27127,7 +27206,7 @@ function localstorage(){
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"../../util/util.coffee":74,"sprintf-js":91}],28:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"../../util/util.coffee":19,"sprintf-js":90}],39:[function(require,module,exports){
 (function() {
   var CircuitComponent, Point, Polygon, Rectangle, Settings, Switch2Elm, SwitchElm, Util, _,
     __hasProp = {}.hasOwnProperty,
@@ -27169,7 +27248,6 @@ function localstorage(){
       this.openhs = 16;
       this.noDiagonal = true;
       Switch2Elm.__super__.constructor.call(this, xa, ya, xb, yb, params, f);
-      this.position = 0;
     }
 
     Switch2Elm.prototype.name = function() {
@@ -27277,7 +27355,7 @@ function localstorage(){
       if (this.position === 2) {
         return false;
       }
-      return this.comparePair(n1, n2, 0, 1 + this.position);
+      return Util.comparePair(n1, n2, 0, 1 + this.position);
     };
 
     Switch2Elm.prototype.getInfo = function(arr) {
@@ -27298,7 +27376,7 @@ function localstorage(){
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"./SwitchElm.coffee":16,"../../util/util.coffee":74,"lodash":89}],25:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":17,"../../geom/point.coffee":18,"./SwitchElm.coffee":27,"../../util/util.coffee":19,"lodash":91}],36:[function(require,module,exports){
 (function() {
   var CircuitComponent, Point, Polygon, RailElm, Rectangle, Settings, Util, VarRailElm, VoltageElm, sprintf,
     __hasProp = {}.hasOwnProperty,
@@ -27367,7 +27445,7 @@ function localstorage(){
 }).call(this);
 
 
-},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":77,"../../geom/polygon.coffee":80,"../../geom/rectangle.coffee":73,"../../geom/point.coffee":79,"./RailElm.coffee":20,"./VoltageElm.coffee":13,"../../util/util.coffee":74,"sprintf-js":91}],83:[function(require,module,exports){
+},{"../circuitComponent.coffee":2,"../../settings/settings.coffee":16,"../../geom/rectangle.coffee":17,"../../geom/polygon.coffee":80,"../../geom/point.coffee":18,"./RailElm.coffee":32,"./VoltageElm.coffee":13,"../../util/util.coffee":19,"sprintf-js":90}],83:[function(require,module,exports){
 (function() {
   var CircuitComponent, Point, Rectangle, Settings, Util, debug, sprintf, _,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
@@ -27435,7 +27513,6 @@ function localstorage(){
           this.setValue(param_name, param_value);
           delete component_params[param_name];
         } else {
-          console.log("Assigning default value of " + default_value + " for " + param_name + " in " + this.constructor.name + " (was " + this[param_name] + ")");
           this[param_name] || (this[param_name] = data_type(default_value));
           this.params[param_name] = this[param_name];
           if (this[param_name] === null || this[param_name] === void 0 || isNaN(this[param_name])) {
@@ -27826,11 +27903,6 @@ function localstorage(){
       }
     };
 
-    CircuitComponent.prototype.comparePair = function(x1, x2, y1, y2) {
-      (x1 === y1 && x2 === y2) || (x1 === y2 && x2 === y1);
-      return this.Circuit.Params;
-    };
-
     CircuitComponent.prototype.timeStep = function() {
       return this.Circuit.timeStep();
     };
@@ -27912,7 +27984,7 @@ function localstorage(){
 }).call(this);
 
 
-},{"../settings/settings.coffee":77,"../geom/rectangle.coffee":73,"../geom/point.coffee":79,"../util/util.coffee":74,"debug":90,"lodash":89,"sprintf-js":91}],94:[function(require,module,exports){
+},{"../settings/settings.coffee":16,"../geom/point.coffee":18,"../geom/rectangle.coffee":17,"../util/util.coffee":19,"lodash":91,"debug":89,"sprintf-js":90}],94:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser

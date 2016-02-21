@@ -204,7 +204,7 @@ class CircuitSolver
       if !volt? and Util.typeOf(ce, VoltageElm)
         volt = ce
 
-    cn = new CircuitNode()
+    cn = new CircuitNode(@)
     cn.x = cn.y = -1
 
     # If no ground and no rails then voltage element's first terminal is referenced to ground:
@@ -240,7 +240,7 @@ class CircuitSolver
         cnl.elm = circuitElm
 
         if k is @Circuit.numNodes()
-          cn = new CircuitNode(postPt.x, postPt.y)
+          cn = new CircuitNode(@, postPt.x, postPt.y)
           cn.links.push cnl
 
           circuitElm.setNode j, @Circuit.numNodes()
@@ -258,7 +258,7 @@ class CircuitSolver
         cnl.num = j + postCount
         cnl.elm = circuitElm
 
-        cn = new CircuitNode(-1, -1, true)
+        cn = new CircuitNode(@, -1, -1, true)
         cn.links.push cnl
         circuitElm.setNode cnl.num, @Circuit.numNodes()
         @Circuit.addCircuitNode cn

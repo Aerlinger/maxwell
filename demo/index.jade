@@ -12,13 +12,16 @@ html
 
     script(type="text/javascript", src="bower_components/dat.gui/dat.gui.js")
     script(type="text/javascript", src="bower_components/jquery/dist/jquery.js")
+    script(type="text/javascript", src="bower_components/jquery-ui/jquery-ui.js")
     script(type="text/javascript", src="bower_components/sketch.js/js/sketch.js")
     script(type="text/javascript", src="bower_components/lodash/lodash.js")
     script(type="text/javascript", src="bower_components/d3/d3.js")
+    script(type="text/javascript", src="bower_components/rickshaw/rickshaw.js")
     //script(type='text/javascript', src='bower_components/bootstrap/dist/js/bootstrap.js')
     script(type="text/javascript", src="bower_components/semantic/dist/semantic.min.js")
 
     script(type="text/javascript", src="dist/maxwell.js")
+    script(type="text/javascript", src="scripts/plot.js")
 
 
 
@@ -26,6 +29,8 @@ html
       document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
 
       $(document).ready(function (event) {
+        var plotter = new Plotter("plot");
+
         var canvas = $('canvas.maxwell').get(0);
         renderer = null;
 
@@ -66,7 +71,9 @@ html
           };
 
           circuitContext.onUpdateComplete = function(context) {
-            console.log(context.highlightedComponent);
+            if (context.highlightedComponent) {
+               plotter.addData(context.highlightedComponent.getVoltageDiff())
+            }
           };
 
           circuitContext.onNodeHover = function(node) {
@@ -248,6 +255,11 @@ html
           canvas.maxwell(data-circuit="#{circuit}", width="800", height="600")
           canvas.grid(width="800", height="600")
           div(style="width: 300px; border: 1px solid #00F; height: 600px; display: inline-block; position: absolute;")
+            #legend
+            #plot
+              #slider
+              #timeline
+              #preview
             p#coords Cursor: (-, -)
             p#placeComponent
             p#selectedComponent

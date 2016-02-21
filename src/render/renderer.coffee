@@ -106,7 +106,6 @@ class Renderer extends BaseRenderer
   clearPlaceComponent: ->
     @placeComponent = null
 
-
   mousemove: (event) =>
     x = event.offsetX
     y = event.offsetY
@@ -134,12 +133,12 @@ class Renderer extends BaseRenderer
       for component in @Circuit.getElements()
         if @marquee?.collidesWithComponent(component)
           @selectedComponents.push(component)
-          @onSelectionChanged(@selectedComponents)
+          @onSelectionChanged?(@selectedComponents)
     else
       @selectedNode = @Circuit.getNodeAtCoordinates(@snapX, @snapY)
 
       if @selectedNode
-        @onNodeHover(@selectedNode)
+        @onNodeHover?(@selectedNode)
 
       for component in @Circuit.getElements()
         if component.getBoundingBox().contains(x, y)
@@ -166,7 +165,7 @@ class Renderer extends BaseRenderer
     y = event.offsetY
 
     if @selectedNode
-      @onNodeClick(@selectedNode)
+      @onNodeClick?(@selectedNode)
 
     if @placeComponent
       if @placeComponent.x1 && @placeComponent.y1
@@ -182,7 +181,7 @@ class Renderer extends BaseRenderer
 
     if @highlightedComponent == null
       if @selectedComponents && @selectedComponents.length > 0
-        @onSelectionChanged([])
+        @onSelectionChanged?([])
 
       @selectedComponents = []
       @marquee = new SelectionMarquee(x, y)
@@ -193,7 +192,7 @@ class Renderer extends BaseRenderer
 
         unless component in @selectedComponents
           @selectedComponents = [component]
-          @onSelectionChanged(@selectedComponents)
+          @onSelectionChanged?(@selectedComponents)
 
         component.toggle?()
 
@@ -216,7 +215,7 @@ class Renderer extends BaseRenderer
 
     # UPDATE FRAME ----------------------------------------------------------------
     @Circuit.updateCircuit()
-    @onUpdateComplete?(@Circuit)
+    @onUpdateComplete?(this)
     # -----------------------------------------------------------------------------
 
     @drawComponents()
