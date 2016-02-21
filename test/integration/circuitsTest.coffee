@@ -9,7 +9,7 @@ _ = require("lodash")
 
 chai = require('chai')
 
-chai.config.showDiff = false
+#chai.config.showDiff = false
 
 assert = chai.assert
 expect = chai.expect
@@ -46,34 +46,27 @@ filenames = glob.sync "./circuits/*.txt", {}
 ]
 
 @files = _.difference(@files, @skip)
-#@files = [
-#  '3way',
-#  '555missing',  # 82
-#  '555sequencer',  # 82
+@files = [
 #  'cciamp',   # Numerical error
 #  'ccvccs',   # Numerical error
 #  'deltasigma',
-#  'digcompare',
 #  'dram',
-#  'dtlnor',
-#  'flashadc',
-#  'hfadc',
+#  'dtlnor',   # Permute
 #  'ledflasher',
 #  'lissa',
 #  'longdist'
 #  'mux3state',
-#  'opint-current',
-#  'opint-invert-amp',
-#  'opint-slew',
-#  'phasecompint',
-#  'relayctr',
-#  'relaymux',
-#  'relaytff',
-#  'ringmod',
-#  'rossler',
+#  'opint-current',   # Permute?
+#  'opint-invert-amp'
+#  'opint-slew'
+#  'phasecompint'
+#  'relayctr'
+#  'relaymux'
+#  'relaytff'
+#  'ringmod'
+#  'rossler'
 #  'swtreedac',  # 82
 #  'tesla'
-#  'transformer'
 #  'transformerdc'
 #  'transformerdown'
 #  'transformerup'
@@ -81,7 +74,7 @@ filenames = glob.sync "./circuits/*.txt", {}
 #  'traffic'
 #  'transformerdown',
 #  'wheatstone' # Missing
-#]
+]
 
 for circuit_name in @files
   do (circuit_name) ->

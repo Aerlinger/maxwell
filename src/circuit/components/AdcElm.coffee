@@ -17,7 +17,7 @@ class AdcElm extends ChipElm
     @bits + 2
 
   getDumpType: ->
-    "m"
+    "167"
 
   needsBits: ->
     true

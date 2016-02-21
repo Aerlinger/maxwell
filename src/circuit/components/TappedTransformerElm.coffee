@@ -41,7 +41,7 @@ class TappedTransformerElm extends CircuitComponent
     @noDiagonal = true
 
   draw: (renderContext) ->
-    super()
+    super(renderContext)
     @current[3] = @current[1] - @current[2]
 
   setPoints: ->
@@ -162,13 +162,13 @@ class TappedTransformerElm extends CircuitComponent
 #    console.log("a", @a)
 
   getConnection: (n1, n2) ->
-    if @comparePair(n1, n2, 0, 1)
+    if Util.comparePair(n1, n2, 0, 1)
       return true
-    if @comparePair(n1, n2, 2, 3)
+    if Util.comparePair(n1, n2, 2, 3)
       return true
-    if @comparePair(n1, n2, 3, 4)
+    if Util.comparePair(n1, n2, 3, 4)
       return true
-    if @comparePair(n1, n2, 2, 4)
+    if Util.comparePair(n1, n2, 2, 4)
       return true
 
     return false

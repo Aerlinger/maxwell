@@ -228,10 +228,10 @@ class TransformerElm extends CircuitComponent
 #    console.log("START ITERATION ", voltdiff1, voltdiff2, @curSourceValue1, @curSourceValue2)
 
   getConnection: (n1, n2) ->
-    if @comparePair(n1, n2, 0, 2)
+    if Util.comparePair(n1, n2, 0, 2)
       return true
 
-    if @comparePair(n1, n2, 1, 3)
+    if Util.comparePair(n1, n2, 1, 3)
       return true
 
     return false

@@ -1,5 +1,3 @@
-3way
-4way
 cciamp
 ccvccs
 deltasigma

@@ -34,6 +34,7 @@ class ChipElm extends CircuitComponent
     @pins = []
     @bits = 0
 
+    console.log("flags #{@flags} -> #{(f & ChipElm.FLAG_SMALL) != 0}")
     @setSize(if ((f & ChipElm.FLAG_SMALL) != 0) then 1 else 2)
 
     @params ||= {}
@@ -116,6 +117,7 @@ class ChipElm extends CircuitComponent
     false
 
   setSize: (s) ->
+    console.log("#{@getName()} Set size: #{s}")
     @csize = s
     @cspc = 8 * s
     @cspc2 = @cspc * 2
@@ -197,8 +199,8 @@ class ChipElm extends CircuitComponent
       renderContext.drawPost(@pins[i].post.x, @pins[i].post.y, @nodes[i])
 
   setPoints: ->
-    if @x2 - @x1 > @sizeX*@cspc2 # dragging
-      @setSize(2)
+#    if @x2 - @x1 > @sizeX*@cspc2 # dragging
+#      @setSize(2)
 
     hs = @cspc2
     x0 = @x1 + @cspc2

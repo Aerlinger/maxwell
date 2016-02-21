@@ -76,7 +76,7 @@ class OpAmpElm extends CircuitComponent
 
     @noDiagonal = true
 
-    @setSize(if f & OpAmpElm.FLAG_SMALL isnt 0 then 1 else 2)
+    @setSize(if (f & OpAmpElm.FLAG_SMALL) isnt 0 then 1 else 2)
     @setGain()
 
 
@@ -108,7 +108,7 @@ class OpAmpElm extends CircuitComponent
     renderContext.drawLinePt @lead2, @point2, color
 
     # Body
-    renderContext.drawThickPolygonP @triangle, Settings.FG_COLOR
+    renderContext.drawThickPolygonP @triangle, Settings.STROKE_COLOR, Settings.FG_COLOR
 
     if @getParentCircuit() && @getParentCircuit()
       @updateDots()
@@ -128,7 +128,7 @@ class OpAmpElm extends CircuitComponent
 
   setPoints: ->
     super()
-    @setSize 2
+#    @setSize 2
 
     if ww > @dn / 2
       ww = Math.floor(@dn / 2)

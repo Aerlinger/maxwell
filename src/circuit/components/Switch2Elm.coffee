@@ -135,7 +135,7 @@ class Switch2Elm extends SwitchElm
   getConnection: (n1, n2) ->
     if @position is 2
       return false
-    @comparePair n1, n2, 0, 1 + @position
+    Util.comparePair n1, n2, 0, 1 + @position
 
   getInfo: (arr) ->
     arr[0] = (if (@link is 0) then "switch (SPDT)" else "switch (DPDT)")
