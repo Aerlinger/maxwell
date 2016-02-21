@@ -20,112 +20,17 @@ html
     script(type="text/javascript", src="bower_components/rickshaw/rickshaw.js")
 
     script(type="text/javascript", src="dist/maxwell.js")
+    script(type="text/javascript", src="scripts/plot.js")
 
     script.
       $(document).ready(function (event) {
-        $("#chart_container").draggable({
-          containment: "parent",
-          grid: [16, 16]
-        });
+        var plotter = new Plotter("chart_container");
 
+        setInterval(function() {
+          t = 2 * Math.PI * ((Date.now() % 10000) / 10000);
 
-        var tv = 20;
-
-        // instantiate our graph!
-        var graph = new Rickshaw.Graph({
-          element: document.getElementById("chart"),
-          width: 300,
-          height: 200,
-          stroke: true,
-          strokeWidth: 0.5,
-          renderer: 'line',
-          xScale: d3.time.scale(),
-          series: new Rickshaw.Series.FixedDuration([{name: 'one'}], undefined, {
-            timeInterval: tv,
-            maxDataPoints: 100,
-            timeBase: new Date().getTime() / 1000
-          })
-        });
-
-        graph.render();
-
-        var legend = document.querySelector('#legend');
-
-        // add some data every so often
-
-        var i = 0;
-
-        var hoverDetail = new Rickshaw.Graph.HoverDetail({
-          graph: graph,
-          formatter: function (series, x, y) {
-            var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
-            var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
-            var content = swatch + series.name + ": " + parseInt(y) + '<br>' + date;
-            return content;
-          }
-        });
-
-        graph.onUpdate(function() {
-          hoverDetail.update();
-        });
-
-        graph.element.addEventListener('mousemove',
-        function(e) {
-          console.log("mousemove!");
-        }, false);
-
-        var iv = setInterval(function () {
-          var data = {one: Math.floor(Math.random() * 40) + 120};
-
-          var randInt = Math.floor(Math.random() * 100);
-          data.two = (Math.sin(i++ / 40) + 4)  * (randInt + 400);
-          data.three = randInt + 300;
-
-          graph.series.addData(data);
-          graph.update();
-          graph.render();
-        }, tv);
-
-        /*
-        var Hover = Rickshaw.Class.create(Rickshaw.Graph.HoverDetail, {
-          render: function (args) {
-            legend.innerHTML = args.formattedXValue;
-
-            args.detail.sort(function (a, b) {
-              return a.order - b.order
-            }).forEach(function (d) {
-              var line = document.createElement('div');
-              line.className = 'line';
-
-              var swatch = document.createElement('div');
-              swatch.className = 'swatch';
-              swatch.style.backgroundColor = d.series.color;
-
-              var label = document.createElement('div');
-              label.className = 'label';
-              label.innerHTML = d.name + ": " + d.formattedYValue;
-
-              line.appendChild(swatch);
-              line.appendChild(label);
-
-              legend.appendChild(line);
-
-              var dot = document.createElement('div');
-              dot.className = 'dot';
-              dot.style.top = graph.y(d.value.y0 + d.value.y) + 'px';
-              dot.style.borderColor = d.series.color;
-
-              this.element.appendChild(dot);
-
-              dot.className = 'dot active';
-
-              this.show();
-            }, this);
-          }
-        });
-        */
-
-        //var hover = new Hover({graph: graph});
+           plotter.addData(100 * Math.sin(t));
+        }, 20);
       });
 
 
@@ -177,11 +82,13 @@ html
 
       .pusher
         .canvas-container(style="margin-left: 150px; width: 100%;")
+          #legend
           #chart_container.draggable.ui-widget-content
             #chart.rickshaw_graph
             #legend_container
               #smoother(title="Smoothing")
-              #legend
             #slider
+            #timeline
+            #preview
           canvas.maxwell(data-circuit="circuit", width="800", height="600")
           canvas.grid(width="800", height="600")

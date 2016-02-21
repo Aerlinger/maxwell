@@ -65,8 +65,12 @@ html
               //$("#selectedComponent").text(circuitContext.getPlaceComponent());
           };
 
+          circuitContext.onUpdateComplete = function(context) {
+            console.log(context.highlightedComponent);
+          };
+
           circuitContext.onNodeHover = function(node) {
-            console.log("NODE HOVER: ", node.x, node.y);
+            console.log("NODE HOVER: ", node.getVoltage());
           };
 
           circuitContext.onNodeClick = function (node) {
