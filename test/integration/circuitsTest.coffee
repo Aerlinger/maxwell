@@ -78,7 +78,7 @@ filenames = glob.sync "./circuits/*.txt", {}
 #  'transformerdown'
 #  'transformerup'
 #  'relayand'
-#  'traffic',
+#  'traffic'
 #  'transformerdown',
 #  'wheatstone' # Missing
 #]

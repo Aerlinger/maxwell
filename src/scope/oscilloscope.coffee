@@ -27,7 +27,6 @@ class Oscilloscope
       graph.update()
     , 40
 #
-
   step: ->
     @frames += 1
     @removeData(1)
