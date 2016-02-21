@@ -3,7 +3,6 @@ ccvccs
 dram
 dtlnor
 ledflasher
-lissa
 longdist
 mux3state
 opint-current
@@ -15,7 +14,6 @@ relaymux
 relaytff
 ringmod
 traffic
-wheatstone
 cc2impn
 deltasigma
 freqdouble

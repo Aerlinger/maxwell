@@ -132,6 +132,7 @@ jkff
 johnsonctr
 ladder
 leadingedge
+lissa
 logconvert
 lrc-critical
 lrc
@@ -251,6 +252,7 @@ voltinvert
 voltquad
 volttriple
 volume
+wheatstone
 xor
 xorphasedet
 zeneriv

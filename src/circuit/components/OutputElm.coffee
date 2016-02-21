@@ -39,7 +39,7 @@ class OutputElm extends CircuitComponent
 
     color = Util.getVoltageColor(@volts[0])
 
-    renderContext.drawLinePt @point1, @lead1, color
+#    renderContext.drawLinePt @point1, @lead1, color
     renderContext.drawCircle @lead1.x + Settings.POST_RADIUS, @lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR
     renderContext.drawPosts(this)
 

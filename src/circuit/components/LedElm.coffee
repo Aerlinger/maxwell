@@ -57,12 +57,12 @@ class LedElm extends DiodeElm
     false
 
   draw: (renderContext) ->
-    if (@needsHighlight() || this == @dragElm)
-      super(renderContext)
-      return
+    #    if (@needsHighlight() || this == @dragElm)
+    #      super(renderContext)
+    #      return
 
     voltageColor = Util.getVoltageColor(@volts[0])
-    renderContext.drawLine(@point1, @ledLead1 voltageColor)
+    renderContext.drawLine(@point1, @ledLead1, voltageColor)
 
     voltageColor = Util.getVoltageColor(volts[0])
     renderContext.drawLine(@ledLead2, @point2, voltageColor)
@@ -85,8 +85,6 @@ class LedElm extends DiodeElm
 
 #    g.setColor(cc);
 #    g.fillOval(ledCenter.x - cr, ledCenter.y - cr, cr * 2, cr * 2);
-
-    @setBbox(@point1, @point2, cr)
 
     @updateDots()
     @renderContext.drawDots(@point1, @ledLead1, @curcount)
