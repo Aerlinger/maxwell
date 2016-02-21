@@ -414,11 +414,6 @@ class CircuitComponent
 
       @curcount
 
-  comparePair: (x1, x2, y1, y2) ->
-    (x1 == y1 && x2 == y2) || (x1 == y2 && x2 == y1)
-
-    @Circuit.Params
-
   timeStep: ->
     @Circuit.timeStep()
 
