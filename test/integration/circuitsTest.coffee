@@ -52,7 +52,6 @@ filenames = glob.sync "./circuits/*.txt", {}
 #  '555sequencer',  # 82
 #  'cciamp',   # Numerical error
 #  'ccvccs',   # Numerical error
-#  'cmosff',  # Text
 #  'deltasigma',
 #  'digcompare',
 #  'dram',
@@ -73,6 +72,12 @@ filenames = glob.sync "./circuits/*.txt", {}
 #  'ringmod',
 #  'rossler',
 #  'swtreedac',  # 82
+#  'tesla'
+#  'transformer'
+#  'transformerdc'
+#  'transformerdown'
+#  'transformerup'
+#  'relayand'
 #  'traffic',
 #  'transformerdown',
 #  'wheatstone' # Missing

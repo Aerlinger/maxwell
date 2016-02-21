@@ -35,7 +35,7 @@ class TextElm extends CircuitComponent
     @lines.push @text
     @size = 24
 
-    super(xa, ya, xb, yb - 1, params, f)
+    super(xa, ya, xb, yb, params, f)
 
 #    if st
 #      st = st.split(" ")  if typeof st is "string"

@@ -49,6 +49,7 @@ ccitov
 ceamp
 classd
 clockedsrff
+cmosff
 cmosinverter
 cmosinvertercap
 cmosinverterslow
@@ -75,6 +76,7 @@ deccounter
 decoder
 delayrc
 diff
+digcompare
 digsine
 diodeclip
 diodecurve
@@ -238,6 +240,7 @@ ttlinverter
 ttlnand
 ttlnor
 twint
+vco
 voltdivide
 voltdouble
 voltdouble2

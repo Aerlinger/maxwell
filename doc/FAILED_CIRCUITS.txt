@@ -1,9 +1,7 @@
 3way
 cciamp
 ccvccs
-cmosff
 deltasigma
-digcompare
 dram
 dtlnor
 flashadc
@@ -22,7 +20,6 @@ relaytff
 ringmod
 rossler
 traffic
-vco
 wheatstone
 4way
 cc2impn

@@ -10,14 +10,14 @@
 '159': AnalogSwitchElm
 '160': AnalogSwitch2Elm
 '161': PhaseCompElm
-'162': LEDElm
-'163': DecadeElm
+'162': LEDElm  X
+'163': DecadeElm  X
 '164': CounterElm
 '165': TimerElm
-'166': DACElm
-'167': ADCElm
-'168': LatchElm
-'169': TappedTransformerElm
+'166': DACElm  X
+'167': ADCElm  X
+'168': LatchElm  X
+'169': TappedTransformerElm  X
 '170': SweepElm
 '171': TransLineElm
 '172': VarRailElm
