@@ -20,6 +20,7 @@ CurrentElm = require('../circuit/components/CurrentElm.coffee')
 sprintf = require("sprintf-js").sprintf
 
 class CircuitSolver
+  @SIZE_LIMIT = 100
 
   constructor: (@Circuit) ->
     @scaleFactors = Util.zeroArray(400)
@@ -78,10 +79,8 @@ class CircuitSolver
     @optimize()
 
     # if a matrix is linear, we can do the lu_factor here instead of needing to do it every frame
-    unless @circuitNonLinear
-      if !@luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
-        @Circuit.halt "Singular matrix in linear circuit!", null
-        return
+    if @circuitLinear()
+      @luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
 
   solveCircuit: ->
     @sysTime = (new Date()).getTime()
@@ -98,7 +97,6 @@ class CircuitSolver
     # if 1000 >= stepRate * (tm - @lastIterTime)
     #   return
 
-    # Main iteration
     iter = 1
     loop
       ++@steps
@@ -122,9 +120,7 @@ class CircuitSolver
 
         if @circuitNonLinear
           break if @converged and subiter > 0
-          unless @luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
-            @Circuit.halt "Singular matrix in nonlinear circuit!", null
-            return
+          @luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
 
         @luSolve @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide
 
@@ -154,7 +150,6 @@ class CircuitSolver
         break
 
       ++iter
-    # END: `loop`
 
     @frames++
     @Circuit.iterations++
@@ -163,6 +158,8 @@ class CircuitSolver
 
     @_updateTimings(lit)
 
+  circuitLinear: ->
+    !@circuitNonLinear
 
   _updateTimings: (lastIterationTime) ->
     @lastIterTime = lastIterationTime
@@ -207,20 +204,17 @@ class CircuitSolver
       if !volt? and Util.typeOf(ce, VoltageElm)
         volt = ce
 
+    cn = new CircuitNode()
+    cn.x = cn.y = -1
+
     # If no ground and no rails then voltage element's first terminal is referenced to ground:
-    if !gotGround and volt? and !gotRail
-      cn = new CircuitNode()
+    if !gotGround and !gotRail and volt?
       pt = volt.getPost(0)
-      #      console.log("GOT GROUND cn=#{cn}, pt=#{pt}")
+
       cn.x = pt.x
       cn.y = pt.y
-      @Circuit.addCircuitNode cn
 
-    # Else allocate extra node for ground
-    else
-      cn = new CircuitNode()
-      cn.x = cn.y = -1
-      @Circuit.addCircuitNode cn
+    @Circuit.addCircuitNode cn
 
   allocateNodes: ->
     voltageSourceCount = 0
@@ -241,22 +235,18 @@ class CircuitSolver
           if postPt.x is cn.x and postPt.y is cn.y
             break
 
-        if k is @Circuit.numNodes()
-          circuitNodeLink = new CircuitNodeLink()
-          circuitNodeLink.num = j
-          circuitNodeLink.elm = circuitElm
+        cnl = new CircuitNodeLink()
+        cnl.num = j
+        cnl.elm = circuitElm
 
+        if k is @Circuit.numNodes()
           cn = new CircuitNode(postPt.x, postPt.y)
-          cn.links.push circuitNodeLink
+          cn.links.push cnl
 
           circuitElm.setNode j, @Circuit.numNodes()
           @Circuit.addCircuitNode cn
 
         else
-          cnl = new CircuitNodeLink()
-          cnl.num = j
-          cnl.elm = circuitElm
-
           @Circuit.getNode(k).links.push cnl
           circuitElm.setNode(j, k)
 
@@ -264,11 +254,11 @@ class CircuitSolver
             circuitElm.setNodeVoltage(j, 0)
 
       for j in [0...internalNodeCount]
-        cn = new CircuitNode(-1, -1, true)
         cnl = new CircuitNodeLink()
-
         cnl.num = j + postCount
         cnl.elm = circuitElm
+
+        cn = new CircuitNode(-1, -1, true)
         cn.links.push cnl
         circuitElm.setNode cnl.num, @Circuit.numNodes()
         @Circuit.addCircuitNode cn
@@ -284,8 +274,8 @@ class CircuitSolver
     for circuitElement in @Circuit.getElements()
       if circuitElement.nonLinear()
         @circuitNonLinear = true
-      internalVSCount = circuitElement.getVoltageSourceCount()
-      for j in [0...internalVSCount]
+
+      for j in [0...circuitElement.getVoltageSourceCount()]
         @Circuit.voltageSources[voltageSourceCount] = circuitElement
         circuitElement.setVoltageSource j, voltageSourceCount++
 
@@ -377,11 +367,11 @@ class CircuitSolver
             return
 
   optimize: ->
-    i = -1
-    while i < @matrixSize-1
-      i += 1
+    row = -1
+    while row < @matrixSize-1
+      row += 1
 
-      re = @circuitRowInfo[i]
+      re = @circuitRowInfo[row]
       if re.lsChanges or re.dropRow or re.rsChanges
         # console.log("CONT: " + re.toString())
         continue
@@ -389,101 +379,97 @@ class CircuitSolver
       rsadd = 0
       qm = -1
       qp = -1
-      qv = 0
+      lastVal = 0
 
       # look for rows that can be removed
-      for j in [0...@matrixSize]
-        q = @circuitMatrix[i][j]
-        # *
-        if @circuitRowInfo[j].type is RowInfo.ROW_CONST
+      for col in [0...@matrixSize]
+        if @circuitRowInfo[col].type is RowInfo.ROW_CONST
           # Keep a running total of const values that have been removed already
-          rsadd -= @circuitRowInfo[j].value * q
-        else if q is 0
-        else if qp is -1
-          qp = j
-          qv = q
-        else if qm is -1 and (q is -qv)
-          qm = j
+          rsadd -= @circuitRowInfo[col].value * @circuitMatrix[row][col]
+        else if @circuitMatrix[row][col] is 0
+        else if qp is -1 # First col
+          qp = col  # First nonzero value is qp
+          lastVal = @circuitMatrix[row][col]
+        else if qm is -1 and (@circuitMatrix[row][col] is -lastVal)
+          qm = col
         else
           break
 
-      #      console.log(i, j, ":", qm, qp, qv, q)
-      if j is @matrixSize
+      if col is @matrixSize
         if qp is -1
-          @Circuit.halt "Matrix error qp (rsadd = #{rsadd})", null
+          @Circuit.halt "Matrix error qp (row with all zeros) (rsadd = #{rsadd})", null
           return
 
         elt = @circuitRowInfo[qp]
+
+        # We found a row with only one nonzero entry, that value is constant
         if qm is -1
-          # We found a row with only one nonzero entry, that value is constant
           k = 0
-          while elt.type is RowInfo.ROW_EQUAL and k < 100
+          while elt.type is RowInfo.ROW_EQUAL and k < CircuitSolver.SIZE_LIMIT
             # Follow the chain
             qp = elt.nodeEq
             elt = @circuitRowInfo[qp]
             ++k
+
           if elt.type is RowInfo.ROW_EQUAL
             # break equal chains
             elt.type = RowInfo.ROW_NORMAL
-            continue
-          unless elt.type is RowInfo.ROW_NORMAL
-            continue
 
-          elt.type = RowInfo.ROW_CONST
-          # console.log("i=#{i} rsadd: #{rsadd}, qm is #{qm}, qv is #{qv}, crs=#{@circuitRightSide[i]} rsadd=#{rsadd}")
-          elt.value = (@circuitRightSide[i] + rsadd) / qv
+          else if elt.type != RowInfo.ROW_NORMAL
+          else
+            elt.type = RowInfo.ROW_CONST
+            elt.value = (@circuitRightSide[row] + rsadd) / lastVal
 
-          # console.log(i + " qm is -1: @circuitRowInfo[i].dropRow = true")
-          @circuitRowInfo[i].dropRow = true
+            @circuitRowInfo[row].dropRow = true
 
-          # console.warn("iter = 0 # start over from scratch")
-          i = -1 # start over from scratch
+            row = -1 # start over from scratch
 
-        else if (@circuitRightSide[i] + rsadd) is 0
-          # We found a row with only two nonzero entries, and one is the negative of the other -> the values are equal
+        # We found a row with only two nonzero entries, and one is the negative of the other -> the values are equal
+        else if (@circuitRightSide[row] + rsadd) is 0
           if elt.type != RowInfo.ROW_NORMAL
             qq = qm
             qm = qp
             qp = qq
             elt = @circuitRowInfo[qp]
+
             if elt.type != RowInfo.ROW_NORMAL
               # We should follow the chain here, but this hardly ever happens so it's not worth worrying about
               console.error("Swap failed!")
               continue
+
           elt.type = RowInfo.ROW_EQUAL
           elt.nodeEq = qm
-          #          console.log(i + " else if (@circuitRightSide[i] + rsadd) is 0")
-          @circuitRowInfo[i].dropRow = true
+          @circuitRowInfo[row].dropRow = true
 
     # find size of new matrix:
     newMatDim = 0
-    for i in [0...@matrixSize]
-      rowInfo = @circuitRowInfo[i]
+    for row in [0...@matrixSize]
+      rowInfo = @circuitRowInfo[row]
 
       if rowInfo.type is RowInfo.ROW_NORMAL
         rowInfo.mapCol = newMatDim++
-        continue
-      if rowInfo.type is RowInfo.ROW_EQUAL
-        # resolve chains of equality; 100 max steps to avoid loops
-        while j isnt [0...100]
-          rowNodeEq = @circuitRowInfo[rowInfo.nodeEq]
-          break  unless rowNodeEq.type is RowInfo.ROW_EQUAL
-          break  if i is rowNodeEq.nodeEq
-          #          console.log("rowInfo.nodeEq = rowNodeEq.nodeEq")
-          rowInfo.nodeEq = rowNodeEq.nodeEq
-      if rowInfo.type is RowInfo.ROW_CONST
-        rowInfo.mapCol = -1
 
-    for i in [0...@matrixSize]
-      rowInfo = @circuitRowInfo[i]
+      else
+        if rowInfo.type is RowInfo.ROW_EQUAL
+          # resolve chains of equality; 100 max steps to avoid loops
+          for j in [0...CircuitSolver.SIZE_LIMIT]
+            rowNodeEq = @circuitRowInfo[rowInfo.nodeEq]
+
+            if (rowNodeEq.type != RowInfo.ROW_EQUAL) or (row is rowNodeEq.nodeEq)
+              break
+
+            rowInfo.nodeEq = rowNodeEq.nodeEq
+
+        if rowInfo.type is RowInfo.ROW_CONST
+          rowInfo.mapCol = -1
+
+    for row in [0...@matrixSize]
+      rowInfo = @circuitRowInfo[row]
       if rowInfo.type is RowInfo.ROW_EQUAL
         rowNodeEq = @circuitRowInfo[rowInfo.nodeEq]
         if rowNodeEq.type is RowInfo.ROW_CONST
-
           # if something is equal to a const, it's a const
           rowInfo.type = rowNodeEq.type
-
-          #          console.log("411", rowNodeEq.value)
           rowInfo.value = rowNodeEq.value
           rowInfo.mapCol = -1
         else
@@ -497,22 +483,23 @@ class CircuitSolver
     Util.zeroArray newRS
 
     ii = 0
-    for i in [0...@matrixSize]
-      circuitRowInfo = @circuitRowInfo[i]
+    for row in [0...@matrixSize]
+      circuitRowInfo = @circuitRowInfo[row]
 
       if circuitRowInfo.dropRow
         circuitRowInfo.mapRow = -1
-        continue
-      newRS[ii] = @circuitRightSide[i]
-      circuitRowInfo.mapRow = ii
-      for j in [0...@matrixSize]
-        rowInfo = @circuitRowInfo[j]
-        if rowInfo.type is RowInfo.ROW_CONST
-          newRS[ii] -= rowInfo.value * @circuitMatrix[i][j]
-        else
-          newMatx[ii][rowInfo.mapCol] += @circuitMatrix[i][j]
+      else
+        newRS[ii] = @circuitRightSide[row]
 
-      ii++
+        circuitRowInfo.mapRow = ii
+        for col in [0...@matrixSize]
+          rowInfo = @circuitRowInfo[col]
+          if rowInfo.type is RowInfo.ROW_CONST
+            newRS[ii] -= rowInfo.value * @circuitMatrix[row][col]
+          else
+            newMatx[ii][rowInfo.mapCol] += @circuitMatrix[row][col]
+
+        ii++
 
     @circuitMatrix = newMatx
     @circuitRightSide = newRS
@@ -590,7 +577,9 @@ class CircuitSolver
         ++j
 
       # Check for singular matrix:
-      return false if largest is 0
+      if largest == 0
+        throw new Error("Singular matrix (#{i}, #{j}) -> #{largest}")
+
       @scaleFactors[i] = 1.0 / largest
       ++i
 

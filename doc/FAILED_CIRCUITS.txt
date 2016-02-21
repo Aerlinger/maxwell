@@ -1,4 +1,5 @@
 3way
+4way
 cciamp
 ccvccs
 deltasigma
@@ -21,7 +22,6 @@ ringmod
 rossler
 traffic
 wheatstone
-4way
 cc2impn
 freqdouble
 swtreedac

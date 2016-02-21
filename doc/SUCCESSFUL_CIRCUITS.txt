@@ -4,7 +4,6 @@
 3-f220
 3-f221
 3-invert
-4way
 555int
 555lowduty
 555missing
