@@ -1,6 +1,7 @@
 CircuitComponent = require("../CircuitComponent.coffee")
 DiodeElm = require("./DiodeElm.coffee")
 Util = require('../../util/util.coffee')
+Settings = require('../../settings/Settings.coffee')
 
 class LedElm extends DiodeElm
 
@@ -20,24 +21,29 @@ class LedElm extends DiodeElm
       data_type: parseFloat
       default_value: 0
     }
-    fwdrop: {
-      name: "Voltage drop"
-      data_type: parseFloat
-      default_value: DiodeElm.DEFAULT_DROP
-    }
+#    fwdrop: {
+#      name: "Voltage drop"
+#      data_type: parseFloat
+#      default_value: DiodeElm.DEFAULT_DROP
+#    }
   }
 
 
   constructor: (xa, xb, ya, yb, params, f) ->
-#    if (f & DiodeElm.FLAG_FWDROP) == 0
-#      @fwdrop = 2.1024259
+    @params = {}
+
+    #    if (f & DiodeElm.FLAG_FWDROP) == 0
+    #      @fwdrop = 2.1024259
+
+    if (f & DiodeElm.FLAG_FWDROP) == 0
+      @fwdrop = 2.1024259  #DiodeElm.DEFAULT_DROP
+      @params['fwdrop'] = 0.805904783
+    else
+      @fwdrop = parseFloat(params.shift())
+      @params['fwdrop'] = @fwdrop
 
     super(xa, xb, ya, yb, params, f)
-
-#    if (f & DiodeElm.FLAG_FWDROP) == 0
-#      @fwdrop = 2.1024259
-
-    @setup()
+    @setPoints()
 
   getName: ->
     "LED"
@@ -62,15 +68,14 @@ class LedElm extends DiodeElm
     #      return
 
     voltageColor = Util.getVoltageColor(@volts[0])
-    renderContext.drawLine(@point1, @ledLead1, voltageColor)
+    renderContext.drawLinePt(@point1, @ledLead1, voltageColor)
 
-    voltageColor = Util.getVoltageColor(volts[0])
-    renderContext.drawLine(@ledLead2, @point2, voltageColor)
+    voltageColor = Util.getVoltageColor(@volts[0])
+    renderContext.drawLinePt(@ledLead2, @point2, voltageColor)
 
-    renderContext.setColor(Settings.GREY)
-    int cr = 12
+    cr = 12
 
-    renderContext.drawThickCircle(@ledCenter.x, @ledCenter.y, cr)
+    renderContext.drawCircle(@ledCenter.x, @ledCenter.y, cr, 1, Settings.GREY)
 
 
     # TODO: Finish color
@@ -87,10 +92,10 @@ class LedElm extends DiodeElm
 #    g.fillOval(ledCenter.x - cr, ledCenter.y - cr, cr * 2, cr * 2);
 
     @updateDots()
-    @renderContext.drawDots(@point1, @ledLead1, @curcount)
-    @renderContext.drawDots(@point2, @ledLead2, -@curcount)
+    renderContext.drawDots(@point1, @ledLead1, @curcount)
+    renderContext.drawDots(@point2, @ledLead2, -@curcount)
 
-    @drawPosts(this)
+    renderContext.drawPosts(this)
 
 
 module.exports = LedElm

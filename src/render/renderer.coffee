@@ -234,6 +234,11 @@ class Renderer extends BaseRenderer
         @drawCircle(@highlightedComponent.x1, @highlightedComponent.y1, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR)
         @drawCircle(@highlightedComponent.x2, @highlightedComponent.y2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR)
 
+    if CircuitComponent.DEBUG
+      for nodeIdx in [0...@Circuit.numNodes()]
+        node = @Circuit.getNode(nodeIdx)
+        @fillText nodeIdx, node.x + 5, node.y - 5
+
   drawComponents: ->
     if @context
       for component in @Circuit.getElements()

@@ -149,12 +149,12 @@ class ChipElm extends CircuitComponent
       if !p.output
         p.value = @volts[i] > 2.5
 
-      @execute()
+    @execute()
 
     for i in [0...@getPostCount()]
       p = @pins[i]
       if p.output
-        stamper.updateVoltageSource(0, @nodes[i], p.voltSource, p.value ? 5 : 0)
+        stamper.updateVoltageSource(0, @nodes[i], p.voltSource, if p.value then 5 else 0)
 
   stamp: (stamper) ->
     for i in [0...@getPostCount()]
@@ -165,6 +165,9 @@ class ChipElm extends CircuitComponent
 
   draw: (renderContext) ->
     @drawChip(renderContext)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
   drawChip: (renderContext) ->
     for i in [0...@getPostCount()]
@@ -187,8 +190,9 @@ class ChipElm extends CircuitComponent
 
       renderContext.fillText(p.text, p.textloc.x, p.textloc.y)
       if p.lineOver
-        ya = p.textloc.y - 10
-        renderContext.drawLine(p.textloc.x, ya, p.textloc.x, ya)
+        ya = p.textloc.y - renderContext.context.measureText(p.text).height
+        textWidth = renderContext.context.measureText(p.text).width + 2
+        renderContext.drawLine(p.textloc.x, ya, p.textloc.x + textWidth, ya)
 
     renderContext.drawThickPolygon(@rectPointsX, @rectPointsY)
 

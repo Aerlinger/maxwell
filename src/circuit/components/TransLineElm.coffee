@@ -40,8 +40,8 @@ class TransLineElm extends CircuitComponent
       @voltageR = null
 
     else
-      @voltageL = new Array(@lenSteps)
-      @voltageR = new Array(@lenSteps)
+      @voltageL = Util.zeroArray(@lenSteps)
+      @voltageR = Util.zeroArray(@lenSteps)
 
     @ptr = 0
 
@@ -59,7 +59,6 @@ class TransLineElm extends CircuitComponent
     p7 = Util.interpolate(@point1, @point2, 0, -Math.floor(@width / 2 + sep) * ds)
     p8 = Util.interpolate(@point1, @point2, 1, -Math.floor(@width / 2 + sep) * ds)
 
-#    console.log("PTS: ", p3, p4, @point1, @point2)
     @posts = [p3, p4, @point1, @point2]
     @inner = [p7, p8, p5, p6]
 

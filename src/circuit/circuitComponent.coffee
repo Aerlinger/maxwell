@@ -113,7 +113,8 @@ class CircuitComponent
       if !Util.isFunction(data_type)
         console.error("data_type #{data_type} is not a function!")
 
-      result[param_name] = data_type.call(this, param_value)
+#      console.log(@getName(), param_name, param_value)
+      result[param_name] = param_value
 
     return result
 
@@ -387,16 +388,23 @@ class CircuitComponent
 #      post = @getPost(i)
 #      renderContext.drawCircle(post.x, post.y, 3, 0, "#FF00FF")
 
-    renderContext.drawLine(@point1.x-2, @point1.y-2, @point1.x+2, @point1.y+2, "#0000FF")
-    renderContext.drawLine(@point1.x-2, @point1.y+2, @point1.x+2, @point1.y-2, "#0000FF")
-    renderContext.drawLine(@point2.x-2, @point2.y-2, @point2.x+2, @point2.y+2, "#0000FF")
-    renderContext.drawLine(@point2.x-2, @point2.y+2, @point2.x+2, @point2.y-2, "#0000FF")
+    outlineRadius = 5
 
-    if @lead1 && @lead2
-      renderContext.drawLine(@lead1.x-2, @lead1.y-2, @lead1.x+2, @lead1.y+2, "#00FF00")
-      renderContext.drawLine(@lead1.x-2, @lead1.y+2, @lead1.x+2, @lead1.y-2, "#00FF00")
-      renderContext.drawLine(@lead2.x-2, @lead2.y-2, @lead2.x+2, @lead2.y+2, "#00FF00")
-      renderContext.drawLine(@lead2.x-2, @lead2.y+2, @lead2.x+2, @lead2.y-2, "#00FF00")
+    if @point1
+      renderContext.drawCircle(@point1.x, @point1.y, outlineRadius, 1, "#0000FF")
+
+    if @point2
+      renderContext.drawCircle(@point1.x, @point1.y, outlineRadius, 1, "#0000FF")
+
+    if @lead1
+      renderContext.drawCircle(@lead1.x, @lead1.y, outlineRadius, 1, "#00FF00")
+
+    if @lead2
+      renderContext.drawCircle(@lead2.x, @lead2.y, outlineRadius, 1, "#00FF00")
+
+    for postIdx in [0...@getPostCount()]
+      post = @getPost(postIdx)
+      renderContext.drawCircle(post.x, post.y, outlineRadius - 1, 1, "#FF00FF")
 
     renderContext.drawLeads(this)
 

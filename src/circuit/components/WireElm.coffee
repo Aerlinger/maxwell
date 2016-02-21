@@ -16,8 +16,8 @@ class WireElm extends CircuitComponent
     "Wire"
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
+#    if CircuitComponent.DEBUG
+#      super(renderContext)
 
     @updateDots()
     renderContext.drawDots(@point1, @point2, this)

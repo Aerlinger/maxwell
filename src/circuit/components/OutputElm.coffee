@@ -27,9 +27,6 @@ class OutputElm extends CircuitComponent
     @setBboxPt(@lead1, @point1, 8)
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     color = "#FFF"
     s = (if (@flags & OutputElm.FLAG_VALUE) isnt 0 then Util.getUnitText(@volts[0], "V") else "out")
 
@@ -39,9 +36,13 @@ class OutputElm extends CircuitComponent
 
     color = Util.getVoltageColor(@volts[0])
 
-#    renderContext.drawLinePt @point1, @lead1, color
+    renderContext.drawLinePt @point1, @lead1, color
     renderContext.drawCircle @lead1.x + Settings.POST_RADIUS, @lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
 
   getVoltageDiff: ->
     @volts[0]

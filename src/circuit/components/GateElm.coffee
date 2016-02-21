@@ -20,13 +20,13 @@ class GateElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
-#    if parseInt(f) == 1
     if parseInt(f) & GateElm.FLAG_SMALL != 0
       size = 1
     else
       size = 2
 
     @setSize(size)
+
     super(xa, ya, xb, yb, params, f)
 
     @noDiagonal = true
@@ -93,8 +93,8 @@ class GateElm extends CircuitComponent
     if @isInverting()
       f = !f
 
-    @lastOutput = f
-#    @params['lastOutput'] = f
+    @lastOutput = (f > 0)
+#    @params['lastOutput'] = (f > 0)
 
     if f
       res = 5
