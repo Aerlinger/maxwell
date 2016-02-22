@@ -50,7 +50,7 @@ class AnalogSwitchElm extends CircuitComponent
   doStep: (stamper) ->
     @open = @volts[2] < 2.5
 
-    if @flags & AnalogSwitchElm != 0
+    if (@flags & AnalogSwitchElm) != 0
       @open = !@open
 
     @resistance = if @open then @r_off else @r_on

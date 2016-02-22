@@ -222,7 +222,6 @@ class DiodeElm extends CircuitComponent
         else
           vnew = @vt * Math.log(vnew / @vt)
 
-        console.log("CONVERGE ZENER")
         @Circuit.Solver.converged = false
       vnew = -(vnew + @zoffset)
     vnew

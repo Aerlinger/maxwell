@@ -221,8 +221,6 @@ swtreedac
 synccounter
 tdiode
 tdosc
-tdrelax
-tesla
 thevenin
 tl
 tlfreq
@@ -237,9 +235,6 @@ tlterm
 trans-diffamp-common
 trans-diffamp-cursrc
 trans-diffamp
-transformer
-transformerdc
-transformerdown
 transswitch
 triangle
 triode
@@ -248,6 +243,7 @@ ttlinverter
 ttlnand
 ttlnor
 twint
+vco
 voltdivide
 voltdouble
 voltdouble2

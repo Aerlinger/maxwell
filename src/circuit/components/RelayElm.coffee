@@ -137,9 +137,9 @@ class RelayElm extends CircuitComponent
 
     stamper.stampResistor(@nodes[@nCoil3], @nodes[@nCoil2], @coilR)
 
-#    console.log("STAMP!")
-
     for i in [0...(3 * @poleCount)]
+      console.log("STAMP! #{@nodes[@nSwitch0 + i]} #{@nodes[@nCoil1]}, #{@nodes[@nCoil2]}, #{@nodes[@nCoil3]}, #{@coilR} -> #{@compResistance}")
+
 #      console.log(@nodes[@nSwitch0 + i])
       stamper.stampNonLinear(@nodes[@nSwitch0 + i])
 
@@ -225,8 +225,6 @@ class RelayElm extends CircuitComponent
       super(renderContext)
 
     #    adjustBbox(swpoles[poleCount - 1][0], swposts[poleCount - 1][1]); // XXX
-
-
 
   doStep: (stamper) ->
     stamper.stampCurrentSource @nodes[@nCoil1], @nodes[@nCoil3], @curSourceValue

@@ -151,9 +151,6 @@ class VoltageElm extends CircuitComponent
     super()
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     @updateDots()
 
     if(@waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR)
@@ -183,6 +180,9 @@ class VoltageElm extends CircuitComponent
       @drawWaveform ps1, renderContext
 
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
 
   drawWaveform: (center, renderContext) ->

@@ -13,4 +13,6 @@ dump/*.json
 dump/*.txt
 circuits/*.txt
 test/fixtures/circuitRenders/**/*.png
+test/fixtures/**/*.json
 .env
+
