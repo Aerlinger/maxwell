@@ -8,11 +8,13 @@ opint-current
 opint-invert-amp
 opint-slew
 phasecompint
-relaymux
 relaytff
 ringmod
 traffic
 cc2impn
+classd
+moscurrentsrc
+nmosfet
 relayctr
 tdiode
 tdrelax

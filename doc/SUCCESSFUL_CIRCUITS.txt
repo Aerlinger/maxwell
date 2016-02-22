@@ -194,6 +194,7 @@ relay
 relayand
 relayctr
 relayff
+relaymux
 relayor
 relayxor
 res-par
