@@ -63,10 +63,6 @@ class LedElm extends DiodeElm
     false
 
   draw: (renderContext) ->
-    #    if (@needsHighlight() || this == @dragElm)
-    #      super(renderContext)
-    #      return
-
     voltageColor = Util.getVoltageColor(@volts[0])
     renderContext.drawLinePt(@point1, @ledLead1, voltageColor)
 
@@ -75,21 +71,18 @@ class LedElm extends DiodeElm
 
     cr = 12
 
-    renderContext.drawCircle(@ledCenter.x, @ledCenter.y, cr, 1, Settings.GREY)
+    renderContext.drawCircle(@ledCenter.x, @ledCenter.y, cr, 2, Settings.PostColor)
 
-
-    # TODO: Finish color
     cr -= 4
 
-    w = 255 * @current / .01
+    w = Math.min(255 * @current / .01, 255)
 
-    if (w > 255)
-      w = 255
-
-#    Color cc = new Color((int) (colorR * w), (int) (colorG * w), (int) (colorB * w));
-
-#    g.setColor(cc);
 #    g.fillOval(ledCenter.x - cr, ledCenter.y - cr, cr * 2, cr * 2);
+    console.log(@current, w)
+    console.log("RBG: #{w * @colorR} #{w * @colorG} #{w * @colorB}")
+    hexcolor = Util.rgb2hex(w * @colorR, w * @colorG, w * @colorB)
+
+    renderContext.fillCircle(@ledCenter.x, @ledCenter.y, cr, 2, hexcolor)
 
     @updateDots()
     renderContext.drawDots(@point1, @ledLead1, @curcount)

@@ -263,5 +263,8 @@ class Util
   @overlappingPoints: (pt1, pt2) ->
     pt1.x == pt2.x && pt1.y == pt2.y
 
+  @rgb2hex: (r, g, b) ->
+    "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+
 
 module.exports = Util
