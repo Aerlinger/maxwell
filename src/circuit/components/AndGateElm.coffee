@@ -36,6 +36,7 @@ class AndGateElm extends GateElm
     for i in [0...@inputCount]
       f = f & @getInput(i)
 
+    console.log("AND: #{f}")
     return f
 
   getDumpType: ->

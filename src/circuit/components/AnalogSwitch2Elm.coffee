@@ -2,6 +2,7 @@ CircuitComponent = require("../CircuitComponent.coffee")
 AnalogSwitchElm = require("./AnalogSwitchElm.coffee")
 Util = require('../../util/util.coffee')
 Point = require('../../geom/Point.coffee')
+Settings = require('../../settings/settings.coffee')
 
 class AnalogSwitch2Elm extends AnalogSwitchElm
 
@@ -34,6 +35,33 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
         @ctlPoint
       else
         @swposts[n - 1]
+
+  draw: (renderContext) ->
+    color = Util.getVoltageColor(@volts[0])
+    renderContext.drawLinePt(@point1, @lead1, color)
+
+    # draw second lead
+    color = Util.getVoltageColor(@volts[0])
+    renderContext.drawLinePt(@swpoles[0], @swposts[0], color)
+
+    # draw third lead
+    color = Util.getVoltageColor(@volts[2])
+    renderContext.drawLinePt(@swpoles[1], @swposts[1], color)
+
+    # draw switch
+
+    position = if @open then 1 else 0
+    renderContext.drawLinePt(@lead1, @swpoles[position], Settings.GREY)
+
+    renderContext.fillCircle(@lead1.x, @lead1.y, 3, 0, Settings.LIGHT_POST_COLOR)
+    renderContext.fillCircle(@swpoles[1].x, @swpoles[1].y, 3, 0, Settings.LIGHT_POST_COLOR)
+    renderContext.fillCircle(@swpoles[0].x, @swpoles[0].y, 3, 0, Settings.LIGHT_POST_COLOR)
+
+    @updateDots()
+
+    renderContext.drawDots(@point1, @lead1, this)
+    renderContext.drawDots(@swpoles[position], @swposts[position], this)
+    renderContext.drawPosts(this)
 
   getDumpType: ->
     160

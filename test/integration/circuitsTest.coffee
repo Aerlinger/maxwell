@@ -50,7 +50,6 @@ filenames = glob.sync "./circuits/*.txt", {}
 #  'cciamp',   # Numerical error
 #  'ccvccs'   # Numerical error
 #  'dtlnor',   # Permute
-#  'ledflasher',
 #  'deltasigma'
 #  'dram'      # AND
 #  'mux3state',   # AND

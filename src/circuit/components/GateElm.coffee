@@ -16,6 +16,7 @@ class GateElm extends CircuitComponent
       name: "Last Output"
       data_type: (x) ->
         x > 2.5
+      default_value: false
     }
   }
 
@@ -122,7 +123,6 @@ class GateElm extends CircuitComponent
 
     @updateDots()
     renderContext.drawDots @lead2, @point2, this
-#    renderContext.drawPosts(this)
 
     renderContext.drawPosts(this, "#FF0000")
     renderContext.drawPosts(this, "#FF0000")
@@ -131,6 +131,9 @@ class GateElm extends CircuitComponent
       post = @getPost(i)
       renderContext.fillCircle post.x, post.y, 1, 1, "#FF0000", "#0000FF"
 #      renderContext.drawPost post.x, post.y, color, color
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
 
   getPostCount: ->
@@ -146,6 +149,7 @@ class GateElm extends CircuitComponent
     @inPosts[n]
 
   getInput: (n)->
+    console.log("INPUT #{n} is #{@volts[n]}")
     return @volts[n] > 2.5
 
   getConnection: (n1, n2)->
@@ -153,8 +157,6 @@ class GateElm extends CircuitComponent
 
   hasGroundConnection: (n1) ->
     n1 == @inputCount
-
-  getGetName: ->
 
   stamp: (stamper) ->
     stamper.stampVoltageSource(0, @nodes[@inputCount], @voltSource)

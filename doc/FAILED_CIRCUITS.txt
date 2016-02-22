@@ -14,7 +14,6 @@ ringmod
 traffic
 cc2impn
 relayctr
-swtreedac
 tdiode
 tdrelax
 tesla

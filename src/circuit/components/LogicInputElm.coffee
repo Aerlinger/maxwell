@@ -49,6 +49,21 @@ class LogicInputElm extends SwitchElm
     if @isTernary()
       @posCount = 3
 
+  draw: (renderContext) ->
+    s = if @position == 0 then "L" else "H"
+
+    if (@isNumeric())
+      s = "" + @position;
+
+    renderContext.fillText(s, @x2, @y2)
+
+    color = Util.getVoltageColor(@volts[0])
+    renderContext.drawLinePt(@point1, @lead1, color)
+
+    @updateDots()
+    renderContext.drawDots(@point1, @lead1, this)
+    renderContext.drawPosts(this)
+
 
   isTernary: ->
     @flags & LogicInputElm.FLAG_TERNARY != 0

@@ -45,6 +45,8 @@ class RailElm extends VoltageElm
       s = v + "V" if Math.abs(v) < 1 #showFormat.format(v)
       s = "+" + s if @getVoltage() > 0
 
+      renderContext.fillText(s, @x2, @y2)
+
 #      s = "Ant" if this instanceof AntennaElm
       s = "CLK" if clock
 

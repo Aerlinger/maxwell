@@ -206,6 +206,11 @@ class Settings
 
   @SELECTION_MARQUEE_COLOR: ColorPalette.orange
 
+  @GREY: "#666"
+  @GRAY: "#666"
+
+  @LIGHT_POST_COLOR: "#333"
+
   @GRID_COLOR: ColorPalette.darkyellow
   @FILL_COLOR: ColorPalette.white
   @BG_COLOR: ColorPalette.white

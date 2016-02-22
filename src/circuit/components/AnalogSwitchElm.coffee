@@ -3,7 +3,7 @@ Util = require('../../util/util.coffee')
 Point = require('../../geom/Point.coffee')
 
 class AnalogSwitchElm extends CircuitComponent
-  FLAG_INVERT: 1
+  @FLAG_INVERT = 1
 
   @Fields = {
     r_on: {

@@ -85,7 +85,11 @@ class Switch2Elm extends SwitchElm
     color = Util.getVoltageColor @volts[2]
     renderContext.drawLinePt @swpoles[1], @swposts[1], color
 
-    renderContext.drawLinePt @lead1, @swpoles[@position], color
+    renderContext.fillCircle(@swpoles[2].x, @swpoles[2].y, 4, 2, "#F0F")
+    renderContext.fillCircle(@swpoles[1].x, @swpoles[1].y, 4, 2, "#F0F")
+    renderContext.fillCircle(@swpoles[0].x, @swpoles[0].y, 4, 2, "#F0F")
+
+    renderContext.drawLinePt @lead1, @swpoles[@position], Settings.GREY
 
     @updateDots()
     renderContext.drawDots @point1, @lead1, this
