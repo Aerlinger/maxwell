@@ -96,6 +96,14 @@ class TransformerElm extends CircuitComponent
   #CALC CURRENT: 0.00038782799757450996,0.4065758146820641,0,4.967879427950679
   #CALC CURRENT: 0.00038782799757450996,0.4065758146820641,0,4.967879427950679
 
+#  getProperties: ->
+#    currentProperties = super()
+#    currentProperties['current'] = 0
+#    currentProperties
+
+#  getCurrent: ->
+#    0
+
   getPostCount: ->
     4
 
@@ -115,19 +123,23 @@ class TransformerElm extends CircuitComponent
     @curcount[1] = 0
 
   draw: (renderContext) ->
-#    if CircuitComponent.DEBUG
-#      super(renderContext)
+    for i in [0...4]
+      color = Util.getVoltageColor(@volts[i])
 
-#    for i in [0...4]
-#      color = Util.getVoltageColor(@volts[i])
-#
-#      console.log(@ptEnds[i], @ptCoil[i], color)
-#      renderContext.drawLinePt(@ptEnds[i], @ptCoil[i], color)
+      console.log(@ptEnds[i], @ptCoil[i], color)
+      renderContext.drawLinePt(@ptEnds[i], @ptCoil[i], color)
 
-#    for i in [1, 2]
-#      renderContext.drawCoil(@dsign * (i == 1 ? ))
+    for i in [0...2]
+      renderContext.drawCoil(@ptCoil[i], @ptCoil[i + 2], @volts[i], @volts[i + 2], @dsign * (if (i == 1) then -6 else 6))
 
-#    renderContext.drawPosts(this)
+    for i in [0...2]
+      renderContext.drawLinePt(@ptCore[i], @ptCore[i + 2])
+      #      @curcount[i] = updateDot
+
+    renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
 
   stamp: (stamper) ->
