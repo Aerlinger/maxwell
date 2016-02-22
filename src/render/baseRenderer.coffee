@@ -141,8 +141,8 @@ class BaseRenderer extends Observer
 
   drawValue: (x1, y1, circuitElm, str) ->
 
-  drawCoil: (point1, point2, vStart, vEnd, renderContext) ->
-    hs = 8
+  drawCoil: (point1, point2, vStart, vEnd, hs = null) ->
+    hs = hs || 8
     segments = 40
 
     ps1 = new Point(0, 0)
@@ -158,7 +158,7 @@ class BaseRenderer extends Observer
 
       voltageLevel = vStart + (vEnd - vStart) * i / segments
       color = Util.getVoltageColor(voltageLevel)
-      renderContext.drawLinePt ps1, ps2, color
+      @drawLinePt ps1, ps2, color
 
       ps1.x = ps2.x
       ps1.y = ps2.y

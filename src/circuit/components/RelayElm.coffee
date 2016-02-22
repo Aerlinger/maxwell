@@ -1,6 +1,7 @@
 CircuitComponent = require('../circuitComponent.coffee')
 Util = require('../../util/util.coffee')
 Point = require('../../geom/point.coffee')
+Settings = require('../../settings/settings.coffee')
 
 class RelayElm extends CircuitComponent
   @FLAG_SWAP_COIL = 1
@@ -124,16 +125,13 @@ class RelayElm extends CircuitComponent
       @switchCurrent[i] = @switchCurCount[i] = 0
 
   stamp: (stamper) ->
-#    @nodes[0] = @nodes[@nCoil1]
-#    @nodes[1] = @nodes[@nCoil3]
-
     if @isTrapezoidal()
       @compResistance = 2 * @inductance / @getParentCircuit().timeStep()
     # backward euler
     else
       @compResistance = @inductance / @getParentCircuit().timeStep()
 
-    stamper.stampResistor @nodes[@nCoil1],  @nodes[@nCoil3], @compResistance
+    stamper.stampResistor @nodes[@nCoil1], @nodes[@nCoil3], @compResistance
     stamper.stampRightSide @nodes[@nCoil1]
     stamper.stampRightSide @nodes[@nCoil3]
 
@@ -147,8 +145,7 @@ class RelayElm extends CircuitComponent
 
 
   startIteration: ->
-#    ind.startIteration(@volts[@nCoil1] - @volts[@nCoil3])
-
+    # ind.startIteration(@volts[@nCoil1] - @volts[@nCoil3])
     voltdiff = @volts[@nCoil1] - @volts[@nCoil3]
 
     if @isTrapezoidal()
@@ -173,6 +170,62 @@ class RelayElm extends CircuitComponent
       @i_position = 1
     else
       @i_position = 2
+
+  draw: (renderContext) ->
+    for i in [0...2]
+      Util.getVoltageColor(@volts[@nCoil1 + i])
+      renderContext.drawLinePt(@coilLeads[i], @coilPosts[i])
+
+    renderContext.drawLeads(this)
+
+    x = if ((@flags & RelayElm.FLAG_SWAP_COIL) != 0) then 1 else 0
+
+    renderContext.drawCoil(@coilLeads[x], @coilLeads[1 - x], @volts[@nCoil1 + x], @volts[@nCoil2 - x], @dsign * 6)
+
+    # draw lines
+    for i in [0...@poleCount]
+      if (i == 0)
+        @lines[i * 2] = Util.interpolate(@point1, @point2, .5, @openhs * 2 + 5 * @dsign - i * @openhs * 3)
+      else
+        @lines[i * 2] = Util.interpolate(@point1, @point2, .5, Math.floor((@openhs * (-i * 3 + 3 - 0.5 + @d_position)) + 5 * @dsign))
+
+      @lines[i * 2 + 1] = Util.interpolate(@point1, @point2, .5, Math.floor((@openhs * (-i * 3 - .5 + @d_position)) - 5 * @dsign))
+
+      renderContext.drawLine(@lines[i * 2].x, @lines[i * 2].y, @lines[i * 2 + 1].x, @lines[i * 2 + 1].y, "#AAA")
+
+    for p in [0...@poleCount]
+      po = p * 3
+
+      for i in [0...3]
+        # draw lead
+        Util.getVoltageColor(@volts[@nSwitch0 + po + i]);
+        renderContext.drawLinePt(@swposts[p][i], @swpoles[p][i])
+
+      @ptSwitch[p] = Util.interpolate(@swpoles[p][1], @swpoles[p][2], @d_position)
+
+      renderContext.drawLinePt(@swpoles[p][0], @ptSwitch[p], Settings.LIGHT_POST_COLOR)
+      #      switchCurCount[p] = updateDotCount(@switchCurrent[p], @switchCurCount[p], this)
+
+      @updateDots()
+      renderContext.drawDots(@swposts[p][0], @swpoles[p][0], this)
+
+      # TODO: Multi dots
+#      if (@i_position != 2)
+#        @drawDots(g, @swpoles[p][@i_position + 1], @swposts[p][@i_position + 1], @switchCurCount[p])
+
+#    coilCurCount = updateDotCount(coilCurrent, coilCurCount);
+
+#    drawDots(g, coilPosts[0], coilLeads[0], coilCurCount);
+#    drawDots(g, coilLeads[0], coilLeads[1], coilCurCount);
+#    drawDots(g, coilLeads[1], coilPosts[1], coilCurCount);
+
+    renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
+    #    adjustBbox(swpoles[poleCount - 1][0], swposts[poleCount - 1][1]); // XXX
+
 
 
   doStep: (stamper) ->
