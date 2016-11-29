@@ -44,30 +44,19 @@ class MatrixStamper
 
   stampResistor: (n1, n2, r) ->
 #    console.log("Stamp resistor: " + n1 + " " + n2 + " " + r)
-    r0 = 1 / r
-    if isNaN(r0) or Util.isInfinite(r0)
-      @Circuit.halt "bad resistance"
-      a = 0
-      a /= a
-
-#    console.log("Stamp resistor: " + n1 + " " + n2 + " " + r + " ");
-
-    @stampMatrix n1, n1, r0
-    @stampMatrix n2, n2, r0
-    @stampMatrix n1, n2, -r0
-    @stampMatrix n2, n1, -r0
+    @stampConductance n1, n2, 1 / r
 
 
-  stampConductance: (n1, n2, r0) ->
-    if isNaN(r0) or Util.isInfinite(r0)
+  stampConductance: (n1, n2, g) ->
+    if isNaN(g) or Util.isInfinite(g)
       @Circuit.halt "bad conductance at #{n1} #{n2}"
 
 #    console.log("Stamp conductance: " + n1 + " " + n2 + " " + r0 + " ");
 
-    @stampMatrix n1, n1, r0
-    @stampMatrix n2, n2, r0
-    @stampMatrix n1, n2, -r0
-    @stampMatrix n2, n1, -r0
+    @stampMatrix n1, n1, g
+    @stampMatrix n2, n2, g
+    @stampMatrix n1, n2, -g
+    @stampMatrix n2, n1, -g
 
 
   ###
@@ -78,11 +67,6 @@ class MatrixStamper
       @Circuit.halt "Invalid gain on voltage controlled current source"
 
 #    console.log("stampVCCurrentSource: " + cn1 + " " + cn2 + " " + vn1 + " " + vn2 + " " + value)
-
-#    stampMatrix(cn1, vn1, g);
-#    stampMatrix(cn2, vn2, g);
-#    stampMatrix(cn1, vn2, -g);
-#    stampMatrix(cn2, vn1, -g);
 
     @stampMatrix cn1, vn1, value
     @stampMatrix cn2, vn2, value
@@ -124,11 +108,9 @@ class MatrixStamper
 
     if row > 0 and col > 0
       if @Circuit.Solver.circuitNeedsMap
-#        console.log("STAMP MATRIX if @Circuit.Solver.circuitNeedsMap", row, col, value)
         row = @Circuit.Solver.circuitRowInfo[row - 1].mapRow
         rowInfo = @Circuit.Solver.circuitRowInfo[col - 1]
         if rowInfo.type is RowInfo.ROW_CONST
-#          console.log("if rowInfo.type is RowInfo.ROW_CONST", row, value * rowInfo.value)
           @Circuit.Solver.circuitRightSide[row] -= value * rowInfo.value
           return
         col = rowInfo.mapCol
@@ -146,19 +128,14 @@ class MatrixStamper
   stampRightSide: (row, value) ->
     if isNaN(value) or value == null
       if row > 0
-#        console.log("rschanges true " + (row - 1));
         @Circuit.Solver.circuitRowInfo[row - 1].rsChanges = true
     else
       if row > 0
         if @Circuit.Solver.circuitNeedsMap
-#          console.log("ELSE " + row + " " + value)
           row = @Circuit.Solver.circuitRowInfo[row - 1].mapRow
-#          console.log("if @Circuit.Solver.circuitNeedsMap", row, value)
-#            console.log("stamping rs " + row + " " + value);
         else
           row--
 
-#        console.log("circuitRightSide", row, value)
         @Circuit.Solver.circuitRightSide[row] += value
 
 
