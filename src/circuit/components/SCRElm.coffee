@@ -6,26 +6,31 @@ Util = require('../../util/util.coffee')
 # TODO: Extend from Diode?
 class ScrElm extends CircuitComponent
 
-  @Fields = {
-    lastvac: {
+  @Fields = [
+    {
+      id: "lastvac"
       data_type: parseFloat
     }
-    lastvag: {
+    {
+      id: "lastvag"
       data_type: parseFloat
     }
-    triggerI: {
+    {
+      id: "triggerI"
       data_type: parseFloat
       default_value: 0.01
     }
-    holdingI: {
+    {
+      id: "holdingI"
       data_type: parseFloat
       default_value: 0.0082
     }
-    cresistance: {
+    {
+      id: "cresistance"
       data_type: parseFloat
       default_value: 50
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     @anode = 0

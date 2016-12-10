@@ -12,6 +12,49 @@ class Scope
   @VAL_VCE = 6
   @VAL_R = 2
 
+  @Fields = [
+    {
+      id: "minMaxV"
+      name: "Voltage"
+      unit: "Voltage"
+      symbol: "V"
+      default_value: 5
+      data_type: parseFloat
+    },
+    {
+      id: "minMaxI"
+      name: "Voltage"
+      unit: "Voltage"
+      symbol: "V"
+      default_value: .1
+      data_type: parseFloat
+    },
+    {
+      id: "speed"
+      name: "Speed"
+      unit: "Scalar"
+      symbol: "x"
+      default_value: 64
+      data_type: parseFloat
+    },
+    {
+      id: "showI"
+      name: "Show I"
+      unit: "boolean"
+      symbol: ""
+      default_value: false
+      data_type: parseFloat
+    },
+    {
+      id: "showFreq"
+      name: "Show Freq"
+      unit: "boolean"
+      symbol: ""
+      default_value: false
+      data_type: parseFloat
+    }
+  ]
+
   constructor: ->
     @rect = Rectangle(0, 500, 200, 100)
 

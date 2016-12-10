@@ -9,6 +9,8 @@ class ProbeElm extends CircuitComponent
 
   @FLAG_SHOWVOLTAGE: 1
 
+  @Fields = []
+
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)
 

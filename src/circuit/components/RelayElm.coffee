@@ -7,29 +7,36 @@ class RelayElm extends CircuitComponent
   @FLAG_SWAP_COIL = 1
   @FLAG_BACK_EULER = 2
 
-  @Fields = {
-    poleCount: {
+  @Fields = [
+    {
+      id: "poleCount"
       data_type: parseInt
     },
-    inductance: {
+    {
+      id: "inductance"
       data_type: parseFloat
     },
-    coilCurrent: {
+    {
+      id: "coilCurrent"
       data_type: parseFloat
     },
-    r_on: {
+    {
+      id: "r_on"
       data_type: parseFloat
     },
-    r_off: {
+    {
+      id: "r_off"
       data_type: parseFloat
     },
-    onCurrent: {
+    {
+      id: "onCurrent"
       data_type: parseFloat
     },
-    coilR: {
+    {
+      id: "coilR"
       data_type: parseFloat
     }
-  }
+  ]
 
 
   constructor: (xa, ya, xb, yb, params, f) ->

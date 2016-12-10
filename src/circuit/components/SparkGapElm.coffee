@@ -6,8 +6,9 @@ Point = require('../../geom/point.coffee')
 Util = require('../../util/util.coffee')
 
 class SparkGapElm extends CircuitComponent
-  @Fields = {
-    "onresistance": {
+  @Fields = [
+    {
+      id: "onresistance"
       name: "Resistance"
       unit: "Ohms",
       default_value: 1e3,
@@ -16,7 +17,8 @@ class SparkGapElm extends CircuitComponent
       range: [0, Infinity]
       type: "physical"
     },
-    "offresistance": {
+    {
+      id: "offresistance"
       name: "Resistance"
       unit: "Ohms",
       default_value: 1e9,
@@ -25,7 +27,8 @@ class SparkGapElm extends CircuitComponent
       range: [0, Infinity]
       type: "physical"
     },
-    "breakdown": {
+    {
+      id: "breakdown"
       name: "Voltage"
       unit: "Voltage"
       symbol: "V"
@@ -33,8 +36,9 @@ class SparkGapElm extends CircuitComponent
       data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"
-    }
-    "holdcurrent": {
+    },
+    {
+      id: "holdcurrent",
       unit: "Amperes",
       name: "Current",
       symbol: "A",
@@ -43,7 +47,7 @@ class SparkGapElm extends CircuitComponent
       range: [-Infinity, Infinity]
       type: "physical"
     },
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     @resistance = 0

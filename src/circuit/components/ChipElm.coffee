@@ -13,7 +13,7 @@ class ChipElm extends CircuitComponent
   @SIDE_W = 2
   @SIDE_E = 3
 
-  @Fields = {}
+  @Fields = []
 
 #  @Fields = {
 #    bits: {

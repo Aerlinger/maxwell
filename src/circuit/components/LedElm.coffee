@@ -5,18 +5,21 @@ Settings = require('../../settings/Settings.coffee')
 
 class LedElm extends DiodeElm
 
-  @Fields = {
-    colorR: {
+  @Fields = [
+    {
+      id: "colorR"
       name: "Red Intensity"
       data_type: parseFloat
       default_value: 0
-    }
-    colorG: {
+    },
+    {
+      id: "colorG"
       name: "Green Intensity"
       data_type: parseFloat
       default_value: 0
-    }
-    colorB: {
+    },
+    {
+      id: "colorB"
       name: "Blue Intensity"
       data_type: parseFloat
       default_value: 0
@@ -26,7 +29,7 @@ class LedElm extends DiodeElm
 #      data_type: parseFloat
 #      default_value: DiodeElm.DEFAULT_DROP
 #    }
-  }
+  ]
 
 
   constructor: (xa, xb, ya, yb, params, f) ->

@@ -14,8 +14,9 @@ class Switch2Elm extends SwitchElm
 
   @FLAG_CENTER_OFF: 1
 
-  @Fields = Util.extend(SwitchElm.Fields, {
-    "link": {
+  @Fields = SwitchElm.Fields.concat([
+    {
+      id: "link"
       name: "link"
       unit: "",
       default_value: 0,
@@ -23,7 +24,7 @@ class Switch2Elm extends SwitchElm
       range: [0, 1]
       field_type: "boolean"
     }
-  })
+  ])
 
   constructor: (xa, ya, xb, yb, params, f) ->
     @openhs = 16

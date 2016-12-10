@@ -4,35 +4,40 @@ Util = require('../../util/util.coffee')
 class TransformerElm extends CircuitComponent
   @FLAG_BACK_EULER = 2
 
-  @Fields = {
-    inductance: {
+  @Fields = [
+    {
+      id: "inductance"
       name: "Inductance"
       default_value: 1e-3
       data_type: parseFloat
-    }
-    ratio: {
+    },
+    {
+      id: "ratio"
       name: "Ratio"
       default_value: 1
       data_type: parseFloat
       input_type: "integer"
-    }
+    },
     # TODO: Name collision
-    current0: {
+    {
+      id: "current0"
       name: "Current L"
       data_type: parseFloat
       default_value: 1e-3
-    }
-    current1: {
+    },
+    {
+      id: "current1"
       name: "Current R"
       data_type: parseFloat
       default_value: 1e-3
-    }
-    couplingCoef: {
+    },
+    {
+      id: "couplingCoef"
       name: "Coupling Coefficient"
       default_value: 0.999
       data_type: parseFloat
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     @width = Math.max(32, Math.abs(yb - ya))

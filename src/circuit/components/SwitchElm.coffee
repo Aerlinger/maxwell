@@ -7,8 +7,9 @@ Util = require('../../util/util.coffee')
 
 class SwitchElm extends CircuitComponent
 
-  @Fields = {
-    "position": {
+  @Fields = [
+    {
+      id: "position"
       name: "Position"
       default_value: 0
       data_type: (str)->
@@ -22,13 +23,14 @@ class SwitchElm extends CircuitComponent
           parseInt(str)
       field_type: "boolean"
     },
-    "momentary": {
+    {
+      id: "momentary"
       name: "Momentary"
       default_value: 0
       data_type: (str) -> str.toString() == 'true'
       field_type: "boolean"
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     @momentary = false

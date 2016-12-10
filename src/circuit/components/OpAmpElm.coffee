@@ -10,8 +10,9 @@ class OpAmpElm extends CircuitComponent
   @FLAG_SMALL: 2
   @FLAG_LOWGAIN: 4
 
-  @Fields = {
-    "maxOut": {
+  @Fields = [
+    {
+      id: "maxOut"
       name: "Voltage"
       unit: "Voltage"
       description: "Maximum allowable output voltage of the Op Amp"
@@ -21,7 +22,8 @@ class OpAmpElm extends CircuitComponent
       range: [-Infinity, Infinity]
       type: "physical"
     },
-    "minOut": {
+    {
+      id: "minOut"
       name: "Voltage"
       unit: "Voltage"
       description: "Minimum allowable output voltage of the Op Amp"
@@ -31,17 +33,18 @@ class OpAmpElm extends CircuitComponent
       range: [-Infinity, Infinity]
       type: "physical"
     },
-    "gbw": {
+    {
+      id: "gbw"
       name: "Gain"
       unit: ""
-      description: "Gutput gain"
+      description: "Output gain"
       symbol: ""
       default_value: 1e6
       data_type: parseFloat
       range: [-Infinity, Infinity]
       type: "physical"
     }
-  }
+  ]
 
   constructor: (xa = 104, ya = 104, xb = 208, yb = 104, params, f) ->
     @opsize = 0
@@ -84,6 +87,8 @@ class OpAmpElm extends CircuitComponent
     # gain of 100000 breaks e-amp-dfdx.txt
     # gain was 1000, but it broke amp-schmitt.txt
     @gain = (if ((@flags & OpAmpElm.FLAG_LOWGAIN) isnt 0) then 1000 else 100000)
+
+  @flags
 
   nonLinear: ->
     true

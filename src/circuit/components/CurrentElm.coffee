@@ -6,8 +6,9 @@ Point = require('../../geom/point.coffee')
 Util = require('../../util/util.coffee')
 
 class CurrentElm extends CircuitComponent
-  @Fields = {
-    "currentValue": {
+  @Fields = [
+    {
+      id: "currentValue",
       unit: "Amperes",
       name: "Current",
       symbol: "A",
@@ -16,7 +17,7 @@ class CurrentElm extends CircuitComponent
       range: [-Infinity, Infinity]
       type: "physical"
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)

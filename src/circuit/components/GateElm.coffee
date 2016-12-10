@@ -5,20 +5,22 @@ Settings = require('../../settings/settings.coffee')
 class GateElm extends CircuitComponent
   @FLAG_SMALL = 1
 
-  @Fields = {
-    inputCount: {
+  @Fields = [
+    {
+      id: "inputCount"
       name: "Input count"
       data_type: parseInt
       default_value: 2
       field: "integer"
     },
-    lastOutput: {
+    {
+      id: "lastOutput"
       name: "Last Output"
       data_type: (x) ->
         x > 2.5
       default_value: false
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     if parseInt(f) & GateElm.FLAG_SMALL != 0

@@ -8,8 +8,9 @@ Util = require('../../util/util.coffee')
 class CapacitorElm extends CircuitComponent
   @FLAG_BACK_EULER: 2
 
-  @Fields = {
-    "capacitance": {
+  @Fields = [
+    {
+      id: "capacitance",
       name: "Capacitance",
       unit: "Farads",
       default_value: 5e-6,
@@ -17,7 +18,8 @@ class CapacitorElm extends CircuitComponent
       data_type: parseFloat
       range: [0, Infinity]
     },
-    "voltdiff": {
+    {
+      id: "voltdiff"
       name: "Volts"
       unit: "Volts"
       default_value: 10
@@ -25,7 +27,7 @@ class CapacitorElm extends CircuitComponent
       data_type: parseFloat
       range: [-Infinity, Infinity]
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     @compResistance = 11

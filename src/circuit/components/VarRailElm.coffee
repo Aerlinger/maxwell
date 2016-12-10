@@ -11,15 +11,16 @@ Util = require('../../util/util.coffee')
 
 class VarRailElm extends RailElm
 
-  @Fields = Util.extend(RailElm.Fields, {
-    "sliderText": {
+  @Fields = RailElm.Fields.concat([
+    {
+      id: "sliderText"
       name: "sliderText"
       unit: "",
       default_value: "Voltage",
       symbol: "%",
       data_type: (x) -> x
     }
-  })
+  ])
 
   constructor: (xa, ya, xb, yb, params, f) ->
     @waveform = VoltageElm.WF_VAR

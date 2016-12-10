@@ -10,13 +10,14 @@ class LogicOutputElm extends CircuitComponent
   @FLAG_NUMERIC = 2
   @FLAG_PULLDOWN = 4
 
-  @Fields = {
-    threshold: {
+  @Fields = [
+    {
+      id: "threshold"
       name: "Threshold Voltage"
       data_type: parseFloat
       default_value: 2.5
     }
-  }
+  ]
 
 
   constructor: (xa, ya, xb, yb, params, f) ->

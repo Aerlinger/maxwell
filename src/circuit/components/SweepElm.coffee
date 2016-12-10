@@ -10,29 +10,33 @@ class SweepElm extends CircuitComponent
   @FLAG_BIDIR: 2
   @circleSize: 17
 
-  @Fields = {
-    "minF": {
+  @Fields = [
+    {
+      id: "minF"
       name: "Min. Frequency"
       unit: "Hertz"
       default_value: 20
       symbol: "Hz"
       data_type: parseFloat
     },
-    "maxF": {
+    {
+      id: "maxF",
       name: "Min. Frequency"
       unit: "Hertz"
       default_value: 4e4
       symbol: "Hz"
       data_type: parseFloat
     },
-    "maxV": {
+    {
+      id: "maxV"
       name: "Voltage"
       unit: "Voltage"
       symbol: "V"
       default_value: 5
       data_type: parseFloat
     },
-    "sweepTime": {
+    {
+      id: "sweepTime"
       unit: "seconds"
       name: "Time"
       symbol: "s"
@@ -40,7 +44,7 @@ class SweepElm extends CircuitComponent
       data_type: parseFloat
       range: [0, -Infinity]
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     @dir = 1

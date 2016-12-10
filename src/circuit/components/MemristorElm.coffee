@@ -4,34 +4,40 @@ Point = require('../../geom/Point.coffee')
 
 class MemristorElm extends CircuitComponent
 
-  @Fields = {
-    r_on: {
+  @Fields = [
+    {
+      id: "r_on"
       name: "On resistance"
       data_type: parseFloat
 
     }
-    r_off: {
+    {
+      id: "r_off"
       name: "Off resistance"
       data_type: parseFloat
     }
-    dopeWidth: {
+    {
+      id: "dopeWidth"
       name: "Doping Width"
       data_type: parseFloat
     }
-    totalWidth: {
+    {
+      id: "totalWidth"
       name: "Total Width"
       data_type: parseFloat
     }
-    mobility: {
+    {
+      id: "mobility"
       name: "Majority carrier mobility"
       data_type: parseFloat
     }
-    resistance: {
+    {
+      id: "resistance"
       name: "Overall resistance"
       data_type: parseFloat
       default_value: 100
     }
-  }
+  ]
 
   constructor: (xa, xb, ya, yb, params, f) ->
     super(xa, xb, ya, yb, params, f)

@@ -7,6 +7,8 @@ Util = require('../../util/util.coffee')
 
 class GroundElm extends CircuitComponent
 
+  @Fields = []
+
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)
 

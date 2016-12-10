@@ -13,8 +13,9 @@ class MosfetElm extends CircuitComponent
   @FLAG_SHOWVT: 2
   @FLAG_DIGITAL: 4
 
-  @Fields = {
-    "vt": {
+  @Fields = [
+    {
+      id: "vt"
       data_type: parseFloat
       name: "Voltage"
       description: "Threshold voltage"
@@ -24,7 +25,8 @@ class MosfetElm extends CircuitComponent
       range: [0, Infinity]
       type: sprintf
     },
-    "pnp": {
+    {
+      id: "pnp"
       name: "Polarity"
       description: "Current multiplier"
       default_value: 1
@@ -32,7 +34,7 @@ class MosfetElm extends CircuitComponent
       field_type: "select"
       select_values: { "N-Channel": -1, "P-Channel": 1 }
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     @lastv1 = 0

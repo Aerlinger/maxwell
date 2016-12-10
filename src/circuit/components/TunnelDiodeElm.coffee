@@ -2,6 +2,8 @@ CircuitComponent = require("../CircuitComponent.coffee")
 Util = require('../../util/util.coffee')
 
 class TunnelDiodeElm extends CircuitComponent
+  @Fields = []
+
   constructor: (xa, xb, ya, yb, params, f) ->
     super(xa, xb, ya, yb, params, f)
 

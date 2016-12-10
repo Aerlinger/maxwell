@@ -3,13 +3,14 @@ Util = require('../../util/util.coffee')
 
 class InverterElm extends CircuitComponent
 
-  @Fields = {
-    slewRate: {
+  @Fields = [
+    {
+      id: "slewRate"
       name: "Slew Rate"
       data_type: parseFloat
       default_value: 0.5
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)

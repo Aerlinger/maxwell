@@ -17,8 +17,9 @@ class VoltageElm extends CircuitComponent
 
   @circleSize: 17
 
-  @Fields = {
-    "waveform": {
+  @Fields = [
+    {
+      id: "waveform"
       name: "none"
       default_value: 0
       data_type: parseInt
@@ -34,28 +35,32 @@ class VoltageElm extends CircuitComponent
         "Variable": VoltageElm.WF_VAR
       }
     },
-    "frequency": {
+    {
+      id: "frequency"
       name: "Frequency"
       unit: "Hertz"
       default_value: 40
       symbol: "Hz"
       data_type: parseFloat
     },
-    "maxVoltage": {
+    {
+      id: "maxVoltage"
       name: "Voltage"
       unit: "Voltage"
       symbol: "V"
       default_value: 5
       data_type: parseFloat
     },
-    "bias": {
+    {
+      id: "bias",
       name: "Voltage"
       unit: "Voltage"
       symbol: "V"
       default_value: 0
       data_type: parseFloat
     },
-    "phaseShift": {
+    {
+      id: "phaseShift"
       name: "degrees"
       unit: "degrees"
       default_value: 0
@@ -65,7 +70,8 @@ class VoltageElm extends CircuitComponent
       type: parseFloat
       input_type: "range"
     },
-    "dutyCycle": {
+    {
+      id: "dutyCycle"
       name: "percentage"
       unit: ""
       default_value: 0.5
@@ -75,7 +81,7 @@ class VoltageElm extends CircuitComponent
       type: parseFloat
       input_type: "range"
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     @flags = f

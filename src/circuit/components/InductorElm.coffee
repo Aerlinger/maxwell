@@ -8,22 +8,24 @@ Util = require('../../util/util.coffee')
 class InductorElm extends CircuitComponent
   @FLAG_BACK_EULER = 2
 
-  @Fields = {
-    "inductance": {
+  @Fields = [
+    {
+      id: "inductance"
       name: "inductance"
       unit: "Henries"
       symbol: "H"
       default_value: 1e-3
       data_type: parseFloat
     },
-    "current": {
+    {
+      id: "current"
       name: "current"
       unit: "Amperes"
       symbol: "A"
       default_value: 0
       data_type: parseFloat
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
 #    @inductance = 0

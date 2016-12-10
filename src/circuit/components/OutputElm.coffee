@@ -8,6 +8,7 @@ Util = require('../../util/util.coffee')
 class OutputElm extends CircuitComponent
 
   @FLAG_VALUE: 1
+  @Fields = []
 
   constructor: (xa, ya, xb, yb, params, f) ->
     # st not used for OutputElm

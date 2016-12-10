@@ -10,15 +10,16 @@ class DiodeElm extends CircuitComponent
   @FLAG_FWDROP = 1
   @DEFAULT_DROP = 0.805904783
 
-  @Fields = {
-    fwdrop: {
+  @Fields = [
+    {
+      id: "fwdrop",
       name: "Voltage"
       unit: "Voltage"
       symbol: "V"
       default_value: DiodeElm.DEFAULT_DROP
       data_type: parseFloat
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     @hs = 8

@@ -6,25 +6,28 @@ Point = require("../../geom/point.coffee")
 
 class PotElm extends CircuitComponent
 
-  @Fields = {
-    "maxResistance": {
+  @Fields = [
+    {
+      id: "maxResistance"
       name: "Max Resistance"
       default_value: 1e4
       data_type: parseFloat
       range: [0, 1e5]
     },
-    "position": {
+    {
+      id: "position"
       name: "Position"
       default_value: 1
       range: [0, 1e5]
       data_type: parseFloat
     },
-    "sliderText": {
+    {
+      id: "sliderText"
       name: "sliderText"
       default_value: ""
       data_type: (x) -> x
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)

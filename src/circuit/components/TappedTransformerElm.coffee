@@ -3,30 +3,35 @@ Util = require('../../util/util.coffee')
 
 class TappedTransformerElm extends CircuitComponent
 
-  @Fields = {
-    inductance: {
+  @Fields = [
+    {
+      id: "inductance"
       name: "Inductance"
       data_type: parseFloat
     }
-    ratio: {
+    {
+      id: "ratio"
       name: "Ratio"
       data_type: parseFloat
     }
-    current0: {
+    {
+      id: "current0"
       name: "Current0"
       data_type: parseFloat
     }
-    current1: {
+    {
+      id: "current1"
       name: "Current1"
       data_type: parseFloat
       default_value: 1
     }
-    current2: {
+    {
+      id: "current2"
       name: "Current2"
       data_type: parseFloat
       default_value: 0
     }
-  }
+  ]
 
   constructor: (xa, xb, ya, yb, params, f) ->
     super(xa, xb, ya, yb, params, f)

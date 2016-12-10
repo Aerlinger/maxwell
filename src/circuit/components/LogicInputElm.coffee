@@ -10,8 +10,9 @@ class LogicInputElm extends SwitchElm
   FLAG_TERNARY: 1
   FLAG_NUMERIC: 2
 
-  @Fields = {
-    "position": {
+  @Fields = [
+    {
+      id: "position"
       name: "Position"
       default_value: 0
       data_type: (str)->
@@ -25,23 +26,26 @@ class LogicInputElm extends SwitchElm
           parseInt(str)
       field_type: "boolean"
     },
-    "momentary": {
+    {
+      id: "momentary"
       name: "Momentary"
       default_value: 0
       data_type: (str) -> str.toString() == 'true'
       field_type: "boolean"
-    }
-    hiV: {
+    },
+    {
+      id: "hiV"
       name: "Voltage High"
       data_type: parseFloat
       default_value: 5
     },
-    loV: {
+    {
+      id: "loV"
       name: "Voltage Low"
       data_type: parseFloat
       default_value: 0
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)

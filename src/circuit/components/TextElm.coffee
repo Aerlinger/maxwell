@@ -8,8 +8,9 @@ class TextElm extends CircuitComponent
   @FLAG_CENTER = 1
   @FLAG_BAR = 2
 
-  @Fields = {
-    size: {
+  @Fields = [
+    {
+      id: "size"
       name: "Pixel"
       unit: "Pixel"
       symbol: ""
@@ -18,12 +19,13 @@ class TextElm extends CircuitComponent
       range: [0, 500]
       type: "attribute"
     },
-    text: {
+    {
+      id: "text"
       default_value: "<text>"
       type: "attribute"
       data_type: (x) -> x
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     @text = "<TextElm>"

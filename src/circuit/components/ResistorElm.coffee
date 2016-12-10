@@ -7,8 +7,9 @@ Util = require('../../util/util.coffee')
 #Maxwell = require('../../Maxwell.coffee')
 
 class ResistorElm extends CircuitComponent
-  @Fields = {
-    "resistance": {
+  @Fields = [
+    {
+      id: "resistance"
       name: "Resistance"
       unit: "Ohms",
       default_value: 1000,
@@ -17,7 +18,7 @@ class ResistorElm extends CircuitComponent
       range: [0, Infinity]
       type: "physical"
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)

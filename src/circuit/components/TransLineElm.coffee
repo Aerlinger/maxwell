@@ -3,24 +3,28 @@ Util = require('../../util/util.coffee')
 Settings = require('../../settings/settings.coffee')
 
 class TransLineElm extends CircuitComponent
-  @Fields = {
-    delay: {
+  @Fields = [
+    {
+      id: "delay"
       name: "Delay"
       data_type: parseFloat
-    }
-    imped: {
+    },
+    {
+      id: "imped"
       name: "Impedance"
       data_type: parseFloat
-    }
-    width: {
+    },
+    {
+      id: "width"
       name: "Width (m)"
       data_type: parseFloat
     }
-    resistance: {
+    {
+      id: "resistance"
       name: "Resistance"
       data_type: parseFloat
     }
-  }
+  ]
 
   constructor: (xa, xb, ya, yb, params, f) ->
     @noDiagonal = true

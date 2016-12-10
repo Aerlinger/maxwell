@@ -8,8 +8,9 @@ Util = require('../../util/util.coffee')
 class TransistorElm extends CircuitComponent
   @FLAG_FLIP: 1
 
-  @Fields = {
-    "pnp": {
+  @Fields = [
+    {
+      id: "pnp"
       name: "Polarity"
       description: "Current multiplier"
       default_value: -1
@@ -17,29 +18,32 @@ class TransistorElm extends CircuitComponent
       field_type: "select"
       select_values: { "NPN": -1, "PNP": 1 }
     },
-    "lastvbe": {
+    {
+      id: "lastvbe"
       name: "Voltage"
       unit: "Voltage"
       symbol: "V"
       default_value: 0
       data_type: parseFloat
       type: "physical"
-    }
-    "lastvbc": {
+    },
+    {
+      id: "lastvbc"
       name: "Voltage"
       unit: "Voltage"
       symbol: "V"
       default_value: 0
       data_type: parseFloat
     },
-    "beta": {
+    {
+      id: "beta"
       name: "beta"
       description: "Current multiplier"
       default_value: 100
       data_type: parseFloat
       range: [0, Infinity]
     }
-  }
+  ]
 
   constructor: (xa, ya, xb, yb, params, f) ->
     # Forward declarations:

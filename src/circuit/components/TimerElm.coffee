@@ -12,6 +12,8 @@ class TimerElm extends ChipElm
   @N_OUT = 5
   @N_RST = 6
 
+  
+
   constructor: (xa, xb, ya, yb, params, f) ->
     super(xa, xb, ya, yb, params, f)
 

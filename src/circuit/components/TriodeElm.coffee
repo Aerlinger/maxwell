@@ -2,16 +2,18 @@ CircuitComponent = require("../CircuitComponent.coffee")
 Util = require('../../util/util.coffee')
 
 class TriodeElm extends CircuitComponent
-  @Fields = {
-    mu: {
+  @Fields = [
+    {
+      id: "mu"
+      name: ""
+      data_type: parseFloat
+    },
+    {
+      id: "kg1"
       name: ""
       data_type: parseFloat
     }
-    kg1: {
-      name: ""
-      data_type: parseFloat
-    }
-  }
+  ]
 
 
   constructor: (xa, xb, ya, yb, params, f) ->
