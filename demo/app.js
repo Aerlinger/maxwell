@@ -25,7 +25,9 @@ app.get('/plotting', function (req, res) {
 });
 
 app.get('/:circuit_name', function (req, res) {
-  circuit_names = glob.sync("../circuits/*.json").map(function(filename) {
+  console.log(__dirname + "../circuits/*.json")
+
+  circuit_names = glob.sync(__dirname + "/../circuits/*.json").map(function(filename) {
     return path.basename(filename, ".json")
   });
 
@@ -41,3 +43,4 @@ app.get('/:circuit_name', function (req, res) {
 app.listen(port, function () {
   console.log('Example app listening on port ' + port + '!');
 });
+``
