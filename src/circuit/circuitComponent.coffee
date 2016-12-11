@@ -59,7 +59,9 @@ class CircuitComponent
 
     @params = @params || {}
 
-    for param_name, definition of Fields
+    for definition in Fields
+
+      param_name = definition['id']
       default_value = definition.default_value
       data_type = definition.data_type
 
