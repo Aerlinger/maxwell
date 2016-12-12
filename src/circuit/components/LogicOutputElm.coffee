@@ -53,7 +53,7 @@ class LogicOutputElm extends CircuitComponent
 
     @value = s
 
-    renderContext.fillText(s, @x2, @y2)
+    renderContext.fillText(s, @point2.x, @point2.y)
 
     color = Util.getVoltageColor(@volts[0])
     renderContext.drawLinePt(@point1, @lead1, color)
@@ -63,9 +63,9 @@ class LogicOutputElm extends CircuitComponent
       super(renderContext)
 
   setPoints: ->
-    super()
+    super
 
-    @lead1 = Util.interpolate(@point1, @point2, 1 - 12 / @dn)
+    @lead1 = Util.interpolate(@point1, @point2, 1 - 12 / @dn())
 
 
   stamp: (stamper) ->

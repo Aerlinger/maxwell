@@ -28,7 +28,7 @@ class TunnelDiodeElm extends CircuitComponent
     "175"
 
   setPoints: ->
-    super()
+    super
     @calcLeads(16)
     @cathode = new Array(4)
     pa = new Array(2)

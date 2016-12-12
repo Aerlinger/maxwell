@@ -12,7 +12,7 @@ class OrGateElm extends GateElm
     "OR Gate"
 
   setPoints: ->
-    super()
+    super
 
     triPoints = Util.newPointArray(38)
 
@@ -22,7 +22,7 @@ class OrGateElm extends GateElm
 
       [triPoints[i], triPoints[32 - i]] = Util.interpolateSymmetrical(@lead1, @lead2, 0.5 + a/2, b * @hs2)
 
-    ww2 = if (@ww == 0) then @dn * 2 else @ww * 2
+    ww2 = if (@ww == 0) then @dn() * 2 else @ww * 2
 
     for i in [0...5]
       a = (i - 2) / 2.0
@@ -33,8 +33,8 @@ class OrGateElm extends GateElm
     triPoints[16] = new Point(@lead2.x, @lead2.y)
 
     if @isInverting()
-      @pcircle = Util.interpolate(@point1, @point2, 0.5 + (@ww + 4) / @dn)
-      @lead2 = Util.interpolate(@point1, @point2, 0.5 + (@ww + 8) / @dn)
+      @pcircle = Util.interpolate(@point1, @point2, 0.5 + (@ww + 4) / @dn())
+      @lead2 = Util.interpolate(@point1, @point2, 0.5 + (@ww + 8) / @dn())
 
     @gatePoly = Util.createPolygonFromArray(triPoints)
 

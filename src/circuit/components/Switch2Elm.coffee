@@ -37,7 +37,7 @@ class Switch2Elm extends SwitchElm
     "SPDT switch"
 
   setPoints: ->
-    super()
+    super
 #    @calcLeads(32);
 
     @swposts = Util.newPointArray(2)

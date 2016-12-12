@@ -1,7 +1,6 @@
 glob = require('glob')
 
 Circuit = require("../../src/circuit/circuit")
-Circuit = require("../../src/Maxwell")
 Renderer = require("../../src/render/renderer")
 
 CircuitLoader = require("../../src/io/circuitLoader")
@@ -24,20 +23,24 @@ describe "Renderer", ->
       outpath = "test/fixtures/circuitRenders/" + basename + ".png"
 
       if basename != "__index__"
-        jsonData = JSON.parse(fs.readFileSync(circuit_name))
+        try
+          jsonData = JSON.parse(fs.readFileSync(circuit_name))
 
-        @circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
-        @circuit.updateCircuit()
+          @circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
+          @circuit.updateCircuit()
 
-        @renderer = new Renderer(@circuit, @canvas)
+          @renderer = new Renderer(@circuit, @canvas)
 
-        ctx = @canvas.getContext('2d')
-        @renderer.context = ctx
-        @renderer.drawComponents()
+          ctx = @canvas.getContext('2d')
+          @renderer.context = ctx
+          @renderer.drawComponents()
 
-        origfont = ctx.font
-        ctx.font = "16px serif"
-        ctx.fillText(basename, 5, 20)
-        ctx.font = origfont
+          origfont = ctx.font
+          ctx.font = "16px serif"
+          ctx.fillText(basename, 5, 20)
+          ctx.font = origfont
 
-        fs.writeFileSync(outpath, @canvas.toBuffer())
+          fs.writeFileSync(outpath, @canvas.toBuffer())
+
+        catch e
+          console.log("ERR:", e.message)

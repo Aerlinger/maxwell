@@ -42,16 +42,16 @@ class TextElm extends CircuitComponent
     "x"
 
   drag: (xx, yy) ->
-    @x1 = xx
-    @y1 = yy
-    @x2 = xx + 16
-    @y2 = yy
+    @point1.x = xx
+    @point1.y = yy
+    @point2.x = xx + 16
+    @point2.y = yy
 
   draw: (renderContext) ->
 #    color = (if @needsHighlight() then Settings.SELECT_COLOR else Settings.TEXT_COLOR)
 
     color = Settings.TEXT_COLOR
-    @setBbox @x1, @y1, @x2, @y2
+    @setBbox @point1.x, @point1.y, @point2.x, @point2.y
 
 #      f = new Font("SansSerif", 0, size)
 #      g.setFont f
@@ -80,8 +80,8 @@ class TextElm extends CircuitComponent
       renderContext.fillText(line, 40, 15*i + 100)
       i++
 
-    @x2 = @boundingBox.x1 + @boundingBox.width
-    @y2 = @boundingBox.y1 + @boundingBox.height
+    @point2.x = @boundingBox.x1 + @boundingBox.width
+    @point2.y = @boundingBox.y1 + @boundingBox.height
 
     if CircuitComponent.DEBUG
       super(renderContext)

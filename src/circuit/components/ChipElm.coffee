@@ -77,10 +77,10 @@ class ChipElm extends CircuitComponent
 
     {
       sym: @getDumpType()
-      x1: @x1
-      y1: @y1
-      x2: @x2
-      xy: @y2
+      x1: @point1.x
+      y1: @point1.y
+      x2: @point2.x
+      y2: @point2.y
 
       csize: @csize
       cspc: @cspc
@@ -215,9 +215,11 @@ class ChipElm extends CircuitComponent
 #    if @x2 - @x1 > @sizeX*@cspc2 # dragging
 #      @setSize(2)
 
+    super
+
     hs = @cspc2
-    x0 = @x1 + @cspc2
-    y0 = @y1
+    x0 = @point1.x + @cspc2
+    y0 = @point1.y
 
     xr = x0 - @cspc
     yr = y0 - @cspc

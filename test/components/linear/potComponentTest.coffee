@@ -3,10 +3,10 @@ describe "Potentiometer", ->
     @potElm = new PotElm(50, 50, 50, 150, { maxResistance: 1e6, position: 50, sliderText: "placeholder" })
 
   it "has correct position", ->
-    expect(@potElm.x1).to.equal(50)
-    expect(@potElm.y1).to.equal(50)
-    expect(@potElm.x2).to.equal(50)
-    expect(@potElm.y2).to.equal(146)
+    expect(@potElm.x1()).to.equal(50)
+    expect(@potElm.y1()).to.equal(50)
+    expect(@potElm.x2()).to.equal(50)
+    expect(@potElm.y2()).to.equal(146)
 
   it "has correct parameters", ->
     expect(@potElm.maxResistance).to.equal(1e6)

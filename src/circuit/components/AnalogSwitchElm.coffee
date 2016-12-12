@@ -27,7 +27,7 @@ class AnalogSwitchElm extends CircuitComponent
     159
 
   setPoints: ->
-    super()
+    super
 
     @calcLeads(32)
 

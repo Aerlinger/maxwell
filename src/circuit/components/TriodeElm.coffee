@@ -55,7 +55,7 @@ class TriodeElm extends CircuitComponent
     (@volts[0] - @volts[2]) * @current
 
   setPoints: ->
-    super()
+    super
 
     @plate = new Array(4)
     @grid = new Array(8)
@@ -72,7 +72,7 @@ class TriodeElm extends CircuitComponent
     [@plate[2], @plate[3]] = Util.interpolateSymmetrical(@point2, @plate[1], 1, platew)
 
     circler = 24
-    @grid[1] = Util.interpolate(@point1, @point2, (@dn - circler) / @dn, 0)
+    @grid[1] = Util.interpolate(@point1, @point2, (@dn() - circler) / @dn(), 0)
 
     for i in [0...3]
       @grid[2 + i * 2] = Util.interpolate(@grid[1], @point2, (i * 3 + 1) / 4.5, 0)

@@ -41,7 +41,7 @@ class InductorElm extends CircuitComponent
     @curcount = 0
 
   setPoints: ->
-    super()
+    super
     @calcLeads(32)
 
   stamp: (stamper) ->

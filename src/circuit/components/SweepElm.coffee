@@ -61,7 +61,7 @@ class SweepElm extends CircuitComponent
       super(renderContext)
 
     color = Util.getVoltageColor(@volts[0])
-    @lead1 = Util.interpolate(@point1, @point2, 1 - SweepElm.circleSize / @dn)
+    @lead1 = Util.interpolate(@point1, @point2, 1 - SweepElm.circleSize / @dn())
 
     renderContext.drawLinePt @point1, @lead1, color
 #    @setVoltageColor (if @needsHighlight() then CircuitComponent.selectColor else Color.GREY)
@@ -120,8 +120,8 @@ class SweepElm extends CircuitComponent
     stamper.stampVoltageSource 0, @nodes[0], @voltSource
 
   setPoints: ->
-    super()
-    Util.interpolate(@point1, @point2, 1 - SweepElm.circleSize / @dn)
+    super
+    Util.interpolate(@point1, @point2, 1 - SweepElm.circleSize / @dn())
 
   setParams: ->
     if @frequency < @minF or @frequency > @maxF

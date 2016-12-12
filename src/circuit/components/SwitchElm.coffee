@@ -54,7 +54,7 @@ class SwitchElm extends CircuitComponent
 
 
   setPoints: ->
-    super()
+    super
 
     @calcLeads(32)
     @ps = new Point(0, 0)

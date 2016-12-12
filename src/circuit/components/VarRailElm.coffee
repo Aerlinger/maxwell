@@ -32,7 +32,7 @@ class VarRailElm extends RailElm
 #    console.log("value: #{@sliderValue}")
 
 #  setPoints: ->
-#    super()
+#    super
 #
 #    diameter = if (@waveform == VoltageElm.WF_DC || @waveform == VoltageElm.WF_VAR)
 #      8

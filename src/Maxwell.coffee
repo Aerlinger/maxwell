@@ -19,15 +19,16 @@ class Maxwell
 
   @Components = (v for k,v of ComponentRegistry.ComponentDefs)
 
-  if environment.isBrowser
-    @logger = console
-  else
-    @logger = new (Winston.Logger)({
-      transports: [
-        new (Winston.transports.Console)(),
-        new (Winston.transports.File)({ filename: 'log/maxwell.log' })
-      ]
-    })
+
+#  if environment.isBrowser
+#    @logger = console
+#  else
+#    @logger = new (Winston.Logger)({
+#      transports: [
+#        new (Winston.transports.Console)(),
+#        new (Winston.transports.File)({ filename: 'log/maxwell.log' })
+#      ]
+#    })
 
   @loadCircuitFromFile: (circuitFileName, onComplete) ->
     circuit = CircuitLoader.createCircuitFromJsonFile(circuitFileName, onComplete)

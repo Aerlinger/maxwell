@@ -126,7 +126,7 @@ class Renderer extends BaseRenderer
     # TODO: WIP for interactive element placing
     if @placeComponent
       @placeComponent.setPoints()
-      if @placeComponent.x1 && @placeComponent.y1
+      if @placeComponent.x1() && @placeComponent.y1()
 #        @placeComponent.x2 = @snapX
 #        @placeComponent.y2 = @snapY
 #        @placeComponent.setPoints()
@@ -243,15 +243,15 @@ class Renderer extends BaseRenderer
       if @placeComponent
         @context.fillText("Placing #{@placeComponent.constructor.name}", @snapX, @snapY)
 
-        if @placeComponent.x1 && @placeComponent.x2
+        if @placeComponent.x1() && @placeComponent.x2()
           @drawComponent(@placeComponent)
 
       if @selectedNode
         @drawCircle(@selectedNode.x, @selectedNode.y, Settings.POST_RADIUS + 3, 3, Settings.HIGHLIGHT_COLOR)
 
       if @highlightedComponent
-        @drawCircle(@highlightedComponent.x1, @highlightedComponent.y1, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR)
-        @drawCircle(@highlightedComponent.x2, @highlightedComponent.y2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR)
+        @drawCircle(@highlightedComponent.x1(), @highlightedComponent.y1(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR)
+        @drawCircle(@highlightedComponent.x2(), @highlightedComponent.y2(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR)
 
     if CircuitComponent.DEBUG
       for nodeIdx in [0...@Circuit.numNodes()]

@@ -63,10 +63,10 @@ class RelayElm extends CircuitComponent
       @switchCurCount = new Array(@poleCount)
 
   setPoints: ->
-    super()
+    super
     @setupPoles()
     @allocNodes()
-    @openhs = -@dsign * 16
+    @openhs = -@dsign() * 16
 
     @calcLeads(32)
     @swposts = (new Point() for i in [0...3] for j in [0...@poleCount])
@@ -182,16 +182,16 @@ class RelayElm extends CircuitComponent
 
     x = if ((@flags & RelayElm.FLAG_SWAP_COIL) != 0) then 1 else 0
 
-    renderContext.drawCoil(@coilLeads[x], @coilLeads[1 - x], @volts[@nCoil1 + x], @volts[@nCoil2 - x], @dsign * 6)
+    renderContext.drawCoil(@coilLeads[x], @coilLeads[1 - x], @volts[@nCoil1 + x], @volts[@nCoil2 - x], @dsign() * 6)
 
     # draw lines
     for i in [0...@poleCount]
       if (i == 0)
-        @lines[i * 2] = Util.interpolate(@point1, @point2, .5, @openhs * 2 + 5 * @dsign - i * @openhs * 3)
+        @lines[i * 2] = Util.interpolate(@point1, @point2, .5, @openhs * 2 + 5 * @dsign() - i * @openhs * 3)
       else
-        @lines[i * 2] = Util.interpolate(@point1, @point2, .5, Math.floor((@openhs * (-i * 3 + 3 - 0.5 + @d_position)) + 5 * @dsign))
+        @lines[i * 2] = Util.interpolate(@point1, @point2, .5, Math.floor((@openhs * (-i * 3 + 3 - 0.5 + @d_position)) + 5 * @dsign()))
 
-      @lines[i * 2 + 1] = Util.interpolate(@point1, @point2, .5, Math.floor((@openhs * (-i * 3 - .5 + @d_position)) - 5 * @dsign))
+      @lines[i * 2 + 1] = Util.interpolate(@point1, @point2, .5, Math.floor((@openhs * (-i * 3 - .5 + @d_position)) - 5 * @dsign()))
 
       renderContext.drawLine(@lines[i * 2].x, @lines[i * 2].y, @lines[i * 2 + 1].x, @lines[i * 2 + 1].y, "#AAA")
 

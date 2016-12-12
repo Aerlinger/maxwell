@@ -45,7 +45,7 @@ class TappedTransformerElm extends CircuitComponent
     @current[3] = @current[1] - @current[2]
 
   setPoints: ->
-    super()
+    super
 
     hs = 32
 
@@ -60,8 +60,8 @@ class TappedTransformerElm extends CircuitComponent
     @ptEnds[3] = Util.interpolate(@point1, @point2, 1, -hs)
     @ptEnds[4] = Util.interpolate(@point1, @point2, 1, -hs * 2)
 
-    ce = 0.5 - 12 / @dn
-    cd = 0.5 - 2 / @dn
+    ce = 0.5 - 12 / @dn()
+    cd = 0.5 - 2 / @dn()
 
     @ptCoil[0] = Util.interpolate(@ptEnds[0], @ptEnds[2], ce)
     @ptCoil[1] = Util.interpolate(@ptEnds[0], @ptEnds[2], ce, -hs * 2)

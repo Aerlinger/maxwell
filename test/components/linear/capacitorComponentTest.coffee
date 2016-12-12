@@ -24,6 +24,10 @@ describe "Capacitor Component", ->
   it "should be orphaned", ->
     @capacitor.orphaned().should.equal true
 
+  it "has correct position", ->
+    expect(@capacitor.point1.x).to.equal(100)
+    expect(@capacitor.x1()).to.equal(100)
+
   it "serializes to JSON", ->
     expect(@capacitor.toJson()).to.eql({
       x: 100

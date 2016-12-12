@@ -21,24 +21,24 @@ class InverterElm extends CircuitComponent
     'I'
 
   setPoints: ->
-    super()
+    super
 
     hs = 16
     ww = 16
 
-    if ww > @dn / 2
-      ww = Math.floor(@dn/2)
+    if ww > @dn() / 2
+      ww = Math.floor(@dn()/2)
 
-    @lead1 = Util.interpolate(@point1, @point2, 0.5 - ww / @dn)
-    @lead2 = Util.interpolate(@point1, @point2, 0.5 + (ww + 2) / @dn)
+    @lead1 = Util.interpolate(@point1, @point2, 0.5 - ww / @dn())
+    @lead2 = Util.interpolate(@point1, @point2, 0.5 + (ww + 2) / @dn())
 
-    @pcircle = Util.interpolate(@point1, @point2, 0.5 + (ww - 2) / @dn)
+    @pcircle = Util.interpolate(@point1, @point2, 0.5 + (ww - 2) / @dn())
 
     triPoints = Util.newPointArray(3)
 
     [triPoints[0], triPoints[1]] = Util.interpolateSymmetrical(@lead1, @lead2, 0, hs)
 
-    triPoints[2] = Util.interpolate(@point1, @point2, 0.5 + (ww - 5) / @dn)
+    triPoints[2] = Util.interpolate(@point1, @point2, 0.5 + (ww - 5) / @dn())
 
     @gatePoly = triPoints
 

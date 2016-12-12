@@ -29,7 +29,7 @@ class CircuitComponent
 
   @Fields = {}
 
-  constructor: (@x1, @y1, @x2, @y2, params, f = 0) ->
+  constructor: (x1, y1, x2, y2, params, f = 0) ->
     @current = 0
     @flags = f || 0
 
@@ -41,7 +41,7 @@ class CircuitComponent
 
     @component_id = Util.getRand(100000000) + (new Date()).getTime()
 
-    @setPoints()
+    @setPoints(x1, y1, x2, y2)
     @recomputeBounds()
     @allocNodes()
 
@@ -121,28 +121,73 @@ class CircuitComponent
   getParentCircuit: ->
     return @Circuit
 
-  setPoints: ->
-    @dx = @x2 - @x1
-    @dy = @y2 - @y1
+  setx1: (value) ->
+    @point1.x = value
+    
+  sety1: (value) ->
+    @point1.y = value
+  
+  setx2: (value) ->
+    @point2.x = value
+    
+  sety2: (value) ->
+    @point2.y = value
+  
+    
+  x1: ->
+    @point1.x
 
-    @dn = Math.sqrt(@dx * @dx + @dy * @dy)
-    @length = Math.sqrt(@dx * @dx + @dy * @dy)
-    @dpx1 = @dy / @dn
-    @dpy1 = -@dx / @dn
+  y1: ->
+    @point1.y
+    
+  x2: ->
+    @point2.x
 
-    @dsign = (if (@dy is 0) then Math.sign(@dx) else Math.sign(@dy))
+  y2: ->
+    @point2.y
+    
+  dx: ->
+    @point2.x - @point1.x
 
-    @point1 = new Point(@x1, @y1)
-    @point2 = new Point(@x2, @y2)
+  dy: ->
+    @point2.y - @point1.y
+
+  dn: ->
+    Math.sqrt(@dx() * @dx() + @dy() * @dy())
+
+  dpx1: ->
+    @dy() / @dn()
+
+  dpy1: ->
+    - @dx() / @dn()
+
+  dsign: ->
+    (if (@dy() is 0) then Math.sign(@dx()) else Math.sign(@dy()))
+
+  setPoints: (x1, y1, x2, y2) ->
+    #    @dx() = x2 - x1
+    #    @dy() = y2 - y1
+
+    #    @dn() = Math.sqrt(@dx() * @dx() + @dy() * @dy())
+    #    @length = Math.sqrt(@dx() * @dx() + @dy() * @dy())
+    #    @@dpx1() = @dy() / @dn()
+    #    @dpy1 = -@dx() / @dn()
+
+    #    @dsign() = (if (@dy() is 0) then Math.sign(@dx()) else Math.sign(@dy()))
+
+    @point1 ||= new Point(x1, y1)
+    @point2 ||= new Point(x2, y2)
+
+#    console.log("c", @point1.x)
 
   unitText: ->
     "?"
 
   height: ->
-    Math.abs(@y2 - @y1)
+    Math.abs(@point2.y - @point1.y)
 
   width: ->
-    Math.abs(@x2 - @x1)
+    Math.abs(@point2.x - @point1.x)
 
   axisAligned: ->
     @height() is 0 or @width() is 0
@@ -194,7 +239,7 @@ class CircuitComponent
 
     paramStr = (val for key, val of @params).join(" ")
 
-    "[v #{tidyVoltage}, i #{tidyCurrent}]\t#{@getDumpType()} #{@x1} #{@y1} #{@x2} #{@y2}"
+    "[v #{tidyVoltage}, i #{tidyCurrent}]\t#{@getDumpType()} #{@point1.x} #{@point1.y} #{@point2.x} #{@point2.y}"
 
   startIteration: ->
     # Called on reactive elements such as inductors and capacitors.
@@ -207,15 +252,15 @@ class CircuitComponent
     @calculateCurrent()
 
   calcLeads: (len) ->
-    if @dn < len or len is 0
+    if @dn() < len or len is 0
       @lead1 = @point1
       @lead2 = @point2
     else
-      @lead1 = Util.interpolate(@point1, @point2, (@dn - len) / (2 * @dn))
-      @lead2 = Util.interpolate(@point1, @point2, (@dn + len) / (2 * @dn))
+      @lead1 = Util.interpolate(@point1, @point2, (@dn() - len) / (2 * @dn()))
+      @lead2 = Util.interpolate(@point1, @point2, (@dn() + len) / (2 * @dn()))
 
   isVertical: ->
-    Math.abs(@x1 - @x2) < 0.01
+    Math.abs(@point1.x - @point2.x) < 0.01
 
   getCenter: ->
     centerX = (@point1.x + @point2.x) / 2.0
@@ -231,28 +276,28 @@ class CircuitComponent
     newY = Util.snapGrid(newY)
 
     if @noDiagonal
-      if Math.abs(@x1 - newX) < Math.abs(@y1 - newY)
-        newX = @x1
+      if Math.abs(@point1.x - newX) < Math.abs(@point1.y - newY)
+        newX = @point1.x
       else
-        newY = @y1
+        newY = @point1.y
 
-    @x2 = newX
-    @y2 = newY
+    @point2.x = newX
+    @point2.y = newY
 
-    @setPoints()
+#    @setPoints()
 
   move: (deltaX, deltaY) ->
-    @x1 += deltaX
-    @y1 += deltaY
-    @x2 += deltaX
-    @y2 += deltaY
+    @point1.x += deltaX
+    @point1.y += deltaY
+    @point2.x += deltaX
+    @point2.y += deltaY
 
-    @setBbox(@x1, @y1, @x2, @y2)
+    @setBbox(@point1.x, @point1.y, @point2.x, @point2.y)
 
     if @getParentCircuit()
       @getParentCircuit().invalidate()
 
-    @setPoints()
+#    @setPoints()
 
   moveTo: (x, y) ->
     deltaX = Util.snapGrid(x - @getCenter().x)
@@ -268,17 +313,17 @@ class CircuitComponent
 
     {
       sym: @getDumpType()
-      x1: @x1
-      y1: @y1
-      x2: @x2
-      xy: @y2
+      x1: @point1.x
+      y1: @point1.y
+      x2: @point2.x
+      xy: @point2.y
       params: paramValues
       voltage: @getVoltageDiff()
       current: @getCurrent()
     }
 
   toString: ->
-    #    "#{@constructor.name} #{@x1} #{@y1} #{@x2} #{@y2}"
+    #    "#{@constructor.name} #{@point1.x} #{@point1.y} #{@point2.x} #{@point2.y}"
     @constructor.name
 
   getVoltageSourceCount: ->
@@ -304,7 +349,7 @@ class CircuitComponent
     2
 
   getName: ->
-    "#{@constructor.name}(#{@x1},#{@y1},#{@x2},#{@y2})"
+    "#{@constructor.name}(#{@point1.x},#{@point1.y},#{@point2.x},#{@point2.y})"
 
   getNode: (nodeIdx) ->
     @nodes[nodeIdx]
@@ -326,7 +371,7 @@ class CircuitComponent
       return @point2
 
   recomputeBounds: ->
-    @setBbox(@x1, @y1, @x2, @y2)
+    @setBbox(@point1.x, @point1.y, @point2.x, @point2.y)
 
   getBoundingBox: ->
     @boundingBox
@@ -341,8 +386,8 @@ class CircuitComponent
 
 
   setBboxPt: (p1, p2, width) ->
-    deltaX = (@dpx1 * width)
-    deltaY = (@dpy1 * width)
+    deltaX = (@dpx1() * width)
+    deltaY = (@dpy1() * width)
 
     @setBbox p1.x - deltaX, p1.y - deltaY, p1.x + deltaX, p1.y + deltaY
 
@@ -396,7 +441,6 @@ class CircuitComponent
 
     outlineRadius = 7
 
-#
 #    nodeIdx = 0
 #    for node in @nodes
 #      if @point1 && @point2
@@ -443,14 +487,14 @@ class CircuitComponent
     false
 
   hash: ->
-    "#{@constructor.name}#{@x1}#{@y1}#{@x2}#{@y2}"
+    "#{@constructor.name}#{@point1.x}#{@point1.y}#{@point2.x}#{@point2.y}"
 
   toJson: ->
     {
-      x: @x1
-      y: @y1
-      x2: @x2
-      y2: @y2
+      x: @point1.x
+      y: @point1.y
+      x2: @point2.x
+      y2: @point2.y
       flags: @flags
       nodes: @nodes
       params: @params
@@ -465,7 +509,7 @@ class CircuitComponent
   getProperties: ->
     {
       name: @getName()
-      pos: [@x1, @y1, @x2, @y2]
+      pos: [@point1.x, @point1.y, @point2.x, @point2.y]
       params: @params
       current: @getCurrent()
       voltDiff: @getVoltageDiff()

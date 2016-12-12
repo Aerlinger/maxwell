@@ -48,7 +48,7 @@ class CurrentElm extends CircuitComponent
 
 #      if Circuit.showValuesCheckItem
 #        s = DrawHelper.getShortUnitText(@currentValue, "A")
-#        @drawValues s, cr  if @dx is 0 or @dy is 0
+#        @drawValues s, cr  if @dx() is 0 or @dy() is 0
 
     renderContext.drawPosts(this)
     renderContext.drawDots(@point1, @lead1, this)

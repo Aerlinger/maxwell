@@ -46,9 +46,9 @@ class TransLineElm extends CircuitComponent
     @ptr = 0
 
   setPoints: ->
-    super()
+    super
 
-    ds = if (@dy == 0) then Math.sign(@dx) else -Math.sign(@dy)
+    ds = if (@dy() == 0) then Math.sign(@dx()) else -Math.sign(@dy())
 
     p3 = Util.interpolate(@point1, @point2, 0, -Math.floor(@width * ds))
     p4 = Util.interpolate(@point1, @point2, 1, -Math.floor(@width * ds))

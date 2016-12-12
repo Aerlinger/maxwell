@@ -21,7 +21,7 @@ class RailElm extends VoltageElm
     1
 
   draw: (renderContext) ->
-    @lead1 = Util.interpolate(@point1, @point2, 1 - VoltageElm.circleSize / @dn)
+    @lead1 = Util.interpolate(@point1, @point2, 1 - VoltageElm.circleSize / @dn())
 
     @setBboxPt @point1, @point2, @circleSize
 
@@ -46,7 +46,7 @@ class RailElm extends VoltageElm
       s = v + "V" if Math.abs(v) < 1 #showFormat.format(v)
       s = "+" + s if @getVoltage() > 0
 
-      renderContext.fillText(s, @x2, @y2)
+      renderContext.fillText(s, @point2.x, @point2.y)
 
 #      s = "Ant" if this instanceof AntennaElm
       s = "CLK" if clock
@@ -68,9 +68,9 @@ class RailElm extends VoltageElm
 #      super()
 
   setPoints: ->
-    super()
+    super
 
-    @lead1 = Util.interpolate(@point1, @point2, 1 - @circleSize / @dn)
+    @lead1 = Util.interpolate(@point1, @point2, 1 - @circleSize / @dn())
 
   stamp: (stamper) ->
 #    console.log("\n::Stamping RailElm:: " + @waveform)

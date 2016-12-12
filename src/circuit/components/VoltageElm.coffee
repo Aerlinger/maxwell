@@ -148,7 +148,7 @@ class VoltageElm extends CircuitComponent
 
 
   setPoints: ->
-    super()
+    super
 
   draw: (renderContext) ->
     @updateDots()

@@ -3,7 +3,7 @@ Circuit = require('../../src/circuit/circuit.coffee')
 fs = require 'fs'
 
 describe "CircuitLoader", ->
-  describe "should read voltdividesimple.json and", ->
+  describe "reads voltdividesimple.json and", ->
     before (done) ->
       voltdividesimple = JSON.parse(fs.readFileSync("./circuits/voltdividesimple.json"))
 

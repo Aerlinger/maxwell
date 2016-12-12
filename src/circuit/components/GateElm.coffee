@@ -47,19 +47,19 @@ class GateElm extends CircuitComponent
       @flags = 0
 
   setPoints: ->
-    super()
+    super
 
-#    if @dn > 150
+#    if @dn() > 150
 #      @setSize(2)
 
     hs = @gheight
     @ww = Math.floor(@gwidth2)
 
-    if @ww > @dn/2
-      @ww = Math.floor(@dn/2)
+    if @ww > @dn()/2
+      @ww = Math.floor(@dn()/2)
 
-    if @isInverting() && (@ww + 8 > @dn/2)
-      @ww = Math.floor(@dn / 2) - 8
+    if @isInverting() && (@ww + 8 > @dn()/2)
+      @ww = Math.floor(@dn() / 2) - 8
 
     @calcLeads @ww*2
 

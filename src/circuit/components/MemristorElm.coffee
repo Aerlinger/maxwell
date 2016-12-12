@@ -40,8 +40,8 @@ class MemristorElm extends CircuitComponent
   getDumpType: ->
     "m"
 
-  setPoints: () ->
-    super()
+  setPoints: ->
+    super
     @calcLeads(32)
     @ps3 = new Point()
     @ps4 = new Point()

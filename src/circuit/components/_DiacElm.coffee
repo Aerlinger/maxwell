@@ -35,7 +35,7 @@ class DiacElm extends CircuitComponent
     true
 
   setPoints: ->
-    super()
+    super
     @calcLeads(32)
     @ps3 = new Point()
     @ps4 = new Point()

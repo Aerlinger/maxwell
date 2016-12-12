@@ -8,10 +8,10 @@ describe "TransistorElm", ->
       done()
 
     it "doesn't set any positions", ->
-      expect(@transistorElm.x1).to.equal(undefined)
-      expect(@transistorElm.y1).to.equal(undefined)
-      expect(@transistorElm.x2).to.equal(undefined)
-      expect(@transistorElm.y2).to.equal(undefined)
+      expect(@transistorElm.x1()).to.equal(undefined)
+      expect(@transistorElm.y1()).to.equal(undefined)
+      expect(@transistorElm.x2()).to.equal(undefined)
+      expect(@transistorElm.y2()).to.equal(undefined)
 
     it "sets default parameters", ->
       expect(@transistorElm.pnp).to.equal(-1)

@@ -12,7 +12,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 
 
   setPoints: ->
-    super()
+    super
 
     @calcLeads(32)
 

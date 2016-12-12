@@ -55,7 +55,7 @@ class TransformerElm extends CircuitComponent
     (@flags & TransformerElm.FLAG_BACK_EULER) == 0
 
   setPoints: ->
-    super()
+    super
 
     @point2.y = @point1.y
 
@@ -66,12 +66,12 @@ class TransformerElm extends CircuitComponent
     @ptEnds[0] = @point1
     @ptEnds[1] = @point2
 
-#    console.log("SP: ", @point1, @point2, 0, -@dsign, @width)
-    @ptEnds[2] = Util.interpolate(@point1, @point2, 0, -@dsign * @width)
-    @ptEnds[3] = Util.interpolate(@point1, @point2, 1, -@dsign * @width)
+#    console.log("SP: ", @point1, @point2, 0, -@dsign(), @width)
+    @ptEnds[2] = Util.interpolate(@point1, @point2, 0, -@dsign() * @width)
+    @ptEnds[3] = Util.interpolate(@point1, @point2, 1, -@dsign() * @width)
 
-    ce = 0.5 - 12 / @dn
-    cd = 0.5 - 2 / @dn
+    ce = 0.5 - 12 / @dn()
+    cd = 0.5 - 2 / @dn()
 
     i = 0
     while i < 4
@@ -132,7 +132,7 @@ class TransformerElm extends CircuitComponent
       renderContext.drawPost(@ptEnds[i], @ptCoil[i], "#33FFEE", "#33FFEE")
 
     for i in [0...2]
-      renderContext.drawCoil(@ptCoil[i], @ptCoil[i + 2], @volts[i], @volts[i + 2], @dsign * (if (i == 1) then -6 else 6))
+      renderContext.drawCoil(@ptCoil[i], @ptCoil[i + 2], @volts[i], @volts[i + 2], @dsign() * (if (i == 1) then -6 else 6))
 
     for i in [0...2]
       renderContext.drawLinePt(@ptCore[i], @ptCore[i + 2])

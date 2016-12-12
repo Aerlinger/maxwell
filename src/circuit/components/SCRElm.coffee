@@ -59,14 +59,14 @@ class ScrElm extends CircuitComponent
     @setup()
 
   setPoints: ->
-    super()
+    super
 
     dir = 0
-    if (Math.abs(@dx) > Math.abs(@dy))
-      dir = -Math.sign(@dx) * Math.sign(@dy)
+    if (Math.abs(@dx()) > Math.abs(@dy()))
+      dir = -Math.sign(@dx()) * Math.sign(@dy())
       @point2.y = @point1.y
     else
-      dir = Math.sign(@dy) * Math.sign(@dx)
+      dir = Math.sign(@dy()) * Math.sign(@dx())
       @point2.x = @point1.x
 
     if (dir == 0)
@@ -82,14 +82,14 @@ class ScrElm extends CircuitComponent
     @poly = Util.createPolygon(pa[0], pa[1], @lead2)
 
     @gate = new Array(2)
-    leadlen = (@dn - 16) / 2
+    leadlen = (@dn() - 16) / 2
 
     gatelen = Settings.GRID_SIZE
     gatelen += leadlen % Settings.GRID_SIZE
 
     if (leadlen < gatelen)
-      @x2 = @x1
-      @y2 = @y1
+      @point2.x = @point1.x
+      @point2.y = @point1.y
       return
 
     @gate[0] = Util.interpolate(@lead2, @point2, gatelen / leadlen, gatelen * dir)

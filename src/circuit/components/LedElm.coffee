@@ -52,11 +52,11 @@ class LedElm extends DiodeElm
     "162"
 
   setPoints: ->
-    super()
+    super
 
     cr = 12
-    @ledLead1 = Util.interpolate(@point1, @point2, 0.5 - cr / @dn)
-    @ledLead2 = Util.interpolate(@point1, @point2, 0.5 + cr / @dn)
+    @ledLead1 = Util.interpolate(@point1, @point2, 0.5 - cr / @dn())
+    @ledLead2 = Util.interpolate(@point1, @point2, 0.5 + cr / @dn())
     @ledCenter = Util.interpolate(@point1, @point2, 0.5)
 
   needsShortcut: ->

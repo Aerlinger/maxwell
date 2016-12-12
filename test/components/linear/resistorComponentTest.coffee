@@ -63,9 +63,9 @@ describe "Resistor Component", ->
       expect(@resistor.point1.y).to.eq 150
       expect(@resistor.point2.x).to.eq 50
       expect(@resistor.point2.y).to.eq 50
-      @resistor.dx.should.eq 0
-      @resistor.dy.should.eq -100
-      @resistor.dn.should.eq 100
+      @resistor.dx().should.eq 0
+      @resistor.dy().should.eq -100
+      @resistor.dn().should.eq 100
 
     it "has correct initial values", ->
       @resistor.current.should.eq 0
@@ -74,7 +74,7 @@ describe "Resistor Component", ->
       @resistor.parentCircuit = null
 
     it "has correct sign (orientation)", ->
-      @resistor.dsign.should.eq -1
+      @resistor.dsign().should.eq -1
 
     it "has correct bounding box", ->
       @resistor.boundingBox.x.should.equal 50
@@ -174,8 +174,8 @@ describe "Resistor Component", ->
       fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_voltage.png", @canvas.toBuffer())
 
     it "renders 45 degree angle", ->
-      @resistor.x1 = 0
-      @resistor.y1 = 0
+      @resistor.setx1(0)
+      @resistor.sety1(0)
 
       @renderer.drawComponents()
 

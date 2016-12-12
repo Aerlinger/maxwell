@@ -19,7 +19,7 @@ class ProbeElm extends CircuitComponent
     "ProbeElm"
 
   setPoints: ->
-    super()
+    super
 
     # swap points so that we subtract higher from lower
     if @point2.y < @point1.y
@@ -40,7 +40,7 @@ class ProbeElm extends CircuitComponent
     #      if selected or Circuit.dragElm is this
     #        len = 16
     #      else
-    len = @dn - 32
+    len = @dn() - 32
 
     @calcLeads Math.floor(len)
 
