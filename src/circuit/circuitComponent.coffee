@@ -153,6 +153,13 @@ class CircuitComponent
   getDumpType: ->
     0
 
+  getPostAt: (x, y) ->
+    for postIdx in [0...@getPostCount()]
+      post = @getPost(postIdx)
+
+      if post.x == x && post.y == y
+        return post
+
   reset: ->
     @volts = Util.zeroArray(@volts.length)
     @curcount = 0

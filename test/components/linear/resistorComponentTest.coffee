@@ -11,6 +11,9 @@ describe "Resistor Component", ->
       resistorElm = new ResistorElm(0, 0, 0, 0, {resistance: "3"})
       expect(resistorElm.resistance).to.equal(3)
 
+    it "has a post at (50, 150)", ->
+      expect(@resistor.getPostAt(50, 150).equals(new Point(50, 150))).to.eql true
+
     it "throws an exception for a parameter that isn't defined on this object", ->
       bad_resistor_definition = ->
         new ResistorElm(0, 0, 0, 0, {cubits: "3"})

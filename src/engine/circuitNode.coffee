@@ -12,8 +12,11 @@ class CircuitNode
   toString: ->
     "CircuitNode: #{@x} #{@y} #{@intern} [#{@links.toString()}]"
 
-#  getVoltage: ->
-#    @links.map (link) -> link.elm.nodes
+  getVoltage: ->
+    @links.map (link) -> link.elm.nodes
+      
+  getNeighboringElements: ->
+    @links.map (link) -> link.elm
 
 
 module.exports = CircuitNode

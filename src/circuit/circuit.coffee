@@ -112,6 +112,8 @@ class Circuit extends Observer
     @time = 0
     @iterations = 0
 
+    @placementElement = null
+
     @clearErrors()
     @notifyObservers @ON_RESET
 
@@ -182,7 +184,7 @@ class Circuit extends Observer
 
     @Solver.reconstruct()
 
-    if @Solver.isStopped
+    if @Solver.isStopped || @placementElement != null
       @Solver.lastTime = 0
     else
       @Solver.solveCircuit()

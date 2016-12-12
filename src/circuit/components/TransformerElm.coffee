@@ -126,7 +126,7 @@ class TransformerElm extends CircuitComponent
     for i in [0...4]
       color = Util.getVoltageColor(@volts[i])
 
-#      console.log(@ptEnds[i], @ptCoil[i], color)
+      # console.log(@ptEnds[i], @ptCoil[i], color)
       renderContext.drawLinePt(@ptEnds[i], @ptCoil[i], color)
 
       renderContext.drawPost(@ptEnds[i], @ptCoil[i], "#33FFEE", "#33FFEE")

@@ -8,6 +8,8 @@ Point = require('../geom/point.coffee')
 Util = require('../util/util.coffee')
 environment = require('../environment.coffee')
 
+ResistorElm = require("../circuit/components/ResistorElm.coffee")
+
 
 class SelectionMarquee extends Rectangle
   constructor: (@x1, @y1) ->
@@ -88,6 +90,8 @@ class Renderer extends BaseRenderer
     @onNodeHover = null
     @onNodeClick = null   # @onNodeClick(component)
     @onUpdateComplete = null  # @onUpdateComplete(circuit)
+#
+    @placeComponent = new ResistorElm(100, 100, 100, 200, [5000])
 
     # @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
     # @Circuit.addObserver Circuit.ON_RESET, @clear
@@ -111,7 +115,7 @@ class Renderer extends BaseRenderer
     y = event.offsetY
 
     @newlyHighlightedComponent = null
-    @selectedNode = null
+#    @selectedNode = null
 
     @lastX = @snapX
     @lastY = @snapY
@@ -121,10 +125,17 @@ class Renderer extends BaseRenderer
 
     # TODO: WIP for interactive element placing
     if @placeComponent
+      @placeComponent.setPoints()
       if @placeComponent.x1 && @placeComponent.y1
-        @placeComponent.x2 = @snapX
-        @placeComponent.y2 = @snapY
-        @placeComponent.setPoints()
+#        @placeComponent.x2 = @snapX
+#        @placeComponent.y2 = @snapY
+#        @placeComponent.setPoints()
+
+        console.log(@snapX, @lastX," ", @snapY, @lastY)
+        console.log(@snapX - @lastX," ", @snapY - @lastY)
+
+#        @placeComponent.move(@snapX - @lastX, @snapY - @lastY)
+        @placeComponent.moveTo(@snapX, @snapY)
 
     if @marquee?
       @marquee?.reposition(x, y)
@@ -135,10 +146,21 @@ class Renderer extends BaseRenderer
           @selectedComponents.push(component)
           @onSelectionChanged?(@selectedComponents)
     else
-      @selectedNode = @Circuit.getNodeAtCoordinates(@snapX, @snapY)
+      @highlightedNode = @Circuit.getNodeAtCoordinates(@snapX, @snapY)
+
+      if @highlightedNode
+        @onNodeHover?(@highlightedNode)
 
       if @selectedNode
-        @onNodeHover?(@selectedNode)
+        for element in @selectedNode.getNeighboringElements()
+          if element
+            console.log(element)
+            post = element.getPostAt(@selectedNode.x, @selectedNode.y)
+            if post
+              post.x = @snapX
+              post.y = @snapY
+            else
+              console.warn("No post at", @selectedNode.x, @selectedNode.y)
 
       for component in @Circuit.getElements()
         if component.getBoundingBox().contains(x, y)
@@ -156,7 +178,7 @@ class Renderer extends BaseRenderer
 
         @highlightedComponent = null
 
-    if @marquee is null and @selectedComponents?.length > 0 and event.which == MOUSEDOWN and (@lastX != @snapX or @lastY != @snapY)
+    if @marquee is null and @selectedNode is null and @selectedComponents?.length > 0 and event.which == MOUSEDOWN and (@lastX != @snapX or @lastY != @snapY)
       for component in @selectedComponents
         component.move(@snapX - @lastX, @snapY - @lastY)
 
@@ -164,20 +186,9 @@ class Renderer extends BaseRenderer
     x = event.offsetX
     y = event.offsetY
 
-    if @selectedNode
-      @onNodeClick?(@selectedNode)
-
     if @placeComponent
-      if @placeComponent.x1 && @placeComponent.y1
-        @placeComponent.x2 = Util.snapGrid(x)
-        @placeComponent.y2 = Util.snapGrid(y)
-        @Circuit.solder(@placeComponent)
-
-        placeComponentKlass = @placeComponent.constructor
-        @placeComponent = new placeComponentKlass()
-      else
-        @placeComponent.x1 = Util.snapGrid(x)
-        @placeComponent.y1 = Util.snapGrid(y)
+      @Circuit.solder(@placeComponent)
+      @placeComponent = null
 
     if @highlightedComponent == null
       if @selectedComponents && @selectedComponents.length > 0
@@ -185,6 +196,13 @@ class Renderer extends BaseRenderer
 
       @selectedComponents = []
       @marquee = new SelectionMarquee(x, y)
+
+    @selectedNode = @Circuit.getNodeAtCoordinates(@snapX, @snapY)
+
+    if @selectedNode
+      @onNodeClick?(@selectedNode)
+
+      console.log("DRAGGING NODE", @selectedNode)
 
     for component in @Circuit.getElements()
       if component.getBoundingBox().contains(x, y)
@@ -201,6 +219,7 @@ class Renderer extends BaseRenderer
 
   mouseup: (event) =>
     @marquee = null
+    @selectedNode = null
 
     if @selectedComponents?.length > 0
       @notifyObservers(Renderer.ON_COMPONENTS_DESELECTED, @selectedComponents)
@@ -228,7 +247,7 @@ class Renderer extends BaseRenderer
           @drawComponent(@placeComponent)
 
       if @selectedNode
-        @drawCircle(@selectedNode.x, @selectedNode.y, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR)
+        @drawCircle(@selectedNode.x, @selectedNode.y, Settings.POST_RADIUS + 3, 3, Settings.HIGHLIGHT_COLOR)
 
       if @highlightedComponent
         @drawCircle(@highlightedComponent.x1, @highlightedComponent.y1, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR)
