@@ -1,12 +1,10 @@
 describe "Render all components", ->
   it "can render all components", ->
+    this.timeout(5000)
     @circuit = new Circuit("All components")
 
-    row = 0
-    col = 0
-
     Canvas = require('canvas')
-    @canvas = new Canvas(1000, 1000)
+    @canvas = new Canvas(2200, 1000)
     ctx = @canvas.getContext('2d')
 
     @Circuit = new Circuit("AllComponents")
@@ -17,21 +15,30 @@ describe "Render all components", ->
 
     col = 0
     row = 0
-    height = 100
+    height = 80
+
+    offsetX = 200
+    nCols = 10
 
     for sym, Component of ComponentRegistry.ComponentDefs
       if sym not in ['170', 'A', 'o', '$', '%', '?', 'B']
 
         console.log(sym, ": ", Component.name)
 
-        col += 100
-        row = col / 500 + 50
-
-        x = col % (900) + 100
-        y = 2 * Math.floor(col / 800) * height + height
+        x = col % (nCols * offsetX) + offsetX
+        y = 2 * Math.floor(col / (offsetX * nCols)) * height + height
 
         @component = new Component(x, y, x, y + height)
         @Circuit.solder(@component)
+
+        origfont = ctx.font
+        ctx.font = "12px serif"
+        ctx.fillText(@component.toString(), x - @component.boundingBox.width, y - 30)
+        ctx.font = origfont
+
+        col += offsetX
+        row = col / 500 + 10
+
 
     @renderer.drawComponents()
 

@@ -35,7 +35,7 @@ class TransLineElm extends CircuitComponent
 
     @lenSteps = Math.floor(@delay / circuit.timeStep())
 
-    if @lenSteps > 100000
+    if @lenSteps > 100000 or !@lenSteps
       @voltageL = null
       @voltageR = null
 

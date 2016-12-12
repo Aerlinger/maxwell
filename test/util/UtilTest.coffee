@@ -94,6 +94,9 @@ describe "Utility test", ->
     expect(Util.typeOf(ve, RailElm)).to.be.true
     expect(Util.typeOf(ve, VarRailElm)).to.be.true
 
+  it "compares two points correctly", ->
+    Util.comparePair(3, 5, 3, 5).should.equal true
+    Util.comparePair(5, 3, 5, 3).should.equal true
 
   it "extends an object", ->
     capacitorFields = {

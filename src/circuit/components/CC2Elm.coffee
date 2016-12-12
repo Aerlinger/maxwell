@@ -12,7 +12,12 @@ class CC2Elm extends ChipElm
 
   constructor: (xa, xb, ya, yb, params, f) ->
     super(xa, xb, ya, yb, params, f)
-    @gain = parseFloat(params[0])
+
+    if params
+      @gain = parseFloat(params[0])
+    else
+      @gain = 1
+
     @params['gain'] = @gain
 #    @params = { gain: @gain }
 

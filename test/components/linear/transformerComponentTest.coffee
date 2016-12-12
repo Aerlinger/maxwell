@@ -1,12 +1,12 @@
 describe "Transformer Component", ->
   before (done)->
-    @transformer = new TransformerElm(50, 50, 50, 150, ["1e-4", "5", "1e-2", 0.998])
+    @transformer = new TransformerElm(50, 50, 50, 150, ["1e-4", "5", "1e-2", "1e-1", 0.998])
     done()
 
   it "has correct attributes", ->
     expect(@transformer.inductance).to.equal(1e-4)
     expect(@transformer.ratio).to.equal(5)
-    expect(@transformer.params.current).to.equal(1e-2)
+    expect(@transformer.params.current).to.deep.equal([1e-2, 1e-1])
     expect(@transformer.couplingCoef).to.equal(0.998)
 
   describe "Rendering", ->

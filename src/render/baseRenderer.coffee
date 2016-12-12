@@ -92,10 +92,11 @@ class BaseRenderer extends Observer
 
     @context.restore()
 
-  drawThickPolygon: (xlist, ylist, color=null) ->
+  drawThickPolygon: (xlist, ylist, color=Settings.STROKE_COLOR, fill=Settings.FILL_COLOR) ->
     @context.save()
 
-    @context.fillStyle = color
+    @context.fillStyle = fill
+    @context.strokeStyle = color
     @context.beginPath()
 
     @context.moveTo(xlist[0], ylist[0])

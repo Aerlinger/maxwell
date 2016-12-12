@@ -21,7 +21,7 @@ describe "Voltage Divider", ->
     @circuit.updateCircuit()
 
   it "has correct values", ->
-    expect(@circuit.inspect()).to.deepEqual([
+    expect(@circuit.inspect()).to.deep.equal([
       {
         "current": 0.05
         "params": [
@@ -66,7 +66,7 @@ describe "Voltage Divider", ->
         "current": 0.05
         "params": []
         "sym": "w"
-        "voltage": 0
+        "voltage": -0
         "x1": 256
         "x2": 256
         "xy": 336

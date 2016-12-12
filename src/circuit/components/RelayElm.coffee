@@ -33,6 +33,8 @@ class RelayElm extends CircuitComponent
 
 
   constructor: (xa, ya, xb, yb, params, f) ->
+    @poleCount ||= 2 # Temporary
+
     @switchCurrent = []
 
     @nSwitch0 = 0

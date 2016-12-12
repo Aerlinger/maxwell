@@ -274,7 +274,8 @@ class CircuitComponent
     }
 
   toString: ->
-    "#{@constructor.name} #{@x1} #{@y1} #{@x2} #{@y2}"
+    #    "#{@constructor.name} #{@x1} #{@y1} #{@x2} #{@y2}"
+    @constructor.name
 
   getVoltageSourceCount: ->
     0

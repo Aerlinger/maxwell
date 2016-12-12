@@ -4,7 +4,7 @@ Renderer = require('../../../src/render/renderer.coffee')
 
 #Renderer = require('../../src/render/renderer.coffee')
 
-describe "Canvas Context", ->
+describe.skip "Canvas Context", ->
   beforeEach (done) ->
     @renderer = new Renderer(400, 300)
     @renderer.clear()

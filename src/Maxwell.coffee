@@ -53,6 +53,9 @@ class Maxwell
         throw new Error("""
           Parameter must either be a path to a JSON file or raw JSON data representing the circuit.
           Use `Maxwell.createCircuit()` to create a new empty circuit object.
+
+          was:
+          #{circuitData}
         """)
     else
       circuit = new Circuit()

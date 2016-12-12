@@ -150,7 +150,3 @@ describe "Base Circuit Component", ->
       @renderer.context = ctx
       done()
 
-    it "renders initial circuit", ->
-      @renderer.draw()
-
-      fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())

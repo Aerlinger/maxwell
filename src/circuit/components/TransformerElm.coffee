@@ -129,11 +129,15 @@ class TransformerElm extends CircuitComponent
       console.log(@ptEnds[i], @ptCoil[i], color)
       renderContext.drawLinePt(@ptEnds[i], @ptCoil[i], color)
 
+      renderContext.drawPost(@ptEnds[i], @ptCoil[i], "#33FFEE", "#33FFEE")
+
     for i in [0...2]
       renderContext.drawCoil(@ptCoil[i], @ptCoil[i + 2], @volts[i], @volts[i + 2], @dsign * (if (i == 1) then -6 else 6))
 
     for i in [0...2]
       renderContext.drawLinePt(@ptCore[i], @ptCore[i + 2])
+
+      renderContext.drawPost(@ptCore[i], @ptCore[i + 2], "#FFEE33", "#FF33EE")
       #      @curcount[i] = updateDot
 
     renderContext.drawPosts(this)

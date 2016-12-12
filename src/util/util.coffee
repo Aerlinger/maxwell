@@ -211,7 +211,7 @@ class Util
 
       if(i != matrixRowCount - 1)
         arrayStr += ", "
-        circuitMatrixDump += ", "
+#        circuitMatrixDump += ", "
 
     arrayStr += "]"
 
