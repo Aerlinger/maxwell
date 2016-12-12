@@ -1,7 +1,6 @@
 describe "Render all components", ->
   it "can render all components", ->
     this.timeout(5000)
-    @circuit = new Circuit("All components")
 
     Canvas = require('canvas')
     @canvas = new Canvas(2200, 1000)
@@ -14,7 +13,6 @@ describe "Render all components", ->
     @renderer.context = ctx
 
     col = 0
-    row = 0
     height = 80
 
     offsetX = 200
@@ -22,8 +20,6 @@ describe "Render all components", ->
 
     for sym, Component of ComponentRegistry.ComponentDefs
       if sym not in ['170', 'A', 'o', '$', '%', '?', 'B']
-
-        console.log(sym, ": ", Component.name)
 
         x = col % (nCols * offsetX) + offsetX
         y = 2 * Math.floor(col / (offsetX * nCols)) * height + height
@@ -37,7 +33,6 @@ describe "Render all components", ->
         ctx.font = origfont
 
         col += offsetX
-        row = col / 500 + 10
 
 
     @renderer.drawComponents()
