@@ -82,9 +82,6 @@ class MosfetElm extends CircuitComponent
     "f"
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     @setBboxPt @point1, @point2, @hs
 
     color = Util.getVoltageColor(@volts[1])
@@ -147,6 +144,9 @@ class MosfetElm extends CircuitComponent
     renderContext.drawDots @src[1], @drn[1], this
     renderContext.drawDots @drn[1], @drn[0], this
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
   getPost: (n) ->
     (if (n is 0) then @point1 else (if (n is 1) then @src[0] else @drn[0]))

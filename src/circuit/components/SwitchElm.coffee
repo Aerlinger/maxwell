@@ -72,9 +72,6 @@ class SwitchElm extends CircuitComponent
       stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     @calcLeads 32
     @ps = new Point(0, 0)
     @ps2 = new Point(0, 0)
@@ -94,6 +91,9 @@ class SwitchElm extends CircuitComponent
     renderContext.drawLinePt @ps, @ps2
 
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
   getName: ->
     "Basic Switch"

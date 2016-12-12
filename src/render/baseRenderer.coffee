@@ -23,8 +23,11 @@ class BaseRenderer extends Observer
       msg += error + "\n"
     console.error "Simulation Error: " + msg
 
-  fillText: (text, x, y) ->
+  fillText: (text, x, y, fillColor="#FF8C00") ->
+    @context.save()
+    @context.fillStyle = fillColor
     @context.fillText(text, x, y)
+    @context.restore()
 
   fillCircle: (x, y, radius, lineWidth = Settings.LINE_WIDTH, fillColor = '#FFFF00', lineColor = null) ->
     @context.save()

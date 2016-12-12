@@ -34,7 +34,7 @@ class ChipElm extends CircuitComponent
     @pins = []
     @bits = 0
 
-    console.log("flags #{@flags} -> #{(f & ChipElm.FLAG_SMALL) != 0}")
+    #console.log("ChipElm flags #{@flags} -> #{(f & ChipElm.FLAG_SMALL) != 0}")
     @setSize(if ((f & ChipElm.FLAG_SMALL) != 0) then 1 else 2)
 
     @params ||= {}
@@ -123,7 +123,7 @@ class ChipElm extends CircuitComponent
     false
 
   setSize: (s) ->
-    console.log("#{@getName()} Set size: #{s}")
+    #console.log("#{@getName()} Set size: #{s}")
     @csize = s
     @cspc = 8 * s
     @cspc2 = @cspc * 2

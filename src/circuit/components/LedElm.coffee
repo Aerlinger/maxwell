@@ -78,8 +78,8 @@ class LedElm extends DiodeElm
     w = Math.min(255 * @current / .01, 255)
 
 #    g.fillOval(ledCenter.x - cr, ledCenter.y - cr, cr * 2, cr * 2);
-    console.log(@current, w)
-    console.log("RBG: #{w * @colorR} #{w * @colorG} #{w * @colorB}")
+    #console.log(@current, w)
+    #console.log("RBG: #{w * @colorR} #{w * @colorG} #{w * @colorB}")
     hexcolor = Util.rgb2hex(w * @colorR, w * @colorG, w * @colorB)
 
     renderContext.fillCircle(@ledCenter.x, @ledCenter.y, cr, 2, hexcolor)

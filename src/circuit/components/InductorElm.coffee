@@ -66,9 +66,6 @@ class InductorElm extends CircuitComponent
     stamper.stampCurrentSource @nodes[0], @nodes[1], @curSourceValue
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     @updateDots()
 
     v1 = @volts[0]
@@ -83,6 +80,9 @@ class InductorElm extends CircuitComponent
 
     renderContext.drawDots(@point1, @point2, this)
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
   getDumpType: ->
     "l"

@@ -56,9 +56,6 @@ class Switch2Elm extends SwitchElm
     "S"
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     @calcLeads 32
 
     @swpoles = Util.newPointArray(3)
@@ -98,6 +95,9 @@ class Switch2Elm extends SwitchElm
       renderContext.drawDots @swpoles[@position], @swposts[@position], this
 
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
   getPost: (n) ->
     if (n is 0)

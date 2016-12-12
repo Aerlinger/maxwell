@@ -64,16 +64,16 @@ class Maxwell
 
     return new Renderer(circuit, canvas)
 
-  @createContext: (circuitName, circuitData, context, onComplete) ->
+  @createContext: (circuitName, filepath, context, onComplete) ->
     circuit = null
 
     if circuitName
-      if typeof circuitData is "string"
-        circuit = Maxwell.loadCircuitFromFile circuitData, (circuit) ->
+      if typeof filepath is "string"
+        circuit = Maxwell.loadCircuitFromFile filepath, (circuit) ->
           onComplete(new Renderer(circuit, context))
 
-      else if typeof circuitData is "object"
-        circuit = Maxwell.loadCircuitFromJson(circuitData)
+      else if typeof filepath is "object"
+        circuit = Maxwell.loadCircuitFromJson(filepath)
       else
         throw new Error("""
           Parameter must either be a path to a JSON file or raw JSON data representing the circuit.
@@ -83,6 +83,8 @@ class Maxwell
       circuit = new Circuit()
 
     @Circuits[circuitName] = circuit
+
+    return circuit
 
 #    return new Renderer(circuit, context)
 

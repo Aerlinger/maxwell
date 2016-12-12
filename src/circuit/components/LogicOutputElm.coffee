@@ -59,6 +59,9 @@ class LogicOutputElm extends CircuitComponent
     renderContext.drawLinePt(@point1, @lead1, color)
     renderContext.drawPosts(this)
 
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
   setPoints: ->
     super()
 

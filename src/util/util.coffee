@@ -178,7 +178,6 @@ class Util
   @snapGrid: (x) ->
     Settings.GRID_SIZE * Math.round(x/Settings.GRID_SIZE)
 
-
   @showFormat: (decimalNum) ->
     decimalNum.toPrecision(2)
 
@@ -188,8 +187,17 @@ class Util
   @longFormat: (decimalNum) ->
     decimalNum.toPrecision(4)
 
+  @singleFloat: (f) ->
+    if f == undefined
+      "undef"
+    else
+      sprintf("%0.1f", f)
+
   @tidyFloat: (f) ->
-    sprintf("%0.2f", f)
+    if f == undefined
+      "undef"
+    else
+      sprintf("%0.2f", f)
 
   @isFunction: (v) ->
     typeof v == "function"

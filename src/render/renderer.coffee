@@ -247,6 +247,16 @@ class Renderer extends BaseRenderer
 
         @drawComponent(component)
 
+      if CircuitComponent.DEBUG
+        nodeIdx = 0
+        for node in @Circuit.getNodes()
+          x = node.x
+          y = node.y
+          voltage = Util.singleFloat(@Circuit.getVoltageForNode(nodeIdx))
+
+          @context.fillText("#{nodeIdx}:#{voltage}", x+10, y-10, "#FF8C00")
+          nodeIdx++
+
   drawBoldLines: ->
     @boldLines = true
 

@@ -64,6 +64,9 @@ class LogicInputElm extends SwitchElm
     renderContext.drawDots(@point1, @lead1, this)
     renderContext.drawPosts(this)
 
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
 
   isTernary: ->
     @flags & LogicInputElm.FLAG_TERNARY != 0

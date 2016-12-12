@@ -57,6 +57,6 @@ class DFlipFlopElm extends ChipElm
 
     @lastClock = @pins[3].value
 
-    console.log("DFF #{@pins[1].value}")
+    #console.log("DFF #{@pins[1].value}")
 
 module.exports = DFlipFlopElm

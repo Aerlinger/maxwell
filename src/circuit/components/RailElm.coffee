@@ -31,6 +31,7 @@ class RailElm extends VoltageElm
     clock = @waveform is VoltageElm.WF_SQUARE and (@flags & VoltageElm.FLAG_CLOCK) isnt 0
 
     @updateDots()
+
     renderContext.drawDots @point2, @point1, this
 #    renderContext.drawDots @point1, @lead1, this
     renderContext.drawPosts(this)
@@ -53,6 +54,9 @@ class RailElm extends VoltageElm
       Util.drawValue 0, 0, this, s
     else
       @drawWaveform @point2, renderContext
+
+#    if CircuitComponent.DEBUG
+#      super(renderContext)
 
 
 #    renderContext.drawDots @point1, @lead1, this # @curcount  unless Circuit.dragElm is this

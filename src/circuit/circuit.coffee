@@ -162,6 +162,9 @@ class Circuit extends Observer
 
     out
 
+  getVoltageForNode: (nodeIdx) ->
+    if @nodeList[nodeIdx].links[0]
+      @nodeList[nodeIdx].links[0].elm.getVoltageForNode(nodeIdx)
 
   ####################################################################################################################
   ### Simulation Frame Computation

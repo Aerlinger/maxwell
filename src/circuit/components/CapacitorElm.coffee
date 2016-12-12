@@ -70,9 +70,6 @@ class CapacitorElm extends CircuitComponent
 
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     hs = 12
 #    @setBboxPt @point1, @point2, hs
 
@@ -94,6 +91,9 @@ class CapacitorElm extends CircuitComponent
     renderContext.drawValue 20, 0, this, Util.getUnitText(@capacitance, @unitSymbol())
 
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
   unitSymbol: ->
     "F"

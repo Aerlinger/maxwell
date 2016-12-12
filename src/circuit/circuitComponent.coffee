@@ -185,8 +185,6 @@ class CircuitComponent
     tidyVoltage = Util.tidyFloat(@getVoltageDiff())
     tidyCurrent = Util.tidyFloat(@getCurrent())
 
-    #    paramStr = JSON.stringify(@params)
-
     paramStr = (val for key, val of @params).join(" ")
 
     "[v #{tidyVoltage}, i #{tidyCurrent}]\t#{@getDumpType()} #{@x1} #{@y1} #{@x2} #{@y2}"
@@ -198,7 +196,6 @@ class CircuitComponent
     @volts[post_idx]
 
   setNodeVoltage: (node_idx, voltage) ->
-#    console.log(node_idx + " -> " + voltage)
     @volts[node_idx] = voltage
     @calculateCurrent()
 
@@ -305,6 +302,16 @@ class CircuitComponent
   getNode: (nodeIdx) ->
     @nodes[nodeIdx]
 
+  getVoltageForNode: (nodeIdx) ->
+    subIdx = 0
+
+    for node in @nodes
+      if node == nodeIdx
+        return @volts[subIdx]
+
+      subIdx++
+
+
   getPost: (postIdx) ->
     if postIdx == 0
       return @point1
@@ -368,49 +375,48 @@ class CircuitComponent
   ### #######################################################################
 
   draw: (renderContext) ->
-    renderContext.drawRect(@boundingBox.x, @boundingBox.y, @boundingBox.width, @boundingBox.height, 1, "#8888CC")
+    renderContext.drawRect(@boundingBox.x-1, @boundingBox.y-1, @boundingBox.width+2, @boundingBox.height+2, 0.5, "#8888CC")
 
 #    renderContext.drawValue 10, -15, this, @constructor.name
 
-#    height = 8
-#    i = 0
-#    for name, value in @params
-#      console.log(name, value);
-#      renderContext.drawValue 12, -15 + height * i, this, "#{name}: #{value}"
-#      i += 1
+    if @params
+      height = 8
+      i = 0
+      for name, value in @params
+        console.log(name, value);
+        renderContext.drawValue 12, -15 + height * i, this, "#{name}: #{value}"
+        i += 1
 
-#    renderContext.drawCircle(@getCenter().x, @getCenter().y, 5, 0, "#FF0000")
+    outlineRadius = 7
 
-#    @calcLeads 0
+#
+#    nodeIdx = 0
+#    for node in @nodes
+#      if @point1 && @point2
+#        renderContext.drawValue 25+10*nodeIdx, -10*nodeIdx, this, "#{node}-#{@getVoltageForNode(node)}"
+#        nodeIdx += 1
 
-    renderContext.drawPosts(this, "#FF0000")
-
-#    for i in [0...@getPostCount()]
-#      post = @getPost(i)
-#      renderContext.drawCircle(post.x, post.y, 3, 0, "#FF00FF")
-
-    outlineRadius = 5
 
     if @point1
-      renderContext.drawCircle(@point1.x, @point1.y, outlineRadius, 1, "#0000FF")
+      renderContext.drawCircle(@point1.x, @point1.y, outlineRadius-1, 1, 'rgba(0,0,255,0.7)')
 
     if @point2
-      renderContext.drawCircle(@point1.x, @point1.y, outlineRadius, 1, "#0000FF")
+      renderContext.drawCircle(@point1.x, @point1.y, outlineRadius-1, 1, 'rgba(0,0,255,0.5)')
 
     if @lead1
-      renderContext.drawCircle(@lead1.x, @lead1.y, outlineRadius, 1, "#00FF00")
+      renderContext.drawRect(@lead1.x-outlineRadius/2, @lead1.y-outlineRadius/2, outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)')
 
     if @lead2
-      renderContext.drawCircle(@lead2.x, @lead2.y, outlineRadius, 1, "#00FF00")
+      renderContext.drawRect(@lead2.x-outlineRadius/2, @lead2.y-outlineRadius/2, outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)')
 
     for postIdx in [0...@getPostCount()]
       post = @getPost(postIdx)
-      renderContext.drawCircle(post.x, post.y, outlineRadius - 1, 1, "#FF00FF")
+      renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
 
     renderContext.drawLeads(this)
 
-#    @updateDots(this)
-#    renderContext.drawDots(@point1, @point2, this)
+    #    @updateDots(this)
+    #    renderContext.drawDots(@point1, @point2, this)
 
   updateDots: (ds = Settings.CURRENT_SEGMENT_LENGTH) ->
     if @Circuit

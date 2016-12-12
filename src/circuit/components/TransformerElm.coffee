@@ -126,7 +126,7 @@ class TransformerElm extends CircuitComponent
     for i in [0...4]
       color = Util.getVoltageColor(@volts[i])
 
-      console.log(@ptEnds[i], @ptCoil[i], color)
+#      console.log(@ptEnds[i], @ptCoil[i], color)
       renderContext.drawLinePt(@ptEnds[i], @ptCoil[i], color)
 
       renderContext.drawPost(@ptEnds[i], @ptCoil[i], "#33FFEE", "#33FFEE")
@@ -179,7 +179,7 @@ class TransformerElm extends CircuitComponent
     else
       ts = @getParentCircuit().timeStep()
 
-    console.log("STAMP li: #{l1} l2: #{l2} deti #{deti} ts: #{ts} ratio: #{@ratio} m: #{m}")
+    #console.log("STAMP li: #{l1} l2: #{l2} deti #{deti} ts: #{ts} ratio: #{@ratio} m: #{m}")
     @a1 = l2 * deti * ts
     @a2 = -m * deti * ts
     @a3 = -m * deti * ts

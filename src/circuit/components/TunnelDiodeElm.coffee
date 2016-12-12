@@ -59,7 +59,7 @@ class TunnelDiodeElm extends CircuitComponent
       @pip * (voltdiff / @pvp) * Math.exp(1 - voltdiff / @pvp) +
       @piv * Math.exp(voltdiff - @pvv)
 
-    console.log("CUR: ", @current)
+    #console.log("CUR: ", @current)
 
     @current
 
@@ -69,7 +69,7 @@ class TunnelDiodeElm extends CircuitComponent
     if (Math.abs(voltdiff - @lastvoltdiff) > 0.01)
       @getParentCircuit().Solver.converged = false
 
-    console.log(voltdiff + " " + @lastvoltdiff + " " + Math.abs(voltdiff-@lastvoltdiff))
+    #console.log(voltdiff + " " + @lastvoltdiff + " " + Math.abs(voltdiff-@lastvoltdiff))
     voltdiff = @limitStep(voltdiff, @lastvoltdiff)
 
     @lastvoltdiff = voltdiff
@@ -85,7 +85,7 @@ class TunnelDiodeElm extends CircuitComponent
 
     nc = i - geq * voltdiff
 
-    console.log("TD: " + geq + ", " + nc)
+    #console.log("TD: " + geq + ", " + nc)
     stamper.stampConductance(@nodes[0], @nodes[1], geq)
     stamper.stampCurrentSource(@nodes[0], @nodes[1], nc)
 

@@ -149,7 +149,7 @@ class GateElm extends CircuitComponent
     @inPosts[n]
 
   getInput: (n)->
-    console.log("INPUT #{n} is #{@volts[n]}")
+    #    console.log("INPUT #{n} is #{@volts[n]}")
     return @volts[n] > 2.5
 
   getConnection: (n1, n2)->

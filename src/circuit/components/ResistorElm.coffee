@@ -43,6 +43,7 @@ class ResistorElm extends CircuitComponent
 
     # Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
     offsets = [0, 1, 0, -1]
+    
     # Draw resistor "zig-zags"
     for n in [0...numSegments]
       resistorSegmentVoltage = @volts[0] + (@volts[1]-@volts[0]) * (n / numSegments)

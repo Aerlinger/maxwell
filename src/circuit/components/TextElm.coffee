@@ -48,8 +48,6 @@ class TextElm extends CircuitComponent
     @y2 = yy
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
 #    color = (if @needsHighlight() then Settings.SELECT_COLOR else Settings.TEXT_COLOR)
 
     color = Settings.TEXT_COLOR
@@ -84,6 +82,9 @@ class TextElm extends CircuitComponent
 
     @x2 = @boundingBox.x1 + @boundingBox.width
     @y2 = @boundingBox.y1 + @boundingBox.height
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
   isCenteredText: ->
     (@flags & TextElm.FLAG_CENTER) isnt 0
