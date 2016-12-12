@@ -42,7 +42,7 @@ class CircuitComponent
     @component_id = Util.getRand(100000000) + (new Date()).getTime()
 
     @setPoints(x1, y1, x2, y2)
-    @recomputeBounds()
+
     @allocNodes()
 
 
@@ -178,6 +178,8 @@ class CircuitComponent
     @point1 ||= new Point(x1, y1)
     @point2 ||= new Point(x2, y2)
 
+    @recomputeBounds()
+
 #    console.log("c", @point1.x)
 
   unitText: ->
@@ -197,13 +199,6 @@ class CircuitComponent
 
   getDumpType: ->
     0
-
-  getPostAt: (x, y) ->
-    for postIdx in [0...@getPostCount()]
-      post = @getPost(postIdx)
-
-      if post.x == x && post.y == y
-        return post
 
   reset: ->
     @volts = Util.zeroArray(@volts.length)
@@ -243,6 +238,13 @@ class CircuitComponent
 
   startIteration: ->
     # Called on reactive elements such as inductors and capacitors.
+
+  getPostAt: (x, y) ->
+    for postIdx in [0...@getPostCount()]
+      post = @getPost(postIdx)
+
+      if post.x == x && post.y == y
+        return post
 
   getPostVoltage: (post_idx) ->
     @volts[post_idx]
@@ -292,7 +294,7 @@ class CircuitComponent
     @point2.x += deltaX
     @point2.y += deltaY
 
-    @setBbox(@point1.x, @point1.y, @point2.x, @point2.y)
+    @recomputeBounds()
 
     if @getParentCircuit()
       @getParentCircuit().invalidate()

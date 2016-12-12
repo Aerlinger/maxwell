@@ -162,6 +162,11 @@ class Renderer extends BaseRenderer
             else
               console.warn("No post at", @selectedNode.x, @selectedNode.y)
 
+            element.recomputeBounds()
+
+        @selectedNode.x = @snapX
+        @selectedNode.y = @snapY
+
       for component in @Circuit.getElements()
         if component.getBoundingBox().contains(x, y)
           @newlyHighlightedComponent = component
@@ -190,7 +195,7 @@ class Renderer extends BaseRenderer
       @Circuit.solder(@placeComponent)
       @placeComponent = null
 
-    if @highlightedComponent == null
+    if @highlightedComponent == null && @placeComponent == null && @highlightedNode == null
       if @selectedComponents && @selectedComponents.length > 0
         @onSelectionChanged?([])
 
