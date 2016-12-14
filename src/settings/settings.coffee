@@ -179,11 +179,11 @@ class Settings
   @CURRENT_SEGMENT_LENGTH: 16
 
   # Line Widths:
-  @POST_RADIUS: 2.5
+  @POST_RADIUS: 2
   @CURRENT_RADIUS: 1
   @CURRENT_COLOR: "rgba(255, 255, 255, 0.7)"
-  @LINE_WIDTH: 2
-  @BOLD_LINE_WIDTH: 3
+  @LINE_WIDTH: 1
+  @BOLD_LINE_WIDTH: 2
 
   # Grid
   @GRID_SIZE: 16

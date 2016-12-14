@@ -24,10 +24,12 @@ class BaseRenderer extends Observer
     console.error "Simulation Error: " + msg
 
   fillText: (text, x, y, fillColor="#FF8C00") ->
-#    @context.save()
+    @context?.save()
+    origFillStyle = @context?.fillStyle
     @context?.fillStyle = fillColor
     @context?.fillText(text, x, y)
-#    @context.restore()
+    @context?.fillStyle = origFillStyle
+    @context?.restore()
 
   fillCircle: (x, y, radius, lineWidth = Settings.LINE_WIDTH, fillColor = '#FFFF00', lineColor = null) ->
     @context.save()
@@ -65,16 +67,14 @@ class BaseRenderer extends Observer
   drawRect: (x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor = "#000000") ->
     @context.strokeStyle = lineColor
     @context.lineJoin = 'miter'
-    @context.rect(x, y, width, height)
+    @context.lineWidth = 0
+    @context.strokeRect(x, y, width, height)
     @context.stroke()
 
   drawLinePt: (pa, pb, color = Settings.STROKE_COLOR) ->
     @drawLine pa.x, pa.y, pb.x, pb.y, color
 
   drawLine: (x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) ->
-#    if !x || !y || !x2 || !y2
-#      console.log(x, y, x2, y2)
-
     @context.save()
     @context.beginPath()
 
@@ -85,11 +85,12 @@ class BaseRenderer extends Observer
       @context.lineTo x2, y2
       @context.stroke()
 
-    @context.strokeStyle = color
-    @context.lineWidth = lineWidth
-    @context.moveTo x, y
-    @context.lineTo x2, y2
-    @context.stroke()
+    else
+      @context.strokeStyle = color
+      @context.lineWidth = lineWidth
+      @context.moveTo x, y
+      @context.lineTo x2, y2
+      @context.stroke()
 
     @context.closePath()
 

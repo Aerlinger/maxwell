@@ -31,12 +31,13 @@ class SelectionMarquee extends Rectangle
 
   draw: (renderContext) ->
     renderContext.lineWidth = 0.1
-    if @x1? && @x2? && @y1? && @y2?
-      renderContext.drawLine @x1, @y1, @x2, @y1
-      renderContext.drawLine @x1, @y2, @x2, @y2
 
-      renderContext.drawLine @x1, @y1, @x1, @y2
-      renderContext.drawLine @x2, @y1, @x2, @y2
+    if @x1? && @x2? && @y1? && @y2?
+      renderContext.drawLine @x1, @y1, @x2, @y1, "#FFFF00", 1
+      renderContext.drawLine @x1, @y2, @x2, @y2, "#FFFF00", 1
+
+      renderContext.drawLine @x1, @y1, @x1, @y2, "#FFFF00", 1
+      renderContext.drawLine @x2, @y1, @x2, @y2, "#FFFF00", 1
 
 
 class Renderer extends BaseRenderer
@@ -91,7 +92,7 @@ class Renderer extends BaseRenderer
     @onNodeClick = null   # @onNodeClick(component)
     @onUpdateComplete = null  # @onUpdateComplete(circuit)
 #
-    @placeComponent = new ResistorElm(100, 100, 100, 200, [5000])
+#    @placeComponent = new ResistorElm(100, 100, 100, 200, [5000])
 
     # @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
     # @Circuit.addObserver Circuit.ON_RESET, @clear
@@ -115,7 +116,6 @@ class Renderer extends BaseRenderer
     y = event.offsetY
 
     @newlyHighlightedComponent = null
-#    @selectedNode = null
 
     @lastX = @snapX
     @lastY = @snapY
@@ -127,14 +127,9 @@ class Renderer extends BaseRenderer
     if @placeComponent
       @placeComponent.setPoints()
       if @placeComponent.x1() && @placeComponent.y1()
-#        @placeComponent.x2 = @snapX
-#        @placeComponent.y2 = @snapY
-#        @placeComponent.setPoints()
-
         console.log(@snapX, @lastX," ", @snapY, @lastY)
         console.log(@snapX - @lastX," ", @snapY - @lastY)
 
-#        @placeComponent.move(@snapX - @lastX, @snapY - @lastY)
         @placeComponent.moveTo(@snapX, @snapY)
 
     if @marquee?
@@ -145,11 +140,20 @@ class Renderer extends BaseRenderer
         if @marquee?.collidesWithComponent(component)
           @selectedComponents.push(component)
           @onSelectionChanged?(@selectedComponents)
+
     else
+      @previouslyHighlightedNode = @highlightedNode
       @highlightedNode = @Circuit.getNodeAtCoordinates(@snapX, @snapY)
+
+      for component in @Circuit.getElements()
+        if component.getBoundingBox().contains(x, y)
+          @newlyHighlightedComponent = component
 
       if @highlightedNode
         @onNodeHover?(@highlightedNode)
+
+      if @previouslyHighlightedNode && !@highlightedNode
+        @onNodeUnhover?(@previouslyHighlightedNode)
 
       if @selectedNode
         for element in @selectedNode.getNeighboringElements()
@@ -167,10 +171,6 @@ class Renderer extends BaseRenderer
         @selectedNode.x = @snapX
         @selectedNode.y = @snapY
 
-      for component in @Circuit.getElements()
-        if component.getBoundingBox().contains(x, y)
-          @newlyHighlightedComponent = component
-
       if @newlyHighlightedComponent
         if @newlyHighlightedComponent != @highlightedComponent
           @highlightedComponent = @newlyHighlightedComponent
@@ -178,12 +178,12 @@ class Renderer extends BaseRenderer
           @notifyObservers(Renderer.ON_COMPONENT_HOVER, @highlightedComponent)
 
       else
-        if @highlightedComponent != null
+        if @highlightedComponent
           @onComponentUnhover?(@highlightedComponent)
 
         @highlightedComponent = null
 
-    if @marquee is null and @selectedNode is null and @selectedComponents?.length > 0 and event.which == MOUSEDOWN and (@lastX != @snapX or @lastY != @snapY)
+    if @marquee is null and @selectedComponents?.length > 0 and event.which == MOUSEDOWN and (@lastX != @snapX or @lastY != @snapY)
       for component in @selectedComponents
         component.move(@snapX - @lastX, @snapY - @lastY)
 
@@ -191,23 +191,24 @@ class Renderer extends BaseRenderer
     x = event.offsetX
     y = event.offsetY
 
+    console.log(@highlightedComponent, @placeComponent, @highlightedNode)
+
     if @placeComponent
       @Circuit.solder(@placeComponent)
       @placeComponent = null
 
-    if @highlightedComponent == null && @placeComponent == null && @highlightedNode == null
+    if !@highlightedComponent && !@placeComponent && !@highlightedNode
       if @selectedComponents && @selectedComponents.length > 0
         @onSelectionChanged?([])
 
       @selectedComponents = []
+
       @marquee = new SelectionMarquee(x, y)
 
     @selectedNode = @Circuit.getNodeAtCoordinates(@snapX, @snapY)
 
     if @selectedNode
       @onNodeClick?(@selectedNode)
-
-      console.log("DRAGGING NODE", @selectedNode)
 
     for component in @Circuit.getElements()
       if component.getBoundingBox().contains(x, y)
@@ -218,8 +219,8 @@ class Renderer extends BaseRenderer
           @onSelectionChanged?(@selectedComponents)
 
         component.toggle?()
+        component.onclick?()
 
-        component.onclick()
         @onComponentClick?(component)
 
   mouseup: (event) =>
@@ -232,7 +233,7 @@ class Renderer extends BaseRenderer
 
   draw: =>
     if @snapX? && @snapY?
-      @drawCircle(@snapX, @snapY, 3, "#F00")
+      @drawCircle(@snapX, @snapY, 1, "#F00")
 
     @drawInfoText()
     @marquee?.draw(this)
@@ -266,8 +267,8 @@ class Renderer extends BaseRenderer
   drawComponents: ->
     if @context
       for component in @Circuit.getElements()
-#        if @marquee?.collidesWithComponent(component)
-#          console.log("MARQUEE COLLIDE: " + component)
+        if @marquee?.collidesWithComponent(component)
+          console.log("MARQUEE COLLIDE: " + component)
 
         @drawComponent(component)
 
@@ -313,7 +314,7 @@ class Renderer extends BaseRenderer
     @context.save()
     @context.textAlign = "center"
 
-    @context.font = "bold 8pt Courier"
+    @context.font = "7pt Courier"
 
     stringWidth = @context.measureText(text).width
     stringHeight = @context.measureText(text).actualBoundingBoxAscent || 0
@@ -331,7 +332,7 @@ class Renderer extends BaseRenderer
       x = component.getCenter().x + parallelOffset
       y = component.getCenter().y + perpindicularOffset
 
-      @fillText text, x, y
+      @fillText text, x, y, Settings.TEXT_COLOR
 
     @context.restore()
 
@@ -363,7 +364,7 @@ class Renderer extends BaseRenderer
 
         @context.save()
         @context.strokeStyle = Settings.CURRENT_COLOR
-        @context.lineWidth = Settings.CURRENT_RADIUS + 1
+        @context.lineWidth = Settings.CURRENT_RADIUS
         @context.beginPath()
         @context.moveTo xOffset0, yOffset0
         @context.lineTo xOffset1, yOffset1

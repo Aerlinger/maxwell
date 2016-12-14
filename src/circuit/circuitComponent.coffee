@@ -429,7 +429,7 @@ class CircuitComponent
   ### #######################################################################
 
   draw: (renderContext) ->
-    renderContext.drawRect(@boundingBox.x-1, @boundingBox.y-1, @boundingBox.width+2, @boundingBox.height+2, 0.5, "#8888CC")
+    renderContext.drawRect(@boundingBox.x-2, @boundingBox.y-2, @boundingBox.width+2, @boundingBox.height+2, 0.5, "#8888CC")
 
 #    renderContext.drawValue 10, -15, this, @constructor.name
 
