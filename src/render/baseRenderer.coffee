@@ -34,7 +34,6 @@ class BaseRenderer extends Observer
   fillCircle: (x, y, radius, lineWidth = Settings.LINE_WIDTH, fillColor = '#FFFF00', lineColor = null) ->
     @context.save()
 
-
     @context.beginPath()
     @context.arc x, y, radius, 0, 2 * Math.PI, true
 

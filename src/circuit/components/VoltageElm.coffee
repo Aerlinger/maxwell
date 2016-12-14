@@ -161,19 +161,22 @@ class VoltageElm extends CircuitComponent
     renderContext.drawLeads(this)
 
     if @waveform is VoltageElm.WF_DC
-      renderContext.drawDots @point1, @point2, this
+      renderContext.drawDots @point1, @lead1, this
+      renderContext.drawDots @lead2, @point2, this
     else
       renderContext.drawDots(@point1, @lead1, this)
       renderContext.drawDots(@lead2, @point2, this)
 
     if @waveform is VoltageElm.WF_DC
-      [ptA, ptB] = Util.interpolateSymmetrical @lead1, @lead2, 0, 10
+      [ptA, ptB] = Util.interpolateSymmetrical @lead1, @lead2, 0, Settings.GRID_SIZE
       renderContext.drawLinePt @lead1, ptA, Util.getVoltageColor(@volts[0])
       renderContext.drawLinePt ptA, ptB, Util.getVoltageColor(@volts[0])
 
       @setBboxPt @point1, @point2, Settings.GRID_SIZE
-      [ptA, ptB] = Util.interpolateSymmetrical @lead1, @lead2, 1, Settings.GRID_SIZE
+      [ptA, ptB] = Util.interpolateSymmetrical @lead1, @lead2, 1, 2*Settings.GRID_SIZE
       renderContext.drawLinePt ptA, ptB, Util.getVoltageColor(@volts[1])
+
+      renderContext.drawValue -25, 0, this, Util.getUnitText(@getVoltageDiff(), @unitSymbol())
     else
       @setBboxPt @point1, @point2, VoltageElm.circleSize
       ps1 = Util.interpolate @lead1, @lead2, 0.5
@@ -277,6 +280,9 @@ class VoltageElm extends CircuitComponent
 
   getVoltageDiff: ->
     @volts[1] - @volts[0]
+
+  unitSymbol: ->
+    "V"
 
   getInfo: (arr) ->
     switch @waveform

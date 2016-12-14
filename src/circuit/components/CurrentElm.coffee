@@ -38,20 +38,25 @@ class CurrentElm extends CircuitComponent
 
     @arrow = Util.calcArrow(@center, p2, 4, 4)
 
-    cr = 12
+    @updateDots()
     renderContext.drawLeads(this)
+    renderContext.drawDots(@point1, @lead1, this)
+    renderContext.drawDots(@lead2, @point2, this)
+
+    cr = 12
     color = Util.getVoltageColor (@volts[0] + @volts[1]) / 2
 #      @setPowerColor false
     renderContext.drawCircle @center.x, @center.y, cr
-    renderContext.drawCircle @ashaft1, @ashaft2
-    renderContext.drawThickPolygonP @arrow
+    renderContext.fillCircle @center.x, @center.y, cr, Settings.LINE_WIDTH, Settings.FG_COLOR
+    renderContext.drawLinePt @ashaft1, @ashaft2
+    renderContext.drawThickPolygonP @arrow, Settings.STROKE_COLOR, Settings.STROKE_COLOR
 
 #      if Circuit.showValuesCheckItem
 #        s = DrawHelper.getShortUnitText(@currentValue, "A")
 #        @drawValues s, cr  if @dx() is 0 or @dy() is 0
 
     renderContext.drawPosts(this)
-    renderContext.drawDots(@point1, @lead1, this)
+
 
   stamp: (stamper) ->
     @current = @currentValue

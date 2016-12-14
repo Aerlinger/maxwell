@@ -82,12 +82,6 @@ class Switch2Elm extends SwitchElm
     color = Util.getVoltageColor @volts[2]
     renderContext.drawLinePt @swpoles[1], @swposts[1], color
 
-    renderContext.fillCircle(@swpoles[2].x, @swpoles[2].y, 4, 2, Settings.POST_COLOR)
-    renderContext.fillCircle(@swpoles[1].x, @swpoles[1].y, 4, 2, Settings.POST_COLOR)
-    renderContext.fillCircle(@swpoles[0].x, @swpoles[0].y, 4, 2, Settings.POST_COLOR)
-
-    renderContext.drawLinePt @lead1, @swpoles[@position], Settings.STROKE_COLOR
-
     @updateDots()
     renderContext.drawDots @point1, @lead1, this
 
@@ -95,6 +89,12 @@ class Switch2Elm extends SwitchElm
       renderContext.drawDots @swpoles[@position], @swposts[@position], this
 
     renderContext.drawPosts(this)
+
+    renderContext.fillCircle(@swpoles[2].x, @swpoles[2].y, Settings.POST_RADIUS, 0, Settings.POST_COLOR)
+    renderContext.fillCircle(@swpoles[1].x, @swpoles[1].y, Settings.POST_RADIUS, 0, Settings.POST_COLOR)
+    renderContext.fillCircle(@swpoles[0].x, @swpoles[0].y, Settings.POST_RADIUS, 0, Settings.POST_COLOR)
+
+    renderContext.drawLinePt @lead1, @swpoles[@position], Settings.STROKE_COLOR
 
 #    if CircuitComponent.DEBUG
 #      super(renderContext)
@@ -122,9 +122,10 @@ class Switch2Elm extends SwitchElm
 
   toggle: ->
     super()
+
     unless @link is 0
       i = 0
-      getParentCircuit().eachComponent (component) ->
+      @getParentCircuit().eachComponent (component) ->
         if component instanceof Switch2Elm
           s2 = component
           if s2.link is @link

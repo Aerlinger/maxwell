@@ -32,12 +32,12 @@ class OutputElm extends CircuitComponent
 
     @lead1 = Util.interpolate @point1, @point2, 1 - (3 * s.length / 2 + 8) / @dn()
 
-    renderContext.drawValue -5, 25, this, s
+    renderContext.drawValue 10, 25, this, s
 
     color = Util.getVoltageColor(@volts[0])
 
     renderContext.drawLinePt @point1, @lead1, color
-    renderContext.drawCircle @lead1.x + Settings.POST_RADIUS, @lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR
+    renderContext.drawCircle @lead1.x + 2*Settings.POST_RADIUS, @lead1.y, 2*Settings.POST_RADIUS, 1, Settings.STROKE_COLOR
     renderContext.drawPosts(this)
 
     if CircuitComponent.DEBUG

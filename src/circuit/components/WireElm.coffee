@@ -27,7 +27,7 @@ class WireElm extends CircuitComponent
     @updateDots()
     renderContext.drawDots(@point1, @point2, this)
 
-#    renderContext.drawPosts(this)
+    renderContext.drawPosts(this)
 
     if CircuitComponent.DEBUG
       super(renderContext)

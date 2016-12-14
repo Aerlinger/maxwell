@@ -113,7 +113,6 @@ class CircuitComponent
       if !Util.isFunction(data_type)
         console.error("data_type #{data_type} is not a function!")
 
-#      console.log(@getName(), param_name, param_value)
       result[param_name] = param_value
 
     return result

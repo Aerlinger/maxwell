@@ -55,7 +55,7 @@ class LogicInputElm extends SwitchElm
     if (@isNumeric())
       s = "" + @position;
 
-    renderContext.fillText(s, @point2.x, @point2.y)
+    renderContext.fillText(s, @point2.x, @point2.y + 4)
 
     color = Util.getVoltageColor(@volts[0])
     renderContext.drawLinePt(@point1, @lead1, color)

@@ -64,6 +64,9 @@ class SweepElm extends CircuitComponent
     @lead1 = Util.interpolate(@point1, @point2, 1 - SweepElm.circleSize / @dn())
 
     renderContext.drawLinePt @point1, @lead1, color
+    @updateDots()
+    renderContext.drawDots(@point2, @point1, this)
+
 #    @setVoltageColor (if @needsHighlight() then CircuitComponent.selectColor else Color.GREY)
 #    @setVoltageColor(Color.GREY)
 #    powerColor = @setPowerColor(false)
@@ -71,7 +74,8 @@ class SweepElm extends CircuitComponent
     xc = @point2.x
     yc = @point2.y
 
-    renderContext.drawCircle xc, yc, SweepElm.circleSize
+    renderContext.fillCircle xc, yc, SweepElm.circleSize, 2, Settings.FG_COLOR
+    renderContext.drawCircle xc, yc, SweepElm.circleSize, 2, "#000000"
 
     wl = 8
 
@@ -110,11 +114,6 @@ class SweepElm extends CircuitComponent
 #        @drawValues s, @circleSize
 
     renderContext.drawPosts(this)
-
-    @updateDots()
-    renderContext.drawDots(@point1, @point2, this)
-#    @curcount = @updateDotCount(-@current, @curcount)
-#    @drawDots @point1, @lead1, @curcount  unless Circuit.dragElm is this
 
   stamp: (stamper) ->
     stamper.stampVoltageSource 0, @nodes[0], @voltSource

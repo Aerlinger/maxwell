@@ -24,6 +24,7 @@ class RailElm extends VoltageElm
     @lead1 = Util.interpolate(@point1, @point2, 1 - VoltageElm.circleSize / @dn())
 
     @setBboxPt @point1, @point2, @circleSize
+    renderContext.drawLinePt @point2, @point1, Settings.STROKE_COLOR
 
     color = Util.getVoltageColor(@volts[0])
     renderContext.drawLinePt @point1, @lead1, color
@@ -32,8 +33,8 @@ class RailElm extends VoltageElm
 
     @updateDots()
 
-    renderContext.drawDots @point2, @point1, this
-#    renderContext.drawDots @point1, @lead1, this
+#    renderContext.drawDots @point2, @point1, this
+    renderContext.drawDots @lead1, @point1, this
     renderContext.drawPosts(this)
 
     if @waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR or clock
@@ -46,7 +47,7 @@ class RailElm extends VoltageElm
       s = v + "V" if Math.abs(v) < 1 #showFormat.format(v)
       s = "+" + s if @getVoltage() > 0
 
-      renderContext.fillText(s, @point2.x, @point2.y)
+      renderContext.fillText(s, @point2.x, @point2.y - 5)
 
 #      s = "Ant" if this instanceof AntennaElm
       s = "CLK" if clock

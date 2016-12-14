@@ -100,12 +100,16 @@ class OpAmpElm extends CircuitComponent
     color = Util.getVoltageColor(@volts[1])
     renderContext.drawLinePt @in2p[0], @in2p[1], color
 
+
     # Terminal 3
     color = Util.getVoltageColor(@volts[2])
     renderContext.drawLinePt @lead2, @point2, color
 
     # Body
     renderContext.drawThickPolygonP @triangle, Settings.STROKE_COLOR, Settings.FG_COLOR
+
+    renderContext.fillText("+", @in1p[1].x + 5, @in1p[1].y + 3, Settings.TEXT_COLOR)
+    renderContext.fillText("-", @in2p[1].x + 5, @in2p[1].y + 3, Settings.TEXT_COLOR)
 
     if @getParentCircuit() && @getParentCircuit()
       @updateDots()
