@@ -326,7 +326,6 @@ class Circuit extends Observer
   destroy: (components) ->
     for component in components
       for circuitComponent in @getElements()
-        console.log(component, circuitComponent)
         if circuitComponent.equalTo(component)
           @desolder(circuitComponent, true)
 

@@ -25,7 +25,7 @@ _ = require("lodash")
 sprintf = require("sprintf-js").sprintf
 
 class CircuitComponent
-  @DEBUG = true
+  @DEBUG = false
 
   @Fields = {}
 
@@ -365,7 +365,6 @@ class CircuitComponent
 
       subIdx++
 
-
   getPost: (postIdx) ->
     if postIdx == 0
       return @point1
@@ -466,7 +465,7 @@ class CircuitComponent
       post = @getPost(postIdx)
       renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
 
-    renderContext.drawLeads(this)
+#    renderContext.drawLeads(this)
 
     #    @updateDots(this)
     #    renderContext.drawDots(@point1, @point2, this)

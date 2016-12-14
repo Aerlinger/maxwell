@@ -82,11 +82,11 @@ class Switch2Elm extends SwitchElm
     color = Util.getVoltageColor @volts[2]
     renderContext.drawLinePt @swpoles[1], @swposts[1], color
 
-    renderContext.fillCircle(@swpoles[2].x, @swpoles[2].y, 4, 2, "#F0F")
-    renderContext.fillCircle(@swpoles[1].x, @swpoles[1].y, 4, 2, "#F0F")
-    renderContext.fillCircle(@swpoles[0].x, @swpoles[0].y, 4, 2, "#F0F")
+    renderContext.fillCircle(@swpoles[2].x, @swpoles[2].y, 4, 2, Settings.POST_COLOR)
+    renderContext.fillCircle(@swpoles[1].x, @swpoles[1].y, 4, 2, Settings.POST_COLOR)
+    renderContext.fillCircle(@swpoles[0].x, @swpoles[0].y, 4, 2, Settings.POST_COLOR)
 
-    renderContext.drawLinePt @lead1, @swpoles[@position], Settings.GREY
+    renderContext.drawLinePt @lead1, @swpoles[@position], Settings.STROKE_COLOR
 
     @updateDots()
     renderContext.drawDots @point1, @lead1, this
@@ -96,8 +96,8 @@ class Switch2Elm extends SwitchElm
 
     renderContext.drawPosts(this)
 
-    if CircuitComponent.DEBUG
-      super(renderContext)
+#    if CircuitComponent.DEBUG
+#      super(renderContext)
 
   getPost: (n) ->
     if (n is 0)
@@ -144,7 +144,7 @@ class Switch2Elm extends SwitchElm
 
   getInfo: (arr) ->
     arr[0] = (if (@link is 0) then "switch (SPDT)" else "switch (DPDT)")
-    arr[1] = "I = " + @getCurrentDText(@getCurrent())
+    arr[1] = "I = " + @getCurrent()
 
   hasCenterOff: ->
     (@flags & Switch2Elm.FLAG_CENTER_OFF) isnt 0

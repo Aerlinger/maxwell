@@ -18,5 +18,4 @@ class CircuitNode
   getNeighboringElements: ->
     @links.map (link) -> link.elm
 
-
 module.exports = CircuitNode

@@ -16,11 +16,8 @@ class WireElm extends CircuitComponent
     "Wire"
 
   draw: (renderContext) ->
-    @updateDots()
-    renderContext.drawDots(@point1, @point2, this)
-
     renderContext.drawLinePt @point1, @point2, Util.getVoltageColor(@volts[0])
-#    @setBboxPt @point1, @point2, 3
+    #  @setBboxPt @point1, @point2, 3
 
     if @mustShowCurrent()
       s = Util.getUnitText(Math.abs(@getCurrent()), "A")

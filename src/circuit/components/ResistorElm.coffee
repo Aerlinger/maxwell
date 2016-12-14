@@ -19,6 +19,7 @@ class ResistorElm extends CircuitComponent
     }
   }
 
+
   constructor: (xa, ya, xb, yb, params, f) ->
     super(xa, ya, xb, yb, params, f)
 
@@ -53,7 +54,7 @@ class ResistorElm extends CircuitComponent
 
       renderContext.drawLinePt startPosition, endPosition, Util.getVoltageColor(resistorSegmentVoltage)
 
-    renderContext.drawValue 12, 0, this, Util.getUnitText(@resistance, @unitSymbol())
+    renderContext.drawValue 14, 0, this, Util.getUnitText(@resistance, @unitSymbol())
 
     renderContext.drawPosts(this)
 
@@ -69,7 +70,7 @@ class ResistorElm extends CircuitComponent
   getInfo: (arr) ->
     arr[0] = "resistor"
     @getBasicInfo arr
-    arr[3] = "R = " + Util.getUnitText(@resistance, @unitSymbol)
+    arr[3] = "R = " + Util.getUnitText(@resistance, @unitSymbol())
     arr[4] = "P = " + Util.getUnitText(@getPower(), "W")
 
     return arr

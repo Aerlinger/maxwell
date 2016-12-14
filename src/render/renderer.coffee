@@ -157,7 +157,7 @@ class Renderer extends BaseRenderer
     @onNodeClick = null   # @onNodeClick(component)
     @onUpdateComplete = null  # @onUpdateComplete(circuit)
 #
-    @setPlaceComponent("ResistorElm")
+    #@setPlaceComponent("ResistorElm")
 
     # @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
     # @Circuit.addObserver Circuit.ON_RESET, @clear

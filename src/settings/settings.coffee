@@ -180,9 +180,9 @@ class Settings
 
   # Line Widths:
   @POST_RADIUS: 2
-  @CURRENT_RADIUS: 1
+  @CURRENT_RADIUS: 2
   @CURRENT_COLOR: "rgba(255, 255, 255, 0.7)"
-  @LINE_WIDTH: 1
+  @LINE_WIDTH: 2
   @BOLD_LINE_WIDTH: 2
 
   # Grid

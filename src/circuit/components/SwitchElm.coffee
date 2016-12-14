@@ -108,6 +108,7 @@ class SwitchElm extends CircuitComponent
     @toggle() if @momentary
 
   toggle: ->
+    console.log("Toggling...#{@}")
     @position++
     @position = 0  if @position >= @posCount
     @Circuit.Solver.analyzeFlag = true
@@ -124,6 +125,9 @@ class SwitchElm extends CircuitComponent
 
   getConnection: (n1, n2) ->
     @position is 0
+
+  onClick: ->
+    toggle()
 
   isWire: ->
     true
