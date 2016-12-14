@@ -491,6 +491,9 @@ class CircuitComponent
   hash: ->
     "#{@constructor.name}#{@point1.x}#{@point1.y}#{@point2.x}#{@point2.y}"
 
+  equals: (otherComponent) ->
+    otherComponent.toString() == @toString()
+
   toJson: ->
     {
       x: @point1.x

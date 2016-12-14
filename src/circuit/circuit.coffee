@@ -137,13 +137,16 @@ class Circuit extends Observer
     @recomputeBounds()
 
   # "Desolders" an existing element to this circuit (removes it to the element list array).
-  desolder: (component, destroy = false) ->
+  desolder: (component) ->
     @notifyObservers @ON_DESOLDER
 
     component.Circuit = null
     Util.removeFromArray @elementList, component
-    if destroy
-      component.destroy()
+
+    # TODO: REMOVE NODES
+    #for node in component.nodes
+    #  if node.getNeighboringElements().length == 1
+    #    @nodeList.de
 
     @recomputeBounds()
 
@@ -319,6 +322,13 @@ class Circuit extends Observer
           @badNodes.push circuitNode
 
     return @badNodes
+
+  destroy: (components) ->
+    for component in components
+      for circuitComponent in @getElements()
+        console.log(component, circuitComponent)
+        if circuitComponent.equalTo(component)
+          @desolder(circuitComponent, true)
 
 
   ####################################################################################################################

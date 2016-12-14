@@ -76,6 +76,17 @@ html
           renderer = circuitContext;
         });
 
+        $(document).keypress(function (e) {
+          console.log("keypress", e.keyCode);
+
+          var keyCode = e.keyCode;
+          if (keyCode == 13) {
+            console.log("DELETE");
+
+            renderer.remove(renderer.getSelectedComponents());
+          }
+        });
+
         $('canvas.maxwell').mousemove(function(evt) {
           $("#coords").text("Cursor: (" + evt.offsetX +", " + evt.offsetY +")");
         });
@@ -90,6 +101,12 @@ html
           $('#component_sidebar .menu').append(
               '<a href="#" class="item component-item" data-name='+ component.name + '>' + component.name + '</a>'
           )
+        });
+
+        $('.component-item').click(function(evt) {
+          var componentName = $(this).data("name");
+
+          renderer.setPlaceComponent(componentName)
         });
 
         var back_canvas = $('.grid').get(0);

@@ -185,6 +185,10 @@ class Renderer extends BaseRenderer
 
     @placeComponent
 
+  remove: (components) ->
+    console.log("components", components)
+    @Circuit.destroy(components)
+
   mousemove: (event) =>
     x = event.offsetX
     y = event.offsetY
