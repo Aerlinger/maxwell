@@ -299,7 +299,7 @@ class CircuitComponent
     if @getParentCircuit()
       @getParentCircuit().invalidate()
 
-#    @setPoints()
+    @setPoints()
 
   moveTo: (x, y) ->
     deltaX = Util.snapGrid(x - @getCenter().x)

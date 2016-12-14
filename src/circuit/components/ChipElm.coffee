@@ -64,7 +64,6 @@ class ChipElm extends CircuitComponent
         console.error("No pin found at #{i}")
         return
 
-
       if @pins[i].state
         @volts[i] = initial_voltages?.shift()
         @pins[i].value = @volts[i] > 2.5

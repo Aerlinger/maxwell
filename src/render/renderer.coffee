@@ -1,6 +1,7 @@
 BaseRenderer = require('./BaseRenderer.coffee')
 Circuit = require('../circuit/circuit.coffee')
 CircuitComponent = require('../circuit/circuitComponent.coffee')
+ComponentRegistry = require('../circuit/componentRegistry.coffee')
 Settings = require('../settings/settings.coffee')
 Rectangle = require('../geom/rectangle.coffee')
 Polygon = require('../geom/Polygon.coffee')
@@ -8,7 +9,71 @@ Point = require('../geom/point.coffee')
 Util = require('../util/util.coffee')
 environment = require('../environment.coffee')
 
-ResistorElm = require("../circuit/components/ResistorElm.coffee")
+AntennaElm = require('../circuit/components/AntennaElm.coffee')
+WireElm = require('../circuit/components/WireElm.coffee')
+ResistorElm = require('../circuit/components/ResistorElm.coffee')
+GroundElm = require('../circuit/components/GroundElm.coffee')
+VoltageElm = require('../circuit/components/VoltageElm.coffee')
+DiodeElm = require('../circuit/components/DiodeElm.coffee')
+OutputElm = require('../circuit/components/OutputElm.coffee')
+SwitchElm = require('../circuit/components/SwitchElm.coffee')
+CapacitorElm = require('../circuit/components/CapacitorElm.coffee')
+InductorElm = require('../circuit/components/InductorElm.coffee')
+SparkGapElm = require('../circuit/components/SparkGapElm.coffee')
+CurrentElm = require('../circuit/components/CurrentElm.coffee')
+RailElm = require('../circuit/components/RailElm.coffee')
+MosfetElm = require('../circuit/components/MosfetElm.coffee')
+JfetElm = require('../circuit/components/JFetElm.coffee')
+TransistorElm = require('../circuit/components/TransistorElm.coffee')
+VarRailElm = require('../circuit/components/VarRailElm.coffee')
+OpAmpElm = require('../circuit/components/OpAmpElm.coffee')
+ZenerElm = require('../circuit/components/ZenerElm.coffee')
+Switch2Elm = require('../circuit/components/Switch2Elm.coffee')
+SweepElm = require('../circuit/components/SweepElm.coffee')
+TextElm = require('../circuit/components/TextElm.coffee')
+ProbeElm = require('../circuit/components/ProbeElm.coffee')
+
+AndGateElm = require('../circuit/components/AndGateElm.coffee')
+NandGateElm = require('../circuit/components/NandGateElm.coffee')
+OrGateElm = require('../circuit/components/OrGateElm.coffee')
+NorGateElm = require('../circuit/components/NorGateElm.coffee')
+XorGateElm = require('../circuit/components/XorGateElm.coffee')
+InverterElm = require('../circuit/components/InverterElm.coffee')
+
+LogicInputElm = require('../circuit/components/LogicInputElm.coffee')
+LogicOutputElm = require('../circuit/components/LogicOutputElm.coffee')
+AnalogSwitchElm = require('../circuit/components/AnalogSwitchElm.coffee')
+AnalogSwitch2Elm = require('../circuit/components/AnalogSwitch2Elm.coffee')
+MemristorElm = require('../circuit/components/MemristorElm.coffee')
+RelayElm = require('../circuit/components/RelayElm.coffee')
+TunnelDiodeElm = require('../circuit/components/TunnelDiodeElm.coffee')
+
+ScrElm = require('../circuit/components/SCRElm.coffee')
+TriodeElm = require('../circuit/components/TriodeElm.coffee')
+
+DecadeElm = require('../circuit/components/DecadeElm.coffee')
+LatchElm = require('../circuit/components/LatchElm.coffee')
+TimerElm = require('../circuit/components/TimerElm.coffee')
+JkFlipFlopElm = require('../circuit/components/JKFlipFlopElm.coffee')
+DFlipFlopElm = require('../circuit/components/DFlipFlopElm.coffee')
+CounterElm = require('../circuit/components/CounterElm.coffee')
+DacElm = require('../circuit/components/DacElm.coffee')
+AdcElm = require('../circuit/components/AdcElm.coffee')
+VcoElm = require('../circuit/components/VcoElm.coffee')
+PhaseCompElm = require('../circuit/components/PhaseCompElm.coffee')
+SevenSegElm = require('../circuit/components/SevenSegElm.coffee')
+CC2Elm = require('../circuit/components/CC2Elm.coffee')
+
+TransLineElm = require('../circuit/components/TransLineElm.coffee')
+
+TransformerElm = require('../circuit/components/TransformerElm.coffee')
+TappedTransformerElm = require('../circuit/components/TappedTransformerElm.coffee')
+
+LedElm = require('../circuit/components/LedElm.coffee')
+PotElm = require('../circuit/components/PotElm.coffee')
+ClockElm = require('../circuit/components/ClockElm.coffee')
+
+Scope = require('../circuit/components/Scope.coffee')
 
 
 class SelectionMarquee extends Rectangle
@@ -92,7 +157,7 @@ class Renderer extends BaseRenderer
     @onNodeClick = null   # @onNodeClick(component)
     @onUpdateComplete = null  # @onUpdateComplete(circuit)
 #
-    @placeComponent = new ResistorElm(100, 100, 100, 200, [5000])
+    @setPlaceComponent("ResistorElm")
 
     # @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
     # @Circuit.addObserver Circuit.ON_RESET, @clear
@@ -110,6 +175,15 @@ class Renderer extends BaseRenderer
 
   clearPlaceComponent: ->
     @placeComponent = null
+
+  setPlaceComponent: (componentName) ->
+    klass = eval(componentName)
+
+    @placeComponent = new klass(100, 100, 100, 200)
+
+    console.log(componentName, "default params:", @placeComponent.params)
+
+    @placeComponent
 
   mousemove: (event) =>
     x = event.offsetX

@@ -186,7 +186,7 @@ class Settings
   @BOLD_LINE_WIDTH: 2
 
   # Grid
-  @GRID_SIZE: 16
+  @GRID_SIZE: 8
   @SMALL_GRID: false
 
   @SHOW_VALUES: false
