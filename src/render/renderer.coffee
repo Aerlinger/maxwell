@@ -92,7 +92,7 @@ class Renderer extends BaseRenderer
     @onNodeClick = null   # @onNodeClick(component)
     @onUpdateComplete = null  # @onUpdateComplete(circuit)
 #
-#    @placeComponent = new ResistorElm(100, 100, 100, 200, [5000])
+    @placeComponent = new ResistorElm(100, 100, 100, 200, [5000])
 
     # @Circuit.addObserver Circuit.ON_START_UPDATE, @clear
     # @Circuit.addObserver Circuit.ON_RESET, @clear
@@ -123,15 +123,6 @@ class Renderer extends BaseRenderer
     @snapX = Util.snapGrid(x)
     @snapY = Util.snapGrid(y)
 
-    # TODO: WIP for interactive element placing
-    if @placeComponent
-      @placeComponent.setPoints()
-      if @placeComponent.x1() && @placeComponent.y1()
-        console.log(@snapX, @lastX," ", @snapY, @lastY)
-        console.log(@snapX - @lastX," ", @snapY - @lastY)
-
-        @placeComponent.moveTo(@snapX, @snapY)
-
     if @marquee?
       @marquee?.reposition(x, y)
       @selectedComponents = []
@@ -145,12 +136,22 @@ class Renderer extends BaseRenderer
       @previouslyHighlightedNode = @highlightedNode
       @highlightedNode = @Circuit.getNodeAtCoordinates(@snapX, @snapY)
 
-      for component in @Circuit.getElements()
-        if component.getBoundingBox().contains(x, y)
-          @newlyHighlightedComponent = component
-
       if @highlightedNode
         @onNodeHover?(@highlightedNode)
+
+      else
+        # TODO: WIP for interactive element placing
+        if @placeComponent
+          @placeComponent.setPoints()
+          if @placeComponent.x1() && @placeComponent.y1()
+            console.log(@snapX, @lastX," ", @snapY, @lastY)
+            console.log(@snapX - @lastX," ", @snapY - @lastY)
+
+            @placeComponent.moveTo(@snapX, @snapY)
+
+        for component in @Circuit.getElements()
+          if component.getBoundingBox().contains(x, y)
+            @newlyHighlightedComponent = component
 
       if @previouslyHighlightedNode && !@highlightedNode
         @onNodeUnhover?(@previouslyHighlightedNode)
@@ -183,7 +184,7 @@ class Renderer extends BaseRenderer
 
         @highlightedComponent = null
 
-    if @marquee is null and @selectedComponents?.length > 0 and event.which == MOUSEDOWN and (@lastX != @snapX or @lastY != @snapY)
+    if !@marquee and !@selectedNode and @selectedComponents?.length > 0 and event.which == MOUSEDOWN and (@lastX != @snapX or @lastY != @snapY)
       for component in @selectedComponents
         component.move(@snapX - @lastX, @snapY - @lastY)
 
@@ -262,7 +263,7 @@ class Renderer extends BaseRenderer
     if CircuitComponent.DEBUG
       for nodeIdx in [0...@Circuit.numNodes()]
         node = @Circuit.getNode(nodeIdx)
-        @fillText nodeIdx, node.x + 5, node.y - 5
+        @fillText "#{nodeIdx} #{node.x},#{node.y}", node.x + 5, node.y - 5
 
   drawComponents: ->
     if @context
