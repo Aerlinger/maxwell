@@ -11,6 +11,7 @@ app.set('view engine', 'jade');
 app.use(express.static(__dirname + '/css'));
 app.use("/bower_components", express.static(path.join(__dirname, '../bower_components')));
 app.use("/dist", express.static(path.join(__dirname, '../dist')));
+app.use("/scripts", express.static(path.join(__dirname, './scripts')));
 app.use("/circuits", express.static(path.join(__dirname, '../circuits')));
 
 var port = 6502;
@@ -24,7 +25,9 @@ app.get('/plotting', function (req, res) {
 });
 
 app.get('/:circuit_name', function (req, res) {
-  circuit_names = glob.sync("../circuits/*.json").map(function(filename) {
+  console.log(__dirname + "../circuits/*.json")
+
+  circuit_names = glob.sync(__dirname + "/../circuits/*.json").map(function(filename) {
     return path.basename(filename, ".json")
   });
 

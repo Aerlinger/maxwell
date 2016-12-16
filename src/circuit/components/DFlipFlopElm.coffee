@@ -32,11 +32,14 @@ class DFlipFlopElm extends ChipElm
     @pins = new Array(@getPostCount())
 
     @pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "D")
+
     @pins[1] = new ChipElm.Pin(0, ChipElm.SIDE_E, "Q")
     @pins[1].output = @pins[1].state = true
+
     @pins[2] = new ChipElm.Pin(2, ChipElm.SIDE_E, "Q")
     @pins[2].output = true
     @pins[2].lineOver = true
+
     @pins[3] = new ChipElm.Pin(1, ChipElm.SIDE_W, "")
     @pins[3].clock = true
 
@@ -53,5 +56,7 @@ class DFlipFlopElm extends ChipElm
       @pins[2].value = true
 
     @lastClock = @pins[3].value
+
+    #console.log("DFF #{@pins[1].value}")
 
 module.exports = DFlipFlopElm

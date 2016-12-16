@@ -62,7 +62,7 @@ describe "JSON output", ->
 
         done()
 
-      it "dumps frame JSON", ->
+      it.skip "dumps frame JSON", ->
         fileJson = JSON.parse(fs.readFileSync("./test/fixtures/data/ohms_frames.json"))
 
         expect(fileJson).to.eql(@circuit.frameJson())

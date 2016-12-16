@@ -41,7 +41,7 @@ class InductorElm extends CircuitComponent
     @curcount = 0
 
   setPoints: ->
-    super()
+    super
     @calcLeads(32)
 
   stamp: (stamper) ->
@@ -66,23 +66,28 @@ class InductorElm extends CircuitComponent
     stamper.stampCurrentSource @nodes[0], @nodes[1], @curSourceValue
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     @updateDots()
 
     v1 = @volts[0]
     v2 = @volts[1]
     hs = 8
 
-    @setBboxPt @point1, @point2, hs
+#    @setBboxPt @point1, @point2, hs
     renderContext.drawLeads(this)
-    renderContext.drawCoil @lead1, @lead2, v1, v2, renderContext
 
-    renderContext.drawValue -12, 0, this, Util.getUnitText(@inductance, "H")
+    renderContext.drawValue -14, 0, this, Util.getUnitText(@inductance, "H")
 
-    renderContext.drawDots(@point1, @point2, this)
+#    renderContext.drawDots(@point1, @point2, this)
+    @updateDots()
+    renderContext.drawDots @point1, @lead1, this
+    renderContext.drawDots @lead2, @point2, this
+
+    renderContext.drawCoil @lead1, @lead2, v1, v2
+
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
   getDumpType: ->
     "l"

@@ -2,12 +2,6 @@ VoltageElm = require('../../src/circuit/components/VoltageElm.coffee')
 
 describe "CircuitLoader", ->
   it "converts params from deprecated array syntax to hash-like syntax", ->
-    convert = {
-      "float": parseFloat,
-      "integer": parseInt,
-      "sign": Math.sign
-    }
-
     param_list = [
       "0",
       "40.0",
@@ -33,5 +27,3 @@ describe "CircuitLoader", ->
         "maxVoltage": 5
         "waveform": 0
     })
-
-

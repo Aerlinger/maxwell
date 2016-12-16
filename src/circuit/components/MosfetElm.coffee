@@ -82,9 +82,6 @@ class MosfetElm extends CircuitComponent
     "f"
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     @setBboxPt @point1, @point2, @hs
 
     color = Util.getVoltageColor(@volts[1])
@@ -133,7 +130,7 @@ class MosfetElm extends CircuitComponent
 
     #g.setColor(Color.white);
     #g.setFont(unitsFont);
-#      ds = MathUtils.sign(@dx)  if (@needsHighlight() or Circuit.dragElm is this) and @dy is 0
+#      ds = MathUtils.sign(@dx())  if (@needsHighlight() or Circuit.dragElm is this) and @dy() is 0
 
     #        Main.getMainCanvas().drawString("G", gate[1].x - 10 * ds, gate[1].y - 5);
     #        Main.getMainCanvas().drawString(pnp == -1 ? "D" : "S", src[0].x - 3 + 9 * ds, src[0].y + 4);
@@ -147,6 +144,9 @@ class MosfetElm extends CircuitComponent
     renderContext.drawDots @src[1], @drn[1], this
     renderContext.drawDots @drn[1], @drn[0], this
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
   getPost: (n) ->
     (if (n is 0) then @point1 else (if (n is 1) then @src[0] else @drn[0]))
@@ -163,20 +163,20 @@ class MosfetElm extends CircuitComponent
   drawDigital: ->
     true
 
-  setPoints: () ->
-    super()
+  setPoints: ->
+    super
     # find the coordinates of the various points we need to draw the MOSFET.
-    hs2 = @hs * @dsign
+    hs2 = @hs * @dsign()
     @src = Util.newPointArray(3)
     @drn = Util.newPointArray(3)
 
     [@src[0], @drn[0]] = Util.interpolateSymmetrical @point1, @point2, 1, -hs2
-    [@src[1], @drn[1]] = Util.interpolateSymmetrical @point1, @point2, 1 - 22 / @dn, -hs2
-    [@src[2], @drn[2]] = Util.interpolateSymmetrical @point1, @point2, 1 - 22 / @dn, -hs2 * 4 / 3
+    [@src[1], @drn[1]] = Util.interpolateSymmetrical @point1, @point2, 1 - 22 / @dn(), -hs2
+    [@src[2], @drn[2]] = Util.interpolateSymmetrical @point1, @point2, 1 - 22 / @dn(), -hs2 * 4 / 3
 
     @gate = Util.newPointArray(3)
 
-    [@gate[0], @gate[2]] = Util.interpolateSymmetrical @point1, @point2, 1 - 28 / @dn, hs2 / 2  #,  # was 1-20/dn
+    [@gate[0], @gate[2]] = Util.interpolateSymmetrical @point1, @point2, 1 - 28 / @dn(), hs2 / 2  #,  # was 1-20/dn
     @gate[1] = Util.interpolate @gate[0], @gate[2], .5
 
     if @pnp
@@ -185,10 +185,10 @@ class MosfetElm extends CircuitComponent
       @arrowPoly = Util.calcArrow(@drn[0], @drn[1], 12, 5)
 
 #    if @pnp is -1
-#      @gate[1] = Util.interpolate @point1, @point2, 1 - 36 / @dn
-#      dist = (if (@dsign < 0) then 32 else 31)
+#      @gate[1] = Util.interpolate @point1, @point2, 1 - 36 / @dn()
+#      dist = (if (@dsign() < 0) then 32 else 31)
 #
-#      @pcircle = Util.interpolate(@point1, @point2, 1 - dist / @dn)
+#      @pcircle = Util.interpolate(@point1, @point2, 1 - dist / @dn())
 #      @pcircler = 3
 
   stamp: (stamper) ->

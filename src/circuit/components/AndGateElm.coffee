@@ -7,7 +7,7 @@ class AndGateElm extends GateElm
     super(xa, ya, xb, yb, params, f)
 
   setPoints: ->
-    super()
+    super
 
     triPoints = Util.newPointArray(23)
 
@@ -22,8 +22,8 @@ class AndGateElm extends GateElm
     triPoints[11] = new Point(@lead2.x, @lead2.y)
 
     if @isInverting()
-      @pcircle = Util.interpolate(@point1, @point2, 0.5 + (@ww + 4) / @dn)
-      @lead2 = Util.interpolate(@point1, @point2, 0.5 + (@ww + 8) / @dn)
+      @pcircle = Util.interpolate(@point1, @point2, 0.5 + (@ww + 4) / @dn())
+      @lead2 = Util.interpolate(@point1, @point2, 0.5 + (@ww + 8) / @dn())
 
     @gatePoly = Util.createPolygonFromArray(triPoints)
 
@@ -36,6 +36,7 @@ class AndGateElm extends GateElm
     for i in [0...@inputCount]
       f = f & @getInput(i)
 
+    #console.log("AND: #{f}")
     return f
 
   getDumpType: ->

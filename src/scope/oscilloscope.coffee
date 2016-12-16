@@ -1,49 +1,29 @@
 class Oscilloscope
-  constructor: (@timeStep = 1) ->
-    @timeBase = 0
-    @frames = 0
+  constructor: () ->
+    @voltageBuffer = []
+    @currentBuffer = []
+    @onUpdate = null
 
-#      palette = new Rickshaw.Color.Palette scheme: 'classic9'
+  setOutputNode: (n) ->
+    @nodeOutput = n
 
-    @seriesData = [[], [], [], [], [], [], [], [], []]
+  setReferenceNode: (n) ->
+    @nodeRef = n
 
-    xbuffer_size = 150
+  setComponent: (component) ->
+    @component = component
 
-    chartDiv = document.getElementById("chart")
+  sampleVoltage: ->
+    unless @nodeOutput && @nodeRef
+      console.error("Node output and reference not set for oscilloscope!")
 
-    for i in [0..xbuffer_size]
-      @addData 0
+    voltageBuffer.add()
 
-    step: ->
-      @frames += 1
-      @removeData(1)
-      if @targetComponent
-        @addData @targetComponent.getScopeValue()
+  sampleCurrent: ->
+    currentBuffer.add()
 
-#      new ScopeControls(graph)
 
-    setInterval =>
-      @step()
-      graph.update()
-    , 40
-#
 
-  step: ->
-    @frames += 1
-    @removeData(1)
-    @addData 0.5 * Math.sin(@frames / 10) + 0.5
-
-  addData: (value) ->
-    index = @seriesData[0].length
-
-    for item in @seriesData
-      item.push({x: index * @timeStep + @timeBase, y: value})
-
-  removeData: (data) ->
-    for item in @seriesData
-      item.shift()
-
-    @timeBase += @timeStep
 
 
 module.exports = Oscilloscope

@@ -7,9 +7,6 @@ class Point
   @toArray: (num) ->
     (new Point(0, 0) for i in Array(num))
 
-  @comparePair: (x1, x2, y1, y2) ->
-    (x1 is y1 and x2 is y2) or (x1 is y2 and x2 is y1)
-
   @distanceSq: (x1, y1, x2, y2) ->
     x2 -= x1
     y2 -= y1

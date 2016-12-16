@@ -23,12 +23,16 @@ class BaseRenderer extends Observer
       msg += error + "\n"
     console.error "Simulation Error: " + msg
 
-  fillText: (text, x, y) ->
-    @context.fillText(text, x, y)
+  fillText: (text, x, y, fillColor="#FF8C00") ->
+    @context?.save()
+    origFillStyle = @context?.fillStyle
+    @context?.fillStyle = fillColor
+    @context?.fillText(text, x, y)
+    @context?.fillStyle = origFillStyle
+    @context?.restore()
 
   fillCircle: (x, y, radius, lineWidth = Settings.LINE_WIDTH, fillColor = '#FFFF00', lineColor = null) ->
     @context.save()
-
 
     @context.beginPath()
     @context.arc x, y, radius, 0, 2 * Math.PI, true
@@ -62,16 +66,14 @@ class BaseRenderer extends Observer
   drawRect: (x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor = "#000000") ->
     @context.strokeStyle = lineColor
     @context.lineJoin = 'miter'
-    @context.rect(x, y, width, height)
+    @context.lineWidth = 0
+    @context.strokeRect(x, y, width, height)
     @context.stroke()
 
   drawLinePt: (pa, pb, color = Settings.STROKE_COLOR) ->
     @drawLine pa.x, pa.y, pb.x, pb.y, color
 
   drawLine: (x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) ->
-#    if !x || !y || !x2 || !y2
-#      console.log(x, y, x2, y2)
-
     @context.save()
     @context.beginPath()
 
@@ -82,20 +84,22 @@ class BaseRenderer extends Observer
       @context.lineTo x2, y2
       @context.stroke()
 
-    @context.strokeStyle = color
-    @context.lineWidth = lineWidth
-    @context.moveTo x, y
-    @context.lineTo x2, y2
-    @context.stroke()
+    else
+      @context.strokeStyle = color
+      @context.lineWidth = lineWidth
+      @context.moveTo x, y
+      @context.lineTo x2, y2
+      @context.stroke()
 
     @context.closePath()
 
     @context.restore()
 
-  drawThickPolygon: (xlist, ylist, color=null) ->
+  drawThickPolygon: (xlist, ylist, color=Settings.STROKE_COLOR, fill=Settings.FILL_COLOR) ->
     @context.save()
 
-    @context.fillStyle = color
+    @context.fillStyle = fill
+    @context.strokeStyle = color
     @context.beginPath()
 
     @context.moveTo(xlist[0], ylist[0])
@@ -141,8 +145,8 @@ class BaseRenderer extends Observer
 
   drawValue: (x1, y1, circuitElm, str) ->
 
-  drawCoil: (point1, point2, vStart, vEnd, renderContext) ->
-    hs = 8
+  drawCoil: (point1, point2, vStart, vEnd, hs = null) ->
+    hs = hs || 8
     segments = 40
 
     ps1 = new Point(0, 0)
@@ -158,7 +162,7 @@ class BaseRenderer extends Observer
 
       voltageLevel = vStart + (vEnd - vStart) * i / segments
       color = Util.getVoltageColor(voltageLevel)
-      renderContext.drawLinePt ps1, ps2, color
+      @drawLinePt ps1, ps2, color
 
       ps1.x = ps2.x
       ps1.y = ps2.y

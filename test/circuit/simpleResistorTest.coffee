@@ -111,7 +111,7 @@ describe "Simple single resistor circuit", ->
       it "Sets circuitRightSide to correct value", ->
         expect(@Solver.circuitRightSide).to.deep.equal([0, 0, 0])
 
-      it "Sets circuitRowInfo to correct value", ->
+      xit "Sets circuitRowInfo to correct value", ->
         @ctx = "asdf"
 
         expect(@Solver.circuitRowInfo).to.deep.equal([
@@ -124,7 +124,7 @@ describe "Simple single resistor circuit", ->
             "rsChanges": false
             "type": 0
             "value": 0
-          }
+          },
           {
             "dropRow": false
             "lsChanges": false
@@ -134,7 +134,7 @@ describe "Simple single resistor circuit", ->
             "rsChanges": false
             "type": 1
             "value": 0
-          }
+          },
           {
             "dropRow": false
             "lsChanges": false
@@ -144,7 +144,7 @@ describe "Simple single resistor circuit", ->
             "rsChanges": true
             "type": 0
             "value": 0
-          }
+          },
           {
             "dropRow": true
             "lsChanges": false

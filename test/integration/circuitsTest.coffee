@@ -9,7 +9,7 @@ _ = require("lodash")
 
 chai = require('chai')
 
-chai.config.showDiff = false
+#chai.config.showDiff = false
 
 assert = chai.assert
 expect = chai.expect
@@ -21,67 +21,41 @@ filenames = glob.sync "./circuits/*.txt", {}
 @files = filenames.map (file) ->
   path.basename(file, ".txt")
 
-#@skip = [
-#  "counter", "555monostable", "555sequencer", "3-invert", "dram", "fulladd", "fullrect", "3-f220", "3-f221", "3-f211",
-#  "cmosnand", "cmosinverterslow", "cmosff", "ccinductor"
-#]
-
-@full_working = [
-  'allpass2', 'amp-dfdx', 'amp-diff', 'amp-follower','amp-fullrect','amp-invert','amp-noninvert','amp-rect',
-  'amp-schmitt','amp-sum','besselbutter','butter10lo','cap','capac','capmult','capmultcaps','capmultfreq','cappar',
-  'capseries','classd','coupled2','coupled3','currentsrcelm','dcrestoration','diff','diodeclip','diodecurve',
-  'diodelimit','follower','grid','grid2','gyrator','impedance','indpar','indseries','induct','inductac','invertamp',
-  'ladder','lrc-critical','lrc','moscurrentramp','moscurrentsrc','mosfetamp','mosfollower','mosmirror',
-  'mosswitch','nic-r','nmosfet','norton','ohms','opamp','opampfeedback','phaseseq','phaseshiftosc','pmosfet','pot',
-  'potdivide','pushpullxover','rectify','relaxosc','res-par','res-series','resistors','ringing','sine',
-  'spark-sawtooth','spikegen','thevenin','triangle','voltdivide','voltdouble','voltdouble2','voltquad','volttriple',
-  "inv-osc", "voltinvert", "switchedcap", "switchfilter", "mr", "mr-crossbar", "mr-sine", "mr-sine2", "mr-sine3",
-  "mr-square", "mr-triangle", "vco", "jfetcurrentsrc", "jfetamp", "jfetfollower"
+@skip = [
+  'transformerup',
+  'tdrelax'
+  'tesla'
+  'transformer'
+  'transformerdc'
+  'transformerdown'
+  'longdist'
+  'cciamp'
+  'ccvccs'
+  'opint-current'
+  'opint-invert-amp'
+  'opint-slew'
 ]
 
-@opamps = [
-  "opamp", "opampfeedback", "amp-invert", "amp-diff", "amp-follower", "amp-fullrect", "amp-integ", "amp-invert",
-  "amp-noninvert", "amp-rect", "amp-schmitt", "amp-sum", "relaxosc", "sawtooth", "howland", "logconvert", "nic-r",
-  "itov", "capmult", "gyrator", "amp-dfdx", "allpass2", "opamp-regulator"
+@files = _.difference(@files, @skip)
+@files = [
+#  'cciamp',   # Numerical error, R? o?
+#  'ccvccs'   # Numerical error, R?, o?
+#  'dtlnor',   # Permute R?, o?
+#  'deltasigma'
+#  'dram'      # AND
+#  'mux3state',   # AND
+#  'phasecompint'  # AND?
+#  'opint-current',   # Permute?, R?, o?
+#  'opint-invert-amp'  # PERMUTE, R?, o?
+#  'opint-slew'      # PERMUTE, R?, o?
+#  'relayctr'
+#  'relaytff'
+#  'ringmod'
+#  'traffic'
+#
+#  'vco'
+#  'opamp-regulator'
 ]
-
-#@files = _.difference(@files, @skip)
-#@files = [
-#  '3way',
-#  '555missing',  # 82
-#  '555sequencer',  # 82
-#  'cciamp',   # Numerical error
-#  'ccvccs',   # Numerical error
-#  'deltasigma',
-#  'digcompare',
-#  'dram',
-#  'dtlnor',
-#  'flashadc',
-#  'hfadc',
-#  'ledflasher',
-#  'lissa',
-#  'longdist'
-#  'mux3state',
-#  'opint-current',
-#  'opint-invert-amp',
-#  'opint-slew',
-#  'phasecompint',
-#  'relayctr',
-#  'relaymux',
-#  'relaytff',
-#  'ringmod',
-#  'rossler',
-#  'swtreedac',  # 82
-#  'tesla'
-#  'transformer'
-#  'transformerdc'
-#  'transformerdown'
-#  'transformerup'
-#  'relayand'
-#  'traffic',
-#  'transformerdown',
-#  'wheatstone' # Missing
-#]
 
 for circuit_name in @files
   do (circuit_name) ->
@@ -96,7 +70,7 @@ for circuit_name in @files
         analysisValidationFileName = "./dump/#{circuit_name}.txt_ANALYSIS.json"
         analysisValidationJson = JSON.parse(fs.readFileSync(analysisValidationFileName))
 
-#        fs.writeFileSync("#{circuit_name}_test_analysis.json", JSON.stringify(circuit.toJson(), null, 2))
+        fs.writeFileSync("test/fixtures/dump/#{circuit_name}_TEST_ANALYSIS.json", JSON.stringify(circuit.toJson(), null, 2))
 
         deltas = approx_diff(circuit.toJson(), analysisValidationJson)
 
@@ -115,7 +89,7 @@ for circuit_name in @files
         simulationValidationFileName = "./dump/#{circuit_name}.txt_FRAMES.json"
         simulationValidationJson = JSON.parse(fs.readFileSync(simulationValidationFileName))
 
-#        fs.writeFileSync("#{circuit_name}_test_frame.json", JSON.stringify(circuit.frameJson(), null, 2))
+        fs.writeFileSync("test/fixtures/dump/#{circuit_name}_TEST_FRAME.json", JSON.stringify(circuit.frameJson(), null, 2))
 
         deltas = approx_diff(circuit.frameJson(), simulationValidationJson)
 

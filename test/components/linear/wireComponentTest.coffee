@@ -8,10 +8,10 @@ describe "Wire Component", ->
     @wireElm = new WireElm(100, 100, 100, 200, {})
 
   it "has correct defaults", ->
-    @wireElm.x1 == 100
-    @wireElm.y1 == 100
-    @wireElm.x2 == 100
-    @wireElm.y2 == 200
+    @wireElm.x1() == 100
+    @wireElm.y1() == 100
+    @wireElm.x2() == 100
+    @wireElm.y2() == 200
     @wireElm.flags = 0
 
   it "has correct number of posts", ->

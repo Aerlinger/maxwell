@@ -47,27 +47,27 @@ class PotElm extends CircuitComponent
     3
 
   setPoints: ->
-    super()
+    super
 
     offset = 0
 
-    if Math.abs(@dx) > Math.abs(@dy)
-      @dx = Util.snapGrid(@dx / 2) * 2
-      @point2.x = @x2 = @point1.x + @dx
+    if Math.abs(@dx()) > Math.abs(@dy())
+      dx = Util.snapGrid(@dx() / 2) * 2
+      @point2.x = @point1.x + dx
 
-      offset = if (@dx < 0) then @dy else -@dy
+      offset = if (@dx() < 0) then @dy() else -@dy()
 
       @point2.y = @point1.y
     else
-      @dy = Util.snapGrid(@dy / 2) * 2
-      @point2.y = @y2 = @point1.y + @dy
-      offset = if (@dy > 0) then @dx else -@dx
+      dy = Util.snapGrid(@dy() / 2) * 2
+      @point2.y = @point1.y + dy
+      offset = if (@dy() > 0) then @dx() else -@dx()
       @point2.x = @point1.x
 
     if (offset == 0)
       offset = Settings.GRID_SIZE
 
-    @dn = Math.sqrt(Math.pow(@point1.x - @point2.x, 2), Math.pow(@point1.y - @point2.y, 2))
+    dn = Math.sqrt(Math.pow(@point1.x - @point2.x, 2), Math.pow(@point1.y - @point2.y, 2))
 
     bodyLen = 32
 
@@ -76,9 +76,9 @@ class PotElm extends CircuitComponent
     soff = Math.floor((@position - 0.5) * bodyLen)
 
     @post3 = Util.interpolate(@point1, @point2, 0.5, offset)
-    @corner2 = Util.interpolate(@point1, @point2, soff / @dn + 0.5, offset)
-    @arrowPoint = Util.interpolate(@point1, @point2, soff / @dn + 0.5, 8 * Math.sign(offset))
-    @midpoint = Util.interpolate(@point1, @point2, soff / @dn + 0.5)
+    @corner2 = Util.interpolate(@point1, @point2, soff / dn + 0.5, offset)
+    @arrowPoint = Util.interpolate(@point1, @point2, soff / dn + 0.5, 8 * Math.sign(offset))
+    @midpoint = Util.interpolate(@point1, @point2, soff / dn + 0.5)
 
     clen = Math.abs(offset) - 8
 

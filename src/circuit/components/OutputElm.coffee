@@ -21,26 +21,28 @@ class OutputElm extends CircuitComponent
     1
 
   setPoints: ->
-    super()
+    super
     @lead1 = new Point()
 
-  draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
+    @setBboxPt(@lead1, @point1, 8)
 
+  draw: (renderContext) ->
     color = "#FFF"
     s = (if (@flags & OutputElm.FLAG_VALUE) isnt 0 then Util.getUnitText(@volts[0], "V") else "out")
 
-    @lead1 = Util.interpolate @point1, @point2, 1 - (3 * s.length / 2 + 8) / @dn
+    @lead1 = Util.interpolate @point1, @point2, 1 - (3 * s.length / 2 + 8) / @dn()
 
-    @setBboxPt @point1, @lead1, 0
-    renderContext.drawValue -5, 25, this, s
+    renderContext.drawValue 10, 25, this, s
 
     color = Util.getVoltageColor(@volts[0])
 
     renderContext.drawLinePt @point1, @lead1, color
-    renderContext.drawCircle @lead1.x + Settings.POST_RADIUS, @lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR
+    renderContext.drawCircle @lead1.x + 2*Settings.POST_RADIUS, @lead1.y, 2*Settings.POST_RADIUS, 1, Settings.STROKE_COLOR
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
+
 
   getVoltageDiff: ->
     @volts[0]

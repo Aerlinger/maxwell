@@ -4,10 +4,10 @@ describe "Ground Component", ->
     @groundElm = new GroundElm(50, 50, 50, 150)
 
   it "has correct defaults", ->
-    @groundElm.x1 == 50
-    @groundElm.y1 == 50
-    @groundElm.x2 == 50
-    @groundElm.y2 == 150
+    @groundElm.x1() == 50
+    @groundElm.y1() == 50
+    @groundElm.x2() == 50
+    @groundElm.y2() == 150
     @groundElm.flags = 0
 
   it "has correct number of posts", ->

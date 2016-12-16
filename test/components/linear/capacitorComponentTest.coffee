@@ -2,11 +2,11 @@ CapacitorElm = require('../../../src/circuit/components/CapacitorElm.coffee')
 
 describe "Capacitor Component", ->
   beforeEach ->
-    @capacitor = new CapacitorElm(100, 100, 100, 200, { capacitance: 1e-9, voltDiff: 1.1})
+    @capacitor = new CapacitorElm(100, 100, 100, 200, { capacitance: 1e-9, voltdiff: 1.1})
 
   it "has correct defaults", ->
     @capacitor.capacitance.should.equal 1e-9
-    @capacitor.voltDiff.should.equal 1.1
+    @capacitor.voltdiff.should.equal 1.1
 
   it "has correct number of posts", ->
     @capacitor.getPostCount().should.equal 2
@@ -24,6 +24,10 @@ describe "Capacitor Component", ->
   it "should be orphaned", ->
     @capacitor.orphaned().should.equal true
 
+  it "has correct position", ->
+    expect(@capacitor.point1.x).to.equal(100)
+    expect(@capacitor.x1()).to.equal(100)
+
   it "serializes to JSON", ->
     expect(@capacitor.toJson()).to.eql({
       x: 100
@@ -32,7 +36,7 @@ describe "Capacitor Component", ->
       y2: 200
       flags: 0
       nodes: [0, 0]
-      params: { capacitance: 1e-9, voltDiff: 1.1 }
+      params: { capacitance: 1e-9, voltdiff: 1.1 }
       selected: false
       voltSource: 0
       needsShortcut: true

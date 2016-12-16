@@ -121,9 +121,9 @@ class TransistorElm extends CircuitComponent
     if CircuitComponent.DEBUG
       super(renderContext)
 
-    @dsign = -@dsign  unless (@flags & TransistorElm.FLAG_FLIP) is 0
+    #@dsign() = -@dsign()  unless (@flags & TransistorElm.FLAG_FLIP) is 0
 
-    hs2 = @renderSize * @dsign * @pnp
+    hs2 = @renderSize * @dsign() * @pnp
 
     # calc collector, emitter posts
     @coll = Util.newPointArray(2)
@@ -133,24 +133,22 @@ class TransistorElm extends CircuitComponent
 
     # calc rectangle edges
     @rect = Util.newPointArray(4)
-    [@rect[0], @rect[1]] = Util.interpolateSymmetrical @point1, @point2, 1 - 16 / @dn, @renderSize
-    [@rect[2], @rect[3]] = Util.interpolateSymmetrical @point1, @point2, 1 - 13 / @dn, @renderSize
+    [@rect[0], @rect[1]] = Util.interpolateSymmetrical @point1, @point2, 1 - 16 / @dn(), @renderSize
+    [@rect[2], @rect[3]] = Util.interpolateSymmetrical @point1, @point2, 1 - 13 / @dn(), @renderSize
 
     # calc points where collector/emitter leads contact rectangle
-    [@coll[1], @emit[1]] = Util.interpolateSymmetrical @point1, @point2, 1 - 13 / @dn, 6 * @dsign * @pnp
+    [@coll[1], @emit[1]] = Util.interpolateSymmetrical @point1, @point2, 1 - 13 / @dn(), 6 * @dsign() * @pnp
 
     # calc point where base lead contacts rectangle
-    @base = Util.interpolate @point1, @point2, 1 - @renderSize / @dn
+    @base = Util.interpolate @point1, @point2, 1 - @renderSize / @dn()
 
     # rectangle
     @rectPoly = Util.createPolygon(@rect[0], @rect[2], @rect[3], @rect[1])
 
     # arrow
     unless @pnp is 1
-      pt = Util.interpolateSymmetrical(@point1, @point2, 1 - 11 / @dn, -5 * @dsign * @pnp)
+      pt = Util.interpolateSymmetrical(@point1, @point2, 1 - 11 / @dn(), -5 * @dsign() * @pnp)
       @arrowPoly = Util.calcArrow(@emit[0], pt, 8, 4)
-
-    @setBboxPt @point1, @point2, @renderSize
 
     # draw collector
     color = Util.getVoltageColor(@volts[1])
@@ -188,12 +186,12 @@ class TransistorElm extends CircuitComponent
     #g.fillPolygon(rectPoly);
     renderContext.drawThickPolygonP @rectPoly, color
 
-#      if (@needsHighlight() or Circuit.dragElm is this) and @dy is 0
+#      if (@needsHighlight() or Circuit.dragElm is this) and @dy() is 0
 #        g.setColor(Color.white);
 #        g.setFont(this.unitsFont);
 #        CircuitComponent.setColor Color.white
 #
-#        ds = MathUtils.sign(@dx)
+#        ds = MathUtils.sign(@dx())
 #        @drawCenteredText "B", @base.x1 - 10 * ds, @base.y - 5, Color.WHITE
 #        @drawCenteredText "C", @coll[0].x1 - 3 + 9 * ds, @coll[0].y + 4, Color.WHITE # x+6 if ds=1, -12 if -1
 #        @drawCenteredText "E", @emit[0].x1 - 3 + 9 * ds, @emit[0].y + 4, Color.WHITE
@@ -214,15 +212,15 @@ class TransistorElm extends CircuitComponent
   getPower: ->
     (@volts[0] - @volts[2]) * @ib + (@volts[1] - @volts[2]) * @ic
 
-  setPoints: (stamper) ->
-    super()
+  setPoints: () ->
+    super
 
     hs = @renderSize
 
-    if @flags & TransistorElm.FLAG_FLIP != 0
-      @dsign = -@dsign
+    #    if @flags & TransistorElm.FLAG_FLIP != 0
+    #      @dsign() = -@dsign()
 
-    hs2 = hs * @dsign * @pnp
+    hs2 = hs * @dsign() * @pnp
 
     @coll = Util.newPointArray(2)
     @emit = Util.newPointArray(2)
@@ -231,18 +229,20 @@ class TransistorElm extends CircuitComponent
 
     @rect = Util.newPointArray(4)
 
-    [@rect[0], @rect[1]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 16/@dn, hs)
-    [@rect[2], @rect[3]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 13/@dn, hs)
-    [@coll[1], @emit[1]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 13/@dn, 6 * @dsign * @pnp)
+    [@rect[0], @rect[1]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 16/@dn(), hs)
+    [@rect[2], @rect[3]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 13/@dn(), hs)
+    [@coll[1], @emit[1]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 13/@dn(), 6 * @dsign() * @pnp)
 
-    @base = Util.interpolateSymmetrical(@point1, @point2, 1 - 16 / @dn)
+    @base = Util.interpolateSymmetrical(@point1, @point2, 1 - 16 / @dn())
 
     @rectPoly = Util.createPolygonFromArray(@rect)
+
+    @setBbox(@point1.x, @point1.y, @point2.x, @point2.y)
 
     if @pnp == 1
       @arrowPoly = Util.calcArrow(@emit[1], @emit[0], 8, 4)
     else
-      pt = Util.interpolate(@point1, @point2, 1 - 11 / @dn, -5 * @dsign * @pnp)
+      pt = Util.interpolate(@point1, @point2, 1 - 11 / @dn(), -5 * @dsign() * @pnp)
 #      console.log(pt)
 #      console.log(@emit)
 

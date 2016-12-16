@@ -41,11 +41,11 @@ class TappedTransformerElm extends CircuitComponent
     @noDiagonal = true
 
   draw: (renderContext) ->
-    super()
+    super(renderContext)
     @current[3] = @current[1] - @current[2]
 
   setPoints: ->
-    super()
+    super
 
     hs = 32
 
@@ -60,8 +60,8 @@ class TappedTransformerElm extends CircuitComponent
     @ptEnds[3] = Util.interpolate(@point1, @point2, 1, -hs)
     @ptEnds[4] = Util.interpolate(@point1, @point2, 1, -hs * 2)
 
-    ce = 0.5 - 12 / @dn
-    cd = 0.5 - 2 / @dn
+    ce = 0.5 - 12 / @dn()
+    cd = 0.5 - 2 / @dn()
 
     @ptCoil[0] = Util.interpolate(@ptEnds[0], @ptEnds[2], ce)
     @ptCoil[1] = Util.interpolate(@ptEnds[0], @ptEnds[2], ce, -hs * 2)
@@ -113,6 +113,7 @@ class TappedTransformerElm extends CircuitComponent
 
     for i in [0...9]
       @a[i] *= @getParentCircuit().timeStep() / 2
+
       stamper.stampConductance(@nodes[0], @nodes[1], @a[0])
       stamper.stampVCCurrentSource(@nodes[0], @nodes[1], @nodes[2], @nodes[3], @a[1])
       stamper.stampVCCurrentSource(@nodes[0], @nodes[1], @nodes[3], @nodes[4], @a[2])
@@ -147,7 +148,6 @@ class TappedTransformerElm extends CircuitComponent
         @curSourceValue[i] = @a[i*3 + j] * @voltdiff[j]
 
   calculateCurrent: ->
-#    console.log("CALCULATECURRENT PRE", @current)
     @voltdiff[0] = @volts[0] - @volts[1]
     @voltdiff[1] = @volts[2] - @volts[3]
     @voltdiff[2] = @volts[3] - @volts[4]
@@ -157,18 +157,14 @@ class TappedTransformerElm extends CircuitComponent
       for j in [0...3]
         @current[i] += @a[i * 3 + j] * @voltdiff[j]
 
-#    console.log("CALCULATECURRENT POST", @current)
-#    console.log("VOLTS", @voltdiff)
-#    console.log("a", @a)
-
   getConnection: (n1, n2) ->
-    if @comparePair(n1, n2, 0, 1)
+    if Util.comparePair(n1, n2, 0, 1)
       return true
-    if @comparePair(n1, n2, 2, 3)
+    if Util.comparePair(n1, n2, 2, 3)
       return true
-    if @comparePair(n1, n2, 3, 4)
+    if Util.comparePair(n1, n2, 3, 4)
       return true
-    if @comparePair(n1, n2, 2, 4)
+    if Util.comparePair(n1, n2, 2, 4)
       return true
 
     return false

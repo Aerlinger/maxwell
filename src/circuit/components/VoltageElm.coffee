@@ -148,12 +148,9 @@ class VoltageElm extends CircuitComponent
 
 
   setPoints: ->
-    super()
+    super
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     @updateDots()
 
     if(@waveform is VoltageElm.WF_DC or @waveform is VoltageElm.WF_VAR)
@@ -161,29 +158,34 @@ class VoltageElm extends CircuitComponent
     else
       @calcLeads VoltageElm.circleSize * 2
 
-    @setBbox @x1, @y1, @x2, @y2
     renderContext.drawLeads(this)
 
     if @waveform is VoltageElm.WF_DC
-      renderContext.drawDots @point1, @point2, this
+      renderContext.drawDots @point1, @lead1, this
+      renderContext.drawDots @lead2, @point2, this
     else
       renderContext.drawDots(@point1, @lead1, this)
       renderContext.drawDots(@lead2, @point2, this)
 
     if @waveform is VoltageElm.WF_DC
-      [ptA, ptB] = Util.interpolateSymmetrical @lead1, @lead2, 0, 10
+      [ptA, ptB] = Util.interpolateSymmetrical @lead1, @lead2, 0, Settings.GRID_SIZE
       renderContext.drawLinePt @lead1, ptA, Util.getVoltageColor(@volts[0])
       renderContext.drawLinePt ptA, ptB, Util.getVoltageColor(@volts[0])
 
       @setBboxPt @point1, @point2, Settings.GRID_SIZE
-      [ptA, ptB] = Util.interpolateSymmetrical @lead1, @lead2, 1, Settings.GRID_SIZE
+      [ptA, ptB] = Util.interpolateSymmetrical @lead1, @lead2, 1, 2*Settings.GRID_SIZE
       renderContext.drawLinePt ptA, ptB, Util.getVoltageColor(@volts[1])
+
+      renderContext.drawValue -25, 0, this, Util.getUnitText(@getVoltageDiff(), @unitSymbol())
     else
       @setBboxPt @point1, @point2, VoltageElm.circleSize
       ps1 = Util.interpolate @lead1, @lead2, 0.5
       @drawWaveform ps1, renderContext
 
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
 
   drawWaveform: (center, renderContext) ->
@@ -279,20 +281,23 @@ class VoltageElm extends CircuitComponent
   getVoltageDiff: ->
     @volts[1] - @volts[0]
 
+  unitSymbol: ->
+    "V"
+
   getInfo: (arr) ->
     switch @waveform
       when VoltageElm.WF_DC, VoltageElm.WF_VAR
-        arr[0] = "voltage source"
+        arr[0] = "Voltage source"
       when VoltageElm.WF_AC
         arr[0] = "A/C source"
       when VoltageElm.WF_SQUARE
-        arr[0] = "square wave gen"
+        arr[0] = "Square wave gen"
       when VoltageElm.WF_PULSE
-        arr[0] = "pulse gen"
+        arr[0] = "Pulse gen"
       when VoltageElm.WF_SAWTOOTH
-        arr[0] = "sawtooth gen"
+        arr[0] = "Sawtooth gen"
       when VoltageElm.WF_TRIANGLE
-        arr[0] = "triangle gen"
+        arr[0] = "Triangle gen"
 
     arr[1] = "I = " + Util.getUnitText(@getCurrent(), "A")
 #      arr[2] = ((if (this instanceof RailElm) then "V = " else "Vd = ")) + DrawHelper.getVoltageText(@getVoltageDiff())

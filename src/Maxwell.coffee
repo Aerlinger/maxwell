@@ -6,8 +6,8 @@ Renderer = require('./render/renderer.coffee')
 
 environment = require("./environment.coffee")
 
-unless environment.isBrowser
-  Winston = require('winston')
+#unless environment.isBrowser
+#  Winston = require('winston')
 
 class Maxwell
   version = "0.0.0"
@@ -19,15 +19,16 @@ class Maxwell
 
   @Components = (v for k,v of ComponentRegistry.ComponentDefs)
 
-  if environment.isBrowser
-    @logger = console
-  else
-    @logger = new (Winston.Logger)({
-      transports: [
-        new (Winston.transports.Console)(),
-        new (Winston.transports.File)({ filename: 'log/maxwell.log' })
-      ]
-    })
+
+#  if environment.isBrowser
+#    @logger = console
+#  else
+#    @logger = new (Winston.Logger)({
+#      transports: [
+#        new (Winston.transports.Console)(),
+#        new (Winston.transports.File)({ filename: 'log/maxwell.log' })
+#      ]
+#    })
 
   @loadCircuitFromFile: (circuitFileName, onComplete) ->
     circuit = CircuitLoader.createCircuitFromJsonFile(circuitFileName, onComplete)
@@ -53,6 +54,9 @@ class Maxwell
         throw new Error("""
           Parameter must either be a path to a JSON file or raw JSON data representing the circuit.
           Use `Maxwell.createCircuit()` to create a new empty circuit object.
+
+          was:
+          #{circuitData}
         """)
     else
       circuit = new Circuit()
@@ -61,16 +65,16 @@ class Maxwell
 
     return new Renderer(circuit, canvas)
 
-  @createContext: (circuitName, circuitData, context, onComplete) ->
+  @createContext: (circuitName, filepath, context, onComplete) ->
     circuit = null
 
     if circuitName
-      if typeof circuitData is "string"
-        circuit = Maxwell.loadCircuitFromFile circuitData, (circuit) ->
+      if typeof filepath is "string"
+        circuit = Maxwell.loadCircuitFromFile filepath, (circuit) ->
           onComplete(new Renderer(circuit, context))
 
-      else if typeof circuitData is "object"
-        circuit = Maxwell.loadCircuitFromJson(circuitData)
+      else if typeof filepath is "object"
+        circuit = Maxwell.loadCircuitFromJson(filepath)
       else
         throw new Error("""
           Parameter must either be a path to a JSON file or raw JSON data representing the circuit.
@@ -80,6 +84,8 @@ class Maxwell
       circuit = new Circuit()
 
     @Circuits[circuitName] = circuit
+
+    return circuit
 
 #    return new Renderer(circuit, context)
 

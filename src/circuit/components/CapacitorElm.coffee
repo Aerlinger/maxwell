@@ -33,6 +33,8 @@ class CapacitorElm extends CircuitComponent
     @plate2 = []
     @curSourceValue = 0
 
+    console.log("ca", xa)
+
     super(xa, ya, xb, yb, params, f)
 
   isTrapezoidal: ->
@@ -56,9 +58,11 @@ class CapacitorElm extends CircuitComponent
     "c"
 
   setPoints: ->
-    super()
+    console.log("capelm", arguments)
+#    super(arguments...)
+    super
 
-    f = (@dn / 2 - 4) / @dn
+    f = (@dn() / 2 - 4) / @dn()
 
     @lead1 = Util.interpolate(@point1, @point2, f)
     @lead2 = Util.interpolate(@point1, @point2, 1 - f)
@@ -70,9 +74,6 @@ class CapacitorElm extends CircuitComponent
 
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     hs = 12
 #    @setBboxPt @point1, @point2, hs
 
@@ -94,6 +95,9 @@ class CapacitorElm extends CircuitComponent
     renderContext.drawValue 20, 0, this, Util.getUnitText(@capacitance, @unitSymbol())
 
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
   unitSymbol: ->
     "F"

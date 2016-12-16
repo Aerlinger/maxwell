@@ -178,7 +178,6 @@ class Util
   @snapGrid: (x) ->
     Settings.GRID_SIZE * Math.round(x/Settings.GRID_SIZE)
 
-
   @showFormat: (decimalNum) ->
     decimalNum.toPrecision(2)
 
@@ -188,8 +187,17 @@ class Util
   @longFormat: (decimalNum) ->
     decimalNum.toPrecision(4)
 
+  @singleFloat: (f) ->
+    if f == undefined
+      "undef"
+    else
+      sprintf("%0.1f", f)
+
   @tidyFloat: (f) ->
-    sprintf("%0.2f", f)
+    if f == undefined
+      "undef"
+    else
+      sprintf("%0.2f", f)
 
   @isFunction: (v) ->
     typeof v == "function"
@@ -211,7 +219,7 @@ class Util
 
       if(i != matrixRowCount - 1)
         arrayStr += ", "
-        circuitMatrixDump += ", "
+#        circuitMatrixDump += ", "
 
     arrayStr += "]"
 
@@ -256,6 +264,15 @@ class Util
 
     unless environment.isBrowser
       process.exit(1)
+
+  @comparePair: (x1, x2, y1, y2) ->
+    (x1 == y1 && x2 == y2) || (x1 == y2 && x2 == y1)
+
+  @overlappingPoints: (pt1, pt2) ->
+    pt1.x == pt2.x && pt1.y == pt2.y
+
+  @rgb2hex: (r, g, b) ->
+    "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
 
 
 module.exports = Util

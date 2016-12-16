@@ -156,7 +156,7 @@ canvas.grid {
 .rickshaw_graph .detail {
   background: none;
 }
-
+.rickshaw_annotation_timeline { margin-top: 0 !important; }
 .rickshaw_graph .detail .x_label { display: none }
 .rickshaw_graph .detail .item { line-height: 1.4; padding: 0.5em }
 .detail_swatch { float: right; display: inline-block; width: 10px; height: 10px; margin: 0 4px 0 0 }

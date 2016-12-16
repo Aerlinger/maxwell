@@ -35,9 +35,7 @@ describe "Point", ->
       p1 = new Point()
       Point.toArray(2).toString().should.equal [p1, p1].toString()
 
-    it "should compare two points correctly", ->
-      Point.comparePair(3, 5, 3, 5).should.equal true
-      Point.comparePair(5, 3, 5, 3).should.equal true
+    
 
     it "two points at the same coordinates should be equal", ->
       point1 = new Point(3, 5)

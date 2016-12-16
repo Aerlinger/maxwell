@@ -1,5 +1,5 @@
 class CircuitNode
-  constructor: (@x=0, @y=0, @intern=false, @links=[]) ->
+  constructor: (@solver, @x=0, @y=0, @intern=false, @links=[]) ->
 
   toJson: ->
     {
@@ -11,5 +11,11 @@ class CircuitNode
 
   toString: ->
     "CircuitNode: #{@x} #{@y} #{@intern} [#{@links.toString()}]"
+
+  getVoltage: ->
+    @links.map (link) -> link.elm.nodes
+      
+  getNeighboringElements: ->
+    @links.map (link) -> link.elm
 
 module.exports = CircuitNode

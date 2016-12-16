@@ -76,23 +76,20 @@ class OpAmpElm extends CircuitComponent
 
     @noDiagonal = true
 
-    @setSize(if f & OpAmpElm.FLAG_SMALL isnt 0 then 1 else 2)
+    @setSize(if (f & OpAmpElm.FLAG_SMALL) isnt 0 then 1 else 2)
     @setGain()
 
 
   setGain: ->
-    # gain of 100000 breaks e-amp-dfdx.txt
-    # gain was 1000, but it broke amp-schmitt.txt
+    # gain of 100000 breaks e-amp-dfdx
+    # gain was 1000, but it broke amp-schmitt
     @gain = (if ((@flags & OpAmpElm.FLAG_LOWGAIN) isnt 0) then 1000 else 100000)
 
   nonLinear: ->
     true
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
-    @setBbox @x1, @in1p[0].y, @x2, @in2p[0].y
+    @setBbox @point1.x, @in1p[0].y, @point2.x, @in2p[0].y
 
     # Terminal 1
     color = Util.getVoltageColor(@volts[0])
@@ -103,12 +100,16 @@ class OpAmpElm extends CircuitComponent
     color = Util.getVoltageColor(@volts[1])
     renderContext.drawLinePt @in2p[0], @in2p[1], color
 
+
     # Terminal 3
     color = Util.getVoltageColor(@volts[2])
     renderContext.drawLinePt @lead2, @point2, color
 
     # Body
-    renderContext.drawThickPolygonP @triangle, Settings.FG_COLOR
+    renderContext.drawThickPolygonP @triangle, Settings.STROKE_COLOR, Settings.FG_COLOR
+
+    renderContext.fillText("+", @in1p[1].x + 5, @in1p[1].y + 3, Settings.TEXT_COLOR)
+    renderContext.fillText("-", @in2p[1].x + 5, @in2p[1].y + 3, Settings.TEXT_COLOR)
 
     if @getParentCircuit() && @getParentCircuit()
       @updateDots()
@@ -116,7 +117,9 @@ class OpAmpElm extends CircuitComponent
       renderContext.drawDots @point2, @lead2, this
 
       renderContext.drawPosts(this)
-#      @(renderContext)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
   getPower: ->
     @volts[2] * @current
@@ -127,16 +130,16 @@ class OpAmpElm extends CircuitComponent
     @opwidth = 13 * s
 
   setPoints: ->
-    super()
-    @setSize 2
+    super
+#    @setSize 2
 
-    if ww > @dn / 2
-      ww = Math.floor(@dn / 2)
+    if ww > @dn() / 2
+      ww = Math.floor(@dn() / 2)
     else
       ww = Math.floor(@opwidth)
 
     @calcLeads ww * 2
-    hs = Math.floor(@opheight * @dsign)
+    hs = Math.floor(@opheight * @dsign())
     hs = -hs unless (@flags & OpAmpElm.FLAG_SWAP) is 0
 
     @in1p = Util.newPointArray(2)

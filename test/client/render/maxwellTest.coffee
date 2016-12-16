@@ -1,8 +1,8 @@
 Maxwell = require('../../../src/Maxwell.coffee')
 
-describe "Instantiating Maxwell", ->
+describe.skip "Instantiating Maxwell", ->
   before ->
-    @primary_circuit = Maxwell.createCircuit("./circuits/ohms.json")
+    @primary_circuit = Maxwell.loadCircuitFromFile("./circuits/ohms.json")
 
   it "can be instantiated independently of the DOM", ->
     expect(@primary_circuit).to.be.ok()

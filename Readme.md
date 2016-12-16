@@ -2,6 +2,10 @@
 
 A low-level javascript circuit simulation engine designed to model, simulate, and render complex electronic circuitry.
 
+## Running the App
+
+- `node demo/app.js` 
+
 ## Features
   - Solvers for linear, nonlinear, analog, digital, and mixed-signal circuitry
   - Preset definitions and examples

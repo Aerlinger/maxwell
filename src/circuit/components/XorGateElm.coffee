@@ -8,11 +8,11 @@ class XorGateElm extends OrGateElm
     super(xa, ya, xb, yb, params, f)
 
   setPoints: ->
-    super()
+    super
 
     @linePoints = Util.newPointArray(5)
 
-    ww2 = if (@ww == 0) then @dn * 2 else @ww * 2
+    ww2 = if (@ww == 0) then @dn() * 2 else @ww * 2
 
     for i in [0...5]
       a = (i - 2) / 2.0

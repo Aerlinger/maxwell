@@ -112,6 +112,8 @@ class Circuit extends Observer
     @time = 0
     @iterations = 0
 
+    @placementElement = null
+
     @clearErrors()
     @notifyObservers @ON_RESET
 
@@ -135,13 +137,16 @@ class Circuit extends Observer
     @recomputeBounds()
 
   # "Desolders" an existing element to this circuit (removes it to the element list array).
-  desolder: (component, destroy = false) ->
+  desolder: (component) ->
     @notifyObservers @ON_DESOLDER
 
     component.Circuit = null
     Util.removeFromArray @elementList, component
-    if destroy
-      component.destroy()
+
+    # TODO: REMOVE NODES
+    #for node in component.nodes
+    #  if node.getNeighboringElements().length == 1
+    #    @nodeList.de
 
     @recomputeBounds()
 
@@ -162,6 +167,9 @@ class Circuit extends Observer
 
     out
 
+  getVoltageForNode: (nodeIdx) ->
+    if @nodeList[nodeIdx].links[0]
+      @nodeList[nodeIdx].links[0].elm.getVoltageForNode(nodeIdx)
 
   ####################################################################################################################
   ### Simulation Frame Computation
@@ -179,7 +187,7 @@ class Circuit extends Observer
 
     @Solver.reconstruct()
 
-    if @Solver.isStopped
+    if @Solver.isStopped || @placementElement != null
       @Solver.lastTime = 0
     else
       @Solver.solveCircuit()
@@ -314,6 +322,12 @@ class Circuit extends Observer
           @badNodes.push circuitNode
 
     return @badNodes
+
+  destroy: (components) ->
+    for component in components
+      for circuitComponent in @getElements()
+        if circuitComponent.equalTo(component)
+          @desolder(circuitComponent, true)
 
 
   ####################################################################################################################

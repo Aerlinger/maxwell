@@ -3,10 +3,10 @@ describe "ClockElmTest", ->
     @clockElm = new ClockElm(100, 200)
 
   it "has correct position", ->
-    expect(@clockElm.x1).to.equal(100)
-    expect(@clockElm.y1).to.equal(200)
-    expect(@clockElm.x2).to.equal(100)
-    expect(@clockElm.y2).to.equal(200)
+    expect(@clockElm.x1()).to.equal(100)
+    expect(@clockElm.y1()).to.equal(200)
+    expect(@clockElm.x2()).to.equal(100)
+    expect(@clockElm.y2()).to.equal(200)
 
   it "has correct voltage, bias, and frequency", ->
     expect(@clockElm.maxVoltage).to.equal(2.5)

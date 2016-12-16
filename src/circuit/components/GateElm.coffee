@@ -16,17 +16,18 @@ class GateElm extends CircuitComponent
       name: "Last Output"
       data_type: (x) ->
         x > 2.5
+      default_value: false
     }
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
-#    if parseInt(f) == 1
     if parseInt(f) & GateElm.FLAG_SMALL != 0
       size = 1
     else
       size = 2
 
     @setSize(size)
+
     super(xa, ya, xb, yb, params, f)
 
     @noDiagonal = true
@@ -46,19 +47,19 @@ class GateElm extends CircuitComponent
       @flags = 0
 
   setPoints: ->
-    super()
+    super
 
-#    if @dn > 150
+#    if @dn() > 150
 #      @setSize(2)
 
     hs = @gheight
     @ww = Math.floor(@gwidth2)
 
-    if @ww > @dn/2
-      @ww = Math.floor(@dn/2)
+    if @ww > @dn()/2
+      @ww = Math.floor(@dn()/2)
 
-    if @isInverting() && (@ww + 8 > @dn/2)
-      @ww = Math.floor(@dn / 2) - 8
+    if @isInverting() && (@ww + 8 > @dn()/2)
+      @ww = Math.floor(@dn() / 2) - 8
 
     @calcLeads @ww*2
 
@@ -93,8 +94,8 @@ class GateElm extends CircuitComponent
     if @isInverting()
       f = !f
 
-    @lastOutput = f
-#    @params['lastOutput'] = f
+    @lastOutput = (f > 0)
+#    @params['lastOutput'] = (f > 0)
 
     if f
       res = 5
@@ -122,7 +123,6 @@ class GateElm extends CircuitComponent
 
     @updateDots()
     renderContext.drawDots @lead2, @point2, this
-#    renderContext.drawPosts(this)
 
     renderContext.drawPosts(this, "#FF0000")
     renderContext.drawPosts(this, "#FF0000")
@@ -131,6 +131,9 @@ class GateElm extends CircuitComponent
       post = @getPost(i)
       renderContext.fillCircle post.x, post.y, 1, 1, "#FF0000", "#0000FF"
 #      renderContext.drawPost post.x, post.y, color, color
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
 
   getPostCount: ->
@@ -146,6 +149,7 @@ class GateElm extends CircuitComponent
     @inPosts[n]
 
   getInput: (n)->
+    #    console.log("INPUT #{n} is #{@volts[n]}")
     return @volts[n] > 2.5
 
   getConnection: (n1, n2)->
@@ -153,8 +157,6 @@ class GateElm extends CircuitComponent
 
   hasGroundConnection: (n1) ->
     n1 == @inputCount
-
-  getGetName: ->
 
   stamp: (stamper) ->
     stamper.stampVoltageSource(0, @nodes[@inputCount], @voltSource)

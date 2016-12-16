@@ -7,8 +7,8 @@ Util = require('../../util/util.coffee')
 
 class DiodeElm extends CircuitComponent
 
-  @FLAG_FWDROP: 1
-  @DEFAULT_DROP: .805904783
+  @FLAG_FWDROP = 1
+  @DEFAULT_DROP = 0.805904783
 
   @Fields = {
     fwdrop: {
@@ -62,9 +62,6 @@ class DiodeElm extends CircuitComponent
     "d"
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     @calcLeads 16
 
     @cathode = Util.newPointArray(2)
@@ -78,6 +75,9 @@ class DiodeElm extends CircuitComponent
     renderContext.drawDots(@point1, @point2, this)
 
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
 
   reset: ->
@@ -129,7 +129,7 @@ class DiodeElm extends CircuitComponent
       eval_ = Math.exp(voltdiff * @vdcoef)
 
       # make diode linear with negative voltages; aids convergence
-      eval_ = 1  if voltdiff < 0
+      eval_ = 1 if voltdiff < 0
       geq = @vdcoef * @leakage * eval_
       nc = (eval_ - 1) * @leakage - geq * voltdiff
 
@@ -222,7 +222,6 @@ class DiodeElm extends CircuitComponent
         else
           vnew = @vt * Math.log(vnew / @vt)
 
-        console.log("CONVERGE ZENER")
         @Circuit.Solver.converged = false
       vnew = -(vnew + @zoffset)
     vnew

@@ -54,11 +54,14 @@ class SwitchElm extends CircuitComponent
 
 
   setPoints: ->
-    super()
+    super
 
     @calcLeads(32)
     @ps = new Point(0, 0)
     @ps2 = new Point(0, 0)
+
+    openhs = 16
+    @setBboxPt @point1, @point2, openhs
 
   getDumpType: ->
     "s"
@@ -69,9 +72,6 @@ class SwitchElm extends CircuitComponent
       stamper.stampVoltageSource @nodes[0], @nodes[1], @voltSource, 0
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
     @calcLeads 32
     @ps = new Point(0, 0)
     @ps2 = new Point(0, 0)
@@ -80,7 +80,6 @@ class SwitchElm extends CircuitComponent
     hs1 = (if (@position is 1) then 0 else 2)
     hs2 = (if (@position is 1) then openhs else 2)
 
-    @setBboxPt @point1, @point2, openhs
     renderContext.drawLeads(this)
 
     if @position is 0
@@ -92,6 +91,9 @@ class SwitchElm extends CircuitComponent
     renderContext.drawLinePt @ps, @ps2
 
     renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
   getName: ->
     "Basic Switch"
@@ -106,6 +108,7 @@ class SwitchElm extends CircuitComponent
     @toggle() if @momentary
 
   toggle: ->
+    console.log("Toggling...#{@}")
     @position++
     @position = 0  if @position >= @posCount
     @Circuit.Solver.analyzeFlag = true
@@ -122,6 +125,9 @@ class SwitchElm extends CircuitComponent
 
   getConnection: (n1, n2) ->
     @position is 0
+
+  onClick: ->
+    toggle()
 
   isWire: ->
     true

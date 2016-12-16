@@ -55,7 +55,7 @@ class TransformerElm extends CircuitComponent
     (@flags & TransformerElm.FLAG_BACK_EULER) == 0
 
   setPoints: ->
-    super()
+    super
 
     @point2.y = @point1.y
 
@@ -66,12 +66,12 @@ class TransformerElm extends CircuitComponent
     @ptEnds[0] = @point1
     @ptEnds[1] = @point2
 
-#    console.log("SP: ", @point1, @point2, 0, -@dsign, @width)
-    @ptEnds[2] = Util.interpolate(@point1, @point2, 0, -@dsign * @width)
-    @ptEnds[3] = Util.interpolate(@point1, @point2, 1, -@dsign * @width)
+#    console.log("SP: ", @point1, @point2, 0, -@dsign(), @width)
+    @ptEnds[2] = Util.interpolate(@point1, @point2, 0, -@dsign() * @width)
+    @ptEnds[3] = Util.interpolate(@point1, @point2, 1, -@dsign() * @width)
 
-    ce = 0.5 - 12 / @dn
-    cd = 0.5 - 2 / @dn
+    ce = 0.5 - 12 / @dn()
+    cd = 0.5 - 2 / @dn()
 
     i = 0
     while i < 4
@@ -96,6 +96,14 @@ class TransformerElm extends CircuitComponent
   #CALC CURRENT: 0.00038782799757450996,0.4065758146820641,0,4.967879427950679
   #CALC CURRENT: 0.00038782799757450996,0.4065758146820641,0,4.967879427950679
 
+#  getProperties: ->
+#    currentProperties = super()
+#    currentProperties['current'] = 0
+#    currentProperties
+
+#  getCurrent: ->
+#    0
+
   getPostCount: ->
     4
 
@@ -115,19 +123,27 @@ class TransformerElm extends CircuitComponent
     @curcount[1] = 0
 
   draw: (renderContext) ->
-#    if CircuitComponent.DEBUG
-#      super(renderContext)
+    for i in [0...4]
+      color = Util.getVoltageColor(@volts[i])
 
-#    for i in [0...4]
-#      color = Util.getVoltageColor(@volts[i])
-#
-#      console.log(@ptEnds[i], @ptCoil[i], color)
-#      renderContext.drawLinePt(@ptEnds[i], @ptCoil[i], color)
+      # console.log(@ptEnds[i], @ptCoil[i], color)
+      renderContext.drawLinePt(@ptEnds[i], @ptCoil[i], color)
 
-#    for i in [1, 2]
-#      renderContext.drawCoil(@dsign * (i == 1 ? ))
+      renderContext.drawPost(@ptEnds[i], @ptCoil[i], "#33FFEE", "#33FFEE")
 
-#    renderContext.drawPosts(this)
+    for i in [0...2]
+      renderContext.drawCoil(@ptCoil[i], @ptCoil[i + 2], @volts[i], @volts[i + 2], @dsign() * (if (i == 1) then -6 else 6))
+
+    for i in [0...2]
+      renderContext.drawLinePt(@ptCore[i], @ptCore[i + 2])
+
+      renderContext.drawPost(@ptCore[i], @ptCore[i + 2], "#FFEE33", "#FF33EE")
+      #      @curcount[i] = updateDot
+
+    renderContext.drawPosts(this)
+
+    if CircuitComponent.DEBUG
+      super(renderContext)
 
 
   stamp: (stamper) ->
@@ -163,7 +179,7 @@ class TransformerElm extends CircuitComponent
     else
       ts = @getParentCircuit().timeStep()
 
-    console.log("STAMP li: #{l1} l2: #{l2} deti #{deti} ts: #{ts} ratio: #{@ratio} m: #{m}")
+    #console.log("STAMP li: #{l1} l2: #{l2} deti #{deti} ts: #{ts} ratio: #{@ratio} m: #{m}")
     @a1 = l2 * deti * ts
     @a2 = -m * deti * ts
     @a3 = -m * deti * ts
@@ -228,10 +244,10 @@ class TransformerElm extends CircuitComponent
 #    console.log("START ITERATION ", voltdiff1, voltdiff2, @curSourceValue1, @curSourceValue2)
 
   getConnection: (n1, n2) ->
-    if @comparePair(n1, n2, 0, 2)
+    if Util.comparePair(n1, n2, 0, 2)
       return true
 
-    if @comparePair(n1, n2, 1, 3)
+    if Util.comparePair(n1, n2, 1, 3)
       return true
 
     return false

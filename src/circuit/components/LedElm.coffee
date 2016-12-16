@@ -1,6 +1,7 @@
 CircuitComponent = require("../CircuitComponent.coffee")
 DiodeElm = require("./DiodeElm.coffee")
 Util = require('../../util/util.coffee')
+Settings = require('../../settings/Settings.coffee')
 
 class LedElm extends DiodeElm
 
@@ -20,24 +21,29 @@ class LedElm extends DiodeElm
       data_type: parseFloat
       default_value: 0
     }
-    fwdrop: {
-      name: "Voltage drop"
-      data_type: parseFloat
-      default_value: DiodeElm.DEFAULT_DROP
-    }
+#    fwdrop: {
+#      name: "Voltage drop"
+#      data_type: parseFloat
+#      default_value: DiodeElm.DEFAULT_DROP
+#    }
   }
 
 
   constructor: (xa, xb, ya, yb, params, f) ->
-#    if (f & DiodeElm.FLAG_FWDROP) == 0
-#      @fwdrop = 2.1024259
+    @params = {}
+
+    #    if (f & DiodeElm.FLAG_FWDROP) == 0
+    #      @fwdrop = 2.1024259
+
+    if (f & DiodeElm.FLAG_FWDROP) == 0
+      @fwdrop = 2.1024259  #DiodeElm.DEFAULT_DROP
+      @params['fwdrop'] = 0.805904783
+    else
+      @fwdrop = parseFloat(params.shift())
+      @params['fwdrop'] = @fwdrop
 
     super(xa, xb, ya, yb, params, f)
-
-#    if (f & DiodeElm.FLAG_FWDROP) == 0
-#      @fwdrop = 2.1024259
-
-    @setup()
+    @setPoints()
 
   getName: ->
     "LED"
@@ -46,53 +52,43 @@ class LedElm extends DiodeElm
     "162"
 
   setPoints: ->
-    super()
+    super
 
     cr = 12
-    @ledLead1 = Util.interpolate(@point1, @point2, 0.5 - cr / @dn)
-    @ledLead2 = Util.interpolate(@point1, @point2, 0.5 + cr / @dn)
+    @ledLead1 = Util.interpolate(@point1, @point2, 0.5 - cr / @dn())
+    @ledLead2 = Util.interpolate(@point1, @point2, 0.5 + cr / @dn())
     @ledCenter = Util.interpolate(@point1, @point2, 0.5)
 
   needsShortcut: ->
     false
 
   draw: (renderContext) ->
-    if (@needsHighlight() || this == @dragElm)
-      super(renderContext)
-      return
+    voltageColor = Util.getVoltageColor(@volts[0])
+    renderContext.drawLinePt(@point1, @ledLead1, voltageColor)
 
     voltageColor = Util.getVoltageColor(@volts[0])
-    renderContext.drawLine(@point1, @ledLead1 voltageColor)
+    renderContext.drawLinePt(@ledLead2, @point2, voltageColor)
 
-    voltageColor = Util.getVoltageColor(volts[0])
-    renderContext.drawLine(@ledLead2, @point2, voltageColor)
+    cr = 12
 
-    renderContext.setColor(Settings.GREY)
-    int cr = 12
+    renderContext.drawCircle(@ledCenter.x, @ledCenter.y, cr, 2, Settings.PostColor)
 
-    renderContext.drawThickCircle(@ledCenter.x, @ledCenter.y, cr)
-
-
-    # TODO: Finish color
     cr -= 4
 
-    w = 255 * @current / .01
+    w = Math.min(255 * @current / .01, 255)
 
-    if (w > 255)
-      w = 255
-
-#    Color cc = new Color((int) (colorR * w), (int) (colorG * w), (int) (colorB * w));
-
-#    g.setColor(cc);
 #    g.fillOval(ledCenter.x - cr, ledCenter.y - cr, cr * 2, cr * 2);
+    #console.log(@current, w)
+    #console.log("RBG: #{w * @colorR} #{w * @colorG} #{w * @colorB}")
+    hexcolor = Util.rgb2hex(w * @colorR, w * @colorG, w * @colorB)
 
-    @setBbox(@point1, @point2, cr)
+    renderContext.fillCircle(@ledCenter.x, @ledCenter.y, cr, 2, hexcolor)
 
     @updateDots()
-    @renderContext.drawDots(@point1, @ledLead1, @curcount)
-    @renderContext.drawDots(@point2, @ledLead2, -@curcount)
+    renderContext.drawDots(@point1, @ledLead1, @curcount)
+    renderContext.drawDots(@point2, @ledLead2, -@curcount)
 
-    @drawPosts(this)
+    renderContext.drawPosts(this)
 
 
 module.exports = LedElm

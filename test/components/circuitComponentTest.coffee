@@ -16,15 +16,15 @@ describe "Base Circuit Component", ->
 
   describe "after instantiating a new Circuit Component", ->
     it "has correct initial position", ->
-      @circuitElement.x1.should.equal 10
-      @circuitElement.y1.should.equal 10
-      @circuitElement.x2.should.equal 13
-      @circuitElement.y2.should.equal 14
+      @circuitElement.x1().should.equal 10
+      @circuitElement.y1().should.equal 10
+      @circuitElement.x2().should.equal 13
+      @circuitElement.y2().should.equal 14
 
     it "has correct dx and dy", ->
-      @circuitElement.dx.should.eq 3
-      @circuitElement.dy.should.eq 4
-      @circuitElement.dn.should.eq 5
+      @circuitElement.dx().should.eq 3
+      @circuitElement.dy().should.eq 4
+      @circuitElement.dn().should.eq 5
 
     it "has component_id", ->
       @circuitElement.component_id > 0
@@ -52,19 +52,19 @@ describe "Base Circuit Component", ->
       @circuitElement.volts.toString().should.equal [0, 0].toString()
 
     it "should set points", ->
-      x1 = @circuitElement.x1
-      y1 = @circuitElement.y1
-      x2 = @circuitElement.x2
-      y2 = @circuitElement.y2
+      x1 = @circuitElement.x1()
+      y1 = @circuitElement.y1()
+      x2 = @circuitElement.x2()
+      y2 = @circuitElement.y2()
 
       @circuitElement.setPoints()
-      @circuitElement.dx.should.equal 3
-      @circuitElement.dy.should.equal 4
-      @circuitElement.dn.should.equal 5
+      @circuitElement.dx().should.equal 3
+      @circuitElement.dy().should.equal 4
+      @circuitElement.dn().should.equal 5
 
-      @circuitElement.dpx1.should.equal (4/5)
-      @circuitElement.dpy1.should.equal -(3/5)
-      @circuitElement.dsign.should.equal 1
+      @circuitElement.dpx1().should.equal (4/5)
+      @circuitElement.dpy1().should.equal -(3/5)
+      @circuitElement.dsign().should.equal 1
 
       @circuitElement.point1.equals( new Point(x1, y1) ).should.equal true
       @circuitElement.point2.equals( new Point(x2, y2) ).should.equal true
@@ -150,7 +150,3 @@ describe "Base Circuit Component", ->
       @renderer.context = ctx
       done()
 
-    it "renders initial circuit", ->
-      @renderer.draw()
-
-      fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())

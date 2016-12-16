@@ -179,14 +179,14 @@ class Settings
   @CURRENT_SEGMENT_LENGTH: 16
 
   # Line Widths:
-  @POST_RADIUS: 2.5
-  @CURRENT_RADIUS: 1
+  @POST_RADIUS: 2
+  @CURRENT_RADIUS: 2
   @CURRENT_COLOR: "rgba(255, 255, 255, 0.7)"
   @LINE_WIDTH: 2
-  @BOLD_LINE_WIDTH: 3
+  @BOLD_LINE_WIDTH: 2
 
   # Grid
-  @GRID_SIZE: 16
+  @GRID_SIZE: 8
   @SMALL_GRID: false
 
   @SHOW_VALUES: false
@@ -205,6 +205,11 @@ class Settings
   @TEXT_WARNING_COLOR: ColorPalette.yellow
 
   @SELECTION_MARQUEE_COLOR: ColorPalette.orange
+
+  @GREY: "#666"
+  @GRAY: "#666"
+
+  @LIGHT_POST_COLOR: "#333"
 
   @GRID_COLOR: ColorPalette.darkyellow
   @FILL_COLOR: ColorPalette.white

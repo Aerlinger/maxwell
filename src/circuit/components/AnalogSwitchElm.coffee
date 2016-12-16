@@ -3,7 +3,7 @@ Util = require('../../util/util.coffee')
 Point = require('../../geom/Point.coffee')
 
 class AnalogSwitchElm extends CircuitComponent
-  FLAG_INVERT: 1
+  @FLAG_INVERT = 1
 
   @Fields = {
     r_on: {
@@ -27,7 +27,7 @@ class AnalogSwitchElm extends CircuitComponent
     159
 
   setPoints: ->
-    super()
+    super
 
     @calcLeads(32)
 
@@ -50,7 +50,7 @@ class AnalogSwitchElm extends CircuitComponent
   doStep: (stamper) ->
     @open = @volts[2] < 2.5
 
-    if @flags & AnalogSwitchElm != 0
+    if (@flags & AnalogSwitchElm) != 0
       @open = !@open
 
     @resistance = if @open then @r_off else @r_on

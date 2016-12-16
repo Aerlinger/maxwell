@@ -55,22 +55,21 @@ class SparkGapElm extends CircuitComponent
 
     super(xa, ya, xb, yb, params, f)
 
-  setPoints: () ->
-    super()
+  setPoints: ->
+    super
 
     dist = 16
     alen = 8
 
     @calcLeads(dist + alen)
 
-    p1 = Util.interpolate(@point1, @point2, (@dn - alen) / (2 * @dn))
+    p1 = Util.interpolate(@point1, @point2, (@dn() - alen) / (2 * @dn()))
     @arrow1 = Util.calcArrow(@point1, p1, alen, alen)
 
-    p1 = Util.interpolate(@point1, @point2, (@dn + alen) / (2 * @dn))
+    p1 = Util.interpolate(@point1, @point2, (@dn() + alen) / (2 * @dn()))
     @arrow2 = Util.calcArrow(@point2, p1, alen, alen)
 
-
-
+    @setBboxPt @point1, @point2, 8
 
 
 #    if st
@@ -87,9 +86,9 @@ class SparkGapElm extends CircuitComponent
     187
 
 
-#      p1 = DrawHelper.interpPoint(@point1, @point2, (@dn - alen) / (2 * @dn))
+#      p1 = DrawHelper.interpPoint(@point1, @point2, (@dn() - alen) / (2 * @dn()))
 #      @arrow1 = DrawHelper.calcArrow(@point1, p1, alen, alen)
-#      p1 = DrawHelper.interpPoint(@point1, @point2, (@dn + alen) / (2 * @dn))
+#      p1 = DrawHelper.interpPoint(@point1, @point2, (@dn() + alen) / (2 * @dn()))
 #      @arrow2 = DrawHelper.calcArrow(@point2, p1, alen, alen)
 
   draw: (renderContext) ->
@@ -104,8 +103,6 @@ class SparkGapElm extends CircuitComponent
 
     v1 = @volts[0]
     v2 = @volts[1]
-
-    @setBboxPt @point1, @point2, 8
 
     renderContext.drawLeads(this)
 

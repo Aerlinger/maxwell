@@ -35,20 +35,20 @@ class TransLineElm extends CircuitComponent
 
     @lenSteps = Math.floor(@delay / circuit.timeStep())
 
-    if @lenSteps > 100000
+    if @lenSteps > 100000 or !@lenSteps
       @voltageL = null
       @voltageR = null
 
     else
-      @voltageL = new Array(@lenSteps)
-      @voltageR = new Array(@lenSteps)
+      @voltageL = Util.zeroArray(@lenSteps)
+      @voltageR = Util.zeroArray(@lenSteps)
 
     @ptr = 0
 
   setPoints: ->
-    super()
+    super
 
-    ds = if (@dy == 0) then Math.sign(@dx) else -Math.sign(@dy)
+    ds = if (@dy() == 0) then Math.sign(@dx()) else -Math.sign(@dy())
 
     p3 = Util.interpolate(@point1, @point2, 0, -Math.floor(@width * ds))
     p4 = Util.interpolate(@point1, @point2, 1, -Math.floor(@width * ds))
@@ -59,7 +59,6 @@ class TransLineElm extends CircuitComponent
     p7 = Util.interpolate(@point1, @point2, 0, -Math.floor(@width / 2 + sep) * ds)
     p8 = Util.interpolate(@point1, @point2, 1, -Math.floor(@width / 2 + sep) * ds)
 
-#    console.log("PTS: ", p3, p4, @point1, @point2)
     @posts = [p3, p4, @point1, @point2]
     @inner = [p7, p8, p5, p6]
 

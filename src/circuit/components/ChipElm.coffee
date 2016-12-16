@@ -34,20 +34,22 @@ class ChipElm extends CircuitComponent
     @pins = []
     @bits = 0
 
+    #console.log("ChipElm flags #{@flags} -> #{(f & ChipElm.FLAG_SMALL) != 0}")
     @setSize(if ((f & ChipElm.FLAG_SMALL) != 0) then 1 else 2)
 
     @params ||= {}
 
     if @needsBits()
-      @bits = parseInt(params.shift())
+      @bits = parseInt(params?.shift() || 0)
       @params['bits'] = @bits
     else
       @params['bits'] = 0
 
-    if Object.prototype.toString.call( params ) == '[object Array]'
-      initial_voltages = params
-    else
-      initial_voltages = params['volts']
+    if params
+      if Object.prototype.toString.call( params ) == '[object Array]'
+        initial_voltages = params
+      else
+        initial_voltages = params['volts']
 
     self = @
     @setupPins()
@@ -58,8 +60,12 @@ class ChipElm extends CircuitComponent
     numPosts = @getPostCount()
 
     for i in [0...numPosts]
+      if !@pins[i]
+        console.error("No pin found at #{i}")
+        return
+
       if @pins[i].state
-        @volts[i] = initial_voltages.shift()
+        @volts[i] = initial_voltages?.shift()
         @pins[i].value = @volts[i] > 2.5
 
     @params['volts'] = @volts
@@ -70,10 +76,10 @@ class ChipElm extends CircuitComponent
 
     {
       sym: @getDumpType()
-      x1: @x1
-      y1: @y1
-      x2: @x2
-      xy: @y2
+      x1: @point1.x
+      y1: @point1.y
+      x2: @point2.x
+      y2: @point2.y
 
       csize: @csize
       cspc: @cspc
@@ -116,6 +122,7 @@ class ChipElm extends CircuitComponent
     false
 
   setSize: (s) ->
+    #console.log("#{@getName()} Set size: #{s}")
     @csize = s
     @cspc = 8 * s
     @cspc2 = @cspc * 2
@@ -147,12 +154,12 @@ class ChipElm extends CircuitComponent
       if !p.output
         p.value = @volts[i] > 2.5
 
-      @execute()
+    @execute()
 
     for i in [0...@getPostCount()]
       p = @pins[i]
       if p.output
-        stamper.updateVoltageSource(0, @nodes[i], p.voltSource, p.value ? 5 : 0)
+        stamper.updateVoltageSource(0, @nodes[i], p.voltSource, if p.value then 5 else 0)
 
   stamp: (stamper) ->
     for i in [0...@getPostCount()]
@@ -164,31 +171,38 @@ class ChipElm extends CircuitComponent
   draw: (renderContext) ->
     @drawChip(renderContext)
 
+    if CircuitComponent.DEBUG && @params['bits'] > 0
+      super(renderContext)
+
   drawChip: (renderContext) ->
+    renderContext.drawThickPolygon(@rectPointsX, @rectPointsY, Settings.STROKE_COLOR)
+
     for i in [0...@getPostCount()]
-      p = @pins[i]
+      if @pins[i]
 
-      voltageColor = Util.getVoltageColor(@volts[i])
+        p = @pins[i]
 
-      a = p.post
-      b = p.stub
+        voltageColor = Util.getVoltageColor(@volts[i])
 
-      renderContext.drawLinePt(a, b, voltageColor)
+        a = p.post
+        b = p.stub
 
-      p.updateDots(@Circuit.Params.getCurrentMult())
+        renderContext.drawLinePt(a, b, voltageColor)
 
-      renderContext.drawDots(b, a, p)
+        p.updateDots(@Circuit.Params.getCurrentMult())
 
-      if (p.bubble)
-        renderContext.drawCircle(p.bubbleX, p.bubbleY, 1, Settings.FILL_COLOR)
-        renderContext.drawCircle(p.bubbleX, p.bubbleY, 3, Settings.STROKE_COLOR)
+        renderContext.drawDots(b, a, p)
 
-      renderContext.fillText(p.text, p.textloc.x, p.textloc.y)
-      if p.lineOver
-        ya = p.textloc.y - 10
-        renderContext.drawLine(p.textloc.x, ya, p.textloc.x, ya)
+        if (p.bubble)
+          renderContext.drawCircle(p.bubbleX, p.bubbleY, 1, Settings.FILL_COLOR)
+          renderContext.drawCircle(p.bubbleX, p.bubbleY, 3, Settings.STROKE_COLOR)
 
-    renderContext.drawThickPolygon(@rectPointsX, @rectPointsY)
+        renderContext.fillText(p.text, p.textloc.x-4, p.textloc.y+2)
+
+        if p.lineOver
+          ya = p.textloc.y - renderContext.context.measureText(p.text).height
+          textWidth = renderContext.context.measureText(p.text).width + 2
+          renderContext.drawLine(p.textloc.x, ya, p.textloc.x + textWidth, ya)
 
     if @clockPointsX && @clockPointsY
       renderContext.drawPolyline(@clockPointsX, @clockPointsY, 3)
@@ -197,12 +211,14 @@ class ChipElm extends CircuitComponent
       renderContext.drawPost(@pins[i].post.x, @pins[i].post.y, @nodes[i])
 
   setPoints: ->
-    if @x2 - @x1 > @sizeX*@cspc2 # dragging
-      @setSize(2)
+#    if @x2 - @x1 > @sizeX*@cspc2 # dragging
+#      @setSize(2)
+
+    super
 
     hs = @cspc2
-    x0 = @x1 + @cspc2
-    y0 = @y1
+    x0 = @point1.x + @cspc2
+    y0 = @point1.y
 
     xr = x0 - @cspc
     yr = y0 - @cspc
@@ -219,9 +235,11 @@ class ChipElm extends CircuitComponent
 
       if !p
         console.error("Cannot set pin at index #{i} because it is not defined (bits: #{@bits})")
+        return
 
       if i >= @pins.length
         console.error("Pin index out of bounds: #{i}. @pins is length #{@pins.length} but there are #{@getPostCount()} posts")
+        return
 
       if p.side == ChipElm.SIDE_N
         p.setPoint(x0, y0, 1, 0, 0, -1, 0, 0)

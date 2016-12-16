@@ -37,7 +37,7 @@ class Switch2Elm extends SwitchElm
     "SPDT switch"
 
   setPoints: ->
-    super()
+    super
 #    @calcLeads(32);
 
     @swposts = Util.newPointArray(2)
@@ -50,14 +50,12 @@ class Switch2Elm extends SwitchElm
 
     @posCount = if @hasCenterOff() then 3 else 2
 
+    @setBboxPt @point1, @point2, @openhs
+
   getDumpType: ->
     "S"
 
   draw: (renderContext) ->
-    if CircuitComponent.DEBUG
-      super(renderContext)
-
-    @setBboxPt @point1, @point2, @openhs
     @calcLeads 32
 
     @swpoles = Util.newPointArray(3)
@@ -84,8 +82,6 @@ class Switch2Elm extends SwitchElm
     color = Util.getVoltageColor @volts[2]
     renderContext.drawLinePt @swpoles[1], @swposts[1], color
 
-    renderContext.drawLinePt @lead1, @swpoles[@position], color
-
     @updateDots()
     renderContext.drawDots @point1, @lead1, this
 
@@ -93,6 +89,15 @@ class Switch2Elm extends SwitchElm
       renderContext.drawDots @swpoles[@position], @swposts[@position], this
 
     renderContext.drawPosts(this)
+
+    renderContext.fillCircle(@swpoles[2].x, @swpoles[2].y, Settings.POST_RADIUS, 0, Settings.POST_COLOR)
+    renderContext.fillCircle(@swpoles[1].x, @swpoles[1].y, Settings.POST_RADIUS, 0, Settings.POST_COLOR)
+    renderContext.fillCircle(@swpoles[0].x, @swpoles[0].y, Settings.POST_RADIUS, 0, Settings.POST_COLOR)
+
+    renderContext.drawLinePt @lead1, @swpoles[@position], Settings.STROKE_COLOR
+
+#    if CircuitComponent.DEBUG
+#      super(renderContext)
 
   getPost: (n) ->
     if (n is 0)
@@ -117,9 +122,10 @@ class Switch2Elm extends SwitchElm
 
   toggle: ->
     super()
+
     unless @link is 0
       i = 0
-      getParentCircuit().eachComponent (component) ->
+      @getParentCircuit().eachComponent (component) ->
         if component instanceof Switch2Elm
           s2 = component
           if s2.link is @link
@@ -135,11 +141,11 @@ class Switch2Elm extends SwitchElm
   getConnection: (n1, n2) ->
     if @position is 2
       return false
-    @comparePair n1, n2, 0, 1 + @position
+    Util.comparePair n1, n2, 0, 1 + @position
 
   getInfo: (arr) ->
     arr[0] = (if (@link is 0) then "switch (SPDT)" else "switch (DPDT)")
-    arr[1] = "I = " + @getCurrentDText(@getCurrent())
+    arr[1] = "I = " + @getCurrent()
 
   hasCenterOff: ->
     (@flags & Switch2Elm.FLAG_CENTER_OFF) isnt 0

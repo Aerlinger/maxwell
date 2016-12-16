@@ -23,37 +23,37 @@ class JfetElm extends MosfetElm
     .00125
 
   setPoints: ->
-    super()
+    super
 
-    hs2 = @hs * @dsign
+    hs2 = @hs * @dsign()
 
     @src = Util.newPointArray(3)
     @drn = Util.newPointArray(3)
 
     [@src[0], @drn[0]] = Util.interpolateSymmetrical(@point1, @point2, 1, hs2)
     [@src[1], @drn[1]] = Util.interpolateSymmetrical(@point1, @point2, 1, hs2 / 2)
-    [@src[2], @drn[2]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 10 / @dn, hs2 / 2)
+    [@src[2], @drn[2]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 10 / @dn(), hs2 / 2)
 
-    @gatePt = Util.interpolate(@point1, @point2, 1 - 14/@dn)
+    @gatePt = Util.interpolate(@point1, @point2, 1 - 14/@dn())
 
     ra = Util.newPointArray(4)
-    [ra[0], ra[1]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 13/@dn, @hs)
-    [ra[2], ra[3]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 10/@dn, @hs)
+    [ra[0], ra[1]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 13/@dn(), @hs)
+    [ra[2], ra[3]] = Util.interpolateSymmetrical(@point1, @point2, 1 - 10/@dn(), @hs)
 
     @gatePoly = Util.createPolygonFromArray(ra[0], ra[1], ra[3], ra[2])
 
     if @pnp == -1
-      x = Util.interpolate(@gatePt, @point1, 15/@dn)
+      x = Util.interpolate(@gatePt, @point1, 15/@dn())
       @arrowPoly = Util.calcArrow(@gatePt, x, 8, 3)
     else
       @arrowPoly = Util.calcArrow(@point1, @gatePt, 8, 3)
+
+    @setBboxPt(@point1, @point2, @hs)
 
 
   draw: (renderContext) ->
     if CircuitComponent.DEBUG
       super(renderContext)
-
-    @setBboxPt(@point1, @point2, @hs)
 
     color = Util.getVoltageColor(@volts[1])
     renderContext.drawLinePt(@src[0], @src[1], color)
