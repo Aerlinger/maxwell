@@ -287,17 +287,17 @@ class VoltageElm extends CircuitComponent
   getInfo: (arr) ->
     switch @waveform
       when VoltageElm.WF_DC, VoltageElm.WF_VAR
-        arr[0] = "voltage source"
+        arr[0] = "Voltage source"
       when VoltageElm.WF_AC
         arr[0] = "A/C source"
       when VoltageElm.WF_SQUARE
-        arr[0] = "square wave gen"
+        arr[0] = "Square wave gen"
       when VoltageElm.WF_PULSE
-        arr[0] = "pulse gen"
+        arr[0] = "Pulse gen"
       when VoltageElm.WF_SAWTOOTH
-        arr[0] = "sawtooth gen"
+        arr[0] = "Sawtooth gen"
       when VoltageElm.WF_TRIANGLE
-        arr[0] = "triangle gen"
+        arr[0] = "Triangle gen"
 
     arr[1] = "I = " + Util.getUnitText(@getCurrent(), "A")
 #      arr[2] = ((if (this instanceof RailElm) then "V = " else "Vd = ")) + DrawHelper.getVoltageText(@getVoltageDiff())
