@@ -1,0 +1,163 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #c3c3c3;
+}
+
+#mocha {
+    background: white;
+}
+
+.ui.vertical.menu .menu .item {
+  font-size: 10px;
+  padding-top: 0.1em;
+  padding-bottom: 0.1em;
+}
+
+.canvas-container {
+  position: relative;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.inline-block {
+  display: inline: block;;
+}
+
+canvas {
+  color: red;
+  border: 1px solid grey;
+  background-color: transparent;
+}
+
+.maxwell {
+  background-color: transparent;
+  position: absolute;
+  z-index: 2;
+}
+
+.ui.menu {
+  margin: 0 !important;
+}
+
+canvas.grid {
+  position: relative;
+  z-index: 1;
+  background-color: lightblue;
+}
+
+#sidenav ul li a {
+  font-size: 10px;
+  /*line-height: 10px;*/
+  margin: 0;
+  padding-left: 5px;
+  line-height: 12px;
+  display: block;
+}
+
+#sidenav ul li {
+  margin: 0;
+  padding: 0;
+  height: 12px;
+}
+
+#draggable {
+  width: 300px;
+  height: 200px;
+  border: 1px solid gray;
+  background-color: white;
+  position: absolute;
+  float: left;
+  z-index: 3;
+}
+
+.circuit-icon {
+  height: 20px;
+  width: auto;
+}
+
+#sidenav ul li:nth-child(odd) {
+  background-color: #f5f5f5;
+}
+
+.col-md-1 {
+  padding: 0px !important;
+}
+
+.ui.mini.button {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.ui.slider.range input[type="range"] {
+  -webkit-appearance: none;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 50rem;
+  border-color: rgba(0, 0, 0, 0.1);
+  padding: 3px 5px;
+  outline: none;
+}
+
+.ui.slider.range input[type="range"]::-moz-range-track {
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.ui.slider.range input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  outline: none;
+  background: #89B84C;
+  border-radius: 50rem;
+  height: 0.7em;
+  width: 0.7em;
+}
+
+.ui.slider.range input[type="range"]::-moz-range-thumb {
+  outline: none;
+  background: #89B84C;
+  border-color: #89B84C;
+  border-radius: 50rem;
+  height: 0.7em;
+  width: 0.7em;
+}
+
+#chart_container {
+  width: 300px;
+}
+
+.swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 0 8px 0 0;
+}
+
+.label {
+  display: inline-block;
+}
+
+.line {
+  display: inline-block;
+  margin: 0 0 0 30px;
+}
+
+#legend {
+  text-align: center;
+}
+
+.rickshaw_graph .detail {
+  background: none;
+}
+.rickshaw_annotation_timeline { margin-top: 0 !important; }
+.rickshaw_graph .detail .x_label { display: none }
+.rickshaw_graph .detail .item { line-height: 1.4; padding: 0.5em }
+.detail_swatch { float: right; display: inline-block; width: 10px; height: 10px; margin: 0 4px 0 0 }
+.rickshaw_graph .detail .date { color: #a0a0a0 }

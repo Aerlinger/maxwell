@@ -2,7 +2,7 @@
   "name": "Maxwell",
   "description": "Maxwell Circuit Simulator",
   "version": "0.0.3",
-  "main": "server.js",
+  "main": "app/app.js",
   "private": true,
   "license": "MIT",
   "directories": {
@@ -58,7 +58,7 @@
   },
   "scripts": {
     "test": "mocha -w --compilers coffee:coffee-script/register",
-    "start": "node app",
+    "start": "node app/app.js",
     "postinstall": "npm rebuild gulp-cli"
   }
 }
