@@ -18,7 +18,7 @@ app.use("/circuits", express.static(path.join(__dirname, '../circuits')));
 var port = 6502;
 
 app.get('/', function (req, res) {
-  res.redirect('/ohms')
+  res.redirect('/opint')
 });
 
 app.get('/plotting', function (req, res) {
