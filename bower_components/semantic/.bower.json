@@ -1,0 +1,38 @@
+{
+  "name": "semantic",
+  "description": "Semantic empowers designers and developers by creating a shared vocabulary for UI.",
+  "homepage": "http://www.semantic-ui.com",
+  "author": {
+    "name": "Jack Lukic",
+    "web": "http://www.jacklukic.com"
+  },
+  "dependencies": {
+    "jquery": ">=1.8"
+  },
+  "main": [
+    "src/semantic.less",
+    "dist/semantic.js"
+  ],
+  "keywords": [
+    "semantic",
+    "ui",
+    "css3",
+    "framework"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "src/site",
+    "test"
+  ],
+  "version": "2.1.8",
+  "_release": "2.1.8",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.1.8",
+    "commit": "04a3c48a0dd3bd9b440b59036004409239a6db16"
+  },
+  "_source": "git://github.com/Semantic-Org/Semantic-UI.git",
+  "_target": "^2.1.8",
+  "_originalSource": "semantic-ui",
+  "_direct": true
+}

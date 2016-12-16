@@ -1,0 +1,14 @@
+{
+  "name": "should",
+  "homepage": "https://github.com/shouldjs/should.js",
+  "version": "4.3.0",
+  "_release": "4.3.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "4.3.0",
+    "commit": "b898383a3d809a11d5dd949c19cf677a3c478b85"
+  },
+  "_source": "git://github.com/shouldjs/should.js.git",
+  "_target": "4.3.0",
+  "_originalSource": "should"
+}
