@@ -1,7 +1,7 @@
-CircuitComponent = require("../CircuitComponent.coffee")
+CircuitComponent = require("../circuitComponent.coffee")
 DiodeElm = require("./DiodeElm.coffee")
 Util = require('../../util/util.coffee')
-Settings = require('../../settings/Settings.coffee')
+Settings = require('../../settings/settings.coffee')
 
 class LedElm extends DiodeElm
 

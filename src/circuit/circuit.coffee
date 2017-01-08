@@ -32,7 +32,7 @@ Rectangle = require('../geom/rectangle.coffee')
 Util = require('../util/util.coffee')
 environment = require("../environment.coffee")
 
-fs = require('fs')
+#fs = require('fs')
 
 
 class Circuit extends Observer
@@ -396,12 +396,12 @@ class Circuit extends Observer
   dumpFrameJson: (filename = "./dump/#{@Params.name}_FRAMES.json") ->
     circuitFramsJson = JSON.stringify(@frameJson(), null, 2)
 
-    fs.writeFileSync(filename, circuitFramsJson)
+#    fs.writeFileSync(filename, circuitFramsJson)
 
   dumpAnalysisJson: ->
     circuitAnalysisJson = JSON.stringify(@toJson(), null, 2)
 
-    fs.writeFileSync("./dump/#{@Params.name}_ANALYSIS.json", circuitAnalysisJson)
+#    fs.writeFileSync("./dump/#{@Params.name}_ANALYSIS.json", circuitAnalysisJson)
 
 
 

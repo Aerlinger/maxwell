@@ -1,4 +1,4 @@
-CircuitComponent = require("../CircuitComponent.coffee")
+CircuitComponent = require("../circuitComponent.coffee")
 ChipElm = require("./ChipElm.coffee")
 
 class SevenSegElm extends ChipElm

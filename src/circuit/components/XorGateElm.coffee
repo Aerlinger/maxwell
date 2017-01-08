@@ -1,6 +1,6 @@
 OrGateElm = require("./OrGateElm.coffee")
 Util = require('../../util/util.coffee')
-Point = require('../../geom/Point.coffee')
+Point = require('../../geom/point.coffee')
 
 class XorGateElm extends OrGateElm
 

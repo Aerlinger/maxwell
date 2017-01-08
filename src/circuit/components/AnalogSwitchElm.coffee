@@ -1,6 +1,6 @@
-CircuitComponent = require("../CircuitComponent.coffee")
+CircuitComponent = require("../circuitComponent.coffee")
 Util = require('../../util/util.coffee')
-Point = require('../../geom/Point.coffee')
+Point = require('../../geom/point.coffee')
 
 class AnalogSwitchElm extends CircuitComponent
   @FLAG_INVERT = 1

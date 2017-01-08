@@ -5,7 +5,7 @@ Circuit = require('../circuit/circuit.coffee')
 CircuitComponent = require('../circuit/circuitComponent.coffee')
 Oscilloscope = require('../scope/oscilloscope.coffee')
 Hint = require('../engine/hint.coffee')
-fs = require('fs')
+#fs = require('fs')
 
 VoltageElm = require('../circuit/components/VoltageElm.coffee')
 
@@ -78,8 +78,8 @@ class CircuitLoader
     if elms.length == 0
       console.error "No elements loaded. JSON most likely malformed"
 
-    unless environment.isBrowser
-      circuit.ostream ||= fs.createWriteStream("dump/#{circuit.Params.name}")
+#    unless environment.isBrowser
+#      circuit.ostream ||= fs.createWriteStream("dump/#{circuit.Params.name}")
 
 #    console.log("--------------------------------------------------------------------\n")
 
@@ -94,9 +94,9 @@ class CircuitLoader
         circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
 
         onComplete?(circuit)
-    else
-      jsonData = JSON.parse(fs.readFileSync(circuitFileName))
-      CircuitLoader.createCircuitFromJsonData(jsonData)
+#    else
+#      jsonData = JSON.parse(fs.readFileSync(circuitFileName))
+#      CircuitLoader.createCircuitFromJsonData(jsonData)
 
       
 
