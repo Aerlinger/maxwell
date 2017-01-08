@@ -211,9 +211,9 @@ class Circuit extends Observer
   halt: (message) ->
     e = new Error(message)
 
-    console.log(e.stack)
-
+    console.warn(e.stack)
     Logger.error message
+    
     @stopMessage = message
 
   clearErrors: ->
