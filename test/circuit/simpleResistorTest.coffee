@@ -1,8 +1,8 @@
 #  r 256 176 256 304 0 100.0
 #  172 256 176 256 128 0 6 5.0 5.0 0.0 0.0 0.5 Voltage
 #  g 256 304 256 352 0
-Circuit = require('../../src/circuit/circuit.coffee')
-CircuitLoader = require('../../src/io/CircuitLoader.coffee')
+Circuit = require('../../src/circuit/circuit.js')
+CircuitLoader = require('../../src/io/CircuitLoader.js')
 
 chai = require('chai');
 assert = chai.assert

@@ -1,4 +1,4 @@
-CircuitComponent = require('../circuitComponent.coffee')
+CircuitComponent = require('../circuitComponent.js')
 Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')

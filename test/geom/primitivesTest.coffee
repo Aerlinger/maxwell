@@ -1,6 +1,6 @@
-Polygon = require('../../src/geom/polygon.coffee')
-Rectangle = require('../../src/geom/rectangle.coffee')
-Point = require('../../src/geom/point.coffee')
+Polygon = require('../../src/geom/polygon.js')
+Rectangle = require('../../src/geom/rectangle.js')
+Point = require('../../src/geom/point.js')
 
 describe "Polygon", ->
 
@@ -22,8 +22,8 @@ describe "Point", ->
 
   it "should default to (0, 0) when no parameters are entered", ->
     point = new Point()
-    point.x.should.equal 0
-    point.y.should.equal 0
+    expect(point.x).to.equal undefined
+    expect(point.y).to.equal undefined
 
   it "should properly define x and y values", ->
     point = new Point(10, 15)
@@ -32,10 +32,8 @@ describe "Point", ->
 
   describe "Class methods", ->
     it "should be able to instantiate an array of points at (0, 0)", ->
-      p1 = new Point()
+      p1 = new Point(0, 0)
       Point.toArray(2).toString().should.equal [p1, p1].toString()
-
-    
 
     it "two points at the same coordinates should be equal", ->
       point1 = new Point(3, 5)

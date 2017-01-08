@@ -1,4 +1,4 @@
-Maxwell = require('../../../src/Maxwell.coffee')
+Maxwell = require('../../../src/Maxwell.js')
 
 describe.skip "Instantiating Maxwell", ->
   before ->

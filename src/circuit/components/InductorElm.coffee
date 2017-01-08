@@ -1,4 +1,4 @@
-CircuitComponent = require('../circuitComponent.coffee')
+CircuitComponent = require('../circuitComponent.js')
 Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
@@ -26,13 +26,12 @@ class InductorElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
-#    @inductance = 0
+    super(xa, ya, xb, yb, params, f)
+
     @nodes = new Array(2)
     @compResistance = 0  #1e-3
-#    @current = 0
     @curSourceValue = 0
 
-    super(xa, ya, xb, yb, params, f)
 
   reset: ->
     @current = 0

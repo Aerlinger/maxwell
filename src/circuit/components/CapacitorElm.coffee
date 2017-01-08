@@ -1,4 +1,4 @@
-CircuitComponent = require('../circuitComponent.coffee')
+CircuitComponent = require('../circuitComponent.js')
 Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
@@ -28,6 +28,8 @@ class CapacitorElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
+    super(xa, ya, xb, yb, params, f)
+    
     @compResistance = 11
     @plate1 = []
     @plate2 = []
@@ -35,7 +37,6 @@ class CapacitorElm extends CircuitComponent
 
     console.log("ca", xa)
 
-    super(xa, ya, xb, yb, params, f)
 
   isTrapezoidal: ->
     true

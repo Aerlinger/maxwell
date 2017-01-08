@@ -32,7 +32,7 @@ Rectangle = require('../geom/rectangle.coffee')
 Util = require('../util/util.coffee')
 environment = require("../environment.coffee")
 
-#fs = require('fs')
+fs = require('fs')
 
 
 class Circuit extends Observer
@@ -119,7 +119,7 @@ class Circuit extends Observer
 
 
   # "Solders" a new element to this circuit (adds it to the element list array).
-  solder: (newElement) =>
+  solder: (newElement) ->
     if newElement in @elementList
       @halt("Circuit component #{newElement} is already in element list")
 
@@ -396,12 +396,12 @@ class Circuit extends Observer
   dumpFrameJson: (filename = "./dump/#{@Params.name}_FRAMES.json") ->
     circuitFramsJson = JSON.stringify(@frameJson(), null, 2)
 
-#    fs.writeFileSync(filename, circuitFramsJson)
+    fs.writeFileSync(filename, circuitFramsJson)
 
   dumpAnalysisJson: ->
     circuitAnalysisJson = JSON.stringify(@toJson(), null, 2)
 
-#    fs.writeFileSync("./dump/#{@Params.name}_ANALYSIS.json", circuitAnalysisJson)
+    fs.writeFileSync("./dump/#{@Params.name}_ANALYSIS.json", circuitAnalysisJson)
 
 
 

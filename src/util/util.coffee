@@ -16,7 +16,7 @@ class Util
     for key, value of newObject
       extendedObj[key] = newObject[key]
 
-    extendedObj
+    return extendedObj
 
   # Calculate fractional vector between AB
   @interpolate: (ptA, ptB, u, v = 0) ->
@@ -30,7 +30,7 @@ class Util
     interpX = Math.round((1-u)*ptA.x + (u*ptB.x) + v*dx)
     interpY = Math.round((1-u)*ptA.y + (u*ptB.y) + v*dy)
 
-    new Point(interpX, interpY)
+    return new Point(interpX, interpY)
 
   ##
   # From a vector between points AB, calculate a new point in space relative to some multiple of the parallel (u)
@@ -50,7 +50,7 @@ class Util
     interpXReflection = Math.round((1-u)*ptA.x + (u*ptB.x) - v*dx)
     interpYReflection = Math.round((1-u)*ptA.y + (u*ptB.y) - v*dy)
 
-    [new Point(interpX, interpY), new Point(interpXReflection, interpYReflection)]
+    return [new Point(interpX, interpY), new Point(interpXReflection, interpYReflection)]
 
   @calcArrow: (point1, point2, al, aw) ->
     if (arguments.length) != 4
@@ -125,7 +125,7 @@ class Util
 
     arr
 
-  @isInfinite: (x)->
+  @isInfinite: (x) ->
     !isFinite(x)
 
   @getRand: (x) ->
@@ -176,38 +176,38 @@ class Util
     return scale[value]
 
   @snapGrid: (x) ->
-    Settings.GRID_SIZE * Math.round(x/Settings.GRID_SIZE)
+    return Settings.GRID_SIZE * Math.round(x/Settings.GRID_SIZE)
 
   @showFormat: (decimalNum) ->
-    decimalNum.toPrecision(2)
+    return decimalNum.toPrecision(2)
 
   @shortFormat: (decimalNum) ->
     return decimalNum.toPrecision(1)
 
   @longFormat: (decimalNum) ->
-    decimalNum.toPrecision(4)
+    return decimalNum.toPrecision(4)
 
   @singleFloat: (f) ->
     if f == undefined
-      "undef"
+      return "undef"
     else
-      sprintf("%0.1f", f)
+      return sprintf("%0.1f", f)
 
   @tidyFloat: (f) ->
     if f == undefined
-      "undef"
+      return "undef"
     else
-      sprintf("%0.2f", f)
+      return sprintf("%0.2f", f)
 
   @isFunction: (v) ->
-    typeof v == "function"
+    return typeof v == "function"
 
   ###
   Removes commas from a number containing a string:
   e.g. 1,234,567.99 -> 1234567.99
   ###
   @noCommaFormat: (numberWithCommas) ->
-    numberWithCommas.replace(/,/g, '')
+    return numberWithCommas.replace(/,/g, '')
 
   @printArray: (array) ->
     matrixRowCount = array.length
@@ -225,16 +225,8 @@ class Util
 
     return arrayStr
 
-  @objectEquality: (obj1, obj2) ->
-
-
-  @printMatrix: (matrix) ->
-    ###
-    Adds commas to a number, and returns the string representation of that number
-    e.g. 1234567.99 -> 1,234,567.99
-    ###
   @commaFormat: (plainNumber) ->
-# Simple method of converting a parameter to a string
+    # Simple method of converting a parameter to a string
     plainNumber += ""
 
     # Ignore any numbers after a '.'
@@ -243,7 +235,8 @@ class Util
     x2 = (if x.length > 1 then "." + x[1] else "")
     pattern = /(\d+)(\d{3})/
     x1 = x1.replace(pattern, "$1" + "," + "$2")  while pattern.test(x1)
-    x1 + x2
+
+    return x1 + x2
 
   @typeOf: (obj, klassType) ->
     klass = obj.constructor
@@ -256,7 +249,7 @@ class Util
 
       klass = klass.__super__.constructor
 
-    false
+    return false
 
   @halt: (message) ->
     e = new Error(message)
@@ -266,13 +259,13 @@ class Util
       process.exit(1)
 
   @comparePair: (x1, x2, y1, y2) ->
-    (x1 == y1 && x2 == y2) || (x1 == y2 && x2 == y1)
+    return (x1 == y1 && x2 == y2) || (x1 == y2 && x2 == y1)
 
   @overlappingPoints: (pt1, pt2) ->
-    pt1.x == pt2.x && pt1.y == pt2.y
+    return pt1.x == pt2.x && pt1.y == pt2.y
 
   @rgb2hex: (r, g, b) ->
-    "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
 
 
 module.exports = Util

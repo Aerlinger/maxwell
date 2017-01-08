@@ -1,4 +1,4 @@
-CircuitComponent = require("../circuitComponent.coffee")
+CircuitComponent = require("../circuitComponent.js")
 Util = require('../../util/util.coffee')
 
 class InverterElm extends CircuitComponent

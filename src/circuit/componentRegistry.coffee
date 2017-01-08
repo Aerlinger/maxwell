@@ -1,4 +1,4 @@
-CircuitComponent = require('./circuitComponent.coffee')
+CircuitComponent = require('./circuitComponent.js')
 
 AntennaElm = require('./components/AntennaElm.coffee')
 WireElm = require('./components/WireElm.coffee')

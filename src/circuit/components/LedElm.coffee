@@ -1,4 +1,4 @@
-CircuitComponent = require("../circuitComponent.coffee")
+CircuitComponent = require("../circuitComponent.js")
 DiodeElm = require("./DiodeElm.coffee")
 Util = require('../../util/util.coffee')
 Settings = require('../../settings/settings.coffee')

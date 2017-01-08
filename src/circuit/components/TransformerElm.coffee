@@ -1,4 +1,4 @@
-CircuitComponent = require('../circuitComponent.coffee')
+CircuitComponent = require('../circuitComponent.js')
 Util = require('../../util/util.coffee')
 
 class TransformerElm extends CircuitComponent
@@ -35,9 +35,9 @@ class TransformerElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
-    @width = Math.max(32, Math.abs(yb - ya))
-
     super(xa, ya, xb, yb, params, f)
+
+    @width = Math.max(32, Math.abs(yb - ya))
 
     @curcount = 0
 

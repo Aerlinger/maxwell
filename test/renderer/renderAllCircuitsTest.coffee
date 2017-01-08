@@ -10,7 +10,7 @@ Canvas = require('canvas')
 path = require("path")
 
 describe "Renderer", ->
-  it "renders all circuits", () ->
+  it.skip "renders all circuits", () ->
     this.timeout(100000)
 
     circuit_names = glob.sync(__dirname + "/../../circuits/*.json")

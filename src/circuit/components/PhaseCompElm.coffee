@@ -1,13 +1,14 @@
-CircuitComponent = require("../circuitComponent.coffee")
+CircuitComponent = require("../circuitComponent.js")
 ChipElm = require("./ChipElm.coffee")
 Util = require('../../util/util.coffee')
 
 class PhaseCompElm extends ChipElm
 
   constructor: (xa, xb, ya, yb, params, f) ->
+    super(xa, xb, ya, yb, params, f)
+
     @ff1 = false
     @ff2 = false
-    super(xa, xb, ya, yb, params, f)
 
   getName: ->
     "Phase comparator"

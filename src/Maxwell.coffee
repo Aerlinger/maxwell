@@ -1,4 +1,4 @@
-CircuitComponent = require('./circuit/circuitComponent.coffee')
+CircuitComponent = require('./circuit/circuitComponent.js')
 CircuitLoader = require('./io/circuitLoader.coffee')
 ComponentRegistry = require('./circuit/componentRegistry.coffee')
 Circuit = require('./circuit/circuit.coffee')

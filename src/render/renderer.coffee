@@ -1,6 +1,6 @@
 BaseRenderer = require('./BaseRenderer.coffee')
 Circuit = require('../circuit/circuit.coffee')
-CircuitComponent = require('../circuit/circuitComponent.coffee')
+CircuitComponent = require('../circuit/circuitComponent.js')
 ComponentRegistry = require('../circuit/componentRegistry.coffee')
 Settings = require('../settings/settings.coffee')
 Rectangle = require('../geom/rectangle.coffee')

@@ -2,10 +2,10 @@ ComponentRegistry = require('../circuit/componentRegistry.coffee')
 SimulationParams = require('../core/simulationParams.coffee')
 
 Circuit = require('../circuit/circuit.coffee')
-CircuitComponent = require('../circuit/circuitComponent.coffee')
+CircuitComponent = require('../circuit/circuitComponent.js')
 Oscilloscope = require('../scope/oscilloscope.coffee')
 Hint = require('../engine/hint.coffee')
-#fs = require('fs')
+fs = require('fs')
 
 VoltageElm = require('../circuit/components/VoltageElm.coffee')
 
@@ -94,9 +94,9 @@ class CircuitLoader
         circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
 
         onComplete?(circuit)
-#    else
-#      jsonData = JSON.parse(fs.readFileSync(circuitFileName))
-#      CircuitLoader.createCircuitFromJsonData(jsonData)
+    else
+      jsonData = JSON.parse(fs.readFileSync(circuitFileName))
+      CircuitLoader.createCircuitFromJsonData(jsonData)
 
       
 

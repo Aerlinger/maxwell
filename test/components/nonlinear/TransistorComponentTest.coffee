@@ -8,10 +8,10 @@ describe "TransistorElm", ->
       done()
 
     it "doesn't set any positions", ->
-      expect(@transistorElm.x1()).to.equal(undefined)
-      expect(@transistorElm.y1()).to.equal(undefined)
       expect(@transistorElm.x2()).to.equal(undefined)
       expect(@transistorElm.y2()).to.equal(undefined)
+      expect(@transistorElm.x1()).to.equal(undefined)
+      expect(@transistorElm.y1()).to.equal(undefined)
 
     it "sets default parameters", ->
       expect(@transistorElm.pnp).to.equal(-1)
@@ -20,12 +20,12 @@ describe "TransistorElm", ->
       expect(@transistorElm.beta).to.equal(100)
 
     it "has correct initial conditions", ->
-      @transistorElm.current = 0
-      @transistorElm.curcount = undefined
-      @transistorElm.point1 = undefined
-      @transistorElm.point2 = undefined
-      @transistorElm.lead1 = undefined
-      @transistorElm.lead2 = undefined
+      expect(@transistorElm.current).to.equal(0)
+      expect(@transistorElm.curcount).to.equal(undefined)
+      expect(@transistorElm.point1).to.eql({ x: undefined, y: undefined })
+      expect(@transistorElm.point2).to.eql({ x: undefined, y: undefined })
+      expect(@transistorElm.lead1).to.equal(undefined)
+      expect(@transistorElm.lead2).to.equal(undefined)
 
   describe "With params", ->
     before (done) ->
@@ -37,6 +37,17 @@ describe "TransistorElm", ->
       @transistorElm.setup()
       @Circuit.solder(@transistorElm)
       done()
+
+    it "has params", ->
+      expect(@transistorElm.params).to.eql({
+        "beta": 100
+        "pnp": 1
+        "volts": [
+          0
+          4.295
+          -0.705
+        ]
+      })
 
     describe "parameter assignments", ->
       it "is pnp", ->

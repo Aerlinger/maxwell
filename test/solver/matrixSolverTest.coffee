@@ -1,4 +1,4 @@
-Circuit = require('../../src/circuit/circuit.coffee')
+Circuit = require('../../src/circuit/circuit.js')
 
 describe "Matrix Solver", ->
 

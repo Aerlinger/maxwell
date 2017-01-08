@@ -1,5 +1,5 @@
-MatrixStamper = require('../../src/engine/matrixStamper.coffee')
-Circuit = require('../../src/circuit/circuit.coffee')
+MatrixStamper = require('../../src/engine/matrixStamper.js')
+Circuit = require('../../src/circuit/circuit.js')
 
 describe "Matrix stamper", ->
 

@@ -8,7 +8,7 @@ componentRegistry = require("../../src/circuit/componentRegistry")
 Canvas = require('canvas')
 
 describe "Renderer", ->
-  it.only "Can place components", () ->
+  it "can place components", () ->
     @Canvas = new Canvas(600, 500)
     @Circuit = new Circuit()
 

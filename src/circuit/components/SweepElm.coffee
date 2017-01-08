@@ -1,4 +1,4 @@
-CircuitComponent = require('../circuitComponent.coffee')
+CircuitComponent = require('../circuitComponent.js')
 Settings = require('../../settings/settings.coffee')
 Polygon = require('../../geom/polygon.coffee')
 Rectangle = require('../../geom/rectangle.coffee')
@@ -43,9 +43,9 @@ class SweepElm extends CircuitComponent
   }
 
   constructor: (xa, ya, xb, yb, params, f) ->
-    @dir = 1
-
     super(xa, ya, xb, yb, params, f)
+
+    @dir = 1
 
   onSolder: (circuit) ->
     @reset()

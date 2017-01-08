@@ -1,8 +1,8 @@
 fs = require('fs')
-Maxwell = require('../../../src/Maxwell.coffee')
-Renderer = require('../../../src/render/renderer.coffee')
+Maxwell = require('../../../src/Maxwell.js')
+Renderer = require('../../../src/render/renderer.js')
 
-#Renderer = require('../../src/render/renderer.coffee')
+#Renderer = require('../../src/render/renderer.js')
 
 describe.skip "Canvas Context", ->
   beforeEach (done) ->
