@@ -1,4 +1,4 @@
-CircuitComponent = require("../CircuitComponent.coffee")
+CircuitComponent = require("../circuitComponent.coffee")
 ChipElm = require("./ChipElm.coffee")
 Util = require('../../util/util.coffee')
 

@@ -1,4 +1,4 @@
-CircuitComponent = require("../CircuitComponent.coffee")
+CircuitComponent = require("../circuitComponent.coffee")
 Util = require('../../util/util.coffee')
 Settings = require('../../settings/settings.coffee')
 

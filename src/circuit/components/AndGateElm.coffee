@@ -1,6 +1,6 @@
 GateElm = require("./GateElm.coffee")
 Util = require('../../util/util.coffee')
-Point = require('../../geom/Point.coffee')
+Point = require('../../geom/point.coffee')
 
 class AndGateElm extends GateElm
   constructor: (xa, ya, xb, yb, params, f) ->
