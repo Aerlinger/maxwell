@@ -80,6 +80,7 @@ class CapacitorElm extends CircuitComponent
     # draw first lead and plate
     color = Util.getVoltageColor(@volts[0])
     renderContext.drawLinePt @point1, @lead1, color
+    renderContext.drawLinePt @plate2[0], @plate2[1], color
 
     # draw second lead and plate
     color = Util.getVoltageColor(@volts[1])
@@ -89,7 +90,6 @@ class CapacitorElm extends CircuitComponent
     renderContext.drawDots @point1, @lead1, this
     renderContext.drawDots @lead2, @point2, this
 
-    renderContext.drawLinePt @plate2[0], @plate2[1], color
     renderContext.drawLinePt @plate1[0], @plate1[1], color
 
     renderContext.drawValue 20, 0, this, Util.getUnitText(@capacitance, @unitSymbol())
