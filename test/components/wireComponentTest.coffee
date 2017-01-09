@@ -28,7 +28,7 @@ describe "Wire Component", ->
     @wireElm.toString().should.equal "WireElm"
 
   it "should be orphaned", ->
-    @wireElm.orphaned().should.equal true
+    expect(@wireElm.orphaned()).to.equal true
 
   describe "after soldering to circuit", ->
     beforeEach ->
