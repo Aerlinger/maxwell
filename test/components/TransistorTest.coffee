@@ -1,5 +1,5 @@
-fs = require('fs')
 Canvas = require('canvas')
+resemble = require("node-resemble-js")
 
 describe "Transistor Component", ->
   describe "default initialization", ->
@@ -156,22 +156,32 @@ describe "Transistor Component", ->
         expect(@transistorElm.pnp).to.equal(-1)
 
     describe "Rendering", ->
-      before (done) ->
-        Canvas = require('canvas')
-        @canvas = new Canvas(200, 300)
-        ctx = @canvas.getContext('2d')
-
+      before ->
         @Circuit.clearAndReset()
         @Circuit.solder(@transistorElm)
 
-        @renderer = new Renderer(@Circuit, @canvas)
-        @renderer.context = ctx
-        done()
+        Canvas = require('canvas')
+        @canvas = new Canvas(200, 300)
 
-      it "renders initial circuit", ->
+        @renderer = new Renderer(@Circuit, @canvas)
+        @renderer.context = @canvas.getContext('2d')
         @renderer.drawComponents()
 
-        if (!fs.existsSync("test/fixtures/componentRenders/"))
-          fs.mkdirSync("test/fixtures/componentRenders/")
+        @componentImageFileName = "test/fixtures/componentRenders/#{@Circuit.name}_init.png"
 
-        fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())
+      it "renders initial circuit", ->
+        fs.writeFileSync(@componentImageFileName, @canvas.toBuffer())
+
+      it "compares buffer", (done) ->
+
+        resemble(@canvas.toBuffer()).compareTo(@componentImageFileName).ignoreAntialiasing().onComplete (data) =>
+          console.log(data)
+
+          data.getDiffImage().pack().pipe(fs.createWriteStream(@componentImageFileName));
+
+          expect(data.misMatchPercentage).to.be.at.most(0.01)
+
+          done()
+
+
+
