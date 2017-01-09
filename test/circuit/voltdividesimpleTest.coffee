@@ -50,7 +50,7 @@ describe "Simple Voltage Divider", ->
       @circuit.Solver.circuitNeedsMap.should.equal true
 
     it "has correct voltage sources", ->
-      voltageSources = "VoltageElm,WireElm,WireElm,WireElm,WireElm"
+      voltageSources = "VoltageElm,WireElm@[112 48 240 48],WireElm@[112 368 240 368],WireElm@[240 48 432 48],WireElm@[240 368 432 368]"
       @circuit.getVoltageSources().toString().should.equal voltageSources
 
     describe "current rowInfos", ->
@@ -78,8 +78,8 @@ describe "Simple Voltage Divider", ->
       @circuit.Solver.circuitRowInfo.length.should.equal 10
 
     it "has correct nodes", ->
-      @circuit.getNode(0).toString().should.equal "CircuitNode: 112 368 false [0 VoltageElm,0 WireElm]"
-      @circuit.getNode(1).toString().should.equal "CircuitNode: 112 48 false [1 VoltageElm,0 WireElm]"
+      expect(@circuit.getNode(0).toString()).to.equal "CircuitNode: 112 368 false [0 VoltageElm,0 WireElm@[112 368 240 368]]"
+      @circuit.getNode(1).toString().should.equal """CircuitNode: 240 48 false [1 WireElm@[112 48 240 48],0 ResistorElm@[240 48 240 368] : {"resistance":10000},0 WireElm@[240 48 432 48]]"""
       @circuit.getNode(2).toString().should.equal "CircuitNode: 240 48 false [1 WireElm,0 ResistorElm,0 WireElm]"
       @circuit.getNode(3).toString().should.equal "CircuitNode: 240 368 false [1 ResistorElm,1 WireElm,0 WireElm]"
       @circuit.getNode(4).toString().should.equal "CircuitNode: 432 48 false [1 WireElm,0 ResistorElm]"

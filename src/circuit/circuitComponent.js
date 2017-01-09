@@ -422,7 +422,15 @@ class CircuitComponent {
   toString() {
     //    "#{@constructor.name} #{@point1.x} #{@point1.y} #{@point2.x} #{@point2.y}"
     // return this.constructor.name;
-    return `${this.constructor.name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}] : ${JSON.stringify(this.params)}`;
+    // if (this.params): ${JSON.stringify(this.params)}
+
+    let paramStr = "";
+
+    if (Object.keys(this.params).length !== 0)
+      paramStr = `: ${JSON.stringify(this.params)}`;
+
+    
+    return `${this.constructor.name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}]` + paramStr;
   }
 
   getVoltageSourceCount() {
@@ -497,8 +505,8 @@ class CircuitComponent {
     let width = Math.max(Math.abs(x2 - x1), 3);
     let height = Math.max(Math.abs(y2 - y1), 3);
     
-    let horizontalMargin = this.dpx1();
-    let verticalMargin = this.dpy1();
+    let horizontalMargin = Math.floor(Math.abs(this.dpx1()));
+    let verticalMargin = Math.floor(Math.abs(this.dpy1()));
 
     return this.boundingBox = new Rectangle(x - horizontalMargin, y - verticalMargin, width + 2*horizontalMargin, height + 2*verticalMargin);
   }

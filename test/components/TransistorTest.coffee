@@ -126,7 +126,7 @@ describe "Transistor Component", ->
       expect(@switchElm.y2()).to.equal(198)
 
     it "can be stringified", ->
-      expect(@switchElm.toString()).to.eql("""TransistorElm@[98 123 98 198] : {"beta":200,"pnp":1,"volts":[0,4.295,-0.705]}""")
+      expect(@switchElm.toString()).to.eql("""TransistorElm@[98 123 98 198]: {"beta":200,"pnp":1,"volts":[0,4.295,-0.705]}""")
       expect(@switchElm.getName()).to.eql("Bipolar Junction Transistor (PNP)")
 
     it "can stamp", ->

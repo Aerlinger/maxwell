@@ -25,9 +25,9 @@ describe "Wire Component", ->
     @wireElm.getDumpType().should.equal "w"
 
   it "has correct toString()", ->
-    @wireElm.toString().should.equal "WireElm"
+    @wireElm.toString().should.equal "WireElm@[100 100 100 200]"
 
-  it "should be orphaned", ->
+  it "is orphaned", ->
     expect(@wireElm.orphaned()).to.equal true
 
   describe "after soldering to circuit", ->
@@ -37,7 +37,7 @@ describe "Wire Component", ->
     it "is not be orphaned", ->
       @wireElm.orphaned().should.equal false
 
-    it "should be stampable", ->
+    it "is stampable", ->
       @wireElm.stamp(@Stamper)
 
     it "is steppable", ->

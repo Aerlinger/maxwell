@@ -99,7 +99,7 @@ describe "Switch element", ->
       expect(@switchElm.y2()).to.equal(198)
 
     it "can be stringified", ->
-      expect(@switchElm.toString()).to.eql("""SwitchElm@[98 123 98 198] : {"position":0,"momentary":false}""")
+      expect(@switchElm.toString()).to.eql("""SwitchElm@[98 123 98 198]: {"position":0,"momentary":false}""")
       expect(@switchElm.getName()).to.eql("Basic Switch")
 
     it "can stamp", ->

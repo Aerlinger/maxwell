@@ -77,9 +77,9 @@ describe "Resistor Component", ->
       @resistor.dsign().should.eq -1
 
     it "has correct bounding box", ->
-      @resistor.boundingBox.x.should.equal 50
+      @resistor.boundingBox.x.should.equal 49
       @resistor.boundingBox.y.should.equal 50
-      @resistor.boundingBox.width.should.equal 3
+      @resistor.boundingBox.width.should.equal 5
       @resistor.boundingBox.height.should.equal 100
 
     it "Has 0 voltage at its terminals", ->

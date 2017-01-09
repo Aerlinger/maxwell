@@ -19,7 +19,7 @@ describe "Capacitor Component", ->
     @capacitor.getDumpType().should.equal "c"
 
   it "has correct toString()", ->
-    @capacitor.toString().should.equal "CapacitorElm"
+    expect(@capacitor.toString()).to.equal """CapacitorElm@[100 100 100 200]: {"capacitance":1e-9,"voltdiff":1.1}"""
 
   it "should be orphaned", ->
     @capacitor.orphaned().should.equal true

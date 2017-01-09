@@ -15,7 +15,16 @@ describe "ClockElmTest", ->
     expect(@clockElm.waveform).to.equal(ClockElm.WF_SQUARE)
 
   it "has correct params", ->
-    expect(@clockElm.params).to.equal({})
+    expect(@clockElm.params).to.equal(
+      {
+        "bias": 0
+        "dutyCycle": 0.5
+        "frequency": 40
+        "maxVoltage": 5
+        "phaseShift": 0
+        "waveform": 0
+      }
+    )
 
 
 describe "with explicit values", ->
