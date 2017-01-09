@@ -171,4 +171,7 @@ describe "Transistor Component", ->
       it "renders initial circuit", ->
         @renderer.drawComponents()
 
+        if (!fs.existsSync("test/fixtures/componentRenders/"))
+          fs.mkdirSync("test/fixtures/componentRenders/")
+
         fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())
