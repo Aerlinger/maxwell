@@ -1,4 +1,4 @@
-CapacitorElm = require('../../../src/circuit/components/CapacitorElm.js')
+CapacitorElm = require('../../src/circuit/components/CapacitorElm.js')
 
 describe "Capacitor Component", ->
   beforeEach ->
