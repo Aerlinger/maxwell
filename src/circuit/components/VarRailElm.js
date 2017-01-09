@@ -10,9 +10,9 @@ let { sprintf } = require("sprintf-js");
 let Util = require('../../util/util.js');
 
 class VarRailElm extends RailElm {
-  static initClass() {
-  
-    this.Fields = Util.extend(RailElm.Fields, {
+
+  static get Fields() {
+    return Util.extend(RailElm.Fields, {
       "sliderText": {
         name: "sliderText",
         unit: "",
@@ -23,9 +23,10 @@ class VarRailElm extends RailElm {
     });
   }
 
+
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
-    
+
     this.waveform = VoltageElm.WF_VAR;
 
 //    console.log(@toJson())
@@ -66,6 +67,6 @@ class VarRailElm extends RailElm {
     return this.frequency;
   }
 }
-VarRailElm.initClass();
+// VarRailElm.initClass();
 
 module.exports = VarRailElm;

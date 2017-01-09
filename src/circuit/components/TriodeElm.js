@@ -2,8 +2,8 @@ let CircuitComponent = require("../circuitComponent.js");
 let Util = require('../../util/util.js');
 
 class TriodeElm extends CircuitComponent {
-  static initClass() {
-    this.Fields = {
+  static get Fields() {
+    return {
       mu: {
         name: "",
         data_type: parseFloat
@@ -14,7 +14,6 @@ class TriodeElm extends CircuitComponent {
       }
     };
   }
-
 
   constructor(xa, xb, ya, yb, params, f) {
     this.gridCurrentR = 6000;

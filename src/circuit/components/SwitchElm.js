@@ -6,9 +6,9 @@ let Point = require('../../geom/point.js');
 let Util = require('../../util/util.js');
 
 class SwitchElm extends CircuitComponent {
-  static initClass() {
+  static get Fields() {
   
-    this.Fields = {
+    return {
       "position": {
         name: "Position",
         default_value: 0,
@@ -155,6 +155,5 @@ class SwitchElm extends CircuitComponent {
     return true;
   }
 }
-SwitchElm.initClass();
 
 module.exports = SwitchElm;

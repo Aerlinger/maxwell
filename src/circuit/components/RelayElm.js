@@ -7,8 +7,10 @@ class RelayElm extends CircuitComponent {
   static initClass() {
     this.FLAG_SWAP_COIL = 1;
     this.FLAG_BACK_EULER = 2;
-  
-    this.Fields = {
+  }
+
+  static get Fields() {
+    return {
       poleCount: {
         data_type: parseInt
       },

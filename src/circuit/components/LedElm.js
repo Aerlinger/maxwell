@@ -4,9 +4,8 @@ let Util = require('../../util/util.js');
 let Settings = require('../../settings/settings.js');
 
 class LedElm extends DiodeElm {
-  static initClass() {
-  
-    this.Fields = {
+  static get Fields() {
+    return {
       colorR: {
         name: "Red Intensity",
         data_type: parseFloat,
@@ -22,11 +21,11 @@ class LedElm extends DiodeElm {
         data_type: parseFloat,
         default_value: 0
       }
-  //    fwdrop: {
-  //      name: "Voltage drop"
-  //      data_type: parseFloat
-  //      default_value: DiodeElm.DEFAULT_DROP
-  //    }
+      //    fwdrop: {
+      //      name: "Voltage drop"
+      //      data_type: parseFloat
+      //      default_value: DiodeElm.DEFAULT_DROP
+      //    }
     };
   }
 

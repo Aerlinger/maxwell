@@ -2,9 +2,8 @@ let CircuitComponent = require("../circuitComponent.js");
 let Util = require('../../util/util.js');
 
 class TappedTransformerElm extends CircuitComponent {
-  static initClass() {
-  
-    this.Fields = {
+  static get Fields() {
+    return {
       inductance: {
         name: "Inductance",
         data_type: parseFloat

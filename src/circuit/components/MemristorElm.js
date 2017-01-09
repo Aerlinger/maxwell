@@ -3,9 +3,9 @@ let Util = require('../../util/util.js');
 let Point = require('../../geom/point.js');
 
 class MemristorElm extends CircuitComponent {
-  static initClass() {
+  static get Fields() {
   
-    this.Fields = {
+    return {
       r_on: {
         name: "On resistance",
         data_type: parseFloat

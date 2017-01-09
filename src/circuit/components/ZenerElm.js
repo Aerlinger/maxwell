@@ -7,8 +7,8 @@ let DiodeElm = require('./DiodeElm.js');
 let Util = require('../../util/util.js');
 
 class ZenerElm extends DiodeElm {
-  static initClass() {
-    this.Fields = Util.extend(DiodeElm.Fields, {
+  static get Fields() {
+    return Util.extend(DiodeElm.Fields, {
       zvoltage: {
         name: "Voltage",
         unit: "Voltage",
@@ -83,6 +83,5 @@ class ZenerElm extends DiodeElm {
     return false;
   }
 }
-ZenerElm.initClass();
 
 module.exports = ZenerElm;

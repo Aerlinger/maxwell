@@ -4,8 +4,10 @@ let Util = require('../../util/util.js');
 class TransformerElm extends CircuitComponent {
   static initClass() {
     this.FLAG_BACK_EULER = 2;
-  
-    this.Fields = {
+  }
+
+  static get Fields() {
+    return {
       inductance: {
         name: "Inductance",
         default_value: 1e-3,

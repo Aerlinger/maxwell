@@ -6,8 +6,8 @@ let Point = require('../../geom/point.js');
 let Util = require('../../util/util.js');
 
 class CurrentElm extends CircuitComponent {
-  static initClass() {
-    this.Fields = {
+  static get Fields() {
+    return {
       "currentValue": {
         unit: "Amperes",
         name: "Current",
@@ -79,6 +79,5 @@ class CurrentElm extends CircuitComponent {
     return this.volts[1] - this.volts[0];
   }
 }
-CurrentElm.initClass();
 
 module.exports = CurrentElm;

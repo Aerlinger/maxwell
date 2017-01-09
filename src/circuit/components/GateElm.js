@@ -5,8 +5,10 @@ let Settings = require('../../settings/settings.js');
 class GateElm extends CircuitComponent {
   static initClass() {
     this.FLAG_SMALL = 1;
-  
-    this.Fields = {
+  }
+
+  static get Fields() {
+    return {
       inputCount: {
         name: "Input count",
         data_type: parseInt,

@@ -9,12 +9,8 @@ let { sprintf } = require("sprintf-js");
 
 
 class MosfetElm extends CircuitComponent {
-  static initClass() {
-    this.FLAG_PNP = 1;
-    this.FLAG_SHOWVT = 2;
-    this.FLAG_DIGITAL = 4;
-  
-    this.Fields = {
+  static get Fields() {
+    return {
       "vt": {
         data_type: parseFloat,
         name: "Voltage",
@@ -34,6 +30,12 @@ class MosfetElm extends CircuitComponent {
         select_values: { "N-Channel": -1, "P-Channel": 1 }
       }
     };
+  }
+
+  static initClass() {
+    this.FLAG_PNP = 1;
+    this.FLAG_SHOWVT = 2;
+    this.FLAG_DIGITAL = 4;
   }
 
   constructor(xa, ya, xb, yb, params, f) {

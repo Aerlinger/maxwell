@@ -12,10 +12,12 @@ let _ = require("lodash");
 // Broken
 class Switch2Elm extends SwitchElm {
   static initClass() {
-  
+
     this.FLAG_CENTER_OFF = 1;
-  
-    this.Fields = Util.extend(SwitchElm.Fields, {
+  }
+
+  static get Fields() {
+    return Util.extend(SwitchElm.Fields, {
       "link": {
         name: "link",
         unit: "",

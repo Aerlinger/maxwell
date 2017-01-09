@@ -10,8 +10,10 @@ class OpAmpElm extends CircuitComponent {
     this.FLAG_SWAP = 1;
     this.FLAG_SMALL = 2;
     this.FLAG_LOWGAIN = 4;
-  
-    this.Fields = {
+  }
+
+  static get Fields() {
+    return {
       "maxOut": {
         name: "Voltage",
         unit: "Voltage",

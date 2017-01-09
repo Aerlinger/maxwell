@@ -8,8 +8,10 @@ let Util = require('../../util/util.js');
 class CapacitorElm extends CircuitComponent {
   static initClass() {
     this.FLAG_BACK_EULER = 2;
-  
-    this.Fields = {
+  }
+
+  static get Fields() {
+    return {
       "capacitance": {
         name: "Capacitance",
         unit: "Farads",

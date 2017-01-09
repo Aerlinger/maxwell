@@ -8,8 +8,10 @@ let Util = require('../../util/util.js');
 class InductorElm extends CircuitComponent {
   static initClass() {
     this.FLAG_BACK_EULER = 2;
-  
-    this.Fields = {
+  }
+
+  static get Fields() {
+    return {
       "inductance": {
         name: "inductance",
         unit: "Henries",

@@ -6,17 +6,15 @@ let Point = require('../../geom/point.js');
 let Util = require('../../util/util.js');
 
 class TransistorElm extends CircuitComponent {
-  static initClass() {
-    this.FLAG_FLIP = 1;
-  
-    this.Fields = {
+  static get Fields() {
+    return {
       "pnp": {
         name: "Polarity",
         description: "Current multiplier",
         default_value: -1,
         data_type: Math.sign,
         field_type: "select",
-        select_values: { "NPN": -1, "PNP": 1 }
+        select_values: {"NPN": -1, "PNP": 1}
       },
       "lastvbe": {
         name: "Voltage",
@@ -40,15 +38,12 @@ class TransistorElm extends CircuitComponent {
         data_type: parseFloat,
         range: [0, Infinity]
       }
-    };
+    }
   }
 
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
 
-    // Forward declarations:
-    // this.beta = 100;
-    // this.pnp = 0;
     this.rect = []; // Array of points
     this.coll = []; // Array of points
     this.emit = []; // Array of points
@@ -106,7 +101,7 @@ class TransistorElm extends CircuitComponent {
     return "t";
   }
 
-  getName(){
+  getName() {
     let type = this.params.pnp == 1 ? "PNP" : "NPN"
 
     return `Bipolar Junction Transistor (${type})`
@@ -231,9 +226,9 @@ class TransistorElm extends CircuitComponent {
 
     this.rect = Util.newPointArray(4);
 
-    [this.rect[0], this.rect[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (16/this.dn()), hs);
-    [this.rect[2], this.rect[3]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (13/this.dn()), hs);
-    [this.coll[1], this.emit[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (13/this.dn()), 6 * this.dsign() * this.pnp);
+    [this.rect[0], this.rect[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (16 / this.dn()), hs);
+    [this.rect[2], this.rect[3]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (13 / this.dn()), hs);
+    [this.coll[1], this.emit[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (13 / this.dn()), 6 * this.dsign() * this.pnp);
 
     this.base = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (16 / this.dn()));
 
@@ -279,7 +274,7 @@ class TransistorElm extends CircuitComponent {
 
   // TODO: DI refactor by passing solver object
   doStep(stamper) {
-    let { subIterations } = this.getParentCircuit().Solver;
+    let {subIterations} = this.getParentCircuit().Solver;
 
     let vbc = this.volts[0] - this.volts[1]; // typically negative
     let vbe = this.volts[0] - this.volts[2]; // typically positive
@@ -295,7 +290,9 @@ class TransistorElm extends CircuitComponent {
       // if we have trouble converging, put a conductance in parallel with all P-N junctions.
       // Gradually increase the conductance value for each iteration.
       this.gmin = Math.exp(-9 * Math.log(10) * (1 - (subIterations / 3000.0)));
-      if (this.gmin > .1) { this.gmin = .1; }
+      if (this.gmin > .1) {
+        this.gmin = .1;
+      }
     }
 
     vbc = this.pnp * this.limitStep(this.pnp * vbc, this.pnp * this.lastvbc);
@@ -308,7 +305,9 @@ class TransistorElm extends CircuitComponent {
     //if (expbc > 1e13 || Double.isInfinite(expbc))
     //     expbc = 1e13;
     let expbe = Math.exp(vbe * pcoef);
-    if (expbe < 1) { expbe = 1; }
+    if (expbe < 1) {
+      expbe = 1;
+    }
 
     //if (expbe > 1e13 || Double.isInfinite(expbe))
     //     expbe = 1e13;
@@ -393,7 +392,9 @@ class TransistorElm extends CircuitComponent {
 
   getScopeUnits(x) {
     switch (x) {
-      case Oscilloscope.VAL_IB: case Oscilloscope.VAL_IC: case Oscilloscope.VAL_IE:
+      case Oscilloscope.VAL_IB:
+      case Oscilloscope.VAL_IC:
+      case Oscilloscope.VAL_IE:
         return "A";
       default:
         return "V";

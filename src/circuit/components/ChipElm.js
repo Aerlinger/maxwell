@@ -6,6 +6,7 @@ let Settings = require('../../settings/settings.js');
 let self = undefined;
 let Pin = undefined;
 class ChipElm extends CircuitComponent {
+
   static initClass() {
     this.FLAG_SMALL = 1;
     this.FLAG_FLIP_X = 1024;
@@ -16,7 +17,7 @@ class ChipElm extends CircuitComponent {
     this.SIDE_W = 2;
     this.SIDE_E = 3;
   
-    this.Fields = {};
+    // this.Fields = {};
   
   //  @Fields = {
   //    bits: {

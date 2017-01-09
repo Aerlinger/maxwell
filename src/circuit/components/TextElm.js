@@ -8,8 +8,10 @@ class TextElm extends CircuitComponent {
   static initClass() {
     this.FLAG_CENTER = 1;
     this.FLAG_BAR = 2;
-  
-    this.Fields = {
+  }
+
+  static get Fields() {
+    return {
       size: {
         name: "Pixel",
         unit: "Pixel",

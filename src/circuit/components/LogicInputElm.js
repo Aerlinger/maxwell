@@ -10,8 +10,11 @@ class LogicInputElm extends SwitchElm {
   static initClass() {
     this.prototype.FLAG_TERNARY = 1;
     this.prototype.FLAG_NUMERIC = 2;
+  }
+
+  static get Fields() {
   
-    this.Fields = {
+    return {
       "position": {
         name: "Position",
         default_value: 0,

@@ -10,8 +10,10 @@ class SweepElm extends CircuitComponent {
     this.FLAG_LOG = 1;
     this.FLAG_BIDIR = 2;
     this.circleSize = 17;
-  
-    this.Fields = {
+  }
+
+  static get Fields() {
+    return {
       "minF": {
         name: "Min. Frequency",
         unit: "Hertz",

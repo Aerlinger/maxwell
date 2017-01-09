@@ -6,8 +6,8 @@ let Point = require('../../geom/point.js');
 let Util = require('../../util/util.js');
 
 class SparkGapElm extends CircuitComponent {
-  static initClass() {
-    this.Fields = {
+  static get Fields() {
+    return {
       "onresistance": {
         name: "Resistance",
         unit: "Ohms",

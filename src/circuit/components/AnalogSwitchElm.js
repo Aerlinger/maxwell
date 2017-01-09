@@ -5,8 +5,10 @@ let Point = require('../../geom/point.js');
 class AnalogSwitchElm extends CircuitComponent {
   static initClass() {
     this.FLAG_INVERT = 1;
-  
-    this.Fields = {
+  }
+
+  static get Fields() {
+    return {
       r_on: {
         name: "On Resistance",
         data_type: parseFloat,

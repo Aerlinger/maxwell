@@ -7,8 +7,8 @@ let Util = require('../../util/util.js');
 //Maxwell = require('../../Maxwell.js')
 
 class ResistorElm extends CircuitComponent {
-  static initClass() {
-    this.Fields = {
+  static get Fields() {
+    return {
       "resistance": {
         name: "Resistance",
         unit: "Ohms",
@@ -20,7 +20,6 @@ class ResistorElm extends CircuitComponent {
       }
     };
   }
-
 
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);

@@ -5,9 +5,9 @@ let Util = require('../../util/util.js');
 
 // TODO: Extend from Diode?
 class ScrElm extends CircuitComponent {
-  static initClass() {
+  static get Fields() {
   
-    this.Fields = {
+    return {
       lastvac: {
         data_type: parseFloat
       },

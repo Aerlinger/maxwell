@@ -25,10 +25,15 @@ let _ = require("lodash");
 let { sprintf } = require("sprintf-js");
 
 class CircuitComponent {
+
+  static get Fields() {
+    return {}
+  }
+
   static initClass() {
     this.DEBUG = false;
   
-    this.Fields = {};
+    // this.Fields = {};
   }
 
   constructor(x1, y1, x2, y2, params, f) {

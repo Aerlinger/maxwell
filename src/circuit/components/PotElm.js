@@ -5,9 +5,8 @@ let Settings = require('../../settings/settings.js');
 let Point = require("../../geom/point.js");
 
 class PotElm extends CircuitComponent {
-  static initClass() {
-  
-    this.Fields = {
+  static get Fields() {
+    return {
       "maxResistance": {
         name: "Max Resistance",
         default_value: 1e4,
@@ -23,7 +22,9 @@ class PotElm extends CircuitComponent {
       "sliderText": {
         name: "sliderText",
         default_value: "",
-        data_type(x) { return x; }
+        data_type(x) {
+          return x;
+        }
       }
     };
   }

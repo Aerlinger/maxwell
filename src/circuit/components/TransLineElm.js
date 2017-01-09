@@ -3,8 +3,8 @@ let Util = require('../../util/util.js');
 let Settings = require('../../settings/settings.js');
 
 class TransLineElm extends CircuitComponent {
-  static initClass() {
-    this.Fields = {
+  static get Fields() {
+    return {
       delay: {
         name: "Delay",
         data_type: parseFloat

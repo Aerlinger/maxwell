@@ -6,19 +6,8 @@ let Point = require('../../geom/point.js');
 let Util = require('../../util/util.js');
 
 class VoltageElm extends CircuitComponent {
-  static initClass() {
-    this.FLAG_COS = 2;
-    this.WF_DC = 0;
-    this.WF_AC = 1;
-    this.WF_SQUARE = 2;
-    this.WF_TRIANGLE = 3;
-    this.WF_SAWTOOTH = 4;
-    this.WF_PULSE = 5;
-    this.WF_VAR = 6;
-  
-    this.circleSize = 17;
-  
-    this.Fields = {
+  static get Fields() {
+    return {
       "waveform": {
         name: "none",
         default_value: 0,
@@ -77,6 +66,20 @@ class VoltageElm extends CircuitComponent {
         input_type: "range"
       }
     };
+  }
+
+  static initClass() {
+    this.FLAG_COS = 2;
+    this.WF_DC = 0;
+    this.WF_AC = 1;
+    this.WF_SQUARE = 2;
+    this.WF_TRIANGLE = 3;
+    this.WF_SAWTOOTH = 4;
+    this.WF_PULSE = 5;
+    this.WF_VAR = 6;
+
+    this.circleSize = 17;
+
   }
 
   constructor(xa, ya, xb, yb, params, f) {
@@ -172,7 +175,7 @@ class VoltageElm extends CircuitComponent {
   draw(renderContext) {
     this.updateDots();
 
-    if((this.waveform === VoltageElm.WF_DC) || (this.waveform === VoltageElm.WF_VAR)) {
+    if ((this.waveform === VoltageElm.WF_DC) || (this.waveform === VoltageElm.WF_VAR)) {
       this.calcLeads(8);
     } else {
       this.calcLeads(VoltageElm.circleSize * 2);
@@ -194,7 +197,7 @@ class VoltageElm extends CircuitComponent {
       renderContext.drawLinePt(ptA, ptB, Util.getVoltageColor(this.volts[0]));
 
       this.setBboxPt(this.point1, this.point2, Settings.GRID_SIZE);
-      [ptA, ptB] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, 2*Settings.GRID_SIZE);
+      [ptA, ptB] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, 2 * Settings.GRID_SIZE);
       renderContext.drawLinePt(ptA, ptB, Util.getVoltageColor(this.volts[1]));
 
       renderContext.drawValue(-25, 0, this, Util.getUnitText(this.getVoltageDiff(), this.unitSymbol()));
@@ -326,7 +329,8 @@ class VoltageElm extends CircuitComponent {
 
   getInfo(arr) {
     switch (this.waveform) {
-      case VoltageElm.WF_DC: case VoltageElm.WF_VAR:
+      case VoltageElm.WF_DC:
+      case VoltageElm.WF_VAR:
         arr[0] = "Voltage source";
         break;
       case VoltageElm.WF_AC:
@@ -355,7 +359,9 @@ class VoltageElm extends CircuitComponent {
       let i = 5;
       if (this.bias !== 0) {
         arr[i++] = `Voff = ${Util.getUnitText(this.bias, "V")}`;
-      } else if (this.frequency > 500) { arr[i++] = `wavelength = ${Util.getUnitText(2.9979e8 / this.frequency, "m")}`; }
+      } else if (this.frequency > 500) {
+        arr[i++] = `wavelength = ${Util.getUnitText(2.9979e8 / this.frequency, "m")}`;
+      }
       return arr[i++] = `P = ${Util.getUnitText(this.getPower(), "W")}`;
     }
   }

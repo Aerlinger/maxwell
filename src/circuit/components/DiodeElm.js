@@ -10,8 +10,10 @@ class DiodeElm extends CircuitComponent {
   
     this.FLAG_FWDROP = 1;
     this.DEFAULT_DROP = 0.805904783;
-  
-    this.Fields = {
+  }
+
+  static get Fields() {
+    return {
       fwdrop: {
         name: "Voltage",
         unit: "Voltage",
@@ -19,7 +21,7 @@ class DiodeElm extends CircuitComponent {
         default_value: DiodeElm.DEFAULT_DROP,
         data_type: parseFloat
       }
-    };
+    }
   }
 
   constructor(xa, ya, xb, yb, params, f) {

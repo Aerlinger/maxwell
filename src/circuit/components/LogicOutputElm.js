@@ -10,8 +10,10 @@ class LogicOutputElm extends CircuitComponent {
     this.FLAG_TERNARY = 1;
     this.FLAG_NUMERIC = 2;
     this.FLAG_PULLDOWN = 4;
-  
-    this.Fields = {
+  }
+
+  static get Fields() {
+    return {
       threshold: {
         name: "Threshold Voltage",
         data_type: parseFloat,
