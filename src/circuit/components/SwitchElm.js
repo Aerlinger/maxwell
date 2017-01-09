@@ -43,21 +43,7 @@ class SwitchElm extends CircuitComponent {
 
     this.ps = new Point(0, 0);
     this.ps2 = new Point(0, 0);
-
-//    if params
-//      params = params.split(" ")  if typeof params is "string"
-//      str = params.shift()
-//      @position = 0
-//        if str is "true"
-//          @position = (if (this instanceof LogicInputElm) then 0 else 1)
-//        else if str is "false"
-//          @position = (if (this instanceof LogicInputElm) then 1 else 0)
-//        else
-//          @position = parseInt(str)
-//          @momentary = (st.shift().toLowerCase() is "true")
-
   }
-
 
   setPoints() {
     super.setPoints(...arguments);
@@ -102,6 +88,8 @@ class SwitchElm extends CircuitComponent {
     renderContext.drawLinePt(this.ps, this.ps2);
 
     renderContext.drawPosts(this);
+    renderContext.fillCircle(this.ps.x - Settings.POST_RADIUS/2 - 1, this.ps.y - Settings.POST_RADIUS/2 - 1, Settings.POST_RADIUS + 1, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+    renderContext.fillCircle(this.ps2.x - Settings.POST_RADIUS/2 - 1, this.ps2.y - Settings.POST_RADIUS/2 - 1, Settings.POST_RADIUS + 1, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
 
     if (CircuitComponent.DEBUG) {
       return super.draw(renderContext);

@@ -1,7 +1,7 @@
-describe "Transistor Component", ->
+describe "Switch element", ->
   describe "default initialization", ->
     before ->
-      @switchElm = new TransistorElm()
+      @switchElm = new SwitchElm()
 
     it "doesn't set any positions", ->
       expect(@switchElm.x2()).to.equal(undefined)
@@ -10,28 +10,21 @@ describe "Transistor Component", ->
       expect(@switchElm.y1()).to.equal(undefined)
 
     it "sets default parameters", ->
-      expect(@switchElm.pnp).to.equal(-1)
-      expect(@switchElm.lastvbe).to.equal(0)
-      expect(@switchElm.lastvbc).to.equal(0)
-      expect(@switchElm.beta).to.equal(100)
+      expect(@switchElm.position).to.equal(0)
+      expect(@switchElm.momentary).to.equal(false)
 
     it "has correct initial rendering conditions", ->
       expect(@switchElm.curcount).to.equal(undefined)
       expect(@switchElm.point1).to.eql({ x: undefined, y: undefined })
       expect(@switchElm.point2).to.eql({ x: undefined, y: undefined })
-      expect(@switchElm.lead1).to.equal(undefined)
-      expect(@switchElm.lead2).to.equal(undefined)
-      expect(@switchElm.rect).to.eql([])
-      expect(@switchElm.coll).to.eql([])
-      expect(@switchElm.emit).to.eql([])
 
     it "has correct node relationships", ->
-      expect(@switchElm.nodes).to.eql([0, 0, 0])
-      expect(@switchElm.volts).to.eql([0, -0, -0])
+      expect(@switchElm.nodes).to.eql([0, 0])
+      expect(@switchElm.volts).to.eql([0, 0])
 
     it "has default method return values", ->
-      @switchElm.getPostCount().should.equal 3
-      @switchElm.isWire().should.equal false
+      @switchElm.getPostCount().should.equal 2
+      @switchElm.isWire().should.equal true
       @switchElm.hasGroundConnection().should.equal false
       @switchElm.needsShortcut().should.equal false
       @switchElm.canViewInScope().should.equal true
@@ -39,64 +32,44 @@ describe "Transistor Component", ->
       @switchElm.orphaned().should.equal true
 
     it "has correct initial state", ->
-      expect(@switchElm.noDiagonal).to.eql(true)
+      expect(@switchElm.noDiagonal).to.eql(false)
       expect(@switchElm.component_id).to.be
       expect(@switchElm.voltSource).to.equal(0)
       expect(@switchElm.current).to.equal(0)
-      expect(@switchElm.ie).to.equal(0)
-      expect(@switchElm.ic).to.equal(0)
-      expect(@switchElm.ib).to.equal(0)
       expect(@switchElm.getCurrent()).to.equal(0)
       expect(@switchElm.getVoltageDiff()).to.equal(0)
 
     it "has params", ->
       expect(@switchElm.params).to.eql({
-        "beta": 100
-        "pnp": -1
-        "volts": [
-          0
-          -0
-          -0
-        ]
+        momentary: false,
+        position: 0
       })
 
   describe "With params object", ->
     before ->
-      @switchElm = new TransistorElm(50, 75, 50, 150, {"pnp": "-1", "lastvbe": "-4.195", "lastvbc": "0.805", "beta": "200.0"})
+      @switchElm = new SwitchElm(50, 75, 50, 150, {"momentary": true, "position": 1})
 
     it "has params", ->
       expect(@switchElm.params).to.eql({
-        "beta": 200
-        "pnp": -1
-        "volts": [
-          0
-          4.195
-          -0.805
-        ]
+        "position": 1,
+        "momentary": true
       })
 
   describe "With params array", ->
     before ->
-      @switchElm = new TransistorElm(50, 75, 50, 150, ["1", "-4.295", "0.705", "200.0"])
+      @switchElm = new SwitchElm(50, 75, 50, 150, [0, false])
 
-      @Circuit = new Circuit("Basic BJT")
+      @Circuit = new Circuit("Basic Switch")
 
       @switchElm.setPoints()
-      @switchElm.setup()
       @Circuit.solder(@switchElm)
 
     it "has params", ->
-      expect(@switchElm.beta).to.eql(200)
-      expect(@switchElm.pnp).to.eql(1)
-      expect(@switchElm.volts).to.eql([0, 4.295, -0.705])
+      expect(@switchElm.position).to.eql(0)
+      expect(@switchElm.momentary).to.eql(false)
       expect(@switchElm.params).to.eql({
-        "beta": 200
-        "pnp": 1
-        "volts": [
-          0
-          4.295
-          -0.705
-        ]
+        "position": 0
+        "momentary": false
       })
 
     it "has correct position", ->
@@ -126,18 +99,11 @@ describe "Transistor Component", ->
       expect(@switchElm.y2()).to.equal(198)
 
     it "can be stringified", ->
-      expect(@switchElm.toString()).to.eql("""TransistorElm@[98 123 98 198] : {"beta":200,"pnp":1,"volts":[0,4.295,-0.705]}""")
-      expect(@switchElm.getName()).to.eql("Bipolar Junction Transistor (PNP)")
+      expect(@switchElm.toString()).to.eql("""SwitchElm@[98 123 98 198] : {"position":0,"momentary":false}""")
+      expect(@switchElm.getName()).to.eql("Basic Switch")
 
     it "can stamp", ->
       @switchElm.stamp(@Circuit.Solver.Stamper)
-
-    describe "Loading list of parameters", ->
-      before ->
-        @switchElm = new TransistorElm(100, 200, 100, 300, ["-1", "-4.295", "0.705", "100.0"])
-
-      it "is pnp", ->
-        expect(@switchElm.pnp).to.equal(-1)
 
     describe "Rendering", ->
       before ->
@@ -151,7 +117,7 @@ describe "Transistor Component", ->
         @renderer.context = @canvas.getContext('2d')
         @renderer.drawComponents()
 
-        @componentImageFileName = "test/fixtures/componentRenders/#{@Circuit.name}_init.png"
+        @componentImageFileName = "test/fixtures/componentRenders/switch_init.png"
 
       it "renders initial circuit", ->
         fs.writeFileSync(@componentImageFileName, @canvas.toBuffer())
@@ -159,8 +125,6 @@ describe "Transistor Component", ->
       it "compares buffer", (done) ->
 
         resemble(@canvas.toBuffer()).compareTo(@componentImageFileName).ignoreAntialiasing().onComplete (data) =>
-          console.log(data)
-
           data.getDiffImage().pack().pipe(fs.createWriteStream(@componentImageFileName + "_diff.png"));
 
           expect(data.misMatchPercentage).to.be.at.most(0.01)

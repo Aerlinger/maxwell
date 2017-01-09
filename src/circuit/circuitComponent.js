@@ -41,8 +41,6 @@ class CircuitComponent {
     this.current = 0;
     this.flags = f || 0;
 
-    this.setParameters(params);
-
     this.voltSource = 0;
     this.noDiagonal = false;
     this.Circuit = null;
@@ -50,6 +48,8 @@ class CircuitComponent {
     this.component_id = Util.getRand(100000000) + (new Date()).getTime();
 
     this.setPoints(x1, y1, x2, y2);
+
+    this.setParameters(params);
 
     this.allocNodes();
   }
