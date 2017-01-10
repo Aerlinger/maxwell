@@ -16,4 +16,5 @@ test/fixtures/**/*.json
 circuits/v2/
 .env
 bundle.js
+**/*.map
 

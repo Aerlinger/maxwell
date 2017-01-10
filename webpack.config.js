@@ -1,5 +1,7 @@
 module.exports = {
   entry: "./src/Maxwell.js",
+  devtool: 'source-map',
+  debug: true,
   output: {
     path: __dirname + "/dist",
     filename: "bundle.js"
