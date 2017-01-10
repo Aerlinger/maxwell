@@ -80,28 +80,24 @@ class CapacitorElm extends CircuitComponent {
     this.plate1 = [new Point(0, 0), new Point(0, 0)];
     this.plate2 = [new Point(0, 0), new Point(0, 0)];
     [this.plate1[0], this.plate1[1]] = Util.interpolateSymmetrical(this.point1, this.point2, f, 12);
-    return [this.plate2[0], this.plate2[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - f, 12);
+    [this.plate2[0], this.plate2[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - f, 12);
   }
-
 
   draw(renderContext) {
     let hs = 12;
 //    @setBboxPt @point1, @point2, hs
 
-    // draw first lead and plate
-    let color = Util.getVoltageColor(this.volts[0]);
-    renderContext.drawLinePt(this.point1, this.lead1, color);
-    renderContext.drawLinePt(this.plate2[0], this.plate2[1], color);
-
-    // draw second lead and plate
-    color = Util.getVoltageColor(this.volts[1]);
-    renderContext.drawLinePt(this.point2, this.lead2, color);
+    // draw leads
+    renderContext.drawLinePt(this.point1, this.lead1, Util.getVoltageColor(this.volts[0]));
+    renderContext.drawLinePt(this.point2, this.lead2, Util.getVoltageColor(this.volts[1]));
 
     this.updateDots();
     renderContext.drawDots(this.point1, this.lead1, this);
     renderContext.drawDots(this.lead2, this.point2, this);
 
-    renderContext.drawLinePt(this.plate1[0], this.plate1[1], color);
+    // draw plates
+    renderContext.drawLinePt(this.plate1[0], this.plate1[1], Util.getVoltageColor(this.volts[0]), Settings.LINE_WIDTH+1);
+    renderContext.drawLinePt(this.plate2[0], this.plate2[1], Util.getVoltageColor(this.volts[1]), Settings.LINE_WIDTH+1);
 
     renderContext.drawValue(20, 0, this, Util.getUnitText(this.capacitance, this.unitSymbol()));
 

@@ -29,6 +29,7 @@ class RailElm extends VoltageElm {
     this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (VoltageElm.circleSize / this.dn()));
 
     this.setBboxPt(this.point1, this.point2, this.circleSize);
+    renderContext.drawLinePt(this.point2, this.lead1, Settings.STROKE_COLOR, Settings.LINE_WIDTH+1);
     renderContext.drawLinePt(this.point2, this.point1, Settings.STROKE_COLOR);
 
     let color = Util.getVoltageColor(this.volts[0]);
@@ -79,7 +80,7 @@ class RailElm extends VoltageElm {
   setPoints() {
     super.setPoints(...arguments);
 
-    return this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (this.circleSize / this.dn()));
+    this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (this.circleSize / this.dn()));
   }
 
   stamp(stamper) {

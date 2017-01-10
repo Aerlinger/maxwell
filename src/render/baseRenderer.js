@@ -88,14 +88,16 @@ class BaseRenderer extends Observer {
     return this.context.stroke();
   }
 
-  drawLinePt(pa, pb, color) {
+  drawLinePt(pa, pb, color, lineWidth) {
     if (color == null) { color = Settings.STROKE_COLOR; }
-    return this.drawLine(pa.x, pa.y, pb.x, pb.y, color);
+    return this.drawLine(pa.x, pa.y, pb.x, pb.y, color, lineWidth);
   }
 
   drawLine(x, y, x2, y2, color, lineWidth) {
     if (color == null) { color = Settings.STROKE_COLOR; }
     if (lineWidth == null) { lineWidth = Settings.LINE_WIDTH; }
+
+    let origLineWidth = this.context.lineWidth;
     this.context.save();
     this.context.beginPath();
 
@@ -117,6 +119,8 @@ class BaseRenderer extends Observer {
     this.context.closePath();
 
     return this.context.restore();
+
+    this.context.lineWidth = origLineWidth;
   }
 
   drawThickPolygon(xlist, ylist, color, fill) {

@@ -38,7 +38,7 @@ class OutputElm extends CircuitComponent {
 
     this.lead1 = Util.interpolate(this.point1, this.point2, 1 - ((((3 * s.length) / 2) + 8) / this.dn()));
 
-    renderContext.drawValue(10, 25, this, s);
+    renderContext.drawValue(-13, 35, this, s);
 
     color = Util.getVoltageColor(this.volts[0]);
 
