@@ -39,7 +39,7 @@ class CapacitorElm extends CircuitComponent {
     this.plate2 = [];
     this.curSourceValue = 0;
 
-    console.log("ca", xa);
+    // console.log("ca", xa);
   }
 
   isTrapezoidal() {
@@ -68,7 +68,7 @@ class CapacitorElm extends CircuitComponent {
   }
 
   setPoints() {
-    console.log("capelm", arguments);
+    // console.log("capelm", arguments);
 //    super(arguments...)
     super.setPoints(...arguments);
 
@@ -77,8 +77,8 @@ class CapacitorElm extends CircuitComponent {
     this.lead1 = Util.interpolate(this.point1, this.point2, f);
     this.lead2 = Util.interpolate(this.point1, this.point2, 1 - f);
 
-    this.plate1 = [new Point(), new Point()];
-    this.plate2 = [new Point(), new Point()];
+    this.plate1 = [new Point(0, 0), new Point(0, 0)];
+    this.plate2 = [new Point(0, 0), new Point(0, 0)];
     [this.plate1[0], this.plate1[1]] = Util.interpolateSymmetrical(this.point1, this.point2, f, 12);
     return [this.plate2[0], this.plate2[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - f, 12);
   }

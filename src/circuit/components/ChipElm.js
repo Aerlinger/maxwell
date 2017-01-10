@@ -138,33 +138,6 @@ class ChipElm extends CircuitComponent {
     this.Pin = Pin;
   }
 
-  allocNodes() {
-    this.pins = [];
-    this.bits = 0;
-
-    /**
-    TODO:
-    Chip initialization needs fixing here...
-    There's a sort of chicken-and-egg problem where the base circuitComponent calls allocNodes before
-     `getPostCount()` can return a valid value in any child class of ChipElm.
-
-     */
-
-    if (!this.params) { this.params = {}; }
-
-    if (this.needsBits()) {
-      this.bits = parseInt(__guard__(params, x => x.shift()) || 0);
-      this.params['bits'] = this.bits;
-    } else {
-      this.params['bits'] = 0;
-    }
-
-    // console.log("this.getPostCount()", this.getPostCount(), "this.getInternalNodeCount()", this.getInternalNodeCount())
-
-    this.nodes = Util.zeroArray(this.getPostCount() + this.getInternalNodeCount());
-    return this.volts = Util.zeroArray(this.getPostCount() + this.getInternalNodeCount());
-  }
-
   // TODO: Need a better way of dealing with variable length params here
   constructor(xa, xb, ya, yb, params, f) {
     super(xa, xb, ya, yb, {}, f);
@@ -177,16 +150,19 @@ class ChipElm extends CircuitComponent {
 
     if (params) {
       if (Object.prototype.toString.call( params ) === '[object Array]') {
+        this.bits = params.shift()
         initial_voltages = params;
       } else {
+        this.bits = params['bits'];
         initial_voltages = params['volts'];
       }
     }
 
+    this.params['bits'] = this.bits;
+
     self = this;
     this.setupPins();
     this.placePins();
-
 
     this.noDiagonal = true;
     let numPosts = this.getPostCount();

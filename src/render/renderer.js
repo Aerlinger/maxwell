@@ -568,9 +568,10 @@ class Renderer extends BaseRenderer {
   drawPosts(component, color) {
     let post;
     if (color == null) { color = Settings.POST_COLOR; }
+
     return __range__(0, component.getPostCount(), false).map((i) =>
-      (post = component.getPost(i),
-      this.drawPost(post.x, post.y, color, color)));
+      (post = component.getPost(i), this.drawPost(post.x, post.y, color, color))
+    );
   }
 
   drawPost(x0, y0, fillColor, strokeColor) {

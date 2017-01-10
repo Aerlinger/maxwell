@@ -32,8 +32,6 @@ class CircuitComponent {
 
   static initClass() {
     this.DEBUG = false;
-  
-    // this.Fields = {};
   }
 
   constructor(x1, y1, x2, y2, params, f) {

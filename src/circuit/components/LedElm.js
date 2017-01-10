@@ -5,7 +5,7 @@ let Settings = require('../../settings/settings.js');
 
 class LedElm extends DiodeElm {
   static get Fields() {
-    return {
+    return Util.extend(DiodeElm.Fields, {
       colorR: {
         name: "Red Intensity",
         data_type: parseFloat,
@@ -26,7 +26,7 @@ class LedElm extends DiodeElm {
       //      data_type: parseFloat
       //      default_value: DiodeElm.DEFAULT_DROP
       //    }
-    };
+    });
   }
 
 

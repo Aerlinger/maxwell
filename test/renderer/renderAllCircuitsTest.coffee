@@ -10,8 +10,8 @@ Canvas = require('canvas')
 path = require("path")
 
 describe "Renderer", ->
-  it.skip "renders all circuits", () ->
-    this.timeout(100000)
+  it "renders all circuits", () ->
+    this.timeout(1000000)
 
     circuit_names = glob.sync(__dirname + "/../../circuits/*.json")
 
@@ -44,3 +44,4 @@ describe "Renderer", ->
 
         catch e
           console.log("ERR:", e.message)
+          console.log(e.stack)

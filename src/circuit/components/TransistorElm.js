@@ -47,7 +47,7 @@ class TransistorElm extends CircuitComponent {
     this.rect = []; // Array of points
     this.coll = []; // Array of points
     this.emit = []; // Array of points
-    this.base = new Point(); // Single point
+    this.base = new Point(0, 0); // Single point
     this.gmin = 0;
     this.ie = 0;
     this.ic = 0;
@@ -73,6 +73,7 @@ class TransistorElm extends CircuitComponent {
     this.volts[2] = -this.lastvbc;
 
     this.setup();
+    this.setPoints();
 
     // TOOD: non-standard  method for setting param
     this.params = {

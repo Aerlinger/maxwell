@@ -17,12 +17,11 @@ describe "Simple Voltage Divider", ->
     voltdividesimple = JSON.parse(fs.readFileSync("./circuits/voltdividesimple.json"))
     @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
 
-
     #    CircuitLoader.createCircuitFromJsonFile "../../circuits/voltdividesimple.json", (circuit) =>
     #      @circuit = circuit
     done()
 
-  describe "should Analyze voltdividesimple.json and have", ->
+  describe "Analyzing voltdividesimple.json", ->
     before (done) ->
       @circuit.Solver.reconstruct()
       @rowInfo = @circuit.Solver.circuitRowInfo
@@ -31,22 +30,22 @@ describe "Simple Voltage Divider", ->
     it "7 elements", ->
       @circuit.numElements().should.equal 7
 
-    it "valid origMatrix", ->
+    it "has valid origMatrix", ->
       @circuit.Solver.origMatrix.should.eql Util.zeroArray2(10, 10)
 
-    it "valid origRightSide", ->
+    it "has valid origRightSide", ->
       @circuit.Solver.origRightSide.should.eql Util.zeroArray(10)
 
-    it "valid circuitPermute", ->
+    it "has valid circuitPermute", ->
       @circuit.Solver.circuitPermute.should.eql Util.zeroArray(10)
 
-    it "valid circuitMatrix", ->
+    it "has valid circuitMatrix", ->
       @circuit.Solver.circuitMatrix.should.eql []
 
-    it "valid right side", ->
+    it "has valid right side", ->
       @circuit.Solver.circuitRightSide.should.eql []
 
-    it "Circuit Solver should need map", ->
+    it "Circuit Solver needs map", ->
       @circuit.Solver.circuitNeedsMap.should.equal true
 
     it "has correct voltage sources", ->
@@ -55,7 +54,7 @@ describe "Simple Voltage Divider", ->
 
     describe "current rowInfos", ->
       it "index: 0", ->
-        @rowInfo[0].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true"
+        expect(@rowInfo[0].toString()).to.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true"
 
       it "index: 1", ->
         @rowInfo[1].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true"
@@ -88,11 +87,11 @@ describe "Simple Voltage Divider", ->
     it "has 6 nodes", ->
       @circuit.numNodes().should.equal 6
 
-    it "should be linear", ->
+    it "is linear", ->
       @circuit.Solver.circuitNonLinear.should.equal false
 
 
-    describe "should runCircuit()", ->
+    describe "runCircuit()", ->
       before ->
         @circuit.Solver.solveCircuit()
         @voltageCompnt = @circuit.getElmByIdx(0)
@@ -212,5 +211,5 @@ describe "Simple Voltage Divider", ->
       @circuit.updateCircuit()
 
     it.skip "has correct voltage", ->
-      @circuit.Solver.dump().should.eql ""
+      expect(@circuit.Solver.dump()).to.eql("")
 

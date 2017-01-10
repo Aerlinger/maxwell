@@ -48,14 +48,14 @@ class SparkGapElm extends CircuitComponent {
   }
 
   constructor(xa, ya, xb, yb, params, f) {
+    super(xa, ya, xb, yb, params, f);
+
     this.resistance = 0;
     this.offresistance = 1e9;
     this.onresistance = 1e3;
     this.breakdown = 1e3;
     this.holdcurrent = 0.001;
     this.state = false;
-
-    super(xa, ya, xb, yb, params, f);
   }
 
   setPoints() {

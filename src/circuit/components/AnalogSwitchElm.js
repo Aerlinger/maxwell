@@ -13,8 +13,6 @@ class AnalogSwitchElm extends CircuitComponent {
         name: "On Resistance",
         data_type: parseFloat,
         default_value: 20
-  
-  
       },
       r_off: {
         name: "Off Resistance",
@@ -37,7 +35,7 @@ class AnalogSwitchElm extends CircuitComponent {
 
     this.calcLeads(32);
 
-    this.ps = new Point();
+    this.ps = new Point(0, 0);
     let openhs = 16;
 
     this.point3 = Util.interpolate(this.point1, this.point2, 0.5, -openhs);

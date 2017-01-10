@@ -1,114 +1,114 @@
 describe "Switch element", ->
   describe "default initialization", ->
     before ->
-      @switchElm = new SwitchElm()
+      @opampElm = new SwitchElm()
 
     it "doesn't set any positions", ->
-      expect(@switchElm.x2()).to.equal(undefined)
-      expect(@switchElm.y2()).to.equal(undefined)
-      expect(@switchElm.x1()).to.equal(undefined)
-      expect(@switchElm.y1()).to.equal(undefined)
+      expect(@opampElm.x2()).to.equal(undefined)
+      expect(@opampElm.y2()).to.equal(undefined)
+      expect(@opampElm.x1()).to.equal(undefined)
+      expect(@opampElm.y1()).to.equal(undefined)
 
     it "sets default parameters", ->
-      expect(@switchElm.position).to.equal(0)
-      expect(@switchElm.momentary).to.equal(false)
+      expect(@opampElm.position).to.equal(0)
+      expect(@opampElm.momentary).to.equal(false)
 
     it "has correct initial rendering conditions", ->
-      expect(@switchElm.curcount).to.equal(undefined)
-      expect(@switchElm.point1).to.eql({ x: undefined, y: undefined })
-      expect(@switchElm.point2).to.eql({ x: undefined, y: undefined })
+      expect(@opampElm.curcount).to.equal(undefined)
+      expect(@opampElm.point1).to.eql({ x: undefined, y: undefined })
+      expect(@opampElm.point2).to.eql({ x: undefined, y: undefined })
 
     it "has correct node relationships", ->
-      expect(@switchElm.nodes).to.eql([0, 0])
-      expect(@switchElm.volts).to.eql([0, 0])
+      expect(@opampElm.nodes).to.eql([0, 0])
+      expect(@opampElm.volts).to.eql([0, 0])
 
     it "has default method return values", ->
-      @switchElm.getPostCount().should.equal 2
-      @switchElm.isWire().should.equal true
-      @switchElm.hasGroundConnection().should.equal false
-      @switchElm.needsShortcut().should.equal false
-      @switchElm.canViewInScope().should.equal true
-      @switchElm.getInternalNodeCount().should.equal 0
-      @switchElm.orphaned().should.equal true
+      @opampElm.getPostCount().should.equal 2
+      @opampElm.isWire().should.equal true
+      @opampElm.hasGroundConnection().should.equal false
+      @opampElm.needsShortcut().should.equal false
+      @opampElm.canViewInScope().should.equal true
+      @opampElm.getInternalNodeCount().should.equal 0
+      @opampElm.orphaned().should.equal true
 
     it "has correct initial state", ->
-      expect(@switchElm.noDiagonal).to.eql(false)
-      expect(@switchElm.component_id).to.be
-      expect(@switchElm.voltSource).to.equal(0)
-      expect(@switchElm.current).to.equal(0)
-      expect(@switchElm.getCurrent()).to.equal(0)
-      expect(@switchElm.getVoltageDiff()).to.equal(0)
+      expect(@opampElm.noDiagonal).to.eql(false)
+      expect(@opampElm.component_id).to.be
+      expect(@opampElm.voltSource).to.equal(0)
+      expect(@opampElm.current).to.equal(0)
+      expect(@opampElm.getCurrent()).to.equal(0)
+      expect(@opampElm.getVoltageDiff()).to.equal(0)
 
     it "has params", ->
-      expect(@switchElm.params).to.eql({
+      expect(@opampElm.params).to.eql({
         momentary: false,
         position: 0
       })
 
   describe "With params object", ->
     before ->
-      @switchElm = new SwitchElm(50, 75, 50, 150, {"momentary": true, "position": 1})
+      @opampElm = new SwitchElm(50, 75, 50, 150, {"momentary": true, "position": 1})
 
     it "has params", ->
-      expect(@switchElm.params).to.eql({
+      expect(@opampElm.params).to.eql({
         "position": 1,
         "momentary": true
       })
 
   describe "With params array", ->
     before ->
-      @switchElm = new SwitchElm(50, 75, 50, 150, [0, false])
+      @opampElm = new SwitchElm(50, 75, 50, 150, [0, false])
 
       @Circuit = new Circuit("Basic Switch")
 
-      @switchElm.setPoints()
-      @Circuit.solder(@switchElm)
+      @opampElm.setPoints()
+      @Circuit.solder(@opampElm)
 
     it "has params", ->
-      expect(@switchElm.position).to.eql(0)
-      expect(@switchElm.momentary).to.eql(false)
-      expect(@switchElm.params).to.eql({
+      expect(@opampElm.position).to.eql(0)
+      expect(@opampElm.momentary).to.eql(false)
+      expect(@opampElm.params).to.eql({
         "position": 0
         "momentary": false
       })
 
     it "has correct position", ->
-      expect(@switchElm.x1()).to.equal(50)
-      expect(@switchElm.y1()).to.equal(75)
-      expect(@switchElm.x2()).to.equal(50)
-      expect(@switchElm.y2()).to.equal(150)
+      expect(@opampElm.x1()).to.equal(50)
+      expect(@opampElm.y1()).to.equal(75)
+      expect(@opampElm.x2()).to.equal(50)
+      expect(@opampElm.y2()).to.equal(150)
 
-      expect(@switchElm.dx()).to.equal(0)
-      expect(@switchElm.dy()).to.equal(75)
-      expect(@switchElm.dn()).to.equal(75)
-      expect(@switchElm.dsign()).to.equal(1)
-      expect(@switchElm.dpx1()).to.equal(1)
-      expect(@switchElm.dpy1()).to.equal(0)
-      expect(@switchElm.isVertical()).to.equal(true)
-      expect(@switchElm.getCenter()).to.eql({x: 50, y: 112.5})
+      expect(@opampElm.dx()).to.equal(0)
+      expect(@opampElm.dy()).to.equal(75)
+      expect(@opampElm.dn()).to.equal(75)
+      expect(@opampElm.dsign()).to.equal(1)
+      expect(@opampElm.dpx1()).to.equal(1)
+      expect(@opampElm.dpy1()).to.equal(0)
+      expect(@opampElm.isVertical()).to.equal(true)
+      expect(@opampElm.getCenter()).to.eql({x: 50, y: 112.5})
 
-      expect(@switchElm.getBoundingBox()).to.eql({x: 49, y: 75, width: 5, height: 75})
+      expect(@opampElm.getBoundingBox()).to.eql({x: 49, y: 75, width: 5, height: 75})
 
     it "snaps to grid when moved", ->
-      @switchElm.moveTo(100, 162.5)
-      expect(@switchElm.getCenter()).to.eql({x: 98, y: 160.5})
+      @opampElm.moveTo(100, 162.5)
+      expect(@opampElm.getCenter()).to.eql({x: 98, y: 160.5})
 
-      expect(@switchElm.x1()).to.equal(98)
-      expect(@switchElm.y1()).to.equal(123)
-      expect(@switchElm.x2()).to.equal(98)
-      expect(@switchElm.y2()).to.equal(198)
+      expect(@opampElm.x1()).to.equal(98)
+      expect(@opampElm.y1()).to.equal(123)
+      expect(@opampElm.x2()).to.equal(98)
+      expect(@opampElm.y2()).to.equal(198)
 
     it "can be stringified", ->
-      expect(@switchElm.toString()).to.eql("""SwitchElm@[98 123 98 198]: {"position":0,"momentary":false}""")
-      expect(@switchElm.getName()).to.eql("Basic Switch")
+      expect(@opampElm.toString()).to.eql("""SwitchElm@[98 123 98 198]: {"position":0,"momentary":false}""")
+      expect(@opampElm.getName()).to.eql("Basic Switch")
 
     it "can stamp", ->
-      @switchElm.stamp(@Circuit.Solver.Stamper)
+      @opampElm.stamp(@Circuit.Solver.Stamper)
 
     describe "Rendering", ->
       before ->
         @Circuit.clearAndReset()
-        @Circuit.solder(@switchElm)
+        @Circuit.solder(@opampElm)
 
         Canvas = require('canvas')
         @canvas = new Canvas(200, 300)

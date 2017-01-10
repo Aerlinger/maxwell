@@ -37,6 +37,8 @@ class RelayElm extends CircuitComponent {
 
 
   constructor(xa, ya, xb, yb, params, f) {
+    super(xa, ya, xb, yb, params, f);
+
     if (!this.poleCount) { this.poleCount = 2; } // Temporary
 
     this.switchCurrent = [];
@@ -45,8 +47,6 @@ class RelayElm extends CircuitComponent {
     this.nSwitch1 = 1;
     this.nSwitch2 = 2;
 
-    super(xa, ya, xb, yb, params, f);
-
 //    ind.setup(@inductance, @coilCurrent, Inductor.FLAG_BACK_EULER)
 //    @flags = RelayElm.FLAG_BACK_EULER
     this.tempCurrent = this.coilCurrent;
@@ -54,6 +54,7 @@ class RelayElm extends CircuitComponent {
     this.curSourceValue = 0;
 
     this.setupPoles();
+    this.setPoints();
 
     this.noDiagonal = true;
   }
@@ -63,7 +64,7 @@ class RelayElm extends CircuitComponent {
     this.nCoil2 = this.nCoil1 + 1;
     this.nCoil3 = this.nCoil1 + 2;
 
-    if ((this.switchCurrent === null) || (this.switchCurrent.length !== this.poleCount)) {
+    if ((this.switchCurrent === null) || (this.switchCurrent == undefined) || (this.switchCurrent.length !== this.poleCount)) {
       this.switchCurrent = new Array(this.poleCount);
       return this.switchCurCount = new Array(this.poleCount);
     }
@@ -77,6 +78,7 @@ class RelayElm extends CircuitComponent {
     this.openhs = -this.dsign() * 16;
 
     this.calcLeads(32);
+
     this.swposts = ((() => {
       let result = [];
       for (j = 0, end = this.poleCount, asc = 0 <= end; asc ? j < end : j > end; asc ? j++ : j--) {
@@ -84,13 +86,14 @@ class RelayElm extends CircuitComponent {
         result.push((() => {
           let result1 = [];
           for (i = 0; i < 3; i++) {
-            result1.push(new Point());
+            result1.push(new Point(0, 0));
           }
           return result1;
         })());
       }
       return result;
     })());
+
     this.swpoles = ((() => {
       let result2 = [];
       for (j = 0, end1 = this.poleCount, asc1 = 0 <= end1; asc1 ? j < end1 : j > end1; asc1 ? j++ : j--) {
@@ -98,7 +101,7 @@ class RelayElm extends CircuitComponent {
         result2.push((() => {
           let result3 = [];
           for (i = 0; i < 3; i++) {
-            result3.push(new Point());
+            result3.push(new Point(0, 0));
           }
           return result3;
         })());
@@ -109,8 +112,8 @@ class RelayElm extends CircuitComponent {
     for (i = 0, end2 = this.poleCount, asc2 = 0 <= end2; asc2 ? i < end2 : i > end2; asc2 ? i++ : i--) {
       var asc2, end2;
       for (j = 0; j < 3; j++) {
-        this.swposts[i][j] = new Point();
-        this.swpoles[i][j] = new Point();
+        this.swposts[i][j] = new Point(0, 0);
+        this.swpoles[i][j] = new Point(0, 0);
       }
 
       this.swpoles[i][0] = Util.interpolate(this.lead1, this.lead2, 0, -this.openhs * 3 * i);
@@ -132,7 +135,8 @@ class RelayElm extends CircuitComponent {
     this.coilLeads[0] = Util.interpolate(this.point1, this.point2, 0.5, this.openhs * 2);
     this.coilLeads[1] = Util.interpolate(this.point1, this.point2, 0.5, this.openhs * 3);
 
-    return this.lines = new Array(this.poleCount * 2);
+    if (this.poleCount && this.poleCount > 0)
+      this.lines = new Array(this.poleCount * 2);
   }
 
   getPost(n) {

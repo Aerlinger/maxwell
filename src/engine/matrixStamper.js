@@ -100,7 +100,7 @@ class MatrixStamper {
   */
   stampCCCS(n1, n2, vs, gain) {
     if (isNaN(gain) || Util.isInfinite(gain)) {
-      this.Circuit.halt("Invalid gain on current source");
+      this.Circuit.halt(`Invalid gain on current source: (was ${gain})`);
     }
 
 //    console.log("stampCurrentSource: " + n1 + " " + n2 + " " + vs + " " + gain);

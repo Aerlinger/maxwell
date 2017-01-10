@@ -43,8 +43,8 @@ class DiacElm extends CircuitComponent {
   setPoints() {
     super.setPoints(...arguments);
     this.calcLeads(32);
-    this.ps3 = new Point();
-    return this.ps4 = new Point();
+    this.ps3 = new Point(0, 0);
+    return this.ps4 = new Point(0, 0);
   }
 
   calculateCurrent() {

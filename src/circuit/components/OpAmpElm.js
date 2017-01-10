@@ -48,47 +48,33 @@ class OpAmpElm extends CircuitComponent {
   }
 
   constructor(xa, ya, xb, yb, params, f) {
-    if (xa == null) { xa = 104; }
-    if (ya == null) { ya = 104; }
-    if (xb == null) { xb = 208; }
-    if (yb == null) { yb = 104; }
-
     super(xa, ya, xb, yb, params, f);
 
     this.opsize = 0;
-//      @opheight = 0
     this.opwidth = 0;
     this.opaddtext = 0;
-    this.maxOut = 15;
-    this.minOut = -15;
-//      @nOut = 0
+    this.maxOut = this.params.maxOut;
+    this.minOut = this.params.minOut;
+
+    // this.nOut = 0
+    // this.lastvd = 0
     this.gain = 1e6;
     this.reset = false;
     this.in1p = [];
     this.in2p = [];
     this.textp = [];
 
-    //Font plusFont;
-    this.maxOut = 15;
-    this.minOut = -15;
-
     // GBW has no effect in this version of the simulator, but we retain it to keep the file format the same
-    this.gbw = 1e6;
-
-//      @lastvd = 0
-
-//    if st and st.length > 0
-//      st = st.split(" ")  if typeof st is "string"
-//      try
-//        @maxOut ||= parseFloat(st[0])
-//        @minOut ||= parseFloat(st[1])
+    this.gbw = this.params.gbw;
 
     this.noDiagonal = true;
 
     this.setSize((f & OpAmpElm.FLAG_SMALL) !== 0 ? 1 : 2);
     this.setGain();
-  }
 
+    this.setPoints();
+    this.allocNodes();
+  }
 
   setGain() {
     // gain of 100000 breaks e-amp-dfdx
@@ -159,7 +145,6 @@ class OpAmpElm extends CircuitComponent {
 
     this.calcLeads(ww * 2);
     let hs = Math.floor(this.opheight * this.dsign());
-    if ((this.flags & OpAmpElm.FLAG_SWAP) !== 0) { hs = -hs; }
 
     this.in1p = Util.newPointArray(2);
     this.in2p = Util.newPointArray(2);
@@ -180,7 +165,7 @@ class OpAmpElm extends CircuitComponent {
   }
 
   getPost(n) {
-    ((n === 0) ? this.in1p[0] : ((n === 1) ? this.in2p[0] : this.point2));
+    return ((n === 0) ? this.in1p[0] : ((n === 1) ? this.in2p[0] : this.point2));
   }
 
   getVoltageSourceCount() {
@@ -209,6 +194,8 @@ class OpAmpElm extends CircuitComponent {
 
   doStep(stamper) {
     let vd = this.volts[1] - this.volts[0];
+
+    // TODO: Simplify conditional
     if (Math.abs(this.lastvd - vd) > .1) {
       this.Circuit.Solver.converged = false;
     } else if ((this.volts[2] > (this.maxOut + .1)) || (this.volts[2] < (this.minOut - .1))) {
@@ -245,10 +232,6 @@ class OpAmpElm extends CircuitComponent {
   // there is no current path through the op-amp inputs, but there is an indirect path through the output to ground.
   getConnection(n1, n2) {
     return false;
-  }
-
-  toString() {
-    return "OpAmpElm";
   }
 
   hasGroundConnection(n1) {

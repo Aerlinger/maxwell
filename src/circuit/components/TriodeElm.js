@@ -16,9 +16,9 @@ class TriodeElm extends CircuitComponent {
   }
 
   constructor(xa, xb, ya, yb, params, f) {
-    this.gridCurrentR = 6000;
-
     super(xa, xb, ya, yb, params, f);
+
+    this.gridCurrentR = 6000;
 
     this.setup();
   }

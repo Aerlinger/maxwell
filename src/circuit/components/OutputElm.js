@@ -27,7 +27,7 @@ class OutputElm extends CircuitComponent {
 
   setPoints() {
     super.setPoints(...arguments);
-    this.lead1 = new Point();
+    this.lead1 = new Point(0, 0);
 
     return this.setBboxPt(this.lead1, this.point1, 8);
   }

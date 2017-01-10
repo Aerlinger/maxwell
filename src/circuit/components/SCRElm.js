@@ -30,13 +30,13 @@ class ScrElm extends CircuitComponent {
   }
 
   constructor(xa, ya, xb, yb, params, f) {
+    super(xa, ya, xb, yb, params, f);
+
     this.anode = 0;
     this.cnode = 1;
     this.gnode = 2;
     this.inode = 3;
     this.hs = 8;
-
-    super(xa, ya, xb, yb, params, f);
 
     this.setDefaults();
 

@@ -94,8 +94,8 @@ class PotElm extends CircuitComponent {
 
     [this.arrow1, this.arrow2] = Util.interpolateSymmetrical(this.corner2, this.arrowPoint, (clen - 8) / clen, 8);
 
-    this.ps3 = new Point();
-    return this.ps4 = new Point();
+    this.ps3 = new Point(0, 0);
+    return this.ps4 = new Point(0, 0);
   }
 
   getPost(n) {

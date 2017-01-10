@@ -104,8 +104,11 @@ class Util {
   }
 
   static zeroArray(numElements) {
-    if (numElements < 1) { return []; }
-    return (Array.from(Array(numElements)).map((i) => 0));
+    if (!numElements || numElements < 1) {
+      return [];
+    } else {
+      return (Array.from(Array(numElements)).map((i) => 0));
+    }
   }
 
   static zeroArray2(numRows, numCols) {

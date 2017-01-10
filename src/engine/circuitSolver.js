@@ -252,8 +252,13 @@ class CircuitSolver {
           for (nodeIdx = 0, end1 = this.Circuit.numNodes(), asc1 = 0 <= end1; asc1 ? nodeIdx < end1 : nodeIdx > end1; asc1 ? nodeIdx++ : nodeIdx--) {
             var asc1, end1;
             circuitNode = this.Circuit.getNode(nodeIdx);
-            if (Util.overlappingPoints(postPt, circuitNode)) {
-              break;
+            try  {
+              if (Util.overlappingPoints(postPt, circuitNode)) {
+                break;
+              }
+            } catch (e) {
+              console.log(`ERR INVALID COMPONENT: ${circuitElm} (${postIdx}) ${e.message}`)
+              console.log(e.stack)
             }
           }
 
@@ -262,8 +267,15 @@ class CircuitSolver {
           nodeLink.elm = circuitElm;
 
           if (nodeIdx === this.Circuit.numNodes()) {
-            circuitNode = new CircuitNode(this, postPt.x, postPt.y);
-            circuitNode.links.push(nodeLink);
+
+            try {
+              circuitNode = new CircuitNode(this, postPt.x, postPt.y);
+              circuitNode.links.push(nodeLink);
+
+            } catch (e) {
+              console.log(`ERR INVALID COMPONENT: ${circuitElm} (${postIdx}) ${e.message}`)
+              console.log(e.stack)
+            }
 
             circuitElm.setNode(postIdx, this.Circuit.numNodes());
             item = this.Circuit.addCircuitNode(circuitNode);

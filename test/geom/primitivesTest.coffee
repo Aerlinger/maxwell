@@ -21,7 +21,7 @@ describe "Polygon", ->
 describe "Point", ->
 
   it "should default to (0, 0) when no parameters are entered", ->
-    point = new Point()
+    point = new Point(0, 0)
     expect(point.x).to.equal undefined
     expect(point.y).to.equal undefined
 
