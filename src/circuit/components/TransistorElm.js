@@ -153,7 +153,11 @@ class TransistorElm extends CircuitComponent {
 
     // draw arrow
     //g.setColor(lightGrayColor);
-    renderContext.drawThickPolygonP(this.arrowPoly);
+
+    // TODO: add arrow poly
+    if(this.arrowPoly && this.arrowPoly.length > 0) {
+      renderContext.drawThickPolygonP(this.arrowPoly);
+    }
 
     // draw base
     color = Util.getVoltageColor(this.volts[0]);

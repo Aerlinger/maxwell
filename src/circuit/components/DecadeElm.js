@@ -39,13 +39,13 @@ class DecadeElm extends ChipElm {
     this.pins[1] = new ChipElm.Pin(this.sizeX - 1, ChipElm.SIDE_S, "R");
     this.pins[1].bubble = true;
 
-    for (let i = 0, end = this.bits, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    for (let i = 0; i < this.bits; i++) {
       let ii = i + 2;
       this.pins[ii] = new ChipElm.Pin(i, ChipElm.SIDE_N, `Q${i}`);
       this.pins[ii].output = this.pins[ii].state = true;
     }
 
-    return this.allocNodes();
+    this.allocNodes();
   }
 
   execute() {

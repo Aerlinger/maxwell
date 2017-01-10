@@ -140,26 +140,19 @@ class Switch2Elm extends SwitchElm {
 
   toggle() {
     super.toggle();
+    // let self = this;
 
     if (this.link !== 0) {
-      let i = 0;
-      return this.getParentCircuit().eachComponent(function(component) {
+      this.getParentCircuit().eachComponent(function(component) {
         if (component instanceof Switch2Elm) {
           let s2 = component;
-          if (s2.link === this.link) {
-            return s2.position = this.position;
+          if (s2.link === self.link) {
+            s2.position = self.position;
           }
         }
       });
     }
   }
-
-//        while i isnt getCircuit().elementList.length
-//          o = Circuit.elementList.elementAt(i)
-//          if o instanceof Switch2Elm
-//            s2 = o
-//            s2.position = @position  if s2.link is @link
-//          i++
 
   getConnection(n1, n2) {
     if (this.position === 2) {

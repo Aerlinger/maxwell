@@ -3,11 +3,13 @@ let ChipElm = require("./ChipElm.js");
 let Util = require('../../util/util.js');
 
 class CounterElm extends ChipElm {
-  static initClass() {
-    this.FLAG_ENABLE = 2;
+  static get FLAG_ENABLE() {
+    return 2;
   }
 
   constructor(xa, xb, ya, yb, params, f) {
+    // console.log("FLAG", f)
+
     super(xa, xb, ya, yb, params, f);
   }
 
@@ -24,15 +26,19 @@ class CounterElm extends ChipElm {
   }
 
   getPostCount() {
+    // console.log("HAS ENABLE", this.hasEnable());
+
     if (this.hasEnable()) {
+      // console.log("COUNTER BITS", this.bits + 3);
       return this.bits + 3;
-    } else {
-      return this.bits + 2;
     }
+
+    // console.log("COUNTER BITS", this.bits + 2);
+    return this.bits + 2;
   }
 
   hasEnable() {
-    return (this.flags & CounterElm.FLAG_ENABLE) !== 0;
+    return (this.flags & CounterElm.FLAG_ENABLE) != 0;
   }
 
   getVoltageSourceCount() {
@@ -50,7 +56,9 @@ class CounterElm extends ChipElm {
     this.pins[1] = new ChipElm.Pin(this.sizeY - 1, ChipElm.SIDE_W, "R");
     this.pins[1].bubble = true;
 
-    for (let i = 0, end = this.bits, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    // console.log("COUNTER BITS", this.bits)
+
+    for (let i = 0; i < this.bits; i++) {
       let ii = i + 2;
       this.pins[ii] = new ChipElm.Pin(i, ChipElm.SIDE_E, `Q${this.bits - i - 1}`);
       this.pins[ii].output = this.pins[ii].state = true;
@@ -60,7 +68,7 @@ class CounterElm extends ChipElm {
       this.pins[this.bits + 2] = new ChipElm.Pin(this.sizeY - 2, ChipElm.SIDE_W, "En");
     }
 
-    return this.allocNodes();
+    this.allocNodes();
   }
 
   execute() {

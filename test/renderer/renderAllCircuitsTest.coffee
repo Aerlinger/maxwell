@@ -3,8 +3,6 @@ glob = require('glob')
 Circuit = require("../../src/circuit/circuit")
 Renderer = require("../../src/render/renderer")
 
-CircuitLoader = require("../../src/io/circuitLoader")
-
 fs = require("fs")
 Canvas = require('canvas')
 path = require("path")

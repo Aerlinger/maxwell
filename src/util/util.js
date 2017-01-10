@@ -308,8 +308,7 @@ class Util {
   }
 
   static halt(message) {
-    let e = new Error(message);
-    console.log(e.stack);
+    console.trace(message);
 
     if (!environment.isBrowser) {
       return process.exit(1);

@@ -708,7 +708,7 @@ class CircuitSolver {
   }
 
 
-  /*
+  /**
     luFactor: finds a solution to a factored matrix through LU (Lower-Upper) factorization
 
     Called once each frame for resistive circuits, otherwise called many times each frame

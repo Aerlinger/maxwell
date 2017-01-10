@@ -116,7 +116,8 @@ class SwitchElm extends CircuitComponent {
     console.log(`Toggling...${this}`);
     this.position++;
     if (this.position >= this.posCount) { this.position = 0; }
-    return this.Circuit.Solver.analyzeFlag = true;
+    
+    this.Circuit.Solver.analyzeFlag = true;
   }
 
   getInfo(arr) {

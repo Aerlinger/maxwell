@@ -1,50 +1,50 @@
 describe "OpAmp Component", ->
   describe "default initialization", ->
     before ->
-      @opampElm = new OpAmpElm()
+      @chipElm = new OpAmpElm()
 
     it "doesn't set any positions", ->
-      expect(@opampElm.x2()).to.equal(undefined)
-      expect(@opampElm.y2()).to.equal(undefined)
-      expect(@opampElm.x1()).to.equal(undefined)
-      expect(@opampElm.y1()).to.equal(undefined)
+      expect(@chipElm.x2()).to.equal(undefined)
+      expect(@chipElm.y2()).to.equal(undefined)
+      expect(@chipElm.x1()).to.equal(undefined)
+      expect(@chipElm.y1()).to.equal(undefined)
 
     it "sets default parameters", ->
-      expect(@opampElm.maxOut).to.equal(15)
-      expect(@opampElm.minOut).to.equal(-15)
-      expect(@opampElm.gbw).to.equal(1e6)
+      expect(@chipElm.maxOut).to.equal(15)
+      expect(@chipElm.minOut).to.equal(-15)
+      expect(@chipElm.gbw).to.equal(1e6)
 
     it "has correct initial rendering conditions", ->
-      expect(@opampElm.curcount).to.equal(undefined)
-      expect(@opampElm.point1).to.eql({ x: undefined, y: undefined })
-      expect(@opampElm.point2).to.eql({ x: undefined, y: undefined })
-      expect(@opampElm.in1p).to.eql([])
-      expect(@opampElm.in2p).to.eql([])
-      expect(@opampElm.textp).to.eql([])
+      expect(@chipElm.curcount).to.equal(undefined)
+      expect(@chipElm.point1).to.eql({ x: undefined, y: undefined })
+      expect(@chipElm.point2).to.eql({ x: undefined, y: undefined })
+      expect(@chipElm.in1p).to.eql([])
+      expect(@chipElm.in2p).to.eql([])
+      expect(@chipElm.textp).to.eql([])
 
     it "has correct node relationships", ->
-      expect(@opampElm.nodes).to.eql([0, 0, 0])
-      expect(@opampElm.volts).to.eql([0, 0, 0])
+      expect(@chipElm.nodes).to.eql([0, 0, 0])
+      expect(@chipElm.volts).to.eql([0, 0, 0])
 
     it "has default method return values", ->
-      expect(@opampElm.getPostCount()).to.equal 3
-      expect(@opampElm.isWire()).to.equal false
-      expect(@opampElm.hasGroundConnection()).to.equal false
-      expect(@opampElm.needsShortcut()).to.equal false
-      expect(@opampElm.canViewInScope()).to.equal false
-      expect(@opampElm.getInternalNodeCount()).to.equal 0
-      expect(@opampElm.orphaned()).to.equal true
+      expect(@chipElm.getPostCount()).to.equal 3
+      expect(@chipElm.isWire()).to.equal false
+      expect(@chipElm.hasGroundConnection()).to.equal false
+      expect(@chipElm.needsShortcut()).to.equal false
+      expect(@chipElm.canViewInScope()).to.equal false
+      expect(@chipElm.getInternalNodeCount()).to.equal 0
+      expect(@chipElm.orphaned()).to.equal true
 
     it "has correct initial state", ->
-      expect(@opampElm.noDiagonal).to.eql(true)
-      expect(@opampElm.component_id).to.be
-      expect(@opampElm.voltSource).to.equal(0)
-      expect(@opampElm.current).to.equal(0)
-      expect(@opampElm.getCurrent()).to.equal(0)
-      expect(@opampElm.getVoltageDiff()).to.equal(0)
+      expect(@chipElm.noDiagonal).to.eql(true)
+      expect(@chipElm.component_id).to.be
+      expect(@chipElm.voltSource).to.equal(0)
+      expect(@chipElm.current).to.equal(0)
+      expect(@chipElm.getCurrent()).to.equal(0)
+      expect(@chipElm.getVoltageDiff()).to.equal(0)
 
     it "has params", ->
-      expect(@opampElm.params).to.eql({
+      expect(@chipElm.params).to.eql({
         "gbw": 1000000
         "maxOut": 15
         "minOut": -15
@@ -52,14 +52,14 @@ describe "OpAmp Component", ->
 
   describe "With params object", ->
     before ->
-      @opampElm = new OpAmpElm(50, 75, 50, 150, {
+      @chipElm = new OpAmpElm(50, 75, 50, 150, {
         "gbw": 1000000
         "maxOut": 15
         "minOut": -15
       })
 
     it "has params", ->
-      expect(@opampElm.params).to.eql({
+      expect(@chipElm.params).to.eql({
         "gbw": 1000000
         "maxOut": 15
         "minOut": -15
@@ -67,73 +67,73 @@ describe "OpAmp Component", ->
 
   describe "With params array", ->
     before ->
-      @opampElm = new OpAmpElm(50, 75, 50, 150, ["15.0", "-15.0", 1e7])
+      @chipElm = new OpAmpElm(50, 75, 50, 150, ["15.0", "-15.0", 1e7])
 
       @Circuit = new Circuit("Basic BJT")
 
-      @opampElm.setPoints()
-      @Circuit.solder(@opampElm)
+      @chipElm.setPoints()
+      @Circuit.solder(@chipElm)
 
     it "has params", ->
-      expect(@opampElm.minOut).to.eql(-15)
-      expect(@opampElm.maxOut).to.eql(15)
-      expect(@opampElm.gbw).to.eql(1e7)
-      expect(@opampElm.params).to.eql({
+      expect(@chipElm.minOut).to.eql(-15)
+      expect(@chipElm.maxOut).to.eql(15)
+      expect(@chipElm.gbw).to.eql(1e7)
+      expect(@chipElm.params).to.eql({
         "gbw": 1e7
         "minOut": -15.0
         "maxOut": 15.0
       })
 
     it "has correct position", ->
-      expect(@opampElm.x1()).to.equal(50)
-      expect(@opampElm.y1()).to.equal(75)
-      expect(@opampElm.x2()).to.equal(50)
-      expect(@opampElm.y2()).to.equal(150)
+      expect(@chipElm.x1()).to.equal(50)
+      expect(@chipElm.y1()).to.equal(75)
+      expect(@chipElm.x2()).to.equal(50)
+      expect(@chipElm.y2()).to.equal(150)
 
-      expect(@opampElm.dx()).to.equal(0)
-      expect(@opampElm.dy()).to.equal(75)
-      expect(@opampElm.dn()).to.equal(75)
-      expect(@opampElm.dsign()).to.equal(1)
-      expect(@opampElm.dpx1()).to.equal(1)
-      expect(@opampElm.dpy1()).to.equal(0)
-      expect(@opampElm.isVertical()).to.equal(true)
-      expect(@opampElm.getCenter()).to.eql({x: 50, y: 112.5})
+      expect(@chipElm.dx()).to.equal(0)
+      expect(@chipElm.dy()).to.equal(75)
+      expect(@chipElm.dn()).to.equal(75)
+      expect(@chipElm.dsign()).to.equal(1)
+      expect(@chipElm.dpx1()).to.equal(1)
+      expect(@chipElm.dpy1()).to.equal(0)
+      expect(@chipElm.isVertical()).to.equal(true)
+      expect(@chipElm.getCenter()).to.eql({x: 50, y: 112.5})
 
-      expect(@opampElm.in1p).to.eql([{ x: 66, y: 75 }, { x: 66, y: 87 }])
-      expect(@opampElm.in2p).to.eql([ { x: 34, y: 75 }, { x: 34, y: 87 } ])
-      expect(@opampElm.textp).to.eql([{ x: 66, y: 97 }, { x: 34, y: 97 }])
+      expect(@chipElm.in1p).to.eql([{ x: 66, y: 75 }, { x: 66, y: 87 }])
+      expect(@chipElm.in2p).to.eql([ { x: 34, y: 75 }, { x: 34, y: 87 } ])
+      expect(@chipElm.textp).to.eql([{ x: 66, y: 97 }, { x: 34, y: 97 }])
 
-      expect(@opampElm.getBoundingBox()).to.eql({x: 49, y: 75, width: 5, height: 75})
+      expect(@chipElm.getBoundingBox()).to.eql({x: 49, y: 75, width: 5, height: 75})
 
     it "snaps to grid when moved", ->
-      @opampElm.moveTo(100, 162.5)
-      expect(@opampElm.getCenter()).to.eql({x: 98, y: 160.5})
+      @chipElm.moveTo(100, 162.5)
+      expect(@chipElm.getCenter()).to.eql({x: 98, y: 160.5})
 
-      expect(@opampElm.x1()).to.equal(98)
-      expect(@opampElm.y1()).to.equal(123)
-      expect(@opampElm.x2()).to.equal(98)
-      expect(@opampElm.y2()).to.equal(198)
+      expect(@chipElm.x1()).to.equal(98)
+      expect(@chipElm.y1()).to.equal(123)
+      expect(@chipElm.x2()).to.equal(98)
+      expect(@chipElm.y2()).to.equal(198)
 
     it "can be stringified", ->
-      expect(@opampElm.toString()).to.eql("""OpAmpElm@[98 123 98 198]: {"maxOut":15,"minOut":-15,"gbw":10000000}""")
-      expect(@opampElm.getName()).to.eql("""OpAmpElm@[98 123 98 198] : {"maxOut":15,"minOut":-15,"gbw":10000000}""")
+      expect(@chipElm.toString()).to.eql("""OpAmpElm@[98 123 98 198]: {"maxOut":15,"minOut":-15,"gbw":10000000}""")
+      expect(@chipElm.getName()).to.eql("""OpAmpElm@[98 123 98 198] : {"maxOut":15,"minOut":-15,"gbw":10000000}""")
 
     it "can stamp", ->
-      @opampElm.stamp(@Circuit.Solver.Stamper)
+      @chipElm.stamp(@Circuit.Solver.Stamper)
 
     describe "Loading list of parameters", ->
       before ->
-        @opampElm = new OpAmpElm(100, 200, 100, 300, [-10, 10, 1e4])
+        @chipElm = new OpAmpElm(100, 200, 100, 300, [-10, 10, 1e4])
 
       it "has correct params", ->
-        expect(@opampElm.minOut).to.eql(10)
-        expect(@opampElm.maxOut).to.eql(-10)
-        expect(@opampElm.gbw).to.equal(1e4)
+        expect(@chipElm.minOut).to.eql(10)
+        expect(@chipElm.maxOut).to.eql(-10)
+        expect(@chipElm.gbw).to.equal(1e4)
 
     describe "Rendering", ->
       before ->
         @Circuit.clearAndReset()
-        @Circuit.solder(@opampElm)
+        @Circuit.solder(@chipElm)
 
         Canvas = require('canvas')
         @canvas = new Canvas(200, 300)

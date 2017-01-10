@@ -14,17 +14,22 @@ class CC2Elm extends ChipElm {
     super(xa, xb, ya, yb, params, f);
 
     if (params) {
-      this.gain = parseFloat(params[0]);
+      if (params.constructor == Array) {
+        this.gain = parseFloat(params[0]);
+      } else {
+        this.gain = params["gain"]
+      }
     } else {
       this.gain = 1;
     }
 
+    // console.log("GAIN", this.gain)
+
     this.params['gain'] = this.gain;
   }
-//    @params = { gain: @gain }
 
   getName() {
-    return "CC2";
+    return "CC2 Chip";
   }
 
   setupPins() {
@@ -35,7 +40,7 @@ class CC2Elm extends ChipElm {
     this.pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "X");
     this.pins[0].output = true;
     this.pins[1] = new ChipElm.Pin(2, ChipElm.SIDE_W, "Y");
-    return this.pins[2] = new ChipElm.Pin(1, ChipElm.SIDE_E, "Z");
+    this.pins[2] = new ChipElm.Pin(1, ChipElm.SIDE_E, "Z");
   }
 
   stamp(stamper) {

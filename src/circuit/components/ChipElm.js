@@ -55,8 +55,7 @@ class ChipElm extends CircuitComponent {
         this.current = 0;
       }
   
-      updateDots(currentMult, ds) {
-        if (ds == null) { ds = Settings.CURRENT_SEGMENT_LENGTH; }
+      updateDots(currentMult=1, ds = Settings.CURRENT_SEGMENT_LENGTH) {
         if (!this.curcount) { this.curcount = 0; }
   
         let currentIncrement = this.current * currentMult;
@@ -133,8 +132,12 @@ class ChipElm extends CircuitComponent {
           state: this.state
         };
       }
+
+      toString() {
+        return this.pos + " " + this.side + " " + this.text;
+      }
     };
-  
+
     this.Pin = Pin;
   }
 
@@ -142,32 +145,48 @@ class ChipElm extends CircuitComponent {
   constructor(xa, xb, ya, yb, params, f) {
     super(xa, xb, ya, yb, {}, f);
 
-    let initial_voltages;
+    let initial_voltages = [];
 
     this.flags = f;
-    //console.log("ChipElm flags #{@flags} -> #{(f & ChipElm.FLAG_SMALL) != 0}")
+
     this.setSize(((f & ChipElm.FLAG_SMALL) !== 0) ? 1 : 2);
 
     if (params) {
-      if (Object.prototype.toString.call( params ) === '[object Array]') {
-        this.bits = params.shift()
-        initial_voltages = params;
+      if (params.constructor == Array) {
+        // console.log("PARAMS", params)
+
+        if (this.needsBits()) {
+          this.bits = parseInt(params.shift());
+        }
+
+        self = this;
+        this.setupPins();
+        this._setPoints()
+
+        // console.log("POST COUNT:", this.getPostCount());
+        for (let i=0; i<this.getPostCount(); ++i) {
+          // console.log("PIN", i);
+          // console.log(this.pins[i]);
+          if (this.pins[i].state) {
+            initial_voltages.push(params.shift());
+          }
+        }
       } else {
         this.bits = params['bits'];
+        this.volts = params['volts'];
         initial_voltages = params['volts'];
+
+        // console.log("BITS OBJ:", this.bits)
       }
     }
 
+    this.params['volts'] = this.volts;
     this.params['bits'] = this.bits;
-
-    self = this;
-    this.setupPins();
-    this.placePins();
 
     this.noDiagonal = true;
     let numPosts = this.getPostCount();
 
-    for (let i = 0, end = numPosts, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    for (let i = 0; i < numPosts; i++) {
       if (!this.pins[i]) {
         console.error(`No pin found at ${i}`);
         return;
@@ -213,11 +232,11 @@ class ChipElm extends CircuitComponent {
 
 
   setupPins() {
-    return console.warn("setupPins() to be called from subclasses of ChipElm");
+    return console.trace("setupPins() to be called from subclasses of ChipElm");
   }
 
   execute() {
-    return console.warn("execute() to be called from subclasses of ChipElm");
+    // return console.trace("execute() to be called from subclasses of ChipElm");
   }
 
   getVoltageSourceCount() {
@@ -225,7 +244,7 @@ class ChipElm extends CircuitComponent {
   }
 
   getChipName() {
-    return console.warn("getChipName() to be called from subclasses of ChipElm");
+    return console.trace("getChipName() to be called from subclasses of ChipElm");
   }
 
   getConnection(n1, n2) {
@@ -237,7 +256,7 @@ class ChipElm extends CircuitComponent {
   }
 
   reset() {
-    for (let i = 0, end = this.getPostCount(), asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    for (let i = 0; i < this.getPostCount(); i++) {
       this.pins[i].value = false;
       this.pins[i].curcount = 0;
       this.volts[i] = 0;
@@ -346,10 +365,9 @@ class ChipElm extends CircuitComponent {
     let i;
     renderContext.drawThickPolygon(this.rectPointsX, this.rectPointsY, Settings.STROKE_COLOR);
 
-    for (i = 0, end = this.getPostCount(), asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-      var asc, end;
-      if (this.pins[i]) {
+    for (i = 0; i < this.getPostCount(); i++) {
 
+      if (this.pins[i]) {
         let p = this.pins[i];
 
         let voltageColor = Util.getVoltageColor(this.volts[i]);
@@ -392,11 +410,11 @@ class ChipElm extends CircuitComponent {
     })();
   }
 
-  placePins() {
+  _setPoints() {
 //    if @x2 - @x1 > @sizeX*@cspc2 # dragging
 //      @setSize(2)
 
-    super.setPoints(...arguments);
+    // super.setPoints(...arguments);
 
     let hs = this.cspc2;
     let x0 = this.point1.x + this.cspc2;
@@ -412,7 +430,7 @@ class ChipElm extends CircuitComponent {
 
     this.setBbox(xr, yr, this.rectPointsX[2], this.rectPointsY[2]);
 
-    for (let i = 0, end = this.getPostCount(), asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    for (let i = 0; i < this.getPostCount(); i++) {
       let p = this.pins[i];
 
       if (!p) {
