@@ -1,5 +1,5 @@
-CircuitLoader = require('../../src/io/CircuitLoader.coffee')
-#Circuit = require('../../src/circuit/circuit.coffee')
+CircuitLoader = require('../../src/io/CircuitLoader.js')
+#Circuit = require('../../src/circuit/circuit.js')
 
 describe "Simple single diode circuit", ->
   beforeEach (done) ->

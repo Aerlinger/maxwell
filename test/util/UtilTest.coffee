@@ -1,6 +1,6 @@
-Circuit = require('../../src/circuit/circuit.coffee')
-GroundElm = require('../../src/circuit/components/GroundElm.coffee')
-Util = require('../../src/util/util.coffee')
+Circuit = require('../../src/circuit/circuit.js')
+GroundElm = require('../../src/circuit/components/GroundElm.js')
+Util = require('../../src/util/util.js')
 diff = require('deep-diff').diff
 
 describe "Utility test", ->

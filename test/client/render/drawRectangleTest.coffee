@@ -1,6 +1,6 @@
 fs = require('fs')
-#Canvas = require('../../src/render/renderer.coffee')
-Maxwell = require('../../../src/Maxwell.coffee')
+#Canvas = require('../../src/render/renderer.js')
+Maxwell = require('../../../src/Maxwell.js')
 
 describe "Canvas", ->
   before ->

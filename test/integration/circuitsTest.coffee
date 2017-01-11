@@ -1,10 +1,10 @@
 glob = require("glob")
 path = require("path")
 fs = require("fs")
-Maxwell = require("../../src/Maxwell.coffee")
+Maxwell = require("../../src/Maxwell.js")
 jsondiffpatch = require('jsondiffpatch').create({});
 CircuitComparator = require("../support/CircuitComparator.coffee")
-Renderer = require('../../src/render/renderer.coffee')
+Renderer = require('../../src/render/renderer.js')
 _ = require("lodash")
 
 chai = require('chai')
@@ -14,7 +14,7 @@ chai = require('chai')
 assert = chai.assert
 expect = chai.expect
 
-Util = require('../../src/util/util.coffee')
+Util = require('../../src/util/util.js')
 
 filenames = glob.sync "./circuits/*.txt", {}
 

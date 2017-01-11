@@ -1,11 +1,11 @@
-Polygon = require("../../src/geom/polygon.coffee")
-Rectangle = require("../../src/geom/rectangle.coffee")
-Point = require("../../src/geom/point.coffee")
-CircuitComponent = require("../../src/circuit/circuitComponent.coffee")
+Polygon = require("../../src/geom/polygon.js")
+Rectangle = require("../../src/geom/rectangle.js")
+Point = require("../../src/geom/point.js")
+CircuitComponent = require("../../src/circuit/circuitComponent.js")
 
-Circuit = require('../../src/circuit/circuit.coffee')
+Circuit = require('../../src/circuit/circuit.js')
 
-Renderer = require("../../src/render/renderer.coffee")
+Renderer = require("../../src/render/renderer.js")
 fs = require('fs')
 Canvas = require('canvas')
 
@@ -29,7 +29,7 @@ describe "Base Circuit Component", ->
     it "has component_id", ->
       @circuitElement.component_id > 0
 
-    it "should equal itself", ->
+    it "equals itself", ->
       @circuitElement.equalTo(@circuitElement).should.equal true
 
     it "is not equal another component", ->
@@ -47,11 +47,11 @@ describe "Base Circuit Component", ->
       @circuitElement.needsShortcut().should.equal false
       @circuitElement.canViewInScope().should.equal true
 
-    it "should allocate nodes", ->
+    it "allocates nodes", ->
       @circuitElement.nodes.toString().should.equal [0, 0].toString()
       @circuitElement.volts.toString().should.equal [0, 0].toString()
 
-    it "should set points", ->
+    it "sets points", ->
       x1 = @circuitElement.x1()
       y1 = @circuitElement.y1()
       x2 = @circuitElement.x2()
@@ -69,7 +69,7 @@ describe "Base Circuit Component", ->
       @circuitElement.point1.equals( new Point(x1, y1) ).should.equal true
       @circuitElement.point2.equals( new Point(x2, y2) ).should.equal true
 
-    it "should set bounding box", ->
+    it "sets bounding box", ->
       bBox = @circuitElement.boundingBox
       bBox.x.should.equal 10
       bBox.y.should.equal 10

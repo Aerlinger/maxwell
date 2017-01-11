@@ -1,4 +1,4 @@
-CircuitNode = require('../../src/engine/circuitNode.coffee')
+CircuitNode = require('../../src/engine/circuitNode.js')
 
 describe "Circuit Node", ->
   beforeEach ->
@@ -11,6 +11,6 @@ describe "Circuit Node", ->
     @CircuitNode.intern.should == false
     @CircuitNode.links.should == [@CircuitNode1]
 
-  it "should output to string", ->
+  it "outputs to string", ->
     console.log @CircuitNode.toString()
 

@@ -3,15 +3,13 @@ glob = require('glob')
 Circuit = require("../../src/circuit/circuit")
 Renderer = require("../../src/render/renderer")
 
-CircuitLoader = require("../../src/io/circuitLoader")
-
 fs = require("fs")
 Canvas = require('canvas')
 path = require("path")
 
 describe "Renderer", ->
   it "renders all circuits", () ->
-    this.timeout(100000)
+    this.timeout(1000000)
 
     circuit_names = glob.sync(__dirname + "/../../circuits/*.json")
 
@@ -44,3 +42,4 @@ describe "Renderer", ->
 
         catch e
           console.log("ERR:", e.message)
+          console.log(e.stack)

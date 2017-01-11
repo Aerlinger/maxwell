@@ -1,4 +1,4 @@
-VoltageElm = require('../../src/circuit/components/VoltageElm.coffee')
+VoltageElm = require('../../src/circuit/components/VoltageElm.js')
 
 describe "CircuitLoader", ->
   it "converts params from deprecated array syntax to hash-like syntax", ->

@@ -1,12 +1,12 @@
-ComponentRegistry = require('../../src/circuit/ComponentRegistry.coffee')
-CircuitComponent = require('../../src/circuit/circuitComponent.coffee')
-Circuit = require('../../src/circuit/circuit.coffee')
-CircuitNode = require('../../src/engine/circuitNode.coffee')
-CircuitLoader = require('../../src/io/circuitLoader.coffee')
-Util = require('../../src/util/util.coffee')
-SimulationParams = require('../../src/core/SimulationParams.coffee')
-Hint = require('../../src/engine/Hint.coffee')
-Oscilloscope = require('../../src/scope/Oscilloscope.coffee')
+ComponentRegistry = require('../../src/circuit/ComponentRegistry.js')
+CircuitComponent = require('../../src/circuit/circuitComponent.js')
+Circuit = require('../../src/circuit/circuit.js')
+CircuitNode = require('../../src/engine/circuitNode.js')
+CircuitLoader = require('../../src/io/circuitLoader.js')
+Util = require('../../src/util/util.js')
+SimulationParams = require('../../src/core/SimulationParams.js')
+Hint = require('../../src/engine/Hint.js')
+Oscilloscope = require('../../src/scope/Oscilloscope.js')
 
 fs = require 'fs'
 _ = require('lodash')
@@ -17,12 +17,11 @@ describe "Simple Voltage Divider", ->
     voltdividesimple = JSON.parse(fs.readFileSync("./circuits/voltdividesimple.json"))
     @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
 
-
     #    CircuitLoader.createCircuitFromJsonFile "../../circuits/voltdividesimple.json", (circuit) =>
     #      @circuit = circuit
     done()
 
-  describe "should Analyze voltdividesimple.json and have", ->
+  describe "Analyzing voltdividesimple.json", ->
     before (done) ->
       @circuit.Solver.reconstruct()
       @rowInfo = @circuit.Solver.circuitRowInfo
@@ -31,31 +30,31 @@ describe "Simple Voltage Divider", ->
     it "7 elements", ->
       @circuit.numElements().should.equal 7
 
-    it "valid origMatrix", ->
+    it "has valid origMatrix", ->
       @circuit.Solver.origMatrix.should.eql Util.zeroArray2(10, 10)
 
-    it "valid origRightSide", ->
+    it "has valid origRightSide", ->
       @circuit.Solver.origRightSide.should.eql Util.zeroArray(10)
 
-    it "valid circuitPermute", ->
+    it "has valid circuitPermute", ->
       @circuit.Solver.circuitPermute.should.eql Util.zeroArray(10)
 
-    it "valid circuitMatrix", ->
+    it "has valid circuitMatrix", ->
       @circuit.Solver.circuitMatrix.should.eql []
 
-    it "valid right side", ->
+    it "has valid right side", ->
       @circuit.Solver.circuitRightSide.should.eql []
 
-    it "Circuit Solver should need map", ->
+    it "Circuit Solver needs map", ->
       @circuit.Solver.circuitNeedsMap.should.equal true
 
     it "has correct voltage sources", ->
-      voltageSources = "VoltageElm,WireElm,WireElm,WireElm,WireElm"
+      voltageSources = "VoltageElm,WireElm@[112 48 240 48],WireElm@[112 368 240 368],WireElm@[240 48 432 48],WireElm@[240 368 432 368]"
       @circuit.getVoltageSources().toString().should.equal voltageSources
 
     describe "current rowInfos", ->
       it "index: 0", ->
-        @rowInfo[0].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true"
+        expect(@rowInfo[0].toString()).to.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true"
 
       it "index: 1", ->
         @rowInfo[1].toString().should.equal "RowInfo: type: 1, nodeEq: 0, mapCol: -1, mapRow: -1, value: 10, rsChanges: false, lsChanges: false, dropRow: true"
@@ -78,8 +77,8 @@ describe "Simple Voltage Divider", ->
       @circuit.Solver.circuitRowInfo.length.should.equal 10
 
     it "has correct nodes", ->
-      @circuit.getNode(0).toString().should.equal "CircuitNode: 112 368 false [0 VoltageElm,0 WireElm]"
-      @circuit.getNode(1).toString().should.equal "CircuitNode: 112 48 false [1 VoltageElm,0 WireElm]"
+      expect(@circuit.getNode(0).toString()).to.equal "CircuitNode: 112 368 false [0 VoltageElm,0 WireElm@[112 368 240 368]]"
+      @circuit.getNode(1).toString().should.equal """CircuitNode: 240 48 false [1 WireElm@[112 48 240 48],0 ResistorElm@[240 48 240 368] : {"resistance":10000},0 WireElm@[240 48 432 48]]"""
       @circuit.getNode(2).toString().should.equal "CircuitNode: 240 48 false [1 WireElm,0 ResistorElm,0 WireElm]"
       @circuit.getNode(3).toString().should.equal "CircuitNode: 240 368 false [1 ResistorElm,1 WireElm,0 WireElm]"
       @circuit.getNode(4).toString().should.equal "CircuitNode: 432 48 false [1 WireElm,0 ResistorElm]"
@@ -88,11 +87,11 @@ describe "Simple Voltage Divider", ->
     it "has 6 nodes", ->
       @circuit.numNodes().should.equal 6
 
-    it "should be linear", ->
+    it "is linear", ->
       @circuit.Solver.circuitNonLinear.should.equal false
 
 
-    describe "should runCircuit()", ->
+    describe "runCircuit()", ->
       before ->
         @circuit.Solver.solveCircuit()
         @voltageCompnt = @circuit.getElmByIdx(0)
@@ -212,5 +211,5 @@ describe "Simple Voltage Divider", ->
       @circuit.updateCircuit()
 
     it.skip "has correct voltage", ->
-      @circuit.Solver.dump().should.eql ""
+      expect(@circuit.Solver.dump()).to.eql("")
 

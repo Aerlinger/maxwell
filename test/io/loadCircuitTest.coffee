@@ -1,5 +1,5 @@
-CircuitLoader = require("../../src/io/circuitLoader.coffee")
-Circuit = require('../../src/circuit/circuit.coffee')
+CircuitLoader = require("../../src/io/circuitLoader.js")
+Circuit = require('../../src/circuit/circuit.js')
 fs = require 'fs'
 
 describe "CircuitLoader", ->

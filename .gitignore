@@ -2,7 +2,6 @@
 test/**/*.js.map
 test/**/*.js
 src/**/*.js.map
-src/**/*.js
 .bower-cache
 .bower-registry
 npm-debug.log
@@ -17,4 +16,5 @@ test/fixtures/**/*.json
 circuits/v2/
 .env
 bundle.js
+**/*.map
 
