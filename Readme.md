@@ -10,77 +10,17 @@ A low-level javascript circuit simulation engine designed to model, simulate, an
   - Solvers for linear, nonlinear, analog, digital, and mixed-signal circuitry
   - Preset definitions and examples
   - Wide catalog of elements
-  - SPICE compatibility
   - Performance tuned
-
-## Installation:
-
-  Bower:
-    `bower install maxwell`
-
-  Using precompiled file:
-    See the `/build` directory
-
-  Compile using Grunt:
-    Clone the repo, navigate to the root directory and run:
-    `bower install && grunt dist`
 
 ## API
 
 ```javascript
 var circuitContext = Maxwell.createCircuit("Voltage Divider", "./voltdivide.json", function(circuit) {
-
+  // Runs once circuit has finished loading
 });
 
 ```
 
-[ '3way',
-  '555missing',
-  '555sequencer',
-  'amp-integ',
-  'cciamp',
-  'ccinductor',
-  'ccitov',
-  'ccvccs',
-  'cmosff',
-  'cmosff',
-  'cube',
-  'default',
-  'deltasigma',
-  'digcompare',
-  'digcompare',
-  'dram',
-  'dtlnor',
-  'dtlnor',
-  'flashadc',
-  'hfadc',
-  'howland',
-  'howland',
-  'indmultfreq',
-  'indmultfreq',
-  'indmultind',
-  'indmultind',
-  'itov',
-  'lissa',
-  'mux3state',
-  'opint-current',
-  'opint-current',
-  'opint-invert-amp',
-  'opint-invert-amp',
-  'opint-slew',
-  'opint-slew',
-  'phasecompint',
-  'powerfactor1',
-  'powerfactor1',
-  'powerfactor2',
-  'relaymux',
-  'relaytff',
-  'relaytff',
-  'rossler',
-  'scr',
-  'scractrig',
-  'swtreedac',
-  'wheatstone' ]
 
 ## Introduction
 
@@ -136,20 +76,6 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
 
   ```
 
-# Components in progress
-
-- 82 ?
-- 118: ?
-- 157: SevenSegElm 1
-- 160: AnalogSwitch2Elm 3
-- 162: LEDElm 3
-- 163: DecadeElm 2
-- 166: DAC 1
-- 167: ADCElm 1
-- 168: LatchElm 1
-- 169: TappedTransformerElm 1
-- 177: SCRElm 2
-
 #####Querying computed values within the circuit:
   ```javascript
 
@@ -164,11 +90,8 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
   resistor = resistiveCircuit.findComponentById("simple_resistor");
 
   resistor.getNodes();
-
   resistor.siblings();
-
   resistor.getVoltages(); // { "node1_id": 1.0, "node2_id": 2.0 }
-
   resistor.getCurrents(); // { "node1_id": 0.1, "node2_id": 0.5 }
   ```
 
@@ -192,14 +115,14 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
 ##Rendering and Plotting:
   Maxwell can also render to one or more `<canvas>` elements via the `Renderer` object.
 
-  #####Setting up the canvas:
+#####Setting up the canvas:
 
   **HTML:**
   ```html
     <canvas id="circuitboard"></canvas>
   ```
 
-  #####Configuration and initialization:
+#####Configuration and initialization:
   **Javascript:**
   ```javascript
     var schmittTrigger = Maxwell.createCircuit('Schmitt trigger example', "schmitt_trigger.json");
@@ -239,7 +162,9 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
   The Maxwell Rendering API is an extension of Soulwire's Sketch.js framework. You can find find a list of additional
   methods used to customize the display there.
 
-  ###Plotting and adding Oscilloscopes:
+###Plotting and adding Oscilloscopes:
+
+  **Work in progress**
 
   Use the addScope method to create a virtual oscilloscope to render values:
 
@@ -295,5 +220,3 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
   ```
 
 ## Acknowledgements
-
-## License
