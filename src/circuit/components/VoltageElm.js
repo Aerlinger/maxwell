@@ -1,8 +1,5 @@
 let CircuitComponent = require('../circuitComponent.js');
 let Settings = require('../../settings/settings.js');
-let Polygon = require('../../geom/polygon.js');
-let Rectangle = require('../../geom/rectangle.js');
-let Point = require('../../geom/point.js');
 let Util = require('../../util/util.js');
 
 class VoltageElm extends CircuitComponent {
@@ -247,8 +244,6 @@ class VoltageElm extends CircuitComponent {
       case VoltageElm.WF_PULSE:
         yc += wl / 2;
 
-        // renderContext.context.strokeStyle = '#FF0000';
-
         renderContext.drawLine(xc - wl, yc - wl, xc - wl, yc, color);
         renderContext.drawLine(xc - wl, yc - wl, xc - wl/2, yc - wl, color);
         renderContext.drawLine(xc - wl/2, yc - wl, xc - wl/2, yc, color);
@@ -256,23 +251,6 @@ class VoltageElm extends CircuitComponent {
 
         yc -= wl / 2;
 
-//        renderContext.drawThickLine xc - wl, yc - wl, xc - wl, yc, color   # Left vertical
-//        renderContext.drawThickLine xc - wl, yc - wl, xc - wl / 2, yc - wl, color
-//        renderContext.drawThickLine xc - wl / 2, yc - wl, xc - wl / 2, yc, color
-//        renderContext.drawThickLine xc - wl / 2, yc, xc + wl, yc, color
-
-        // renderContext.context.stroke();
-        // renderContext.context.moveTo(xc - wl, yc);
-
-        // renderContext.context.lineTo(xc - wl, yc - wl);
-        // renderContext.context.moveTo(xc - wl, yc - wl);
-
-//        renderContext.context.lineTo xc - wl / 2, yc - wl
-//        renderContext.context.moveTo xc - wl / 2, yc - wl
-
-//        renderContext.context.lineTo xc - wl / 2, yc - wl, xc - wl / 2, yc, color
-//        renderContext.context.lineTo xc - wl / 2, yc, xc + wl, yc, color
-//         renderContext.context.closePath();
         break;
 
       case VoltageElm.WF_SAWTOOTH:
@@ -314,9 +292,6 @@ class VoltageElm extends CircuitComponent {
       return valueString = Util.getUnitText(this.frequency, "Hz");
     }
   }
-
-//      if @axisAligned
-//        @drawValues valueString, VoltageElm.circleSize
 
   getVoltageSourceCount() {
     return 1;

@@ -1,8 +1,4 @@
 let CircuitComponent = require('../circuitComponent.js');
-let Settings = require('../../settings/settings.js');
-let Polygon = require('../../geom/polygon.js');
-let Rectangle = require('../../geom/rectangle.js');
-let Point = require('../../geom/point.js');
 let SwitchElm = require("./SwitchElm.js");
 let Util = require('../../util/util.js');
 
@@ -130,8 +126,6 @@ class LogicInputElm extends SwitchElm {
   }
 }
 LogicInputElm.initClass();
-
-
 
 module.exports = LogicInputElm;
 
