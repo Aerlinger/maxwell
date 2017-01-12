@@ -214,6 +214,7 @@ class Settings {
     this.LIGHT_POST_COLOR = "#333";
   
     this.GRID_COLOR = ColorPalette.darkyellow;
+    this.SWITCH_COLOR = "#333";
     this.FILL_COLOR = ColorPalette.white;
     this.BG_COLOR = ColorPalette.white;
     this.FG_COLOR = ColorPalette.white;

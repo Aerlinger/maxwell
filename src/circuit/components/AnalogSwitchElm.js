@@ -1,6 +1,7 @@
 let CircuitComponent = require("../circuitComponent.js");
 let Util = require('../../util/util.js');
 let Point = require('../../geom/point.js');
+let Settings = require('../../settings/settings.js');
 
 class AnalogSwitchElm extends CircuitComponent {
   static initClass() {
@@ -34,12 +35,33 @@ class AnalogSwitchElm extends CircuitComponent {
     super.setPoints(...arguments);
 
     this.calcLeads(32);
+    this.open = false;
 
     this.ps = new Point(0, 0);
     let openhs = 16;
 
     this.point3 = Util.interpolate(this.point1, this.point2, 0.5, -openhs);
     return this.lead3 = Util.interpolate(this.point1, this.point2, 0.5, -openhs / 2);
+  }
+
+  draw(renderContext) {
+    let openhs = 16;
+
+    let hs = this.open ? openhs : 0;
+
+    renderContext.drawLeads(this)
+
+    this.ps = Util.interpolate(this.lead1, this.lead2, 1, hs);
+
+    renderContext.drawLinePt(this.lead1, this.ps, Settings.SWITCH_COLOR);
+
+
+    renderContext.drawLinePt(this.point3, this.lead3);
+
+    this.updateDots();
+    renderContext.drawDots(this.point1, this.point2, this);
+
+    renderContext.drawPosts(this)
   }
 
   calculateCurrent() {
