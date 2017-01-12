@@ -141,7 +141,7 @@ class GateElm extends CircuitComponent {
 
     renderContext.drawThickPolygonP(this.gatePoly, Settings.STROKE_COLOR);
     if (this.linePoints !== null) {
-      for (i = 0; i< this.linePoints.length - 1; i++) {
+      for (let i = 0; i< this.linePoints.length - 1; i++) {
         renderContext.drawLinePt(this.linePoints[i], this.linePoints[i + 1]);
       }
     }
@@ -156,7 +156,7 @@ class GateElm extends CircuitComponent {
     renderContext.drawPosts(this);
     // renderContext.drawPosts(this);
 
-    for (i = 0; i < this.getPostCount(); i++) {
+    for (let i = 0; i < this.getPostCount(); i++) {
       let post = this.getPost(i);
       renderContext.drawPost(post.x, post.y)
     }

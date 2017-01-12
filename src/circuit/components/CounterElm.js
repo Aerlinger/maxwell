@@ -11,8 +11,6 @@ class CounterElm extends ChipElm {
     // console.log("FLAG", f)
 
     super(xa, xb, ya, yb, params, f);
-
-    console.log("Init Counter")
   }
 
   getDumpType() {
@@ -58,8 +56,6 @@ class CounterElm extends ChipElm {
     this.pins[1] = new ChipElm.Pin(this.sizeY - 1, ChipElm.SIDE_W, "R");
     this.pins[1].bubble = true;
 
-    // console.log("COUNTER BITS", this.bits)
-
     for (let i = 0; i < this.bits; i++) {
       let ii = i + 2;
       this.pins[ii] = new ChipElm.Pin(i, ChipElm.SIDE_E, `Q${this.bits - i - 1}`);
@@ -71,8 +67,6 @@ class CounterElm extends ChipElm {
     }
 
     this.allocNodes();
-
-    console.log("Setup Pins")
   }
 
   execute() {
@@ -105,8 +99,6 @@ class CounterElm extends ChipElm {
     }
 
     return this.lastClock = this.pins[0].value;
-
-    console.log("Exec Counter")
   }
 }
 CounterElm.initClass();

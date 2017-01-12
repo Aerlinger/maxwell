@@ -37,14 +37,11 @@ class LatchElm extends ChipElm {
     this.sizeY = this.bits + 1;
     this.pins = new Array(this.getPostCount());
 
-    for (i = 0, end = this.bits, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-      var asc, end;
+    for (i = 0; i < this.bits; i++) {
       this.pins[i] = new ChipElm.Pin(this.bits - 1 - i, ChipElm.SIDE_W, `I${i}`);
     }
 
-    for (i = 0, end1 = this.bits, asc1 = 0 <= end1; asc1 ? i < end1 : i > end1; asc1 ? i++ : i--) {
-      var asc1, end1;
-      console.log(i + this.bits);
+    for (i = 0; i < this.bits; i++) {
       this.pins[i + this.bits] = new ChipElm.Pin(this.bits - 1 - i, ChipElm.SIDE_E, "O");
       this.pins[i + this.bits].output = true;
     }
@@ -57,7 +54,7 @@ class LatchElm extends ChipElm {
 
   execute() {
     if (this.pins[this.loadPin].value && !this.lastLoad) {
-      for (let i = 0, end = this.bits, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+      for (let i = 0; i < this.bits; i++) {
         this.pins[i + this.bits].value = this.pins[i].value;
       }
     }

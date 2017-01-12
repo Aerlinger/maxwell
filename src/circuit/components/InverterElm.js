@@ -80,8 +80,6 @@ class InverterElm extends CircuitComponent {
 
     out = Math.max(Math.min(v0 + maxStep, out), v0 - maxStep);
 
-    console.log(out)
-
     return stamper.updateVoltageSource(0, this.nodes[1], this.voltSource, out);
   }
 
