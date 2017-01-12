@@ -1,5 +1,6 @@
 let CircuitComponent = require("../circuitComponent.js");
 let Util = require('../../util/util.js');
+let Settings = require('../../settings/settings.js');
 
 class InverterElm extends CircuitComponent {
   static get Fields() {
@@ -16,6 +17,8 @@ class InverterElm extends CircuitComponent {
     super(xa, ya, xb, yb, params, f);
 
     this.noDiagonal = true;
+
+    this.setPoints()
   }
 
 
@@ -44,11 +47,23 @@ class InverterElm extends CircuitComponent {
 
     triPoints[2] = Util.interpolate(this.point1, this.point2, 0.5 + ((ww - 5) / this.dn()));
 
-    this.gatePoly = triPoints;
+    this.gatePoly = Util.createPolygonFromArray(triPoints);
 
     return this.setBboxPt(this.point1, this.point2, hs);
   }
 
+  draw(renderContext) {
+
+    renderContext.drawLeads(this);
+
+    renderContext.drawThickPolygonP(this.gatePoly, Settings.STROKE_COLOR, Settings.FILL_COLOR);
+    renderContext.fillCircle(this.pcircle.x, this.pcircle.y, Settings.POST_RADIUS + 2, 2, "#FFFFFF", Settings.STROKE_COLOR);
+
+    this.updateDots();
+    renderContext.drawDots(this.point1, this.point2, this);
+
+    renderContext.drawPosts(this);
+  }
 
   getVoltageSourceCount() {
     return 1;

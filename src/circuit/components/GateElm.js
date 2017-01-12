@@ -133,8 +133,7 @@ class GateElm extends CircuitComponent {
 
 
   draw(renderContext){
-    let i, voltageColor;
-    for (i = 0; i < this.inputCount; i++) {
+    for (let i = 0; i < this.inputCount; i++) {
       renderContext.drawLinePt(this.inPosts[i], this.inGates[i], Util.getVoltageColor(this.volts[i]));
     }
 
