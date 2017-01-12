@@ -9,9 +9,9 @@ describe "Clock Test", ->
     expect(@clockElm.y2()).to.equal(200)
 
   it "has correct voltage, bias, and frequency", ->
-    expect(@clockElm.maxVoltage).to.equal(2.5)
+    expect(@clockElm.maxVoltage).to.equal(5)
     expect(@clockElm.bias).to.equal(2.5)
-    expect(@clockElm.frequency).to.equal(100)
+    expect(@clockElm.frequency).to.equal(40)
     expect(@clockElm.waveform).to.equal(ClockElm.WF_SQUARE)
 
   it "has correct params", ->

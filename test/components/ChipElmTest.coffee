@@ -134,7 +134,7 @@ describe "CC2 Component", ->
 
   describe "With params object", ->
     before ->
-      @chipElm = new CC2Elm(50, 75, 50, 150, {"bits": 3, "volts": ["0", "1", "1"], "gain": 1})
+      @chipElm = new CC2Elm(50, 75, 50, 150, {"gain": 1})
 
     it "has params", ->
       expect(@chipElm.bits).to.eql(3)
@@ -162,9 +162,9 @@ describe "CC2 Component", ->
 
   describe "With params array", ->
     before ->
-      @chipElm = new CC2Elm(50, 75, 50, 150, ["3", "0", "1", "1", "1"])
+      @chipElm = new CC2Elm(50, 75, 50, 150, ["1"])
 
-      @Circuit = new Circuit("Basic BJT")
+      @Circuit = new Circuit("CC2 Elm")
 
       @chipElm.setPoints()
       @Circuit.solder(@chipElm)
@@ -172,13 +172,12 @@ describe "CC2 Component", ->
     it "has params", ->
       expect(@chipElm.volts).to.eql([0, 0, 0])
       expect(@chipElm.params).to.eql({
-        "bits": 3
         "gain": 1
         "volts": [0, 0, 0]
       })
 
     it "has bits", ->
-      expect(@chipElm.bits).to.eql(3)
+      expect(@chipElm.bits).to.eql(undefined)
 
     it "has correct pins", ->
       expect(@chipElm.pins).to.eql(@pins)
@@ -210,7 +209,7 @@ describe "CC2 Component", ->
       expect(@chipElm.y2()).to.equal(198)
 
     it "can be stringified", ->
-      expect(@chipElm.toString()).to.eql("""CC2Elm@[98 123 98 198]: {"volts":[0,0,0],"bits":"3","gain":1}""")
+      expect(@chipElm.toString()).to.eql("""CC2Elm@[98 123 98 198]: {"volts":[0,0,0],"gain":1}""")
       expect(@chipElm.getName()).to.eql("CC2 Chip")
 
     it "can stamp", ->
@@ -233,14 +232,6 @@ describe "CC2 Component", ->
         @componentImageFileName = "test/fixtures/componentRenders/#{@chipElm.getName()}_init.png"
 
         fs.writeFileSync(@componentImageFileName, @canvas.toBuffer())
-
-      it "draws", ->
-        expect(@chipElm.pins).to.eql(@pins)
-#        expect(@chipElm.curcount).to.eql(-1)
-
-      it "stamps", ->
-        expect(@chipElm.pins).to.eql(@pins)
-      #        expect(@chipElm.curcount).to.eql(-1)
 
       it "compares buffer", (done) ->
         resemble(@canvas.toBuffer()).compareTo(@componentImageFileName).ignoreAntialiasing().onComplete (data) =>

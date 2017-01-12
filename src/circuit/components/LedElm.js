@@ -5,7 +5,7 @@ let Settings = require('../../settings/settings.js');
 
 class LedElm extends DiodeElm {
   static get Fields() {
-    return Util.extend(DiodeElm.Fields, {
+    return {
       colorR: {
         name: "Red Intensity",
         data_type: parseFloat,
@@ -26,18 +26,28 @@ class LedElm extends DiodeElm {
       //      data_type: parseFloat
       //      default_value: DiodeElm.DEFAULT_DROP
       //    }
-    });
+    };
   }
 
 
   constructor(xa, xb, ya, yb, params, f) {
+    let fwdrop;
+
+    if (f) {
+      fwdrop = params.shift();
+    } else {
+      fwdrop = 2.1024259;
+    }
+
     super(xa, xb, ya, yb, params, f);
     // TODO: CHECK!
     // this.params = {};
 
     //    if (f & DiodeElm.FLAG_FWDROP) == 0
     //      @fwdrop = 2.1024259
+    this.fwdrop = fwdrop;
 
+    /*
     if ((f & DiodeElm.FLAG_FWDROP) === 0) {
       this.fwdrop = 2.1024259;  //DiodeElm.DEFAULT_DROP
       this.params['fwdrop'] = 0.805904783;
@@ -45,6 +55,9 @@ class LedElm extends DiodeElm {
       this.fwdrop = parseFloat(params.shift());
       this.params['fwdrop'] = this.fwdrop;
     }
+    */
+
+    this.setup();
 
     this.setPoints();
   }
@@ -63,7 +76,7 @@ class LedElm extends DiodeElm {
     let cr = 12;
     this.ledLead1 = Util.interpolate(this.point1, this.point2, 0.5 - (cr / this.dn()));
     this.ledLead2 = Util.interpolate(this.point1, this.point2, 0.5 + (cr / this.dn()));
-    return this.ledCenter = Util.interpolate(this.point1, this.point2, 0.5);
+    this.ledCenter = Util.interpolate(this.point1, this.point2, 0.5);
   }
 
   needsShortcut() {

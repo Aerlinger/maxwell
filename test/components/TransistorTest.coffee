@@ -21,9 +21,6 @@ describe "Transistor Component", ->
       expect(@chipElm.point2).to.eql({ x: undefined, y: undefined })
       expect(@chipElm.lead1).to.equal(undefined)
       expect(@chipElm.lead2).to.equal(undefined)
-      expect(@chipElm.rect).to.eql([])
-      expect(@chipElm.coll).to.eql([])
-      expect(@chipElm.emit).to.eql([])
 
     it "has correct node relationships", ->
       expect(@chipElm.nodes).to.eql([0, 0, 0])

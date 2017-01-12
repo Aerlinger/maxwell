@@ -18,9 +18,6 @@ describe "OpAmp Component", ->
       expect(@chipElm.curcount).to.equal(undefined)
       expect(@chipElm.point1).to.eql({ x: undefined, y: undefined })
       expect(@chipElm.point2).to.eql({ x: undefined, y: undefined })
-      expect(@chipElm.in1p).to.eql([])
-      expect(@chipElm.in2p).to.eql([])
-      expect(@chipElm.textp).to.eql([])
 
     it "has correct node relationships", ->
       expect(@chipElm.nodes).to.eql([0, 0, 0])

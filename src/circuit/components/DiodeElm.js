@@ -149,6 +149,8 @@ class DiodeElm extends CircuitComponent {
       geq = this.vdcoef * this.leakage * eval_;
       nc = ((eval_ - 1) * this.leakage) - (geq * voltdiff);
 
+      // console.log("DIODE", this.fwdrop, this.vdcoef, this.leakage)
+
       stamper.stampConductance(this.nodes[0], this.nodes[1], geq);
       return stamper.stampCurrentSource(this.nodes[0], this.nodes[1], nc);
 

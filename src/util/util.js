@@ -124,7 +124,7 @@ class Util {
         let valid = arguments.callee(element);
       } else {
         if (!isFinite(element)) {
-          console.warn(`Invalid number found: ${element}`);
+          console.trace(`Invalid number found: ${element}`);
           return false;
         }
       }

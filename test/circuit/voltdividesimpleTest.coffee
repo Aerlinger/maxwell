@@ -78,11 +78,11 @@ describe "Simple Voltage Divider", ->
 
     it "has correct nodes", ->
       expect(@circuit.getNode(0).toString()).to.equal "CircuitNode: 112 368 false [0 VoltageElm,0 WireElm@[112 368 240 368]]"
-      @circuit.getNode(1).toString().should.equal """CircuitNode: 240 48 false [1 WireElm@[112 48 240 48],0 ResistorElm@[240 48 240 368] : {"resistance":10000},0 WireElm@[240 48 432 48]]"""
-      @circuit.getNode(2).toString().should.equal "CircuitNode: 240 48 false [1 WireElm,0 ResistorElm,0 WireElm]"
-      @circuit.getNode(3).toString().should.equal "CircuitNode: 240 368 false [1 ResistorElm,1 WireElm,0 WireElm]"
-      @circuit.getNode(4).toString().should.equal "CircuitNode: 432 48 false [1 WireElm,0 ResistorElm]"
-      @circuit.getNode(5).toString().should.equal "CircuitNode: 432 368 false [1 WireElm,1 ResistorElm]"
+      expect(@circuit.getNode(1).toString()).to.equal """CircuitNode: 112 48 false [1 VoltageElm,0 WireElm@[112 48 240 48]]"""
+      expect(@circuit.getNode(2).toString()).to.equal """CircuitNode: 240 48 false [1 WireElm@[112 48 240 48],0 ResistorElm@[240 48 240 368]: {"resistance":10000},0 WireElm@[240 48 432 48]]"""
+      expect(@circuit.getNode(3).toString()).to.equal """CircuitNode: 240 368 false [1 ResistorElm@[240 48 240 368]: {"resistance":10000},1 WireElm@[112 368 240 368],0 WireElm@[240 368 432 368]]"""
+      expect(@circuit.getNode(4).toString()).to.equal """CircuitNode: 432 48 false [1 WireElm@[240 48 432 48],0 ResistorElm@[432 48 432 368]: {"resistance":20000}]"""
+      expect(@circuit.getNode(5).toString()).to.equal """CircuitNode: 432 368 false [1 WireElm@[240 368 432 368],1 ResistorElm@[432 48 432 368]: {"resistance":20000}]"""
 
     it "has 6 nodes", ->
       @circuit.numNodes().should.equal 6

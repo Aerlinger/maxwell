@@ -172,7 +172,10 @@ class ChipElm extends CircuitComponent {
     }
 
     this.params['volts'] = this.volts;
-    this.params['bits'] = this.bits;
+
+    if (this.bits) {
+      this.params['bits'] = this.bits;
+    }
 
     this.noDiagonal = true;
     let numPosts = this.getPostCount();

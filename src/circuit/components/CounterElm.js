@@ -26,14 +26,10 @@ class CounterElm extends ChipElm {
   }
 
   getPostCount() {
-    // console.log("HAS ENABLE", this.hasEnable());
-
     if (this.hasEnable()) {
-      // console.log("COUNTER BITS", this.bits + 3);
       return this.bits + 3;
     }
 
-    // console.log("COUNTER BITS", this.bits + 2);
     return this.bits + 2;
   }
 
