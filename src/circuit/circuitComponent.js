@@ -45,10 +45,9 @@ class CircuitComponent {
 
     this.component_id = Util.getRand(100000000) + (new Date()).getTime();
 
-    this.setPoints(x1, y1, x2, y2);
-
     this.setParameters(params);
 
+    this.setPoints(x1, y1, x2, y2);
     this.allocNodes();
   }
 

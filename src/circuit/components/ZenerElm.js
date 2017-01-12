@@ -54,10 +54,10 @@ class ZenerElm extends DiodeElm {
 
     // PLATE:
     // setVoltageColor(g, v2)
+    color = Util.getVoltageColor(v2);
     renderContext.drawLinePt(this.cathode[0], this.cathode[1], v1);
 
     // Cathode "Wings"
-    color = Util.getVoltageColor(v2);
     renderContext.drawLinePt(this.wing[0], this.cathode[0], color);
     renderContext.drawLinePt(this.wing[1], this.cathode[1], color);
 

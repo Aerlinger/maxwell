@@ -1,6 +1,5 @@
 let OrGateElm = require("./OrGateElm.js");
 let Util = require('../../util/util.js');
-let Point = require('../../geom/point.js');
 
 class XorGateElm extends OrGateElm {
 
@@ -23,18 +22,18 @@ class XorGateElm extends OrGateElm {
       this.linePoints[i] = Util.interpolate(this.lead1, this.lead2, (b - 5) / ww2, a * this.hs2)));
   }
 
-  getGateName() {
+  getName() {
     return "XOR Gate";
   }
 
   calcFunction() {
-    let f = true;
+    let f = false;
 
-    for (let i = 0, end = this.inputCount, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    for (let i = 0; i < this.inputCount; ++i) {
       f = f ^ this.getInput(i);
     }
 
-    return f > 1;
+    return f;
   }
 
   getDumpType() {

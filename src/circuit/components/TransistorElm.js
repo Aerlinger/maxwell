@@ -138,10 +138,14 @@ class TransistorElm extends CircuitComponent {
     this.rectPoly = Util.createPolygon(this.rect[0], this.rect[2], this.rect[3], this.rect[1]);
 
     // arrow
+    /*
     if (this.pnp !== 1) {
       let pt = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (11 / this.dn()), -5 * this.dsign() * this.pnp);
       this.arrowPoly = Util.calcArrow(this.emit[0], pt, 8, 4);
+
+      console.log("ARROW POLY", this.arrowPoly, this.point1, this.point2, this.dn(), this.dsign(), this.pnp, this.emit[0], pt, "\n")
     }
+    */
 
     // draw collector
     let color = Util.getVoltageColor(this.volts[1]);
@@ -156,7 +160,12 @@ class TransistorElm extends CircuitComponent {
 
     // TODO: add arrow poly
     if(this.arrowPoly && this.arrowPoly.numPoints() > 0) {
-      renderContext.drawThickPolygonP(this.arrowPoly);
+      try {
+        renderContext.drawThickPolygonP(this.arrowPoly);
+      } catch(e) {
+        console.log(this.pnp)
+        console.log(this.arrowPoly)
+      }
     }
 
     // draw base
@@ -217,6 +226,8 @@ class TransistorElm extends CircuitComponent {
   setPoints() {
     super.setPoints(...arguments);
 
+    this.renderSize = 16;
+
     let hs = this.renderSize;
 
     //    if @flags & TransistorElm.FLAG_FLIP != 0
@@ -242,11 +253,15 @@ class TransistorElm extends CircuitComponent {
     this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
 
     if (this.pnp === 1) {
+      // console.log("PNP", "hs2", hs2, "Emit", this.emit[0], this.dsign(), this.dn(), this.pnp, this.point1, this.point2, "arrowPoly", Util.calcArrow(this.emit[1], this.emit[0], 8, 4))
+
       return this.arrowPoly = Util.calcArrow(this.emit[1], this.emit[0], 8, 4);
     } else {
       let pt = Util.interpolate(this.point1, this.point2, 1 - (11 / this.dn()), -5 * this.dsign() * this.pnp);
 
-      return this.arrowPoly = Util.calcArrow(this.emit[0], pt, 8, 4);
+      this.arrowPoly = Util.calcArrow(this.emit[0], pt, 8, 4);
+
+      // console.log("NPN", "hs2", hs2, "Emit", this.emit[0], this.dsign(), this.dn(), this.pnp, this.point1, this.point2, "pt", pt, "arrowPoly", this.arrowPoly)
     }
   }
 

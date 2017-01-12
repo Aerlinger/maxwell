@@ -39,6 +39,8 @@ class GateElm extends CircuitComponent {
 
     this.noDiagonal = true;
     this.linePoints = null;
+
+    this.setPoints()
   }
 
   isInverting() {
@@ -110,11 +112,11 @@ class GateElm extends CircuitComponent {
     let f = this.calcFunction();
 
     if (this.isInverting()) {
-      f = !f;
+      f = (f > 0) ? 0 : 1;
     }
 
     this.lastOutput = (f > 0);
-//    @params['lastOutput'] = (f > 0)
+    this.params['lastOutput'] = (f > 0);
 
     if (f) {
       res = 5;
@@ -122,7 +124,11 @@ class GateElm extends CircuitComponent {
       res = 0;
     }
 
-    return stamper.updateVoltageSource(0, this.nodes[this.inputCount], this.voltageSource, res);
+    // console.log("V", this.volts, f, res);
+
+    // console.log("GATE " + this.getName() + "nodes: " + this.nodes[this.inputCount] + " vs: " +  this.voltSource + "res: " + res)
+
+    return stamper.updateVoltageSource(0, this.nodes[this.inputCount], this.voltSource, res);
   }
 
 
@@ -142,7 +148,7 @@ class GateElm extends CircuitComponent {
     }
 
     if (this.isInverting()) {
-      renderContext.fillCircle(this.pcircle.x, this.pcircle.y, 3);
+      renderContext.fillCircle(this.pcircle.x, this.pcircle.y, Settings.POST_RADIUS + 2, 2, "#FFFFFF", Settings.STROKE_COLOR);
     }
 
     this.updateDots();
@@ -194,6 +200,7 @@ class GateElm extends CircuitComponent {
     return stamper.stampVoltageSource(0, this.nodes[this.inputCount], this.voltSource);
   }
 }
+
 GateElm.initClass();
 
 module.exports = GateElm;

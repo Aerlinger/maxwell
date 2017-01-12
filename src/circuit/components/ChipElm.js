@@ -161,7 +161,7 @@ class ChipElm extends CircuitComponent {
 
         for (let i=0; i<this.getPostCount(); ++i) {
           if (this.pins[i].state) {
-            initial_voltages.push(params.shift());
+            initial_voltages.push(parseInt(params.shift()));
           }
         }
       } else {

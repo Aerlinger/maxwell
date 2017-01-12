@@ -1,5 +1,4 @@
 let OrGateElm = require("./OrGateElm.js");
-let Util = require('../../util/util.js');
 
 class NorGateElm extends OrGateElm {
 
@@ -7,7 +6,7 @@ class NorGateElm extends OrGateElm {
     super(xa, ya, xb, yb, params, f);
   }
 
-  getGateName() {
+  getName() {
     return "NOR Gate";
   }
 

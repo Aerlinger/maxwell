@@ -27,6 +27,10 @@ class Polygon {
   numPoints() {
     return this.vertices.length;
   }
+
+  toString(){
+    return JSON.stringify(this.vertices);
+  }
 }
 
 module.exports = Polygon;

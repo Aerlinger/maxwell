@@ -31,18 +31,19 @@ class AndGateElm extends GateElm {
     return this.gatePoly = Util.createPolygonFromArray(triPoints);
   }
 
-  getGateName() {
+  getName() {
     return "AND Gate";
   }
 
   calcFunction() {
     let f = true;
 
-    for (let i = 0, end = this.inputCount, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    for (let i = 0; i < this.inputCount; ++i) {
       f = f & this.getInput(i);
     }
 
-    //console.log("AND: #{f}")
+    // console.log(f)
+
     return f;
   }
 

@@ -8,10 +8,6 @@ class OrGateElm extends GateElm {
     super(xa, ya, xb, yb, params, f);
   }
 
-  getGateName() {
-    return "OR Gate";
-  }
-
   getName() {
     return "OR Gate";
   }
@@ -49,9 +45,9 @@ class OrGateElm extends GateElm {
   }
 
   calcFunction() {
-    let f = true;
+    let f = false;
 
-    for (let i = 0, end = this.inputCount, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    for (let i = 0; i < this.inputCount; i++) {
       f = f | this.getInput(i);
     }
 
