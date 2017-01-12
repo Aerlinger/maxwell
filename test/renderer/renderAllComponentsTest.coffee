@@ -34,7 +34,6 @@ describe "Render all components", ->
 
         col += offsetX
 
-
     @renderer.drawComponents()
 
     fs.writeFileSync("test/fixtures/componentRenders/all_components.png", @canvas.toBuffer())

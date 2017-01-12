@@ -220,7 +220,6 @@ class ChipElm extends CircuitComponent {
     };
   }
 
-
   setupPins() {
     return console.trace("setupPins() to be called from subclasses of ChipElm");
   }

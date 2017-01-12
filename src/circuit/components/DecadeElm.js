@@ -1,6 +1,4 @@
-let CircuitComponent = require("../circuitComponent.js");
 let ChipElm = require("./ChipElm.js");
-let Util = require('../../util/util.js');
 
 class DecadeElm extends ChipElm {
 

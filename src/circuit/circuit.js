@@ -449,6 +449,18 @@ class Circuit extends Observer {
     return this.Solver.getStamper();
   }
 
+  serialize() {
+    return [{
+          type: this.Params.name,
+          timeStep: this.timeStep(),
+          simSpeed: this.simSpeed(),
+          currentSpeed: this.currentSpeed(),
+          voltageRange: this.voltageRange(),
+          powerRange: this.powerRange(),
+          flags: this.flags
+        }].concat(this.elementList.map(element => element.serialize()));
+  }
+
   toJson() {
     return {
       startCircuit: this.Params.name,
