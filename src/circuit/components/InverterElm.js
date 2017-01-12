@@ -21,7 +21,6 @@ class InverterElm extends CircuitComponent {
     this.setPoints()
   }
 
-
   getDumpType() {
     return 'I';
   }
@@ -80,6 +79,8 @@ class InverterElm extends CircuitComponent {
     let maxStep = this.slewRate * this.getParentCircuit().timeStep() * 1e9;
 
     out = Math.max(Math.min(v0 + maxStep, out), v0 - maxStep);
+
+    console.log(out)
 
     return stamper.updateVoltageSource(0, this.nodes[1], this.voltSource, out);
   }
