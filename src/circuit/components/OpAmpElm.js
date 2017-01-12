@@ -159,6 +159,9 @@ class OpAmpElm extends CircuitComponent {
     return this.triangle = Util.createPolygonFromArray([tris[0], tris[1], this.lead2]);
   }
 
+  getName() {
+    return "OpAmp"
+  }
 
   getPostCount() {
     return 3;

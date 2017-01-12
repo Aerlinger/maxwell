@@ -128,19 +128,15 @@ class GateElm extends CircuitComponent {
 
   draw(renderContext){
     let i, voltageColor;
-    for (i = 0, end = this.inputCount, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-      var asc, end;
-      voltageColor = Util.getVoltageColor(this.volts[i]);
-      renderContext.drawLinePt(this.inPosts[i], this.inGates[i], voltageColor);
+    for (i = 0; i < this.inputCount; i++) {
+      renderContext.drawLinePt(this.inPosts[i], this.inGates[i], Util.getVoltageColor(this.volts[i]));
     }
 
-    voltageColor = Util.getVoltageColor(this.volts[this.inputCount]);
-    renderContext.drawLinePt(this.lead2, this.point2, voltageColor);
+    renderContext.drawLinePt(this.lead2, this.point2, Util.getVoltageColor(this.volts[this.inputCount]));
 
     renderContext.drawThickPolygonP(this.gatePoly, Settings.STROKE_COLOR);
     if (this.linePoints !== null) {
-      for (i = 0, end1 = this.linePoints.length - 1, asc1 = 0 <= end1; asc1 ? i < end1 : i > end1; asc1 ? i++ : i--) {
-        var asc1, end1;
+      for (i = 0; i< this.linePoints.length - 1; i++) {
         renderContext.drawLinePt(this.linePoints[i], this.linePoints[i + 1]);
       }
     }
@@ -152,21 +148,18 @@ class GateElm extends CircuitComponent {
     this.updateDots();
     renderContext.drawDots(this.lead2, this.point2, this);
 
-    renderContext.drawPosts(this, "#FF0000");
-    renderContext.drawPosts(this, "#FF0000");
+    renderContext.drawPosts(this);
+    // renderContext.drawPosts(this);
 
-    for (i = 0, end2 = this.getPostCount(), asc2 = 0 <= end2; asc2 ? i < end2 : i > end2; asc2 ? i++ : i--) {
-      var asc2, end2;
+    for (i = 0; i < this.getPostCount(); i++) {
       let post = this.getPost(i);
-      renderContext.fillCircle(post.x, post.y, 1, 1, "#FF0000", "#0000FF");
+      renderContext.drawPost(post.x, post.y)
     }
-//      renderContext.drawPost post.x, post.y, color, color
 
     if (CircuitComponent.DEBUG) {
       return super.draw(renderContext);
     }
   }
-
 
   getPostCount() {
     return this.inputCount + 1;
@@ -202,7 +195,5 @@ class GateElm extends CircuitComponent {
   }
 }
 GateElm.initClass();
-
-
 
 module.exports = GateElm;

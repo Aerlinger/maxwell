@@ -461,7 +461,7 @@ class CircuitComponent {
   }
 
   getName() {
-    console.warn(`getName() was called by circuitComponent base class, but should be extended by subclasses (${this})`)
+    console.warn(`getName() was called by circuitComponent base class, but should be extended by subclasses (${this.constructor.name})`)
     return `${this.constructor.name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}] : ${JSON.stringify(this.params)}`;
   }
 
@@ -565,6 +565,10 @@ class CircuitComponent {
     renderContext.drawRect(this.boundingBox.x-2, this.boundingBox.y-2, this.boundingBox.width+2, this.boundingBox.height+2, 0.5, "#8888CC");
 
 //    renderContext.drawValue 10, -15, this, @constructor.name
+
+    // renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
+
+    renderContext.drawValue(-14, 0, this, this.toString());
 
     if (this.params) {
       let height = 8;

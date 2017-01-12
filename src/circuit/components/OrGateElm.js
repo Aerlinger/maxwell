@@ -8,8 +8,11 @@ class OrGateElm extends GateElm {
     super(xa, ya, xb, yb, params, f);
   }
 
-
   getGateName() {
+    return "OR Gate";
+  }
+
+  getName() {
     return "OR Gate";
   }
 
@@ -45,7 +48,6 @@ class OrGateElm extends GateElm {
     return this.gatePoly = Util.createPolygonFromArray(triPoints);
   }
 
-
   calcFunction() {
     let f = true;
 
@@ -60,6 +62,5 @@ class OrGateElm extends GateElm {
     return 152;
   }
 }
-
 
 module.exports = OrGateElm;

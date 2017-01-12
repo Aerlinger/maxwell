@@ -12,7 +12,8 @@ class Rectangle {
 
   equals(otherRect) {
     if (otherRect != null) {
-      if( (otherRect.x === this.x) && (otherRect.y === this.y) && (otherRect.width === this.width) && (otherRect.height === this.height) ) {
+      if( (otherRect.x === this.x) && (otherRect.y === this.y) &&
+          (otherRect.width === this.width) && (otherRect.height === this.height) ) {
         return true;
       }
     }

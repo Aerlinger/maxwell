@@ -14,9 +14,6 @@ class Maxwell {
   static initClass() {
     version = "0.0.0";
   
-    this.OhmSymbol = "Ω";
-    this.MuSymbol = "μ";
-  
     this.Circuits = {};
   
     this.Components = ((() => {
@@ -28,7 +25,6 @@ class Maxwell {
       return result;
     })());
   }
-
 
 //  if environment.isBrowser
 //    @logger = console
@@ -105,9 +101,6 @@ Use \`Maxwell.createCircuit()\` to create a new empty circuit object.\
   }
 }
 Maxwell.initClass();
-
-//    return new Renderer(circuit, context)
-
 
 Maxwell.Renderer = Renderer;
 

@@ -155,7 +155,7 @@ class TransistorElm extends CircuitComponent {
     //g.setColor(lightGrayColor);
 
     // TODO: add arrow poly
-    if(this.arrowPoly && this.arrowPoly.length > 0) {
+    if(this.arrowPoly && this.arrowPoly.numPoints() > 0) {
       renderContext.drawThickPolygonP(this.arrowPoly);
     }
 

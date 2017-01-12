@@ -1,4 +1,4 @@
-describe "ClockElmTest", ->
+describe "Clock Test", ->
   before ->
     @clockElm = new ClockElm(100, 200)
 
@@ -15,7 +15,7 @@ describe "ClockElmTest", ->
     expect(@clockElm.waveform).to.equal(ClockElm.WF_SQUARE)
 
   it "has correct params", ->
-    expect(@clockElm.params).to.equal(
+    expect(@clockElm.params).to.eql(
       {
         "bias": 0
         "dutyCycle": 0.5

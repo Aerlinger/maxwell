@@ -116,7 +116,7 @@ describe "OpAmp Component", ->
 
     it "can be stringified", ->
       expect(@chipElm.toString()).to.eql("""OpAmpElm@[98 123 98 198]: {"maxOut":15,"minOut":-15,"gbw":10000000}""")
-      expect(@chipElm.getName()).to.eql("""OpAmpElm@[98 123 98 198] : {"maxOut":15,"minOut":-15,"gbw":10000000}""")
+      expect(@chipElm.getName()).to.eql("""OpAmp""")
 
     it "can stamp", ->
       @chipElm.stamp(@Circuit.Solver.Stamper)

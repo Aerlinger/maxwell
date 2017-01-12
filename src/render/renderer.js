@@ -422,10 +422,6 @@ class Renderer extends BaseRenderer {
   drawComponents() {
     if (this.context) {
       for (var component of Array.from(this.Circuit.getElements())) {
-        if (__guard__(this.marquee, x1 => x1.collidesWithComponent(component))) {
-          console.log(`MARQUEE COLLIDE: ${component}`);
-        }
-
         this.drawComponent(component);
       }
 

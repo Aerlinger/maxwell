@@ -17,8 +17,6 @@ class ChipElm extends CircuitComponent {
     this.SIDE_W = 2;
     this.SIDE_E = 3;
   
-    // this.Fields = {};
-  
   //  @Fields = {
   //    bits: {
   //      name: "Bits"
@@ -153,20 +151,15 @@ class ChipElm extends CircuitComponent {
 
     if (params) {
       if (params.constructor == Array) {
-        // console.log("PARAMS", params)
-
         if (this.needsBits()) {
           this.bits = parseInt(params.shift());
         }
 
         self = this;
         this.setupPins();
-        this._setPoints()
+        this._setPoints();
 
-        // console.log("POST COUNT:", this.getPostCount());
         for (let i=0; i<this.getPostCount(); ++i) {
-          // console.log("PIN", i);
-          // console.log(this.pins[i]);
           if (this.pins[i].state) {
             initial_voltages.push(params.shift());
           }
@@ -175,8 +168,6 @@ class ChipElm extends CircuitComponent {
         this.bits = params['bits'];
         this.volts = params['volts'];
         initial_voltages = params['volts'];
-
-        // console.log("BITS OBJ:", this.bits)
       }
     }
 
@@ -200,7 +191,6 @@ class ChipElm extends CircuitComponent {
 
     this.params['volts'] = this.volts;
   }
-
 
   inspect() {
     let paramValues = ((() => {

@@ -172,10 +172,13 @@ describe "CC2 Component", ->
     it "has params", ->
       expect(@chipElm.volts).to.eql([0, 0, 0])
       expect(@chipElm.params).to.eql({
-        "bits": "3"
+        "bits": 3
         "gain": 1
         "volts": [0, 0, 0]
       })
+
+    it "has bits", ->
+      expect(@chipElm.bits).to.eql(3)
 
     it "has correct pins", ->
       expect(@chipElm.pins).to.eql(@pins)

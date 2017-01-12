@@ -108,8 +108,6 @@ class PotElm extends CircuitComponent {
     }
   }
 
-//    return (n == 0) ? @point1 : (n == 1) ? @point2 : @post3;
-
   calculateCurrent() {
     this.current1 = (this.volts[0] - this.volts[2]) / this.resistance1;
     this.current2 = (this.volts[1] - this.volts[2]) / this.resistance2;

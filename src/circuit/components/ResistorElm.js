@@ -49,7 +49,7 @@ class ResistorElm extends CircuitComponent {
     let offsets = [0, 1, 0, -1];
     
     // Draw resistor "zig-zags"
-    for (let n = 0, end = numSegments, asc = 0 <= end; asc ? n < end : n > end; asc ? n++ : n--) {
+    for (let n = 0; n < numSegments; n++) {
       let resistorSegmentVoltage = this.volts[0] + ((this.volts[1]-this.volts[0]) * (n / numSegments));
 
       let startPosition = Util.interpolate(this.lead1, this.lead2, n*parallelOffset, width*offsets[n % 4]);
@@ -69,6 +69,10 @@ class ResistorElm extends CircuitComponent {
 
   unitSymbol() {
     return "Ω";
+  }
+  
+  getName() {
+    "Resistor"
   }
 
   getDumpType() {

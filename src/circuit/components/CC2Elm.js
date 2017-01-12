@@ -15,7 +15,7 @@ class CC2Elm extends ChipElm {
 
     if (params) {
       if (params.constructor == Array) {
-        this.gain = parseFloat(params[0]);
+        this.gain = parseFloat(params[params.length - 1]);
       } else {
         this.gain = params["gain"]
       }
