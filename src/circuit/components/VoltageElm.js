@@ -247,25 +247,32 @@ class VoltageElm extends CircuitComponent {
       case VoltageElm.WF_PULSE:
         yc += wl / 2;
 
-        renderContext.context.strokeStyle = '#FF0000';
+        // renderContext.context.strokeStyle = '#FF0000';
+
+        renderContext.drawLine(xc - wl, yc - wl, xc - wl, yc, color);
+        renderContext.drawLine(xc - wl, yc - wl, xc - wl/2, yc - wl, color);
+        renderContext.drawLine(xc - wl/2, yc - wl, xc - wl/2, yc, color);
+        renderContext.drawLine(xc - wl/2, yc, xc + wl, yc, color);
+
+        yc -= wl / 2;
 
 //        renderContext.drawThickLine xc - wl, yc - wl, xc - wl, yc, color   # Left vertical
 //        renderContext.drawThickLine xc - wl, yc - wl, xc - wl / 2, yc - wl, color
 //        renderContext.drawThickLine xc - wl / 2, yc - wl, xc - wl / 2, yc, color
 //        renderContext.drawThickLine xc - wl / 2, yc, xc + wl, yc, color
 
-        renderContext.context.stroke();
-        renderContext.context.moveTo(xc - wl, yc);
+        // renderContext.context.stroke();
+        // renderContext.context.moveTo(xc - wl, yc);
 
-        renderContext.context.lineTo(xc - wl, yc - wl);
-        renderContext.context.moveTo(xc - wl, yc - wl);
+        // renderContext.context.lineTo(xc - wl, yc - wl);
+        // renderContext.context.moveTo(xc - wl, yc - wl);
 
 //        renderContext.context.lineTo xc - wl / 2, yc - wl
 //        renderContext.context.moveTo xc - wl / 2, yc - wl
 
 //        renderContext.context.lineTo xc - wl / 2, yc - wl, xc - wl / 2, yc, color
 //        renderContext.context.lineTo xc - wl / 2, yc, xc + wl, yc, color
-        renderContext.context.closePath();
+//         renderContext.context.closePath();
         break;
 
       case VoltageElm.WF_SAWTOOTH:
