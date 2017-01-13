@@ -33,11 +33,11 @@ class TappedTransformerElm extends CircuitComponent {
     super(xa, xb, ya, yb, params, f);
 
     this.current = [this.current0, this.current1, this.current2, 0];
-    this.params['current'] = this.current;
+    // this.params['current'] = this.current;
 
-    delete this.params['current0'];
-    delete this.params['current1'];
-    delete this.params['current2'];
+    // delete this.params['current0'];
+    // delete this.params['current1'];
+    // delete this.params['current2'];
 
     this.noDiagonal = true;
   }
