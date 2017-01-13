@@ -53,10 +53,10 @@ class ScrElm extends CircuitComponent {
     this.volts[this.cnode] = -this.lastvac;
     this.volts[this.gnode] = -this.lastvag;
 
-    this.params['volts'] = this.volts;
+    // this.params['volts'] = this.volts;
 
-    delete this.params['lastvac'];
-    delete this.params['lastvag'];
+    // delete this.params['lastvac'];
+    // delete this.params['lastvag'];
 
     this.setup();
   }

@@ -29,7 +29,7 @@ class TransLineElm extends CircuitComponent {
 
     this.noDiagonal = true;
 
-    delete this.params['resistance'];
+    // delete this.params['resistance'];
 
     this.ptr = 0;
   }
