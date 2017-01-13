@@ -31,12 +31,14 @@ class LedElm extends DiodeElm {
 
 
   constructor(xa, xb, ya, yb, params, f) {
-    let fwdrop;
+    let fwdrop = 2.1024259;
 
     if (f) {
-      fwdrop = params.shift();
-    } else {
-      fwdrop = 2.1024259;
+      if (params.constructor == Array && params.length > 3) {
+        fwdrop = params.shift();
+      } else {
+        fwdrop = params["fwdrop"] || fwdrop;
+      }
     }
 
     super(xa, xb, ya, yb, params, f);
