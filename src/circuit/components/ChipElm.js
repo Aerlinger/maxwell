@@ -16,18 +16,7 @@ class ChipElm extends CircuitComponent {
     this.SIDE_S = 1;
     this.SIDE_W = 2;
     this.SIDE_E = 3;
-  
-  //  @Fields = {
-  //    bits: {
-  //      name: "Bits"
-  //      data_type: parseInt
-  //    }
-  //    volts: {
-  //      name: "Volts"
-  //      data_type: (x) -> x
-  //    }
-  //  }
-  
+
     self = null;
   
     Pin = class Pin {
@@ -167,17 +156,14 @@ class ChipElm extends CircuitComponent {
 
         for (let i=0; i<this.getPostCount(); ++i) {
           if (this.pins[i].state) {
-            console.log(params)
             initial_voltages.push(parseInt(params.shift()));
           }
         }
 
-        // this.volts = params['volts'];
         this.volts = initial_voltages;
 
         if (this.volts) {
           this.params['volts'] = initial_voltages;
-          console.log(this.params['volts'])
         }
       } else {
         if (this.needsBits()) {
@@ -223,10 +209,9 @@ class ChipElm extends CircuitComponent {
     }
     */
 
-    console.log(this.params['volts'])
+    // console.log(this.params['volts'])
   }
 
-  /*
   inspect() {
     let paramValues = ((() => {
       let result = [];
@@ -254,7 +239,6 @@ class ChipElm extends CircuitComponent {
       current: this.getCurrent()
     };
   }
-  */
 
   setupPins() {
     return console.trace("setupPins() to be called from subclasses of ChipElm");
@@ -295,7 +279,6 @@ class ChipElm extends CircuitComponent {
   }
 
   setSize(s) {
-    //console.log("#{@getName()} Set size: #{s}")
     this.csize = s;
     this.cspc = 8 * s;
     this.cspc2 = this.cspc * 2;
