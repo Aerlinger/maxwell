@@ -206,7 +206,7 @@ class Renderer extends BaseRenderer {
 
     this.placeComponent = new klass(100, 100, 100, 200);
 
-    console.log(componentName, "default params:", this.placeComponent.params);
+    // console.log(componentName, "default params:", this.placeComponent.params);
 
     return this.placeComponent;
   }

@@ -4,95 +4,74 @@ describe "CC2", ->
   it "updates and renders circuit", () ->
     @circuitJson = [
       {
-        "name_unique": "cc2.txt",
-        "flags": 1,
-        "time_step": 5.0e-06,
-        "sim_speed": 10.20027730826997,
-        "current_speed": 50.0,
-        "voltage_range": 5.0,
-        "power_range": 50.0
+        "type": "cc2.txt",
+        "timeStep": 0.000005,
+        "simSpeed": 172,
+        "currentSpeed": 50,
+        "voltageRange": 5,
+        "powerRange": 50,
+        "flags": 1
       },
       {
-        "sym": "179",
-        "x1": 272,
-        "y1": 224,
-        "x2": 304,
-        "y2": 224,
-        "flags": "0",
-        "params": [
-          "1.0"
-        ]
+        "name": "CC2Elm",
+        "pos": [272, 224, 304, 224],
+        "flags": 0,
+        "params": {
+          "volts": [],
+          "gain": 1
+        }
       },
       {
-        "sym": "r",
-        "x1": 368,
-        "y1": 256,
-        "x2": 480,
-        "y2": 256,
-        "flags": "0",
-        "params": [
-          "100.0"
-        ]
+        "name": "ResistorElm",
+        "pos": [368, 256, 480, 256],
+        "flags": 0,
+        "params": {
+          "resistance": 100
+        }
       },
       {
-        "sym": "g",
-        "x1": 480,
-        "y1": 256,
-        "x2": 480,
-        "y2": 288,
-        "flags": "0",
-        "params": []
+        "name": "GroundElm",
+        "pos": [480, 256, 480, 288],
+        "flags": 0,
+        "params": {}
       },
       {
-        "sym": "172",
-        "x1": 272,
-        "y1": 288,
-        "x2": 192,
-        "y2": 288,
-        "flags": "0",
-        "params": [
-          "6",
-          "4.5",
-          "5.0",
-          "0.0",
-          "0.0",
-          "0.5",
-          "Y",
-          "Voltage"
-        ]
+        "name": "VarRailElm",
+        "pos": [272, 288, 192, 288],
+        "flags": 0,
+        "params": {
+          "waveform": 6,
+          "frequency": 4.5,
+          "maxVoltage": 5,
+          "bias": 0,
+          "phaseShift": 0,
+          "dutyCycle": 0.5,
+          "sliderText": "Y Voltage"
+        }
       },
       {
-        "sym": "174",
-        "x1": 272,
-        "y1": 224,
-        "x2": 208,
-        "y2": 176,
-        "flags": "0",
-        "params": [
-          "1000.0",
-          "0.5",
-          "X Resistance"
-        ]
+        "name": "PotElm",
+        "pos": [272, 224, 208, 224],
+        "flags": 0,
+        "params": {
+          "maxResistance": 1000,
+          "position": 0.5,
+          "sliderText": "X Resistance"
+        }
       },
       {
-        "sym": "r",
-        "x1": 240,
-        "y1": 176,
-        "x2": 144,
-        "y2": 176,
-        "flags": "0",
-        "params": [
-          "100.0"
-        ]
+        "name": "ResistorElm",
+        "pos": [240, 176, 144, 176],
+        "flags": 0,
+        "params": {
+          "resistance": 100
+        }
       },
       {
-        "sym": "g",
-        "x1": 144,
-        "y1": 176,
-        "x2": 144,
-        "y2": 192,
-        "flags": "0",
-        "params": []
+        "name": "GroundElm",
+        "pos": [144, 176, 144, 192],
+        "flags": 0,
+        "params": {}
       }
     ]
 
@@ -107,3 +86,4 @@ describe "CC2", ->
     ctx = @canvas.getContext('2d')
     @renderer.context = ctx
     @renderer.drawComponents()
+    

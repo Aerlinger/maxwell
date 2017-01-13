@@ -29,42 +29,32 @@ describe "Simple single resistor circuit", ->
         "voltage_range": 5.0
       },
       {
-        "sym": "172",
-        "x1": "256",
-        "y1": "176",
-        "x2": "256",
-        "y2": "128",
+        "name": "VarRailElm",
+        "pos": [304, 176, 304, 128],
+        "flags": 0,
+        "params": {
+          "waveform": 6,
+          "frequency": 5,
+          "maxVoltage": 5,
+          "bias": 0,
+          "phaseShift": 0,
+          "dutyCycle": 0.5,
+          "sliderText": "Voltage"
+        }
+      },
+      {
+        "name": "ResistorElm",
+        "pos": [256, 176, 256, 304],
         "flags": "0",
         "params": [
-          "6",
-          "5.0",
-          "5.0",
-          "0.0",
-          "0.0",
-          "0.5",
-          "Voltage"
+          resistance: 100.0
         ]
       },
       {
-        "sym": "r",
-        "x1": "256",
-        "y1": "176",
-        "x2": "256",
-        "y2": "304",
+        "name": "GroundElm",
+        "pos": ["256", "304", "256", "352"],
         "flags": "0",
-        "params": [
-          "100.0"
-        ]
-      },
-      {
-        "sym": "g",
-        "x1": "256",
-        "y1": "304",
-        "x2": "256",
-        "y2": "352",
-        "flags": "0",
-        "params": [
-        ]
+        "params": {}
       }
     ]
 

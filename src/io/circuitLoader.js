@@ -1,5 +1,3 @@
-let ComponentRegistry = require('../circuit/componentRegistry.js');
-
 let AntennaElm = require('../circuit/components/AntennaElm.js');
 let WireElm = require('../circuit/components/WireElm.js');
 let ResistorElm = require('../circuit/components/ResistorElm.js');
@@ -66,18 +64,11 @@ let ClockElm = require('../circuit/components/ClockElm.js');
 
 let Scope = require('../circuit/components/Scope.js');
 
-
 let SimulationParams = require('../core/simulationParams.js');
 
 let Circuit = require('../circuit/circuit.js');
-let CircuitComponent = require('../circuit/circuitComponent.js');
-let Oscilloscope = require('../scope/oscilloscope.js');
 let Hint = require('../engine/hint.js');
 fs = require('fs')
-
-// let VoltageElm = require('../circuit/components/VoltageElm.js');
-
-// let Scope = require('../circuit/components/Scope.js');
 
 let environment = require("../environment.js");
 
@@ -99,9 +90,6 @@ class CircuitLoader {
       let [x1, y1, x2, y2] = elementData['pos'];
       let flags = parseInt(elementData['flags']) || 0;
       let params = elementData['params'];
-
-      // console.log("X", [x1, y1, x2, y2]);
-      // console.log("Params", params);
 
       if (!ComponentClass) {
         circuit.warn(`No matching component for ${type}`);

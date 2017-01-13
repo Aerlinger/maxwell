@@ -81,144 +81,141 @@ describe "CC2 Component", ->
 
   describe.skip "default initialization", ->
     before ->
-      @chipElm = new CC2Elm()
+      @cc2Elm = new CC2Elm()
 
     it "doesn't set any positions", ->
-      expect(@chipElm.x2()).to.equal(undefined)
-      expect(@chipElm.y2()).to.equal(undefined)
-      expect(@chipElm.x1()).to.equal(undefined)
-      expect(@chipElm.y1()).to.equal(undefined)
+      expect(@cc2Elm.x2()).to.equal(undefined)
+      expect(@cc2Elm.y2()).to.equal(undefined)
+      expect(@cc2Elm.x1()).to.equal(undefined)
+      expect(@cc2Elm.y1()).to.equal(undefined)
 
     it "has correct params", ->
-      expect(@chipElm.bits).to.equal(-1)
-      expect(@chipElm.volts).to.equal(-1)
+      expect(@cc2Elm.bits).to.equal(-1)
+      expect(@cc2Elm.volts).to.equal(-1)
 
     it "has correct pins", ->
-      expect(@chipElm.pins).to.equal(@pins)
+      expect(@cc2Elm.pins).to.equal(@pins)
 
     it "has correct initial rendering conditions", ->
-      expect(@chipElm.curcount).to.equal(undefined)
-      expect(@chipElm.point1).to.eql({x: undefined, y: undefined})
-      expect(@chipElm.point2).to.eql({x: undefined, y: undefined})
-      expect(@chipElm.lead1).to.equal(undefined)
-      expect(@chipElm.lead2).to.equal(undefined)
+      expect(@cc2Elm.curcount).to.equal(undefined)
+      expect(@cc2Elm.point1).to.eql({x: undefined, y: undefined})
+      expect(@cc2Elm.point2).to.eql({x: undefined, y: undefined})
+      expect(@cc2Elm.lead1).to.equal(undefined)
+      expect(@cc2Elm.lead2).to.equal(undefined)
 
     it "has correct node relationships", ->
-      expect(@chipElm.nodes).to.eql([0, 0, 0])
-      expect(@chipElm.volts).to.eql([0, -0, -0])
+      expect(@cc2Elm.nodes).to.eql([0, 0, 0])
+      expect(@cc2Elm.volts).to.eql([0, -0, -0])
 
     it "has default method return values", ->
-      @chipElm.getPostCount().should.equal 3
-      @chipElm.isWire().should.equal false
-      @chipElm.hasGroundConnection().should.equal false
-      @chipElm.needsShortcut().should.equal false
-      @chipElm.canViewInScope().should.equal true
-      @chipElm.getInternalNodeCount().should.equal 0
-      @chipElm.orphaned().should.equal true
+      @cc2Elm.getPostCount().should.equal 3
+      @cc2Elm.isWire().should.equal false
+      @cc2Elm.hasGroundConnection().should.equal false
+      @cc2Elm.needsShortcut().should.equal false
+      @cc2Elm.canViewInScope().should.equal true
+      @cc2Elm.getInternalNodeCount().should.equal 0
+      @cc2Elm.orphaned().should.equal true
 
     it "has correct initial state", ->
-      expect(@chipElm.cspc).to.eql([-1])
-      expect(@chipElm.cspc2).to.eql([-1])
-      expect(@chipElm.flags).to.eql([-1])
-      expect(@chipElm.csize).to.eql(true)
-      expect(@chipElm.noDiagonal).to.eql(true)
-      expect(@chipElm.component_id).to.be
-      expect(@chipElm.voltSource).to.equal(0)
-      expect(@chipElm.current).to.equal(0)
-      expect(@chipElm.getCurrent()).to.equal(0)
-      expect(@chipElm.getVoltageDiff()).to.equal(0)
+      expect(@cc2Elm.cspc).to.eql([-1])
+      expect(@cc2Elm.cspc2).to.eql([-1])
+      expect(@cc2Elm.flags).to.eql([-1])
+      expect(@cc2Elm.csize).to.eql(true)
+      expect(@cc2Elm.noDiagonal).to.eql(true)
+      expect(@cc2Elm.component_id).to.be
+      expect(@cc2Elm.voltSource).to.equal(0)
+      expect(@cc2Elm.current).to.equal(0)
+      expect(@cc2Elm.getCurrent()).to.equal(0)
+      expect(@cc2Elm.getVoltageDiff()).to.equal(0)
 
     it "has params", ->
-      expect(@chipElm.params).to.eql({
+      expect(@cc2Elm.params).to.eql({
       })
 
   describe "With params object", ->
     before ->
-      @chipElm = new CC2Elm(50, 75, 50, 150, {"gain": 1})
+      @cc2Elm = new CC2Elm(50, 75, 50, 150, {"gain": 1})
 
     it "has params", ->
-      expect(@chipElm.bits).to.eql(3)
-      expect(@chipElm.params).to.eql({
-        "bits": 3
+#      expect(@chipElm.bits).to.eql(3)
+      expect(@cc2Elm.params).to.eql({
         "gain": 1
-        "volts": ["0", "1", "1"]
       })
 
     it "has correct pins", ->
-      expect(@chipElm.pins).to.eql(@pins)
+      expect(@cc2Elm.pins).to.eql(@pins)
 
     it "has correct initial state", ->
-      expect(@chipElm.cspc).to.eql(16)
-      expect(@chipElm.cspc2).to.eql(32)
-      expect(@chipElm.flags).to.eql(0)
-      expect(@chipElm.csize).to.eql(2)
-      expect(@chipElm.noDiagonal).to.eql(true)
-      expect(@chipElm.component_id).to.be
-      expect(@chipElm.voltSource).to.equal(0)
-      expect(@chipElm.current).to.equal(0)
-      expect(@chipElm.getCurrent()).to.equal(0)
-      expect(@chipElm.getVoltageDiff()).to.equal(-1)
+      expect(@cc2Elm.cspc).to.eql(16)
+      expect(@cc2Elm.cspc2).to.eql(32)
+      expect(@cc2Elm.flags).to.eql(0)
+      expect(@cc2Elm.csize).to.eql(2)
+      expect(@cc2Elm.noDiagonal).to.eql(true)
+      expect(@cc2Elm.component_id).to.be
+      expect(@cc2Elm.voltSource).to.equal(0)
+      expect(@cc2Elm.current).to.equal(0)
+      expect(@cc2Elm.getCurrent()).to.equal(0)
+      expect(@cc2Elm.getVoltageDiff()).to.equal(-1)
 
 
   describe "With params array", ->
     before ->
-      @chipElm = new CC2Elm(50, 75, 50, 150, ["1"])
+      @cc2Elm = new CC2Elm(50, 75, 50, 150, {"gain": "1"})
 
       @Circuit = new Circuit("CC2 Elm")
 
-      @chipElm.setPoints()
-      @Circuit.solder(@chipElm)
+      @cc2Elm.setPoints()
+      @Circuit.solder(@cc2Elm)
 
     it "has params", ->
-      expect(@chipElm.volts).to.eql([0, 0, 0])
-      expect(@chipElm.params).to.eql({
-        "gain": 1
-        "volts": [0, 0, 0]
+      expect(@cc2Elm.volts).to.eql([])
+      expect(@cc2Elm.params).to.eql({
+        "gain": "1"
       })
 
     it "has bits", ->
-      expect(@chipElm.bits).to.eql(undefined)
+      expect(@cc2Elm.bits).to.eql(undefined)
 
     it "has correct pins", ->
-      expect(@chipElm.pins).to.eql(@pins)
+      expect(@cc2Elm.pins).to.eql(@pins)
 
     it "has correct position", ->
-      expect(@chipElm.x1()).to.equal(50)
-      expect(@chipElm.y1()).to.equal(75)
-      expect(@chipElm.x2()).to.equal(50)
-      expect(@chipElm.y2()).to.equal(150)
+      expect(@cc2Elm.x1()).to.equal(50)
+      expect(@cc2Elm.y1()).to.equal(75)
+      expect(@cc2Elm.x2()).to.equal(50)
+      expect(@cc2Elm.y2()).to.equal(150)
 
-      expect(@chipElm.dx()).to.equal(0)
-      expect(@chipElm.dy()).to.equal(75)
-      expect(@chipElm.dn()).to.equal(75)
-      expect(@chipElm.dsign()).to.equal(1)
-      expect(@chipElm.dpx1()).to.equal(1)
-      expect(@chipElm.dpy1()).to.equal(0)
-      expect(@chipElm.isVertical()).to.equal(true)
-      expect(@chipElm.getCenter()).to.eql({x: 50, y: 112.5})
+      expect(@cc2Elm.dx()).to.equal(0)
+      expect(@cc2Elm.dy()).to.equal(75)
+      expect(@cc2Elm.dn()).to.equal(75)
+      expect(@cc2Elm.dsign()).to.equal(1)
+      expect(@cc2Elm.dpx1()).to.equal(1)
+      expect(@cc2Elm.dpy1()).to.equal(0)
+      expect(@cc2Elm.isVertical()).to.equal(true)
+      expect(@cc2Elm.getCenter()).to.eql({x: 50, y: 112.5})
 
-      expect(@chipElm.getBoundingBox()).to.eql({x: 49, y: 75, width: 5, height: 75})
+      expect(@cc2Elm.getBoundingBox()).to.eql({x: 49, y: 75, width: 5, height: 75})
 
     it "snaps to grid when moved", ->
-      @chipElm.moveTo(100, 162.5)
-      expect(@chipElm.getCenter()).to.eql({x: 98, y: 160.5})
+      @cc2Elm.moveTo(100, 162.5)
+      expect(@cc2Elm.getCenter()).to.eql({x: 98, y: 160.5})
 
-      expect(@chipElm.x1()).to.equal(98)
-      expect(@chipElm.y1()).to.equal(123)
-      expect(@chipElm.x2()).to.equal(98)
-      expect(@chipElm.y2()).to.equal(198)
+      expect(@cc2Elm.x1()).to.equal(98)
+      expect(@cc2Elm.y1()).to.equal(123)
+      expect(@cc2Elm.x2()).to.equal(98)
+      expect(@cc2Elm.y2()).to.equal(198)
 
     it "can be stringified", ->
-      expect(@chipElm.toString()).to.eql("""CC2Elm@[98 123 98 198]: {"volts":[0,0,0],"gain":1}""")
-      expect(@chipElm.getName()).to.eql("CC2 Chip")
+      expect(@cc2Elm.toString()).to.eql("""CC2Elm@[98 123 98 198]: {"gain":"1"}""")
+      expect(@cc2Elm.getName()).to.eql("CC2 Chip")
 
     it "can stamp", ->
-      @chipElm.stamp(@Circuit.Solver.Stamper)
+      @cc2Elm.stamp(@Circuit.Solver.Stamper)
 
     describe "Rendering", ->
       before ->
         @Circuit.clearAndReset()
-        @Circuit.solder(@chipElm)
+        @Circuit.solder(@cc2Elm)
 
         Canvas = require('canvas')
         @canvas = new Canvas(200, 300)
@@ -229,14 +226,12 @@ describe "CC2 Component", ->
         @Circuit.updateCircuit()
         @renderer.drawComponents()
 
-        @componentImageFileName = "test/fixtures/componentRenders/#{@chipElm.getName()}_init.png"
+        @componentImageFileName = "test/fixtures/componentRenders/#{@cc2Elm.getName()}_init.png"
 
         fs.writeFileSync(@componentImageFileName, @canvas.toBuffer())
 
       it "compares buffer", (done) ->
         resemble(@canvas.toBuffer()).compareTo(@componentImageFileName).ignoreAntialiasing().onComplete (data) =>
-          console.log(data)
-
           data.getDiffImage().pack().pipe(fs.createWriteStream(@componentImageFileName + "_diff.png"));
 
           expect(data.misMatchPercentage).to.be.at.most(0.01)

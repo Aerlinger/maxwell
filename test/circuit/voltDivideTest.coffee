@@ -13,7 +13,7 @@ _ = require('lodash')
 
 describe "Voltage Divider", ->
   before (done) ->
-    voltdivide = JSON.parse(fs.readFileSync("./circuits/ohms.json"))
+    voltdivide = JSON.parse(fs.readFileSync("./circuits/v3/ohms.json"))
     @circuit = CircuitLoader.createCircuitFromJsonData(voltdivide)
 
     done()
@@ -23,108 +23,99 @@ describe "Voltage Divider", ->
   it "has correct values", ->
     expect(@circuit.inspect()).to.deep.equal([
       {
-        "current": 0.05
-        "params": [
-          100
-        ]
-        "sym": "r"
-        "voltage": 5
-        "x1": 256
-        "x2": 256
-        "xy": 304
-        "y1": 176
-      }
+        "type": "voltdivide.txt",
+        "timeStep": 0.000005,
+        "simSpeed": 172,
+        "currentSpeed": 63,
+        "voltageRange": 10,
+        "powerRange": 62,
+        "flags": 1
+      },
       {
-        "current": 0.055
-        "params": [
-          6
-          5
-          5
-          0
-          0
-          0.5
-          "Voltage"
-        ]
-        "sym": 172
-        "voltage": 5
-        "x1": 304
-        "x2": 304
-        "xy": 128
-        "y1": 176
-      }
+        "name": "VoltageElm",
+        "pos": [112, 368, 112, 48],
+        "flags": 0,
+        "params": {
+          "waveform": 0,
+          "frequency": 40,
+          "maxVoltage": 10,
+          "bias": 0,
+          "phaseShift": 0,
+          "dutyCycle": 0.5
+        }
+      },
       {
-        "current": 0.05
-        "params": []
-        "sym": "g"
-        "voltage": 0
-        "x1": 256
-        "x2": 256
-        "xy": 352
-        "y1": 336
-      }
+        "name": "WireElm",
+        "pos": [112, 48, 240, 48],
+        "flags": 0,
+        "params": {}
+      },
       {
-        "current": 0.05
-        "params": []
-        "sym": "w"
-        "voltage": -0
-        "x1": 256
-        "x2": 256
-        "xy": 336
-        "y1": 304
-      }
+        "name": "ResistorElm",
+        "pos": [240, 48, 240, 208],
+        "flags": 0,
+        "params": {
+          "resistance": 10000
+        }
+      },
       {
-        "current": 0.005
-        "params": [
-          1000
-        ]
-        "sym": "r"
-        "voltage": 5
-        "x1": 352
-        "x2": 352
-        "xy": 304
-        "y1": 176
-      }
+        "name": "ResistorElm",
+        "pos": [240, 208, 240, 368],
+        "flags": 0,
+        "params": {
+          "resistance": 10000
+        }
+      },
       {
-        "current": 0.005
-        "params": []
-        "sym": "w"
-        "voltage": 0
-        "x1": 352
-        "x2": 352
-        "xy": 336
-        "y1": 304
-      }
+        "name": "WireElm",
+        "pos": [112, 368, 240, 368],
+        "flags": 0,
+        "params": {}
+      },
       {
-        "current": 0.005
-        "params": []
-        "sym": "g"
-        "voltage": 0
-        "x1": 352
-        "x2": 352
-        "xy": 352
-        "y1": 336
-      }
+        "name": "WireElm",
+        "pos": [240, 48, 432, 48],
+        "flags": 0,
+        "params": {}
+      },
       {
-        "current": 0.005
-        "params": []
-        "sym": "w"
-        "voltage": 5
-        "x1": 304
-        "x2": 352
-        "xy": 176
-        "y1": 176
-      }
+        "name": "WireElm",
+        "pos": [240, 368, 432, 368],
+        "flags": 0,
+        "params": {}
+      },
       {
-        "current": -0.05
-        "params": []
-        "sym": "w"
-        "voltage": 5
-        "x1": 256
-        "x2": 304
-        "xy": 176
-        "y1": 176
+        "name": "ResistorElm",
+        "pos": [432, 48, 432, 128],
+        "flags": 0,
+        "params": {
+          "resistance": 10000
+        }
+      },
+      {
+        "name": "ResistorElm",
+        "pos": [432, 128, 432, 208],
+        "flags": 0,
+        "params": {
+          "resistance": 10000
+        }
+      },
+      {
+        "name": "ResistorElm",
+        "pos": [432, 208, 432, 288],
+        "flags": 0,
+        "params": {
+          "resistance": 10000
+        }
+      },
+      {
+        "name": "ResistorElm",
+        "pos": [432, 288, 432, 368],
+        "flags": 0,
+        "params": {
+          "resistance": 10000
+        }
       }
-
     ])
 
   describe "Running updateCircuit", ->

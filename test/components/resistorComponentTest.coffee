@@ -44,7 +44,7 @@ describe "Resistor Component", ->
       expect(@resistor.orphaned()).to.equal true
 
     it "has correct properties", ->
-      console.log("PARAMS", @resistor.getFieldWithValue("resistance"))
+#      console.log("PARAMS", @resistor.getFieldWithValue("resistance"))
       expect(@resistor.getFieldWithValue("resistance")).to.eql({
         "default_value": 1000
         "name": "Resistance"

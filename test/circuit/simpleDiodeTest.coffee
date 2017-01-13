@@ -21,38 +21,31 @@ describe "Simple single diode circuit", ->
         "voltage_range": 2.0
       },
       {
-        "sym": "R",
-        "x1": "288",
-        "y1": "208",
-        "x2": "288",
-        "y2": "160",
-        "flags": "0",
-        "params": [
-          "3",
-          "50.0",
-          "0.65",
-          "0.25",
-          "0.0",
-          "0.5"
-        ]
+        "name": "RailElm",
+        "pos": [288, 208, 288, 160],
+        "flags": 0,
+        "params": {
+          "waveform": 3,
+          "frequency": 50,
+          "maxVoltage": 0.65,
+          "bias": 0.25,
+          "phaseShift": 0,
+          "dutyCycle": 0.5
+        }
       },
       {
-        "sym": "d",
-        "x1": "288",
-        "y1": "208",
-        "x2": "288",
-        "y2": "288",
-        "flags": "0",
-        "params": []
+        "name": "DiodeElm",
+        "pos": [288, 208, 288, 288],
+        "flags": 0,
+        "params": {
+          "fwdrop": 0.805904783
+        }
       },
       {
-        "sym": "g",
-        "x1": "288",
-        "y1": "288",
-        "x2": "288",
-        "y2": "320",
-        "flags": "0",
-        "params": []
+        "name": "GroundElm",
+        "pos": [288, 288, 288, 320],
+        "flags": 0,
+        "params": {}
       }
     ]
 

@@ -1,11 +1,10 @@
 CircuitLoader = require("../../src/io/circuitLoader.js")
-Circuit = require('../../src/circuit/circuit.js')
 fs = require 'fs'
 
 describe "CircuitLoader", ->
   describe "reads voltdividesimple.json and", ->
     before (done) ->
-      voltdividesimple = JSON.parse(fs.readFileSync("./circuits/voltdividesimple.json"))
+      voltdividesimple = JSON.parse(fs.readFileSync("./circuits/v3/voltdividesimple.json"))
 
       @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
       done()
@@ -15,32 +14,29 @@ describe "CircuitLoader", ->
 
     describe "should load parameters", ->
       it "has correct completionStatus", ->
-        @circuit.Params.completionStatus.should.equal "complete"
+        expect(@circuit.Params.completionStatus).to.equal "in development"
 
       it "has correct currentSpeed", ->
-        @circuit.Params.currentSpeed.should.equal 103.0
-
-      it "has correct description", ->
-        @circuit.Params.description.should.equal "A simple voltage divider circuit"
+        @circuit.Params.currentSpeed.should.equal 63
 
       it "has correct flags", ->
         @circuit.Params.flags.should.equal 1
 
       it "has correct unique name", ->
         console.log @circuit.Params.name
-        @circuit.Params.name.should.equal "voltdivide.txt"
+        @circuit.Params.name.should.equal "default"
 
       it "has correct power range", ->
         @circuit.Params.powerRange.should.equal 62.0
 
       it "has correct simSpeed", ->
-        @circuit.Params.simSpeed.should.equal 116
+        expect(@circuit.Params.simSpeed).to.equal 172
 
       it "has correct timeStep", ->
         @circuit.Params.timeStep.should.equal 5.0e-6
 
       it "has correct title", ->
-        @circuit.Params.title.should.equal "Voltage Divider"
+        @circuit.Params.title.should.equal "Default"
 
       it "has correct topic", ->
         @circuit.Params.topic.should.equal "Basics"

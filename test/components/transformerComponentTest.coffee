@@ -1,6 +1,14 @@
 describe "Transformer Component", ->
   before (done)->
-    @transformer = new TransformerElm(50, 50, 50, 150, ["1e-4", "5", "1e-2", "1e-1", 0.998])
+#    @transformer = new TransformerElm(50, 50, 50, 150, ["1e-4", "5", "1e-2", "1e-1", 0.998])
+
+    @transformer = new TransformerElm(50, 50, 50, 150, {
+      "inductance": "1e-4",
+      "ratio", "5",
+      "current0", "1e-2",
+      "current1", "1e-3",
+      "couplingCoef": 0.990
+    })
     done()
 
   it "has correct attributes", ->
