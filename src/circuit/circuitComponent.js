@@ -648,7 +648,7 @@ class CircuitComponent {
   serialize() {
     return {
       name: this.constructor.name,
-      pos:[this.point1.x, this.point1.y, this.point2.x, this.point2.y],
+      pos: [this.point1.x, this.point1.y, this.point2.x, this.point2.y],
       flags: this.flags,
       params: this.params
     }
