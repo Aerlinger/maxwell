@@ -141,6 +141,8 @@ class ChipElm extends CircuitComponent {
 
   // TODO: Need a better way of dealing with variable length params here
   constructor(xa, xb, ya, yb, params, f) {
+    // console.log(params);
+
     super(xa, xb, ya, yb, {}, f);
 
     let initial_voltages = [];
@@ -148,11 +150,15 @@ class ChipElm extends CircuitComponent {
     this.flags = f;
 
     this.setSize(((f & ChipElm.FLAG_SMALL) !== 0) ? 1 : 2);
+    
+    // TODO: Needs cleanup 
 
     if (params) {
+      // TODO: DRY
       if (params.constructor == Array) {
         if (this.needsBits()) {
           this.bits = parseInt(params.shift());
+          this.params['bits'] = this.bits;
         }
 
         self = this;
@@ -161,25 +167,49 @@ class ChipElm extends CircuitComponent {
 
         for (let i=0; i<this.getPostCount(); ++i) {
           if (this.pins[i].state) {
+            console.log(params)
             initial_voltages.push(parseInt(params.shift()));
           }
         }
+
+        // this.volts = params['volts'];
+        this.volts = initial_voltages;
+
+        if (this.volts) {
+          this.params['volts'] = initial_voltages;
+          console.log(this.params['volts'])
+        }
       } else {
-        this.bits = params['bits'];
+        if (this.needsBits()) {
+          this.bits = params['bits'];
+          this.params['bits'] = this.bits;
+        }
+
+        self = this;
+        this.setupPins();
+        this._setPoints();
+
         this.volts = params['volts'];
-        initial_voltages = params['volts'];
+
+        if (params['volts']) {
+          this.params['volts'] = params['volts']
+        }
+
+        for (let i=0; i<this.getPostCount(); ++i) {
+          if (this.pins[i].state) {
+            initial_voltages.push(parseInt(params['volts'].shift()));
+          }
+        }
+
+        this.volts = initial_voltages;
       }
     }
 
-    this.params['volts'] = this.volts;
-
-    if (this.bits) {
-      this.params['bits'] = this.bits;
-    }
-
     this.noDiagonal = true;
+    
+    /*
     let numPosts = this.getPostCount();
-
+    
     for (let i = 0; i < numPosts; i++) {
       if (!this.pins[i]) {
         console.error(`No pin found at ${i}`);
@@ -191,10 +221,12 @@ class ChipElm extends CircuitComponent {
         this.pins[i].value = this.volts[i] > 2.5;
       }
     }
+    */
 
-    this.params['volts'] = this.volts;
+    console.log(this.params['volts'])
   }
 
+  /*
   inspect() {
     let paramValues = ((() => {
       let result = [];
@@ -222,6 +254,7 @@ class ChipElm extends CircuitComponent {
       current: this.getCurrent()
     };
   }
+  */
 
   setupPins() {
     return console.trace("setupPins() to be called from subclasses of ChipElm");
