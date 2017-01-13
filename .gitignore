@@ -14,7 +14,6 @@ test/fixtures/circuitRenders/**/*.png
 test/fixtures/componentRenders/**/*.png
 test/fixtures/**/*.json
 circuits/v2/
-circuits/v3/
 .env
 bundle.js
 **/*.map
