@@ -1,1 +1,335 @@
-[{"type":"555int.txt","timeStep":0.000005,"simSpeed":155,"currentSpeed":64,"voltageRange":7,"powerRange":62,"flags":3},{"name":"OpAmpElm","pos":[288,168,384,168],"flags":1,"params":{"maxOut":5,"minOut":0,"gbw":1000000}},{"name":"OpAmpElm","pos":[288,264,384,264],"flags":1,"params":{"maxOut":5,"minOut":0,"gbw":1000000}},{"name":"ResistorElm","pos":[240,56,240,104],"flags":0,"params":{"resistance":5000}},{"name":"ResistorElm","pos":[240,104,240,152],"flags":0,"params":{"resistance":5000}},{"name":"WireElm","pos":[240,152,240,280],"flags":0,"params":{}},{"name":"ResistorElm","pos":[240,280,240,328],"flags":0,"params":{"resistance":5000}},{"name":"GroundElm","pos":[240,328,240,336],"flags":0,"params":{}},{"name":"WireElm","pos":[240,152,288,152],"flags":0,"params":{}},{"name":"WireElm","pos":[240,104,272,104],"flags":0,"params":{}},{"name":"WireElm","pos":[272,104,272,280],"flags":0,"params":{}},{"name":"WireElm","pos":[272,280,288,280],"flags":0,"params":{}},{"name":"WireElm","pos":[464,176,464,192],"flags":0,"params":{}},{"name":"WireElm","pos":[384,184,384,192],"flags":0,"params":{}},{"name":"WireElm","pos":[384,192,464,240],"flags":0,"params":{}},{"name":"WireElm","pos":[464,240,464,256],"flags":0,"params":{}},{"name":"WireElm","pos":[384,240,384,248],"flags":0,"params":{}},{"name":"WireElm","pos":[384,240,464,192],"flags":0,"params":{}},{"name":"RailElm","pos":[240,56,240,24],"flags":0,"params":{"waveform":0,"frequency":40,"maxVoltage":10,"bias":0,"phaseShift":0,"dutyCycle":0.5}},{"name":"RailElm","pos":[88,56,88,24],"flags":0,"params":{"waveform":0,"frequency":40,"maxVoltage":10,"bias":0,"phaseShift":0,"dutyCycle":0.5}},{"name":"ResistorElm","pos":[88,56,88,120],"flags":0,"params":{"resistance":10000}},{"name":"ResistorElm","pos":[88,120,88,184],"flags":0,"params":{"resistance":10000}},{"name":"WireElm","pos":[88,120,216,120],"flags":0,"params":{}},{"name":"WireElm","pos":[216,120,216,352],"flags":0,"params":{}},{"name":"WireElm","pos":[88,184,88,248],"flags":0,"params":{}},{"name":"CapacitorElm","pos":[88,248,88,352],"flags":0,"params":{"capacitance":3e-7,"voltdiff":0}},{"name":"GroundElm","pos":[88,352,88,368],"flags":0,"params":{}},{"name":"ResistorElm","pos":[384,368,464,368],"flags":0,"params":{"resistance":10000}},{"name":"WireElm","pos":[464,176,496,176],"flags":0,"params":{}},{"name":"WireElm","pos":[464,368,496,368],"flags":0,"params":{}},{"name":"NorGateElm","pos":[384,256,464,256],"flags":1,"params":{"inputCount":2,"lastOutput":true}},{"name":"NorGateElm","pos":[384,176,464,176],"flags":1,"params":{"inputCount":2,"lastOutput":false}},{"name":"WireElm","pos":[496,176,496,368],"flags":0,"params":{}},{"name":"OutputElm","pos":[464,256,544,256],"flags":0,"params":{}},{"name":"WireElm","pos":[88,184,288,184],"flags":0,"params":{}},{"name":"WireElm","pos":[88,248,288,248],"flags":0,"params":{}},{"name":"TransistorElm","pos":[328,368,296,368],"flags":0,"params":{"beta":100,"pnp":1,"volts":[0,7.876671689823544,-4.999999997999999e-10]}},{"name":"WireElm","pos":[216,352,296,352],"flags":0,"params":{}},{"name":"GroundElm","pos":[296,384,296,400],"flags":0,"params":{}},{"name":"WireElm","pos":[328,368,384,368],"flags":0,"params":{}},{"name":"TextElm","pos":[120,115,136,115],"flags":0,"params":{"size":16,"text":"discharge"}},{"name":"TextElm","pos":[129,178,145,178],"flags":0,"params":{"size":16,"text":"trigger"}},{"name":"TextElm","pos":[120,242,136,242],"flags":0,"params":{"size":16,"text":"threshold"}},{"name":"WireElm","pos":[272,104,272,56],"flags":0,"params":{}},{"name":"TextElm","pos":[284,62,300,62],"flags":0,"params":{"size":16,"text":"control"}}]
+[
+  {
+    "type": "555int.txt",
+    "timeStep": 0.000005,
+    "simSpeed": 155,
+    "currentSpeed": 64,
+    "voltageRange": 7,
+    "powerRange": 62,
+    "flags": 3
+  },
+  {
+    "name": "OpAmpElm",
+    "pos": [288, 168, 384, 168],
+    "flags": 1,
+    "params": {
+      "maxOut": 5,
+      "minOut": 0,
+      "gbw": 1000000
+    }
+  },
+  {
+    "name": "OpAmpElm",
+    "pos": [288, 264, 384, 264],
+    "flags": 1,
+    "params": {
+      "maxOut": 5,
+      "minOut": 0,
+      "gbw": 1000000
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [240, 56, 240, 104],
+    "flags": 0,
+    "params": {
+      "resistance": 5000
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [240, 104, 240, 152],
+    "flags": 0,
+    "params": {
+      "resistance": 5000
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [240, 152, 240, 280],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [240, 280, 240, 328],
+    "flags": 0,
+    "params": {
+      "resistance": 5000
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [240, 328, 240, 336],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [240, 152, 288, 152],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [240, 104, 272, 104],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [272, 104, 272, 280],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [272, 280, 288, 280],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [464, 176, 464, 192],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [384, 184, 384, 192],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [384, 192, 464, 240],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [464, 240, 464, 256],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [384, 240, 384, 248],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [384, 240, 464, 192],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "RailElm",
+    "pos": [240, 56, 240, 24],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 10,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [88, 56, 88, 24],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 10,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [88, 56, 88, 120],
+    "flags": 0,
+    "params": {
+      "resistance": 10000
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [88, 120, 88, 184],
+    "flags": 0,
+    "params": {
+      "resistance": 10000
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [88, 120, 216, 120],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [216, 120, 216, 352],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [88, 184, 88, 248],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [88, 248, 88, 352],
+    "flags": 0,
+    "params": {
+      "capacitance": 3e-7,
+      "voltdiff": 0
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [88, 352, 88, 368],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [384, 368, 464, 368],
+    "flags": 0,
+    "params": {
+      "resistance": 10000
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [464, 176, 496, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [464, 368, 496, 368],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "NorGateElm",
+    "pos": [384, 256, 464, 256],
+    "flags": 1,
+    "params": {
+      "inputCount": 2,
+      "lastOutput": true
+    }
+  },
+  {
+    "name": "NorGateElm",
+    "pos": [384, 176, 464, 176],
+    "flags": 1,
+    "params": {
+      "inputCount": 2,
+      "lastOutput": false
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [496, 176, 496, 368],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "OutputElm",
+    "pos": [464, 256, 544, 256],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [88, 184, 288, 184],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [88, 248, 288, 248],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "TransistorElm",
+    "pos": [328, 368, 296, 368],
+    "flags": 0,
+    "params": {
+      "pnp": 1,
+      "lastvbe": -7.876671689823544,
+      "lastvbc": 4.999999997999999e-10,
+      "beta": 100
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [216, 352, 296, 352],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "GroundElm",
+    "pos": [296, 384, 296, 400],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [328, 368, 384, 368],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "TextElm",
+    "pos": [120, 115, 136, 115],
+    "flags": 0,
+    "params": {
+      "size": 16,
+      "text": "discharge"
+    }
+  },
+  {
+    "name": "TextElm",
+    "pos": [129, 178, 145, 178],
+    "flags": 0,
+    "params": {
+      "size": 16,
+      "text": "trigger"
+    }
+  },
+  {
+    "name": "TextElm",
+    "pos": [120, 242, 136, 242],
+    "flags": 0,
+    "params": {
+      "size": 16,
+      "text": "threshold"
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [272, 104, 272, 56],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "TextElm",
+    "pos": [284, 62, 300, 62],
+    "flags": 0,
+    "params": {
+      "size": 16,
+      "text": "control"
+    }
+  }
+]
