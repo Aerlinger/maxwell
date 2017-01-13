@@ -14,7 +14,20 @@ class TimerElm extends ChipElm {
     this.N_RST = 6;
   }
 
-  constructor(xa, xb, ya, yb, params, f) {
+  static get Fields() {
+    return {
+      "volts": {
+        name: "Volts",
+        description: "Current multiplier",
+        default_value: -1,
+        data_type: Math.sign,
+        field_type: "select",
+        select_values: {"NPN": -1, "PNP": 1}
+      }
+    }
+  }
+
+  constructor(xa, xb, ya, yb, params = ["0.0"], f = "0") {
     super(xa, xb, ya, yb, params, f);
   }
 
@@ -27,7 +40,11 @@ class TimerElm extends ChipElm {
   }
 
   getPostCount() {
-    if (this.hasReset()) { return 7; } else { return 6; }
+    if (this.hasReset()) {
+      return 7;
+    } else {
+      return 6;
+    }
   }
 
   getVoltageSourceCount() {

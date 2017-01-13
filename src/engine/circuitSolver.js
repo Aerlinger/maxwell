@@ -722,6 +722,7 @@ class CircuitSolver {
   luFactor(circuitMatrix, matrixSize, pivotArray) {
     // Divide each row by largest element in that row and remember scale factors
     let j, largest, x;
+
     let i = 0;
     while (i < matrixSize) {
       largest = 0;
@@ -745,7 +746,7 @@ class CircuitSolver {
     j = 0;
     while (j < matrixSize) {
 
-      // Calculate upper trangular elements for this column:
+      // Calculate upper triangular elements for this column:
       var k, matrix_ij;
       i = 0;
       while (i < j) {

@@ -14,7 +14,7 @@ _ = require('lodash')
 
 describe "Simple Voltage Divider", ->
   before (done) ->
-    voltdividesimple = JSON.parse(fs.readFileSync("./circuits/voltdividesimple.json"))
+    voltdividesimple = JSON.parse(fs.readFileSync("./circuits/v3/voltdividesimple.json"))
     @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
 
     #    CircuitLoader.createCircuitFromJsonFile "../../circuits/voltdividesimple.json", (circuit) =>

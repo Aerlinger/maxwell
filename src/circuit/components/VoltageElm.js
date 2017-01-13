@@ -76,7 +76,6 @@ class VoltageElm extends CircuitComponent {
     this.WF_VAR = 6;
 
     this.circleSize = 17;
-
   }
 
   constructor(xa, ya, xb, yb, params, f) {
