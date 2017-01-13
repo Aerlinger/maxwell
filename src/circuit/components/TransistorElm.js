@@ -76,11 +76,13 @@ class TransistorElm extends CircuitComponent {
     this.setPoints();
 
     // TOOD: non-standard  method for setting param
+    /*
     this.params = {
       "beta": this.beta,
       "pnp": this.pnp,
       "volts": this.volts
     };
+    */
   }
 
   setup() {
