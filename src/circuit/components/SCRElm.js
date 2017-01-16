@@ -9,10 +9,12 @@ class ScrElm extends CircuitComponent {
   
     return {
       lastvac: {
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 0
       },
       lastvag: {
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 0
       },
       triggerI: {
         data_type: parseFloat,

@@ -6,15 +6,18 @@ class TappedTransformerElm extends CircuitComponent {
     return {
       inductance: {
         name: "Inductance",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 4
       },
       ratio: {
         name: "Ratio",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 1
       },
       current0: {
         name: "Current0",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 0
       },
       current1: {
         name: "Current1",

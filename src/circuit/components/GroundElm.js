@@ -15,6 +15,10 @@ class GroundElm extends CircuitComponent {
     return 1;
   }
 
+  getName() {
+    return "Ground"
+  }
+
   draw(renderContext) {
     this.updateDots();
 

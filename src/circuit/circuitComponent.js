@@ -82,10 +82,12 @@ class CircuitComponent {
         delete component_params[param_name];
 
       } else {
-        if (default_value) {
-          console.log(`INFO: Assigning default value of ${default_value} for ${param_name} in ${this.constructor.name} (was ${this[param_name]})`)
+        if ((default_value != null) && (default_value != undefined)) {
+          if (CircuitComponent.DEBUG) {
+            console.log(`INFO: Assigning default value of ${default_value} for ${param_name} in ${this.constructor.name} (was ${this[param_name]})`)
+          }
         } else {
-          console.warn(`No default for ${param_name} in ${this.constructor.name}!`)
+          console.warn(`No default value defined for ${param_name} in ${this.constructor.name}!`)
         }
 
         if (!this[param_name])
@@ -107,7 +109,7 @@ class CircuitComponent {
     })());
 
     if (unmatched_params.length > 0) {
-      console.error(`The following parameters ${unmatched_params.join(" ")} do not belong in ${this.getName()}`);
+      console.error(`The following parameters [${unmatched_params.join(" ")}] do not belong in ${this.getName()}`);
       throw new Error(`Invalid params '${unmatched_params.join(" ")}' assigned to ${this.getName()}`);
     }
   }

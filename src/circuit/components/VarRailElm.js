@@ -23,6 +23,9 @@ class VarRailElm extends RailElm {
     });
   }
 
+  getName() {
+    return "Variable Voltage Rail"
+  }
 
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);

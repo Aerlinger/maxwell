@@ -21,6 +21,10 @@ class RailElm extends VoltageElm {
     return 1;
   }
 
+  getName() {
+    return "Voltage Rail"
+  }
+
   draw(renderContext) {
     this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (VoltageElm.circleSize / this.dn()));
 

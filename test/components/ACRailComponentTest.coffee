@@ -1,4 +1,4 @@
-describe "ACRailElmTest", ->
+describe "ACRailElm Test", ->
   before ->
     @acRailElm = new ACRailElm(100, 200)
 

@@ -17,5 +17,9 @@ describe "Renderer", ->
     #    console.log(componentRegistry.ComponentDefs)
 
     for sym, component of componentRegistry.ComponentDefs
-      @Renderer.setPlaceComponent(component.name)
+      @placeComponent = @Renderer.setPlaceComponent(component.name)
+
+      console.log(@placeComponent.constructor.name)
+      console.log(@placeComponent.getName())
+      expect(@placeComponent.getName()).to.be
 

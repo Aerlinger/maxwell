@@ -27,7 +27,7 @@ class SwitchElm extends CircuitComponent {
       },
       "momentary": {
         name: "Momentary",
-        default_value: 0,
+        default_value: false,
         data_type(str) { return str.toString() === 'true'; },
         field_type: "boolean"
       }

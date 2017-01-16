@@ -205,6 +205,9 @@ class VoltageElm extends CircuitComponent {
     }
   }
 
+  getName() {
+    return "Voltage Source"
+  }
 
   drawWaveform(center, renderContext) {
     let color = Settings.STROKE_COLOR;

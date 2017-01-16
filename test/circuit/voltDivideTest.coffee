@@ -39,7 +39,7 @@ describe "Voltage Divider", ->
         }
         {
           "current": 0.055
-          "name": "VarRailElm"
+          "name": "Variable Voltage Rail"
           "params": [
             6
             5
@@ -59,7 +59,7 @@ describe "Voltage Divider", ->
         }
         {
           "current": 0.05
-          "name": "GroundElm"
+          "name": "Ground"
           "params": []
           "pos": [
             256
@@ -109,7 +109,7 @@ describe "Voltage Divider", ->
         }
         {
           "current": 0.005
-          "name": "GroundElm"
+          "name": "Ground"
           "params": []
           "pos": [
             352

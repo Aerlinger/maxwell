@@ -102,7 +102,7 @@ describe "Simple Voltage Divider", ->
         @circuit.inspect().should.eql([
           {
             "current": 0.0015
-            "name": "VoltageElm"
+            "name": "Voltage Source"
             "params": [
               0
               40

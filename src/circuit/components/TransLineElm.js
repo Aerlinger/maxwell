@@ -7,19 +7,23 @@ class TransLineElm extends CircuitComponent {
     return {
       delay: {
         name: "Delay",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 1000
       },
       imped: {
         name: "Impedance",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 75
       },
       width: {
         name: "Width (m)",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 20
       },
       resistance: {
         name: "Resistance",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 50
       }
     };
   }

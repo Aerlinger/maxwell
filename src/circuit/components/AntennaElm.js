@@ -36,6 +36,10 @@ class AntennaElm extends RailElm {
 
     return wave1 + wave2 + wave3;
   }
+
+  getName() {
+    return "Antenna Voltage Rail"
+  }
 }
 
 module.exports = AntennaElm;

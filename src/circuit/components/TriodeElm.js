@@ -6,11 +6,13 @@ class TriodeElm extends CircuitComponent {
     return {
       mu: {
         name: "",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 93
       },
       kg1: {
         name: "",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 680
       }
     };
   }
