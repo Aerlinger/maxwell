@@ -9,6 +9,15 @@ let { sprintf } = require("sprintf-js");
 
 
 class MosfetElm extends CircuitComponent {
+  static get PNP() {
+    return 1
+  }
+
+  static get NPN() {
+    return  -1
+  }
+
+  // TODO: Replace PNP, NPN with P-Type/N-Type
   static get Fields() {
     return {
       "vt": {
@@ -17,7 +26,7 @@ class MosfetElm extends CircuitComponent {
         description: "Threshold voltage",
         units: "Volts",
         symbol: "V",
-        default: 1.5,
+        default_value: 1.5,
         range: [0, Infinity],
         type: sprintf
       },
@@ -54,7 +63,6 @@ class MosfetElm extends CircuitComponent {
     this.gate = [];
     this.pcircle = [];
 
-//    @pnp = (params["polarity"] ? -1 : 1)
     this.noDiagonal = true;
     this.vt = this.getDefaultThreshold();
 

@@ -22,8 +22,6 @@ let debug = require('debug')('circuitComponent');
 
 let _ = require("lodash");
 
-let {sprintf} = require("sprintf-js");
-
 class CircuitComponent {
 
   static get Fields() {
@@ -54,16 +52,13 @@ class CircuitComponent {
   }
 
   allocNodes() {
-    // console.log("this.getPostCount()", this.getPostCount(), "this.getInternalNodeCount()", this.getInternalNodeCount())
-
     this.nodes = Util.zeroArray(this.getPostCount() + this.getInternalNodeCount());
     return this.volts = Util.zeroArray(this.getPostCount() + this.getInternalNodeCount());
   }
 
   setParameters(component_params) {
     if (component_params && (component_params.constructor === Array)) {
-      console.warn(`component_params ${component_params} is an array on ${this.constructor.name}`)
-      component_params = this.convertParamsToHash(component_params);
+      console.error(`component_params ${component_params} is an array on ${this.constructor.name}`)
     }
 
     let {Fields} = this.constructor;
@@ -72,8 +67,7 @@ class CircuitComponent {
 
     for (let param_name in Fields) {
       let definition = Fields[param_name];
-      let {default_value} = definition;
-      let {data_type} = definition;
+      let {default_value, data_type} = definition;
 
       if (!Util.isFunction(data_type)) {
         console.error("data_type must be a function");
@@ -88,16 +82,19 @@ class CircuitComponent {
         delete component_params[param_name];
 
       } else {
-//        console.log("Assigning default value of #{default_value} for #{param_name} in #{@constructor.name} (was #{this[param_name]})")
-
-        if (!this[param_name]) {
-          this[param_name] = data_type(default_value);
+        if (default_value) {
+          console.log(`INFO: Assigning default value of ${default_value} for ${param_name} in ${this.constructor.name} (was ${this[param_name]})`)
+        } else {
+          console.warn(`No default for ${param_name} in ${this.constructor.name}!`)
         }
+
+        if (!this[param_name])
+          this[param_name] = data_type(default_value);
+
         this.params[param_name] = this[param_name];
 
-        if ((this[param_name] === null) || (this[param_name] === undefined) || isNaN(this[param_name])) {
+        if ((this[param_name] === null) || (this[param_name] === undefined) || isNaN(this[param_name]))
           debug(`Parameter ${param_name} is unset: ${this[param_name]}!`);
-        }
       }
     }
 
@@ -111,41 +108,10 @@ class CircuitComponent {
 
     if (unmatched_params.length > 0) {
       console.error(`The following parameters ${unmatched_params.join(" ")} do not belong in ${this.getName()}`);
-      throw new Error(`Invalid params ${unmatched_params.join(" ")} assigned to ${this.getName()}`);
+      throw new Error(`Invalid params '${unmatched_params.join(" ")}' assigned to ${this.getName()}`);
     }
   }
 
-  // Convert list of parameters to a hash, according to matching order in @Fields
-  convertParamsToHash(param_list) {
-    let {Fields} = this.constructor;
-    let result = {};
-
-    for (let i = 0, end = param_list.length, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-      var data_type;
-      let param_name = Object.keys(Fields)[i];
-      let param_value = param_list[i];
-
-      if (Fields[param_name]) {
-        ({data_type} = Fields[param_name]);
-      } else {
-        console.warn(`Failed to load data_type ${data_type}: ${param_name}: ${param_value}`);
-        console.log(param_value);
-        console.log(`${i}: param_name ${Fields}`);
-      }
-
-      if (!data_type) {
-        console.warn(`No conversion found for ${data_type}`);
-      }
-
-      if (!Util.isFunction(data_type)) {
-        console.error(`data_type ${data_type} is not a function!`);
-      }
-
-      result[param_name] = param_value;
-    }
-
-    return result;
-  }
 
   getParentCircuit() {
     return this.Circuit;
@@ -580,8 +546,7 @@ class CircuitComponent {
     let post;
     renderContext.drawRect(this.boundingBox.x - 2, this.boundingBox.y - 2, this.boundingBox.width + 2, this.boundingBox.height + 2, 0.5, "#8888CC");
 
-//    renderContext.drawValue 10, -15, this, @constructor.name
-
+    // renderContext.drawValue 10, -15, this, @constructor.name
     // renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
 
     renderContext.drawValue(-14, 0, this, this.toString());
@@ -599,11 +564,11 @@ class CircuitComponent {
 
     let outlineRadius = 7;
 
-//    nodeIdx = 0
-//    for node in @nodes
-//      if @point1 && @point2
-//        renderContext.drawValue 25+10*nodeIdx, -10*nodeIdx, this, "#{node}-#{@getVoltageForNode(node)}"
-//        nodeIdx += 1
+    // nodeIdx = 0
+    // for node in @nodes
+    //   if @point1 && @point2
+    //     renderContext.drawValue 25+10*nodeIdx, -10*nodeIdx, this, "#{node}-#{@getVoltageForNode(node)}"
+    //     nodeIdx += 1
 
 
     if (this.point1) {
