@@ -50,6 +50,10 @@ class TappedTransformerElm extends CircuitComponent {
     return this.current[3] = this.current[1] - this.current[2];
   }
 
+  getName() {
+    return "Tapped Transformer"
+  }
+
   setPoints() {
     let b;
     super.setPoints(...arguments);

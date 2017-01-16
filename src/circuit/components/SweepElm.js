@@ -52,6 +52,10 @@ class SweepElm extends CircuitComponent {
     this.dir = 1;
   }
 
+  getName() {
+    return "Frequency Sweep"
+  }
+
   onSolder(circuit) {
     return this.reset();
   }

@@ -50,6 +50,10 @@ class MemristorElm extends CircuitComponent {
     return this.ps4 = new Point(0, 0);
   }
 
+  getName() {
+    return "Memristor"
+  }
+
   reset() {
     return this.dopeWidth = 0;
   }

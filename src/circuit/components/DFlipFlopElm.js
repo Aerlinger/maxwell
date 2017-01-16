@@ -26,6 +26,10 @@ class DFlipFlopElm extends ChipElm {
     }
   }
 
+  getName() {
+    return "D Flip-Flop"
+  }
+
   getVoltageSourceCount() {
     return 2;
   }

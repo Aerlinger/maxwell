@@ -51,6 +51,10 @@ class TextElm extends CircuitComponent {
     return this.point2.y = yy;
   }
 
+  getName() {
+    return "Text Label"
+  }
+
   draw(renderContext) {
 //    color = (if @needsHighlight() then Settings.SELECT_COLOR else Settings.TEXT_COLOR)
 

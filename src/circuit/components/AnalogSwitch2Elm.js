@@ -78,6 +78,9 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
     }
   }
 
+  getName() {
+    return "Analog Switch (2-way)"
+  }
 
   stamp(stamper) {
     stamper.stampNonLinear(this.nodes[0]);

@@ -27,6 +27,10 @@ class TunnelDiodeElm extends CircuitComponent {
 
   setup() {}
 
+  getName() {
+    return "Tunnel Diode"
+  }
+
   setPoints() {
     super.setPoints(...arguments);
     this.calcLeads(16);

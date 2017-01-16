@@ -15,8 +15,8 @@ class TransLineElm extends CircuitComponent {
         data_type: parseFloat,
         default_value: 75
       },
-      width: {
-        name: "Width (m)",
+      channelWidth: {
+        name: "Channel Width (m)",
         data_type: parseFloat,
         default_value: 20
       },
@@ -36,6 +36,10 @@ class TransLineElm extends CircuitComponent {
     // delete this.params['resistance'];
 
     this.ptr = 0;
+  }
+
+  getName() {
+    return "Transmission Line"
   }
 
   onSolder(circuit){
@@ -60,14 +64,14 @@ class TransLineElm extends CircuitComponent {
 
     let ds = (this.dy() === 0) ? Math.sign(this.dx()) : -Math.sign(this.dy());
 
-    let p3 = Util.interpolate(this.point1, this.point2, 0, -Math.floor(this.width * ds));
-    let p4 = Util.interpolate(this.point1, this.point2, 1, -Math.floor(this.width * ds));
+    let p3 = Util.interpolate(this.point1, this.point2, 0, -Math.floor(this.channelWidth * ds));
+    let p4 = Util.interpolate(this.point1, this.point2, 1, -Math.floor(this.channelWidth * ds));
 
     let sep = Settings.GRID_SIZE / 2;
-    let p5 = Util.interpolate(this.point1, this.point2, 0, -Math.floor((this.width / 2) - sep) * ds);
-    let p6 = Util.interpolate(this.point1, this.point2, 1, -Math.floor((this.width / 2) - sep) * ds);
-    let p7 = Util.interpolate(this.point1, this.point2, 0, -Math.floor((this.width / 2) + sep) * ds);
-    let p8 = Util.interpolate(this.point1, this.point2, 1, -Math.floor((this.width / 2) + sep) * ds);
+    let p5 = Util.interpolate(this.point1, this.point2, 0, -Math.floor((this.channelWidth / 2) - sep) * ds);
+    let p6 = Util.interpolate(this.point1, this.point2, 1, -Math.floor((this.channelWidth / 2) - sep) * ds);
+    let p7 = Util.interpolate(this.point1, this.point2, 0, -Math.floor((this.channelWidth / 2) + sep) * ds);
+    let p8 = Util.interpolate(this.point1, this.point2, 1, -Math.floor((this.channelWidth / 2) + sep) * ds);
 
     this.posts = [p3, p4, this.point1, this.point2];
     return this.inner = [p7, p8, p5, p6];

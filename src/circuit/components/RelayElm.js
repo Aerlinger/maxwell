@@ -77,6 +77,10 @@ class RelayElm extends CircuitComponent {
     }
   }
 
+  getName() {
+    return "Relay"
+  }
+
   setPoints() {
     let i, j;
     super.setPoints(...arguments);

@@ -47,6 +47,11 @@ class SparkGapElm extends CircuitComponent {
     };
   }
 
+  getName() {
+    return "Spark Gap"
+  }
+
+
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
 

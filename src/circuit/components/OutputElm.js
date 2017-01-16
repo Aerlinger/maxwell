@@ -20,6 +20,10 @@ class OutputElm extends CircuitComponent {
     return 1;
   }
 
+  getName() {
+    return "Output"
+  }
+
   setPoints() {
     super.setPoints(...arguments);
     this.lead1 = new Point(0, 0);

@@ -277,6 +277,10 @@ class Util {
     return arrayStr;
   }
 
+  static isValue(x) {
+    return (typeof x == "string") || (typeof x == "number") || (typeof x == "boolean")
+  }
+
   static commaFormat(plainNumber) {
     // Simple method of converting a parameter to a string
     plainNumber += "";

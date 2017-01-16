@@ -95,8 +95,9 @@ class CircuitComponent {
 
         this.params[param_name] = this[param_name];
 
-        if ((this[param_name] === null) || (this[param_name] === undefined) || isNaN(this[param_name]))
-          debug(`Parameter ${param_name} is unset: ${this[param_name]}!`);
+        if (!Util.isValue(this[param_name])) {
+          debug(`Parameter ${param_name} is unset in ${this.constructor.name}. Value: ${this[param_name]}!`);
+        }
       }
     }
 

@@ -59,6 +59,9 @@ class CurrentElm extends CircuitComponent {
     return renderContext.drawPosts(this);
   }
 
+  getName() {
+    return "Current Source"
+  }
 
   stamp(stamper) {
     this.current = this.currentValue;

@@ -39,6 +39,9 @@ class Scope {
     }
   }
 
+  getName() {
+    return "Scope Output"
+  }
 
   resetGraph() {
     this.scopePointCount = 1;

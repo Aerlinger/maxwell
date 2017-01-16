@@ -32,6 +32,10 @@ class ProbeElm extends CircuitComponent {
     return this.center = this.getCenter();
   }
 
+  getName() {
+    return "Scope Probe"
+  }
+
   draw(renderContext) {
     if (CircuitComponent.DEBUG) {
       super.draw(renderContext);

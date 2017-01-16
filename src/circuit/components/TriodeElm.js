@@ -29,6 +29,10 @@ class TriodeElm extends CircuitComponent {
     return this.noDiagonal = true;
   }
 
+  getName() {
+    return "Triode"
+  }
+
   nonLinear() {
     return true;
   }

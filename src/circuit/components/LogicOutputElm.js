@@ -43,6 +43,10 @@ class LogicOutputElm extends CircuitComponent {
     return 1;
   }
 
+  getName() {
+    return "Logic Output"
+  }
+
   draw(renderContext) {
     let s = this.volts < this.threshold ? "L" : "H";
 

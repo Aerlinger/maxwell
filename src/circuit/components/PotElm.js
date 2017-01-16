@@ -49,6 +49,10 @@ class PotElm extends CircuitComponent {
     return 3;
   }
 
+  getName() {
+    return "Potentiometer"
+  }
+
   setPoints() {
     let dx;
     super.setPoints(...arguments);

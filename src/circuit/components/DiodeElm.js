@@ -86,6 +86,9 @@ class DiodeElm extends CircuitComponent {
     }
   }
 
+  getName() {
+    return "Diode"
+  }
 
   reset() {
     this.lastvoltdiff = 0;

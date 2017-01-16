@@ -60,6 +60,10 @@ class AnalogSwitchElm extends CircuitComponent {
     renderContext.drawPosts(this)
   }
 
+  getName() {
+    return "Analog Switch"
+  }
+
   calculateCurrent() {
     return this.current = (this.volts[0] - this.volts[1]) / this.resistance;
   }
