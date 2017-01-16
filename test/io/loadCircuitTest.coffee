@@ -10,33 +10,33 @@ describe "CircuitLoader", ->
       done()
 
     it "have only 7 elements", ->
-      @circuit.numElements().should.equal 7
+      expect(@circuit.numElements()).to.equal 7
 
-    describe "should load parameters", ->
+    describe "can load parameters", ->
       it "has correct completionStatus", ->
         expect(@circuit.Params.completionStatus).to.equal "in development"
 
       it "has correct currentSpeed", ->
-        @circuit.Params.currentSpeed.should.equal 63
+        expect(@circuit.Params.currentSpeed).to.equal 63
 
       it "has correct flags", ->
-        @circuit.Params.flags.should.equal 1
+        expect(@circuit.Params.flags).to.equal 1
 
       it "has correct unique name", ->
         console.log @circuit.Params.name
-        @circuit.Params.name.should.equal "default"
+        expect(@circuit.Params.name).to.equal "default"
 
       it "has correct power range", ->
-        @circuit.Params.powerRange.should.equal 62.0
+        expect(@circuit.Params.powerRange).to.equal 62.0
 
       it "has correct simSpeed", ->
         expect(@circuit.Params.simSpeed).to.equal 172
 
       it "has correct timeStep", ->
-        @circuit.Params.timeStep.should.equal 5.0e-6
+        expect(@circuit.Params.timeStep).to.equal 5.0e-6
 
       it "has correct title", ->
-        @circuit.Params.title.should.equal "Default"
+        expect(@circuit.Params.title).to.equal "Default"
 
       it "has correct voltage_range", ->
-        @circuit.Params.voltageRange.should.equal 10.0
+        expect(@circuit.Params.voltageRange).to.equal 10.0

@@ -1,14 +1,3 @@
-Polygon = require("../../src/geom/polygon.js")
-Rectangle = require("../../src/geom/rectangle.js")
-Point = require("../../src/geom/point.js")
-CircuitComponent = require("../../src/circuit/circuitComponent.js")
-
-Circuit = require('../../src/circuit/circuit.js')
-
-Renderer = require("../../src/render/renderer.js")
-fs = require('fs')
-Canvas = require('canvas')
-
 describe "Base Circuit Component", ->
   beforeEach ->
     @Circuit = new Circuit()
@@ -139,7 +128,6 @@ describe "Base Circuit Component", ->
       @Circuit = new Circuit("BasicComponent")
       @circuitElement = new CircuitComponent(50, 50, 50, 150)
 
-      Canvas = require('canvas')
       @canvas = new Canvas(200, 200)
       ctx = @canvas.getContext('2d')
 

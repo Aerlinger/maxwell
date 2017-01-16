@@ -132,7 +132,6 @@ describe "OpAmp Component", ->
         @Circuit.clearAndReset()
         @Circuit.solder(@transistorElm)
 
-        Canvas = require('canvas')
         @canvas = new Canvas(200, 300)
 
         @renderer = new Renderer(@Circuit, @canvas)

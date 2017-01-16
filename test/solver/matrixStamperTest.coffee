@@ -1,6 +1,3 @@
-MatrixStamper = require('../../src/engine/matrixStamper.js')
-Circuit = require('../../src/circuit/circuit.js')
-
 describe "Matrix stamper", ->
 
   beforeEach ->
@@ -8,20 +5,20 @@ describe "Matrix stamper", ->
     @CircuitSolver = @Circuit.Solver
     @MatrixStamper = new MatrixStamper(@Circuit)
 
-  it "should stamp VCVS", ->
+  it "stamps VCVS", ->
 
-  it "should stamp Voltage Source", ->
+  it "stamps Voltage Source", ->
 
-  it "should stamp resistor", ->
+  it "stamps resistor", ->
 
-  it "should stamp conductance", ->
+  it "stamps conductance", ->
 
-  it "should stamp VCCurrentSource", ->
+  it "stamps VCCurrentSource", ->
 
-  it "should stamp CCCS", ->
+  it "stamps CCCS", ->
 
-  it "should stamp Matrix", ->
+  it "stamps Matrix", ->
 
-  it "should stamp right side", ->
+  it "stamps right side", ->
 
-  it "should stamp nonlinear", ->
+  it "stamps nonlinear", ->

@@ -1,20 +1,7 @@
 glob = require("glob")
 path = require("path")
-fs = require("fs")
-Maxwell = require("../../src/Maxwell.js")
 jsondiffpatch = require('jsondiffpatch').create({});
-CircuitComparator = require("../support/CircuitComparator.coffee")
-Renderer = require('../../src/render/renderer.js')
-_ = require("lodash")
-
-chai = require('chai')
-
-#chai.config.showDiff = false
-
-assert = chai.assert
-expect = chai.expect
-
-Util = require('../../src/util/util.js')
+_ = require('lodash');
 
 filenames = glob.sync "./circuits/*.txt", {}
 

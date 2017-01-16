@@ -1,6 +1,6 @@
 {
   "nFrames": 4,
-  "t": 0.00003,
+  "t": 0.000025,
   "circuitMatrix": [
     [
       1,
@@ -597,7 +597,7 @@
     },
     {
       "frameNumber": 4,
-      "time": 0.00003,
+      "time": 0.000025,
       "circuitMatrix": [
         [
           1,

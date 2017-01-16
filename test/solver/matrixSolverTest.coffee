@@ -1,5 +1,3 @@
-Circuit = require('../../src/circuit/circuit.js')
-
 describe "Matrix Solver", ->
 
   beforeEach ->

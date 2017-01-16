@@ -1,6 +1,3 @@
-fs = require('fs')
-Canvas = require('canvas')
-
 describe "Voltage Component", ->
   beforeEach ->
     @Circuit = new Circuit("BasicVoltage")
@@ -32,34 +29,33 @@ describe "Voltage Component", ->
   it "has correct toString()", ->
     @voltageElm.toString().should.equal "VoltageElm"
 
-  it "should be orphaned", ->
+  it "is orphaned", ->
     @voltageElm.orphaned().should.equal true
 
   describe "after soldering to circuit", ->
     beforeEach ->
       @Circuit.solder(@voltageElm)
 
-    it "should get voltage correctly", ->
+    it "can getVoltage correctly", ->
       @voltageElm.getVoltage().should.equal 6 + 2
 
     it "is not be orphaned", ->
       @voltageElm.orphaned().should.equal false
 
-    it "should be stampable", ->
+    it "is stampable", ->
       @voltageElm.stamp(@Stamper)
 
-    it "should be steppable", ->
+    it "is steppable", ->
       @voltageElm.doStep()
 
-    it "should be drawable", ->
+    it "is drawable", ->
       #@voltageElm.draw()
 
-    it "should setPoints", ->
+    it "can setPoints(", ->
       @voltageElm.setPoints()
 
   describe "Rendering", ->
     before (done) ->
-      Canvas = require('canvas')
       @canvas = new Canvas(100, 200)
       ctx = @canvas.getContext('2d')
 

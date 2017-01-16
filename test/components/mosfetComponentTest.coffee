@@ -1,6 +1,3 @@
-fs = require('fs')
-Canvas = require('canvas')
-
 describe "MosfetElm", ->
   describe "Loading list of parameters", ->
     before ->
@@ -37,7 +34,6 @@ describe "MosfetElm", ->
 
     describe "Rendering", ->
       before (done) ->
-        Canvas = require('canvas')
         @canvas = new Canvas(100, 200)
         ctx = @canvas.getContext('2d')
 

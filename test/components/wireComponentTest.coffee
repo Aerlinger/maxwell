@@ -1,6 +1,3 @@
-fs = require('fs')
-Canvas = require('canvas')
-
 describe "Wire Component", ->
   beforeEach ->
     @Circuit = new Circuit("BasicWire")
@@ -48,7 +45,6 @@ describe "Wire Component", ->
 
   describe "Rendering", ->
     before (done) ->
-      Canvas = require('canvas')
       @canvas = new Canvas(100, 200)
       ctx = @canvas.getContext('2d')
 

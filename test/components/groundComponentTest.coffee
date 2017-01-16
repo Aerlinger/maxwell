@@ -20,7 +20,7 @@ describe "Ground Component", ->
   it "has correct toString()", ->
     @groundElm.toString().should.equal "GroundElm"
 
-  it "should be orphaned", ->
+  it "is orphaned", ->
     @groundElm.orphaned().should.equal true
 
   describe "after soldering to circuit", ->
@@ -30,21 +30,20 @@ describe "Ground Component", ->
     it "is not be orphaned", ->
       @groundElm.orphaned().should.equal false
 
-    it "should be stampable", ->
+    it "is stampable", ->
       @groundElm.stamp(@Circuit.Solver.Stamper)
 
-    it "should be steppable", ->
+    it "is steppable", ->
       @groundElm.doStep()
 
-    it "should be drawable", ->
+    it "is drawable", ->
       #@groundElm.draw()
 
-    it "should setPoints", ->
+    it "can setPoints", ->
       @groundElm.setPoints()
 
   describe "Rendering", ->
     before (done) ->
-      Canvas = require('canvas')
       @canvas = new Canvas(100, 200)
       ctx = @canvas.getContext('2d')
 

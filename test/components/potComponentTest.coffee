@@ -18,7 +18,6 @@ describe "Potentiometer", ->
     before (done) ->
       @Circuit = new Circuit("BasicPotentiometer")
 
-      Canvas = require('canvas')
       @canvas = new Canvas(200, 200)
       ctx = @canvas.getContext('2d')
 

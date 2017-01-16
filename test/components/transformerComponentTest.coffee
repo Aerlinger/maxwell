@@ -22,7 +22,6 @@ describe "Transformer Component", ->
     before (done) ->
       @Circuit = new Circuit("Basic Transformer")
 
-      Canvas = require('canvas')
       @canvas = new Canvas(200, 200)
       ctx = @canvas.getContext('2d')
 

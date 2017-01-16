@@ -1,9 +1,4 @@
 glob = require('glob')
-
-Renderer = require("../../src/render/renderer")
-
-fs = require("fs")
-Canvas = require('canvas')
 path = require("path")
 
 describe "Renderer", ->
