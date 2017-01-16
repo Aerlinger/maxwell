@@ -649,13 +649,46 @@ class CircuitComponent {
     };
   }
 
-  setValue(paramName, paramValue) {
-    if (!Array.from(this.getParamNames()).includes(paramName)) {
-      console.error(`Error while setting param for ${this.getName()}: ${paramName} is not a field in ${this.getParamNames()}`);
+  isValidParam(paramName, paramValue) {
+    let field = this.constructor.Fields[paramName];
+
+    if (!field) {
+      console.error(`Error while setting param for ${this.getName()}: '${paramName}' is not a field in ${this.getParamNames()}`);
+      return false
     }
 
-    this[paramName] = paramValue;
-    return this.params[paramName] = paramValue;
+    if (field && field["range"]) {
+      let [minValue, maxValue] = field["range"];
+
+      if (paramValue > maxValue || paramValue < minValue) {
+        console.error(`Invalid param value for ${paramName}: ${paramValue}. Not in range [${minValue}, ${maxValue}]`)
+        return false
+      }
+    }
+
+    if (field && field["select_values"]) {
+      let selectValues = Object.keys(field["select_values"]).map(key => field["select_values"][key]);
+
+      if (!(paramValue in selectValues)) {
+        console.error(`Invalid param value for ${paramName}: ${paramValue}. Not in possible values: ${JSON.stringify(field["select_values"])}`)
+        return false
+      }
+    }
+
+    return true
+  }
+
+  update(params) {
+    for (let paramName in params) {
+      this.setValue(paramName, params[paramName])
+    }
+  }
+
+  setValue(paramName, paramValue) {
+    if (this.isValidParam(paramName, paramValue)) {
+      this[paramName] = paramValue;
+      this.params[paramName] = paramValue;
+    }
   }
 
   getParamNames() {

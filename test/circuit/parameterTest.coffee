@@ -16,6 +16,22 @@ describe "Loading parameters", ->
           new MosfetElm(0, 0, 0, 0, {invalid: 1})
         ).to.throw()
 
+    it "shows warning when setting invalid param", ->
+      @MosfetElm.update({vt: 2})
+
+      expect(@MosfetElm.vt).to.eql(2)
+
+    it "shows warning when setting invalid param", ->
+      @MosfetElm.update({nonsense: 2})
+
+      expect(@MosfetElm.vt).to.eql(1.5)
+
+    it "shows warning when setting invalid value for valid param", ->
+      @MosfetElm.update({pnp: 2})
+
+      expect(@MosfetElm.pnp).to.eql(1)
+
+
   describe "DecadeElm", ->
     beforeEach ->
       @DecadeElm = new DecadeElm(0, 0, 0, 0, {"bits": 10, "volts": [0, 0, 0, 0, 0, 0, 5, 0, 0, 0]})
