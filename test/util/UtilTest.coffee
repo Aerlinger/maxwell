@@ -76,7 +76,7 @@ describe "Utility test", ->
           {
             e: 1.000654 - epsilon/2
             f: 1.000654 + epsilon/2
-          }
+          }  
           0.0000001 + epsilon/2,
         ]
       }

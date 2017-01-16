@@ -21,102 +21,130 @@ describe "Voltage Divider", ->
     @circuit.updateCircuit()
 
   it "has correct values", ->
-    expect(@circuit.inspect()).to.deep.equal([
-      {
-        "type": "voltdivide.txt",
-        "timeStep": 0.000005,
-        "simSpeed": 172,
-        "currentSpeed": 63,
-        "voltageRange": 10,
-        "powerRange": 62,
-        "flags": 1
-      },
-      {
-        "name": "VoltageElm",
-        "pos": [112, 368, 112, 48],
-        "flags": 0,
-        "params": {
-          "waveform": 0,
-          "frequency": 40,
-          "maxVoltage": 10,
-          "bias": 0,
-          "phaseShift": 0,
-          "dutyCycle": 0.5
+    expect(@circuit.inspect()).to.deep.equal(
+      [
+        {
+          "current": 0.05
+          "name": "Resistor"
+          "params": [
+            100
+          ]
+          "pos": [
+            256
+            176
+            256
+            304
+          ]
+          "voltage": 5
         }
-      },
-      {
-        "name": "WireElm",
-        "pos": [112, 48, 240, 48],
-        "flags": 0,
-        "params": {}
-      },
-      {
-        "name": "ResistorElm",
-        "pos": [240, 48, 240, 208],
-        "flags": 0,
-        "params": {
-          "resistance": 10000
+        {
+          "current": 0.055
+          "name": "VarRailElm"
+          "params": [
+            6
+            5
+            5
+            0
+            0
+            0.5
+            "Voltage"
+          ]
+          "pos": [
+            304
+            176
+            304
+            128
+          ]
+          "voltage": 5
         }
-      },
-      {
-        "name": "ResistorElm",
-        "pos": [240, 208, 240, 368],
-        "flags": 0,
-        "params": {
-          "resistance": 10000
+        {
+          "current": 0.05
+          "name": "GroundElm"
+          "params": []
+          "pos": [
+            256
+            336
+            256
+            352
+          ]
+          "voltage": 0
         }
-      },
-      {
-        "name": "WireElm",
-        "pos": [112, 368, 240, 368],
-        "flags": 0,
-        "params": {}
-      },
-      {
-        "name": "WireElm",
-        "pos": [240, 48, 432, 48],
-        "flags": 0,
-        "params": {}
-      },
-      {
-        "name": "WireElm",
-        "pos": [240, 368, 432, 368],
-        "flags": 0,
-        "params": {}
-      },
-      {
-        "name": "ResistorElm",
-        "pos": [432, 48, 432, 128],
-        "flags": 0,
-        "params": {
-          "resistance": 10000
+        {
+          "current": 0.05
+          "name": "Wire"
+          "params": []
+          "pos": [
+            256
+            304
+            256
+            336
+          ]
+          "voltage": -0
         }
-      },
-      {
-        "name": "ResistorElm",
-        "pos": [432, 128, 432, 208],
-        "flags": 0,
-        "params": {
-          "resistance": 10000
+        {
+          "current": 0.005
+          "name": "Resistor"
+          "params": [
+            1000
+          ]
+          "pos": [
+            352
+            176
+            352
+            304
+          ]
+          "voltage": 5
         }
-      },
-      {
-        "name": "ResistorElm",
-        "pos": [432, 208, 432, 288],
-        "flags": 0,
-        "params": {
-          "resistance": 10000
+        {
+          "current": 0.005
+          "name": "Wire"
+          "params": []
+          "pos": [
+            352
+            304
+            352
+            336
+          ]
+          "voltage": 0
         }
-      },
-      {
-        "name": "ResistorElm",
-        "pos": [432, 288, 432, 368],
-        "flags": 0,
-        "params": {
-          "resistance": 10000
+        {
+          "current": 0.005
+          "name": "GroundElm"
+          "params": []
+          "pos": [
+            352
+            336
+            352
+            352
+          ]
+          "voltage": 0
         }
-      }
-    ])
+        {
+          "current": 0.005
+          "name": "Wire"
+          "params": []
+          "pos": [
+            304
+            176
+            352
+            176
+          ]
+          "voltage": 5
+        }
+        {
+          "current": -0.05
+          "name": "Wire"
+          "params": []
+          "pos": [
+            256
+            176
+            304
+            176
+          ]
+          "voltage": 5
+        }
+      ]
+    )
 
   describe "Running updateCircuit", ->
     before ->

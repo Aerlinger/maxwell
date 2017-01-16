@@ -37,7 +37,7 @@ describe "Capacitor Component", ->
       selected: false
       voltSource: 0
       needsShortcut: true
-      dump: "c"
+      name: "CapacitorElm"
       postCount: 2
       nonLinear: false
     })

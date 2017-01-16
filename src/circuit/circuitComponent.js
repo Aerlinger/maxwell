@@ -366,10 +366,7 @@ class CircuitComponent {
 
     return {
       name: this.getName(),
-      x1: this.point1.x,
-      y1: this.point1.y,
-      x2: this.point2.x,
-      xy: this.point2.y,
+      pos: [this.point1.x, this.point1.y, this.point2.x, this.point2.y],
       params: paramValues,
       voltage: this.getVoltageDiff(),
       current: this.getCurrent()
@@ -421,7 +418,8 @@ class CircuitComponent {
 
   getName() {
     console.warn(`getName() was called by circuitComponent base class, but should be extended by subclasses (${this.constructor.name})`)
-    return `${this.constructor.name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}] : ${JSON.stringify(this.params)}`;
+    // return `${this.constructor.name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}] : ${JSON.stringify(this.params)}`;
+    return this.constructor.name
   }
 
   getNode(nodeIdx) {
@@ -669,8 +667,8 @@ class CircuitComponent {
     if (field && field["select_values"]) {
       let selectValues = Object.keys(field["select_values"]).map(key => field["select_values"][key]);
 
-      if (!(paramValue in selectValues)) {
-        console.error(`Invalid param value for ${paramName}: ${paramValue}. Not in possible values: ${JSON.stringify(field["select_values"])}`)
+      if (!(selectValues.includes(paramValue))) {
+        console.error(`Invalid param value for ${paramName}: ${paramValue}. Not in possible values: ${selectValues}`)
         return false
       }
     }

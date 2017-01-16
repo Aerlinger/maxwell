@@ -102,6 +102,7 @@ describe "Simple Voltage Divider", ->
         @circuit.inspect().should.eql([
           {
             "current": 0.0015
+            "name": "VoltageElm"
             "params": [
               0
               40
@@ -110,76 +111,89 @@ describe "Simple Voltage Divider", ->
               0
               0.5
             ]
-            "sym": "v"
+            "pos": [
+              112
+              368
+              112
+              48
+            ]
             "voltage": 10
-            "x1": 112
-            "x2": 112
-            "xy": 48
-            "y1": 368
           }
           {
             "current": 0.0015
+            "name": "Wire"
             "params": []
-            "sym": "w"
+            "pos": [
+              112
+              48
+              240
+              48
+            ]
             "voltage": 10
-            "x1": 112
-            "x2": 240
-            "xy": 48
-            "y1": 48
           }
           {
             "current": 0.001
+            "name": "Resistor"
             "params": [
               10000
             ]
-            "sym": "r"
+            "pos": [
+              240
+              48
+              240
+              368
+            ]
             "voltage": 10
-            "x1": 240
-            "x2": 240
-            "xy": 368
-            "y1": 48
           }
           {
             "current": -0.0015
+            "name": "Wire"
             "params": []
-            "sym": "w"
+            "pos": [
+              112
+              368
+              240
+              368
+            ]
             "voltage": 0
-            "x1": 112
-            "x2": 240
-            "xy": 368
-            "y1": 368
           }
           {
             "current": 0.0005
+            "name": "Wire"
             "params": []
-            "sym": "w"
+            "pos": [
+              240
+              48
+              432
+              48
+            ]
             "voltage": 10
-            "x1": 240
-            "x2": 432
-            "xy": 48
-            "y1": 48
           }
           {
             "current": -0.0005
+            "name": "Wire"
             "params": []
-            "sym": "w"
+            "pos": [
+              240
+              368
+              432
+              368
+            ]
             "voltage": 0
-            "x1": 240
-            "x2": 432
-            "xy": 368
-            "y1": 368
           }
           {
             "current": 0.0005
+            "name": "Resistor"
             "params": [
               20000
             ]
-            "sym": "r"
+            "pos": [
+              432
+              48
+              432
+              368
+            ]
             "voltage": 10
-            "x1": 432
-            "x2": 432
-            "xy": 368
-            "y1": 48
           }
         ])
 

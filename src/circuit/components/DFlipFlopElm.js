@@ -8,13 +8,22 @@ class DFlipFlopElm extends ChipElm {
   }
 
   constructor(xa, xb, ya, yb, params, f) {
+
+    // Set [4] as default value for params['volts']
+    params = params || {};
+    params['volts'] = params['volts'] || [4];
+
     super(xa, xb, ya, yb, params, f);
 
     this.pins[2].value = !this.pins[1].value;
   }
 
   getPostCount() {
-    if (this.hasReset()) { return 5; } else { return 4; }
+    if (this.hasReset()) {
+      return 5;
+    } else {
+      return 4;
+    }
   }
 
   getVoltageSourceCount() {

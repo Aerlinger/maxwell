@@ -6,7 +6,7 @@ describe "Potentiometer", ->
     expect(@potElm.x1()).to.equal(50)
     expect(@potElm.y1()).to.equal(50)
     expect(@potElm.x2()).to.equal(50)
-    expect(@potElm.y2()).to.equal(146)
+    expect(@potElm.y2()).to.equal(150)
 
   it "has correct parameters", ->
     expect(@potElm.maxResistance).to.equal(1e6)

@@ -1,12 +1,7 @@
-#  r 256 176 256 304 0 100.0
-#  172 256 176 256 128 0 6 5.0 5.0 0.0 0.0 0.5 Voltage
-#  g 256 304 256 352 0
 Circuit = require('../../src/circuit/circuit.js')
 CircuitLoader = require('../../src/io/CircuitLoader.js')
 
 chai = require('chai');
-assert = chai.assert
-expect = chai.expect;
 
 
 describe "Simple single resistor circuit", ->
@@ -30,7 +25,7 @@ describe "Simple single resistor circuit", ->
       },
       {
         "name": "VarRailElm",
-        "pos": [304, 176, 304, 128],
+        "pos": [256, 176, 256, 128],
         "flags": 0,
         "params": {
           "waveform": 6,
@@ -46,13 +41,13 @@ describe "Simple single resistor circuit", ->
         "name": "ResistorElm",
         "pos": [256, 176, 256, 304],
         "flags": "0",
-        "params": [
+        "params": {
           resistance: 100.0
-        ]
+        }
       },
       {
         "name": "GroundElm",
-        "pos": ["256", "304", "256", "352"],
+        "pos": [256, 304, 256, 352],
         "flags": "0",
         "params": {}
       }
@@ -163,10 +158,11 @@ describe "Simple single resistor circuit", ->
 
           expect(@Circuit.iterations).to.equal(3)
 
-        it "increments time", ->
+        it "increments time", (done)->
           @Circuit.updateCircuit()
           @Circuit.updateCircuit()
           @Circuit.updateCircuit()
 
           expect(@Circuit.time).to.equal(3 * 5.0e-06)
+          done()
 

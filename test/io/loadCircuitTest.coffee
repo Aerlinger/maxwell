@@ -38,8 +38,5 @@ describe "CircuitLoader", ->
       it "has correct title", ->
         @circuit.Params.title.should.equal "Default"
 
-      it "has correct topic", ->
-        @circuit.Params.topic.should.equal "Basics"
-
       it "has correct voltage_range", ->
         @circuit.Params.voltageRange.should.equal 10.0

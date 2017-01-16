@@ -54,6 +54,10 @@ class TransformerElm extends CircuitComponent {
     this.noDiagonal = true;
   }
 
+  getName() {
+    return "Transformer"
+  }
+
   isTrapezoidal() {
     return (this.flags & TransformerElm.FLAG_BACK_EULER) === 0;
   }

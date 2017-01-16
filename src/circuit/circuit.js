@@ -215,7 +215,7 @@ class Circuit extends Observer {
 //    @write(@Solver.dumpFrame() + "\n")
 //    @write(@dump() + "\n")
 
-    return this.notifyObservers(this.ON_COMPLETE_UPDATE);
+    this.notifyObservers(this.ON_COMPLETE_UPDATE);
   }
 
 

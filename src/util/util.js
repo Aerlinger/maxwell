@@ -292,10 +292,13 @@ class Util {
   }
 
   static typeOf(obj, klassType) {
-    let klass = obj.constructor;
+    return (obj.constructor === klassType) || (obj.constructor.prototype instanceof klassType)
 
-    if (klass === klassType) { return true; }
+    // let klass = obj.constructor;
 
+    // if (klass === klassType) { return true; }
+
+    /*
     while (klass.__super__ != null) {
       if (klass.__super__ === klassType.prototype) {
         return true;
@@ -303,8 +306,9 @@ class Util {
 
       klass = klass.__super__.constructor;
     }
+    */
 
-    return false;
+    // return false;
   }
 
   static halt(message) {

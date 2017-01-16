@@ -11,7 +11,7 @@ class PotElm extends CircuitComponent {
         name: "Max Resistance",
         default_value: 1e4,
         data_type: parseFloat,
-        range: [0, 1e5]
+        range: [0, Infinity]
       },
       "position": {
         name: "Position",
@@ -55,6 +55,7 @@ class PotElm extends CircuitComponent {
 
     let offset = 0;
 
+    // TODO: Check
     if (Math.abs(this.dx()) > Math.abs(this.dy())) {
       dx = Util.snapGrid(this.dx() / 2) * 2;
       this.point2.x = this.point1.x + dx;

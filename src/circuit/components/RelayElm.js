@@ -12,25 +12,32 @@ class RelayElm extends CircuitComponent {
   static get Fields() {
     return {
       poleCount: {
-        data_type: parseInt
+        data_type: parseInt,
+        default_value: 1
       },
       inductance: {
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 0.2
       },
       coilCurrent: {
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 0
       },
       r_on: {
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 0.05
       },
       r_off: {
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 1e6
       },
       onCurrent: {
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 0.02
       },
       coilR: {
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 20
       }
     };
   }
