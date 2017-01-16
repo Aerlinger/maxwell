@@ -117,7 +117,7 @@ class MatrixStamper {
   (Unless i or j is a voltage source node.)
   */
   stampMatrix(row, col, value) {
-    if (isNaN(value) || Util.isInfinite(value)) {
+    if (isNaN(value) || Util.isInfinite(value) || value == null || value == undefined) {
       this.Circuit.halt(`attempted to stamp Matrix with invalid value (${value}) at ${row} ${col}`);
     }
 
