@@ -40,7 +40,7 @@ class JfetElm extends MosfetElm {
     [ra[0], ra[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (13/this.dn()), this.hs);
     [ra[2], ra[3]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (10/this.dn()), this.hs);
 
-    this.gatePoly = Util.createPolygonFromArray(ra[0], ra[1], ra[3], ra[2]);
+    this.gatePoly = Util.createPolygonFromArray([ra[0], ra[1], ra[3], ra[2]]);
 
     if (this.pnp === -1) {
       let x = Util.interpolate(this.gatePt, this.point1, 15/this.dn());
@@ -70,7 +70,7 @@ class JfetElm extends MosfetElm {
     renderContext.drawLinePt(this.point1, this.gatePt, color);
 
     renderContext.drawThickPolygonP(this.arrowPoly);
-    renderContext.drawThickPolygonP(this.arrowPoly);
+    renderContext.drawThickPolygonP(this.gatePoly);
 
     if (this.curcount !== 0) {
       renderContext.drawDots(this.src[0], this.src[1], this);
