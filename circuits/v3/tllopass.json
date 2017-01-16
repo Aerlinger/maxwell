@@ -1,1 +1,255 @@
-[{"type":"tllopass.txt","timeStep":5e-13,"simSpeed":175,"currentSpeed":50,"voltageRange":5,"powerRange":50,"flags":1},{"name":"SweepElm","pos":[64,80,32,80],"flags":2,"params":{"minF":2000000000,"maxF":8000000000,"maxV":5,"sweepTime":1e-8}},{"name":"TransLineElm","pos":[144,176,256,176],"flags":0,"params":{"delay":3.125e-11,"imped":64.9,"width":48,"resistance":0}},{"name":"TransLineElm","pos":[144,80,256,80],"flags":0,"params":{"delay":3.125e-11,"imped":217.5,"width":48,"resistance":0}},{"name":"WireElm","pos":[128,128,128,224],"flags":0,"params":{}},{"name":"WireElm","pos":[128,224,144,224],"flags":0,"params":{}},{"name":"WireElm","pos":[128,128,144,128],"flags":0,"params":{}},{"name":"TransLineElm","pos":[304,80,400,80],"flags":0,"params":{"delay":3.125e-11,"imped":217.5,"width":48,"resistance":0}},{"name":"TransLineElm","pos":[304,176,400,176],"flags":0,"params":{"delay":3.125e-11,"imped":70.3,"width":48,"resistance":0}},{"name":"TransLineElm","pos":[448,176,544,176],"flags":0,"params":{"delay":3.125e-11,"imped":64.9,"width":48,"resistance":0}},{"name":"WireElm","pos":[256,80,272,80],"flags":0,"params":{}},{"name":"WireElm","pos":[272,80,272,176],"flags":0,"params":{}},{"name":"WireElm","pos":[272,176,304,176],"flags":0,"params":{}},{"name":"WireElm","pos":[256,128,288,128],"flags":0,"params":{}},{"name":"WireElm","pos":[288,128,288,224],"flags":0,"params":{}},{"name":"WireElm","pos":[288,224,304,224],"flags":0,"params":{}},{"name":"WireElm","pos":[272,80,304,80],"flags":0,"params":{}},{"name":"WireElm","pos":[288,128,304,128],"flags":0,"params":{}},{"name":"WireElm","pos":[400,80,416,80],"flags":0,"params":{}},{"name":"WireElm","pos":[416,80,416,176],"flags":0,"params":{}},{"name":"WireElm","pos":[416,176,448,176],"flags":0,"params":{}},{"name":"WireElm","pos":[400,128,432,128],"flags":0,"params":{}},{"name":"WireElm","pos":[432,128,432,224],"flags":0,"params":{}},{"name":"WireElm","pos":[432,224,448,224],"flags":0,"params":{}},{"name":"GroundElm","pos":[256,224,256,240],"flags":0,"params":{}},{"name":"GroundElm","pos":[400,224,400,240],"flags":0,"params":{}},{"name":"GroundElm","pos":[544,224,544,240],"flags":0,"params":{}},{"name":"WireElm","pos":[416,80,464,80],"flags":0,"params":{}},{"name":"WireElm","pos":[432,128,464,128],"flags":0,"params":{}},{"name":"ResistorElm","pos":[464,80,464,128],"flags":0,"params":{"resistance":50}},{"name":"GroundElm","pos":[256,128,256,144],"flags":0,"params":{}},{"name":"GroundElm","pos":[144,224,144,240],"flags":0,"params":{}},{"name":"ResistorElm","pos":[64,80,112,80],"flags":0,"params":{"resistance":50}},{"name":"WireElm","pos":[112,80,112,176],"flags":0,"params":{}},{"name":"WireElm","pos":[112,176,144,176],"flags":0,"params":{}},{"name":"WireElm","pos":[112,80,144,80],"flags":0,"params":{}}]
+[
+  {
+    "type": "tllopass.txt",
+    "timeStep": 5e-13,
+    "simSpeed": 175,
+    "currentSpeed": 50,
+    "voltageRange": 5,
+    "powerRange": 50,
+    "flags": 1
+  },
+  {
+    "name": "SweepElm",
+    "pos": [64, 80, 32, 80],
+    "flags": 2,
+    "params": {
+      "minF": 2000000000,
+      "maxF": 8000000000,
+      "maxV": 5,
+      "sweepTime": 1e-8
+    }
+  },
+  {
+    "name": "TransLineElm",
+    "pos": [144, 176, 256, 176],
+    "flags": 0,
+    "params": {
+      "delay": 3.125e-11,
+      "imped": 64.9,
+      "channelWidth": 48,
+      "resistance": 0
+    }
+  },
+  {
+    "name": "TransLineElm",
+    "pos": [144, 80, 256, 80],
+    "flags": 0,
+    "params": {
+      "delay": 3.125e-11,
+      "imped": 217.5,
+      "channelWidth": 48,
+      "resistance": 0
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [128, 128, 128, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [128, 224, 144, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [128, 128, 144, 128],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "TransLineElm",
+    "pos": [304, 80, 400, 80],
+    "flags": 0,
+    "params": {
+      "delay": 3.125e-11,
+      "imped": 217.5,
+      "channelWidth": 48,
+      "resistance": 0
+    }
+  },
+  {
+    "name": "TransLineElm",
+    "pos": [304, 176, 400, 176],
+    "flags": 0,
+    "params": {
+      "delay": 3.125e-11,
+      "imped": 70.3,
+      "channelWidth": 48,
+      "resistance": 0
+    }
+  },
+  {
+    "name": "TransLineElm",
+    "pos": [448, 176, 544, 176],
+    "flags": 0,
+    "params": {
+      "delay": 3.125e-11,
+      "imped": 64.9,
+      "channelWidth": 48,
+      "resistance": 0
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [256, 80, 272, 80],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [272, 80, 272, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [272, 176, 304, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [256, 128, 288, 128],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [288, 128, 288, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [288, 224, 304, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [272, 80, 304, 80],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [288, 128, 304, 128],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [400, 80, 416, 80],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [416, 80, 416, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [416, 176, 448, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [400, 128, 432, 128],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [432, 128, 432, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [432, 224, 448, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "GroundElm",
+    "pos": [256, 224, 256, 240],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "GroundElm",
+    "pos": [400, 224, 400, 240],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "GroundElm",
+    "pos": [544, 224, 544, 240],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [416, 80, 464, 80],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [432, 128, 464, 128],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [464, 80, 464, 128],
+    "flags": 0,
+    "params": {
+      "resistance": 50
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [256, 128, 256, 144],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "GroundElm",
+    "pos": [144, 224, 144, 240],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [64, 80, 112, 80],
+    "flags": 0,
+    "params": {
+      "resistance": 50
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [112, 80, 112, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [112, 176, 144, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [112, 80, 144, 80],
+    "flags": 0,
+    "params": {}
+  }
+]

@@ -1,1 +1,47 @@
-[{"type":"diff.txt","timeStep":0.000005,"simSpeed":172,"currentSpeed":50,"voltageRange":5,"powerRange":62,"flags":1},{"name":"VoltageElm","pos":[160,288,160,144],"flags":0,"params":{"waveform":2,"frequency":40,"maxVoltage":5,"bias":0,"phaseShift":0,"dutyCycle":0.5}},{"name":"CapacitorElm","pos":[160,144,352,144],"flags":0,"params":{"capacitance":0.000009,"voltdiff":4.999340978003125}},{"name":"ResistorElm","pos":[352,144,352,288],"flags":0,"params":{"resistance":120}},{"name":"WireElm","pos":[160,288,352,288],"flags":0,"params":{}}]
+[
+  {
+    "type": "diff.txt",
+    "timeStep": 0.000005,
+    "simSpeed": 172,
+    "currentSpeed": 50,
+    "voltageRange": 5,
+    "powerRange": 62,
+    "flags": 1
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [160, 288, 160, 144],
+    "flags": 0,
+    "params": {
+      "waveform": 2,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [160, 144, 352, 144],
+    "flags": 0,
+    "params": {
+      "capacitance": 0.000009,
+      "voltdiff": 4.999340978003125
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [352, 144, 352, 288],
+    "flags": 0,
+    "params": {
+      "resistance": 120
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [160, 288, 352, 288],
+    "flags": 0,
+    "params": {}
+  }
+]

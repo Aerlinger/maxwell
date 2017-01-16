@@ -1,1 +1,128 @@
-[{"type":"itov.txt","timeStep":0.000005,"simSpeed":172,"currentSpeed":59,"voltageRange":5,"powerRange":62,"flags":1},{"name":"ResistorElm","pos":[272,112,384,112],"flags":0,"params":{"resistance":1001}},{"name":"WireElm","pos":[272,112,272,160],"flags":0,"params":{}},{"name":"GroundElm","pos":[272,192,272,288],"flags":0,"params":{}},{"name":"Switch2Elm","pos":[192,240,192,160],"flags":0,"params":{"position":1,"momentary":false,"link":0}},{"name":"Switch2Elm","pos":[192,80,192,160],"flags":0,"params":{"position":1,"momentary":false,"link":0}},{"name":"WireElm","pos":[112,80,112,160],"flags":0,"params":{}},{"name":"WireElm","pos":[112,160,112,240],"flags":0,"params":{}},{"name":"ResistorElm","pos":[112,160,176,160],"flags":0,"params":{"resistance":1000}},{"name":"CurrentElm","pos":[192,80,112,80],"flags":0,"params":{"currentValue":0.001}},{"name":"CurrentElm","pos":[192,240,112,240],"flags":0,"params":{"currentValue":0.002}},{"name":"OpAmpElm","pos":[272,176,384,176],"flags":0,"params":{"maxOut":15,"minOut":-15,"gbw":1000000}},{"name":"WireElm","pos":[384,112,384,176],"flags":0,"params":{}},{"name":"OutputElm","pos":[384,176,448,176],"flags":1,"params":{}},{"name":"RailElm","pos":[112,240,112,280],"flags":0,"params":{"waveform":0,"frequency":40,"maxVoltage":-5,"bias":0,"phaseShift":0,"dutyCycle":0.5}},{"name":"WireElm","pos":[272,160,208,160],"flags":1,"params":{}}]
+[
+  {
+    "type": "itov.txt",
+    "timeStep": 0.000005,
+    "simSpeed": 172,
+    "currentSpeed": 59,
+    "voltageRange": 5,
+    "powerRange": 62,
+    "flags": 1
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [272, 112, 384, 112],
+    "flags": 0,
+    "params": {
+      "resistance": 1001
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [272, 112, 272, 160],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "GroundElm",
+    "pos": [272, 192, 272, 288],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "Switch2Elm",
+    "pos": [192, 240, 192, 160],
+    "flags": 0,
+    "params": {
+      "position": 1,
+      "momentary": false,
+      "link": 0
+    }
+  },
+  {
+    "name": "Switch2Elm",
+    "pos": [192, 80, 192, 160],
+    "flags": 0,
+    "params": {
+      "position": 1,
+      "momentary": false,
+      "link": 0
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [112, 80, 112, 160],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [112, 160, 112, 240],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [112, 160, 176, 160],
+    "flags": 0,
+    "params": {
+      "resistance": 1000
+    }
+  },
+  {
+    "name": "CurrentElm",
+    "pos": [192, 80, 112, 80],
+    "flags": 0,
+    "params": {
+      "currentValue": 0.001
+    }
+  },
+  {
+    "name": "CurrentElm",
+    "pos": [192, 240, 112, 240],
+    "flags": 0,
+    "params": {
+      "currentValue": 0.002
+    }
+  },
+  {
+    "name": "OpAmpElm",
+    "pos": [272, 176, 384, 176],
+    "flags": 0,
+    "params": {
+      "maxOut": 15,
+      "minOut": -15,
+      "gbw": 1000000
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [384, 112, 384, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "OutputElm",
+    "pos": [384, 176, 448, 176],
+    "flags": 1,
+    "params": {}
+  },
+  {
+    "name": "RailElm",
+    "pos": [112, 240, 112, 280],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": -5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [272, 160, 208, 160],
+    "flags": 1,
+    "params": {}
+  }
+]

@@ -1,1 +1,50 @@
-[{"type":"mr.txt","timeStep":2e-8,"simSpeed":124,"currentSpeed":52,"voltageRange":5,"powerRange":50,"flags":1},{"name":"MemristorElm","pos":[256,144,256,288],"flags":0,"params":{"r_on":100,"r_off":16000,"dopeWidth":0,"totalWidth":1e-8,"mobility":1e-10,"resistance":100}},{"name":"GroundElm","pos":[256,320,256,336],"flags":0,"params":{}},{"name":"WireElm","pos":[256,288,256,320],"flags":1,"params":{}},{"name":"VarRailElm","pos":[256,144,256,112],"flags":0,"params":{"waveform":6,"frequency":5,"maxVoltage":5,"bias":-5,"phaseShift":0,"dutyCycle":0.5,"sliderText":"Voltage"}}]
+[
+  {
+    "type": "mr.txt",
+    "timeStep": 2e-8,
+    "simSpeed": 124,
+    "currentSpeed": 52,
+    "voltageRange": 5,
+    "powerRange": 50,
+    "flags": 1
+  },
+  {
+    "name": "MemristorElm",
+    "pos": [256, 144, 256, 288],
+    "flags": 0,
+    "params": {
+      "r_on": 100,
+      "r_off": 16000,
+      "dopeWidth": 0,
+      "totalWidth": 1e-8,
+      "mobility": 1e-10,
+      "resistance": 100
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [256, 320, 256, 336],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [256, 288, 256, 320],
+    "flags": 1,
+    "params": {}
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [256, 144, 256, 112],
+    "flags": 0,
+    "params": {
+      "waveform": 6,
+      "frequency": 5,
+      "maxVoltage": 5,
+      "bias": -5,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  }
+]
