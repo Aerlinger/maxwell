@@ -69,11 +69,6 @@ class TransLineElm extends CircuitComponent {
     return this.inner = [p7, p8, p5, p6];
   }
 
-
-  getDumpType() {
-    return "171";
-  }
-
   getConnection(n1, n2) {
     return false;
   }

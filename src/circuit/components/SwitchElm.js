@@ -56,10 +56,6 @@ class SwitchElm extends CircuitComponent {
     return this.setBboxPt(this.point1, this.point2, openhs);
   }
 
-  getDumpType() {
-    return "s";
-  }
-
   stamp(stamper) {
 //    console.log(@voltSource)
     if (this.position === 0) {

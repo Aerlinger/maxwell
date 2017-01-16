@@ -39,11 +39,6 @@ class MemristorElm extends CircuitComponent {
     super(xa, xb, ya, yb, params, f);
   }
 
-
-  getDumpType() {
-    return "m";
-  }
-
   setPoints() {
     super.setPoints(...arguments);
     this.calcLeads(32);

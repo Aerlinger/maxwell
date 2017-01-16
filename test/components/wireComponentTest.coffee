@@ -21,9 +21,6 @@ describe "Wire Component", ->
   it "is not have any internal voltage sources", ->
     @wireElm.getVoltageSourceCount().should.equal 1
 
-  it "has correct dump type", ->
-    @wireElm.getDumpType().should.equal "w"
-
   it "has correct toString()", ->
     @wireElm.toString().should.equal "WireElm@[100 100 100 200]"
 

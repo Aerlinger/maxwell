@@ -10,10 +10,6 @@ class VcoElm extends ChipElm {
     this.cResistance = 1e6;
   }
 
-  getDumpType() {
-    return "158";
-  }
-
   getName() {
     return "Voltage Controlled Oscillator";
   }
@@ -28,10 +24,6 @@ class VcoElm extends ChipElm {
 
   getVoltageSourceCount() {
     return 3;
-  }
-
-  getDumpType() {
-    return 158;
   }
 
   setupPins() {

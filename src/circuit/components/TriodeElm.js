@@ -38,10 +38,6 @@ class TriodeElm extends CircuitComponent {
     return this.curcount = 0;
   }
 
-  getDumpType() {
-    return '173';
-  }
-
   getPost(n) {
     if (n === 0) {
       return this.plate[0];

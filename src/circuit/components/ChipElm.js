@@ -223,7 +223,7 @@ class ChipElm extends CircuitComponent {
     })());
 
     return {
-      sym: this.getDumpType(),
+      name: this.constructor.name,
       x1: this.point1.x,
       y1: this.point1.y,
       x2: this.point2.x,

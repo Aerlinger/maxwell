@@ -46,10 +46,6 @@ class VarRailElm extends RailElm {
 //
 //    @calcLeads(diameter)
 
-  getDumpType() {
-    return 172;
-  }
-
   createSlider() {}
 
   getSliderValue() {

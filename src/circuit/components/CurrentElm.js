@@ -24,10 +24,6 @@ class CurrentElm extends CircuitComponent {
     super(xa, ya, xb, yb, params, f);
   }
 
-  getDumpType() {
-    return "i";
-  }
-
   draw(renderContext) {
     if (CircuitComponent.DEBUG) {
       super.draw(renderContext);

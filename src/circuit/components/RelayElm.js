@@ -159,10 +159,6 @@ class RelayElm extends CircuitComponent {
     return (this.flags & RelayElm.FLAG_BACK_EULER) === 0;
   }
 
-  getDumpType() {
-    return 178;
-  }
-
   reset() {
     super.reset();
 

@@ -10,7 +10,6 @@ class SimulationFrame {
     this.circuitRightSide = solver.circuitRightSide;
 
     this.elementStates = (Array.from(circuit.getElements()).map((elm) => ({
-      dumpType: elm.getDumpType().toString(),
       volts: elm.volts,
       current: elm.current,
       curcount: elm.curcount || 0

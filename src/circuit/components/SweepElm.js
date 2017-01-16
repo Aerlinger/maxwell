@@ -56,10 +56,6 @@ class SweepElm extends CircuitComponent {
     return this.reset();
   }
 
-  getDumpType() {
-    return 170;
-  }
-
   getPostCount() {
     return 1;
   }

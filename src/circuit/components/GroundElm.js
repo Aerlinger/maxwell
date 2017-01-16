@@ -11,10 +11,6 @@ class GroundElm extends CircuitComponent {
     super(xa, ya, xb, yb, params, f);
   }
 
-  getDumpType() {
-    return "g";
-  }
-
   getPostCount() {
     return 1;
   }

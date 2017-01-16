@@ -97,10 +97,6 @@ class MosfetElm extends CircuitComponent {
     return this.lastv1 = this.lastv2 = this.volts[0] = this.volts[1] = this.volts[2] = this.curcount = 0;
   }
 
-  getDumpType() {
-    return "f";
-  }
-
   draw(renderContext) {
     this.setBboxPt(this.point1, this.point2, this.hs);
 

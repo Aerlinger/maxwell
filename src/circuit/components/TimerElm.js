@@ -35,10 +35,6 @@ class TimerElm extends ChipElm {
     return "555 Timer";
   }
 
-  getDumpType() {
-    return "165";
-  }
-
   getPostCount() {
     if (this.hasReset()) {
       return 7;
@@ -49,10 +45,6 @@ class TimerElm extends ChipElm {
 
   getVoltageSourceCount() {
     return 1;
-  }
-
-  getDumpType() {
-    return 165;
   }
 
   nonLinear() {

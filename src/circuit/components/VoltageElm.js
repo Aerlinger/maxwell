@@ -104,11 +104,6 @@ class VoltageElm extends CircuitComponent {
     this.reset();
   }
 
-
-  getDumpType() {
-    return "v";
-  }
-
   reset() {
     this.freqTimeZero = 0;
     return this.curcount = 0;

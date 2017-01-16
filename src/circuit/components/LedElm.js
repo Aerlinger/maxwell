@@ -68,10 +68,6 @@ class LedElm extends DiodeElm {
     return "LED";
   }
 
-  getDumpType() {
-    return "162";
-  }
-
   setPoints() {
     super.setPoints(...arguments);
 

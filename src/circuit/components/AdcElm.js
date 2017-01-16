@@ -20,10 +20,6 @@ class AdcElm extends ChipElm {
     return this.bits + 2;
   }
 
-  getDumpType() {
-    return "167";
-  }
-
   needsBits() {
     return true;
   }

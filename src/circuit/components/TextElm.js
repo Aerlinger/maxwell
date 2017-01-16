@@ -44,10 +44,6 @@ class TextElm extends CircuitComponent {
     return this.lines = this.text.split("\n");
   }
 
-  getDumpType() {
-    return "x";
-  }
-
   drag(xx, yy) {
     this.point1.x = xx;
     this.point1.y = yy;

@@ -45,10 +45,6 @@ class PotElm extends CircuitComponent {
     return this.setPoints();
   }
 
-  getDumpType() {
-    return 174;
-  }
-
   getPostCount() {
     return 3;
   }

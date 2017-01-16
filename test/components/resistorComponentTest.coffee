@@ -37,9 +37,6 @@ describe "Resistor Component", ->
       @resistor.getPostCount().should.equal 2
       @resistor.getInternalNodeCount().should.equal 0
 
-    it "has correct dump type", ->
-      expect(@resistor.getDumpType()).to.equal "r"
-
     it "is orphaned", ->
       expect(@resistor.orphaned()).to.equal true
 

@@ -149,10 +149,6 @@ class ScrElm extends CircuitComponent {
     return "Silicon Controlled Rectifier";
   }
 
-  getDumpType() {
-    return 177;
-  }
-
   setup() {
     this.fwdrop = 0.8;   // Parameter?
     this.zvoltage = 0;   // zvoltage parameter?

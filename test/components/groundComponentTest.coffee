@@ -17,9 +17,6 @@ describe "Ground Component", ->
   it "is not have any internal voltage sources", ->
     @groundElm.getVoltageSourceCount().should.equal 1
 
-  it "has correct dump type", ->
-    @groundElm.getDumpType().should.equal "g"
-
   it "has correct toString()", ->
     @groundElm.toString().should.equal "GroundElm"
 

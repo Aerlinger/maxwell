@@ -29,9 +29,6 @@ describe "Voltage Component", ->
   it "is not have any internal voltage sources", ->
     @voltageElm.getVoltageSourceCount().should.equal 1
 
-  it "has correct dump type", ->
-    @voltageElm.getDumpType().should.equal "v"
-
   it "has correct toString()", ->
     @voltageElm.toString().should.equal "VoltageElm"
 

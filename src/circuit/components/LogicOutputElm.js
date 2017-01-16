@@ -39,10 +39,6 @@ class LogicOutputElm extends CircuitComponent {
     return (this.flags & LogicOutputElm.FLAG_PULLDOWN) !== 0;
   }
 
-  getDumpType() {
-    return 'M';
-  }
-
   getPostCount() {
     return 1;
   }

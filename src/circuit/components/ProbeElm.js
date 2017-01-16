@@ -15,10 +15,6 @@ class ProbeElm extends CircuitComponent {
     super(xa, ya, xb, yb, params, f);
   }
 
-  getDumpType() {
-    return "p";
-  }
-
   toString() {
     return "ProbeElm";
   }

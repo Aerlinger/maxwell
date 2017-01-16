@@ -46,10 +46,6 @@ class AndGateElm extends GateElm {
 
     return f;
   }
-
-  getDumpType() {
-    return 150;
-  }
 }
 
 module.exports = AndGateElm;

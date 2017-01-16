@@ -75,10 +75,6 @@ class ZenerElm extends DiodeElm {
     return super.setup();
   }
 
-  getDumpType() {
-    return "z";
-  }
-
   needsShortcut() {
     return false;
   }

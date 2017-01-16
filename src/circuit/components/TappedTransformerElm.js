@@ -87,10 +87,6 @@ class TappedTransformerElm extends CircuitComponent {
     return 5;
   }
 
-  getDumpType() {
-    return "169";
-  }
-
   setNodeVoltage(node_idx, voltage) {
 //    console.log("TRANS", voltage)
     return super.setNodeVoltage();

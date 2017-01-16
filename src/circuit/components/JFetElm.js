@@ -14,10 +14,6 @@ class JfetElm extends MosfetElm {
     this.noDiagonal = true;
   }
 
-  getDumpType() {
-    return 'j';
-  }
-
   getDefaultThreshold() {
     return -4;
   }

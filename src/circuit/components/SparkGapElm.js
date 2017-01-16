@@ -87,11 +87,6 @@ class SparkGapElm extends CircuitComponent {
     return true;
   }
 
-  getDumpType() {
-    return 187;
-  }
-
-
 //      p1 = DrawHelper.interpPoint(@point1, @point2, (@dn() - alen) / (2 * @dn()))
 //      @arrow1 = DrawHelper.calcArrow(@point1, p1, alen, alen)
 //      p1 = DrawHelper.interpPoint(@point1, @point2, (@dn() + alen) / (2 * @dn()))

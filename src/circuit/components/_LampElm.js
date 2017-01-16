@@ -28,13 +28,8 @@ class LampElm extends CircuitComponent {
     };
   }
 
-
   constructor(xa, xb, ya, yb, params, f) {
     super(xa, xb, ya, yb, params, f);
-  }
-
-  getDumpType() {
-    return "181";
   }
 }
 LampElm.initClass();

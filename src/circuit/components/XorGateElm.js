@@ -35,10 +35,6 @@ class XorGateElm extends OrGateElm {
 
     return f;
   }
-
-  getDumpType() {
-    return 154;
-  }
 }
 
 module.exports = XorGateElm;

@@ -15,9 +15,6 @@ describe "Capacitor Component", ->
   it "is not have any internal voltage sources", ->
     @capacitor.getVoltageSourceCount().should.equal 0
 
-  it "has correct dump type", ->
-    @capacitor.getDumpType().should.equal "c"
-
   it "has correct toString()", ->
     expect(@capacitor.toString()).to.equal """CapacitorElm@[100 100 100 200]: {"capacitance":1e-9,"voltdiff":1.1}"""
 

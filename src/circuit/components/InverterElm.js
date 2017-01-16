@@ -21,10 +21,6 @@ class InverterElm extends CircuitComponent {
     this.setPoints()
   }
 
-  getDumpType() {
-    return 'I';
-  }
-
   setPoints() {
     super.setPoints(...arguments);
 

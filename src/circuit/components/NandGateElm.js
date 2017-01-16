@@ -13,10 +13,6 @@ class NandGateElm extends AndGateElm {
   getGameName() {
     return "NAND Gate";
   }
-
-  getDumpType() {
-    return 151;
-  }
 }
 
 module.exports = NandGateElm;

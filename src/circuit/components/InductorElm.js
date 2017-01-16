@@ -99,10 +99,6 @@ class InductorElm extends CircuitComponent {
     }
   }
 
-  getDumpType() {
-    return "l";
-  }
-
   startIteration() {
     if (this.isTrapezoidal()) {
       return this.curSourceValue = (this.getVoltageDiff() / this.compResistance) + this.current;

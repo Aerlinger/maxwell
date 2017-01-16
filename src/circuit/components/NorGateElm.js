@@ -13,10 +13,6 @@ class NorGateElm extends OrGateElm {
   isInverting() {
     return true;
   }
-
-  getDumpType() {
-    return 153;
-  }
 }
 
 module.exports = NorGateElm;

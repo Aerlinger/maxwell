@@ -75,10 +75,6 @@ class ResistorElm extends CircuitComponent {
     "Resistor"
   }
 
-  getDumpType() {
-    return "r";
-  }
-
   getInfo(arr) {
     arr[0] = "resistor";
     this.getBasicInfo(arr);

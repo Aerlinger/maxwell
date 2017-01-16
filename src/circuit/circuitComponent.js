@@ -221,10 +221,6 @@ class CircuitComponent {
     return console.warn("Set power color not yet implemented");
   }
 
-  getDumpType() {
-    return 0;
-  }
-
   reset() {
     this.volts = Util.zeroArray(this.volts.length);
     return this.curcount = 0;
@@ -277,7 +273,7 @@ class CircuitComponent {
       return result;
     })()).join(" ");
 
-    return `[v ${tidyVoltage}, i ${tidyCurrent}]\t${this.getDumpType()} ${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}`;
+    return `[v ${tidyVoltage}, i ${tidyCurrent}]\t${this.getName()} ${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}`;
   }
 
   startIteration() {
@@ -370,7 +366,7 @@ class CircuitComponent {
   }
 
   stamp() {
-    return this.Circuit.halt(`Called abstract function stamp() in Circuit ${this.getDumpType()}`);
+    return this.Circuit.halt(`Called abstract function stamp() in Circuit ${this.constructor.name}`);
   }
 
   inspect() {
@@ -384,7 +380,7 @@ class CircuitComponent {
     })());
 
     return {
-      sym: this.getDumpType(),
+      name: this.getName(),
       x1: this.point1.x,
       y1: this.point1.y,
       x2: this.point2.x,
@@ -654,7 +650,7 @@ class CircuitComponent {
       selected: false,
       voltSource: this.getVoltageSource(),
       needsShortcut: this.needsShortcut(),
-      dump: this.getDumpType().toString(),
+      name: this.constructor.name,
       postCount: this.getPostCount(),
       nonLinear: this.nonLinear()
     };

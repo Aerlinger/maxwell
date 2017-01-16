@@ -84,10 +84,6 @@ class LogicInputElm extends SwitchElm {
     return this.flags & ((LogicInputElm.FLAG_TERNARY | LogicInputElm.FLAG_NUMERIC) !== 0);
   }
 
-  getDumpType() {
-    return 'L';
-  }
-
   getPostCount() {
     return 1;
   }

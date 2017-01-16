@@ -119,10 +119,6 @@ class TransformerElm extends CircuitComponent {
     return 4;
   }
 
-  getDumpType() {
-    return 'T';
-  }
-
   reset() {
     this.current[0] = 0;
     this.current[1] = 0;

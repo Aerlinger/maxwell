@@ -24,16 +24,8 @@ class DiacElm extends CircuitComponent {
     };
   }
 
-  getDumpType() {
-    return 185;
-  }
-
   constructor(xa, xb, ya, yb, params, f) {
     super(xa, xb, ya, yb, params, f);
-  }
-
-  getDumpType() {
-    return "185";
   }
 
   nonLinear() {

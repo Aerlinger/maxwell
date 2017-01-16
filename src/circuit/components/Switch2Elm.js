@@ -59,10 +59,6 @@ class Switch2Elm extends SwitchElm {
     return this.setBboxPt(this.point1, this.point2, this.openhs);
   }
 
-  getDumpType() {
-    return "S";
-  }
-
   draw(renderContext) {
     this.calcLeads(32);
 

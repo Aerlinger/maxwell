@@ -10,10 +10,6 @@ class JkFlipFlopElm extends ChipElm {
     this.pins[4].value = !this.pins[3].value;
   }
 
-  getDumpType() {
-    return "156";
-  }
-
   getName() {
     return "JK flip-flop";
   }

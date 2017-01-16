@@ -8,10 +8,6 @@ class DacElm extends ChipElm {
     super(xa, xb, ya, yb, params, f);
   }
 
-  getDumpType() {
-    return "166";
-  }
-
   needsBits() {
     return true;
   }

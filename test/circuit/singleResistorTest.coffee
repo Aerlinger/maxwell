@@ -20,9 +20,6 @@ describe "1V grounded DC Source with 1 ohm grounded resistor", ->
     @resistor.getPostCount().should.equal 2
     @resistor.getInternalNodeCount().should.equal 0
 
-  it "has correct dump type", ->
-    @resistor.getDumpType().should.equal "r"
-
   it "needs a remap", ->
     @Circuit.Solver.analyzeFlag.should.equal true
 

@@ -63,10 +63,6 @@ class CapacitorElm extends CircuitComponent {
     return this.voltdiff = 1e-3;
   }
 
-  getDumpType() {
-    return "c";
-  }
-
   setPoints() {
     // console.log("capelm", arguments);
 //    super(arguments...)

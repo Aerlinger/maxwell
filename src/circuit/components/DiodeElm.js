@@ -66,10 +66,6 @@ class DiodeElm extends CircuitComponent {
     }
   }
 
-  getDumpType() {
-    return "d";
-  }
-
   draw(renderContext) {
     this.calcLeads(16);
 

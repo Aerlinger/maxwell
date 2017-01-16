@@ -13,10 +13,6 @@ class CounterElm extends ChipElm {
     super(xa, xb, ya, yb, params, f);
   }
 
-  getDumpType() {
-    return "164";
-  }
-
   needsBits() {
     return true;
   }

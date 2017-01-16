@@ -27,10 +27,6 @@ class AnalogSwitchElm extends CircuitComponent {
     super(xa, ya, xb, yb, params, f);
   }
 
-  getDumpType() {
-    return 159;
-  }
-
   setPoints() {
     super.setPoints(...arguments);
 

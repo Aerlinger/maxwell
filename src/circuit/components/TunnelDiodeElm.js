@@ -27,10 +27,6 @@ class TunnelDiodeElm extends CircuitComponent {
 
   setup() {}
 
-  getDumpType() {
-    return "175";
-  }
-
   setPoints() {
     super.setPoints(...arguments);
     this.calcLeads(16);

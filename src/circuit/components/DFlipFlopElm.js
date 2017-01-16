@@ -13,14 +13,6 @@ class DFlipFlopElm extends ChipElm {
     this.pins[2].value = !this.pins[1].value;
   }
 
-  getDumpType() {
-    return "155";
-  }
-
-  getName() {
-    return "D flip-flop";
-  }
-
   getPostCount() {
     if (this.hasReset()) { return 5; } else { return 4; }
   }
