@@ -1,18 +1,18 @@
-// #######################################################################
-// CircuitComponent:
-//   Base class from which all components inherit
-//
-// @author Anthony Erlinger
-// @year 2012
-//
-// Uses the Observer Design Pattern:
-//   Observes: Circuit, CircuitRender
-//   Observed By: CircuitCanvas
-//
-// Events:
-//  <None>
-//
-// #######################################################################
+/**
+ CircuitComponent:
+   Base class from which all components inherit
+
+ @author Anthony Erlinger
+ @year 2012
+
+ Uses the Observer Design Pattern:
+   Observes: Circuit, CircuitRender
+   Observed By: CircuitCanvas
+
+ Events:
+  <None>
+
+*/
 
 let Settings = require('../settings/settings.js');
 let Rectangle = require('../geom/rectangle.js');
@@ -178,17 +178,6 @@ class CircuitComponent {
   }
 
   setPoints(x1, y1, x2, y2) {
-    //    @dx() = x2 - x1
-    //    @dy() = y2 - y1
-
-    //    @dn() = Math.sqrt(@dx() * @dx() + @dy() * @dy())
-    //    @length = Math.sqrt(@dx() * @dx() + @dy() * @dy())
-    //    @@dpx1() = @dy() / @dn()
-    //    @dpy1 = -@dx() / @dn()
-
-    //    @dsign() = (if (@dy() is 0) then Math.sign(@dx()) else Math.sign(@dy()))
-    // console.log("x1", x1, "y1", y1)
-
     if (!this.point1) {
       this.point1 = new Point(x1, y1);
     }
@@ -198,8 +187,6 @@ class CircuitComponent {
 
     return this.recomputeBounds();
   }
-
-//    console.log("c", @point1.x)
 
   unitText() {
     return "?";
@@ -340,8 +327,6 @@ class CircuitComponent {
     this.point2.x = newX;
     return this.point2.y = newY;
   }
-
-//    @setPoints()
 
   move(deltaX, deltaY) {
     this.point1.x += deltaX;
@@ -534,9 +519,9 @@ class CircuitComponent {
     return false;
   }
 
-  /* *///###################################################################
-// RENDERING METHODS
-  /* *///###################################################################
+  //
+  // RENDERING METHODS
+  //
 
   draw(renderContext) {
     let post;
@@ -560,12 +545,14 @@ class CircuitComponent {
 
     let outlineRadius = 7;
 
-    // nodeIdx = 0
-    // for node in @nodes
-    //   if @point1 && @point2
-    //     renderContext.drawValue 25+10*nodeIdx, -10*nodeIdx, this, "#{node}-#{@getVoltageForNode(node)}"
-    //     nodeIdx += 1
-
+    /*
+    // Draw node values
+    nodeIdx = 0
+    for node in @nodes
+      if @point1 && @point2
+        renderContext.drawValue 25+10*nodeIdx, -10*nodeIdx, this, "#{node}-#{@getVoltageForNode(node)}"
+        nodeIdx += 1
+    */
 
     if (this.point1) {
       renderContext.drawCircle(this.point1.x, this.point1.y, outlineRadius - 1, 1, 'rgba(0,0,255,0.7)');
@@ -587,11 +574,6 @@ class CircuitComponent {
         (post = this.getPost(postIdx),
             renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')));
   }
-
-//    renderContext.drawLeads(this)
-
-  //    @updateDots(this)
-  //    renderContext.drawDots(@point1, @point2, this)
 
   updateDots(ds) {
     if (ds == null) {
@@ -680,24 +662,25 @@ class CircuitComponent {
     return Object.keys(this.constructor.Fields);
   }
 
-  //#
-  // Returns the JSON metadata object for this field with an additional key/value pair for the assigned value.
-  // Used externally to edit/update component values
-  //
-  // Eg:
-  // voltageElm.getFieldWithValue("waveform")
-  //
-  // {
-  //   name: "none"
-  //   default_value: 0
-  //   data_type: parseInt
-  //   range: [0, 6]
-  //   input_type: "select"
-  //   select_values: ...
-  //   value: 2  // Square wave
-  // }
-  //
-  // @see @Fields
+  /**
+   Returns the JSON metadata object for this field with an additional key/value pair for the assigned value.
+   Used externally to edit/update component values
+  
+   Eg:
+   voltageElm.getFieldWithValue("waveform")
+  
+   {
+     name: "none"
+     default_value: 0
+     data_type: parseInt
+     range: [0, 6]
+     input_type: "select"
+     select_values: ...
+     value: 2   Square wave
+   }
+  
+   @see @Fields
+   */
   getFieldWithValue(param_name) {
     let param_value = this.params[param_name];
 
