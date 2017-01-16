@@ -177,10 +177,6 @@ class ChipElm extends CircuitComponent {
 
         this.volts = params['volts'];
 
-        if (params['volts']) {
-          this.params['volts'] = params['volts']
-        }
-
         for (let i=0; i<this.getPostCount(); ++i) {
           if (this.pins[i].state) {
             initial_voltages.push(parseInt(params['volts'].shift()));
@@ -188,6 +184,10 @@ class ChipElm extends CircuitComponent {
         }
 
         this.volts = initial_voltages;
+
+        if (params['volts']) {
+          this.params.volts = this.volts
+        }
       }
     }
 

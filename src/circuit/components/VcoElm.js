@@ -6,6 +6,7 @@ class VcoElm extends ChipElm {
   constructor(xa, xb, ya, yb, params, f) {
     super(xa, xb, ya, yb, params, f);
 
+    // TODO: paramify
     this.cResistance = 1e6;
   }
 

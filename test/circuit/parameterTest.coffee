@@ -15,3 +15,38 @@ describe "Loading parameters", ->
         expect(->
           new MosfetElm(0, 0, 0, 0, {invalid: 1})
         ).to.throw()
+
+  describe "DecadeElm", ->
+    beforeEach ->
+      @DecadeElm = new DecadeElm(0, 0, 0, 0, {"bits": 10, "volts": [0, 0, 0, 0, 0, 0, 5, 0, 0, 0]})
+
+    it "Has correct initial voltage", ->
+      expect(@DecadeElm.bits).to.eql(10)
+      expect(@DecadeElm.volts).to.eql([0, 0, 0, 0, 0, 0, 5, 0, 0, 0])
+
+      expect(@DecadeElm.params).to.eql({
+        "bits": 10, "volts": [0, 0, 0, 0, 0, 0, 5, 0, 0, 0]
+      })
+
+  describe "CounterElm", ->
+    beforeEach ->
+      @CounterElm = new CounterElm(0, 0, 0, 0, {"bits": 10, "volts": [0, 0, 0, 0, 0, 0, 5, 0, 0, 0]})
+
+    it "Has correct initial voltage", ->
+      expect(@CounterElm.bits).to.eql(10)
+      expect(@CounterElm.volts).to.eql([0, 0, 0, 0, 0, 0, 5, 0, 0, 0])
+
+      expect(@CounterElm.params).to.eql({
+        "bits": 10, "volts": [0, 0, 0, 0, 0, 0, 5, 0, 0, 0]
+      })
+
+  describe "CC2Elm", ->
+    beforeEach ->
+      @CC2Elm = new CC2Elm(0, 0, 0, 0, {"gain": 10})
+
+    it "Has correct initial voltage", ->
+      expect(@CC2Elm.gain).to.eql(10)
+
+      expect(@CC2Elm.params).to.eql({
+        "gain": 10
+      })
