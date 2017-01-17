@@ -76,6 +76,72 @@ ${circuitData}\
     return new Renderer(circuit, canvas);
   }
 
+  static renderEdit(circuitComponent) {
+    let fields = circuitComponent.constructor.Fields;
+
+    let result = [];
+    let html = `
+    <div class="container">
+      <h3 class="componentTitle">
+          ${circuitComponent.getName()}
+        </h3>
+    
+      <form>
+    `;
+
+    for (let fieldName in fields) {
+      if (fieldName) {
+
+        let field = fields[fieldName];
+
+        let fieldValue = circuitComponent[fieldName];
+        let fieldType = field["field_type"] || "float";
+        let fieldDefault = field["default_value"];
+        let fieldLabel = field["name"];
+        let fieldSymbol = field["symbol"];
+        let fieldDescription = field["description"];
+        let fieldRange = field["range"];
+
+        result.push(`fieldValue:${fieldValue} fieldType:${fieldType} fieldLabel:${fieldLabel} fieldSymbol:${fieldSymbol} fieldDescription:${fieldDescription} fieldRange:${fieldRange}`);
+
+        html += `
+        
+        <div class="form-group row has-success">
+          <label for="inputHorizontalSuccess" class="col-sm-2 col-form-label">
+            ${fieldLabel}
+          </label>
+    
+          <div class="col-sm-10">
+            <div>
+              <input type="${fieldType}" value="${fieldValue}" class="form-control form-control-success" data-range-min="${fieldRange[0]}" data-range-max="${fieldRange[1]}" id="inputHorizontalSuccess" placeholder="${fieldDefault}">
+              <small class="form-symbol text-muted">${fieldSymbol}</small>
+            </div>
+            `;
+
+            if (fieldDescription) {
+              html += `
+              <div>
+                <small class="form-text text-muted">${fieldDescription}</small>
+              </div>
+              `
+            }
+            html += `
+          </div>
+        </div>
+        `;
+      } else {
+        result.push("?");
+      }
+    }
+
+    html += `    
+      </form>
+    </div>
+    `
+    
+    return html;
+  }
+
   static createContext(circuitName, filepath, context, onComplete) {
     let circuit = null;
 
@@ -100,6 +166,7 @@ Use \`Maxwell.createCircuit()\` to create a new empty circuit object.\
     return circuit;
   }
 }
+
 Maxwell.initClass();
 
 Maxwell.Renderer = Renderer;
