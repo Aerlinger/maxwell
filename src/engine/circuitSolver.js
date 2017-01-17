@@ -20,7 +20,9 @@ let CurrentElm = require('../circuit/components/CurrentElm.js');
 let { sprintf } = require("sprintf-js");
 
 class CircuitSolver {
+  
   static initClass() {
+    this.DEBUG_FRAME_TIMING = true;
     this.SIZE_LIMIT = 100;
     this.MAXIMUM_SUBITERATIONS = 5000;
   }
@@ -97,6 +99,8 @@ class CircuitSolver {
 
     let iter = 1;
     while (true) {
+      this.startIterTime = (new Date()).getTime();
+
       var subiter;
       ++this.steps;
 
@@ -145,10 +149,15 @@ class CircuitSolver {
 
       tm = (new Date()).getTime();
       lit = tm;
+
+      // console.warn(">", (iter * 1000), stepRate, tm, this.lastIterTime, this.lastFrameTime, (tm-this.lastIterTime), "STEPS", this.steps);
       if ((tm - this.lastFrameTime) > 500) {
-        console.warn("FRAME TIMEOUT: ", (tm - this.lastFrameTime))
+        if (CircuitSolver.DEBUG_FRAME_TIMING)
+          console.warn("FRAMEBREAK: ", (iter * 1000), stepRate, tm, this.lastIterTime, this.lastFrameTime, (tm-this.lastIterTime), "STEPS", this.steps);
         break;
       } else if ((iter * 1000) >= (stepRate * (tm - this.lastIterTime))) {
+        if (CircuitSolver.DEBUG_FRAME_TIMING)
+          console.warn("FRAMETIME: ", (iter * 1000), stepRate, tm, this.lastIterTime, this.lastFrameTime, (tm-this.lastIterTime), "STEPS", this.steps);
         break;
       }
 
@@ -160,7 +169,9 @@ class CircuitSolver {
 
     this.simulationFrames.push(new SimulationFrame(this.Circuit));
 
-    return this._updateTimings(lit);
+    // this.lastIterTime = lit;
+
+    this._updateTimings(lit);
   }
 
   circuitLinear() {
@@ -187,7 +198,10 @@ class CircuitSolver {
     }
 
     this.lastTime = sysTime;
-    return this.lastFrameTime = this.lastTime;
+    if (CircuitSolver.DEBUG_FRAME_TIMING)
+        console.log("F.T. " + (this.lastTime - this.lastFrameTime), "  I.T. ", (sysTime - this.startIterTime));
+
+    this.lastFrameTime = this.lastTime;
   }
 
 
