@@ -47,6 +47,11 @@ class SparkGapElm extends CircuitComponent {
     };
   }
 
+  getName() {
+    return "Spark Gap"
+  }
+
+
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
 
@@ -86,11 +91,6 @@ class SparkGapElm extends CircuitComponent {
   nonLinear() {
     return true;
   }
-
-  getDumpType() {
-    return 187;
-  }
-
 
 //      p1 = DrawHelper.interpPoint(@point1, @point2, (@dn() - alen) / (2 * @dn()))
 //      @arrow1 = DrawHelper.calcArrow(@point1, p1, alen, alen)

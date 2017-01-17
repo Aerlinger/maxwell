@@ -1,4 +1,4 @@
-describe "ACRailElmTest", ->
+describe "ACRailElm Test", ->
   before ->
     @acRailElm = new ACRailElm(100, 200)
 
@@ -11,7 +11,6 @@ describe "ACRailElmTest", ->
 
   describe "Rendering", ->
     before (done) ->
-      Canvas = require('canvas')
       @canvas = new Canvas(100, 200)
       ctx = @canvas.getContext('2d')
 

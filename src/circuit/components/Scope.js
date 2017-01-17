@@ -15,7 +15,7 @@ class Scope {
   }
 
   constructor() {
-    this.rect = Rectangle(0, 500, 200, 100);
+    this.rect = new Rectangle(0, 500, 200, 100);
   }
 
   reset() {
@@ -39,6 +39,9 @@ class Scope {
     }
   }
 
+  getName() {
+    return "Scope Output"
+  }
 
   resetGraph() {
     this.scopePointCount = 1;

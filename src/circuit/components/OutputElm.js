@@ -16,13 +16,12 @@ class OutputElm extends CircuitComponent {
     super(xa, ya, xb, yb, params, f);
   }
 
-
-  getDumpType() {
-    return "O";
-  }
-
   getPostCount() {
     return 1;
+  }
+
+  getName() {
+    return "Output"
   }
 
   setPoints() {

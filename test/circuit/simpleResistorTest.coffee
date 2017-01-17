@@ -1,12 +1,7 @@
-#  r 256 176 256 304 0 100.0
-#  172 256 176 256 128 0 6 5.0 5.0 0.0 0.0 0.5 Voltage
-#  g 256 304 256 352 0
 Circuit = require('../../src/circuit/circuit.js')
 CircuitLoader = require('../../src/io/CircuitLoader.js')
 
 chai = require('chai');
-assert = chai.assert
-expect = chai.expect;
 
 
 describe "Simple single resistor circuit", ->
@@ -29,42 +24,32 @@ describe "Simple single resistor circuit", ->
         "voltage_range": 5.0
       },
       {
-        "sym": "172",
-        "x1": "256",
-        "y1": "176",
-        "x2": "256",
-        "y2": "128",
-        "flags": "0",
-        "params": [
-          "6",
-          "5.0",
-          "5.0",
-          "0.0",
-          "0.0",
-          "0.5",
-          "Voltage"
-        ]
+        "name": "VarRailElm",
+        "pos": [256, 176, 256, 128],
+        "flags": 0,
+        "params": {
+          "waveform": 6,
+          "frequency": 5,
+          "maxVoltage": 5,
+          "bias": 0,
+          "phaseShift": 0,
+          "dutyCycle": 0.5,
+          "sliderText": "Voltage"
+        }
       },
       {
-        "sym": "r",
-        "x1": "256",
-        "y1": "176",
-        "x2": "256",
-        "y2": "304",
+        "name": "ResistorElm",
+        "pos": [256, 176, 256, 304],
         "flags": "0",
-        "params": [
-          "100.0"
-        ]
+        "params": {
+          resistance: 100.0
+        }
       },
       {
-        "sym": "g",
-        "x1": "256",
-        "y1": "304",
-        "x2": "256",
-        "y2": "352",
+        "name": "GroundElm",
+        "pos": [256, 304, 256, 352],
         "flags": "0",
-        "params": [
-        ]
+        "params": {}
       }
     ]
 
@@ -173,10 +158,11 @@ describe "Simple single resistor circuit", ->
 
           expect(@Circuit.iterations).to.equal(3)
 
-        it "increments time", ->
+        it "increments time", (done)->
           @Circuit.updateCircuit()
           @Circuit.updateCircuit()
           @Circuit.updateCircuit()
 
           expect(@Circuit.time).to.equal(3 * 5.0e-06)
+          done()
 

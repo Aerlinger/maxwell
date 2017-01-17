@@ -24,10 +24,6 @@ class CurrentElm extends CircuitComponent {
     super(xa, ya, xb, yb, params, f);
   }
 
-  getDumpType() {
-    return "i";
-  }
-
   draw(renderContext) {
     if (CircuitComponent.DEBUG) {
       super.draw(renderContext);
@@ -63,6 +59,9 @@ class CurrentElm extends CircuitComponent {
     return renderContext.drawPosts(this);
   }
 
+  getName() {
+    return "Current Source"
+  }
 
   stamp(stamper) {
     this.current = this.currentValue;

@@ -23,8 +23,8 @@ class Switch2Elm extends SwitchElm {
         unit: "",
         default_value: 0,
         data_type: parseInt,
-        range: [0, 1],
-        field_type: "boolean"
+        range: [0, 2],
+        field_type: "integer"
       }
     });
   }
@@ -35,8 +35,6 @@ class Switch2Elm extends SwitchElm {
     this.openhs = 16;
     this.noDiagonal = true;
   }
-
-//    @position = 0
 
   name() {
     return "SPDT switch";
@@ -57,10 +55,6 @@ class Switch2Elm extends SwitchElm {
     this.posCount = this.hasCenterOff() ? 3 : 2;
 
     return this.setBboxPt(this.point1, this.point2, this.openhs);
-  }
-
-  getDumpType() {
-    return "S";
   }
 
   draw(renderContext) {

@@ -1,0 +1,74 @@
+[
+  {
+    "type": "npn.txt",
+    "timeStep": 0.000005,
+    "simSpeed": 173,
+    "currentSpeed": 43,
+    "voltageRange": 2,
+    "powerRange": 50,
+    "flags": 1
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [240, 240, 208, 240],
+    "flags": 0,
+    "params": {
+      "waveform": 6,
+      "frequency": 0.705,
+      "maxVoltage": 0.75,
+      "bias": 0.5,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Base Voltage"
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [352, 256, 352, 304],
+    "flags": 1,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [352, 224, 352, 176],
+    "flags": 1,
+    "params": {}
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [352, 176, 352, 144],
+    "flags": 0,
+    "params": {
+      "waveform": 6,
+      "frequency": 2,
+      "maxVoltage": 2,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Collector Voltage"
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [352, 304, 352, 320],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "TransistorElm",
+    "pos": [304, 240, 352, 240],
+    "flags": 0,
+    "params": {
+      "pnp": 1,
+      "lastvbe": -4.295,
+      "lastvbc": 0.7049999999999998,
+      "beta": 100
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [240, 240, 304, 240],
+    "flags": 1,
+    "params": {}
+  }
+]

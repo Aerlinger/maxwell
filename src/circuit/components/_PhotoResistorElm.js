@@ -16,17 +16,11 @@ class PhotoResistorElm extends CircuitComponent {
     };
   }
 
-
   constructor(xa, xb, ya, yb, params, f) {
     super(xa, xb, ya, yb, params, f);
   }
-
-  getDumpType() {
-    return "186";
-  }
 }
+
 PhotoResistorElm.initClass();
-
-
 
 module.exports = PhotoResistorElm;

@@ -1,0 +1,162 @@
+[
+  {
+    "type": "4way.txt",
+    "timeStep": 0.000005,
+    "simSpeed": 143,
+    "currentSpeed": 44,
+    "voltageRange": 120,
+    "powerRange": 15,
+    "flags": 1
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [32, 320, 32, 80],
+    "flags": 0,
+    "params": {
+      "waveform": 1,
+      "frequency": 60,
+      "maxVoltage": 120,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [480, 80, 480, 320],
+    "flags": 0,
+    "params": {
+      "resistance": 150
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [32, 80, 80, 80],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "Switch2Elm",
+    "pos": [336, 176, 240, 176],
+    "flags": 0,
+    "params": {
+      "position": 0,
+      "momentary": false,
+      "link": 2
+    }
+  },
+  {
+    "name": "Switch2Elm",
+    "pos": [336, 240, 240, 240],
+    "flags": 0,
+    "params": {
+      "position": 0,
+      "momentary": false,
+      "link": 2
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [432, 80, 480, 80],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [32, 320, 80, 320],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [80, 320, 480, 320],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [208, 256, 240, 256],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [208, 160, 240, 160],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [240, 192, 240, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "Switch2Elm",
+    "pos": [80, 208, 176, 208],
+    "flags": 0,
+    "params": {
+      "position": 0,
+      "momentary": false,
+      "link": 0
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [80, 80, 80, 208],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [176, 224, 240, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [208, 160, 208, 192],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [176, 192, 208, 192],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [208, 192, 208, 256],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "Switch2Elm",
+    "pos": [432, 208, 336, 208],
+    "flags": 0,
+    "params": {
+      "position": 0,
+      "momentary": false,
+      "link": 0
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [336, 176, 336, 192],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [336, 224, 336, 240],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [432, 80, 432, 208],
+    "flags": 0,
+    "params": {}
+  }
+]

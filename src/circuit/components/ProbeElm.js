@@ -15,10 +15,6 @@ class ProbeElm extends CircuitComponent {
     super(xa, ya, xb, yb, params, f);
   }
 
-  getDumpType() {
-    return "p";
-  }
-
   toString() {
     return "ProbeElm";
   }
@@ -34,6 +30,10 @@ class ProbeElm extends CircuitComponent {
     }
 
     return this.center = this.getCenter();
+  }
+
+  getName() {
+    return "Scope Probe"
   }
 
   draw(renderContext) {

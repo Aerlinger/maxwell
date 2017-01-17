@@ -1,6 +1,3 @@
-fs = require('fs')
-Canvas = require('canvas')
-
 describe "Resistor Component", ->
   beforeEach ->
     @Circuit = new Circuit("SingleResistor")
@@ -37,14 +34,11 @@ describe "Resistor Component", ->
       @resistor.getPostCount().should.equal 2
       @resistor.getInternalNodeCount().should.equal 0
 
-    it "has correct dump type", ->
-      expect(@resistor.getDumpType()).to.equal "r"
-
     it "is orphaned", ->
       expect(@resistor.orphaned()).to.equal true
 
     it "has correct properties", ->
-      console.log("PARAMS", @resistor.getFieldWithValue("resistance"))
+#      console.log("PARAMS", @resistor.getFieldWithValue("resistance"))
       expect(@resistor.getFieldWithValue("resistance")).to.eql({
         "default_value": 1000
         "name": "Resistance"
@@ -146,7 +140,6 @@ describe "Resistor Component", ->
 
   describe "Rendering", ->
     before (done) ->
-      Canvas = require('canvas')
       @canvas = new Canvas(100, 200)
       @ctx = @canvas.getContext('2d')
 

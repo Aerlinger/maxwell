@@ -70,10 +70,6 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
     return renderContext.drawPosts(this);
   }
 
-  getDumpType() {
-    return 160;
-  }
-
   calculateCurrent() {
     if (this.open) {
       return this.current = (this.volts[0] - this.volts[2]) / this.r_on;
@@ -82,6 +78,9 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
     }
   }
 
+  getName() {
+    return "Analog Switch (2-way)"
+  }
 
   stamp(stamper) {
     stamper.stampNonLinear(this.nodes[0]);

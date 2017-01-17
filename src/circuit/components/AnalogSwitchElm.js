@@ -27,10 +27,6 @@ class AnalogSwitchElm extends CircuitComponent {
     super(xa, ya, xb, yb, params, f);
   }
 
-  getDumpType() {
-    return 159;
-  }
-
   setPoints() {
     super.setPoints(...arguments);
 
@@ -62,6 +58,10 @@ class AnalogSwitchElm extends CircuitComponent {
     renderContext.drawDots(this.point1, this.point2, this);
 
     renderContext.drawPosts(this)
+  }
+
+  getName() {
+    return "Analog Switch"
   }
 
   calculateCurrent() {

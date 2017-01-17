@@ -6,11 +6,13 @@ class TriodeElm extends CircuitComponent {
     return {
       mu: {
         name: "",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 93
       },
       kg1: {
         name: "",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 680
       }
     };
   }
@@ -27,6 +29,10 @@ class TriodeElm extends CircuitComponent {
     return this.noDiagonal = true;
   }
 
+  getName() {
+    return "Triode"
+  }
+
   nonLinear() {
     return true;
   }
@@ -36,10 +42,6 @@ class TriodeElm extends CircuitComponent {
     this.volts[1] = 0;
     this.volts[2] = 0;
     return this.curcount = 0;
-  }
-
-  getDumpType() {
-    return '173';
   }
 
   getPost(n) {

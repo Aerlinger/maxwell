@@ -1,0 +1,181 @@
+[
+  {
+    "type": "delayrc.txt",
+    "timeStep": 5e-9,
+    "simSpeed": 172,
+    "currentSpeed": 54,
+    "voltageRange": 5,
+    "powerRange": 62,
+    "flags": 1
+  },
+  {
+    "name": "MosfetElm",
+    "pos": [144, 144, 208, 144],
+    "flags": 1,
+    "params": {
+      "vt": null,
+      "pnp": -1
+    }
+  },
+  {
+    "name": "MosfetElm",
+    "pos": [144, 240, 208, 240],
+    "flags": 0,
+    "params": {
+      "vt": null,
+      "pnp": 1
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [208, 160, 208, 192],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [208, 192, 208, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [144, 144, 144, 192],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [144, 192, 144, 240],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "LogicInputElm",
+    "pos": [144, 192, 96, 192],
+    "flags": 0,
+    "params": {
+      "position": 1,
+      "momentary": false,
+      "hiV": 5,
+      "loV": 0
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [208, 128, 208, 80],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [208, 256, 208, 288],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [208, 192, 288, 192],
+    "flags": 0,
+    "params": {
+      "resistance": 1500
+    }
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [288, 192, 288, 256],
+    "flags": 0,
+    "params": {
+      "capacitance": 1e-8,
+      "voltdiff": 4.973779073596618
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [288, 256, 288, 288],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [288, 192, 336, 192],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [336, 192, 336, 144],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [336, 192, 336, 240],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "MosfetElm",
+    "pos": [336, 144, 400, 144],
+    "flags": 1,
+    "params": {
+      "vt": null,
+      "pnp": -1
+    }
+  },
+  {
+    "name": "MosfetElm",
+    "pos": [336, 240, 400, 240],
+    "flags": 0,
+    "params": {
+      "vt": null,
+      "pnp": 1
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [400, 160, 400, 192],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [400, 192, 400, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "LogicOutputElm",
+    "pos": [400, 192, 448, 192],
+    "flags": 0,
+    "params": {
+      "threshold": 2.5
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [400, 256, 400, 288],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "RailElm",
+    "pos": [400, 128, 400, 80],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  }
+]

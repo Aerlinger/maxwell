@@ -16,18 +16,7 @@ class ChipElm extends CircuitComponent {
     this.SIDE_S = 1;
     this.SIDE_W = 2;
     this.SIDE_E = 3;
-  
-  //  @Fields = {
-  //    bits: {
-  //      name: "Bits"
-  //      data_type: parseInt
-  //    }
-  //    volts: {
-  //      name: "Volts"
-  //      data_type: (x) -> x
-  //    }
-  //  }
-  
+
     self = null;
   
     Pin = class Pin {
@@ -143,43 +132,41 @@ class ChipElm extends CircuitComponent {
   constructor(xa, xb, ya, yb, params, f) {
     super(xa, xb, ya, yb, {}, f);
 
-    let initial_voltages = [];
-
     this.flags = f;
 
     this.setSize(((f & ChipElm.FLAG_SMALL) !== 0) ? 1 : 2);
+    
+    // TODO: Needs cleanup 
 
     if (params) {
-      if (params.constructor == Array) {
-        if (this.needsBits()) {
-          this.bits = parseInt(params.shift());
-        }
+      // TODO: DRY
 
-        self = this;
-        this.setupPins();
-        this._setPoints();
+      if (params['volts']) {
+        this.params.volts = params["volts"].slice();
+      }
 
-        for (let i=0; i<this.getPostCount(); ++i) {
-          if (this.pins[i].state) {
-            initial_voltages.push(parseInt(params.shift()));
-          }
+      if (this.needsBits()) {
+        this.bits = parseInt(params['bits']);
+        this.params['bits'] = this.bits;
+      }
+
+      self = this;
+      this.setupPins();
+      this._setPoints();
+
+      for (let i=0; i<this.getPostCount(); ++i) {
+        if (this.pins[i].state) {
+          this.volts[i] = parseFloat(params['volts'].shift());
+          this.pins[i].value = (this.volts[i] > 2.5);
         }
-      } else {
-        this.bits = params['bits'];
-        this.volts = params['volts'];
-        initial_voltages = params['volts'];
       }
     }
 
-    this.params['volts'] = this.volts;
-
-    if (this.bits) {
-      this.params['bits'] = this.bits;
-    }
-
     this.noDiagonal = true;
-    let numPosts = this.getPostCount();
 
+    /*
+    let numPosts = this.getPostCount();
+    
     for (let i = 0; i < numPosts; i++) {
       if (!this.pins[i]) {
         console.error(`No pin found at ${i}`);
@@ -191,8 +178,9 @@ class ChipElm extends CircuitComponent {
         this.pins[i].value = this.volts[i] > 2.5;
       }
     }
+    */
 
-    this.params['volts'] = this.volts;
+    // console.log(this.params['volts'])
   }
 
   inspect() {
@@ -206,7 +194,7 @@ class ChipElm extends CircuitComponent {
     })());
 
     return {
-      sym: this.getDumpType(),
+      name: this.constructor.name,
       x1: this.point1.x,
       y1: this.point1.y,
       x2: this.point2.x,
@@ -262,7 +250,6 @@ class ChipElm extends CircuitComponent {
   }
 
   setSize(s) {
-    //console.log("#{@getName()} Set size: #{s}")
     this.csize = s;
     this.cspc = 8 * s;
     this.cspc2 = this.cspc * 2;

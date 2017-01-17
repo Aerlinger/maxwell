@@ -7,8 +7,8 @@ ResistorElm = require('../../src/circuit/components/ResistorElm.js')
 describe "1V grounded DC Source with 1 ohm grounded resistor", ->
   beforeEach ->
     @Circuit = new Circuit()
-    @resistor       = new ResistorElm(300, 100, 300, 200, [50])
-    @voltageSource  = new VoltageElm(100, 100, 100, 200, [50])
+    @resistor       = new ResistorElm(300, 100, 300, 200, {"resistance": 50})
+    @voltageSource  = new VoltageElm(100, 100, 100, 200, {"waveform": VoltageElm.WF_DC})
     @wire           = new WireElm(100, 100, 300, 100)
     @voltageGround  = new GroundElm(100, 200, 100, 250)
     @resGround      = new GroundElm(300, 200, 300, 250)
@@ -19,9 +19,6 @@ describe "1V grounded DC Source with 1 ohm grounded resistor", ->
   it "calculates current when voltage is applied", ->
     @resistor.getPostCount().should.equal 2
     @resistor.getInternalNodeCount().should.equal 0
-
-  it "has correct dump type", ->
-    @resistor.getDumpType().should.equal "r"
 
   it "needs a remap", ->
     @Circuit.Solver.analyzeFlag.should.equal true

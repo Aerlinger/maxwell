@@ -244,10 +244,6 @@ class OpAmpElm extends CircuitComponent {
   getVoltageDiff() {
     return this.volts[2] - this.volts[1];
   }
-
-  getDumpType() {
-    return "a";
-  }
 }
 OpAmpElm.initClass();
 

@@ -8,11 +8,11 @@ class SimulationParams {
     this.description = __guard__(paramsObj, x4 => x4['description']) || "";
     this.flags = parseInt(__guard__(paramsObj, x5 => x5['flags'])) || 1;
     this.id = parseInt(__guard__(paramsObj, x6 => x6['id'])) || null;
-    this.name = __guard__(paramsObj, x7 => x7['name_unique']) || "default";
-    this.powerRange = parseFloat(__guard__(paramsObj, x8 => x8['power_range'])) || 62.0;
-    this.voltageRange = parseFloat(__guard__(paramsObj, x9 => x9['voltage_range'])) || 10.0;
+    this.name = __guard__(paramsObj, x7 => x7['nameUnique']) || "default";
+    this.powerRange = parseFloat(__guard__(paramsObj, x8 => x8['powerRange'])) || 62.0;
+    this.voltageRange = parseFloat(__guard__(paramsObj, x9 => x9['voltageRange'])) || 10.0;
     this.simSpeed = parseFloat(SimulationParams.convertSimSpeed(__guard__(paramsObj, x10 => x10['sim_speed'])) || 10.0);
-    this.timeStep = parseFloat(__guard__(paramsObj, x11 => x11['time_step'])) || 5.0e-06;
+    this.timeStep = parseFloat(__guard__(paramsObj, x11 => x11['timeStep'])) || 5.0e-06;
     this.title = __guard__(paramsObj, x12 => x12['title']) || "Default";
     this.topic = __guard__(paramsObj, x13 => x13['topic']) || null;
     //      @currentMult = 1
@@ -31,11 +31,11 @@ class SimulationParams {
       description: simParams.description,
       flags: simParams.flags,
       id: simParams.id,
-      name_unique: simParams.name,
+      nameUnique: simParams.name,
       power_range: simParams.powerRange,
       voltage_range: simParams.voltageRange,
       sim_speed: simParams.simSpeed,
-      time_step: simParams.timeStep,
+      timeStep: simParams.timeStep,
       title: simParams.title,
       topic: simParams.topic
     };
@@ -51,11 +51,11 @@ class SimulationParams {
     simParams.description = __guard__(jsonObj, x4 => x4['description']) || "";
     simParams.flags = parseInt(__guard__(jsonObj, x5 => x5['flags'])) || 1;
     simParams.id = __guard__(jsonObj, x6 => x6['id']) || null;
-    simParams.name = __guard__(jsonObj, x7 => x7['name_unique']) || "default";
+    simParams.name = __guard__(jsonObj, x7 => x7['nameUnique']) || "default";
     simParams.powerRange = parseFloat(__guard__(jsonObj, x8 => x8['power_range'])) || 62.0;
     simParams.voltageRange = parseFloat(__guard__(jsonObj, x9 => x9['voltage_range'])) || 10.0;
     simParams.simSpeed = SimulationParams.convertSimSpeed(__guard__(jsonObj, x10 => x10['sim_speed']) || 10.0);
-    simParams.timeStep = parseFloat(__guard__(jsonObj, x11 => x11['time_step'])) || 5.0e-06;
+    simParams.timeStep = parseFloat(__guard__(jsonObj, x11 => x11['timeStep'])) || 5.0e-06;
     simParams.title = __guard__(jsonObj, x12 => x12['title']) || "Default";
     simParams.topic = __guard__(jsonObj, x13 => x13['topic']) || null;
 

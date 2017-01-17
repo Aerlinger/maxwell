@@ -1,0 +1,89 @@
+[
+  {
+    "type": "scr.txt",
+    "timeStep": 0.000005,
+    "simSpeed": 172,
+    "currentSpeed": 50,
+    "voltageRange": 5,
+    "powerRange": 50,
+    "flags": 1
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [384, 160, 384, 96],
+    "flags": 0,
+    "params": {
+      "resistance": 100
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [384, 96, 384, 80],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "SwitchElm",
+    "pos": [384, 288, 384, 368],
+    "flags": 0,
+    "params": {
+      "position": 1,
+      "momentary": false
+    }
+  },
+  {
+    "name": "SwitchElm",
+    "pos": [352, 256, 256, 256],
+    "flags": 0,
+    "params": {
+      "position": 1,
+      "momentary": false
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [256, 176, 256, 256],
+    "flags": 0,
+    "params": {
+      "resistance": 100
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [256, 176, 256, 128],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [384, 368, 384, 384],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ScrElm",
+    "pos": [384, 160, 384, 288],
+    "flags": 0,
+    "params": {
+      "lastvac": 0,
+      "lastvag": 0,
+      "triggerI": 0.01,
+      "holdingI": 0.0082,
+      "cresistance": 50
+    }
+  }
+]

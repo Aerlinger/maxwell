@@ -10,10 +10,6 @@ class DecadeElm extends ChipElm {
     return "Decade counter";
   }
 
-  getDumpType() {
-    return "163";
-  }
-
   needsBits() {
     return true;
   }

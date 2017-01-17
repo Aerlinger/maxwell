@@ -72,11 +72,7 @@ class ResistorElm extends CircuitComponent {
   }
   
   getName() {
-    "Resistor"
-  }
-
-  getDumpType() {
-    return "r";
+    return "Resistor"
   }
 
   getInfo(arr) {

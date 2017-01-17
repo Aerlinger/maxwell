@@ -1,6 +1,3 @@
-Circuit = require('../../src/circuit/circuit.js')
-GroundElm = require('../../src/circuit/components/GroundElm.js')
-Util = require('../../src/util/util.js')
 diff = require('deep-diff').diff
 
 describe "Utility test", ->
@@ -76,7 +73,7 @@ describe "Utility test", ->
           {
             e: 1.000654 - epsilon/2
             f: 1.000654 + epsilon/2
-          }
+          }  
           0.0000001 + epsilon/2,
         ]
       }
@@ -296,54 +293,54 @@ describe "Utility test", ->
 
 
   describe "Array Utilities", ->
-    it "should build array of zeros of length 5", ->
+    it "builds array of zeros of length 5", ->
       Util.zeroArray(5).toString().should.equal [0, 0, 0, 0, 0].toString()
 
-      it "should return an empty array for a length of -1", ->
+    it "returns an empty array for a length of -1", ->
       Util.zeroArray(-1).toString().should.equal ""
       Util.zeroArray(0).toString().should.equal ""
 
-    it "should build an empty 2d array when numRows or numCols is < 1", ->
+    it "builds an empty 2d array when numRows or numCols is < 1", ->
       Util.zeroArray2(1, -5).toString().should.equal ""
       Util.zeroArray2(-1, -5).toString().should.equal ""
       Util.zeroArray2(-1, 5).toString().should.equal ""
       Util.zeroArray2(0, 0).toString().should.equal ""
 
-    it "should build a 1x5 array of zeros", ->
-      Util.zeroArray2(1, 5).should.eql [[0, 0, 0, 0, 0]]
+    it "builds a 1x5 array of zeros", ->
+      expect(Util.zeroArray2(1, 5)).to.eql [[0, 0, 0, 0, 0]]
 
-    it "should build a 2x5 array of zeros", ->
-      Util.zeroArray2(2, 5).should.eql [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
+    it "builds a 2x5 array of zeros", ->
+      expect(Util.zeroArray2(2, 5)).to.eql [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
 
-    it "should build a 3x2 array of zeros", ->
+    it "builds a 3x2 array of zeros", ->
       arr = Util.zeroArray2(3, 2)
-      arr.should.eql [[0, 0], [0, 0], [0, 0]]
-      arr[0][0].should.equal 0
-      arr[2][1].should.equal 0
+      expect(arr).to.eql [[0, 0], [0, 0], [0, 0]]
+      expect(arr[0][0]).to.equal 0
+      expect(arr[2][1]).to.equal 0
 
-    it "should be able to remove a circuit component from an array", ->
+    it "is able to remove a circuit component from an array", ->
       circuitElm1 = new CircuitComponent(1, 2, 3, 4)
       circuitElm2 = new CircuitComponent(5, 6, 7, 8)
       circuitElm3 = new CircuitComponent(9, 10, 11, 12)
 
       circuitList = [circuitElm1, circuitElm2, circuitElm3, circuitElm1]
-      console.log(circuitList.remove)
+#      circuitList.remove
 
-      Util.removeFromArray(circuitList, circuitElm1).should.eql [circuitElm2, circuitElm3]
+      expect(Util.removeFromArray(circuitList, circuitElm1)).to.eql [circuitElm2, circuitElm3]
     #circuitList.remove(circuitElm2).should.eql [circuitElm3]
 
-    it "should be able to remove an item from an array", ->
+    it "is be able to remove an item from an array", ->
       Util.removeFromArray([0, 1, 2, 3, 0], 0).should.eql [1, 2, 3]
       Util.removeFromArray(["one", "two", "three", "one"], "one", "two").should.eql ["three"]
 
     describe "Util.isClean should reject", ->
       specify "1D arrays with NaN", ->
         arr = [1, NaN, 3, 4, 5]
-        Util.isCleanArray(arr).should.equal false
+        expect(Util.isCleanArray(arr)).to.equal false
 
       specify "1D arrays with Inf", ->
         arr = [1, Infinity, 3, 4, 5]
-        Util.isCleanArray(arr).should.equal false
+        expect(Util.isCleanArray(arr)).to.equal false
 
       specify "1D arrays with non-numeric values", ->
         arr = ['a', 2, 3, 4, 5]

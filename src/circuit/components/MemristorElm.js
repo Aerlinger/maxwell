@@ -8,24 +8,28 @@ class MemristorElm extends CircuitComponent {
     return {
       r_on: {
         name: "On resistance",
-        data_type: parseFloat
-  
+        data_type: parseFloat,
+        default_value: 100
       },
       r_off: {
         name: "Off resistance",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 160 * 100
       },
       dopeWidth: {
         name: "Doping Width",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 0
       },
       totalWidth: {
         name: "Total Width",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 10e-9
       },
       mobility: {
         name: "Majority carrier mobility",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 1e-10
       },
       resistance: {
         name: "Overall resistance",
@@ -39,16 +43,15 @@ class MemristorElm extends CircuitComponent {
     super(xa, xb, ya, yb, params, f);
   }
 
-
-  getDumpType() {
-    return "m";
-  }
-
   setPoints() {
     super.setPoints(...arguments);
     this.calcLeads(32);
     this.ps3 = new Point(0, 0);
     return this.ps4 = new Point(0, 0);
+  }
+
+  getName() {
+    return "Memristor"
   }
 
   reset() {

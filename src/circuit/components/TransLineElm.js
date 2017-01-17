@@ -7,19 +7,24 @@ class TransLineElm extends CircuitComponent {
     return {
       delay: {
         name: "Delay",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 1000 * 5e-12,
+        symbol: "s"
       },
       imped: {
         name: "Impedance",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 75
       },
-      width: {
-        name: "Width (m)",
-        data_type: parseFloat
+      channelWidth: {
+        name: "Channel Width (m)",
+        data_type: parseFloat,
+        default_value: 20
       },
       resistance: {
         name: "Resistance",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 50
       }
     };
   }
@@ -29,17 +34,27 @@ class TransLineElm extends CircuitComponent {
 
     this.noDiagonal = true;
 
-    delete this.params['resistance'];
+    // delete this.params['resistance'];
 
     this.ptr = 0;
   }
 
-  onSolder(circuit){
+  getName() {
+    return "Transmission Line"
+  }
+
+  onSolder(circuit) {
     super.onSolder();
 
-    this.lenSteps = Math.floor(this.delay / circuit.timeStep());
+    // console.log(circuit.timeStep())
 
-    if ((this.lenSteps > 100000) || !this.lenSteps) {
+    this.delay = this.delay || (1000 * circuit.timeStep());
+    this.params['delay'] = this.delay;
+
+    this.lenSteps = Math.floor(this.delay / circuit.timeStep());
+    // console.log("LEN STEPS", this.lenSteps, this.delay, circuit.timeStep())
+
+    if (this.lenSteps > 100000) {
       this.voltageL = null;
       this.voltageR = null;
 
@@ -48,7 +63,7 @@ class TransLineElm extends CircuitComponent {
       this.voltageR = Util.zeroArray(this.lenSteps);
     }
 
-    return this.ptr = 0;
+    this.ptr = 0;
   }
 
   setPoints() {
@@ -56,22 +71,17 @@ class TransLineElm extends CircuitComponent {
 
     let ds = (this.dy() === 0) ? Math.sign(this.dx()) : -Math.sign(this.dy());
 
-    let p3 = Util.interpolate(this.point1, this.point2, 0, -Math.floor(this.width * ds));
-    let p4 = Util.interpolate(this.point1, this.point2, 1, -Math.floor(this.width * ds));
+    let p3 = Util.interpolate(this.point1, this.point2, 0, -Math.floor(this.channelWidth * ds));
+    let p4 = Util.interpolate(this.point1, this.point2, 1, -Math.floor(this.channelWidth * ds));
 
     let sep = Settings.GRID_SIZE / 2;
-    let p5 = Util.interpolate(this.point1, this.point2, 0, -Math.floor((this.width / 2) - sep) * ds);
-    let p6 = Util.interpolate(this.point1, this.point2, 1, -Math.floor((this.width / 2) - sep) * ds);
-    let p7 = Util.interpolate(this.point1, this.point2, 0, -Math.floor((this.width / 2) + sep) * ds);
-    let p8 = Util.interpolate(this.point1, this.point2, 1, -Math.floor((this.width / 2) + sep) * ds);
+    let p5 = Util.interpolate(this.point1, this.point2, 0, -Math.floor((this.channelWidth / 2) - sep) * ds);
+    let p6 = Util.interpolate(this.point1, this.point2, 1, -Math.floor((this.channelWidth / 2) - sep) * ds);
+    let p7 = Util.interpolate(this.point1, this.point2, 0, -Math.floor((this.channelWidth / 2) + sep) * ds);
+    let p8 = Util.interpolate(this.point1, this.point2, 1, -Math.floor((this.channelWidth / 2) + sep) * ds);
 
     this.posts = [p3, p4, this.point1, this.point2];
     return this.inner = [p7, p8, p5, p6];
-  }
-
-
-  getDumpType() {
-    return "171";
   }
 
   getConnection(n1, n2) {
@@ -124,9 +134,12 @@ class TransLineElm extends CircuitComponent {
 
   startIteration() {
     if (!this.voltageL) {
-      console.error("Transmission line delay too large!");
+      console.error(`Start Iteration: Transmission line delay too large: ${this.params.delay}. Time Step is: ${this.Circuit.timeStep()}`);
       return;
     }
+
+
+    // console.log("START ITERATION PTR", this.ptr, this.volts, "LENSTEP",  this.lenSteps);
 
     this.voltageL[this.ptr] = ((this.volts[2] - this.volts[0]) + this.volts[2]) - this.volts[4];
     this.voltageR[this.ptr] = ((this.volts[3] - this.volts[1]) + this.volts[3]) - this.volts[5];
@@ -136,7 +149,7 @@ class TransLineElm extends CircuitComponent {
 
   doStep(stamper) {
     if (!this.voltageL) {
-      console.error("Transmission line delay too large!");
+      console.error(`doStep: Transmission line delay too large: ${this.params.delay}. Time Step is: ${this.Circuit.timeStep()}`);
       return;
     }
 

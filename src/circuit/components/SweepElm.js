@@ -41,7 +41,7 @@ class SweepElm extends CircuitComponent {
         symbol: "s",
         default_value: 0.1,
         data_type: parseFloat,
-        range: [0, -Infinity]
+        range: [0, Infinity]
       }
     };
   }
@@ -52,12 +52,12 @@ class SweepElm extends CircuitComponent {
     this.dir = 1;
   }
 
-  onSolder(circuit) {
-    return this.reset();
+  getName() {
+    return "Frequency Sweep"
   }
 
-  getDumpType() {
-    return 170;
+  onSolder(circuit) {
+    return this.reset();
   }
 
   getPostCount() {

@@ -15,10 +15,6 @@ class LatchElm extends ChipElm {
     return "Latch";
   }
 
-  getDumpType() {
-    return "168";
-  }
-
   needsBits() {
     return true;
   }

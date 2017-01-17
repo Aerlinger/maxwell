@@ -1,18 +1,18 @@
-// #######################################################################
-// CircuitComponent:
-//   Base class from which all components inherit
-//
-// @author Anthony Erlinger
-// @year 2012
-//
-// Uses the Observer Design Pattern:
-//   Observes: Circuit, CircuitRender
-//   Observed By: CircuitCanvas
-//
-// Events:
-//  <None>
-//
-// #######################################################################
+/**
+ CircuitComponent:
+   Base class from which all components inherit
+
+ @author Anthony Erlinger
+ @year 2012
+
+ Uses the Observer Design Pattern:
+   Observes: Circuit, CircuitRender
+   Observed By: CircuitCanvas
+
+ Events:
+  <None>
+
+*/
 
 let Settings = require('../settings/settings.js');
 let Rectangle = require('../geom/rectangle.js');
@@ -21,8 +21,6 @@ let Util = require('../util/util.js');
 let debug = require('debug')('circuitComponent');
 
 let _ = require("lodash");
-
-let { sprintf } = require("sprintf-js");
 
 class CircuitComponent {
 
@@ -35,7 +33,9 @@ class CircuitComponent {
   }
 
   constructor(x1, y1, x2, y2, params, f) {
-    if (f == null) { f = 0; }
+    if (f == null) {
+      f = 0;
+    }
     this.current = 0;
     this.flags = f || 0;
 
@@ -52,25 +52,22 @@ class CircuitComponent {
   }
 
   allocNodes() {
-    // console.log("this.getPostCount()", this.getPostCount(), "this.getInternalNodeCount()", this.getInternalNodeCount())
-
     this.nodes = Util.zeroArray(this.getPostCount() + this.getInternalNodeCount());
-    return this.volts = Util.zeroArray(this.getPostCount() + this.getInternalNodeCount());
+    this.volts = Util.zeroArray(this.getPostCount() + this.getInternalNodeCount());
   }
 
   setParameters(component_params) {
     if (component_params && (component_params.constructor === Array)) {
-      component_params = this.convertParamsToHash(component_params);
+      console.error(`component_params ${component_params} is an array on ${this.constructor.name}`)
     }
 
-    let { Fields } = this.constructor;
+    let {Fields} = this.constructor;
 
     this.params = this.params || {};
 
     for (let param_name in Fields) {
       let definition = Fields[param_name];
-      let { default_value } = definition;
-      let { data_type } = definition;
+      let {default_value, data_type} = definition;
 
       if (!Util.isFunction(data_type)) {
         console.error("data_type must be a function");
@@ -84,15 +81,22 @@ class CircuitComponent {
 
         delete component_params[param_name];
 
-      // fallback to default value assigned in @Fields
       } else {
-//        console.log("Assigning default value of #{default_value} for #{param_name} in #{@constructor.name} (was #{this[param_name]})")
+        if ((default_value != null) && (default_value != undefined)) {
+          if (CircuitComponent.DEBUG) {
+            console.log(`INFO: Assigning default value of ${default_value} for ${param_name} in ${this.constructor.name} (was ${this[param_name]})`)
+          }
+        } else {
+          console.warn(`No default value defined for ${param_name} in ${this.constructor.name}!`)
+        }
 
-        if (!this[param_name]) { this[param_name] = data_type(default_value); }
+        if (!this[param_name])
+          this[param_name] = data_type(default_value);
+
         this.params[param_name] = this[param_name];
 
-        if ((this[param_name] === null) || (this[param_name] === undefined) || isNaN(this[param_name])) {
-          debug(`Parameter ${param_name} is unset: ${this[param_name]}!`);
+        if (!Util.isValue(this[param_name])) {
+          debug(`Parameter ${param_name} is unset in ${this.constructor.name}. Value: ${this[param_name]}!`);
         }
       }
     }
@@ -106,43 +110,11 @@ class CircuitComponent {
     })());
 
     if (unmatched_params.length > 0) {
-      console.error(`The following parameters ${unmatched_params.join(" ")} do not belong in ${this}`);
-      throw new Error(`Invalid params ${unmatched_params.join(" ")} assigned to ${this}`);
+      console.error(`The following parameters [${unmatched_params.join(" ")}] do not belong in ${this.getName()}`);
+      throw new Error(`Invalid params '${unmatched_params.join(" ")}' assigned to ${this.getName()}`);
     }
   }
 
-
-  // Convert list of parameters to a hash, according to matching order in @Fields
-  convertParamsToHash(param_list) {
-    let { Fields } = this.constructor;
-    let result = {};
-
-    for (let i = 0, end = param_list.length, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-      var data_type;
-      let param_name = Object.keys(Fields)[i];
-      let param_value = param_list[i];
-
-      if (Fields[param_name]) {
-        ({ data_type } = Fields[param_name]);
-      } else {
-        console.warn(`Failed to load data_type ${data_type}: ${param_name}: ${param_value}`);
-        console.log(param_value);
-        console.log(`${i}: param_name ${Fields}`);
-      }
-
-      if (!data_type) {
-        console.warn(`No conversion found for ${data_type}`);
-      }
-
-      if (!Util.isFunction(data_type)) {
-        console.error(`data_type ${data_type} is not a function!`);
-      }
-
-      result[param_name] = param_value;
-    }
-
-    return result;
-  }
 
   getParentCircuit() {
     return this.Circuit;
@@ -151,20 +123,20 @@ class CircuitComponent {
   setx1(value) {
     return this.point1.x = value;
   }
-    
+
   sety1(value) {
     return this.point1.y = value;
   }
-  
+
   setx2(value) {
     return this.point2.x = value;
   }
-    
+
   sety2(value) {
     return this.point2.y = value;
   }
-  
-    
+
+
   x1() {
     return this.point1.x;
   }
@@ -172,7 +144,7 @@ class CircuitComponent {
   y1() {
     return this.point1.y;
   }
-    
+
   x2() {
     return this.point2.x;
   }
@@ -180,7 +152,7 @@ class CircuitComponent {
   y2() {
     return this.point2.y;
   }
-    
+
   dx() {
     return this.point2.x - this.point1.x;
   }
@@ -209,24 +181,15 @@ class CircuitComponent {
   }
 
   setPoints(x1, y1, x2, y2) {
-    //    @dx() = x2 - x1
-    //    @dy() = y2 - y1
-
-    //    @dn() = Math.sqrt(@dx() * @dx() + @dy() * @dy())
-    //    @length = Math.sqrt(@dx() * @dx() + @dy() * @dy())
-    //    @@dpx1() = @dy() / @dn()
-    //    @dpy1 = -@dx() / @dn()
-
-    //    @dsign() = (if (@dy() is 0) then Math.sign(@dx()) else Math.sign(@dy()))
-    // console.log("x1", x1, "y1", y1)
-
-    if (!this.point1) { this.point1 = new Point(x1, y1); }
-    if (!this.point2) { this.point2 = new Point(x2, y2); }
+    if (!this.point1) {
+      this.point1 = new Point(x1, y1);
+    }
+    if (!this.point2) {
+      this.point2 = new Point(x2, y2);
+    }
 
     return this.recomputeBounds();
   }
-
-//    console.log("c", @point1.x)
 
   unitText() {
     return "?";
@@ -246,10 +209,6 @@ class CircuitComponent {
 
   setPowerColor(color) {
     return console.warn("Set power color not yet implemented");
-  }
-
-  getDumpType() {
-    return 0;
   }
 
   reset() {
@@ -273,11 +232,15 @@ class CircuitComponent {
     return this.getVoltageDiff() * this.getCurrent();
   }
 
-  calculateCurrent() {}
-    // To be implemented by subclasses
+  calculateCurrent() {
+  }
 
-  doStep() {}
-    // To be implemented by subclasses
+  // To be implemented by subclasses
+
+  doStep() {
+  }
+
+  // To be implemented by subclasses
 
   orphaned() {
     return (this.Circuit === null) || (this.Circuit === undefined);
@@ -300,11 +263,13 @@ class CircuitComponent {
       return result;
     })()).join(" ");
 
-    return `[v ${tidyVoltage}, i ${tidyCurrent}]\t${this.getDumpType()} ${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}`;
+    return `[v ${tidyVoltage}, i ${tidyCurrent}]\t${this.getName()} ${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}`;
   }
 
-  startIteration() {}
-    // Called on reactive elements such as inductors and capacitors.
+  startIteration() {
+  }
+
+  // Called on reactive elements such as inductors and capacitors.
 
   getPostAt(x, y) {
     for (let postIdx = 0, end = this.getPostCount(), asc = 0 <= end; asc ? postIdx < end : postIdx > end; asc ? postIdx++ : postIdx--) {
@@ -366,8 +331,6 @@ class CircuitComponent {
     return this.point2.y = newY;
   }
 
-//    @setPoints()
-
   move(deltaX, deltaY) {
     this.point1.x += deltaX;
     this.point1.y += deltaY;
@@ -391,7 +354,7 @@ class CircuitComponent {
   }
 
   stamp() {
-    return this.Circuit.halt(`Called abstract function stamp() in Circuit ${this.getDumpType()}`);
+    return this.Circuit.halt(`Called abstract function stamp() in Circuit ${this.constructor.name}`);
   }
 
   inspect() {
@@ -405,11 +368,8 @@ class CircuitComponent {
     })());
 
     return {
-      sym: this.getDumpType(),
-      x1: this.point1.x,
-      y1: this.point1.y,
-      x2: this.point2.x,
-      xy: this.point2.y,
+      name: this.getName(),
+      pos: [this.point1.x, this.point1.y, this.point2.x, this.point2.y],
       params: paramValues,
       voltage: this.getVoltageDiff(),
       current: this.getCurrent()
@@ -426,7 +386,7 @@ class CircuitComponent {
     if (Object.keys(this.params).length !== 0)
       paramStr = `: ${JSON.stringify(this.params)}`;
 
-    
+
     return `${this.constructor.name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}]` + paramStr;
   }
 
@@ -461,7 +421,8 @@ class CircuitComponent {
 
   getName() {
     console.warn(`getName() was called by circuitComponent base class, but should be extended by subclasses (${this.constructor.name})`)
-    return `${this.constructor.name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}] : ${JSON.stringify(this.params)}`;
+    // return `${this.constructor.name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}] : ${JSON.stringify(this.params)}`;
+    return this.constructor.name
   }
 
   getNode(nodeIdx) {
@@ -501,11 +462,11 @@ class CircuitComponent {
     let y = Math.min(y1, y2);
     let width = Math.max(Math.abs(x2 - x1), 3);
     let height = Math.max(Math.abs(y2 - y1), 3);
-    
+
     let horizontalMargin = Math.floor(Math.abs(this.dpx1()));
     let verticalMargin = Math.floor(Math.abs(this.dpy1()));
 
-    return this.boundingBox = new Rectangle(x - horizontalMargin, y - verticalMargin, width + 2*horizontalMargin, height + 2*verticalMargin);
+    return this.boundingBox = new Rectangle(x - horizontalMargin, y - verticalMargin, width + 2 * horizontalMargin, height + 2 * verticalMargin);
   }
 
   setBboxPt(p1, p2, width) {
@@ -532,7 +493,11 @@ class CircuitComponent {
   }
 
   getScopeUnits(x) {
-    if (x === 1) { return "W"; } else { return "V"; }
+    if (x === 1) {
+      return "W";
+    } else {
+      return "V";
+    }
   }
 
   getConnection(n1, n2) {
@@ -555,16 +520,15 @@ class CircuitComponent {
     return false;
   }
 
-  /* *///###################################################################
-// RENDERING METHODS
-  /* *///###################################################################
+  //
+  // RENDERING METHODS
+  //
 
   draw(renderContext) {
     let post;
-    renderContext.drawRect(this.boundingBox.x-2, this.boundingBox.y-2, this.boundingBox.width+2, this.boundingBox.height+2, 0.5, "#8888CC");
+    renderContext.drawRect(this.boundingBox.x - 2, this.boundingBox.y - 2, this.boundingBox.width + 2, this.boundingBox.height + 2, 0.5, "#8888CC");
 
-//    renderContext.drawValue 10, -15, this, @constructor.name
-
+    // renderContext.drawValue 10, -15, this, @constructor.name
     // renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
 
     renderContext.drawValue(-14, 0, this, this.toString());
@@ -582,48 +546,51 @@ class CircuitComponent {
 
     let outlineRadius = 7;
 
-//    nodeIdx = 0
-//    for node in @nodes
-//      if @point1 && @point2
-//        renderContext.drawValue 25+10*nodeIdx, -10*nodeIdx, this, "#{node}-#{@getVoltageForNode(node)}"
-//        nodeIdx += 1
-
+    /*
+    // Draw node values
+    nodeIdx = 0
+    for node in @nodes
+      if @point1 && @point2
+        renderContext.drawValue 25+10*nodeIdx, -10*nodeIdx, this, "#{node}-#{@getVoltageForNode(node)}"
+        nodeIdx += 1
+    */
 
     if (this.point1) {
-      renderContext.drawCircle(this.point1.x, this.point1.y, outlineRadius-1, 1, 'rgba(0,0,255,0.7)');
+      renderContext.drawCircle(this.point1.x, this.point1.y, outlineRadius - 1, 1, 'rgba(0,0,255,0.7)');
     }
 
     if (this.point2) {
-      renderContext.drawCircle(this.point1.x, this.point1.y, outlineRadius-1, 1, 'rgba(0,0,255,0.5)');
+      renderContext.drawCircle(this.point1.x, this.point1.y, outlineRadius - 1, 1, 'rgba(0,0,255,0.5)');
     }
 
     if (this.lead1) {
-      renderContext.drawRect(this.lead1.x-(outlineRadius/2), this.lead1.y-(outlineRadius/2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
+      renderContext.drawRect(this.lead1.x - (outlineRadius / 2), this.lead1.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
     }
 
     if (this.lead2) {
-      renderContext.drawRect(this.lead2.x-(outlineRadius/2), this.lead2.y-(outlineRadius/2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
+      renderContext.drawRect(this.lead2.x - (outlineRadius / 2), this.lead2.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
     }
 
     return __range__(0, this.getPostCount(), false).map((postIdx) =>
-      (post = this.getPost(postIdx),
-      renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')));
+        (post = this.getPost(postIdx),
+            renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')));
   }
 
-//    renderContext.drawLeads(this)
-
-    //    @updateDots(this)
-    //    renderContext.drawDots(@point1, @point2, this)
-
   updateDots(ds) {
-    if (ds == null) { ds = Settings.CURRENT_SEGMENT_LENGTH; }
+    if (ds == null) {
+      ds = Settings.CURRENT_SEGMENT_LENGTH;
+    }
     if (this.Circuit) {
-      if (!this.curcount) { this.curcount = 0; }
+      if (!this.curcount) {
+        this.curcount = 0;
+      }
 
       let currentIncrement = this.current * this.Circuit.Params.getCurrentMult();
 
       this.curcount = (this.curcount + currentIncrement) % ds;
-      if (this.curcount < 0) { this.curcount += ds; }
+      if (this.curcount < 0) {
+        this.curcount += ds;
+      }
 
       return this.curcount;
     }
@@ -644,14 +611,11 @@ class CircuitComponent {
   equals(otherComponent) {
     return otherComponent.toString() === this.toString();
   }
-  
+
   serialize() {
     return {
       name: this.constructor.name,
-      x1: this.point1.x,
-      y1: this.point1.y,
-      x2: this.point2.x,
-      y2: this.point2.y,
+      pos: [this.point1.x, this.point1.y, this.point2.x, this.point2.y],
       flags: this.flags,
       params: this.params
     }
@@ -669,7 +633,7 @@ class CircuitComponent {
       selected: false,
       voltSource: this.getVoltageSource(),
       needsShortcut: this.needsShortcut(),
-      dump: this.getDumpType().toString(),
+      name: this.constructor.name,
       postCount: this.getPostCount(),
       nonLinear: this.nonLinear()
     };
@@ -686,37 +650,71 @@ class CircuitComponent {
     };
   }
 
-  setValue(paramName, paramValue) {
-    if (!Array.from(this.getParamNames()).includes(paramName)) {
-      console.error(`Error while setting param for ${this.getName()}: ${paramName} is not a field in ${this.getParamNames()}`);
+  isValidParam(paramName, paramValue) {
+    let field = this.constructor.Fields[paramName];
+
+    if (!field) {
+      console.error(`Error while setting param for ${this.getName()}: '${paramName}' is not a field in ${this.getParamNames()}`);
+      return false
     }
 
-    this[paramName] = paramValue;
-    return this.params[paramName] = paramValue;
+    if (field && field["range"]) {
+      let [minValue, maxValue] = field["range"];
+
+      if (paramValue > maxValue || paramValue < minValue) {
+        console.error(`${this.constructor.name}: invalid param value for ${paramName}: ${paramValue}. Not in range [${minValue}, ${maxValue}]`)
+        return false
+      }
+    }
+
+    if (field && field["select_values"]) {
+      let selectValues = Object.keys(field["select_values"]).map(key => field["select_values"][key]);
+
+      if (!(selectValues.includes(paramValue))) {
+        console.error(`${this.constructor.name}: invalid param value for ${paramName}: ${paramValue}. Not in possible values: ${selectValues}`)
+        return false
+      }
+    }
+
+    return true
+  }
+
+  update(params) {
+    for (let paramName in params) {
+      this.setValue(paramName, params[paramName])
+    }
+  }
+
+  setValue(paramName, paramValue) {
+    if (this.isValidParam(paramName, paramValue)) {
+      this[paramName] = paramValue;
+      this.params[paramName] = paramValue;
+    }
   }
 
   getParamNames() {
     return Object.keys(this.constructor.Fields);
   }
 
-  //#
-  // Returns the JSON metadata object for this field with an additional key/value pair for the assigned value.
-  // Used externally to edit/update component values
-  //
-  // Eg:
-  // voltageElm.getFieldWithValue("waveform")
-  //
-  // {
-  //   name: "none"
-  //   default_value: 0
-  //   data_type: parseInt
-  //   range: [0, 6]
-  //   input_type: "select"
-  //   select_values: ...
-  //   value: 2  // Square wave
-  // }
-  //
-  // @see @Fields
+  /**
+   Returns the JSON metadata object for this field with an additional key/value pair for the assigned value.
+   Used externally to edit/update component values
+  
+   Eg:
+   voltageElm.getFieldWithValue("waveform")
+  
+   {
+     name: "none"
+     default_value: 0
+     data_type: parseInt
+     range: [0, 6]
+     input_type: "select"
+     select_values: ...
+     value: 2   Square wave
+   }
+  
+   @see @Fields
+   */
   getFieldWithValue(param_name) {
     let param_value = this.params[param_name];
 
@@ -734,10 +732,11 @@ class CircuitComponent {
     return field_metadata;
   }
 
+  onSolder(circuit) {
+  }
 
-  onSolder(circuit) {}
-
-  onclick() {}
+  onclick() {
+  }
 }
 CircuitComponent.initClass();
 

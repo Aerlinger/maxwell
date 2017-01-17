@@ -1,0 +1,494 @@
+[
+  {
+    "type": "grid.txt",
+    "timeStep": 0.000005,
+    "simSpeed": 133,
+    "currentSpeed": 46,
+    "voltageRange": 5,
+    "powerRange": 42,
+    "flags": 17
+  },
+  {
+    "name": "RailElm",
+    "pos": [272, 64, 272, 16],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [272, 352, 272, 384],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [176, 64, 176, 112],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [176, 112, 176, 160],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [176, 160, 176, 208],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [176, 208, 176, 256],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [176, 256, 176, 304],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [176, 304, 176, 352],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [224, 64, 224, 112],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [224, 112, 224, 160],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [224, 160, 224, 208],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [224, 208, 224, 256],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [224, 256, 224, 304],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [224, 304, 224, 352],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [272, 64, 272, 112],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [272, 112, 272, 160],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [272, 160, 272, 208],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [272, 208, 272, 256],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [272, 256, 272, 304],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [272, 304, 272, 352],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [320, 64, 320, 112],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [320, 112, 320, 160],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [320, 160, 320, 208],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [320, 208, 320, 256],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [320, 256, 320, 304],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [320, 304, 320, 352],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [368, 64, 368, 112],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [368, 112, 368, 160],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [368, 160, 368, 208],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [368, 208, 368, 256],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [368, 256, 368, 304],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [368, 304, 368, 352],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [176, 64, 224, 64],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [176, 112, 224, 112],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [176, 160, 224, 160],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [176, 208, 224, 208],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [176, 256, 224, 256],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [176, 304, 224, 304],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [176, 352, 224, 352],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [224, 64, 272, 64],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [224, 112, 272, 112],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [224, 160, 272, 160],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [224, 208, 272, 208],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [224, 256, 272, 256],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [224, 304, 272, 304],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [224, 352, 272, 352],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [272, 64, 320, 64],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [272, 112, 320, 112],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [272, 160, 320, 160],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [272, 208, 320, 208],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [272, 256, 320, 256],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [272, 304, 320, 304],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [272, 352, 320, 352],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [320, 64, 368, 64],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [320, 112, 368, 112],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [320, 160, 368, 160],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [320, 208, 368, 208],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [320, 256, 368, 256],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [320, 304, 368, 304],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [320, 352, 368, 352],
+    "flags": 0,
+    "params": {
+      "resistance": 5
+    }
+  }
+]

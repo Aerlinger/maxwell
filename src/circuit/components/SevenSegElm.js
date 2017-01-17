@@ -7,10 +7,6 @@ class SevenSegElm extends ChipElm {
     super(xa, xb, ya, yb, params, f);
   }
 
-  getDumpType() {
-    return "157";
-  }
-
   getPostCount() {
     return 7;
   }

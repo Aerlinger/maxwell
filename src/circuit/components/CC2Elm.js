@@ -62,10 +62,6 @@ class CC2Elm extends ChipElm {
   getVoltageSourceCount() {
     return 1;
   }
-
-  getDumpType() {
-    return "179";
-  }
 }
 
 module.exports = CC2Elm;

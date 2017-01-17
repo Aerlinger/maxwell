@@ -1,17 +1,11 @@
 glob = require('glob')
-
-Circuit = require("../../src/circuit/circuit")
-Renderer = require("../../src/render/renderer")
-
-fs = require("fs")
-Canvas = require('canvas')
 path = require("path")
 
 describe "Renderer", ->
   it "renders all circuits", () ->
     this.timeout(1000000)
 
-    circuit_names = glob.sync(__dirname + "/../../circuits/*.json")
+    circuit_names = glob.sync(__dirname + "/../../circuits/v3/*.json")
 
     for circuit_name in circuit_names
       basename = path.basename(circuit_name, '.json')

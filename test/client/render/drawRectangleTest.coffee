@@ -7,7 +7,7 @@ describe "Canvas", ->
     @canvas = new Canvas(400, 300)
     @context = @canvas.getContext('2d');
 
-  it "should draw line", ->
+  it "can draw line", ->
     @context.beginPath()
     @context.fillStyle = "#FA6B00"
     @context.fillRect(50, 60, 90, 70)

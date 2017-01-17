@@ -6,7 +6,7 @@ describe "Potentiometer", ->
     expect(@potElm.x1()).to.equal(50)
     expect(@potElm.y1()).to.equal(50)
     expect(@potElm.x2()).to.equal(50)
-    expect(@potElm.y2()).to.equal(146)
+    expect(@potElm.y2()).to.equal(150)
 
   it "has correct parameters", ->
     expect(@potElm.maxResistance).to.equal(1e6)
@@ -18,7 +18,6 @@ describe "Potentiometer", ->
     before (done) ->
       @Circuit = new Circuit("BasicPotentiometer")
 
-      Canvas = require('canvas')
       @canvas = new Canvas(200, 200)
       ctx = @canvas.getContext('2d')
 

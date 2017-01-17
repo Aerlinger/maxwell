@@ -1,0 +1,364 @@
+[
+  {
+    "type": "jkff.txt",
+    "timeStep": 0.000005,
+    "simSpeed": 173,
+    "currentSpeed": 50,
+    "voltageRange": 5,
+    "powerRange": 50,
+    "flags": 1
+  },
+  {
+    "name": "NandGateElm",
+    "pos": [432, 144, 528, 144],
+    "flags": 0,
+    "params": {
+      "inputCount": 2,
+      "lastOutput": false
+    }
+  },
+  {
+    "name": "NandGateElm",
+    "pos": [432, 256, 528, 256],
+    "flags": 0,
+    "params": {
+      "inputCount": 2,
+      "lastOutput": true
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [432, 224, 432, 240],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [432, 160, 432, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [528, 224, 528, 256],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [528, 224, 432, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [528, 144, 528, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [528, 176, 432, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "NandGateElm",
+    "pos": [320, 128, 432, 128],
+    "flags": 0,
+    "params": {
+      "inputCount": 2,
+      "lastOutput": true
+    }
+  },
+  {
+    "name": "NandGateElm",
+    "pos": [320, 272, 432, 272],
+    "flags": 0,
+    "params": {
+      "inputCount": 2,
+      "lastOutput": false
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [320, 144, 320, 256],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [320, 256, 320, 336],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "NandGateElm",
+    "pos": [192, 144, 288, 144],
+    "flags": 0,
+    "params": {
+      "inputCount": 2,
+      "lastOutput": false
+    }
+  },
+  {
+    "name": "NandGateElm",
+    "pos": [192, 256, 288, 256],
+    "flags": 0,
+    "params": {
+      "inputCount": 2,
+      "lastOutput": true
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [320, 112, 288, 112],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [288, 112, 288, 144],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [288, 256, 288, 288],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [288, 288, 320, 288],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [192, 160, 192, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [192, 240, 192, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [288, 224, 288, 256],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [288, 224, 192, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [288, 176, 288, 144],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [288, 176, 192, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "NandGateElm",
+    "pos": [80, 128, 192, 128],
+    "flags": 0,
+    "params": {
+      "inputCount": 3,
+      "lastOutput": true
+    }
+  },
+  {
+    "name": "InverterElm",
+    "pos": [64, 336, 320, 336],
+    "flags": 0,
+    "params": {
+      "slewRate": 0.5
+    }
+  },
+  {
+    "name": "LogicOutputElm",
+    "pos": [528, 144, 592, 144],
+    "flags": 0,
+    "params": {
+      "threshold": 2.5
+    }
+  },
+  {
+    "name": "LogicOutputElm",
+    "pos": [528, 256, 592, 256],
+    "flags": 0,
+    "params": {
+      "threshold": 2.5
+    }
+  },
+  {
+    "name": "TextElm",
+    "pos": [518, 117, 537, 123],
+    "flags": 0,
+    "params": {
+      "size": 24,
+      "text": "Q"
+    }
+  },
+  {
+    "name": "TextElm",
+    "pos": [520, 305, 539, 311],
+    "flags": 2,
+    "params": {
+      "size": 24,
+      "text": "Q"
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [32, 112, 80, 112],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "TextElm",
+    "pos": [30, 47, 37, 53],
+    "flags": 0,
+    "params": {
+      "size": 24,
+      "text": "J"
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [64, 336, 32, 336],
+    "flags": 1,
+    "params": {
+      "waveform": 2,
+      "frequency": 120,
+      "maxVoltage": 2.5,
+      "bias": 2.5,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "NandGateElm",
+    "pos": [80, 272, 192, 272],
+    "flags": 0,
+    "params": {
+      "inputCount": 3,
+      "lastOutput": true
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [432, 160, 432, 64],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [432, 64, 80, 64],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [80, 64, 80, 128],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "LogicInputElm",
+    "pos": [32, 256, 32, 224],
+    "flags": 0,
+    "params": {
+      "position": 1,
+      "momentary": false,
+      "hiV": 5,
+      "loV": 0
+    }
+  },
+  {
+    "name": "TextElm",
+    "pos": [24, 193, 40, 199],
+    "flags": 0,
+    "params": {
+      "size": 24,
+      "text": "K"
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [64, 336, 64, 256],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [64, 256, 80, 256],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [80, 144, 64, 144],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [64, 144, 64, 256],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [32, 288, 32, 256],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [32, 288, 80, 288],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [432, 240, 432, 368],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [432, 368, 80, 368],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [80, 368, 80, 272],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "LogicInputElm",
+    "pos": [32, 112, 32, 80],
+    "flags": 0,
+    "params": {
+      "position": 1,
+      "momentary": false,
+      "hiV": 5,
+      "loV": 0
+    }
+  }
+]

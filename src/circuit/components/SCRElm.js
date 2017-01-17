@@ -9,10 +9,12 @@ class ScrElm extends CircuitComponent {
   
     return {
       lastvac: {
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 0
       },
       lastvag: {
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 0
       },
       triggerI: {
         data_type: parseFloat,
@@ -53,10 +55,10 @@ class ScrElm extends CircuitComponent {
     this.volts[this.cnode] = -this.lastvac;
     this.volts[this.gnode] = -this.lastvag;
 
-    this.params['volts'] = this.volts;
+    // this.params['volts'] = this.volts;
 
-    delete this.params['lastvac'];
-    delete this.params['lastvag'];
+    // delete this.params['lastvac'];
+    // delete this.params['lastvag'];
 
     this.setup();
   }
@@ -147,10 +149,6 @@ class ScrElm extends CircuitComponent {
 
   getName() {
     return "Silicon Controlled Rectifier";
-  }
-
-  getDumpType() {
-    return 177;
   }
 
   setup() {

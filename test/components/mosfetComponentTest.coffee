@@ -1,10 +1,7 @@
-fs = require('fs')
-Canvas = require('canvas')
-
 describe "MosfetElm", ->
   describe "Loading list of parameters", ->
     before ->
-      @mosfetElm = new MosfetElm(100, 200, 100, 300, ["1.5"])
+      @mosfetElm = new MosfetElm(100, 200, 100, 300, {vt: "1.5"})
 
     it "has correct position", ->
       expect(@mosfetElm.x1()).to.equal(100)
@@ -21,7 +18,7 @@ describe "MosfetElm", ->
 
   describe "Loading list of parameters", ->
     before ->
-      @mosfetElm = new MosfetElm(50, 50, 50, 150, ["1.5"], "1")
+      @mosfetElm = new MosfetElm(50, 50, 50, 150, {vt: "1.5"}, "1")
 
     it "has correct position", ->
       expect(@mosfetElm.x1()).to.equal(50)
@@ -37,7 +34,6 @@ describe "MosfetElm", ->
 
     describe "Rendering", ->
       before (done) ->
-        Canvas = require('canvas')
         @canvas = new Canvas(100, 200)
         ctx = @canvas.getContext('2d')
 

@@ -6,15 +6,18 @@ class TappedTransformerElm extends CircuitComponent {
     return {
       inductance: {
         name: "Inductance",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 4
       },
       ratio: {
         name: "Ratio",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 1
       },
       current0: {
         name: "Current0",
-        data_type: parseFloat
+        data_type: parseFloat,
+        default_value: 0
       },
       current1: {
         name: "Current1",
@@ -33,11 +36,11 @@ class TappedTransformerElm extends CircuitComponent {
     super(xa, xb, ya, yb, params, f);
 
     this.current = [this.current0, this.current1, this.current2, 0];
-    this.params['current'] = this.current;
+    // this.params['current'] = this.current;
 
-    delete this.params['current0'];
-    delete this.params['current1'];
-    delete this.params['current2'];
+    // delete this.params['current0'];
+    // delete this.params['current1'];
+    // delete this.params['current2'];
 
     this.noDiagonal = true;
   }
@@ -45,6 +48,10 @@ class TappedTransformerElm extends CircuitComponent {
   draw(renderContext) {
     super.draw(renderContext);
     return this.current[3] = this.current[1] - this.current[2];
+  }
+
+  getName() {
+    return "Tapped Transformer"
   }
 
   setPoints() {
@@ -85,10 +92,6 @@ class TappedTransformerElm extends CircuitComponent {
 
   getPostCount() {
     return 5;
-  }
-
-  getDumpType() {
-    return "169";
   }
 
   setNodeVoltage(node_idx, voltage) {

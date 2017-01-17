@@ -1,116 +1,115 @@
 describe "Switch element", ->
   describe "default initialization", ->
     before ->
-      @chipElm = new SwitchElm()
+      @transistorElm = new SwitchElm()
 
     it "doesn't set any positions", ->
-      expect(@chipElm.x2()).to.equal(undefined)
-      expect(@chipElm.y2()).to.equal(undefined)
-      expect(@chipElm.x1()).to.equal(undefined)
-      expect(@chipElm.y1()).to.equal(undefined)
+      expect(@transistorElm.x2()).to.equal(undefined)
+      expect(@transistorElm.y2()).to.equal(undefined)
+      expect(@transistorElm.x1()).to.equal(undefined)
+      expect(@transistorElm.y1()).to.equal(undefined)
 
     it "sets default parameters", ->
-      expect(@chipElm.position).to.equal(0)
-      expect(@chipElm.momentary).to.equal(false)
+      expect(@transistorElm.position).to.equal(0)
+      expect(@transistorElm.momentary).to.equal(false)
 
     it "has correct initial rendering conditions", ->
-      expect(@chipElm.curcount).to.equal(undefined)
-      expect(@chipElm.point1).to.eql({ x: undefined, y: undefined })
-      expect(@chipElm.point2).to.eql({ x: undefined, y: undefined })
+      expect(@transistorElm.curcount).to.equal(undefined)
+      expect(@transistorElm.point1).to.eql({ x: undefined, y: undefined })
+      expect(@transistorElm.point2).to.eql({ x: undefined, y: undefined })
 
     it "has correct node relationships", ->
-      expect(@chipElm.nodes).to.eql([0, 0])
-      expect(@chipElm.volts).to.eql([0, 0])
+      expect(@transistorElm.nodes).to.eql([0, 0])
+      expect(@transistorElm.volts).to.eql([0, 0])
 
     it "has default method return values", ->
-      @chipElm.getPostCount().should.equal 2
-      @chipElm.isWire().should.equal true
-      @chipElm.hasGroundConnection().should.equal false
-      @chipElm.needsShortcut().should.equal false
-      @chipElm.canViewInScope().should.equal true
-      @chipElm.getInternalNodeCount().should.equal 0
-      @chipElm.orphaned().should.equal true
+      @transistorElm.getPostCount().should.equal 2
+      @transistorElm.isWire().should.equal true
+      @transistorElm.hasGroundConnection().should.equal false
+      @transistorElm.needsShortcut().should.equal false
+      @transistorElm.canViewInScope().should.equal true
+      @transistorElm.getInternalNodeCount().should.equal 0
+      @transistorElm.orphaned().should.equal true
 
     it "has correct initial state", ->
-      expect(@chipElm.noDiagonal).to.eql(false)
-      expect(@chipElm.component_id).to.be
-      expect(@chipElm.voltSource).to.equal(0)
-      expect(@chipElm.current).to.equal(0)
-      expect(@chipElm.getCurrent()).to.equal(0)
-      expect(@chipElm.getVoltageDiff()).to.equal(0)
+      expect(@transistorElm.noDiagonal).to.eql(false)
+      expect(@transistorElm.component_id).to.be
+      expect(@transistorElm.voltSource).to.equal(0)
+      expect(@transistorElm.current).to.equal(0)
+      expect(@transistorElm.getCurrent()).to.equal(0)
+      expect(@transistorElm.getVoltageDiff()).to.equal(0)
 
     it "has params", ->
-      expect(@chipElm.params).to.eql({
+      expect(@transistorElm.params).to.eql({
         momentary: false,
         position: 0
       })
 
   describe "With params object", ->
     before ->
-      @chipElm = new SwitchElm(50, 75, 50, 150, {"momentary": true, "position": 1})
+      @transistorElm = new SwitchElm(50, 75, 50, 150, {"momentary": true, "position": 1})
 
     it "has params", ->
-      expect(@chipElm.params).to.eql({
+      expect(@transistorElm.params).to.eql({
         "position": 1,
         "momentary": true
       })
 
   describe "With params array", ->
     before ->
-      @chipElm = new SwitchElm(50, 75, 50, 150, [0, false])
+      @transistorElm = new SwitchElm(50, 75, 50, 150, {position: 0, momentary: false})
 
       @Circuit = new Circuit("Basic Switch")
 
-      @chipElm.setPoints()
-      @Circuit.solder(@chipElm)
+      @transistorElm.setPoints()
+      @Circuit.solder(@transistorElm)
 
     it "has params", ->
-      expect(@chipElm.position).to.eql(0)
-      expect(@chipElm.momentary).to.eql(false)
-      expect(@chipElm.params).to.eql({
+      expect(@transistorElm.position).to.eql(0)
+      expect(@transistorElm.momentary).to.eql(false)
+      expect(@transistorElm.params).to.eql({
         "position": 0
         "momentary": false
       })
 
     it "has correct position", ->
-      expect(@chipElm.x1()).to.equal(50)
-      expect(@chipElm.y1()).to.equal(75)
-      expect(@chipElm.x2()).to.equal(50)
-      expect(@chipElm.y2()).to.equal(150)
+      expect(@transistorElm.x1()).to.equal(50)
+      expect(@transistorElm.y1()).to.equal(75)
+      expect(@transistorElm.x2()).to.equal(50)
+      expect(@transistorElm.y2()).to.equal(150)
 
-      expect(@chipElm.dx()).to.equal(0)
-      expect(@chipElm.dy()).to.equal(75)
-      expect(@chipElm.dn()).to.equal(75)
-      expect(@chipElm.dsign()).to.equal(1)
-      expect(@chipElm.dpx1()).to.equal(1)
-      expect(@chipElm.dpy1()).to.equal(0)
-      expect(@chipElm.isVertical()).to.equal(true)
-      expect(@chipElm.getCenter()).to.eql({x: 50, y: 112.5})
+      expect(@transistorElm.dx()).to.equal(0)
+      expect(@transistorElm.dy()).to.equal(75)
+      expect(@transistorElm.dn()).to.equal(75)
+      expect(@transistorElm.dsign()).to.equal(1)
+      expect(@transistorElm.dpx1()).to.equal(1)
+      expect(@transistorElm.dpy1()).to.equal(0)
+      expect(@transistorElm.isVertical()).to.equal(true)
+      expect(@transistorElm.getCenter()).to.eql({x: 50, y: 112.5})
 
-      expect(@chipElm.getBoundingBox()).to.eql({x: 49, y: 75, width: 5, height: 75})
+      expect(@transistorElm.getBoundingBox()).to.eql({x: 49, y: 75, width: 5, height: 75})
 
     it "snaps to grid when moved", ->
-      @chipElm.moveTo(100, 162.5)
-      expect(@chipElm.getCenter()).to.eql({x: 98, y: 160.5})
+      @transistorElm.moveTo(100, 162.5)
+      expect(@transistorElm.getCenter()).to.eql({x: 98, y: 160.5})
 
-      expect(@chipElm.x1()).to.equal(98)
-      expect(@chipElm.y1()).to.equal(123)
-      expect(@chipElm.x2()).to.equal(98)
-      expect(@chipElm.y2()).to.equal(198)
+      expect(@transistorElm.x1()).to.equal(98)
+      expect(@transistorElm.y1()).to.equal(123)
+      expect(@transistorElm.x2()).to.equal(98)
+      expect(@transistorElm.y2()).to.equal(198)
 
     it "can be stringified", ->
-      expect(@chipElm.toString()).to.eql("""SwitchElm@[98 123 98 198]: {"position":0,"momentary":false}""")
-      expect(@chipElm.getName()).to.eql("Basic Switch")
+      expect(@transistorElm.toString()).to.eql("""SwitchElm@[98 123 98 198]: {"position":0,"momentary":false}""")
+      expect(@transistorElm.getName()).to.eql("Basic Switch")
 
     it "can stamp", ->
-      @chipElm.stamp(@Circuit.Solver.Stamper)
+      @transistorElm.stamp(@Circuit.Solver.Stamper)
 
     describe "Rendering", ->
       before ->
         @Circuit.clearAndReset()
-        @Circuit.solder(@chipElm)
+        @Circuit.solder(@transistorElm)
 
-        Canvas = require('canvas')
         @canvas = new Canvas(200, 300)
 
         @renderer = new Renderer(@Circuit, @canvas)

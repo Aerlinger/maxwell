@@ -7,15 +7,13 @@ class MatrixStamper {
     this.Circuit = Circuit;
   }
 
-  /*
+  /**
   control voltage source vs with voltage from n1 to n2 (must also call stampVoltageSource())
   */
   stampVCVS(n1, n2, coef, vs) {
     if (isNaN(vs) || isNaN(coef)) {
       console.warn("NaN in stampVCVS");
     }
-
-//    console.log("stamp VCVS" + " " + n1 + " " + n2 + " " + coef + " " + vs);
 
     let vn = this.Circuit.numNodes() + vs;
 
@@ -29,8 +27,6 @@ class MatrixStamper {
     if (v == null) { v = null; }
     let vn = this.Circuit.numNodes() + vs;
 
-//    console.log("Stamp voltage source " + " " + n1 + " " + n2 + " " + vs + " " + v)
-
     this.stampMatrix(vn, n1, -1);
     this.stampMatrix(vn, n2, 1);
     this.stampRightSide(vn, v);
@@ -41,9 +37,8 @@ class MatrixStamper {
 
   updateVoltageSource(n1, n2, vs, voltage) {
     if (isNaN(voltage) || Util.isInfinite(voltage)) {
-      this.Circuit.halt(`updateVoltageSource: bad voltage at ${n1} ${n2} ${vs}`);
+      this.Circuit.halt(`updateVoltageSource: bad voltage ${voltage} at ${n1} ${n2} ${vs}`);
     }
-//    console.log("@Circuit.numNodes() #{@Circuit.numNodes()} #{vs} #{voltage}")
 
     let vn = this.Circuit.numNodes() + vs;
     return this.stampRightSide(vn, voltage);
@@ -51,7 +46,6 @@ class MatrixStamper {
 
 
   stampResistor(n1, n2, r) {
-//    console.log("Stamp resistor: " + n1 + " " + n2 + " " + r)
     return this.stampConductance(n1, n2, 1 / r);
   }
 
@@ -61,8 +55,6 @@ class MatrixStamper {
       this.Circuit.halt(`bad conductance at ${n1} ${n2}`);
     }
 
-//    console.log("Stamp conductance: " + n1 + " " + n2 + " " + r0 + " ");
-
     this.stampMatrix(n1, n1, g);
     this.stampMatrix(n2, n2, g);
     this.stampMatrix(n1, n2, -g);
@@ -70,32 +62,29 @@ class MatrixStamper {
   }
 
 
-  /*
+  /**
   current from cn1 to cn2 is equal to voltage from vn1 to 2, divided by g
   */
   stampVCCurrentSource(cn1, cn2, vn1, vn2, value) {
     if (isNaN(value) || Util.isInfinite(value)) {
-      this.Circuit.halt("Invalid gain on voltage controlled current source");
+      this.Circuit.halt(`Invalid gain ${value} on voltage controlled current source`);
     }
-
-//    console.log("stampVCCurrentSource: " + cn1 + " " + cn2 + " " + vn1 + " " + vn2 + " " + value)
 
     this.stampMatrix(cn1, vn1, value);
     this.stampMatrix(cn2, vn2, value);
     this.stampMatrix(cn1, vn2, -value);
+
     return this.stampMatrix(cn2, vn1, -value);
   }
 
 
   stampCurrentSource(n1, n2, value) {
-//    console.log("stampCurrentSource: " + n1 + " " + n2 + " " + value);
-
     this.stampRightSide(n1, -value);
     return this.stampRightSide(n2, value);
   }
 
 
-  /*
+  /**
   stamp a current source from n1 to n2 depending on current through vs
   */
   stampCCCS(n1, n2, vs, gain) {
@@ -103,25 +92,21 @@ class MatrixStamper {
       this.Circuit.halt(`Invalid gain on current source: (was ${gain})`);
     }
 
-//    console.log("stampCurrentSource: " + n1 + " " + n2 + " " + vs + " " + gain);
-
     let vn = this.Circuit.numNodes() + vs;
     this.stampMatrix(n1, vn, gain);
     return this.stampMatrix(n2, vn, -gain);
   }
 
 
-  /*
+  /**
   stamp value x in row i, column j, meaning that a voltage change
   of dv in node j will increase the current into node i by x dv.
   (Unless i or j is a voltage source node.)
   */
   stampMatrix(row, col, value) {
-    if (isNaN(value) || Util.isInfinite(value)) {
+    if (isNaN(value) || Util.isInfinite(value) || value == null || value == undefined) {
       this.Circuit.halt(`attempted to stamp Matrix with invalid value (${value}) at ${row} ${col}`);
     }
-
-//    console.log("stampMatrix: " + row + " " + col + " " + value);
 
     if ((row > 0) && (col > 0)) {
       if (this.Circuit.Solver.circuitNeedsMap) {
@@ -142,7 +127,7 @@ class MatrixStamper {
   }
 
 
-  /*
+  /**
   Stamp value x on the right side of row i, representing an
   independent current source flowing into node i
   */
@@ -165,7 +150,7 @@ class MatrixStamper {
   }
 
 
-  /*
+  /**
   Indicate that the values on the left side of row i change in doStep()
   */
   stampNonLinear(row) {

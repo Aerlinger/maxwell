@@ -54,7 +54,7 @@ let TriodeElm = require('../circuit/components/TriodeElm.js');
 let DecadeElm = require('../circuit/components/DecadeElm.js');
 let LatchElm = require('../circuit/components/LatchElm.js');
 let TimerElm = require('../circuit/components/TimerElm.js');
-let JkFlipFlopElm = require('../circuit/components/JKFlipFlopElm.js');
+let JkFlipFlopElm = require('../circuit/components/JkFlipFlopElm.js');
 let DFlipFlopElm = require('../circuit/components/DFlipFlopElm.js');
 let CounterElm = require('../circuit/components/CounterElm.js');
 let DacElm = require('../circuit/components/DacElm.js');
@@ -206,7 +206,7 @@ class Renderer extends BaseRenderer {
 
     this.placeComponent = new klass(100, 100, 100, 200);
 
-    console.log(componentName, "default params:", this.placeComponent.params);
+    // console.log(componentName, "default params:", this.placeComponent.params);
 
     return this.placeComponent;
   }

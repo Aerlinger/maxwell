@@ -53,10 +53,6 @@ class OrGateElm extends GateElm {
 
     return f;
   }
-
-  getDumpType() {
-    return 152;
-  }
 }
 
 module.exports = OrGateElm;

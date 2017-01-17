@@ -5,13 +5,13 @@ let Util = require('../../util/util.js');
 class JkFlipFlopElm extends ChipElm {
 
   constructor(xa, xb, ya, yb, params, f) {
+    // Set [4] as default value for params['volts']
+    params = params || {};
+    params['volts'] = params['volts'] || [4];
+
     super(xa, xb, ya, yb, params, f);
 
     this.pins[4].value = !this.pins[3].value;
-  }
-
-  getDumpType() {
-    return "156";
   }
 
   getName() {

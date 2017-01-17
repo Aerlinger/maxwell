@@ -1,0 +1,165 @@
+[
+  {
+    "type": "dac.txt",
+    "timeStep": 0.000005,
+    "simSpeed": 172,
+    "currentSpeed": 50,
+    "voltageRange": 5,
+    "powerRange": 62,
+    "flags": 1
+  },
+  {
+    "name": "WireElm",
+    "pos": [208, 128, 208, 192],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [320, 208, 320, 128],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [208, 128, 320, 128],
+    "flags": 0,
+    "params": {
+      "resistance": 160.6
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [208, 288, 208, 320],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [208, 192, 176, 192],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [176, 192, 176, 160],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [176, 160, 112, 160],
+    "flags": 0,
+    "params": {
+      "resistance": 200
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [112, 224, 176, 224],
+    "flags": 0,
+    "params": {
+      "resistance": 400
+    }
+  },
+  {
+    "name": "LogicInputElm",
+    "pos": [112, 160, 80, 160],
+    "flags": 0,
+    "params": {
+      "position": 0,
+      "momentary": false,
+      "hiV": 5,
+      "loV": 0
+    }
+  },
+  {
+    "name": "LogicInputElm",
+    "pos": [112, 224, 80, 224],
+    "flags": 0,
+    "params": {
+      "position": 1,
+      "momentary": false,
+      "hiV": 5,
+      "loV": 0
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [176, 160, 176, 96],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [112, 288, 176, 288],
+    "flags": 0,
+    "params": {
+      "resistance": 800
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [112, 96, 176, 96],
+    "flags": 0,
+    "params": {
+      "resistance": 100
+    }
+  },
+  {
+    "name": "LogicInputElm",
+    "pos": [112, 96, 80, 96],
+    "flags": 0,
+    "params": {
+      "position": 0,
+      "momentary": false,
+      "hiV": 5,
+      "loV": 0
+    }
+  },
+  {
+    "name": "LogicInputElm",
+    "pos": [112, 288, 80, 288],
+    "flags": 0,
+    "params": {
+      "position": 1,
+      "momentary": false,
+      "hiV": 5,
+      "loV": 0
+    }
+  },
+  {
+    "name": "OpAmpElm",
+    "pos": [208, 208, 320, 208],
+    "flags": 0,
+    "params": {
+      "maxOut": 15,
+      "minOut": -15,
+      "gbw": 1000000
+    }
+  },
+  {
+    "name": "OutputElm",
+    "pos": [320, 208, 368, 208],
+    "flags": 1,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [208, 224, 208, 288],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [176, 288, 176, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [176, 224, 176, 192],
+    "flags": 0,
+    "params": {}
+  }
+]

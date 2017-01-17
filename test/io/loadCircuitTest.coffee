@@ -1,49 +1,42 @@
 CircuitLoader = require("../../src/io/circuitLoader.js")
-Circuit = require('../../src/circuit/circuit.js')
 fs = require 'fs'
 
 describe "CircuitLoader", ->
   describe "reads voltdividesimple.json and", ->
     before (done) ->
-      voltdividesimple = JSON.parse(fs.readFileSync("./circuits/voltdividesimple.json"))
+      voltdividesimple = JSON.parse(fs.readFileSync("./circuits/v3/voltdividesimple.json"))
 
       @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
       done()
 
     it "have only 7 elements", ->
-      @circuit.numElements().should.equal 7
+      expect(@circuit.numElements()).to.equal 7
 
-    describe "should load parameters", ->
+    describe "can load parameters", ->
       it "has correct completionStatus", ->
-        @circuit.Params.completionStatus.should.equal "complete"
+        expect(@circuit.Params.completionStatus).to.equal "in development"
 
       it "has correct currentSpeed", ->
-        @circuit.Params.currentSpeed.should.equal 103.0
-
-      it "has correct description", ->
-        @circuit.Params.description.should.equal "A simple voltage divider circuit"
+        expect(@circuit.Params.currentSpeed).to.equal 63
 
       it "has correct flags", ->
-        @circuit.Params.flags.should.equal 1
+        expect(@circuit.Params.flags).to.equal 1
 
       it "has correct unique name", ->
         console.log @circuit.Params.name
-        @circuit.Params.name.should.equal "voltdivide.txt"
+        expect(@circuit.Params.name).to.equal "default"
 
       it "has correct power range", ->
-        @circuit.Params.powerRange.should.equal 62.0
+        expect(@circuit.Params.powerRange).to.equal 62.0
 
       it "has correct simSpeed", ->
-        @circuit.Params.simSpeed.should.equal 116
+        expect(@circuit.Params.simSpeed).to.equal 172
 
       it "has correct timeStep", ->
-        @circuit.Params.timeStep.should.equal 5.0e-6
+        expect(@circuit.Params.timeStep).to.equal 5.0e-6
 
       it "has correct title", ->
-        @circuit.Params.title.should.equal "Voltage Divider"
-
-      it "has correct topic", ->
-        @circuit.Params.topic.should.equal "Basics"
+        expect(@circuit.Params.title).to.equal "Default"
 
       it "has correct voltage_range", ->
-        @circuit.Params.voltageRange.should.equal 10.0
+        expect(@circuit.Params.voltageRange).to.equal 10.0

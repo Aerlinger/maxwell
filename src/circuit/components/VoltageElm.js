@@ -76,7 +76,6 @@ class VoltageElm extends CircuitComponent {
     this.WF_VAR = 6;
 
     this.circleSize = 17;
-
   }
 
   constructor(xa, ya, xb, yb, params, f) {
@@ -103,11 +102,6 @@ class VoltageElm extends CircuitComponent {
     this.freqTimeZero = 0;
 
     this.reset();
-  }
-
-
-  getDumpType() {
-    return "v";
   }
 
   reset() {
@@ -211,6 +205,9 @@ class VoltageElm extends CircuitComponent {
     }
   }
 
+  getName() {
+    return "Voltage Source"
+  }
 
   drawWaveform(center, renderContext) {
     let color = Settings.STROKE_COLOR;

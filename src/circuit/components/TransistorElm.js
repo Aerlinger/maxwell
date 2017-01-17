@@ -74,13 +74,6 @@ class TransistorElm extends CircuitComponent {
 
     this.setup();
     this.setPoints();
-
-    // TOOD: non-standard  method for setting param
-    this.params = {
-      "beta": this.beta,
-      "pnp": this.pnp,
-      "volts": this.volts
-    };
   }
 
   setup() {
@@ -98,14 +91,10 @@ class TransistorElm extends CircuitComponent {
     return this.lastvbc = this.lastvbe = this.curcount_c = this.curcount_e = this.curcount_b = 0;
   }
 
-  getDumpType() {
-    return "t";
-  }
-
   getName() {
-    let type = this.params.pnp == 1 ? "PNP" : "NPN"
+    let type = this.params.pnp == 1 ? "PNP" : "NPN";
 
-    return `Bipolar Junction Transistor (${type})`
+    return `Bipolar Junction Transistor`
   }
 
   draw(renderContext) {

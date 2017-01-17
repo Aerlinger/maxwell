@@ -181,7 +181,9 @@ class Util {
   }
 
   static getVoltageColor(volts, fullScaleVRange) {
-    if (fullScaleVRange == null) { fullScaleVRange = 10; }
+    // TODO: Define voltage range
+    if (fullScaleVRange == null) { fullScaleVRange = 5; }
+
     let RedGreen =
       [ "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
         "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
@@ -277,6 +279,10 @@ class Util {
     return arrayStr;
   }
 
+  static isValue(x) {
+    return (typeof x == "string") || (typeof x == "number") || (typeof x == "boolean")
+  }
+
   static commaFormat(plainNumber) {
     // Simple method of converting a parameter to a string
     plainNumber += "";
@@ -292,10 +298,13 @@ class Util {
   }
 
   static typeOf(obj, klassType) {
-    let klass = obj.constructor;
+    return (obj.constructor === klassType) || (obj.constructor.prototype instanceof klassType)
 
-    if (klass === klassType) { return true; }
+    // let klass = obj.constructor;
 
+    // if (klass === klassType) { return true; }
+
+    /*
     while (klass.__super__ != null) {
       if (klass.__super__ === klassType.prototype) {
         return true;
@@ -303,8 +312,9 @@ class Util {
 
       klass = klass.__super__.constructor;
     }
+    */
 
-    return false;
+    // return false;
   }
 
   static halt(message) {

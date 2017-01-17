@@ -66,10 +66,6 @@ class DiodeElm extends CircuitComponent {
     }
   }
 
-  getDumpType() {
-    return "d";
-  }
-
   draw(renderContext) {
     this.calcLeads(16);
 
@@ -90,6 +86,9 @@ class DiodeElm extends CircuitComponent {
     }
   }
 
+  getName() {
+    return "Diode"
+  }
 
   reset() {
     this.lastvoltdiff = 0;

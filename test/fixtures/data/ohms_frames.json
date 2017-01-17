@@ -191,7 +191,6 @@
       ],
       "elementStates": [
         {
-          "dumpType": "r",
           "volts": [
             5,
             0
@@ -200,7 +199,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "172",
           "volts": [
             5
           ],
@@ -208,7 +206,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "g",
           "volts": [
             0
           ],
@@ -216,7 +213,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             0,
             0
@@ -225,7 +221,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "r",
           "volts": [
             5,
             0
@@ -234,7 +229,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             0,
             0
@@ -243,7 +237,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "g",
           "volts": [
             0
           ],
@@ -251,7 +244,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             5,
             5
@@ -260,7 +252,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             5,
             5
@@ -367,7 +358,6 @@
       ],
       "elementStates": [
         {
-          "dumpType": "r",
           "volts": [
             5,
             0
@@ -376,7 +366,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "172",
           "volts": [
             5
           ],
@@ -384,7 +373,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "g",
           "volts": [
             0
           ],
@@ -392,7 +380,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             0,
             0
@@ -401,7 +388,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "r",
           "volts": [
             5,
             0
@@ -410,7 +396,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             0,
             0
@@ -419,7 +404,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "g",
           "volts": [
             0
           ],
@@ -427,7 +411,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             5,
             5
@@ -436,7 +419,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             5,
             5
@@ -543,7 +525,6 @@
       ],
       "elementStates": [
         {
-          "dumpType": "r",
           "volts": [
             5,
             0
@@ -552,7 +533,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "172",
           "volts": [
             5
           ],
@@ -560,7 +540,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "g",
           "volts": [
             0
           ],
@@ -568,7 +547,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             0,
             0
@@ -577,7 +555,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "r",
           "volts": [
             5,
             0
@@ -586,7 +563,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             0,
             0
@@ -595,7 +571,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "g",
           "volts": [
             0
           ],
@@ -603,7 +578,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             5,
             5
@@ -612,7 +586,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             5,
             5
@@ -719,7 +692,6 @@
       ],
       "elementStates": [
         {
-          "dumpType": "r",
           "volts": [
             5,
             0
@@ -728,7 +700,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "172",
           "volts": [
             5
           ],
@@ -736,7 +707,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "g",
           "volts": [
             0
           ],
@@ -744,7 +714,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             0,
             0
@@ -753,7 +722,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "r",
           "volts": [
             5,
             0
@@ -762,7 +730,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             0,
             0
@@ -771,7 +738,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "g",
           "volts": [
             0
           ],
@@ -779,7 +745,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             5,
             5
@@ -788,7 +753,6 @@
           "curcount": 0
         },
         {
-          "dumpType": "w",
           "volts": [
             5,
             5

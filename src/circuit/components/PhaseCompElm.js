@@ -27,10 +27,6 @@ class PhaseCompElm extends ChipElm {
     return this.pins[2].output = true;
   }
 
-  getDumpType() {
-    return "161";
-  }
-
   getPostCount() {
     return 3;
   }

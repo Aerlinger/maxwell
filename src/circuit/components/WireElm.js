@@ -66,10 +66,6 @@ class WireElm extends CircuitComponent {
     return arr[2] = `V = ${Util.getUnitText(this.volts[0], "V")}`;
   }
 
-  getDumpType() {
-    return "w";
-  }
-
   getPower() {
     return 0;
   }

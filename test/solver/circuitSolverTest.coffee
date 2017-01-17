@@ -1,6 +1,3 @@
-Circuit = require('../../src/circuit/circuit.js')
-Util = require('../../src/util/util.js')
-
 describe "Circuit Solver", ->
   beforeEach ->
     @Circuit = new Circuit()

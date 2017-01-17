@@ -1,5 +1,3 @@
-CapacitorElm = require('../../src/circuit/components/CapacitorElm.js')
-
 describe "Capacitor Component", ->
   beforeEach ->
     @capacitor = new CapacitorElm(100, 100, 100, 200, { capacitance: 1e-9, voltdiff: 1.1})
@@ -15,13 +13,10 @@ describe "Capacitor Component", ->
   it "is not have any internal voltage sources", ->
     @capacitor.getVoltageSourceCount().should.equal 0
 
-  it "has correct dump type", ->
-    @capacitor.getDumpType().should.equal "c"
-
   it "has correct toString()", ->
     expect(@capacitor.toString()).to.equal """CapacitorElm@[100 100 100 200]: {"capacitance":1e-9,"voltdiff":1.1}"""
 
-  it "should be orphaned", ->
+  it "is orphaned", ->
     @capacitor.orphaned().should.equal true
 
   it "has correct position", ->
@@ -40,7 +35,7 @@ describe "Capacitor Component", ->
       selected: false
       voltSource: 0
       needsShortcut: true
-      dump: "c"
+      name: "CapacitorElm"
       postCount: 2
       nonLinear: false
     })
@@ -50,29 +45,28 @@ describe "Capacitor Component", ->
       @Circuit = new Circuit()
       @Circuit.solder(@capacitor)
 
-    it "should get voltage correctly", ->
+    it "can getVoltage() correctly", ->
       @capacitor.getVoltageDiff().should.equal 0
 
     it "is not be orphaned", ->
       @capacitor.orphaned().should.equal false
 
-    it "should be stampable", ->
+    it "is stampable", ->
       @capacitor.stamp(@Circuit.Solver.getStamper())
 
-    it "should be steppable", ->
+    it "is steppable", ->
       @capacitor.doStep(@Circuit.getStamper())
 
-    it "should be drawable", ->
+    it "is drawable", ->
       #@capacitor.draw()
 
-    it "should setPoints", ->
+    it "can setPoints()", ->
       @capacitor.setPoints()
 
   describe "Rendering", ->
     before (done) ->
       @Circuit = new Circuit("BasicPotentiometer")
 
-      Canvas = require('canvas')
       @canvas = new Canvas(200, 200)
       ctx = @canvas.getContext('2d')
 

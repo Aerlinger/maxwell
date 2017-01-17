@@ -2,15 +2,13 @@ let CircuitComponent = require("../circuitComponent.js");
 let ChipElm = require("./ChipElm.js");
 let Util = require('../../util/util.js');
 
+// TODO Fails on this line: stamper.updateVoltageSource(0, this.nodes[1], this.pins[1].voltSource, vo);
 class VcoElm extends ChipElm {
   constructor(xa, xb, ya, yb, params, f) {
     super(xa, xb, ya, yb, params, f);
 
+    // TODO: paramify
     this.cResistance = 1e6;
-  }
-
-  getDumpType() {
-    return "158";
   }
 
   getName() {
@@ -29,10 +27,6 @@ class VcoElm extends ChipElm {
     return 3;
   }
 
-  getDumpType() {
-    return 158;
-  }
-
   setupPins() {
     this.sizeX = 2;
     this.sizeY = 4;
@@ -48,7 +42,7 @@ class VcoElm extends ChipElm {
     this.pins[4].output = true;
 
     this.pins[5] = new ChipElm.Pin(3, ChipElm.SIDE_E, "R2");
-    return this.pins[5].output = true;
+    this.pins[5].output = true;
   }
 
   computeCurrent() {

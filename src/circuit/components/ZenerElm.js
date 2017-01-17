@@ -70,13 +70,13 @@ class ZenerElm extends DiodeElm {
     return true;
   }
 
+  getName() {
+    return "Zener Diode"
+  }
+
   setup() {
     this.leakage = 5e-6;
     return super.setup();
-  }
-
-  getDumpType() {
-    return "z";
   }
 
   needsShortcut() {

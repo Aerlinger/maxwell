@@ -27,7 +27,7 @@ class SwitchElm extends CircuitComponent {
       },
       "momentary": {
         name: "Momentary",
-        default_value: 0,
+        default_value: false,
         data_type(str) { return str.toString() === 'true'; },
         field_type: "boolean"
       }
@@ -54,10 +54,6 @@ class SwitchElm extends CircuitComponent {
 
     let openhs = 16;
     return this.setBboxPt(this.point1, this.point2, openhs);
-  }
-
-  getDumpType() {
-    return "s";
   }
 
   stamp(stamper) {

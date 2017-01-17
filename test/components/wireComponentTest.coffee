@@ -1,6 +1,3 @@
-fs = require('fs')
-Canvas = require('canvas')
-
 describe "Wire Component", ->
   beforeEach ->
     @Circuit = new Circuit("BasicWire")
@@ -20,9 +17,6 @@ describe "Wire Component", ->
 
   it "is not have any internal voltage sources", ->
     @wireElm.getVoltageSourceCount().should.equal 1
-
-  it "has correct dump type", ->
-    @wireElm.getDumpType().should.equal "w"
 
   it "has correct toString()", ->
     @wireElm.toString().should.equal "WireElm@[100 100 100 200]"
@@ -51,7 +45,6 @@ describe "Wire Component", ->
 
   describe "Rendering", ->
     before (done) ->
-      Canvas = require('canvas')
       @canvas = new Canvas(100, 200)
       ctx = @canvas.getContext('2d')
 

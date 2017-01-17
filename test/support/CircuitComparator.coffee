@@ -1,6 +1,5 @@
 jsondiffpatch = require('jsondiffpatch').create({});
 flatdiff = require('deep-diff').diff;
-
 glob = require("glob")
 
 class CircuitComparator

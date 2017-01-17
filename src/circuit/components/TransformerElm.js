@@ -46,15 +46,17 @@ class TransformerElm extends CircuitComponent {
     this.curcount = 0;
 
     this.current = [this.current0, this.current1];
-    this.params["current"] = [this.current0, this.current1];
+    // this.params["current"] = [this.current0, this.current1];
 
-    delete this.params["current0"];
-    delete this.params["current1"];
+    // delete this.params["current0"];
+    // delete this.params["current1"];
 
     this.noDiagonal = true;
   }
 
-//    @setPoints()
+  getName() {
+    return "Transformer"
+  }
 
   isTrapezoidal() {
     return (this.flags & TransformerElm.FLAG_BACK_EULER) === 0;
@@ -119,10 +121,6 @@ class TransformerElm extends CircuitComponent {
 
   getPostCount() {
     return 4;
-  }
-
-  getDumpType() {
-    return 'T';
   }
 
   reset() {
