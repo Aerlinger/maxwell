@@ -15,7 +15,7 @@ class PotElm extends CircuitComponent {
       },
       "position": {
         name: "Position",
-        default_value: 1,
+        default_value: 0.5,
         range: [0, 1e5],
         data_type: parseFloat
       },
@@ -32,13 +32,71 @@ class PotElm extends CircuitComponent {
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
 
-    this.sliderValue = this.position * 100;
+    // this.sliderValue = this.position * 100;
+
+    // this.setPoints()
   }
 
 //  draw: (renderContext) ->
 //    super()
 //
 //    @getParentCircuit.halt("Draw not yet implemented for #{this}")
+
+  draw(renderContext) {
+    this.calcLeads(32);
+
+    let numSegments = 16;
+    let width = 5;
+
+//    @setBboxPt @point1, @point2, width
+
+    renderContext.drawLeads(this);
+
+    let parallelOffset = 1 / numSegments;
+
+    this.updateDots();
+    renderContext.drawDots(this.point1, this.lead1, this);
+    renderContext.drawDots(this.lead2, this.point2, this);
+
+    // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
+    let offsets = [0, 1, 0, -1];
+
+    // Draw resistor "zig-zags"
+    for (let n = 0; n < numSegments; n++) {
+      let resistorSegmentVoltage = this.volts[0] + ((this.volts[1]-this.volts[0]) * (n / numSegments));
+
+      let startPosition = Util.interpolate(this.lead1, this.lead2, n*parallelOffset, width*offsets[n % 4]);
+      let endPosition = Util.interpolate(this.lead1, this.lead2, (n+1)*parallelOffset, width*offsets[(n+1) % 4]);
+
+      renderContext.drawLinePt(startPosition, endPosition, Util.getVoltageColor(resistorSegmentVoltage), Settings.LINE_WIDTH);
+    }
+
+    let voltColor = Util.getVoltageColor(this.volts[2]);
+    // console.log("POSTS", this.post3, this.corner2, this.arrowPoint, this.arrow1, this.arrow2, this.midpoint);
+
+    renderContext.drawLinePt(this.post3, this.corner2, voltColor);
+    renderContext.drawLinePt(this.corner2, this.arrowPoint, voltColor);
+    renderContext.drawLinePt(this.arrow1, this.arrowPoint, voltColor);
+    renderContext.drawLinePt(this.arrow2, this.arrowPoint, voltColor);
+    // drawThickLine(g, corner2, arrowPoint);
+    // drawThickLine(g, arrow1, arrowPoint);
+    // drawThickLine(g, arrow2, arrowPoint);
+
+    // renderContext.drawDots(this.point1, this.lead1, this);
+    // renderContext.drawDots(this.lead2, this.point2, this);
+
+    renderContext.drawValue(14, 0, this, Util.getUnitText(this.resistance1, this.unitSymbol()));
+
+    renderContext.drawPosts(this);
+
+    if (CircuitComponent.DEBUG) {
+      return super.draw(renderContext);
+    }
+  }
+
+  unitSymbol() {
+    return "Ω";
+  }
 
   adjustmentValueChanged() {
     this.getParentCircuit().Solver.analyzeFlag = true;
@@ -51,6 +109,11 @@ class PotElm extends CircuitComponent {
 
   getName() {
     return "Potentiometer"
+  }
+
+  sliderValue() {
+    // return this.position * 100;
+    return 50;
   }
 
   setPoints() {
@@ -83,7 +146,7 @@ class PotElm extends CircuitComponent {
     let bodyLen = 32;
 
     this.calcLeads(bodyLen);
-    //    @position = @getSliderValue() * 0.0099 + 0.005
+    this.position = this.sliderValue() * 0.0099 + 0.005;
     let soff = Math.floor((this.position - 0.5) * bodyLen);
 
     this.post3 = Util.interpolate(this.point1, this.point2, 0.5, offset);
