@@ -33,10 +33,8 @@ class BaseRenderer extends Observer {
     return console.error(`Simulation Error: ${msg}`);
   }
 
-  fillText(text, x, y, fillColor, size=8) {
-    if (fillColor == null) { fillColor = Settings.TEXT_COLOR; }
+  fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size=8) {
     this.context.save();
-
 
     let origFillStyle = this.context.fillStyle;
     let origFillColor = this.context.fillColor;
@@ -53,7 +51,7 @@ class BaseRenderer extends Observer {
     this.context.fillColor = origFillColor;
     this.context.font = font;
 
-    this.context.restore()
+    this.context.restore();
 
     return textMetrics;
   }

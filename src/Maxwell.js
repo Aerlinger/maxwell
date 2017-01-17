@@ -95,14 +95,50 @@ ${circuitData}\
         let field = fields[fieldName];
 
         let fieldValue = circuitComponent[fieldName];
+        let componentId = circuitComponent.component_id;
         let fieldType = field["field_type"] || "float";
         let fieldDefault = field["default_value"];
         let fieldLabel = field["name"];
-        let fieldSymbol = field["symbol"];
+        let fieldSymbol = field["symbol"] || "";
         let fieldDescription = field["description"];
         let fieldRange = field["range"];
+        let selectValues = field["select_values"];
 
-        result.push(`fieldValue:${fieldValue} fieldType:${fieldType} fieldLabel:${fieldLabel} fieldSymbol:${fieldSymbol} fieldDescription:${fieldDescription} fieldRange:${fieldRange}`);
+        // Set our min/max permissible values if they exist, otherwise default to +/- Infinity
+        let fieldMin = (fieldRange && fieldRange[0]) || -Infinity;
+        let fieldMax = (fieldRange && fieldRange[1]) || Infinity;
+
+        console.log(`fieldValue:${fieldValue} fieldType:${fieldType} fieldLabel:${fieldLabel} fieldSymbol:${fieldSymbol} fieldDescription:${fieldDescription} fieldRange:${fieldRange}`);
+
+        let inputControl = "";
+
+        // Possible fieldTypes are "select", "boolean", "slider"
+
+        if (fieldType == "select") {
+          let optionVals = "";
+
+          for (let value in selectValues) {
+            optionVals += `<option value="${selectValues[value]}">${value}</option>`;
+          }
+
+          inputControl = `
+            <select class="form-control">
+              ${optionVals}
+            </select>
+          `;
+        } else if(fieldType == "boolean") {
+          inputControl = `
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" id="blankCheckbox" value="${fieldValue}">
+              ${fieldLabel}
+            </label>
+          </div>
+          `
+
+        } else {
+          inputControl = `<input type="${fieldType}" value="${fieldValue}" class="form-control form-control-success" data-range-min="${fieldMin}" data-range-max="${fieldMax}" data-component-id="${componentId}" id="inputHorizontalSuccess" placeholder="${fieldDefault}">`
+        }
 
         html += `
         
@@ -113,7 +149,7 @@ ${circuitData}\
     
           <div class="col-sm-10">
             <div>
-              <input type="${fieldType}" value="${fieldValue}" class="form-control form-control-success" data-range-min="${fieldRange[0]}" data-range-max="${fieldRange[1]}" id="inputHorizontalSuccess" placeholder="${fieldDefault}">
+              ${inputControl}
               <small class="form-symbol text-muted">${fieldSymbol}</small>
             </div>
             `;

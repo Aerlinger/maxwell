@@ -12,19 +12,20 @@ class TextElm extends CircuitComponent {
 
   static get Fields() {
     return {
+      text: {
+        default_value: "<text>",
+        name: "Text value",
+        type: "attribute",
+        data_type(x) { return x; }
+      },
       size: {
-        name: "Pixel",
-        unit: "Pixel",
-        symbol: "",
+        name: "Text Size",
+        unit: "pt",
+        symbol: "pt",
         default_value: 24,
         data_type: parseInt,
         range: [0, 500],
         type: "attribute"
-      },
-      text: {
-        default_value: "<text>",
-        type: "attribute",
-        data_type(x) { return x; }
       }
     };
   }
@@ -65,7 +66,11 @@ class TextElm extends CircuitComponent {
     this.point2.x = this.boundingBox.x1 + this.boundingBox.width;
     this.point2.y = this.boundingBox.y1 + this.boundingBox.height;
 
-    this.setBbox(this.x1(), this.y1() + mt.actualBoundingBoxDescent, this.x1() + mt.width, this.y1() - mt.emHeightAscent + mt.emHeightDescent);
+    let mt2 = renderContext.context.measureText(this.text);
+
+    // console.log("MT", mt, this.x1(), this.y1() + mt.actualBoundingBoxDescent, this.x1() + mt.width, this.y1() - mt.emHeightAscent + mt.emHeightDescent);
+    // console.log("MT2", mt2, this.x1(), this.y1() + mt.actualBoundingBoxDescent, this.x1() + mt.width, this.y1() - mt.emHeightAscent + mt.emHeightDescent);
+    this.setBbox(this.x1(), this.y1() - this.size + 1, this.x1() + mt.width, this.y1());
 
     if (CircuitComponent.DEBUG) {
       return super.draw(renderContext);
