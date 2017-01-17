@@ -17,4 +17,4 @@ circuits/v2/
 .env
 bundle.js
 **/*.map
-
+*.graffle

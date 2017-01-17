@@ -14,6 +14,9 @@ A low-level javascript circuit simulation engine designed to model, simulate, an
 
 ## API
 
+##### Entry Point
+
+
 ```javascript
 var circuitContext = Maxwell.createCircuit("Voltage Divider", "./voltdivide.json", function(circuit) {
   // Runs once circuit has finished loading

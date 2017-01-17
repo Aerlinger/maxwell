@@ -18,14 +18,14 @@ app.use("/circuits", express.static(path.join(__dirname, '../circuits')));
 var port = 6502;
 
 app.get('/', function (req, res) {
-  res.redirect('/opint')
+  res.redirect('/circuits/opint')
 });
 
 app.get('/plotting', function (req, res) {
   res.render('plotting');
 });
 
-app.get('/:circuit_name', function (req, res) {
+app.get('/circuits/:circuit_name', function (req, res) {
   // console.log(__dirname + "../circuits/v3/*.json")
 
   circuit_names = glob.sync(__dirname + "/../circuits/v3/*.json").map(function(filename) {
@@ -39,7 +39,6 @@ app.get('/:circuit_name', function (req, res) {
     circuit_names: circuit_names
   });
 });
-
 
 app.listen(process.env.PORT || port, function () {
   console.log('Example app listening on port ' + port + '!');
