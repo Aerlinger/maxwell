@@ -1,229 +1,206 @@
-doctype
-html
-  head
-    title="Maxwell"
+extends ./layout
 
-    meta(http-equiv="content-type", content="text/html; charset=UTF8")
+block header
 
-    link(rel='stylesheet', href='theme.css')
-    link(rel='stylesheet', href='/bower_components/rickshaw/rickshaw.css')
-    //link(rel='stylesheet', href='bower_components/bootstrap/dist/css/bootstrap.css')
-    link(rel="stylesheet", href="/bower_components/semantic/dist/semantic.min.css")
+  script.
+    document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
 
-    script(type="text/javascript", src="/bower_components/dat.gui/dat.gui.js")
-    script(type="text/javascript", src="/bower_components/jquery/dist/jquery.js")
-    script(type="text/javascript", src="/bower_components/jquery-ui/jquery-ui.js")
-    script(type="text/javascript", src="/bower_components/sketch.js/js/sketch.js")
-    script(type="text/javascript", src="/bower_components/lodash/lodash.js")
-    script(type="text/javascript", src="/bower_components/d3/d3.js")
-    script(type="text/javascript", src="/bower_components/rickshaw/rickshaw.js")
-    //script(type='text/javascript', src='bower_components/bootstrap/dist/js/bootstrap.js')
-    script(type="text/javascript", src="/bower_components/semantic/dist/semantic.min.js")
+    $(document).ready(function (event) {
+      var plotter = new Plotter("plot");
+      var canvas = $('canvas.maxwell').get(0);
+      var renderer = null;
 
-    script(type="text/javascript", src="/dist/bundle.js")
-    script(type="text/javascript", src="/plot.js")
+      Maxwell.createContext("#{circuit}", "../circuits/v3/#{circuit}.json", canvas, function (circuitContext) {
+        console.log(circuitContext);
+        console.log("Circuit loaded! ", circuitContext.Circuit, canvas);
 
+        var circuit = circuitContext.Circuit;
 
+        circuitContext.onSelectionChanged = function (components) {
+          console.log("SELECTION CHANGED:", components);
+        };
 
-    script.
-      document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
+        circuitContext.onComponentHover = function(component) {
+          console.log("ON HOVER:", component.toString(), "V:", component.volts);
+          var form = Maxwell.renderEdit(component);
 
-      $(document).ready(function (event) {
-        var plotter = new Plotter("plot");
-        var canvas = $('canvas.maxwell').get(0);
-        var renderer = null;
+          console.log("renderEdit\n", form);
 
-        Maxwell.createContext("#{circuit}", "../circuits/v3/#{circuit}.json", canvas, function (circuitContext) {
-          console.log(circuitContext);
-          console.log("Circuit loaded! ", circuitContext.Circuit, canvas);
+          window.editInfo = form;
 
-          var circuit = circuitContext.Circuit;
+          // document.getElementById("edit_component").innerHTML = form;
+        };
 
-          circuitContext.onSelectionChanged = function (components) {
-            console.log("SELECTION CHANGED:", components);
-          };
+        circuitContext.onComponentUnhover = function (component) {
+          console.log("ON UNHOVER:", component.toString());
+        };
 
-          circuitContext.onComponentHover = function(component) {
-            console.log("ON HOVER:", component.toString(), "V:", component.volts);
-            var form = Maxwell.renderEdit(component);
+        circuitContext.onComponentClick = function (component) {
+          console.log("ON CLICK:", component.getProperties());
+        };
 
-            console.log("renderEdit\n", form);
-
-            window.editInfo = form;
-
-            // document.getElementById("edit_component").innerHTML = form;
-          };
-
-          circuitContext.onComponentUnhover = function (component) {
-            console.log("ON UNHOVER:", component.toString());
-          };
-
-          circuitContext.onComponentClick = function (component) {
-            console.log("ON CLICK:", component.getProperties());
-          };
-
-          circuitContext.onUpdateComplete = function(context) {
-            if (context.highlightedComponent) {
-               plotter.addData(context.highlightedComponent.getVoltageDiff())
-            }
-          };
-
-          circuitContext.onNodeHover = function(node) {
-            console.log("NODE HOVER: ", node.getVoltage());
-          };
-
-          circuitContext.onNodeUnhover = function (node) {
-            console.log("NODE UNHOVER: ", node.getVoltage());
-          };
-
-          circuitContext.onNodeClick = function (node) {
-            console.log("NODE CLICK: ", node.x, node.y);
-          };
-
-          renderer = circuitContext;
-        });
-
-        $(document).keypress(function (e) {
-          console.log("keypress", e.keyCode);
-
-          var keyCode = e.keyCode;
-          if (keyCode == 13) {
-            console.log("DELETE");
-
-            renderer.remove(renderer.getSelectedComponents());
+        circuitContext.onUpdateComplete = function(context) {
+          if (context.highlightedComponent) {
+             plotter.addData(context.highlightedComponent.getVoltageDiff())
           }
-        });
+        };
 
-        $('canvas.maxwell').mousemove(function(evt) {
-          $("#coords").text("Cursor: (" + evt.offsetX +", " + evt.offsetY +")");
-        });
+        circuitContext.onNodeHover = function(node) {
+          console.log("NODE HOVER: ", node.getVoltage());
+        };
 
-        $('#component_sidebar').sidebar('setting', 'transition', 'overlay');
+        circuitContext.onNodeUnhover = function (node) {
+          console.log("NODE UNHOVER: ", node.getVoltage());
+        };
 
-        $('#circuit_sidebar').sidebar('show');
-        $('.ui.dropdown').dropdown();
-        $('.ui.checkbox').checkbox();
+        circuitContext.onNodeClick = function (node) {
+          console.log("NODE CLICK: ", node.x, node.y);
+        };
 
-        Maxwell.Components.map(function(component) {
-          $('#component_sidebar .menu').append(
-              '<a href="#" class="item component-item" data-name='+ component.name + '>' + component.name + '</a>'
-          )
-        });
+        renderer = circuitContext;
+      });
 
-        $('.component-item').click(function(evt) {
-          var componentName = $(this).data("name");
+      $(document).keypress(function (e) {
+        console.log("keypress", e.keyCode);
 
-          renderer.setPlaceComponent(componentName)
-        });
+        var keyCode = e.keyCode;
+        if (keyCode == 13) {
+          console.log("DELETE");
 
-        var back_canvas = $('.grid').get(0);
-
-        var ctx = back_canvas.getContext("2d");
-        ctx.fillStyle = "#000";
-        ctx.globalAlpha = 0.5;
-        ctx.lineWidth = 0;
-
-        for (i=0; i<back_canvas.width; i += 16) {
-          for (j=0; j<back_canvas.height; j += 16) {
-            ctx.moveTo(i, j);
-            ctx.fillRect(i, j, 1, 1);
-          }
+          renderer.remove(renderer.getSelectedComponents());
         }
       });
 
-  body
-    .ui.menu
-      .ui.dropdown.item
-        | Circuit
-        i.dropdown.icon
+      $('canvas.maxwell').mousemove(function(evt) {
+        $("#coords").text("Cursor: (" + evt.offsetX +", " + evt.offsetY +")");
+      });
+
+      $('#component_sidebar').sidebar('setting', 'transition', 'overlay');
+
+      $('#circuit_sidebar').sidebar('show');
+      $('.ui.dropdown').dropdown();
+      $('.ui.checkbox').checkbox();
+
+      Maxwell.Components.map(function(component) {
+        $('#component_sidebar .menu').append(
+            '<a href="#" class="item component-item" data-name='+ component.name + '>' + component.name + '</a>'
+        )
+      });
+
+      $('.component-item').click(function(evt) {
+        var componentName = $(this).data("name");
+
+        renderer.setPlaceComponent(componentName)
+      });
+
+      var back_canvas = $('.grid').get(0);
+
+      var ctx = back_canvas.getContext("2d");
+      ctx.fillStyle = "#000";
+      ctx.globalAlpha = 0.5;
+      ctx.lineWidth = 0;
+
+      for (i=0; i<back_canvas.width; i += 16) {
+        for (j=0; j<back_canvas.height; j += 16) {
+          ctx.moveTo(i, j);
+          ctx.fillRect(i, j, 1, 1);
+        }
+      }
+    });
+
+block content
+  .ui.menu
+    .ui.dropdown.item
+      | Circuit
+      i.dropdown.icon
+      .menu
+        a.item
+          span.description ctrl + s
+          | Save
+        a.item
+          i.folder.icon
+          | Permalink
+        a.item Export to SPICE
+        a.item Export to JSON
+    .ui.dropdown.item
+      | Components
+      i.dropdown.icon
+      .menu
+        a.item First
+        a.item Second
+        a.item Third
+    .ui.dropdown.item
+      | Sample Circuits
+      i.dropdown.icon
+      .menu
+        a.item First
+        a.item Second
+        a.item Third
+
+  div
+    #circuit_sidebar.ui.sidebar.left.vertical.menu.visible
+      .item
+        .header Circuits
         .menu
-          a.item
-            span.description ctrl + s
-            | Save
-          a.item
-            i.folder.icon
-            | Permalink
-          a.item Export to SPICE
-          a.item Export to JSON
-      .ui.dropdown.item
-        | Components
-        i.dropdown.icon
-        .menu
-          a.item First
-          a.item Second
-          a.item Third
-      .ui.dropdown.item
-        | Sample Circuits
-        i.dropdown.icon
-        .menu
-          a.item First
-          a.item Second
-          a.item Third
+          - for (var i=0; i<circuit_names.length; ++i)
+            a.item(href="/"+circuit_names[i])= circuit_names[i]
 
-    div
-      #circuit_sidebar.ui.sidebar.left.vertical.menu.visible
-        .item
-          .header Circuits
-          .menu
-            - for (var i=0; i<circuit_names.length; ++i)
-              a.item(href="/"+circuit_names[i])= circuit_names[i]
+    #component_sidebar.ui.sidebar.right.vertical.menu.visible
+      .item
+        .header Components
+        #edit_component.menu
 
-      #component_sidebar.ui.sidebar.right.vertical.menu.visible
-        .item
-          .header Components
-          #edit_component.menu
+    //#edit_sidebar.ui.bottom.sidebar.visible
+      div(style="height: 200px; border: 1px solid #FF00FF; margin-left: 150px;")
+        div(style="width: 100%; border: 1px solid #F00; padding: 5px;")
+          a.button.mini.ui.button.green Start
+          a.button.mini.ui.button.orange  Stop
+          a.button.mini.ui.button.red  Reset
+        p text
+        p text
+        p text
+        p text
 
-      //#edit_sidebar.ui.bottom.sidebar.visible
-        div(style="height: 200px; border: 1px solid #FF00FF; margin-left: 150px;")
-          div(style="width: 100%; border: 1px solid #F00; padding: 5px;")
-            a.button.mini.ui.button.green Start
-            a.button.mini.ui.button.orange  Stop
-            a.button.mini.ui.button.red  Reset
-          p text
-          p text
-          p text
-          p text
+    .pusher
+      .canvas-container(style="margin-left: 300px; width: 100%;")
+        canvas.maxwell(data-circuit="#{circuit}", width="1200", height="1200")
+        canvas.grid(width="1200", height="1200")
+        div(style="width: 300px; border: 1px solid #00F; height: 600px; display: inline-block; position: absolute;")
+          //#legend
+          #plot
+            #slider
+            #timeline
+            #preview
+          p#coords Cursor: (-, -)
+          p#placeComponent
+          p#selectedComponent
 
-      .pusher
-        .canvas-container(style="margin-left: 300px; width: 100%;")
-          canvas.maxwell(data-circuit="#{circuit}", width="1200", height="1200")
-          canvas.grid(width="1200", height="1200")
-          div(style="width: 300px; border: 1px solid #00F; height: 600px; display: inline-block; position: absolute;")
-            //#legend
-            #plot
-              #slider
-              #timeline
-              #preview
-            p#coords Cursor: (-, -)
-            p#placeComponent
-            p#selectedComponent
+          form.ui.form
+            h4.ui.dividing.header Simulation Settings
 
-            form.ui.form
-              h4.ui.dividing.header Simulation Settings
+            //.inline.field
+              .ui.slider.checkbox
+                label Toggle
+                input(type="checkbox")
 
-              //.inline.field
-                .ui.slider.checkbox
-                  label Toggle
-                  input(type="checkbox")
+            .inline.field
+              .ui.slider.range
+                label Simulation Speed
+                input(type="range")
 
-              .inline.field
-                .ui.slider.range
-                  label Simulation Speed
-                  input(type="range")
+            .inline.field
+              .ui.mini.icon.input
+                label Time Step
+                input(type="text", placeholder="0.05")
 
-              .inline.field
-                .ui.mini.icon.input
-                  label Time Step
-                  input(type="text", placeholder="0.05")
-
-            h4.ui.dividing.header Component List
-            .ui.middle.aligned.divided.list
-              - for (var i=0; i<2; ++i)
-                .item
-                  .right.floated.content
-                    button.mini.ui.button.green Edit
-                  img.ui.circuit-icon.image(src="https://placehold.it/50x50")
-                  .content
-                    | Element Name #{i}
-                // Render component/circuit properties
+          h4.ui.dividing.header Component List
+          .ui.middle.aligned.divided.list
+            - for (var i=0; i<2; ++i)
+              .item
+                .right.floated.content
+                  button.mini.ui.button.green Edit
+                img.ui.circuit-icon.image(src="https://placehold.it/50x50")
+                .content
+                  | Element Name #{i}
+              // Render component/circuit properties
 
