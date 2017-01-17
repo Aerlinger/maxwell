@@ -32,10 +32,11 @@ class TextElm extends CircuitComponent {
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
 
-    this.text = "<TextElm>";
+    // this.text = params.text;
+
     this.lines = new Array(); // new vector()
     this.lines.push(this.text);
-    this.size = 24;
+    // this.size = ;
   }
 
   stamp() {}
@@ -83,11 +84,13 @@ class TextElm extends CircuitComponent {
 //        cury += fm.getHeight()
 //        i++
 
-    let i = 0;
-    for (let line of Array.from(this.lines)) {
-      renderContext.fillText(line, 40, (15*i) + 100);
-      i++;
-    }
+    // let i = 0;
+    // for (let line of Array.from(this.lines)) {
+    //   renderContext.fillText(line, 40, (15*i) + 100);
+    //   i++;
+    // }
+
+    renderContext.fillText(this.text, this.x1(), this.y1(), Settings.TEXT_COLOR, this.size);
 
     this.point2.x = this.boundingBox.x1 + this.boundingBox.width;
     this.point2.y = this.boundingBox.y1 + this.boundingBox.height;

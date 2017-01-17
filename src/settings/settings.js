@@ -181,7 +181,7 @@ class Settings {
     this.CURRENT_SEGMENT_LENGTH = 16;
   
     // Line Widths:
-    this.POST_RADIUS = 2;
+    this.POST_RADIUS = 1;
     this.CURRENT_RADIUS = 2;
     this.CURRENT_COLOR = "rgba(255, 255, 255, 0.7)";
     this.LINE_WIDTH = 2;
@@ -212,7 +212,8 @@ class Settings {
     this.GRAY = "#666";
   
     this.LIGHT_POST_COLOR = "#333";
-  
+    this.COMPONENT_DECIMAL_PLACES = 1;
+
     this.GRID_COLOR = ColorPalette.darkyellow;
     this.SWITCH_COLOR = "#333";
     this.FILL_COLOR = ColorPalette.white;

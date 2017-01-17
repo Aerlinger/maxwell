@@ -481,7 +481,7 @@ class Renderer extends BaseRenderer {
     this.context.save();
     this.context.textAlign = "center";
 
-    this.context.font = "7pt Courier";
+    this.context.font = "bold 7pt Courier";
 
     let stringWidth = this.context.measureText(text).width;
     let stringHeight = this.context.measureText(text).actualBoundingBoxAscent || 0;

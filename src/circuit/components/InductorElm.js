@@ -83,7 +83,7 @@ class InductorElm extends CircuitComponent {
 //    @setBboxPt @point1, @point2, hs
     renderContext.drawLeads(this);
 
-    renderContext.drawValue(-14, 0, this, Util.getUnitText(this.inductance, "H"));
+    renderContext.drawValue(-14, 0, this, Util.getUnitText(this.inductance, "H"), Settings.COMPONENT_DECIMAL_PLACES);
 
 //    renderContext.drawDots(@point1, @point2, this)
     this.updateDots();

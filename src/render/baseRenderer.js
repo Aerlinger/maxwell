@@ -28,14 +28,25 @@ class BaseRenderer extends Observer {
     return console.error(`Simulation Error: ${msg}`);
   }
 
-  fillText(text, x, y, fillColor) {
+  fillText(text, x, y, fillColor, size=8) {
     if (fillColor == null) { fillColor = Settings.TEXT_COLOR; }
-    __guard__(this.context, x1 => x1.save());
-    let origFillStyle = __guard__(this.context, x2 => x2.fillStyle);
-    __guard__(this.context, x3 => x3.fillStyle = fillColor);
-    __guard__(this.context, x4 => x4.fillText(text, x, y));
-    __guard__(this.context, x5 => x5.fillStyle = origFillStyle);
-    return __guard__(this.context, x6 => x6.restore());
+    this.context.save();
+
+
+    let origFillStyle = this.context.fillStyle;
+    let origFillColor = this.context.fillColor;
+    let font = this.context.font;
+
+    // this.context.fillStyle = fillStyle;
+    this.context.fillColor = fillColor;
+    this.context.font = `${size}pt Courier`;
+    this.context.fillText(text, x, y);
+
+    this.context.fillStyle = origFillStyle;
+    this.context.fillColor = origFillColor;
+    this.context.font = font;
+
+    this.context.restore()
   }
 
   fillCircle(x, y, radius, lineWidth, fillColor, lineColor) {

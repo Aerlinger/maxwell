@@ -191,7 +191,7 @@ class VoltageElm extends CircuitComponent {
       [ptA, ptB] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, 2 * Settings.GRID_SIZE);
       renderContext.drawLinePt(ptA, ptB, Util.getVoltageColor(this.volts[1]));
 
-      renderContext.drawValue(-25, 0, this, Util.getUnitText(this.getVoltageDiff(), this.unitSymbol()));
+      renderContext.drawValue(-25, 0, this, Util.getUnitText(this.getVoltageDiff(), this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
     } else {
       this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
       let ps1 = Util.interpolate(this.lead1, this.lead2, 0.5);

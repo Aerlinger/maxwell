@@ -298,7 +298,7 @@ class Util {
   }
 
   static typeOf(obj, klassType) {
-    return (obj.constructor === klassType) || (obj.constructor.prototype instanceof klassType)
+    return (obj.constructor === klassType) || (obj.constructor.prototype instanceof klassType);
 
     // let klass = obj.constructor;
 

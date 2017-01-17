@@ -22,7 +22,7 @@ let { sprintf } = require("sprintf-js");
 class CircuitSolver {
   
   static initClass() {
-    this.DEBUG_FRAME_TIMING = true;
+    this.DEBUG_FRAME_TIMING = false;
     this.SIZE_LIMIT = 100;
     this.MAXIMUM_SUBITERATIONS = 5000;
   }
