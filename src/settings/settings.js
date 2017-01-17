@@ -182,7 +182,7 @@ class Settings {
     this.WIRE_POSTS = true;
   
     // Line Widths:
-    this.POST_RADIUS = 1;
+    this.POST_RADIUS = 2;
     this.CURRENT_RADIUS = 2;
     this.CURRENT_COLOR = "rgba(255, 255, 255, 0.7)";
     this.LINE_WIDTH = 2;

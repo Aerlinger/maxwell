@@ -363,11 +363,11 @@ class ChipElm extends CircuitComponent {
         renderContext.drawDots(b, a, p);
 
         if (p.bubble) {
-          renderContext.drawCircle(p.bubbleX, p.bubbleY, 1, Settings.FILL_COLOR);
-          renderContext.drawCircle(p.bubbleX, p.bubbleY, 3, Settings.STROKE_COLOR);
+          renderContext.fillCircle(p.bubbleX, p.bubbleY, 1, Settings.FILL_COLOR);
         }
 
-        renderContext.fillText(p.text, p.textloc.x-4, p.textloc.y+2);
+        let textSize = this.csize == 0 ? 6 : 8;
+        renderContext.fillText(p.text, p.textloc.x-4, p.textloc.y+2, textSize);
 
         if (p.lineOver) {
           let ya = p.textloc.y - renderContext.context.measureText(p.text).height;

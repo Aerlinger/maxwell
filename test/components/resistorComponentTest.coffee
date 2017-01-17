@@ -42,6 +42,7 @@ describe "Resistor Component", ->
       expect(@resistor.getFieldWithValue("resistance")).to.eql({
         "default_value": 1000
         "name": "Resistance"
+        "description": "Amount of current per unit voltage applied to this resistor (ideal)."
         "range": [
           0
           Infinity
