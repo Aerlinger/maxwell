@@ -720,34 +720,26 @@ class CircuitSolver {
     @param (output) pivotArray pivot index
   */
   luFactor(circuitMatrix, matrixSize, pivotArray) {
-    // Divide each row by largest element in that row and remember scale factors
-    let j, largest, x;
-
-    let i = 0;
+    var i, j, k, largest, largestRow, matrix_ij, mult, x;
+    i = 0;
     while (i < matrixSize) {
       largest = 0;
       j = 0;
       while (j < matrixSize) {
         x = Math.abs(circuitMatrix[i][j]);
-        if (x > largest) { largest = x; }
+        if (x > largest) {
+          largest = x;
+        }
         ++j;
       }
-
-      // Check for singular matrix:
       if (largest === 0) {
-        throw new Error(`Singular matrix (${i}, ${j}) -> ${largest}`);
+        throw new Error("Singular matrix (" + i + ", " + j + ") -> " + largest);
       }
-
       this.scaleFactors[i] = 1.0 / largest;
       ++i;
     }
-
-    // Crout's method: Loop through columns first
     j = 0;
     while (j < matrixSize) {
-
-      // Calculate upper triangular elements for this column:
-      var k, matrix_ij;
       i = 0;
       while (i < j) {
         matrix_ij = circuitMatrix[i][j];
@@ -759,10 +751,8 @@ class CircuitSolver {
         circuitMatrix[i][j] = matrix_ij;
         ++i;
       }
-
-      // Calculate lower triangular elements for this column
       largest = 0;
-      let largestRow = -1;
+      largestRow = -1;
       i = j;
       while (i < matrixSize) {
         matrix_ij = circuitMatrix[i][j];
@@ -771,7 +761,6 @@ class CircuitSolver {
           matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
           ++k;
         }
-
         circuitMatrix[i][j] = matrix_ij;
         x = Math.abs(matrix_ij);
         if (x >= largest) {
@@ -780,8 +769,6 @@ class CircuitSolver {
         }
         ++i;
       }
-
-      // Pivot
       if (j !== largestRow) {
         k = 0;
         while (k < matrixSize) {
@@ -792,14 +779,12 @@ class CircuitSolver {
         }
         this.scaleFactors[largestRow] = this.scaleFactors[j];
       }
-
-      // keep track of row interchanges
       pivotArray[j] = largestRow;
-
-      // avoid zeros
-      if (circuitMatrix[j][j] === 0) { circuitMatrix[j][j] = 1e-18; }
-      if (j !== (matrixSize - 1)) {
-        let mult = 1 / circuitMatrix[j][j];
+      if (circuitMatrix[j][j] === 0) {
+        circuitMatrix[j][j] = 1e-18;
+      }
+      if (j !== matrixSize - 1) {
+        mult = 1 / circuitMatrix[j][j];
         i = j + 1;
         while (i !== matrixSize) {
           circuitMatrix[i][j] *= mult;
