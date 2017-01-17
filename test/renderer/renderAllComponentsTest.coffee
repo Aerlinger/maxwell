@@ -1,5 +1,5 @@
 describe "Render all components", ->
-  it.skip "can render all components", ->
+  it "can render all components", ->
     this.timeout(5000)
 
     Canvas = require('canvas')
@@ -29,7 +29,7 @@ describe "Render all components", ->
 
         origfont = ctx.font
         ctx.font = "12px serif"
-        ctx.fillText(@component.toString(), x - @component.boundingBox.width, y - 30)
+        ctx.fillText(@component.getName(), x - @component.boundingBox.width, y - 30)
         ctx.font = origfont
 
         col += offsetX

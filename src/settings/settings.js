@@ -179,6 +179,7 @@ class Settings {
   
     this.FRACTIONAL_DIGITS = 2;
     this.CURRENT_SEGMENT_LENGTH = 16;
+    this.WIRE_POSTS = true;
   
     // Line Widths:
     this.POST_RADIUS = 1;

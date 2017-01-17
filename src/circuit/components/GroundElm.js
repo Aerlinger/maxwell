@@ -33,7 +33,7 @@ class GroundElm extends CircuitComponent {
 
     for (let row = 0; row < 3; row++) {
       let pt1;
-      let startPt = 10 - (row * 2);
+      let startPt = 6 - (row * 2);
       let endPt = row * 3;
       [pt1, pt2] = Util.interpolateSymmetrical(this.point1, this.point2, 1 + (endPt / this.dn()), startPt);
       renderContext.drawLinePt(pt1, pt2, color);

@@ -10,6 +10,8 @@ class CounterElm extends ChipElm {
   constructor(xa, xb, ya, yb, params, f) {
     // console.log("FLAG", f)
 
+    params = params || {"bits": 4, "volts": [0, 0, 0, 0]}
+
     super(xa, xb, ya, yb, params, f);
   }
 

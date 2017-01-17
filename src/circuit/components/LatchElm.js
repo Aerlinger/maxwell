@@ -5,6 +5,8 @@ let Util = require('../../util/util.js');
 class LatchElm extends ChipElm {
 
   constructor(xa, xb, ya, yb, params, f) {
+    params = params || {"bits": 2, "volts": [0, 0, 0, 0, 0]};
+
     super(xa, xb, ya, yb, params, f);
     
     this.lastLoad = false;

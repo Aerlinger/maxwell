@@ -78,7 +78,7 @@ let Scope = require('../circuit/components/Scope.js');
 
 class SelectionMarquee extends Rectangle {
   constructor(x1, y1) {
-    super()
+    super();
 
     this.x1 = x1;
     this.y1 = y1;

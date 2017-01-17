@@ -130,6 +130,8 @@ class ChipElm extends CircuitComponent {
 
   // TODO: Need a better way of dealing with variable length params here
   constructor(xa, xb, ya, yb, params, f) {
+    params = params || {}
+    
     super(xa, xb, ya, yb, {}, f);
 
     this.flags = f;

@@ -3,6 +3,8 @@ let ChipElm = require("./ChipElm.js");
 class DecadeElm extends ChipElm {
 
   constructor(xa, xb, ya, yb, params, f) {
+    params = params || {"bits": 2, "volts": [0, 0, 0, 0]};
+
     super(xa, xb, ya, yb, params, f);
   }
 

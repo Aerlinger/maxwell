@@ -33,7 +33,8 @@ class WireElm extends CircuitComponent {
     this.updateDots();
     renderContext.drawDots(this.point1, this.point2, this);
 
-    renderContext.drawPosts(this);
+    if (Settings.WIRE_POSTS)
+      renderContext.drawPosts(this);
 
     if (CircuitComponent.DEBUG) {
       return super.draw(renderContext);

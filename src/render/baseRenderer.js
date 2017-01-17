@@ -4,6 +4,11 @@ let Util = require('../util/util.js');
 let Point = require('../geom/point.js');
 
 class BaseRenderer extends Observer {
+  constructor() {
+    super()
+    this.pathMode = false;
+  }
+
   drawInfo() {
     // TODO: Find where to show data; below circuit, not too high unless we need it
 //    bottomTextOffset = 100
@@ -104,30 +109,45 @@ class BaseRenderer extends Observer {
     return this.drawLine(pa.x, pa.y, pb.x, pb.y, color, lineWidth);
   }
 
+  beginPath() {
+    this.pathMode = true;
+    this.context.beginPath();
+  }
+
+  closePath() {
+    this.pathMode = false;
+    this.context.closePath();
+  }
+
   drawLine(x, y, x2, y2, color, lineWidth) {
     if (color == null) { color = Settings.STROKE_COLOR; }
     if (lineWidth == null) { lineWidth = Settings.LINE_WIDTH; }
 
     let origLineWidth = this.context.lineWidth;
     this.context.save();
-    this.context.beginPath();
+
+    if (!this.pathMode)
+      this.context.beginPath();
 
     if (this.boldLines) {
       this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
       this.context.strokeStyle = Settings.SELECT_COLOR;
-      this.context.moveTo(x, y);
+      if (!this.pathMode)
+        this.context.moveTo(x, y);
       this.context.lineTo(x2, y2);
       this.context.stroke();
 
     } else {
       this.context.strokeStyle = color;
       this.context.lineWidth = lineWidth;
-      this.context.moveTo(x, y);
+      if (!this.pathMode)
+        this.context.moveTo(x, y);
       this.context.lineTo(x2, y2);
       this.context.stroke();
     }
 
-    this.context.closePath();
+    if (!this.pathMode)
+      this.context.closePath();
 
     return this.context.restore();
 
