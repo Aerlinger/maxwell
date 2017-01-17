@@ -411,11 +411,9 @@ class Renderer extends BaseRenderer {
       }
     }
 
-    if (CircuitComponent.DEBUG) {
-      let node;
-      return __range__(0, this.Circuit.numNodes(), false).map((nodeIdx) =>
-        (node = this.Circuit.getNode(nodeIdx),
-        this.fillText(`${nodeIdx} ${node.x},${node.y}`, node.x + 5, node.y - 5)));
+    for (let nodeIdx=0; nodeIdx<this.Circuit.numNodes(); ++nodeIdx) {
+      let node = this.Circuit.getNode(nodeIdx);
+      this.fillText(`${nodeIdx} ${node.x},${node.y}`, node.x + 5, node.y - 5);
     }
   }
 

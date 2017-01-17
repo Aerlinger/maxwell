@@ -28,7 +28,7 @@ class InverterElm extends CircuitComponent {
   setPoints() {
     super.setPoints(...arguments);
 
-    let hs = 16;
+    this.hs = 16;
     let ww = 16;
 
     if (ww > (this.dn() / 2)) {
@@ -42,16 +42,17 @@ class InverterElm extends CircuitComponent {
 
     let triPoints = Util.newPointArray(3);
 
-    [triPoints[0], triPoints[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, hs);
+    [triPoints[0], triPoints[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, this.hs);
 
     triPoints[2] = Util.interpolate(this.point1, this.point2, 0.5 + ((ww - 5) / this.dn()));
 
     this.gatePoly = Util.createPolygonFromArray(triPoints);
 
-    return this.setBboxPt(this.point1, this.point2, hs);
+    this.setBboxPt(this.point1, this.point2, this.hs);
   }
 
   draw(renderContext) {
+    this.setBboxPt(this.point1, this.point2, this.hs);
 
     renderContext.drawLeads(this);
 
@@ -62,6 +63,10 @@ class InverterElm extends CircuitComponent {
     renderContext.drawDots(this.point1, this.point2, this);
 
     renderContext.drawPosts(this);
+
+    if (CircuitComponent.DEBUG) {
+      return super.draw(renderContext);
+    }
   }
 
   getVoltageSourceCount() {

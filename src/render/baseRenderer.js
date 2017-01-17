@@ -47,11 +47,15 @@ class BaseRenderer extends Observer {
     this.context.font = `${size}pt Courier`;
     this.context.fillText(text, x, y);
 
+    let textMetrics = this.context.measureText(text);
+
     this.context.fillStyle = origFillStyle;
     this.context.fillColor = origFillColor;
     this.context.font = font;
 
     this.context.restore()
+
+    return textMetrics;
   }
 
   fillCircle(x, y, radius, lineWidth, fillColor, lineColor) {

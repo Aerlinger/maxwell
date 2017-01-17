@@ -57,43 +57,15 @@ class TextElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-//    color = (if @needsHighlight() then Settings.SELECT_COLOR else Settings.TEXT_COLOR)
-
     let color = Settings.TEXT_COLOR;
     this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
 
-//      f = new Font("SansSerif", 0, size)
-//      g.setFont f
-//      fm = g.getFontMetrics()
-//      maxw = -1
-
-//      for i in [0...lines.length]
-//        w = fm.stringWidth(@lines[i])
-//        maxw = w  if w > maxw
-
-//      cury = y
-
-//      while i in [0...@lines.length]
-//        s = (@lines[i])
-//        x = (Circuit.winSize.width - fm.stringWidth(s)) / 2  unless (@flags & TextElm.FLAG_CENTER) is 0
-//        g.drawString s, @x1, cury
-//        unless (@flags & TextElm.FLAG_BAR) is 0
-//          by_ = cury - fm.getAscent()
-//          CircuitComponent.drawLine @x1, by_, @x1 + fm.stringWidth(s) - 1, by_
-//        @adjustBbox @x1, cury - fm.getAscent(), @x1 + fm.stringWidth(s), cury + fm.getDescent()
-//        cury += fm.getHeight()
-//        i++
-
-    // let i = 0;
-    // for (let line of Array.from(this.lines)) {
-    //   renderContext.fillText(line, 40, (15*i) + 100);
-    //   i++;
-    // }
-
-    renderContext.fillText(this.text, this.x1(), this.y1(), Settings.TEXT_COLOR, this.size);
+    let mt = renderContext.fillText(this.text, this.x1(), this.y1(), color, this.size);
 
     this.point2.x = this.boundingBox.x1 + this.boundingBox.width;
     this.point2.y = this.boundingBox.y1 + this.boundingBox.height;
+
+    this.setBbox(this.x1(), this.y1() + mt.actualBoundingBoxDescent, this.x1() + mt.width, this.y1() - mt.emHeightAscent + mt.emHeightDescent);
 
     if (CircuitComponent.DEBUG) {
       return super.draw(renderContext);

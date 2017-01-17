@@ -336,14 +336,11 @@ class ChipElm extends CircuitComponent {
 
   draw(renderContext) {
     this.drawChip(renderContext);
-
-    if (CircuitComponent.DEBUG && (this.params['bits'] > 0)) {
-      return super.draw(renderContext);
-    }
   }
 
   drawChip(renderContext) {
     let i;
+    this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
     renderContext.drawThickPolygon(this.rectPointsX, this.rectPointsY, Settings.STROKE_COLOR);
 
     for (i = 0; i < this.getPostCount(); i++) {
@@ -381,6 +378,10 @@ class ChipElm extends CircuitComponent {
       renderContext.drawPolyline(this.clockPointsX, this.clockPointsY, 3);
     }
 
+    if (CircuitComponent.DEBUG) {
+      return super.draw(renderContext);
+    }
+
     return (() => {
       let result = [];
       for (i = i, end1 = this.getPostCount(), asc1 = i <= end1; asc1 ? i < end1 : i > end1; asc1 ? i++ : i--) {
@@ -409,7 +410,8 @@ class ChipElm extends CircuitComponent {
     this.rectPointsX = [xr, xr + xs, xr + xs, xr];
     this.rectPointsY = [yr, yr, yr + ys, yr + ys];
 
-    this.setBbox(xr, yr, this.rectPointsX[2], this.rectPointsY[2]);
+    // this.setBbox(xr, yr, this.rectPointsX[2], this.rectPointsY[2]);
+    this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
 
     for (let i = 0; i < this.getPostCount(); i++) {
       let p = this.pins[i];

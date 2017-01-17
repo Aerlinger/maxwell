@@ -201,7 +201,7 @@ class VoltageElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (CircuitComponent.DEBUG) {
-      return super.draw(renderContext);
+      super.draw(renderContext);
     }
   }
 

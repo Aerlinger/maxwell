@@ -52,8 +52,8 @@ class SwitchElm extends CircuitComponent {
     this.ps = new Point(0, 0);
     this.ps2 = new Point(0, 0);
 
-    let openhs = 16;
-    return this.setBboxPt(this.point1, this.point2, openhs);
+    this.openhs = 16;
+    this.setBboxPt(this.point1, this.point2, this.openhs/2);
   }
 
   stamp(stamper) {
@@ -65,12 +65,13 @@ class SwitchElm extends CircuitComponent {
 
   draw(renderContext) {
     this.calcLeads(32);
+    this.setBboxPt(this.point1, this.point2, this.openhs/2);
+
     this.ps = new Point(0, 0);
     this.ps2 = new Point(0, 0);
 
-    let openhs = 16;
     let hs1 = ((this.position === 1) ? 0 : 2);
-    let hs2 = ((this.position === 1) ? openhs : 2);
+    let hs2 = ((this.position === 1) ? this.openhs : 2);
 
     renderContext.drawLeads(this);
 

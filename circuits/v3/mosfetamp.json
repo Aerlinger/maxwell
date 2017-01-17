@@ -1,1 +1,125 @@
-[{"type":"mosfetamp.txt","timeStep":0.000005,"simSpeed":206,"currentSpeed":60,"voltageRange":5,"powerRange":53,"flags":1},{"name":"ResistorElm","pos":[208,176,208,272],"flags":0,"params":{"resistance":4000}},{"name":"RailElm","pos":[160,160,112,160],"flags":0,"params":{"waveform":1,"frequency":40,"maxVoltage":0.05,"bias":0,"phaseShift":0,"dutyCycle":0.5}},{"name":"RailElm","pos":[208,32,160,32],"flags":0,"params":{"waveform":0,"frequency":40,"maxVoltage":10,"bias":0,"phaseShift":0,"dutyCycle":0.5}},{"name":"ResistorElm","pos":[208,32,208,144],"flags":0,"params":{"resistance":4000}},{"name":"CapacitorElm","pos":[208,144,320,144],"flags":0,"params":{"capacitance":0.000001,"voltdiff":1.938598649739942}},{"name":"ResistorElm","pos":[320,144,320,272],"flags":0,"params":{"resistance":50000}},{"name":"GroundElm","pos":[320,272,320,304],"flags":0,"params":{}},{"name":"OutputElm","pos":[320,144,384,144],"flags":0,"params":{}},{"name":"WireElm","pos":[208,176,256,176],"flags":0,"params":{}},{"name":"CapacitorElm","pos":[256,176,256,272],"flags":0,"params":{"capacitance":0.00009999999999999999,"voltdiff":8.054803335508433}},{"name":"WireElm","pos":[208,272,256,272],"flags":0,"params":{}},{"name":"MosfetElm","pos":[160,160,208,160],"flags":0,"params":{"vt":1.5,"pnp":1}},{"name":"RailElm","pos":[208,272,208,304],"flags":0,"params":{"waveform":0,"frequency":40,"maxVoltage":-10,"bias":0,"phaseShift":0,"dutyCycle":0.5}}]
+[
+  {
+    "type": "mosfetamp.txt",
+    "timeStep": 0.000005,
+    "simSpeed": 206,
+    "currentSpeed": 60,
+    "voltageRange": 5,
+    "powerRange": 53,
+    "flags": 1
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [208, 176, 208, 272],
+    "flags": 0,
+    "params": {
+      "resistance": 4000
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [160, 160, 112, 160],
+    "flags": 0,
+    "params": {
+      "waveform": 1,
+      "frequency": 40,
+      "maxVoltage": 0.05,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [208, 32, 160, 32],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 10,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [208, 32, 208, 144],
+    "flags": 0,
+    "params": {
+      "resistance": 4000
+    }
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [208, 144, 320, 144],
+    "flags": 0,
+    "params": {
+      "capacitance": 0.000001,
+      "voltdiff": 1.938598649739942
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [320, 144, 320, 272],
+    "flags": 0,
+    "params": {
+      "resistance": 50000
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [320, 272, 320, 304],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "OutputElm",
+    "pos": [320, 144, 384, 144],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [208, 176, 256, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [256, 176, 256, 272],
+    "flags": 0,
+    "params": {
+      "capacitance": 0.00009999999999999999,
+      "voltdiff": 8.054803335508433
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [208, 272, 256, 272],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "MosfetElm",
+    "pos": [160, 160, 208, 160],
+    "flags": 0,
+    "params": {
+      "vt": 1.5,
+      "pnp": 1
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [208, 272, 208, 304],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": -10,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  }
+]

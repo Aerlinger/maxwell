@@ -58,9 +58,13 @@ class RailElm extends VoltageElm {
 //      s = "Ant" if this instanceof AntennaElm
       if (clock) { s = "CLK"; }
 
-      return Util.drawValue(0, 0, this, s);
+      Util.drawValue(0, 0, this, s);
     } else {
-      return this.drawWaveform(this.point2, renderContext);
+      this.drawWaveform(this.point2, renderContext);
+    }
+    
+    if (CircuitComponent.DEBUG) {
+      return super.draw(renderContext);
     }
   }
 

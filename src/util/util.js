@@ -280,7 +280,7 @@ class Util {
   }
 
   static isValue(x) {
-    return (typeof x == "string") || (typeof x == "number") || (typeof x == "boolean")
+    return !isNaN(x) && ((typeof x == "string") || (typeof x == "number") || (typeof x == "boolean"))
   }
 
   static commaFormat(plainNumber) {
@@ -295,6 +295,21 @@ class Util {
     while (pattern.test(x1)) { x1 = x1.replace(pattern, "$1,$2"); }
 
     return x1 + x2;
+  }
+
+  static colorHash() {
+
+  }
+
+  static getRandomColor() {
+    let letters = '0123456789ABCDEF';
+    let color = '#';
+
+    for (let i = 0; i < 6; i++ ) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+
+    return color;
   }
 
   static typeOf(obj, klassType) {

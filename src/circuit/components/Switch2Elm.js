@@ -36,8 +36,8 @@ class Switch2Elm extends SwitchElm {
     this.noDiagonal = true;
   }
 
-  name() {
-    return "SPDT switch";
+  getName() {
+    return "Two-way switch"
   }
 
   setPoints() {
@@ -54,7 +54,7 @@ class Switch2Elm extends SwitchElm {
 
     this.posCount = this.hasCenterOff() ? 3 : 2;
 
-    return this.setBboxPt(this.point1, this.point2, this.openhs);
+    this.setBboxPt(this.point1, this.point2, this.openhs);
   }
 
   draw(renderContext) {
@@ -72,6 +72,8 @@ class Switch2Elm extends SwitchElm {
     } else {
       this.posCount = 2;
     }
+
+    this.setBboxPt(this.point1, this.point2, this.openhs);
 
     // draw first lead
     let color = Util.getVoltageColor(this.volts[0]);
@@ -99,6 +101,11 @@ class Switch2Elm extends SwitchElm {
     renderContext.fillCircle(this.swpoles[0].x, this.swpoles[0].y, Settings.POST_RADIUS, 0, Settings.POST_COLOR);
 
     renderContext.drawLinePt(this.lead1, this.swpoles[this.position], Settings.STROKE_COLOR, Settings.LINE_WIDTH + 1);
+
+    if (CircuitComponent.DEBUG) {
+      return super.draw(renderContext);
+    }
+
   }
 
 //    if CircuitComponent.DEBUG

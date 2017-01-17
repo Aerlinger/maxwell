@@ -23,7 +23,9 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
     [this.swpoles[0], this.swpoles[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, this.openhs);
     [this.swposts[0], this.swposts[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1, this.openhs);
 
-    return this.ctlPoint = Util.interpolate(this.point1, this.point2, 0.5, this.openhs);
+    this.ctlPoint = Util.interpolate(this.point1, this.point2, 0.5, this.openhs);
+
+    this.setBboxPt(this.point1, this.point2, this.openhs);
   }
 
   getPostCount() {
@@ -43,6 +45,8 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
   }
 
   draw(renderContext) {
+    this.setBboxPt(this.point1, this.point2, this.openhs);
+
     let color = Util.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.lead1, color);
 
@@ -67,7 +71,11 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
 
     renderContext.drawDots(this.point1, this.lead1, this);
     renderContext.drawDots(this.swpoles[position], this.swposts[position], this);
-    return renderContext.drawPosts(this);
+    renderContext.drawPosts(this);
+
+    if (CircuitComponent.DEBUG) {
+      return super.draw(renderContext);
+    }
   }
 
   calculateCurrent() {

@@ -37,7 +37,9 @@ class AnalogSwitchElm extends CircuitComponent {
     let openhs = 16;
 
     this.point3 = Util.interpolate(this.point1, this.point2, 0.5, -openhs);
-    return this.lead3 = Util.interpolate(this.point1, this.point2, 0.5, -openhs / 2);
+    this.lead3 = Util.interpolate(this.point1, this.point2, 0.5, -openhs / 2);
+
+    this.setBboxPt(this.point1, this.point2, openhs);
   }
 
   draw(renderContext) {
@@ -57,7 +59,11 @@ class AnalogSwitchElm extends CircuitComponent {
     this.updateDots();
     renderContext.drawDots(this.point1, this.point2, this);
 
-    renderContext.drawPosts(this)
+    renderContext.drawPosts(this);
+
+    if (CircuitComponent.DEBUG) {
+      return super.draw(renderContext);
+    }
   }
 
   getName() {
