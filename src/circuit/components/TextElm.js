@@ -38,6 +38,8 @@ class TextElm extends CircuitComponent {
     this.lines = new Array(); // new vector()
     this.lines.push(this.text);
     // this.size = ;
+
+    this.setPoints(xa, ya, xb, yb)
   }
 
   stamp() {}
@@ -68,8 +70,6 @@ class TextElm extends CircuitComponent {
 
     let mt2 = renderContext.context.measureText(this.text);
 
-    // console.log("MT", mt, this.x1(), this.y1() + mt.actualBoundingBoxDescent, this.x1() + mt.width, this.y1() - mt.emHeightAscent + mt.emHeightDescent);
-    // console.log("MT2", mt2, this.x1(), this.y1() + mt.actualBoundingBoxDescent, this.x1() + mt.width, this.y1() - mt.emHeightAscent + mt.emHeightDescent);
     this.setBbox(this.x1(), this.y1() - this.size + 1, this.x1() + mt.width, this.y1());
 
     if (CircuitComponent.DEBUG) {

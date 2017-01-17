@@ -29,7 +29,7 @@ class CircuitComponent {
   }
 
   static initClass() {
-    this.DEBUG = true;
+    this.DEBUG = false;
   }
 
   constructor(x1, y1, x2, y2, params, f) {
@@ -537,7 +537,7 @@ class CircuitComponent {
 
   draw(renderContext) {
     let post;
-    let color = Util.getRandomColor();
+    let color = Util.getColorForId(this.component_id);
 
     renderContext.drawRect(this.boundingBox.x - 2, this.boundingBox.y - 2, this.boundingBox.width + 2, this.boundingBox.height + 2, 0.5, color);
 

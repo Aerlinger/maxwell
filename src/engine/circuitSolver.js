@@ -749,7 +749,7 @@ class CircuitSolver {
         ++j;
       }
       if (largest === 0) {
-        throw new Error("Singular matrix (" + i + ", " + j + ") -> " + largest);
+        console.error("Singular matrix (" + i + ", " + j + ") -> " + largest);
       }
       this.scaleFactors[i] = 1.0 / largest;
       ++i;

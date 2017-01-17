@@ -9,6 +9,7 @@ scripts/
 dump/*.json
 dump/*.txt
 circuits/*.txt
+test/fixtures/circuitDumps
 test/fixtures/circuitRenders/**/*.png
 test/fixtures/componentRenders/**/*.png
 test/fixtures/**/*.json
