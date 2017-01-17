@@ -145,8 +145,10 @@ class CircuitSolver {
 
       tm = (new Date()).getTime();
       lit = tm;
-
-      if (((iter * 1000) >= (stepRate * (tm - this.lastIterTime))) || ((tm - this.lastFrameTime) > 500)) {
+      if ((tm - this.lastFrameTime) > 500) {
+        console.warn("FRAME TIMEOUT: ", (tm - this.lastFrameTime))
+        break;
+      } else if ((iter * 1000) >= (stepRate * (tm - this.lastIterTime))) {
         break;
       }
 

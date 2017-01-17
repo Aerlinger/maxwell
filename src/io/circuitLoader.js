@@ -68,7 +68,7 @@ let SimulationParams = require('../core/simulationParams.js');
 
 let Circuit = require('../circuit/circuit.js');
 let Hint = require('../engine/hint.js');
-fs = require('fs')
+let fs = require('fs');
 
 let environment = require("../environment.js");
 
@@ -77,7 +77,7 @@ class CircuitLoader {
     let circuit = new Circuit();
 
     let circuitParams = jsonData.shift();
-    circuit.Params = SimulationParams.deserialize(circuitParams);
+    circuit.Params = new SimulationParams(circuitParams);
     circuit.flags = parseInt(circuitParams['flags']);
 
     // console.log("SIM PARAMS", circuit.Params)
@@ -131,9 +131,9 @@ class CircuitLoader {
     }
 
 //    unless environment.isBrowser
-//      circuit.ostream ||= fs.createWriteStream("dump/#{circuit.Params.name}")
-
-//    console.log("--------------------------------------------------------------------\n")
+   console.log("--------------------------------------------------------------------\n");
+   console.log(circuit.Params);
+   console.log("--------------------------------------------------------------------\n");
 
     return circuit;
   }
