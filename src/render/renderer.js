@@ -380,6 +380,7 @@ class Renderer extends BaseRenderer {
   draw() {
     if ((this.snapX != null) && (this.snapY != null)) {
       this.drawCircle(this.snapX, this.snapY, 1, "#F00");
+      this.fillText(`${this.snapX}, ${this.snapY}`, this.snapX, this.snapY);
     }
 
     this.drawInfoText();

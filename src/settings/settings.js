@@ -216,7 +216,7 @@ class Settings {
     this.COMPONENT_DECIMAL_PLACES = 1;
 
     this.GRID_COLOR = ColorPalette.darkyellow;
-    this.SWITCH_COLOR = "#333";
+    this.SWITCH_COLOR = "#666";
     this.FILL_COLOR = ColorPalette.white;
     this.BG_COLOR = ColorPalette.white;
     this.FG_COLOR = ColorPalette.white;

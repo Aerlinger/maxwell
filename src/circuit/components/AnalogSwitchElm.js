@@ -51,8 +51,8 @@ class AnalogSwitchElm extends CircuitComponent {
 
     this.ps = Util.interpolate(this.lead1, this.lead2, 1, hs);
 
-    renderContext.drawLinePt(this.lead1, this.ps, Settings.SWITCH_COLOR);
-
+    // SWITCH LEVER
+    renderContext.drawLinePt(this.lead1, this.ps, Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
 
     renderContext.drawLinePt(this.point3, this.lead3);
 

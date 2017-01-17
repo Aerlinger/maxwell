@@ -100,7 +100,8 @@ class Switch2Elm extends SwitchElm {
     renderContext.fillCircle(this.swpoles[1].x, this.swpoles[1].y, Settings.POST_RADIUS, 0, Settings.POST_COLOR);
     renderContext.fillCircle(this.swpoles[0].x, this.swpoles[0].y, Settings.POST_RADIUS, 0, Settings.POST_COLOR);
 
-    renderContext.drawLinePt(this.lead1, this.swpoles[this.position], Settings.STROKE_COLOR, Settings.LINE_WIDTH + 1);
+    // Switch lever
+    renderContext.drawLinePt(this.lead1, this.swpoles[this.position], Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
 
     if (CircuitComponent.DEBUG) {
       return super.draw(renderContext);
