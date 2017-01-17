@@ -76,18 +76,43 @@ ${circuitData}\
     return new Renderer(circuit, canvas);
   }
 
+  /**
+   <div class="form-group row has-success">
+     <label for="inputHorizontalSuccess" class="col-sm-2 col-form-label">
+     Resistance
+     </label>
+
+     <div class="col-sm-10">
+       <div>
+         <input type="float" value="100" class="form-control form-control-success" data-range-min="-Infinity" data-range-max="Infinity" data-component-id="1484677177243" id="inputHorizontalSuccess" placeholder="1000">
+        <small class="form-symbol text-muted">Ω</small>
+       </div>
+
+       <div>
+        <small class="form-text text-muted">Amount of current per unit voltage applied to this resistor (ideal).</small>
+       </div>
+
+     </div>
+   </div>
+   */
+
   static renderEdit(circuitComponent) {
     let fields = circuitComponent.constructor.Fields;
 
     let result = [];
-    let html = `
-    <div class="container">
-      <h3 class="componentTitle">
-          ${circuitComponent.getName()}
-        </h3>
-    
-      <form>
-    `;
+
+    let container = document.createElement("div");
+    container.className = "container";
+
+    let componentTitle = document.createElement("h3");
+    componentTitle.className = "componentTitle";
+    componentTitle.innerText = circuitComponent.getName();
+
+    container.prepend(componentTitle);
+
+    let form = document.createElement("form");
+
+    container.append(form);
 
     for (let fieldName in fields) {
       if (fieldName) {
@@ -108,74 +133,104 @@ ${circuitData}\
         let fieldMin = (fieldRange && fieldRange[0]) || -Infinity;
         let fieldMax = (fieldRange && fieldRange[1]) || Infinity;
 
-        console.log(`fieldValue:${fieldValue} fieldType:${fieldType} fieldLabel:${fieldLabel} fieldSymbol:${fieldSymbol} fieldDescription:${fieldDescription} fieldRange:${fieldRange}`);
+        // console.log(`fieldValue:${fieldValue} fieldType:${fieldType} fieldLabel:${fieldLabel} fieldSymbol:${fieldSymbol} fieldDescription:${fieldDescription} fieldRange:${fieldRange}`);
 
-        let inputControl = "";
+        //-------------------------------------------
+        //-------------------------------------------
 
-        // Possible fieldTypes are "select", "boolean", "slider"
+        // FORM GROUP
+        let formGroup = document.createElement("div");
+        formGroup.className = "form-group row has-success";
+
+        // INPUT LABEL
+        let label = document.createElement("label");
+        label.className = "col-sm-2 col-form-label";
+        label.setAttribute("for", "inputHorizontalSuccess");
+        label.innerText = fieldLabel;
+
+        // INPUT WRAPPER
+        let columnWrapper = document.createElement("div");
+        columnWrapper.className = "col-sm-10";
+
+        let inputDivWrapper = document.createElement("div");
+        columnWrapper.append(inputDivWrapper);
+
+        let inputElm;
 
         if (fieldType == "select") {
-          let optionVals = "";
+          inputElm = document.createElement("select");
+          inputElm.className = "form-control";
 
           for (let value in selectValues) {
-            optionVals += `<option value="${selectValues[value]}">${value}</option>`;
+            var optionElm = document.createElement("option");
+            optionElm.setAttribute("value", selectValues[value]);
+            optionElm.innerText = value;
+
+            inputElm.append(optionElm);
           }
 
-          inputControl = `
-            <select class="form-control">
-              ${optionVals}
-            </select>
-          `;
-        } else if(fieldType == "boolean") {
-          inputControl = `
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" id="blankCheckbox" value="${fieldValue}">
-              ${fieldLabel}
-            </label>
-          </div>
-          `
+          inputDivWrapper.append(inputElm);
+        } else if (fieldType == "boolean") {
+          label = "";
+
+          let checkboxWrapper = document.createElement("div");
+          checkboxWrapper.className = "checkbox"
+          let labelElm = document.createElement("label");
+          inputElm = document.createElement("input");
+          inputElm.setAttribute("type", "checkbox");
+
+          checkboxWrapper.append(labelElm);
+          labelElm.append(inputElm);
+          labelElm.append(fieldLabel);
+
+          inputDivWrapper.append(checkboxWrapper);
 
         } else {
-          inputControl = `<input type="${fieldType}" value="${fieldValue}" class="form-control form-control-success" data-range-min="${fieldMin}" data-range-max="${fieldMax}" data-component-id="${componentId}" id="inputHorizontalSuccess" placeholder="${fieldDefault}">`
+          inputElm = document.createElement("input");
+          inputElm.className = "form-control form-control-success";
+
+          inputDivWrapper.append(inputElm);
         }
 
-        html += `
-        
-        <div class="form-group row has-success">
-          <label for="inputHorizontalSuccess" class="col-sm-2 col-form-label">
-            ${fieldLabel}
-          </label>
-    
-          <div class="col-sm-10">
-            <div>
-              ${inputControl}
-              <small class="form-symbol text-muted">${fieldSymbol}</small>
-            </div>
-            `;
+        inputElm.setAttribute("data-range-min", fieldMin);
+        inputElm.setAttribute("data-range-max", fieldMax);
+        inputElm.setAttribute("data-component-id", componentId);
+        inputElm.setAttribute("placeholder", fieldDefault);
+        inputElm.setAttribute("value", fieldValue);
 
-            if (fieldDescription) {
-              html += `
-              <div>
-                <small class="form-text text-muted">${fieldDescription}</small>
-              </div>
-              `
-            }
-            html += `
-          </div>
-        </div>
-        `;
+        inputDivWrapper.addEventListener("click", function(evt) {
+          console.log(circuitComponent.toString());
+        });
+
+        let symbolSuffix = document.createElement("small");
+        symbolSuffix.className = "form-symbol text-muted";
+        symbolSuffix.innerText = fieldSymbol;
+
+        inputDivWrapper.append(symbolSuffix)
+        columnWrapper.append(inputDivWrapper)
+
+        let descriptionWrapper = document.createElement("div");
+        let smallDescription = document.createElement("small");
+        smallDescription.className = "form-text text-muted";
+        smallDescription.innerText = fieldDescription || "";
+        descriptionWrapper.append(smallDescription);
+
+        formGroup.append(label);
+        formGroup.append(columnWrapper);
+        formGroup.append(descriptionWrapper);
+
+        form.append(formGroup);
+
       } else {
-        result.push("?");
+        console.error(`Fieldname missing for ${circuitComponent}`)
       }
     }
 
-    html += `    
-      </form>
-    </div>
-    `
-    
-    return html;
+    let sidebar = document.getElementById('component_sidebar');
+    sidebar.innerHTML = "";
+    sidebar.appendChild(container);
+
+    return container;
   }
 
   static createContext(circuitName, filepath, context, onComplete) {

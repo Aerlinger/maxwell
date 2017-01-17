@@ -49,7 +49,9 @@ html
 
             console.log("renderEdit\n", form);
 
-            document.getElementById("edit_component").innerHTML = form;
+            window.editInfo = form;
+
+            // document.getElementById("edit_component").innerHTML = form;
           };
 
           circuitContext.onComponentUnhover = function (component) {
