@@ -263,7 +263,7 @@
     },
     {
       "frameNumber": 2,
-      "time": 0.000015000000000000002,
+      "time": 0.00001,
       "circuitMatrix": [
         [
           1,
@@ -430,7 +430,7 @@
     },
     {
       "frameNumber": 3,
-      "time": 0.00002,
+      "time": 0.000015000000000000002,
       "circuitMatrix": [
         [
           1,

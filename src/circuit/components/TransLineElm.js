@@ -8,7 +8,7 @@ class TransLineElm extends CircuitComponent {
       delay: {
         name: "Delay",
         data_type: parseFloat,
-        default_value: null,
+        default_value: 1000 * 5e-12,
         symbol: "s"
       },
       imped: {
@@ -43,15 +43,18 @@ class TransLineElm extends CircuitComponent {
     return "Transmission Line"
   }
 
-  onSolder(circuit){
+  onSolder(circuit) {
     super.onSolder();
 
-    // this.delay = this.delay || (1000 * circuit.timeStep());
-    // this.params['delay'] = this.delay;
+    // console.log(circuit.timeStep())
+
+    this.delay = this.delay || (1000 * circuit.timeStep());
+    this.params['delay'] = this.delay;
 
     this.lenSteps = Math.floor(this.delay / circuit.timeStep());
+    // console.log("LEN STEPS", this.lenSteps, this.delay, circuit.timeStep())
 
-    if ((this.lenSteps > 100000) || !this.lenSteps) {
+    if (this.lenSteps > 100000) {
       this.voltageL = null;
       this.voltageR = null;
 
@@ -60,7 +63,7 @@ class TransLineElm extends CircuitComponent {
       this.voltageR = Util.zeroArray(this.lenSteps);
     }
 
-    return this.ptr = 0;
+    this.ptr = 0;
   }
 
   setPoints() {
@@ -131,9 +134,12 @@ class TransLineElm extends CircuitComponent {
 
   startIteration() {
     if (!this.voltageL) {
-      console.error("Transmission line delay too large!");
+      console.error(`Start Iteration: Transmission line delay too large: ${this.params.delay}. Time Step is: ${this.Circuit.timeStep()}`);
       return;
     }
+
+
+    // console.log("START ITERATION PTR", this.ptr, this.volts, "LENSTEP",  this.lenSteps);
 
     this.voltageL[this.ptr] = ((this.volts[2] - this.volts[0]) + this.volts[2]) - this.volts[4];
     this.voltageR[this.ptr] = ((this.volts[3] - this.volts[1]) + this.volts[3]) - this.volts[5];
@@ -143,7 +149,7 @@ class TransLineElm extends CircuitComponent {
 
   doStep(stamper) {
     if (!this.voltageL) {
-      console.error("Transmission line delay too large!");
+      console.error(`doStep: Transmission line delay too large: ${this.params.delay}. Time Step is: ${this.Circuit.timeStep()}`);
       return;
     }
 
