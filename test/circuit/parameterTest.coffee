@@ -34,26 +34,26 @@ describe "Loading parameters", ->
 
   describe "DecadeElm", ->
     beforeEach ->
-      @DecadeElm = new DecadeElm(0, 0, 0, 0, {"bits": 10, "volts": [0, 0, 0, 0, 0, 0, 5, 0, 0, 0]})
+      @DecadeElm = new DecadeElm(0, 0, 0, 0, {"bits": 10, "volts": [0, 0, 0, 0, 0, 0, 0, 0, 5, 0]})
 
     it "Has correct initial voltage", ->
       expect(@DecadeElm.bits).to.eql(10)
-      expect(@DecadeElm.volts).to.eql([0, 0, 0, 0, 0, 0, 5, 0, 0, 0])
+      expect(@DecadeElm.volts).to.eql([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0])
 
       expect(@DecadeElm.params).to.eql({
-        "bits": 10, "volts": [0, 0, 0, 0, 0, 0, 5, 0, 0, 0]
+        "bits": 10, "volts": [0, 0, 0, 0, 0, 0, 0, 0, 5, 0]
       })
 
   describe "CounterElm", ->
     beforeEach ->
-      @CounterElm = new CounterElm(0, 0, 0, 0, {"bits": 10, "volts": [0, 0, 0, 0, 0, 0, 5, 0, 0, 0]})
+      @CounterElm = new CounterElm(0, 0, 0, 0, {"bits": 4, "volts": [0.0, 5.0, 0.0, 0.0]})
 
     it "Has correct initial voltage", ->
-      expect(@CounterElm.bits).to.eql(10)
-      expect(@CounterElm.volts).to.eql([0, 0, 0, 0, 0, 0, 5, 0, 0, 0])
+      expect(@CounterElm.bits).to.eql(4)
+      expect(@CounterElm.volts).to.eql([0, 0, 0, 5, 0, 0])
 
       expect(@CounterElm.params).to.eql({
-        "bits": 10, "volts": [0, 0, 0, 0, 0, 0, 5, 0, 0, 0]
+        "bits": 4, "volts": [0, 5, 0, 0]
       })
 
   describe "CC2Elm", ->

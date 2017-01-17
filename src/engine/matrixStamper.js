@@ -37,7 +37,7 @@ class MatrixStamper {
 
   updateVoltageSource(n1, n2, vs, voltage) {
     if (isNaN(voltage) || Util.isInfinite(voltage)) {
-      this.Circuit.halt(`updateVoltageSource: bad voltage at ${n1} ${n2} ${vs}`);
+      this.Circuit.halt(`updateVoltageSource: bad voltage ${voltage} at ${n1} ${n2} ${vs}`);
     }
 
     let vn = this.Circuit.numNodes() + vs;
@@ -67,7 +67,7 @@ class MatrixStamper {
   */
   stampVCCurrentSource(cn1, cn2, vn1, vn2, value) {
     if (isNaN(value) || Util.isInfinite(value)) {
-      this.Circuit.halt("Invalid gain on voltage controlled current source");
+      this.Circuit.halt(`Invalid gain ${value} on voltage controlled current source`);
     }
 
     this.stampMatrix(cn1, vn1, value);

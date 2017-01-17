@@ -8,7 +8,8 @@ class TransLineElm extends CircuitComponent {
       delay: {
         name: "Delay",
         data_type: parseFloat,
-        default_value: 1000
+        default_value: null,
+        symbol: "s"
       },
       imped: {
         name: "Impedance",
@@ -44,6 +45,9 @@ class TransLineElm extends CircuitComponent {
 
   onSolder(circuit){
     super.onSolder();
+
+    // this.delay = this.delay || (1000 * circuit.timeStep());
+    // this.params['delay'] = this.delay;
 
     this.lenSteps = Math.floor(this.delay / circuit.timeStep());
 

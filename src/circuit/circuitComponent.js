@@ -53,7 +53,7 @@ class CircuitComponent {
 
   allocNodes() {
     this.nodes = Util.zeroArray(this.getPostCount() + this.getInternalNodeCount());
-    return this.volts = Util.zeroArray(this.getPostCount() + this.getInternalNodeCount());
+    this.volts = Util.zeroArray(this.getPostCount() + this.getInternalNodeCount());
   }
 
   setParameters(component_params) {
@@ -662,7 +662,7 @@ class CircuitComponent {
       let [minValue, maxValue] = field["range"];
 
       if (paramValue > maxValue || paramValue < minValue) {
-        console.error(`Invalid param value for ${paramName}: ${paramValue}. Not in range [${minValue}, ${maxValue}]`)
+        console.error(`${this.constructor.name}: invalid param value for ${paramName}: ${paramValue}. Not in range [${minValue}, ${maxValue}]`)
         return false
       }
     }
@@ -671,7 +671,7 @@ class CircuitComponent {
       let selectValues = Object.keys(field["select_values"]).map(key => field["select_values"][key]);
 
       if (!(selectValues.includes(paramValue))) {
-        console.error(`Invalid param value for ${paramName}: ${paramValue}. Not in possible values: ${selectValues}`)
+        console.error(`${this.constructor.name}: invalid param value for ${paramName}: ${paramValue}. Not in possible values: ${selectValues}`)
         return false
       }
     }

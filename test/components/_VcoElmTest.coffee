@@ -1,4 +1,8 @@
-#class VcoElm extends ChipElm
-#  constructor: (xa, xb, ya, yb, params, f) ->
-#    super(xa, xb, ya, yb, params, f)
-#
+describe "VCO Component Test",  ->
+  before ->
+    @vco = new VcoElm()
+    
+  
+  
+  
+  

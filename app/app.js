@@ -26,9 +26,9 @@ app.get('/plotting', function (req, res) {
 });
 
 app.get('/:circuit_name', function (req, res) {
-  console.log(__dirname + "../circuits/*.json")
+  // console.log(__dirname + "../circuits/v3/*.json")
 
-  circuit_names = glob.sync(__dirname + "/../circuits/*.json").map(function(filename) {
+  circuit_names = glob.sync(__dirname + "/../circuits/v3/*.json").map(function(filename) {
     return path.basename(filename, ".json")
   });
 

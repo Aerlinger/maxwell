@@ -130,11 +130,7 @@ class ChipElm extends CircuitComponent {
 
   // TODO: Need a better way of dealing with variable length params here
   constructor(xa, xb, ya, yb, params, f) {
-    // console.log(params);
-
     super(xa, xb, ya, yb, {}, f);
-
-    let initial_voltages = [];
 
     this.flags = f;
 
@@ -144,55 +140,30 @@ class ChipElm extends CircuitComponent {
 
     if (params) {
       // TODO: DRY
-      if (params.constructor == Array) {
-        if (this.needsBits()) {
-          this.bits = parseInt(params.shift());
-          this.params['bits'] = this.bits;
-        }
 
-        self = this;
-        this.setupPins();
-        this._setPoints();
+      if (params['volts']) {
+        this.params.volts = params["volts"].slice();
+      }
 
-        for (let i=0; i<this.getPostCount(); ++i) {
-          if (this.pins[i].state) {
-            initial_voltages.push(parseInt(params.shift()));
-          }
-        }
+      if (this.needsBits()) {
+        this.bits = parseInt(params['bits']);
+        this.params['bits'] = this.bits;
+      }
 
-        this.volts = initial_voltages;
+      self = this;
+      this.setupPins();
+      this._setPoints();
 
-        if (this.volts) {
-          this.params['volts'] = initial_voltages;
-        }
-      } else {
-        if (this.needsBits()) {
-          this.bits = params['bits'];
-          this.params['bits'] = this.bits;
-        }
-
-        self = this;
-        this.setupPins();
-        this._setPoints();
-
-        this.volts = params['volts'];
-
-        for (let i=0; i<this.getPostCount(); ++i) {
-          if (this.pins[i].state) {
-            initial_voltages.push(parseInt(params['volts'].shift()));
-          }
-        }
-
-        this.volts = initial_voltages;
-
-        if (params['volts']) {
-          this.params.volts = this.volts
+      for (let i=0; i<this.getPostCount(); ++i) {
+        if (this.pins[i].state) {
+          this.volts[i] = parseFloat(params['volts'].shift());
+          this.pins[i].value = (this.volts[i] > 2.5);
         }
       }
     }
 
     this.noDiagonal = true;
-    
+
     /*
     let numPosts = this.getPostCount();
     

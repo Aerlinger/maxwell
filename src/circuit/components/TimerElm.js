@@ -27,7 +27,7 @@ class TimerElm extends ChipElm {
     }
   }
 
-  constructor(xa, xb, ya, yb, params = ["0.0"], f = "0") {
+  constructor(xa, xb, ya, yb, params = {volts: [0.0], bits: [0]}, f = "0") {
     super(xa, xb, ya, yb, params, f);
   }
 

@@ -27,7 +27,7 @@ class MosfetElm extends CircuitComponent {
         units: "Volts",
         symbol: "V",
         default_value: 1.5,
-        range: [0, Infinity],
+        range: [-Infinity, Infinity],
         type: sprintf
       },
       "pnp": {

@@ -168,7 +168,7 @@ describe "CC2 Component", ->
       @Circuit.solder(@transistorElm)
 
     it "has params", ->
-      expect(@transistorElm.volts).to.eql([])
+      expect(@transistorElm.volts).to.eql([0, 0, 0])
       expect(@transistorElm.params).to.eql({
         "gain": "1"
       })

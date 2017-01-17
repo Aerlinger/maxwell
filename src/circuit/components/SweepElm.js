@@ -41,7 +41,7 @@ class SweepElm extends CircuitComponent {
         symbol: "s",
         default_value: 0.1,
         data_type: parseFloat,
-        range: [0, -Infinity]
+        range: [0, Infinity]
       }
     };
   }

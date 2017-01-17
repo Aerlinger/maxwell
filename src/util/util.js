@@ -181,7 +181,9 @@ class Util {
   }
 
   static getVoltageColor(volts, fullScaleVRange) {
-    if (fullScaleVRange == null) { fullScaleVRange = 10; }
+    // TODO: Define voltage range
+    if (fullScaleVRange == null) { fullScaleVRange = 5; }
+
     let RedGreen =
       [ "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
         "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",

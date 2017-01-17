@@ -2,7 +2,7 @@ glob = require('glob')
 path = require("path")
 
 describe "Renderer", ->
-  it.skip "renders all circuits", () ->
+  it "renders all circuits", () ->
     this.timeout(1000000)
 
     circuit_names = glob.sync(__dirname + "/../../circuits/v3/*.json")
