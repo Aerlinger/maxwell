@@ -1,6 +1,5 @@
 .idea
 test/**/*.js.map
-test/**/*.js
 src/**/*.js.map
 .bower-cache
 .bower-registry
