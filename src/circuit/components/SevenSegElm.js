@@ -1,4 +1,5 @@
 let CircuitComponent = require("../circuitComponent.js");
+let Settings = require('../../settings/settings.js');
 let ChipElm = require("./ChipElm.js");
 
 class SevenSegElm extends ChipElm {
@@ -39,34 +40,36 @@ class SevenSegElm extends ChipElm {
 
     let xl = this.point1.x + this.cspc * 5;
     let yl = this.point1.y + this.cspc;
+    
+    let color = "#333";
 
     // TOP
-    if (this.pins[0])
-      renderContext.drawLine(xl, yl, xl + this.cspc, yl, "#FF0000");
+    if (this.pins[0].value > 0)
+      renderContext.drawLine(xl, yl, xl + this.cspc, yl, 2*Settings.LINE_WIDTH);
 
     // TOP-RIGHT
-    if (this.pins[1])
-      renderContext.drawLine(xl + this.cspc, yl, xl + this.cspc, yl + this.cspc, "#00FF00");
+    if (this.pins[1].value > 0)
+      renderContext.drawLine(xl + this.cspc, yl, xl + this.cspc, yl + this.cspc, 2*Settings.LINE_WIDTH);
 
     // BOTTOM-RIGHT
-    if (this.pins[2])
-      renderContext.drawLine(xl + this.cspc, yl + this.cspc, xl + this.cspc, yl + this.cspc2, "#0000FF");
+    if (this.pins[2].value > 0)
+      renderContext.drawLine(xl + this.cspc, yl + this.cspc, xl + this.cspc, yl + this.cspc2, 2*Settings.LINE_WIDTH);
 
     // BOTTOM
-    if (this.pins[3])
-      renderContext.drawLine(xl, yl + this.cspc2, xl + this.cspc, yl + this.cspc2, "#FF00FF");
+    if (this.pins[3].value > 0)
+      renderContext.drawLine(xl, yl + this.cspc2, xl + this.cspc, yl + this.cspc2, 2*Settings.LINE_WIDTH);
 
     // BOTTOM-LEFT
-    if (this.pins[4])
-      renderContext.drawLine(xl, yl + this.cspc, xl, yl + this.cspc2, "#00FFFF");
+    if (this.pins[4].value > 0)
+      renderContext.drawLine(xl, yl + this.cspc, xl, yl + this.cspc2, 2*Settings.LINE_WIDTH);
 
     // TOP-LEFT
-    if (this.pins[5])
-      renderContext.drawLine(xl, yl, xl, yl + this.cspc, "#FFFF00");
+    if (this.pins[5].value > 0)
+      renderContext.drawLine(xl, yl, xl, yl + this.cspc, 2*Settings.LINE_WIDTH);
 
     // MIDDLE
-    if (this.pins[6])
-      renderContext.drawLine(xl, yl + this.cspc, xl + this.cspc, yl + this.cspc);
+    if (this.pins[6].value > 0)
+      renderContext.drawLine(xl, yl + this.cspc, xl + this.cspc, yl + this.cspc, 2*Settings.LINE_WIDTH);
 
   }
 
