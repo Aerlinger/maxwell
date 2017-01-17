@@ -707,9 +707,20 @@ class CircuitComponent {
   }
 
   setValue(paramName, paramValue) {
+    /**
+     * parseFunction converts a *possibly* stringified `paramValue` to a raw value. Common examples of parseFunction
+     * are builtins like parseFloat, parseInt, etc.
+     */
+    let parseFunction = (this.constructor.Fields[paramName] && this.constructor.Fields[paramName]['data_type'])
+
+    // default to a no-op if parseFunction isn't defined
+    if (!parseFunction) {
+      parseFunction = function noop(x) { return x; };
+    }
+
     if (this.isValidParam(paramName, paramValue)) {
-      this[paramName] = paramValue;
-      this.params[paramName] = paramValue;
+      this[paramName] = parseFunction(paramValue);
+      this.params[paramName] = parseFunction(paramValue);
     }
   }
 

@@ -218,7 +218,6 @@ class Circuit extends Observer {
     this.notifyObservers(this.ON_COMPLETE_UPDATE);
   }
 
-
   setSelected(component) {
     return (() => {
       let result = [];

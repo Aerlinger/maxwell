@@ -32,8 +32,8 @@ class TransistorElm extends CircuitComponent {
         data_type: parseFloat
       },
       "beta": {
-        name: "beta",
-        description: "Current multiplier",
+        name: "Beta",
+        description: "Current gain",
         default_value: 100,
         data_type: parseFloat,
         range: [0, Infinity]

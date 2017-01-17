@@ -135,8 +135,7 @@ ${circuitData}\
 
         // console.log(`fieldValue:${fieldValue} fieldType:${fieldType} fieldLabel:${fieldLabel} fieldSymbol:${fieldSymbol} fieldDescription:${fieldDescription} fieldRange:${fieldRange}`);
 
-        //-------------------------------------------
-        //-------------------------------------------
+        // Render form object into DOM
 
         // FORM GROUP
         let formGroup = document.createElement("div");
@@ -198,8 +197,14 @@ ${circuitData}\
         inputElm.setAttribute("placeholder", fieldDefault);
         inputElm.setAttribute("value", fieldValue);
 
-        inputDivWrapper.addEventListener("click", function(evt) {
-          console.log(circuitComponent.toString());
+        inputDivWrapper.addEventListener("change", function(evt) {
+          let updateObj = {}
+          updateObj[fieldName] = evt.target.value;
+
+          console.log("CHANGE", evt.target);
+          console.log("CHANGE", `circuitComponent.update(${JSON.stringify(updateObj)})`);
+
+          circuitComponent.update(updateObj);
         });
 
         let symbolSuffix = document.createElement("small");
@@ -222,7 +227,7 @@ ${circuitData}\
         form.append(formGroup);
 
       } else {
-        console.error(`Fieldname missing for ${circuitComponent}`)
+        console.error(`Field name missing for ${circuitComponent}`)
       }
     }
 
