@@ -1,11 +1,8 @@
 extends ./layout
 
 block header
-  //script(type="text/javascript", src="/foundation.scss")
   link(rel="stylesheet", href="/ui.css")
-
   link(rel="stylesheet", href="/foundation/css/app.css")
-  //script(type="text/javascript", src="/foundation/js/app.js")
 
   script(type="text/javascript", src="/bower_components/foundation-sites/dist/js/foundation.js")
 
@@ -75,6 +72,55 @@ block content
           button.button(type='button') Search
 
   div.edit-form
+    form
+      label
+        | How many puppies?
+        input(type='number', value='100')
+      p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
+
+      label
+        | How many puppies?
+        input(type='number', value='100')
+      p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
+
+      label
+        | Select Menu
+        select
+          option(value='husker') Husker
+          option(value='starbuck') Starbuck
+          option(value='hotdog') Hot Dog
+          option(value='apollo') Apollo
+      p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
+
+      input#checkbox12(type='checkbox')
+      label(for='checkbox12') Checkbox 1
+
+      .row
+        .small-8.columns
+          .slider(data-slider='', data-initial-start='50', data-step='5')
+            span.slider-handle(data-slider-handle='', role='slider', tabindex='1', aria-controls='sliderOutput2')
+            span.slider-fill(data-slider-fill='')
+
+        .small-4.columns
+          input#sliderOutput2(type='number')
+
+
+      .slider(data-slider='', data-initial-start='25', data-initial-end='75')
+        span.slider-handle(data-slider-handle='', role='slider', tabindex='1')
+        span.slider-fill(data-slider-fill='')
+        span.slider-handle(data-slider-handle='', role='slider', tabindex='1')
+        input(type='hidden')
+        input(type='hidden')
+
+
+      .row
+        .switch.tiny
+          input#tinySwitch.switch-input(type='checkbox', name='exampleSwitch')
+          label.switch-paddle(for='tinySwitch')
+            span.show-for-sr Tiny Sandwiches Enabled
+          label(for='tinySwitch') Checkbox 1
+
+
     ul.vertical.menu(data-accordion-menu, data-multi-open="false")
       li
         a(href='#') Item 1
@@ -148,6 +194,11 @@ block content
             input(type='number', value='100')
             p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
 
+          label
+            | How many puppies?
+            input(type='number', value='100')
+            p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
+
         .row
           label
             | Select Menu
@@ -156,7 +207,7 @@ block content
               option(value='starbuck') Starbuck
               option(value='hotdog') Hot Dog
               option(value='apollo') Apollo
-            p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
+          p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
 
         .row
           fieldset.fieldset

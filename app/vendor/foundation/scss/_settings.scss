@@ -59,6 +59,7 @@ $foundation-palette: (
 $light-gray: #e6e6e6;
 $medium-gray: #cacaca;
 $dark-gray: #8a8a8a;
+$off-black: #555;
 $black: #0a0a0a;
 $white: #fefefe;
 $body-background: $white;
@@ -212,7 +213,7 @@ $accordion-content-padding: 1rem;
 
 $accordionmenu-arrows: true;
 $accordionmenu-arrow-color: $primary-color;
-$accordionmenu-arrow-size: 6px;
+$accordionmenu-arrow-size: 3px;
 
 // 9. Badge
 // --------
@@ -355,25 +356,25 @@ $fieldset-border: 1px solid $medium-gray;
 $fieldset-padding: rem-calc(20);
 $fieldset-margin: rem-calc(18 0);
 $legend-padding: rem-calc(0 3);
-$form-spacing: rem-calc(16);
-$helptext-color: $black;
-$helptext-font-size: rem-calc(13);
+$form-spacing: rem-calc(8);
+$helptext-color: $off-black;
+$helptext-font-size: rem-calc(11);
 $helptext-font-style: italic;
 $input-prefix-color: $black;
 $input-prefix-background: $light-gray;
 $input-prefix-border: 1px solid $medium-gray;
 $input-prefix-padding: 1rem;
-$form-label-color: $black;
-$form-label-font-size: rem-calc(16);
-$form-label-font-weight: $global-weight-normal;
-$form-label-line-height: 1.8;
+$form-label-color: $off-black;
+$form-label-font-size: rem-calc(12);
+$form-label-font-weight: $global-weight-bold;
+$form-label-line-height: 1.3;
 $select-background: $white;
 $select-triangle-color: $dark-gray;
 $select-radius: $global-radius;
 $input-color: $black;
 $input-placeholder-color: $medium-gray;
 $input-font-family: inherit;
-$input-font-size: rem-calc(16);
+$input-font-size: rem-calc(12);
 $input-font-weight: $global-weight-normal;
 $input-background: $white;
 $input-background-focus: $white;
@@ -385,8 +386,8 @@ $input-shadow-focus: 0 0 5px $medium-gray;
 $input-cursor-disabled: not-allowed;
 $input-transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
 $input-number-spinners: true;
-$input-radius: $global-radius;
-$form-button-radius: $global-radius;
+$input-radius: 0;
+$form-button-radius: 0;
 
 // 20. Label
 // ---------
@@ -510,13 +511,13 @@ $reveal-overlay-background: rgba($black, 0.45);
 // 30. Slider
 // ----------
 
-$slider-width-vertical: 0.3rem;
+$slider-width-vertical: 0.1rem;
 $slider-transition: all 0.2s ease-in-out;
 $slider-height: 0.5rem;
 $slider-background: $light-gray;
 $slider-fill-background: $medium-gray;
 $slider-handle-height: 1.4rem;
-$slider-handle-width: 1.4rem;
+$slider-handle-width: 0.7rem;
 $slider-handle-background: $primary-color;
 $slider-opacity-disabled: 0.25;
 $slider-radius: $global-radius;
