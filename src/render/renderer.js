@@ -378,6 +378,10 @@ class Renderer extends BaseRenderer {
 
 
   draw() {
+    if (this.context) {
+      this.context.clear()
+    }
+
     if ((this.snapX != null) && (this.snapY != null)) {
       this.drawCircle(this.snapX, this.snapY, 1, "#F00");
       this.fillText(`${this.snapX}, ${this.snapY}`, this.snapX, this.snapY);
@@ -410,12 +414,15 @@ class Renderer extends BaseRenderer {
         this.drawCircle(this.highlightedComponent.x1(), this.highlightedComponent.y1(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
         this.drawCircle(this.highlightedComponent.x2(), this.highlightedComponent.y2(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
       }
+
+      // this.context.clear();
     }
 
     // for (let nodeIdx=0; nodeIdx<this.Circuit.numNodes(); ++nodeIdx) {
       // let node = this.Circuit.getNode(nodeIdx);
       // this.fillText(`${nodeIdx} ${node.x},${node.y}`, node.x + 5, node.y - 5);
     // }
+
   }
 
   drawComponents() {

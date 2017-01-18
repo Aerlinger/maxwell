@@ -10,41 +10,50 @@ block header
     $(document).ready(function() {
       var canvas = document.getElementById('canvas');
 
-      if (canvas) {
-        var ctx = canvas.getContext('2d');
-        ctx = Sketch.augment(ctx, { autoclear: false });
+      Maxwell.createContext("ohms", "../circuits/v3/ohms.json", canvas, function (circuitContext) {
+        console.log(circuitContext);
+        console.log("Circuit loaded! ", circuitContext.Circuit, canvas);
 
-        // resize the canvas to fill browser window dynamically
-        window.addEventListener('resize', resizeCanvas, false);
+        // TODO: swap context with circuit
+        var circuit = circuitContext.Circuit;
 
-        function resizeCanvas() {
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
 
-          /**
-           * Your drawings need to be inside this function otherwise they will be reset when
-           * you resize the browser window and the canvas goes will be cleared.
-           */
+        if (canvas) {
+          var ctx = canvas.getContext('2d');
+          ctx = Sketch.augment(ctx, {autoclear: false});
+
+          // resize the canvas to fill browser window dynamically
+          window.addEventListener('resize', resizeCanvas, false);
+
+          function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            /**
+             * Your drawings need to be inside this function otherwise they will be reset when
+             * you resize the browser window and the canvas goes will be cleared.
+             */
+            drawStuff();
+          }
+
+          resizeCanvas();
+
+          function drawStuff() {
+            // do your drawing stuff here
+            ctx.beginPath();
+            ctx.arc(Math.random(ctx.width), Math.random(ctx.height), 10, 0, 2 * Math.PI);
+            ctx.arc(500 * Math.random(), 500 * Math.random(), 10, 0, 2 * Math.PI);
+            ctx.arc(500, 500, 10, 0, 2 * Math.PI);
+            ctx.strokeStyle = "#FF0000";
+            ctx.fillStyle = "#00FF00";
+            ctx.strokeRect(800, 900, 1800, 1900);
+            ctx.fillText("ASDF", 1500, 1200);
+            ctx.fill();
+          }
+
           drawStuff();
         }
-
-        resizeCanvas();
-
-        function drawStuff() {
-          // do your drawing stuff here
-          ctx.beginPath();
-          ctx.arc(Math.random(ctx.width), Math.random(ctx.height), 10, 0, 2 * Math.PI);
-          ctx.arc(500 * Math.random(), 500 * Math.random(), 10, 0, 2 * Math.PI);
-          ctx.arc(500, 500, 10, 0, 2 * Math.PI);
-          ctx.strokeStyle="#FF0000";
-          ctx.fillStyle="#00FF00";
-          ctx.strokeRect(800, 900, 1800, 1900);
-          ctx.fillText("ASDF", 1500, 1200);
-          ctx.fill();
-        }
-
-        drawStuff();
-      }
+      });
     });
 
 block content
