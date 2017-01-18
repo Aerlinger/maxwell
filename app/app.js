@@ -25,6 +25,10 @@ app.get('/plotting', function (req, res) {
   res.render('plotting');
 });
 
+app.get('/ui', function (req, res) {
+  res.render('ui');
+});
+
 app.get('/circuits/:circuit_name', function (req, res) {
   // console.log(__dirname + "../circuits/v3/*.json")
 
