@@ -38,7 +38,7 @@ block header
 block content
   canvas#canvas
 
-  .top-bar
+  #main_nav.top-bar
     .top-bar-left
       ul.dropdown.menu(data-dropdown-menu='')
         li.menu-text Site Title
@@ -61,6 +61,19 @@ block content
           input(type='search', placeholder='Search')
         li
           button.button(type='button') Search
+
+  .off-canvas-wrapper
+    #offCanvasLeft.off-canvas-absolute.position-left(data-off-canvas='')
+
+    .off-canvas-content
+      button.button.float-left(type='button', data-toggle='offCanvasLeft') Open Left
+
+  .off-canvas-wrapper
+    #offCanvasRight.off-canvas.position-right(data-off-canvas='')
+
+    .off-canvas-content
+      button.button.float-right(type='button', data-toggle='offCanvasRight') Open Right
+
 
 
     //.off-canvas-wrapper
@@ -118,14 +131,6 @@ block content
 
 
 
-
-
-
-  .off-canvas-wrapper
-    #offCanvasRight1.off-canvas.position-right(data-off-canvas='')
-
-    .off-canvas-content
-      button.button.float-right(type='button', data-toggle='offCanvasRight1') Open Right
 
 
   script.
