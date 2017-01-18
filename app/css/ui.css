@@ -26,11 +26,12 @@ canvas {
 .edit-form {
   width: 250px;
   height: 100%;
-  float: left;
-  /*position: absolute;*/
+  /*float: left;*/
+  top: 0;
+  position: absolute;
   left: 0;
   background: #EEE;
-  padding: 10px;
+  padding: 70px 10px 10px 10px;
 }
 
 .edit-form label {
@@ -39,6 +40,10 @@ canvas {
 
 .edit-form input {
 
+}
+
+.slider-container input {
+  margin-top: 12px;
 }
 
 .off-canvas-wrapper {
@@ -50,6 +55,7 @@ canvas {
   z-index: -1;
   position: absolute;
   background: #efe;
+  border: none;
 }
 
 .off-canvas > ul.vertical.menu > li > a {

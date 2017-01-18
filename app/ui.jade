@@ -6,14 +6,21 @@ block header
 
   script(type="text/javascript", src="/bower_components/foundation-sites/dist/js/foundation.js")
 
-
-
   script.
     $(document).ready(function() {
       var canvas = document.getElementById('canvas');
 
       if (canvas) {
-        context = canvas.getContext('2d');
+        var ctx = canvas.getContext('2d');
+        ctx = Sketch.augment(ctx, { autoclear: false });
+
+        ctx.beginPath();
+        ctx.arc(500, 500, 10, 0, 2 * Math.PI);
+        ctx.strokeStyle = "#FF0000";
+        ctx.fillStyle = "#00FF00";
+        ctx.strokeRect(800, 900, 1800, 1900);
+        ctx.fillText("ASDF", 1500, 1200);
+        ctx.fill();
 
         // resize the canvas to fill browser window dynamically
         window.addEventListener('resize', resizeCanvas, false);
@@ -33,7 +40,18 @@ block header
 
         function drawStuff() {
           // do your drawing stuff here
+          ctx.beginPath();
+          ctx.arc(Math.random(ctx.width), Math.random(ctx.height), 10, 0, 2 * Math.PI);
+          ctx.arc(500 * Math.random(), 500 * Math.random(), 10, 0, 2 * Math.PI);
+          ctx.arc(500, 500, 10, 0, 2 * Math.PI);
+          ctx.strokeStyle="#FF0000";
+          ctx.fillStyle="#00FF00";
+          ctx.strokeRect(800, 900, 1800, 1900);
+          ctx.fillText("ASDF", 1500, 1200);
+          ctx.fill();
         }
+
+        drawStuff();
       }
     });
 
@@ -73,10 +91,14 @@ block content
 
   div.edit-form
     form
+
       label
         | How many puppies?
-        input(type='number', value='100')
-      p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
+        .input-group
+
+          input.input-group-field(type='number', value='100')
+          span.input-group-label V
+      p#passwordHelpText.help-text Your password must have at least 10 char, a number, and an Emoji.
 
       label
         | How many puppies?
@@ -92,36 +114,45 @@ block content
           option(value='apollo') Apollo
       p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
 
+
       input#checkbox12(type='checkbox')
       label(for='checkbox12') Checkbox 1
+      p.help-text
 
-      .row
-        .small-8.columns
-          .slider(data-slider='', data-initial-start='50', data-step='5')
-            span.slider-handle(data-slider-handle='', role='slider', tabindex='1', aria-controls='sliderOutput2')
-            span.slider-fill(data-slider-fill='')
+      input#checkbox12(type='checkbox')
+      label(for='checkbox12') Checkbox 1
+      p.help-text
 
-        .small-4.columns
-          input#sliderOutput2(type='number')
+      fieldset.fieldset
+        legend How many puppies?
+        .slider-container
+          .small-8.columns
+            .slider(data-slider='', data-initial-start='50', data-step='5')
+              span.slider-handle(data-slider-handle='', role='slider', tabindex='1', aria-controls='sliderOutput2')
+              span.slider-fill(data-slider-fill='')
 
+          .small-4.columns
+            input#sliderOutput2(type='number')
 
-      .slider(data-slider='', data-initial-start='25', data-initial-end='75')
-        span.slider-handle(data-slider-handle='', role='slider', tabindex='1')
-        span.slider-fill(data-slider-fill='')
-        span.slider-handle(data-slider-handle='', role='slider', tabindex='1')
-        input(type='hidden')
-        input(type='hidden')
+      label How many puppies?
+        .slider-container
+          .small-8.columns
+            .slider(data-slider='', data-initial-start='50', data-step='5')
+              span.slider-handle(data-slider-handle='', role='slider', tabindex='1', aria-controls='sliderOutput2')
+              span.slider-fill(data-slider-fill='')
 
+          .small-4.columns
+            input#sliderOutput2(type='number')
 
       .row
         .switch.tiny
           input#tinySwitch.switch-input(type='checkbox', name='exampleSwitch')
           label.switch-paddle(for='tinySwitch')
             span.show-for-sr Tiny Sandwiches Enabled
-          label(for='tinySwitch') Checkbox 1
+          label(for='tinySwitch') Switch
 
 
-    ul.vertical.menu(data-accordion-menu, data-multi-open="false")
+    //ul.vertical.menu(data-accordion-menu, data-multi-open="false")
       li
         a(href='#') Item 1
         ul.menu.vertical.nested
@@ -185,61 +216,61 @@ block content
     .off-canvas-content
       button.button.float-left(type='button', data-toggle='offCanvasLeft') Open Left
 
-  .off-canvas-wrapper
-    #offCanvasRight.off-canvas.position-right(data-off-canvas='')
-      form
-        .row
-          label
-            | How many puppies?
-            input(type='number', value='100')
-            p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
 
-          label
-            | How many puppies?
-            input(type='number', value='100')
-            p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
-
-        .row
-          label
-            | Select Menu
-            select
-              option(value='husker') Husker
-              option(value='starbuck') Starbuck
-              option(value='hotdog') Hot Dog
-              option(value='apollo') Apollo
+  #offCanvasRight.off-canvas.position-right(data-off-canvas='')
+    form
+      .row
+        label
+          | How many puppies?
+          input(type='number', value='100')
           p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
 
-        .row
-          fieldset.fieldset
-            legend Check these out
-            input#checkbox12(type='checkbox')
-            label(for='checkbox12') Checkbox 1
+        label
+          | How many puppies?
+          input(type='number', value='100')
+          p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
 
-        .row
-          .small-10.columns
-            .slider(data-slider='', data-initial-start='50', data-step='5')
-              span.slider-handle(data-slider-handle='', role='slider', tabindex='1', aria-controls='sliderOutput2')
-              span.slider-fill(data-slider-fill='')
-          .small-2.columns
-            input#sliderOutput2(type='number')
+      .row
+        label
+          | Select Menu
+          select
+            option(value='husker') Husker
+            option(value='starbuck') Starbuck
+            option(value='hotdog') Hot Dog
+            option(value='apollo') Apollo
+        p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
 
-        .row
-          .slider(data-slider='', data-initial-start='25', data-initial-end='75')
-            span.slider-handle(data-slider-handle='', role='slider', tabindex='1')
+      .row
+        fieldset.fieldset
+          legend Check these out
+          input#checkbox12(type='checkbox')
+          label(for='checkbox12') Checkbox 1
+
+      .row
+        .small-10.columns
+          .slider(data-slider='', data-initial-start='50', data-step='5')
+            span.slider-handle(data-slider-handle='', role='slider', tabindex='1', aria-controls='sliderOutput2')
             span.slider-fill(data-slider-fill='')
-            span.slider-handle(data-slider-handle='', role='slider', tabindex='1')
-            input(type='hidden')
-            input(type='hidden')
+        .small-2.columns
+          input#sliderOutput2(type='number')
+
+      .row
+        .slider(data-slider='', data-initial-start='25', data-initial-end='75')
+          span.slider-handle(data-slider-handle='', role='slider', tabindex='1')
+          span.slider-fill(data-slider-fill='')
+          span.slider-handle(data-slider-handle='', role='slider', tabindex='1')
+          input(type='hidden')
+          input(type='hidden')
 
 
-        .row
-          .switch.tiny
-            input#tinySwitch.switch-input(type='checkbox', name='exampleSwitch')
-            label.switch-paddle(for='tinySwitch')
-              span.show-for-sr Tiny Sandwiches Enabled
+      .row
+        .switch.tiny
+          input#tinySwitch.switch-input(type='checkbox', name='exampleSwitch')
+          label.switch-paddle(for='tinySwitch')
+            span.show-for-sr Tiny Sandwiches Enabled
 
-    .off-canvas-content
-      button.button.float-right(type='button', data-toggle='offCanvasRight') Open Right
+  .off-canvas-content
+    button.button.float-right(type='button', data-toggle='offCanvasRight') Open Right
 
 
 
