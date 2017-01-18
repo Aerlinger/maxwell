@@ -23,8 +23,28 @@ canvas {
   z-index: 10;
 }
 
+.fieldset legend {
+  background: none !important;
+  font-weight: bold;
+  color: #666;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+fieldset.fieldset .slider {
+  margin-bottom: 1em;
+}
+
+.switch.tiny .switch-label {
+  color: #444;
+  position: relative;
+  bottom: 6px;
+  left: 9px;
+  font-size: 12px;
+}
+
 .edit-form {
-  width: 250px;
+  width: 260px;
   height: 100%;
   /*float: left;*/
   top: 0;
@@ -32,6 +52,21 @@ canvas {
   left: 0;
   background: #EEE;
   padding: 70px 10px 10px 10px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.edit-form::-webkit-scrollbar {
+  width: 0.3em;
+}
+
+.edit-form::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+.edit-form::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
 }
 
 .edit-form label {
