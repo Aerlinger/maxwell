@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var fs = require('fs');
 var glob = require('glob');
+var sassMiddleware = require('node-sass-middleware');
 
 var app = express();
 
@@ -10,6 +11,7 @@ app.set('view engine', 'jade');
 
 app.use(express.static(__dirname + '/css'));
 app.use(express.static(__dirname + '/js'));
+app.use("/foundation", express.static(path.join(__dirname, './vendor/foundation')));
 app.use("/bower_components", express.static(path.join(__dirname, '../bower_components')));
 app.use("/dist", express.static(path.join(__dirname, '../dist')));
 app.use("/scripts", express.static(path.join(__dirname, './scripts')));

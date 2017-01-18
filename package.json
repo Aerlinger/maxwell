@@ -11,9 +11,10 @@
   "dependencies": {
     "dotenv": "^2.0.0",
     "express": "4.13.3",
+    "foundation-sites": "^6.3.0",
+    "glob": "*",
     "jade": "~0.26.3",
-    "lodash": "4.1.0",
-    "glob": "*"
+    "lodash": "4.1.0"
   },
   "devDependencies": {
     "better-require": "0.0.3",
@@ -43,9 +44,11 @@
     "jsondiffpatch": "0.1.38",
     "mocha": "^3.2.0",
     "node-resemble-js": "^0.2.0",
+    "node-sass-middleware": "^0.11.0",
     "on-finished": "^2.3.0",
     "range-parser": "^1.0.3",
     "resemblejs": "^2.2.3",
+    "sass-loader": "^4.1.1",
     "serve-static": "^1.10.0",
     "should": "^7.1.1",
     "sinon": "~1.6.0",
@@ -53,6 +56,7 @@
     "time-grunt": "^1.4.0",
     "tiny-lr": "^0.2.1",
     "watchify": "^3.6.1",
+    "webpack": "^1.14.0",
     "winston": "2.1.1"
   },
   "scripts": {

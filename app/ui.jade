@@ -1,10 +1,15 @@
 extends ./layout
 
 block header
+  //script(type="text/javascript", src="/foundation.scss")
   link(rel="stylesheet", href="/ui.css")
 
-  link(rel="stylesheet", href="/bower_components/foundation-sites/dist/css/foundation.css")
+  link(rel="stylesheet", href="/foundation/css/app.css")
+  //script(type="text/javascript", src="/foundation/js/app.js")
+
   script(type="text/javascript", src="/bower_components/foundation-sites/dist/js/foundation.js")
+
+
 
   script.
     $(document).ready(function() {
@@ -43,18 +48,25 @@ block content
       ul.dropdown.menu(data-dropdown-menu='', data-multi-open=false)
         li.menu-text Maxwell
         li
-          a(href='#') One
+          a(href='#') Circuit
           ul.menu.vertical
             li
               a(href='#') One
             li
               a(href='#') Two
+              ul.menu.vertical
+                li
+                  a(href='#') One
+                li
+                  a(href='#') Two
+                li
+                  a(href='#') Three
             li
               a(href='#') Three
         li
-          a(href='#') Two
+          a(href='#') Edit
         li
-          a(href='#') Three
+          a(href='#') Sample Circuits
     .top-bar-right
       ul.menu
         li
