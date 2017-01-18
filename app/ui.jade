@@ -62,8 +62,99 @@ block content
         li
           button.button(type='button') Search
 
-  .off-canvas-wrapper
-    #offCanvasLeft.off-canvas-absolute.position-left(data-off-canvas='')
+  div.edit-form
+    form
+      .row
+        label
+          | How many puppies?
+          input(type='number', value='100')
+          p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
+
+      .row
+        label
+          | Select Menu
+          select
+            option(value='husker') Husker
+            option(value='starbuck') Starbuck
+            option(value='hotdog') Hot Dog
+            option(value='apollo') Apollo
+          p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
+
+      .row
+        fieldset.fieldset
+          legend Check these out
+          input#checkbox12(type='checkbox')
+          label(for='checkbox12') Checkbox 1
+
+      .row
+        .small-10.columns
+          .slider(data-slider='', data-initial-start='50', data-step='5')
+            span.slider-handle(data-slider-handle='', role='slider', tabindex='1', aria-controls='sliderOutput2')
+            span.slider-fill(data-slider-fill='')
+        .small-2.columns
+          input#sliderOutput2(type='number')
+
+      .row
+        .slider(data-slider='', data-initial-start='25', data-initial-end='75')
+          span.slider-handle(data-slider-handle='', role='slider', tabindex='1')
+          span.slider-fill(data-slider-fill='')
+          span.slider-handle(data-slider-handle='', role='slider', tabindex='1')
+          input(type='hidden')
+          input(type='hidden')
+
+
+      .row
+        .switch.tiny
+          input#tinySwitch.switch-input(type='checkbox', name='exampleSwitch')
+          label.switch-paddle(for='tinySwitch')
+            span.show-for-sr Tiny Sandwiches Enabled
+
+
+
+
+  //.off-canvas-wrapper
+    #offCanvasLeft.off-canvas-absolute.position-left.is-open(data-off-canvas='')
+      form
+        .row
+          .medium-6.columns
+            label
+              | Input Label
+              input(type='text', placeholder='.medium-6.columns')
+              p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
+
+          .medium-6.columns
+            label
+              | Input Label
+              input(type='text', placeholder='.medium-6.columns')
+              p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
+
+
+        .row
+          label
+            | How many puppies?
+            input(type='number', value='100')
+            p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
+
+
+        .row
+          label
+            | Select Menu
+            select
+              option(value='husker') Husker
+              option(value='starbuck') Starbuck
+              option(value='hotdog') Hot Dog
+              option(value='apollo') Apollo
+
+        .row
+          fieldset.fieldset
+            legend Check these out
+            input#checkbox12(type='checkbox')
+            label(for='checkbox12') Checkbox 1
+            input#checkbox22(type='checkbox')
+            label(for='checkbox22') Checkbox 2
+            input#checkbox32(type='checkbox')
+            label(for='checkbox32') Checkbox 3
+
 
     .off-canvas-content
       button.button.float-left(type='button', data-toggle='offCanvasLeft') Open Left
