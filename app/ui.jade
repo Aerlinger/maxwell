@@ -14,14 +14,6 @@ block header
         var ctx = canvas.getContext('2d');
         ctx = Sketch.augment(ctx, { autoclear: false });
 
-        ctx.beginPath();
-        ctx.arc(500, 500, 10, 0, 2 * Math.PI);
-        ctx.strokeStyle = "#FF0000";
-        ctx.fillStyle = "#00FF00";
-        ctx.strokeRect(800, 900, 1800, 1900);
-        ctx.fillText("ASDF", 1500, 1200);
-        ctx.fill();
-
         // resize the canvas to fill browser window dynamically
         window.addEventListener('resize', resizeCanvas, false);
 
@@ -181,55 +173,6 @@ block content
           li
             a(href='#') Item 1B
 
-
-  //.off-canvas-wrapper
-    #offCanvasLeft.off-canvas-absolute.position-left.is-open(data-off-canvas='')
-      form
-        .row
-          .medium-6.columns
-            label
-              | Input Label
-              input(type='text', placeholder='.medium-6.columns')
-              p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
-
-          .medium-6.columns
-            label
-              | Input Label
-              input(type='text', placeholder='.medium-6.columns')
-              p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
-
-
-        .row
-          label
-            | How many puppies?
-            input(type='number', value='100')
-            p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
-
-
-        .row
-          label
-            | Select Menu
-            select
-              option(value='husker') Husker
-              option(value='starbuck') Starbuck
-              option(value='hotdog') Hot Dog
-              option(value='apollo') Apollo
-
-        .row
-          fieldset.fieldset
-            legend Check these out
-            input#checkbox12(type='checkbox')
-            label(for='checkbox12') Checkbox 1
-            input#checkbox22(type='checkbox')
-            label(for='checkbox22') Checkbox 2
-            input#checkbox32(type='checkbox')
-            label(for='checkbox32') Checkbox 3
-
-
-    .off-canvas-content
-      button.button.float-left(type='button', data-toggle='offCanvasLeft') Open Left
-
-
   #offCanvasRight.off-canvas.position-right(data-off-canvas='')
     form
       .row
@@ -284,65 +227,6 @@ block content
 
   .off-canvas-content
     button.button.float-right(type='button', data-toggle='offCanvasRight') Open Right
-
-
-
-    //.off-canvas-wrapper
-      #offCanvasLeft.off-canvas.position-left.is-transition-push.is-open(data-off-canvas='90k2mf-off-canvas', data-position='left', aria-hidden='false')
-        button.close-button(aria-label='Close menu', type='button', data-close='')
-          span(aria-hidden='true') ×
-        ul.mobile-ofc.vertical.menu
-          li
-            a(href='http://zurb.com/responsive') Showcase
-            ul.submenu.menu.vertical(data-submenu='')
-              li
-                a(href='http://zurb.com/responsive') Foundation Showcase
-              li
-                a(href='http://foundation.zurb.com/showcase/brands.html') Brands
-
-          li
-            a(href='http://foundation.zurb.com/develop/getting-started.html') Develop
-            ul.submenu.menu.vertical(data-submenu='')
-              li.title Frameworks
-              li
-                a(href='http://foundation.zurb.com/sites.html') Foundation for Sites
-              li
-                a(href='http://foundation.zurb.com/emails.html') Foundation for Email
-              li.divider
-              li.title Develop
-              li
-                a(href='http://foundation.zurb.com/templates.html') HTML Templates
-
-          li
-            a(href='http://foundation.zurb.com/learn/tutorials.html') Tutorials
-            ul.submenu.menu.vertical(data-submenu='')
-              li
-                a(href='http://foundation.zurb.com/learn/tutorials.html') Tutorials
-              li
-                a(href='http://foundation.zurb.com/learn/classes.html') Classes
-
-          li
-            a(href='http://foundation.zurb.com/get-involved/support.html') Get Involved
-            ul.submenu.menu.vertical(data-submenu='')
-              li
-                a(href='http://foundation.zurb.com/get-involved/support.html') Connect
-              li
-                a(href='http://foundation.zurb.com/get-involved/premium-support.html') PLZ Halp
-
-          li
-            a(href='http://foundation.zurb.com/frameworks-docs.html') Docs
-            ul.submenu.menu.vertical(data-submenu='')
-              li
-                a(href='http://foundation.zurb.com/docs/', target='_blank') Sites Docs
-              li
-                a(href='http://zurb.com/ink/docs.php', target='_blank') Email Docs
-          li
-            a.button(href='http://foundation.zurb.com/develop/getting-started.html') Getting Started
-
-
-
-
-
 
   script.
     $(document).foundation();
