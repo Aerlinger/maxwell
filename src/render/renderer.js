@@ -136,6 +136,9 @@ class Renderer extends BaseRenderer {
     this.Circuit = Circuit1;
     this.Canvas = Canvas;
 
+    this.xMargin = 260;
+    this.yMargin = 56;
+
     this.mousemove = this.mousemove.bind(this);
     this.mousedown = this.mousedown.bind(this);
     this.mouseup = this.mouseup.bind(this);
@@ -158,6 +161,7 @@ class Renderer extends BaseRenderer {
 
     if (environment.isBrowser) {
       this.context = Sketch.augment(this.Canvas.getContext("2d"), {
+        autoclear: false,
         draw: this.draw,
         mousemove: this.mousemove,
         mousedown: this.mousedown,
@@ -201,6 +205,10 @@ class Renderer extends BaseRenderer {
     return this.placeComponent = null;
   }
 
+  noop() {
+
+  }
+
   setPlaceComponent(componentName) {
     let klass = eval(componentName);
 
@@ -218,8 +226,8 @@ class Renderer extends BaseRenderer {
 
   mousemove(event) {
     let component;
-    let x = event.offsetX;
-    let y = event.offsetY;
+    let x = event.offsetX - this.xMargin;
+    let y = event.offsetY - this.yMargin;
 
     this.newlyHighlightedComponent = null;
 
@@ -380,6 +388,8 @@ class Renderer extends BaseRenderer {
   draw() {
     if (this.context) {
       this.context.clear()
+      this.context.save()
+      this.context.translate(this.xMargin, this.yMargin)
     }
 
     if ((this.snapX != null) && (this.snapY != null)) {
@@ -423,6 +433,9 @@ class Renderer extends BaseRenderer {
       // this.fillText(`${nodeIdx} ${node.x},${node.y}`, node.x + 5, node.y - 5);
     // }
 
+    if (this.context) {
+      this.context.restore()
+    }
   }
 
   drawComponents() {

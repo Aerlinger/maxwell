@@ -39,16 +39,7 @@ block header
           resizeCanvas();
 
           function drawStuff() {
-            // do your drawing stuff here
-            ctx.beginPath();
-            ctx.arc(Math.random(ctx.width), Math.random(ctx.height), 10, 0, 2 * Math.PI);
-            ctx.arc(500 * Math.random(), 500 * Math.random(), 10, 0, 2 * Math.PI);
-            ctx.arc(500, 500, 10, 0, 2 * Math.PI);
-            ctx.strokeStyle = "#FF0000";
-            ctx.fillStyle = "#00FF00";
-            ctx.strokeRect(800, 900, 1800, 1900);
-            ctx.fillText("ASDF", 1500, 1200);
-            ctx.fill();
+            // draw updates on resize
           }
 
           drawStuff();
@@ -57,7 +48,7 @@ block header
     });
 
 block content
-  canvas#canvas
+  canvas#canvas.maxwell
 
   #main_nav.top-bar
     .top-bar-left
