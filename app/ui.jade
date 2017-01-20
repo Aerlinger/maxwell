@@ -8,6 +8,14 @@ block header
 
   script.
     $(document).ready(function() {
+
+      //$('.edit-form').append(Maxwell.renderInput("Input Label", 10, "V", "Input HELP"));
+      //$('.edit-form').append(Maxwell.renderSelect("Select Label", {"A": 1, "B": 2}, "SELECT HELP"));
+      //$('.edit-form').append(Maxwell.renderCheckbox("Checkbox label", true, "CHECKBOX HELP"));
+      //$('.edit-form').append(Maxwell.renderSlider("Slider label", 50, -50, 100, 5, "SLIDER HELP"));
+
+      $(document).foundation();
+
       var canvas = document.getElementById('canvas');
 
       Maxwell.createContext("ohms", "../circuits/v3/ohms.json", canvas, function (circuitContext) {
@@ -16,6 +24,20 @@ block header
 
         // TODO: swap context with circuit
         var circuit = circuitContext.Circuit;
+
+        circuitContext.onComponentHover = function (component) {
+          console.log("ON HOVER:", component.toString(), "V:", component.volts);
+          var form = Maxwell.renderEdit(component);
+
+          console.log("renderEdit\n", form);
+
+          window.editInfo = form;
+
+          edit_pane = document.getElementById("edit_pane");
+
+          edit_pane.innerHTML = "";
+          edit_pane.append(form);
+        };
 
 
         if (canvas) {
@@ -81,81 +103,7 @@ block content
         li
           button.button(type='button') Search
 
-  div.edit-form
-    form
-
-      label
-        | How many puppies?
-        .input-group
-
-          input.input-group-field(type='number', value='100')
-          span.input-group-label V
-      p#passwordHelpText.help-text Your password must least 10 char and an Emoji.
-
-      label
-        | How many puppies?
-        input(type='number', value='100')
-      p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
-
-      label
-        | Select Menu
-        select
-          option(value='husker') Husker
-          option(value='starbuck') Starbuck
-          option(value='hotdog') Hot Dog
-          option(value='apollo') Apollo
-      p#passwordHelpText.help-text Your password must have at least 10 characters
-
-
-      input#checkbox12(type='checkbox')
-      label(for='checkbox12') Checkbox 1
-      p.help-text Your password must have at least 10 characters
-
-      input#checkbox12(type='checkbox')
-      label(for='checkbox12') Checkbox 1
-      p.help-text
-
-      fieldset.fieldset
-        legend How many puppies?
-        .slider-container
-          .small-8.columns
-            .slider(data-slider='', data-initial-start='50', data-step='5')
-              span.slider-handle(data-slider-handle='', role='slider', tabindex='1', aria-controls='sliderOutput2')
-              span.slider-fill(data-slider-fill='')
-
-          .small-4.columns
-            input#sliderOutput2(type='number')
-
-          .clearfix
-
-      .switch.tiny
-        input#tinySwitch.switch-input(type='checkbox', name='exampleSwitch')
-        label.switch-paddle(for='tinySwitch')
-          //span Tiny Sandwiches Enabled
-          //span.show-for-sr Tiny Sandwiches Enabled
-        span.switch-label(for='tinySwitch') Switch
-      p.help-text Your password must have at least 10 characters
-
-      .slider-container
-        .small-8.columns
-          .slider(data-slider='', data-initial-start='50', data-step='5')
-            span.slider-handle(data-slider-handle='', role='slider', tabindex='1', aria-controls='sliderOutput2')
-            span.slider-fill(data-slider-fill='')
-
-        .small-4.columns
-          input#sliderOutput2(type='number')
-
-        .clearfix
-
-      div
-        .row
-          .switch.tiny
-            input#tinySwitch.switch-input(type='checkbox', name='exampleSwitch')
-            label.switch-paddle(for='tinySwitch')
-              //span Tiny Sandwiches Enabled
-              //span.show-for-sr Tiny Sandwiches Enabled
-            span.switch-label(for='tinySwitch') Switch
-
+  div#edit_pane.edit-form
 
     //ul.vertical.menu(data-accordion-menu, data-multi-open="false")
       li
@@ -229,4 +177,3 @@ block content
     button.button.float-right(type='button', data-toggle='offCanvasRight') Open Right
 
   script.
-    $(document).foundation();

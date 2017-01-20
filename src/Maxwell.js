@@ -76,6 +76,173 @@ ${circuitData}\
     return new Renderer(circuit, canvas);
   }
 
+  static renderInput(labelText, value, symbolText, helpText) {
+    let wrapper = document.createElement('div');
+    wrapper.className = "param-control";
+
+    let label = document.createElement('label');
+
+    let input_wrapper = document.createElement('div');
+    input_wrapper.className = "input-group";
+
+    let input = document.createElement('input');
+
+    input.setAttribute("type", "number");
+    input.setAttribute("value", value);
+
+    input.className = "input-group-field"
+
+    label.append(labelText);
+    label.append(input_wrapper);
+    // label.append(help);
+
+    input_wrapper.append(input);
+
+    if (symbolText) {
+      let symbolSpan = document.createElement('span');
+
+      symbolSpan.innerText = symbolText;
+      symbolSpan.className = "input-group-label";
+
+      input_wrapper.append(symbolSpan);
+    }
+
+    wrapper.append(label)
+
+    if (helpText && helpText != "") {
+      let help = document.createElement("p");
+      help.className = "help-text";
+      help.innerText = helpText;
+
+      wrapper.append(help)
+    }
+
+    return wrapper;
+  }
+
+  static renderSelect(labelText, selectValues, helpText) {
+    let wrapper = document.createElement('div');
+    wrapper.className = "param-control";
+
+    let label = document.createElement('label');
+    let select = document.createElement('select');
+
+    for (let value in selectValues) {
+      var optionElm = document.createElement("option");
+      optionElm.setAttribute("value", selectValues[value]);
+      optionElm.innerText = value;
+
+      select.append(optionElm);
+    }
+
+    label.append(labelText);
+
+    wrapper.append(label);
+    wrapper.append(select);
+
+    if (helpText && helpText != "") {
+      let help = document.createElement("p");
+      help.className = "help-text";
+      help.innerText = helpText;
+      wrapper.append(help);
+    }
+
+    return wrapper;
+  }
+
+  static renderCheckbox(labelText, value, helpText) {
+    let wrapper = document.createElement('div');
+    wrapper.className = "param-control";
+
+    let input = document.createElement('input');
+    let inputID = "inputID";
+
+    input.setAttribute("type", "checkbox");
+    input.setAttribute("value", value);
+
+    if (value) {
+      input.setAttribute("checked", "true");
+    }
+    input.setAttribute("id", inputID);
+
+    let label = document.createElement('label');
+    label.append(labelText);
+    label.setAttribute("for", inputID);
+
+    wrapper.append(input);
+    wrapper.append(label);
+
+    if (helpText && helpText != "") {
+      let help = document.createElement("p");
+      help.className = "help-text";
+      help.innerText = helpText;
+      wrapper.append(help);
+    }
+
+    return wrapper;
+  }
+
+  static renderSlider(labelText, value, rangeMin, rangeMax, step, helpText) {
+    let sliderId = "sliderID";
+
+    let wrapper = document.createElement('div');
+    wrapper.className = "param-control slider-container small-collapse";
+
+    let label = document.createElement('label');
+    label.append(labelText);
+
+    let sliderContainer = document.createElement('div');
+    sliderContainer.className = "small-8 columns";
+
+    let slider = document.createElement("div");
+
+    slider.setAttribute("data-slider", "");
+    slider.setAttribute("data-initial-start", value);
+    slider.setAttribute("data-start", rangeMin);
+    slider.setAttribute("data-end", rangeMax);
+    slider.setAttribute("data-step", step);
+    slider.setAttribute("class", "slider");
+
+    let handleSpan = document.createElement("span");
+
+    handleSpan.setAttribute("data-slider-handle", "");
+    handleSpan.setAttribute("role", "slider");
+    handleSpan.setAttribute("aria-controls", sliderId);
+    handleSpan.setAttribute("class", "slider-handle");
+
+    let handleFillSpan = document.createElement("span");
+    handleFillSpan.setAttribute("data-slider-fill", "");
+    handleFillSpan.setAttribute("class", "slider-fill");
+
+    slider.append(handleSpan);
+    slider.append(handleFillSpan);
+
+    let inputContainer = document.createElement('div');
+    inputContainer.className = "small-4 columns"
+
+    let input = document.createElement('input');
+    input.id = sliderId;
+    input.setAttribute("id", sliderId);
+    input.setAttribute("type", "number");
+
+    inputContainer.append(input);
+
+    input.className = "input-group-field";
+
+    let clearfix = document.createElement('div');
+    clearfix.className = "clearfix";
+
+    wrapper.append(label);
+    wrapper.append(sliderContainer);
+    wrapper.append(inputContainer);
+    wrapper.append(clearfix);
+
+    sliderContainer.append(slider);
+
+    return wrapper
+  }
+
+
   /**
    <div class="form-group row has-success">
      <label for="inputHorizontalSuccess" class="col-sm-2 col-form-label">
@@ -104,11 +271,12 @@ ${circuitData}\
     let container = document.createElement("div");
     container.className = "container";
 
-    let componentTitle = document.createElement("h3");
+    let componentTitle = document.createElement("h6");
     componentTitle.className = "componentTitle";
     componentTitle.innerText = circuitComponent.getName();
 
-    container.prepend(componentTitle);
+    container.append(componentTitle);
+    container.append(document.createElement("hr"));
 
     let form = document.createElement("form");
 
@@ -133,7 +301,6 @@ ${circuitData}\
         let fieldMin = (fieldRange && fieldRange[0]) || -Infinity;
         let fieldMax = (fieldRange && fieldRange[1]) || Infinity;
 
-        // console.log(`fieldValue:${fieldValue} fieldType:${fieldType} fieldLabel:${fieldLabel} fieldSymbol:${fieldSymbol} fieldDescription:${fieldDescription} fieldRange:${fieldRange}`);
 
         // Render form object into DOM
 
@@ -141,63 +308,18 @@ ${circuitData}\
         let formGroup = document.createElement("div");
         formGroup.className = "form-group row has-success";
 
-        // INPUT LABEL
-        let label = document.createElement("label");
-        label.className = "col-sm-2 col-form-label";
-        label.setAttribute("for", "inputHorizontalSuccess");
-        label.innerText = fieldLabel;
-
-        // INPUT WRAPPER
-        let columnWrapper = document.createElement("div");
-        columnWrapper.className = "col-sm-10";
-
-        let inputDivWrapper = document.createElement("div");
-        columnWrapper.append(inputDivWrapper);
 
         let inputElm;
 
         if (fieldType == "select") {
-          inputElm = document.createElement("select");
-          inputElm.className = "form-control";
-
-          for (let value in selectValues) {
-            var optionElm = document.createElement("option");
-            optionElm.setAttribute("value", selectValues[value]);
-            optionElm.innerText = value;
-
-            inputElm.append(optionElm);
-          }
-
-          inputDivWrapper.append(inputElm);
+          inputElm = Maxwell.renderSelect(fieldLabel, selectValues, fieldSymbol, fieldDescription);
         } else if (fieldType == "boolean") {
-          label = "";
-
-          let checkboxWrapper = document.createElement("div");
-          checkboxWrapper.className = "checkbox"
-          let labelElm = document.createElement("label");
-          inputElm = document.createElement("input");
-          inputElm.setAttribute("type", "checkbox");
-
-          checkboxWrapper.append(labelElm);
-          labelElm.append(inputElm);
-          labelElm.append(fieldLabel);
-
-          inputDivWrapper.append(checkboxWrapper);
-
+          inputElm = Maxwell.renderCheckbox(fieldLabel, fieldValue, fieldDescription);
         } else {
-          inputElm = document.createElement("input");
-          inputElm.className = "form-control form-control-success";
-
-          inputDivWrapper.append(inputElm);
+          inputElm = Maxwell.renderInput(fieldLabel, fieldValue, fieldSymbol, fieldDescription);
         }
 
-        inputElm.setAttribute("data-range-min", fieldMin);
-        inputElm.setAttribute("data-range-max", fieldMax);
-        inputElm.setAttribute("data-component-id", componentId);
-        inputElm.setAttribute("placeholder", fieldDefault);
-        inputElm.setAttribute("value", fieldValue);
-
-        inputDivWrapper.addEventListener("change", function(evt) {
+        inputElm.addEventListener("change", function(evt) {
           let updateObj = {}
           updateObj[fieldName] = evt.target.value;
 
@@ -207,33 +329,12 @@ ${circuitData}\
           circuitComponent.update(updateObj);
         });
 
-        let symbolSuffix = document.createElement("small");
-        symbolSuffix.className = "form-symbol text-muted";
-        symbolSuffix.innerText = fieldSymbol;
-
-        inputDivWrapper.append(symbolSuffix)
-        columnWrapper.append(inputDivWrapper)
-
-        let descriptionWrapper = document.createElement("div");
-        let smallDescription = document.createElement("small");
-        smallDescription.className = "form-text text-muted";
-        smallDescription.innerText = fieldDescription || "";
-        descriptionWrapper.append(smallDescription);
-
-        formGroup.append(label);
-        formGroup.append(columnWrapper);
-        formGroup.append(descriptionWrapper);
-
-        form.append(formGroup);
+        form.append(inputElm);
 
       } else {
         console.error(`Field name missing for ${circuitComponent}`)
       }
     }
-
-    let sidebar = document.getElementById('component_sidebar');
-    sidebar.innerHTML = "";
-    sidebar.appendChild(container);
 
     return container;
   }

@@ -43,6 +43,10 @@ fieldset.fieldset .slider {
   font-size: 12px;
 }
 
+.param-control {
+  margin-bottom: 15px;
+}
+
 .edit-form {
   width: 260px;
   height: 100%;
@@ -54,6 +58,7 @@ fieldset.fieldset .slider {
   padding: 70px 10px 10px 10px;
   overflow: scroll;
   overflow-x: hidden;
+  z-index: 5;
 }
 
 .edit-form::-webkit-scrollbar {
