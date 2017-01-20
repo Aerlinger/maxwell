@@ -16,10 +16,16 @@ block header
       Maxwell.createContext("ohms", "../circuits/v3/ohms.json", canvas, function (circuitContext) {
         //circuitContext
 
+        // Selected components
+
+        circuitContext.onSelectionChanged = function (selectedComponents) {
+          console.log("SELECTED COMPONENTS", selectedComponents);
+        };
+
         circuitContext.onComponentHover = function (component) {
           var form = Maxwell.renderEdit(component);
 
-          console.log(form);
+          //console.log(form);
 
           edit_pane = document.getElementById("edit_pane");
 

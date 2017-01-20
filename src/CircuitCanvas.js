@@ -33,7 +33,6 @@ class CircuitCanvas extends Observer {
       //height: this.height
     });
 
-
     //this.context.lineJoin = 'miter';
   }
 
@@ -289,9 +288,9 @@ class CircuitCanvas extends Observer {
       this.context.translate(this.xMargin, this.yMargin)
     }
 
-    if ((this.snapX != null) && (this.snapY != null)) {
-      this.drawCircle(this.snapX, this.snapY, 1, "#F00");
-      this.fillText(`${this.snapX}, ${this.snapY}`, this.snapX, this.snapY);
+    if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
+      this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
+      this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX, this.circuitUI.snapY);
     }
 
     this.drawInfoText();
@@ -299,27 +298,30 @@ class CircuitCanvas extends Observer {
 
     // UPDATE FRAME ----------------------------------------------------------------
     this.Circuit.updateCircuit();
-    __guardMethod__(this, 'onUpdateComplete', o => o.onUpdateComplete(this));
+
+    if (this.circuitUI.onUpdateComplete) {
+      this.circuitUI.onUpdateComplete();
+    }
     // -----------------------------------------------------------------------------
 
     this.drawComponents();
 
     if (this.context) {
-      if (this.placeComponent) {
-        this.context.fillText(`Placing ${this.placeComponent.constructor.name}`, this.snapX, this.snapY);
+      if (this.circuitUI.placeComponent) {
+        this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX, this.circuitUI.snapY);
 
         if (this.placeComponent.x1() && this.placeComponent.x2()) {
           this.drawComponent(this.placeComponent);
         }
       }
 
-      if (this.selectedNode) {
-        this.drawCircle(this.selectedNode.x, this.selectedNode.y, Settings.POST_RADIUS + 3, 3, Settings.HIGHLIGHT_COLOR);
+      if (this.circuitUI.selectedNode) {
+        this.drawCircle(this.circuitUI.selectedNode.x, this.circuitUI.selectedNode.y, Settings.POST_RADIUS + 3, 3, Settings.HIGHLIGHT_COLOR);
       }
 
-      if (this.highlightedComponent) {
-        this.drawCircle(this.highlightedComponent.x1(), this.highlightedComponent.y1(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
-        this.drawCircle(this.highlightedComponent.x2(), this.highlightedComponent.y2(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+      if (this.circuitUI.highlightedComponent) {
+        this.drawCircle(this.circuitUI.highlightedComponent.x1(), this.circuitUI.highlightedComponent.y1(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+        this.drawCircle(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
       }
 
       // this.context.clear();
@@ -371,10 +373,9 @@ class CircuitCanvas extends Observer {
     component.draw(this);
   }
 
-  drawValue(perpindicularOffset, parallelOffset, component, text, rotation) {
+  drawValue(perpindicularOffset, parallelOffset, component, text = null, rotation = 0) {
     let x, y;
-    if (text == null) { text = null; }
-    if (rotation == null) { rotation = 0; }
+
     this.context.save();
     this.context.textAlign = "center";
 
