@@ -30,7 +30,7 @@ describe "Transformer Component", ->
 
       @transformer.Circuit = @Circuit
 
-      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer = new CircuitUI(@Circuit, @canvas)
       @renderer.context = ctx
 
       done()

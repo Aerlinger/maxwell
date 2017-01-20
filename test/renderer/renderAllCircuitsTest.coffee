@@ -1,7 +1,7 @@
 glob = require('glob')
 path = require("path")
 
-describe "Renderer", ->
+describe "CircuitUI", ->
   it "renders all circuits", () ->
     this.timeout(1000000)
 
@@ -21,7 +21,7 @@ describe "Renderer", ->
           @circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
           @circuit.updateCircuit()
 
-          @renderer = new Renderer(@circuit, @canvas)
+          @renderer = new CircuitUI(@circuit, @canvas)
 
           ctx = @canvas.getContext('2d')
           @renderer.context = ctx

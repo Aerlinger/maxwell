@@ -62,7 +62,7 @@ describe "Voltage Component", ->
       @Circuit.clearAndReset()
       @Circuit.solder(@voltageElm)
 
-      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer = new CircuitUI(@Circuit, @canvas)
       @renderer.context = ctx
       done()
 

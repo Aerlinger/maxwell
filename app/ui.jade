@@ -8,65 +8,56 @@ block header
 
   script.
     $(document).ready(function() {
-
-      //$('.edit-form').append(Maxwell.renderInput("Input Label", 10, "V", "Input HELP"));
-      //$('.edit-form').append(Maxwell.renderSelect("Select Label", {"A": 1, "B": 2}, "SELECT HELP"));
-      //$('.edit-form').append(Maxwell.renderCheckbox("Checkbox label", true, "CHECKBOX HELP"));
-      //$('.edit-form').append(Maxwell.renderSlider("Slider label", 50, -50, 100, 5, "SLIDER HELP"));
-
       $(document).foundation();
 
       var canvas = document.getElementById('canvas');
 
-      Maxwell.createContext("ohms", "../circuits/v3/ohms.json", canvas, function (circuitContext) {
-        console.log(circuitContext);
-        console.log("Circuit loaded! ", circuitContext.Circuit, canvas);
 
-        // TODO: swap context with circuit
-        var circuit = circuitContext.Circuit;
+      Maxwell.createContext("ohms", "../circuits/v3/ohms.json", canvas, function (circuitContext) {
+        //circuitContext
 
         circuitContext.onComponentHover = function (component) {
-          console.log("ON HOVER:", component.toString(), "V:", component.volts);
           var form = Maxwell.renderEdit(component);
 
-          console.log("renderEdit\n", form);
-
-          window.editInfo = form;
+          console.log(form);
 
           edit_pane = document.getElementById("edit_pane");
 
           edit_pane.innerHTML = "";
           edit_pane.append(form);
         };
+      });
 
 
-        if (canvas) {
-          var ctx = canvas.getContext('2d');
-          ctx = Sketch.augment(ctx, {autoclear: false});
+      if (canvas) {
+        var ctx = canvas.getContext('2d');
+        //ctx = Sketch.augment(ctx, {autoclear: false});
 
-          // resize the canvas to fill browser window dynamically
-          window.addEventListener('resize', resizeCanvas, false);
+        // resize the canvas to fill browser window dynamically
+        //window.addEventListener('resize', resizeCanvas, false);
 
-          function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        function resizeCanvas() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
 
-            /**
-             * Your drawings need to be inside this function otherwise they will be reset when
-             * you resize the browser window and the canvas goes will be cleared.
-             */
-            drawStuff();
-          }
-
-          resizeCanvas();
-
-          function drawStuff() {
-            // draw updates on resize
-          }
-
+          /**
+           * Your drawings need to be inside this function otherwise they will be reset when
+           * you resize the browser window and the canvas goes will be cleared.
+           */
           drawStuff();
         }
-      });
+
+        resizeCanvas();
+
+        function drawStuff() {
+          // draw updates on resize
+
+          //ctx.style = "#F00";
+          //ctx.fillRect(500, 500, 100, 200);
+        }
+
+        drawStuff();
+      }
     });
 
 block content

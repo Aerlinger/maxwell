@@ -19,7 +19,7 @@ describe "ACRailElm Test", ->
       @Circuit.clearAndReset()
       @Circuit.solder(@acRailElm)
 
-      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer = new CircuitUI(@Circuit, @canvas)
       @renderer.context = ctx
       done()
 

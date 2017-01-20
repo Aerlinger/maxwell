@@ -73,7 +73,7 @@ describe "Capacitor Component", ->
       @Circuit.clearAndReset()
       @Circuit.solder(@capacitor)
 
-      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer = new CircuitUI(@Circuit, @canvas)
       @renderer.context = ctx
       done()
 

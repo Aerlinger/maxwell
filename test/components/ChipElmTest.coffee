@@ -219,7 +219,7 @@ describe "CC2 Component", ->
 
         @canvas = new Canvas(200, 300)
 
-        @renderer = new Renderer(@Circuit, @canvas)
+        @renderer = new CircuitUI(@Circuit, @canvas)
         @renderer.context = @canvas.getContext('2d')
 
         @Circuit.updateCircuit()

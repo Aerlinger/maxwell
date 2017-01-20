@@ -20,7 +20,7 @@ describe "Transformer", ->
 
         @canvas = new Canvas(200, 300)
 
-        @renderer = new Renderer(@Circuit, @canvas)
+        @renderer = new CircuitUI(@Circuit, @canvas)
         @renderer.context = @canvas.getContext('2d')
         @renderer.drawComponents()
 
@@ -46,7 +46,7 @@ describe "Transformer", ->
 
         @canvas = new Canvas(200, 300)
 
-        @renderer = new Renderer(@Circuit, @canvas)
+        @renderer = new CircuitUI(@Circuit, @canvas)
         @renderer.context = @canvas.getContext('2d')
         @renderer.drawComponents()
 
@@ -82,7 +82,7 @@ describe "Transformer", ->
 
         @canvas = new Canvas(400, 300)
 
-        @renderer = new Renderer(@Circuit, @canvas)
+        @renderer = new CircuitUI(@Circuit, @canvas)
         @renderer.context = @canvas.getContext('2d')
         @renderer.drawComponents()
 

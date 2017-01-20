@@ -24,7 +24,7 @@ describe "Potentiometer", ->
       @Circuit.clearAndReset()
       @Circuit.solder(@potElm)
 
-      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer = new CircuitUI(@Circuit, @canvas)
       @renderer.context = ctx
       done()
 

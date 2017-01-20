@@ -1,8 +1,9 @@
 let CircuitComponent = require('./circuit/circuitComponent.js');
 let CircuitLoader = require('./io/circuitLoader.js');
 let ComponentRegistry = require('./circuit/componentRegistry.js');
+
 let Circuit = require('./circuit/circuit.js');
-let Renderer = require('./render/renderer.js');
+let CircuitUI = require('./CircuitUI.js');
 
 let environment = require("./environment.js");
 
@@ -25,16 +26,6 @@ class Maxwell {
       return result;
     })());
   }
-
-//  if environment.isBrowser
-//    @logger = console
-//  else
-//    @logger = new (Winston.Logger)({
-//      transports: [
-//        new (Winston.transports.Console)(),
-//        new (Winston.transports.File)({ filename: 'log/maxwell.log' })
-//      ]
-//    })
 
   static loadCircuitFromFile(circuitFileName, onComplete) {
     let circuit = CircuitLoader.createCircuitFromJsonFile(circuitFileName, onComplete);
@@ -73,7 +64,7 @@ ${circuitData}\
 
     this.Circuits[circuitName] = circuit;
 
-    return new Renderer(circuit, canvas);
+    return new CircuitUI(circuit, canvas);
   }
 
   static renderInput(labelText, value, symbolText, helpText) {
@@ -301,14 +292,7 @@ ${circuitData}\
         let fieldMin = (fieldRange && fieldRange[0]) || -Infinity;
         let fieldMax = (fieldRange && fieldRange[1]) || Infinity;
 
-
         // Render form object into DOM
-
-        // FORM GROUP
-        let formGroup = document.createElement("div");
-        formGroup.className = "form-group row has-success";
-
-
         let inputElm;
 
         if (fieldType == "select") {
@@ -323,7 +307,6 @@ ${circuitData}\
           let updateObj = {}
           updateObj[fieldName] = evt.target.value;
 
-          console.log("CHANGE", evt.target);
           console.log("CHANGE", `circuitComponent.update(${JSON.stringify(updateObj)})`);
 
           circuitComponent.update(updateObj);
@@ -344,7 +327,7 @@ ${circuitData}\
 
     if (circuitName) {
       if (typeof filepath === "string") {
-        circuit = Maxwell.loadCircuitFromFile(filepath, circuit => onComplete(new Renderer(circuit, context)));
+        circuit = Maxwell.loadCircuitFromFile(filepath, circuit => onComplete(new CircuitUI(circuit, context)));
 
       } else if (typeof filepath === "object") {
         circuit = Maxwell.loadCircuitFromJson(filepath);
@@ -366,7 +349,7 @@ Use \`Maxwell.createCircuit()\` to create a new empty circuit object.\
 
 Maxwell.initClass();
 
-Maxwell.Renderer = Renderer;
+Maxwell.Renderer = CircuitUI;
 
 if (environment.isBrowser) {
   window.Maxwell = Maxwell;

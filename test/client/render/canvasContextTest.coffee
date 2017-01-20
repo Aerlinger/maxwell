@@ -1,6 +1,6 @@
 describe.skip "Canvas Context", ->
   beforeEach (done) ->
-    @renderer = new Renderer(400, 300)
+    @renderer = new CircuitUI(400, 300)
     @renderer.clear()
     done()
 

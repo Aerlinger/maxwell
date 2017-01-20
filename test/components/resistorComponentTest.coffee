@@ -144,7 +144,7 @@ describe "Resistor Component", ->
       @canvas = new Canvas(100, 200)
       @ctx = @canvas.getContext('2d')
 
-      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer = new CircuitUI(@Circuit, @canvas)
       @renderer.context = @ctx
 
       #      @ctx.clearRect(0, 0, 100, 200)

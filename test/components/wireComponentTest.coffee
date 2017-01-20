@@ -51,7 +51,7 @@ describe "Wire Component", ->
       @Circuit.clearAndReset()
       @Circuit.solder(@wireElm)
 
-      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer = new CircuitUI(@Circuit, @canvas)
       @renderer.context = ctx
       done()
 

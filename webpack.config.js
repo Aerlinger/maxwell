@@ -1,6 +1,6 @@
 module.exports = {
   entry: "./src/Maxwell.js",
-  // devtool: 'source-map',
+  devtool: 'source-map',
   // debug: true,
   output: {
     path: __dirname + "/dist",

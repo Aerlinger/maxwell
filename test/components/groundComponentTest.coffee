@@ -50,7 +50,7 @@ describe "Ground Component", ->
       @Circuit.clearAndReset()
       @Circuit.solder(@groundElm)
 
-      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer = new CircuitUI(@Circuit, @canvas)
       @renderer.context = ctx
       done()
 

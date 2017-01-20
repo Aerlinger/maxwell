@@ -17,7 +17,7 @@ describe "Render all components", ->
 
     @Circuit = new Circuit("AllComponents")
 
-    @renderer = new Renderer(@Circuit, @canvas)
+    @renderer = new CircuitUI(@Circuit, @canvas)
     ctx.imageSmoothingEnabled = true
     @renderer.context = ctx
 

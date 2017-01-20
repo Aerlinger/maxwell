@@ -129,9 +129,7 @@ class CircuitLoader {
     }
 
 //    unless environment.isBrowser
-   console.log("--------------------------------------------------------------------\n");
    console.log(circuit.Params);
-   console.log("--------------------------------------------------------------------\n");
 
     return circuit;
   }

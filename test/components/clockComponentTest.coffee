@@ -47,7 +47,7 @@ describe "with explicit values", ->
       @Circuit.clearAndReset()
       @Circuit.solder(@clockElm)
 
-      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer = new CircuitUI(@Circuit, @canvas)
       @renderer.context = ctx
       done()
 
