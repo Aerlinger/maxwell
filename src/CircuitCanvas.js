@@ -290,7 +290,7 @@ class CircuitCanvas extends Observer {
 
     if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
       this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
-      this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX, this.circuitUI.snapY);
+      this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
     }
 
     this.drawInfoText();
@@ -308,10 +308,10 @@ class CircuitCanvas extends Observer {
 
     if (this.context) {
       if (this.circuitUI.placeComponent) {
-        this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX, this.circuitUI.snapY);
+        this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
 
-        if (this.placeComponent.x1() && this.placeComponent.x2()) {
-          this.drawComponent(this.placeComponent);
+        if (this.circuitUI.placeY && this.circuitUI.placeX && this.circuitUI.placeComponent.x2() && this.circuitUI.placeComponent.y2()) {
+          this.drawComponent(this.circuitUI.placeComponent);
         }
       }
 

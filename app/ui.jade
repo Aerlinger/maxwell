@@ -12,12 +12,7 @@ block header
 
       var canvas = document.getElementById('canvas');
 
-
       Maxwell.createContext("ohms", "../circuits/v3/ohms.json", canvas, function (circuitContext) {
-        //circuitContext
-
-        // Selected components
-
         circuitContext.onSelectionChanged = function (selectedComponents) {
           console.log("SELECTED COMPONENTS", selectedComponents);
         };
@@ -25,15 +20,24 @@ block header
         circuitContext.onComponentHover = function (component) {
           var form = Maxwell.renderEdit(component);
 
-          //console.log(form);
-
           edit_pane = document.getElementById("edit_pane");
 
           edit_pane.innerHTML = "";
           edit_pane.append(form);
         };
-      });
 
+        Maxwell.Components.map(function (component) {
+          $('#component_list').append(
+              '<li><a href="#" class="item component-item" data-name=' + component.name + '>' + component.name + '</a></li>'
+          )
+        });
+
+        $('.component-item').click(function (evt) {
+          var componentName = $(this).data("name");
+
+          circuitContext.setPlaceComponent(componentName);
+        });
+      });
 
       if (canvas) {
         var ctx = canvas.getContext('2d');
@@ -100,16 +104,12 @@ block content
         li
           button.button(type='button') Search
 
-  div#edit_pane.edit-form
+  div#component_sidebar
 
-    //ul.vertical.menu(data-accordion-menu, data-multi-open="false")
+    ul.vertical.menu(data-accordion-menu, data-multi-open="false")
       li
-        a(href='#') Item 1
-        ul.menu.vertical.nested
-          li
-            a(href='#') Item 1A
-          li
-            a(href='#') Item 1B
+        a(href='#') Components
+        ul#component_list.is-active.menu.vertical.nested
       li
         a(href='#') Item 2
         ul.menu.vertical.nested
@@ -119,56 +119,7 @@ block content
             a(href='#') Item 1B
 
   #offCanvasRight.off-canvas.position-right(data-off-canvas='')
-    form
-      .row
-        label
-          | How many puppies?
-          input(type='number', value='100')
-          p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
-
-        label
-          | How many puppies?
-          input(type='number', value='100')
-          p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
-
-      .row
-        label
-          | Select Menu
-          select
-            option(value='husker') Husker
-            option(value='starbuck') Starbuck
-            option(value='hotdog') Hot Dog
-            option(value='apollo') Apollo
-        p#passwordHelpText.help-text Your password must have at least 10 characters, a number, and an Emoji.
-
-      .row
-        fieldset.fieldset
-          legend Check these out
-          input#checkbox12(type='checkbox')
-          label(for='checkbox12') Checkbox 1
-
-      .row
-        .small-10.columns
-          .slider(data-slider='', data-initial-start='50', data-step='5')
-            span.slider-handle(data-slider-handle='', role='slider', tabindex='1', aria-controls='sliderOutput2')
-            span.slider-fill(data-slider-fill='')
-        .small-2.columns
-          input#sliderOutput2(type='number')
-
-      .row
-        .slider(data-slider='', data-initial-start='25', data-initial-end='75')
-          span.slider-handle(data-slider-handle='', role='slider', tabindex='1')
-          span.slider-fill(data-slider-fill='')
-          span.slider-handle(data-slider-handle='', role='slider', tabindex='1')
-          input(type='hidden')
-          input(type='hidden')
-
-
-      .row
-        .switch.tiny
-          input#tinySwitch.switch-input(type='checkbox', name='exampleSwitch')
-          label.switch-paddle(for='tinySwitch')
-            span.show-for-sr Tiny Sandwiches Enabled
+    div#edit_pane.edit-form
 
   .off-canvas-content
     button.button.float-right(type='button', data-toggle='offCanvasRight') Open Right

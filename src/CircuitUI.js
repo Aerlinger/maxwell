@@ -3,6 +3,74 @@ let CircuitCanvas = require('./CircuitCanvas.js');
 let Observer = require('./util/observer');
 let Util = require('./util/util');
 
+let AntennaElm = require('./circuit/components/AntennaElm.js');
+let WireElm = require('./circuit/components/WireElm.js');
+let ResistorElm = require('./circuit/components/ResistorElm.js');
+let GroundElm = require('./circuit/components/GroundElm.js');
+let VoltageElm = require('./circuit/components/VoltageElm.js');
+let DiodeElm = require('./circuit/components/DiodeElm.js');
+let OutputElm = require('./circuit/components/OutputElm.js');
+let SwitchElm = require('./circuit/components/SwitchElm.js');
+let CapacitorElm = require('./circuit/components/CapacitorElm.js');
+let InductorElm = require('./circuit/components/InductorElm.js');
+let SparkGapElm = require('./circuit/components/SparkGapElm.js');
+let CurrentElm = require('./circuit/components/CurrentElm.js');
+let RailElm = require('./circuit/components/RailElm.js');
+let MosfetElm = require('./circuit/components/MosfetElm.js');
+let JfetElm = require('./circuit/components/JFetElm.js');
+let TransistorElm = require('./circuit/components/TransistorElm.js');
+let VarRailElm = require('./circuit/components/VarRailElm.js');
+let OpAmpElm = require('./circuit/components/OpAmpElm.js');
+let ZenerElm = require('./circuit/components/ZenerElm.js');
+let Switch2Elm = require('./circuit/components/Switch2Elm.js');
+let SweepElm = require('./circuit/components/SweepElm.js');
+let TextElm = require('./circuit/components/TextElm.js');
+let ProbeElm = require('./circuit/components/ProbeElm.js');
+
+let AndGateElm = require('./circuit/components/AndGateElm.js');
+let NandGateElm = require('./circuit/components/NandGateElm.js');
+let OrGateElm = require('./circuit/components/OrGateElm.js');
+let NorGateElm = require('./circuit/components/NorGateElm.js');
+let XorGateElm = require('./circuit/components/XorGateElm.js');
+let InverterElm = require('./circuit/components/InverterElm.js');
+
+let LogicInputElm = require('./circuit/components/LogicInputElm.js');
+let LogicOutputElm = require('./circuit/components/LogicOutputElm.js');
+let AnalogSwitchElm = require('./circuit/components/AnalogSwitchElm.js');
+let AnalogSwitch2Elm = require('./circuit/components/AnalogSwitch2Elm.js');
+let MemristorElm = require('./circuit/components/MemristorElm.js');
+let RelayElm = require('./circuit/components/RelayElm.js');
+let TunnelDiodeElm = require('./circuit/components/TunnelDiodeElm.js');
+
+let ScrElm = require('./circuit/components/SCRElm.js');
+let TriodeElm = require('./circuit/components/TriodeElm.js');
+
+let DecadeElm = require('./circuit/components/DecadeElm.js');
+let LatchElm = require('./circuit/components/LatchElm.js');
+let TimerElm = require('./circuit/components/TimerElm.js');
+let JkFlipFlopElm = require('./circuit/components/JkFlipFlopElm.js');
+let DFlipFlopElm = require('./circuit/components/DFlipFlopElm.js');
+let CounterElm = require('./circuit/components/CounterElm.js');
+let DacElm = require('./circuit/components/DacElm.js');
+let AdcElm = require('./circuit/components/AdcElm.js');
+let VcoElm = require('./circuit/components/VcoElm.js');
+let PhaseCompElm = require('./circuit/components/PhaseCompElm.js');
+let SevenSegElm = require('./circuit/components/SevenSegElm.js');
+let CC2Elm = require('./circuit/components/CC2Elm.js');
+
+let TransLineElm = require('./circuit/components/TransLineElm.js');
+
+let TransformerElm = require('./circuit/components/TransformerElm.js');
+let TappedTransformerElm = require('./circuit/components/TappedTransformerElm.js');
+
+let LedElm = require('./circuit/components/LedElm.js');
+let PotElm = require('./circuit/components/PotElm.js');
+let ClockElm = require('./circuit/components/ClockElm.js');
+
+let Scope = require('./circuit/components/Scope.js');
+
+
+
 class SelectionMarquee extends Rectangle {
   constructor(x1, y1) {
     super();
@@ -31,7 +99,7 @@ class SelectionMarquee extends Rectangle {
     renderContext.lineWidth = 0.1;
 
     if ((this.x1 != null) && (this.x2 != null) && (this.y1 != null) && (this.y2 != null)) {
-      renderContext.drawLine(this.x1, this.y1, this.x2, this.y1, "#FFFF00", 1);
+      renderContext.drawLine(this.x1, this.y1, this.x2, this.y1, "#FFFF00", 0);
       renderContext.drawLine(this.x1, this.y2, this.x2, this.y2, "#FFFF00", 1);
 
       renderContext.drawLine(this.x1, this.y1, this.x1, this.y2, "#FFFF00", 1);
@@ -68,16 +136,16 @@ class CircuitUI extends Observer {
     this.mousemove = this.mousemove.bind(this);
     this.mousedown = this.mousedown.bind(this);
     this.mouseup = this.mouseup.bind(this);
-    // this.draw = this.draw.bind(this);
-    // this.drawDots = this.drawDots.bind(this);
     this.highlightedComponent = null;
-    this.addComponent = null;
     this.selectedNode = null;
     this.selectedComponents = [];
 
     // TODO: Width and height are currently undefined
     this.width = this.Canvas.width;
     this.height = this.Canvas.height;
+
+    this.placeX = null;
+    this.placeY = null;
 
     this.state = this.STATE_RUN;
 
@@ -141,12 +209,21 @@ class CircuitUI extends Observer {
         // TODO: WIP for interactive element placing
         if (this.placeComponent) {
           this.placeComponent.setPoints();
-          if (this.placeComponent.x1() && this.placeComponent.y1()) {
+
+          if (this.placeX && this.placeY) {
+            this.placeComponent.point1.x = this.placeX;
+            this.placeComponent.point1.y = this.placeY;
+
+            this.placeComponent.point2.x = this.snapX;
+            this.placeComponent.point2.y = this.snapY;
+          }
+          // if (this.placeComponent.x1() && this.placeComponent.y1()) {
             // console.log(this.snapX, this.lastX," ", this.snapY, this.lastY);
             // console.log(this.snapX - this.lastX," ", this.snapY - this.lastY);
 
-            this.placeComponent.moveTo(this.snapX, this.snapY);
-          }
+            // this.placeComponent.point1.x = this.placeX;
+            // this.placeComponent.point1.y = this.placeY;
+          // }
         }
 
         for (let component of this.Circuit.getElements()) {
@@ -218,8 +295,15 @@ class CircuitUI extends Observer {
     // console.log(this.highlightedComponent, this.placeComponent, this.highlightedNode);
 
     if (this.placeComponent) {
-      this.Circuit.solder(this.placeComponent);
-      this.placeComponent = null;
+      if (!this.placeX && !this.placeY) {
+        this.placeX = this.snapX;
+        this.placeY = this.snapY;
+      } else {
+        this.Circuit.solder(this.placeComponent);
+        this.placeComponent = null;
+        this.placeX = null;
+        this.placeY = null;
+      }
     }
 
     if (!this.highlightedComponent && !this.placeComponent && !this.highlightedNode) {
@@ -303,9 +387,7 @@ class CircuitUI extends Observer {
   setPlaceComponent(componentName) {
     let klass = eval(componentName);
 
-    this.placeComponent = new klass(100, 100, 100, 200);
-
-    // console.log(componentName, "default params:", this.placeComponent.params);
+    this.placeComponent = new klass();
 
     return this.placeComponent;
   }
@@ -318,23 +400,3 @@ class CircuitUI extends Observer {
 
 CircuitUI.initClass();
 module.exports = CircuitUI;
-
-function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
-}
-function __guardMethod__(obj, methodName, transform) {
-  if (typeof obj !== 'undefined' && obj !== null && typeof obj[methodName] === 'function') {
-    return transform(obj, methodName);
-  } else {
-    return undefined;
-  }
-}
-function __range__(left, right, inclusive) {
-  let range = [];
-  let ascending = left < right;
-  let end = !inclusive ? right : ascending ? right + 1 : right - 1;
-  for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-    range.push(i);
-  }
-  return range;
-}

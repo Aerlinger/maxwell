@@ -47,6 +47,25 @@ fieldset.fieldset .slider {
   margin-bottom: 15px;
 }
 
+#component_sidebar {
+  width: 260px;
+  height: 100%;
+  /*float: left;*/
+  top: 0;
+  position: absolute;
+  left: 0;
+  background: #EEE;
+  padding: 70px 10px 10px 10px;
+  overflow: auto;
+  overflow-x: hidden;
+  z-index: 5;
+}
+
+.item.component-item {
+  font-size: 10px;
+  padding: 5px;
+}
+
 .edit-form {
   width: 260px;
   height: 100%;
@@ -56,7 +75,7 @@ fieldset.fieldset .slider {
   left: 0;
   background: #EEE;
   padding: 70px 10px 10px 10px;
-  overflow: scroll;
+  overflow: auto;
   overflow-x: hidden;
   z-index: 5;
 }
@@ -84,6 +103,15 @@ fieldset.fieldset .slider {
 
 .slider-container input {
   margin-top: 12px;
+}
+
+.off-canvas {
+  z-index: 5;
+}
+
+.off-canvas-content {
+  position: relative;
+  z-index: 5;
 }
 
 .off-canvas-wrapper {

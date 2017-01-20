@@ -6,6 +6,9 @@ let Circuit = require('./circuit/circuit.js');
 let CircuitUI = require('./CircuitUI.js');
 
 let environment = require("./environment.js");
+// let Maxwell = require("./Maxwell.js");
+
+
 
 //unless environment.isBrowser
 //  Winston = require('winston')
