@@ -1,5 +1,5 @@
 describe "Render all components", ->
-  it "can render all components", ->
+  it.only "can render all components", ->
     this.timeout(5000)
 
     nComponents = Object.keys(ComponentRegistry.ComponentDefs).length
@@ -39,6 +39,18 @@ describe "Render all components", ->
 
         col += offsetX
 
+        @singleComponent = new Component(50, 50, 50, 125);
+        @ComponentCircuit = new Circuit(@singleComponent.getName());
+        @ComponentCircuit.solder(@singleComponent);
+
+        @singleComponent.setPoints()
+
+        @ComponentCanvas = new Canvas(200, 300);
+        componentUI = new CircuitUI(@ComponentCircuit, @ComponentCanvas);
+        componentUI.CircuitCanvas.drawComponents();
+
+        fs.writeFileSync("test/fixtures/componentRenders/" + @component.getName() + ".png", @ComponentCanvas.toBuffer())
+
     @renderer.CircuitCanvas.drawComponents()
 
     fs.writeFileSync("test/fixtures/componentRenders/all_components.png", @canvas.toBuffer())
@@ -46,4 +58,3 @@ describe "Render all components", ->
 
     console.log(@Circuit.serialize())
 
-    @renderer.CircuitCanvas.drawComponents()

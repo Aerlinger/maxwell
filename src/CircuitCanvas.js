@@ -36,6 +36,9 @@ class CircuitCanvas extends Observer {
         //width: this.width,
         //height: this.height
       });
+
+    } else {
+      this.context = this.Canvas.getContext("2d");
     }
 
     //this.context.lineJoin = 'miter';
