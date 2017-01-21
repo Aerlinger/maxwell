@@ -14,6 +14,9 @@ block header
     $(document).ready(function() {
       $(document).foundation();
 
+      $( ".plot-pane" ).draggable();
+      $( ".plot-pane" ).resizable();
+
       var canvas = document.getElementById('canvas');
 
       Maxwell.createContext("ohms", "../circuits/v4/#{circuit_name}.json", canvas, function (circuitContext) {
@@ -135,6 +138,12 @@ block header
 
 block content
   canvas#canvas.maxwell
+
+  .plot-pane
+    .plot-context
+    button(class="close-button", aria-label="Close alert", type="button")
+      span(aria-hidden="true")
+        | &times;
 
   #main_nav.top-bar.sidepanel
     .top-bar-left

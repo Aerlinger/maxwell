@@ -92,6 +92,34 @@ fieldset.fieldset .slider {
   z-index: 5;
 }
 
+.plot-pane {
+  position: absolute;
+  top: 50px;
+  left: 400px;
+
+  width: 300px;
+  height: 200px;
+  background-color: #CCC;
+
+  z-index: 8;
+}
+
+.plot-pane .close-button {
+  position: absolute;
+  top: -30px;
+  right: 5px;
+}
+
+.plot-pane .plot-context {
+  background-color: #EEE;
+
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  top: 5px;
+  bottom: 5px;
+}
+
 .sidepanel::-webkit-scrollbar {
   width: 0.3em;
 }
