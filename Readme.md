@@ -2,6 +2,10 @@
 
 A low-level javascript circuit simulation engine designed to model, simulate, and render complex electronic circuitry.
 
+## Demo Link:
+([http://circuitlab.herokuapp.com/ui/opint])[http://circuitlab.herokuapp.com/ui/opint]
+
+
 ## Running the App
 
 - `node demo/app.js` 
