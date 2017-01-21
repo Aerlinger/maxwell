@@ -22,7 +22,7 @@ describe "Transformer", ->
 
         @renderer = new CircuitUI(@Circuit, @canvas)
         @renderer.context = @canvas.getContext('2d')
-        @renderer.drawComponents()
+        @renderer.CircuitCanvas.drawComponents()
 
         @componentImageFileName = "test/fixtures/componentRenders/#{@transformerElm.getName()}_vert.png"
 
@@ -48,7 +48,7 @@ describe "Transformer", ->
 
         @renderer = new CircuitUI(@Circuit, @canvas)
         @renderer.context = @canvas.getContext('2d')
-        @renderer.drawComponents()
+        @renderer.CircuitCanvas.drawComponents()
 
         @componentImageFileName = "test/fixtures/componentRenders/#{@transformerElm.getName()}_init.png"
 
@@ -84,7 +84,7 @@ describe "Transformer", ->
 
         @renderer = new CircuitUI(@Circuit, @canvas)
         @renderer.context = @canvas.getContext('2d')
-        @renderer.drawComponents()
+        @renderer.CircuitCanvas.drawComponents()
 
         @componentImageFileName = "test/fixtures/componentRenders/#{@transformerElm.getName()}_params.png"
 

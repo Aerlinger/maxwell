@@ -39,11 +39,11 @@ describe "Render all components", ->
 
         col += offsetX
 
-    @renderer.drawComponents()
+    @renderer.CircuitCanvas.drawComponents()
 
     fs.writeFileSync("test/fixtures/componentRenders/all_components.png", @canvas.toBuffer())
     fs.writeFileSync("test/fixtures/circuitDumps/allComponents.json", JSON.stringify(@Circuit.serialize()))
 
     console.log(@Circuit.serialize())
 
-    @renderer.drawComponents()
+    @renderer.CircuitCanvas.drawComponents()

@@ -9,7 +9,6 @@ sinon = require('sinon');
 
 diff = require('deep-diff').diff;
 _ = require('lodash');
-Renderer = require("../src/render/renderer.js");
 fs = require('fs');
 Canvas = require('canvas');
 resemble = require("node-resemble-js");
@@ -32,6 +31,10 @@ approx_diff = function(lhs, rhs) {
   return true_deltas
 };
 
+Canvas.prototype.addEventListener = function() {
+
+};
+
 Circuit = require('../src/circuit/circuit.js');
 
 CircuitNode = require('../src/engine/circuitNode');
@@ -43,7 +46,9 @@ MatrixStamper = require('../src/engine/matrixStamper.js');
 ComponentRegistry = require('../src/circuit/ComponentRegistry.js');
 CircuitLoader = require("../src/io/circuitLoader");
 
-Renderer = require("../src/render/renderer.js");
+// Renderer = require("../src/render/renderer.js");
+CircuitUI = require("../src/CircuitUI.js");
+CircuitCanvas = require("../src/CircuitCanvas.js");
 MatrixStamper = require('../src/engine/matrixStamper.js');
 
 CircuitComponent = require('../src/circuit/circuitComponent.js');
@@ -109,7 +114,6 @@ Polygon = require('../src/geom/polygon.js');
 Rectangle = require('../src/geom/rectangle.js');
 
 require('coffee-script/register');
-
 
 if (!fs.existsSync("test/fixtures/componentRenders/"))
   fs.mkdirSync("test/fixtures/componentRenders/");

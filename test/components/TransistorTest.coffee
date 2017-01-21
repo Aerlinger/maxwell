@@ -124,7 +124,7 @@ describe "Transistor Component", ->
 
         @renderer = new CircuitUI(@Circuit, @canvas)
         @renderer.context = @canvas.getContext('2d')
-        @renderer.drawComponents()
+        @renderer.CircuitCanvas.drawComponents()
 
         @componentImageFileName = "test/fixtures/componentRenders/#{@Circuit.name}_init.png"
 

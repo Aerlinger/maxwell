@@ -36,7 +36,7 @@ describe "Transformer Component", ->
       done()
 
     it "renders initial circuit", ->
-      @renderer.drawComponents()
+      @renderer.CircuitCanvas.drawComponents()
       fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())
 
     it "stamps the circuit", ->

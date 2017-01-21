@@ -99,7 +99,7 @@ for circuit_name in @files
         @renderer = new CircuitUI(circuit, @canvas)
         @renderer.context = ctx
 
-        @renderer.draw()
+        @renderer.CircuitCanvas.draw()
 
         fs.writeFileSync("test/fixtures/circuitRenders/#{circuit_name}_init.png", @canvas.toBuffer())
 

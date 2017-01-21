@@ -12,14 +12,14 @@ describe "Wire Component", ->
     @wireElm.flags = 0
 
   it "has correct number of posts", ->
-    @wireElm.getPostCount().should.equal 2
-    @wireElm.getInternalNodeCount().should.equal 0
+    expect(@wireElm.getPostCount()).to.equal 2
+    expect(@wireElm.getInternalNodeCount()).to.equal 0
 
   it "is not have any internal voltage sources", ->
-    @wireElm.getVoltageSourceCount().should.equal 1
+    expect(@wireElm.getVoltageSourceCount()).to.equal 1
 
   it "has correct toString()", ->
-    @wireElm.toString().should.equal "WireElm@[100 100 100 200]"
+    expect(@wireElm.toString()).to.equal "WireElm@[100 100 100 200]"
 
   it "is orphaned", ->
     expect(@wireElm.orphaned()).to.equal true
@@ -29,7 +29,7 @@ describe "Wire Component", ->
       @Circuit.solder(@wireElm)
 
     it "is not be orphaned", ->
-      @wireElm.orphaned().should.equal false
+      expect(@wireElm.orphaned()).to.equal false
 
     it "is stampable", ->
       @wireElm.stamp(@Stamper)
@@ -56,7 +56,7 @@ describe "Wire Component", ->
       done()
 
     it "renders initial circuit", ->
-      @renderer.draw()
+      @renderer.CircuitCanvas.draw()
 
       fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())
 

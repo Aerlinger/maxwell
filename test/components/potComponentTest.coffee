@@ -29,6 +29,6 @@ describe "Potentiometer", ->
       done()
 
     it "renders initial circuit", ->
-      @renderer.draw()
+      @renderer.CircuitCanvas.draw()
 
       fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())

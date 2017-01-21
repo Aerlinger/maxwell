@@ -223,7 +223,7 @@ describe "CC2 Component", ->
         @renderer.context = @canvas.getContext('2d')
 
         @Circuit.updateCircuit()
-        @renderer.drawComponents()
+        @renderer.CircuitCanvas.drawComponents()
 
         @componentImageFileName = "test/fixtures/componentRenders/#{@transistorElm.getName()}_init.png"
 

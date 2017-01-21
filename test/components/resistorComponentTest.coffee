@@ -155,7 +155,7 @@ describe "Resistor Component", ->
       done()
 
     it "renders initial circuit", ->
-      @renderer.drawComponents()
+      @renderer.CircuitCanvas.drawComponents()
 
       fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_initial.png", @canvas.toBuffer())
 
@@ -163,7 +163,7 @@ describe "Resistor Component", ->
       @resistor.volts[1] = 5
       @resistor.volts[0] = 0
 
-      @renderer.drawComponents()
+      @renderer.CircuitCanvas.drawComponents()
 
       fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_voltage.png", @canvas.toBuffer())
 
@@ -171,6 +171,6 @@ describe "Resistor Component", ->
       @resistor.setx1(0)
       @resistor.sety1(0)
 
-      @renderer.drawComponents()
+      @renderer.CircuitCanvas.drawComponents()
 
       fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_angle.png", @canvas.toBuffer())

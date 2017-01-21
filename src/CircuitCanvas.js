@@ -1,8 +1,10 @@
 let Observer = require('./util/observer');
 let Util = require('./util/util');
+let Point = require('./geom/Point');
 let Settings = require('./settings/settings');
 
 let CircuitComponent = require('./circuit/circuitComponent');
+let environment = require('./environment.js');
 
 class CircuitCanvas extends Observer {
 
@@ -22,17 +24,19 @@ class CircuitCanvas extends Observer {
 
     //this.context = this.Canvas.getContext("2d");
 
-    this.context = Sketch.augment(this.Canvas.getContext("2d", {alpha: false}), {
-      autoclear: false,
-      draw: this.draw,
-      alpha: false
-      // mousemove: this.mousemove,
-      // mousedown: this.mousedown,
-      // mouseup: this.mouseup
-      //fullscreen: false,
-      //width: this.width,
-      //height: this.height
-    });
+    if (environment.isBrowser) {
+      this.context = Sketch.augment(this.Canvas.getContext("2d", {alpha: false}), {
+        autoclear: false,
+        draw: this.draw,
+        alpha: false
+        // mousemove: this.mousemove,
+        // mousedown: this.mousedown,
+        // mouseup: this.mouseup
+        //fullscreen: false,
+        //width: this.width,
+        //height: this.height
+      });
+    }
 
     //this.context.lineJoin = 'miter';
   }

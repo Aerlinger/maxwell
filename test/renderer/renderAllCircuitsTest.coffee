@@ -25,7 +25,7 @@ describe "CircuitUI", ->
 
           ctx = @canvas.getContext('2d')
           @renderer.context = ctx
-          @renderer.drawComponents()
+          @renderer.CircuitCanvas.drawComponents()
 
           origfont = ctx.font
           ctx.font = "16px serif"

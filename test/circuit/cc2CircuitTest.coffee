@@ -85,5 +85,5 @@ describe "CC2", ->
 
     ctx = @canvas.getContext('2d')
     @renderer.context = ctx
-    @renderer.drawComponents()
+    @renderer.CircuitCanvas.drawComponents()
     
