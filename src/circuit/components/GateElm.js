@@ -103,7 +103,7 @@ class GateElm extends CircuitComponent {
     }
 
     this.hs2 = this.gwidth * (Math.floor(this.inputCount / 2) + 1);
-    return this.setBboxPt(this.point1, this.point2, this.hs2);
+    this.setBboxPt(this.point1, this.point2, this.hs2);
   }
 
 
@@ -136,6 +136,8 @@ class GateElm extends CircuitComponent {
     for (let i = 0; i < this.inputCount; i++) {
       renderContext.drawLinePt(this.inPosts[i], this.inGates[i], Util.getVoltageColor(this.volts[i]));
     }
+
+    this.setBboxPt(this.point1, this.point2, this.hs2)
 
     renderContext.drawLinePt(this.lead2, this.point2, Util.getVoltageColor(this.volts[this.inputCount]));
 

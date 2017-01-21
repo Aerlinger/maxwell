@@ -116,8 +116,6 @@ class DiodeElm extends CircuitComponent {
     return renderContext.drawLinePt(this.cathode[0], this.cathode[1], color);
   }
 
-
-
   stamp(stamper) {
     stamper.stampNonLinear(this.nodes[0]);
     return stamper.stampNonLinear(this.nodes[1]);

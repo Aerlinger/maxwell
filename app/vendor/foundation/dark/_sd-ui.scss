@@ -1,0 +1,508 @@
+//  SD UI Dark Theme Foundation
+//  -----------------------------
+//
+//  Table of Contents:
+//
+//   1. Custom Classes
+//   2. Typography
+//   3. Accordion
+//   4. Breadcrumbs
+//   5. Buttons
+//   6. Callout
+//   7. Drilldown
+//   8. Dropdown Menu
+//   9. Menu
+//   10. Orbit
+//   11. Switch
+//   12. Table
+//   13. Tabs
+//   14. Top Bar
+
+
+// 1. Custom Classes
+// ---------
+
+$blockquote-bg: #242424;
+$blue-color: #65b9fc;
+$top-bar-bg: #1e1e1e;
+
+@media screen {
+  * {
+    outline: none;
+  }
+}
+
+hr {
+  border-color: $dark-gray;
+}
+
+.boxed {
+  border: 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 0px 0px 1px rgba(0, 0, 0, 0.05);
+}
+
+.highlighted {
+  color: $white;
+}
+
+// 2. Typography
+// ---------
+
+blockquote {
+  background: $blockquote-bg;
+  cite {
+    color: $medium-gray;
+  }
+}
+
+p {
+  &.primary {
+    color: $primary-color;
+  }
+  &.secondary {
+    color: $secondary-color;
+  }
+  &.success {
+    color: $success-color;
+  }
+  &.warning {
+    color: $warning-color;
+  }
+  &.alert {
+    color: $alert-color;
+  }
+
+}
+
+.subheader {
+  color: #656565;
+}
+
+dl {
+  dd {
+    margin-bottom: $paragraph-margin-bottom;
+  }
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+select {
+  color: $body-font-color;
+}
+
+// 3. Accordion
+// ---------
+
+.accordion {
+  border-bottom-width: 0;
+  .accordion-item {
+    background: $black;
+    &.is-active {
+      background: $body-background;
+      .accordion-title {
+        color: $medium-gray;
+      }
+    }
+  }
+  :last-child > .accordion-title {
+    border-bottom-width: 1px;
+  }
+  .accordion-title {
+    font-size: 1rem;
+  }
+}
+
+// 4. Breadcrumbs
+// ---------
+
+.breadcrumbs {
+  padding: 0.5rem 1rem;
+  border-radius: $global-radius;
+  border: 1px solid $black;
+  background: #242424;
+}
+
+// 5. Buttons
+// ---------
+
+.button, button, input[type="submit"] {
+  &.blue {
+    @include button-style($blue-color, scale-color($blue-color, $lightness: -8%), #333333);
+    border: 0;
+    font-weight: normal;
+  }
+  &.dark {
+    @include button-style($dark-gray, scale-color($dark-gray, $lightness: -15%), $white);
+  }
+  &.black {
+    @include button-style($black, $black, $white);
+    &:hover {
+      color: darken($white, 5%);
+    }
+  }
+  &.dropdown::after {
+    border-color: $body-font-color transparent transparent;
+  }
+}
+
+// 6. Callout
+// ---------
+.callout {
+  color: $white;
+  &.primary {
+    color: $dark-gray;
+  }
+}
+
+// 7. Drilldown
+// ---------
+
+.is-drilldown {
+  border-bottom: 1px solid $black;
+  border-radius: 0 0 $global-radius $global-radius;
+}
+
+.js-drilldown-back::before {
+  margin-top: 1rem;
+  padding: 0;
+}
+
+// 8. Dropdown Menu
+// ---------
+
+.dropdown.menu {
+  .has-submenu.is-down-arrow > a::after {
+    top: 17px;
+    right: 10px;
+  }
+  .submenu {
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    &.first-sub {
+      left: -1px;
+    }
+  }
+  &.vertical > li.opens-right > .is-dropdown-submenu {
+    right: auto;
+    left: 100%;
+    top:-1px;
+  }
+}
+
+
+.input-group {
+  .input-group-label {
+    border-color: #333;
+    border-radius: $global-radius 0 0 $global-radius;
+    background: $black;
+    color: $medium-gray;
+  }
+  .input-group-field {
+    border-radius: 0;
+  }
+  .input-group-button .button {
+    border-radius: 0 $global-radius $global-radius 0;
+    margin: 0;
+  }
+}
+
+// 9. Menu
+// ---------
+
+.menu {
+  border: 1px solid $black;
+  border-radius: $global-radius;
+  background: #1e1e1e;
+  display: inline-block;
+  * {
+    outline: none;
+  }
+  > li {
+    border-right: 1px solid $black;
+    &:last-child {
+      border-bottom: none;
+      border-right: none;
+    }
+    > a > i {
+      vertical-align: top;
+    }
+    a:hover {
+      background: $body-background;
+    }
+    &:first-child > a {
+      border-radius: $global-radius 0 0 $global-radius;
+    }
+    &:last-child > a {
+      border-radius: 0 $global-radius $global-radius 0;
+    }
+    &.active > a {
+      background: $body-background;
+    }
+  }
+  &.vertical {
+    display: block;
+    > li {
+      border-right: 0;
+      border-bottom: 1px solid $black;
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+    &.nested {
+      background: #1e1e1e;
+      border-width: 1px 0 0 0;
+    }
+    > li:first-child > a {
+      border-radius: $global-radius $global-radius 0 0;
+    }
+    > li:last-child > a {
+      border-radius: 0 0 $global-radius $global-radius;
+    }
+  }
+}
+
+.unstyled-menu {
+  @include menu-base;
+}
+
+// 10. Orbit
+// ---------
+
+@media screen {
+  .orbit * {
+    outline: none;
+  }
+}
+.orbit {
+  &.bullets-inside {
+    .orbit-caption {
+      padding-bottom: 2.5rem;
+    }
+    .orbit-bullets {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      bottom: 0;
+      button {
+        background-color:#fff;
+        opacity: 0.35;
+        transition: opacity 0.3s ease-out;
+        &.is-active {
+          opacity: 0.9;
+          &:hover {
+            opacity: 0.9;
+          }
+        }
+        &:hover {
+          opacity: 0.25;
+        }
+      }
+    }
+  }
+}
+
+// 11. Switch
+// ---------
+
+.switch-active {
+  left: 14%;
+}
+.switch {
+  .switch-paddle {
+    border-radius: 1rem;
+    color: $black;
+    &::after {
+      border-radius: 0.75rem;
+    }
+  }
+  &.tiny {
+    .switch-paddle {
+      border-radius: 0.75rem;
+      &::after {
+        border-radius: 0.5rem;
+      }
+    }
+  }
+  &.small {
+    .switch-paddle {
+      border-radius: 0.875rem;
+      &::after {
+        border-radius: 0.625rem;
+      }
+    }
+  }
+  &.large {
+    .switch-paddle {
+      border-radius: 1.25rem;
+      &::after {
+        border-radius: 1.25rem;
+      }
+    }
+  }
+}
+
+input:checked ~ .switch-paddle::after {
+  background: $success-color;
+}
+
+// 12. Table
+// ---------
+
+table {
+  tr {
+    &:nth-child(even) {
+      background: none;
+    }
+    &.primary {
+      background: #333;
+    }
+    &.success {
+      background: darken($success-color,10%);
+      color: #fff;
+    }
+    &.warning {
+      background: rgba($warning-color,0.8);
+      color: #fff;
+    }
+    &.alert {
+      background: rgba($alert-color,0.8);
+      color: #fff;
+    }
+  }
+}
+
+// 13. Tabs
+// ---------
+
+.tabs {
+  border-width: 0 0 1px 0;
+  .tabs-title {
+    border-top-left-radius: $global-radius;
+    border-top-right-radius: $global-radius;
+    > a {
+      font-size: 1rem;
+    }
+    &.is-active {
+      > a {
+        color: $medium-gray;
+      }
+      border: 1px solid $dark-gray;
+      border-bottom-width: 0;
+      margin-bottom: -1px;
+    }
+  }
+}
+
+// 14. Top Bar
+// ---------
+
+.title-bar {
+  background: $top-bar-bg;
+  &.black {
+    background: $black;
+  }
+}
+
+.top-bar {
+  color: $body-font-color;
+  background: $top-bar-bg;
+  ul {
+    background: transparent;
+  }
+  .top-bar-inner {
+    padding: 0.3rem 0 0.2rem 1rem;
+  }
+  .top-bar-text {
+    padding: 0;
+    @include breakpoint(medium up) {
+      line-height: 2.5rem;
+    }
+  }
+  .menu {
+    border: 0;
+    border-radius: 0;
+    display: block;
+    * {
+      outline: none;
+    }
+    > li {
+      border-right: 0;
+      a {
+        color: #fff;
+        padding: 1rem;
+        &:hover {
+          background: darken($top-bar-bg, 3%);
+        }
+      }
+      &.menu-text {
+        padding:1rem;
+      }
+      &:first-child > a {
+        border-radius: 0;
+      }
+      &:last-child > a {
+        border-radius: 0;
+      }
+      &.active > a {
+        background: darken($top-bar-bg, 3%);
+
+      }
+    }
+    &.dropdown {
+      .submenu {
+        &.vertical > li.opens-right > .is-dropdown-submenu {
+          top:-1px;
+        }
+        &.first-sub {
+          left: 0;
+        }
+        background: #1e1e1e;
+        border-color: $black;
+        box-shadow: 0 3px 3px rgba(0,0,0,0.3);
+        li {
+          border-color: $black;
+        }
+      }
+      .has-submenu.is-down-arrow > a::after {
+        border-color: $white transparent transparent;
+        top: 20px;
+      }
+      .has-submenu.is-right-arrow > a::after {
+        border-color: transparent transparent transparent $white;
+      }
+    }
+  }
+  input {
+    display: inline-block;
+    margin-bottom: 0;
+    background: rgba(0,0,0,0.2);
+  }
+  .button {
+    border: 0;
+  }
+  &.black {
+    background: #000;
+    .menu {
+      > li {
+        a {
+          &:hover {
+            background: lighten($black,2%);
+          }
+        }
+        &.active > a {
+          background: lighten($black,2%);
+        }
+      }
+      &.dropdown {
+        .submenu {
+          background: $black;
+          border-color: lighten($black,5%);
+          li {
+            border-color: lighten($black,5%);
+          }
+        }
+      }
+    }
+  }
+}

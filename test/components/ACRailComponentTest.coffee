@@ -19,11 +19,11 @@ describe "ACRailElm Test", ->
       @Circuit.clearAndReset()
       @Circuit.solder(@acRailElm)
 
-      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer = new CircuitUI(@Circuit, @canvas)
       @renderer.context = ctx
       done()
 
     it "renders initial circuit", ->
-      @renderer.drawComponents()
+      @renderer.CircuitCanvas.drawComponents()
 
       fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())

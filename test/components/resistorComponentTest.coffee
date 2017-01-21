@@ -42,6 +42,7 @@ describe "Resistor Component", ->
       expect(@resistor.getFieldWithValue("resistance")).to.eql({
         "default_value": 1000
         "name": "Resistance"
+        "description": "Amount of current per unit voltage applied to this resistor (ideal)."
         "range": [
           0
           Infinity
@@ -143,7 +144,7 @@ describe "Resistor Component", ->
       @canvas = new Canvas(100, 200)
       @ctx = @canvas.getContext('2d')
 
-      @renderer = new Renderer(@Circuit, @canvas)
+      @renderer = new CircuitUI(@Circuit, @canvas)
       @renderer.context = @ctx
 
       #      @ctx.clearRect(0, 0, 100, 200)
@@ -154,7 +155,7 @@ describe "Resistor Component", ->
       done()
 
     it "renders initial circuit", ->
-      @renderer.drawComponents()
+      @renderer.CircuitCanvas.drawComponents()
 
       fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_initial.png", @canvas.toBuffer())
 
@@ -162,7 +163,7 @@ describe "Resistor Component", ->
       @resistor.volts[1] = 5
       @resistor.volts[0] = 0
 
-      @renderer.drawComponents()
+      @renderer.CircuitCanvas.drawComponents()
 
       fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_voltage.png", @canvas.toBuffer())
 
@@ -170,6 +171,6 @@ describe "Resistor Component", ->
       @resistor.setx1(0)
       @resistor.sety1(0)
 
-      @renderer.drawComponents()
+      @renderer.CircuitCanvas.drawComponents()
 
       fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_angle.png", @canvas.toBuffer())

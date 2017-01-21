@@ -11,7 +11,6 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
     this.openhs = 16;
   }
 
-
   setPoints() {
     super.setPoints(...arguments);
 
@@ -23,7 +22,9 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
     [this.swpoles[0], this.swpoles[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, this.openhs);
     [this.swposts[0], this.swposts[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1, this.openhs);
 
-    return this.ctlPoint = Util.interpolate(this.point1, this.point2, 0.5, this.openhs);
+    this.ctlPoint = Util.interpolate(this.point1, this.point2, 0.5, this.openhs);
+
+    this.setBboxPt(this.point1, this.point2, this.openhs);
   }
 
   getPostCount() {
@@ -43,6 +44,8 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
   }
 
   draw(renderContext) {
+    this.setBboxPt(this.point1, this.point2, this.openhs);
+
     let color = Util.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.lead1, color);
 
@@ -54,20 +57,24 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
     color = Util.getVoltageColor(this.volts[2]);
     renderContext.drawLinePt(this.swpoles[1], this.swposts[1], color);
 
-    // draw switch
-
     let position = this.open ? 1 : 0;
-    renderContext.drawLinePt(this.lead1, this.swpoles[position], Settings.GREY);
-
-    renderContext.fillCircle(this.lead1.x, this.lead1.y, 3, 0, Settings.LIGHT_POST_COLOR);
-    renderContext.fillCircle(this.swpoles[1].x, this.swpoles[1].y, 3, 0, Settings.LIGHT_POST_COLOR);
-    renderContext.fillCircle(this.swpoles[0].x, this.swpoles[0].y, 3, 0, Settings.LIGHT_POST_COLOR);
+    // draw switch
+    renderContext.drawLinePt(this.lead1, this.swpoles[position], Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
 
     this.updateDots();
 
     renderContext.drawDots(this.point1, this.lead1, this);
     renderContext.drawDots(this.swpoles[position], this.swposts[position], this);
-    return renderContext.drawPosts(this);
+
+    renderContext.fillCircle(this.lead1.x, this.lead1.y, 3, 0, Settings.LIGHT_POST_COLOR);
+    renderContext.fillCircle(this.swpoles[1].x, this.swpoles[1].y, 3, 0, Settings.LIGHT_POST_COLOR);
+    renderContext.fillCircle(this.swpoles[0].x, this.swpoles[0].y, 3, 0, Settings.LIGHT_POST_COLOR);
+
+    renderContext.drawPosts(this);
+
+    if (CircuitComponent.DEBUG) {
+      return super.draw(renderContext);
+    }
   }
 
   calculateCurrent() {

@@ -61,6 +61,7 @@ class ScrElm extends CircuitComponent {
     // delete this.params['lastvag'];
 
     this.setup();
+    this.setPoints();
   }
 
   setPoints() {
@@ -101,7 +102,9 @@ class ScrElm extends CircuitComponent {
     }
 
     this.gate[0] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, gatelen * dir);
-    return this.gate[1] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, Settings.GRID_SIZE * 2 * dir);
+    this.gate[1] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, Settings.GRID_SIZE * 2 * dir);
+
+    this.setBboxPt(this.point1, this.point2, this.hs)
   }
 
   nonLinear() {
@@ -109,7 +112,7 @@ class ScrElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-//    @setBbox(@point1, @point2, @hs)
+    this.setBboxPt(this.point1, this.point2, this.hs)
 //    adjustBbox(@gate[0], @gate[1])
 
     let v1 = this.volts[this.anode];
@@ -136,7 +139,11 @@ class ScrElm extends CircuitComponent {
     renderContext.drawDots(this.gate[1], this.gate[0], this.curcount_g);
 //    renderContext.drawDots(@gate[0], @lead2, @curcount_g + distance(@gate[1], @gate[0]))
 
-    return renderContext.drawPosts(this);
+    renderContext.drawPosts(this);
+
+    if (CircuitComponent.DEBUG) {
+      super.draw(renderContext);
+    }
   }
 
   setDefaults() {

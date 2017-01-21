@@ -17,7 +17,7 @@ describe "CircuitLoader", ->
         expect(@circuit.Params.completionStatus).to.equal "in development"
 
       it "has correct currentSpeed", ->
-        expect(@circuit.Params.currentSpeed).to.equal 63
+        expect(@circuit.Params.currentSpeed).to.equal 103
 
       it "has correct flags", ->
         expect(@circuit.Params.flags).to.equal 1
@@ -30,7 +30,7 @@ describe "CircuitLoader", ->
         expect(@circuit.Params.powerRange).to.equal 62.0
 
       it "has correct simSpeed", ->
-        expect(@circuit.Params.simSpeed).to.equal 172
+        expect(@circuit.Params.simSpeed).to.equal 116
 
       it "has correct timeStep", ->
         expect(@circuit.Params.timeStep).to.equal 5.0e-6

@@ -1,0 +1,1456 @@
+doctype html
+html.no-js(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='x-ua-compatible', content='ie=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title SD UI: Dark | Foundation 6
+    link(rel='stylesheet', href='/foundation/css/app.css')
+    script(src='https://use.fontawesome.com/01ac7e2496.js')
+    style.
+      .docs-section-margin {
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+      }
+  body
+    .top-bar(style='position:fixed;top:0;width:100%; z-index: 999;')
+      .row
+        .top-bar-left
+          ul.dropdown.menu(data-dropdown-menu='', data-click-open='false')
+            li.menu-text
+              | SD UI: Dark
+              small ZURB Foundation 6 theme
+            li
+              a(href='#') Elements
+              ul.menu.vertical
+                li
+                  a(href='#navigation') Navigation
+                li
+                  a(href='#orbit') Orbit Slider
+                li
+                  a(href='#buttons') Buttons
+                li
+                  a(href='#typography') Typography
+                li
+                  a(href='#tables') Tables
+                li
+                  a(href='#tabs') Tabs
+                li
+                  a(href='#forms') Forms
+                li
+                  a(href='#callouts') Callouts
+        .top-bar-right
+          ul.dropdown.menu(data-dropdown-menu='', data-click-open='false')
+            li
+              a(href='http://es-di.com/foundation/') About
+            li
+              a(href='http://es-di.com/foundation/#foundation-themes-list') Download
+    .docs-section-margin  
+    .row
+      .large-12.columns
+        h1.highlighted Dark Foundation 6 Theme
+        h4  Clean Dark UI
+    hr.docs-section-margin
+    .row
+      .large-12.columns
+        h2#navigation.highlighted(name='nav78') Navigation
+        h3
+          | Top Bar
+          a(data-open='code-top-bar1')
+            small
+              i.fa.fa-code  
+    .row
+      .large-12.columns
+        .top-bar
+          .row.column
+            .top-bar-left
+              ul.dropdown.menu(data-dropdown-menu='')
+                li.menu-text Site Title
+                li
+                  a(href='#') One
+                  ul.menu.vertical
+                    li
+                      a(href='#') One
+                      ul.menu.vertical
+                        li
+                          a(href='#') One
+                        li
+                          a(href='#') Two
+                        li
+                          a(href='#') Three
+                        li
+                          a(href='#') Three
+                    li
+                      a(href='#') Two
+                    li
+                      a(href='#') Three
+                li
+                  a(href='#') Two
+                li
+                  a(href='#') Three
+            .top-bar-right
+              .top-bar-inner
+                ul.menu
+                  li
+                    input(type='search', placeholder='Search')
+                  li
+                    button.button.dark(type='button') Search
+            .top-bar-right
+              .top-bar-inner
+                .top-bar-text  Custom text
+    .row
+      .large-12.columns
+        br
+        h4
+          | Tob Bar - Black
+          a(data-open='code-top-bar2')
+            small
+              i.fa.fa-code  
+        p
+          | Use class
+          code .black
+          |  with
+          code .tob-bar
+        .top-bar.black
+          .row.column
+            .top-bar-left
+              ul.dropdown.menu(data-dropdown-menu='')
+                li.menu-text
+                  | Site Title |
+                  small Description
+            .top-bar-right
+              ul.dropdown.menu(data-dropdown-menu='')
+                li
+                  a(href='#') One
+                  ul.menu.vertical
+                    li
+                      a(href='#') One
+                    li
+                      a(href='#') Two
+                    li
+                      a(href='#') Three
+                li
+                  a(href='#') Two
+                li
+                  a(href='#') Three
+                li
+                  a(href='#') Four
+                li
+                  a(href='#') Five
+                li
+                  a(href='#') Six
+    hr.docs-section-margin
+    .row
+      .columns
+        h4
+          | Title Bar
+          a(data-open='code-title-bar1')
+            small
+              i.fa.fa-code  
+        .title-bar
+          .title-bar-left
+            button.menu-icon(type='button')
+            span.title-bar-title Foundation
+          .title-bar-right
+            button.menu-icon(type='button')
+        br
+        h4
+          | Title Bar - Black
+          a(data-open='code-title-bar2')
+            small
+              i.fa.fa-code  
+        .title-bar.black
+          .title-bar-left
+            button.menu-icon(type='button')
+            span.title-bar-title Foundation
+          .title-bar-right
+            button.menu-icon(type='button')
+    .row
+      hr.docs-section-margin
+      .large-4.columns
+        h3
+          | Horizontal Menu
+          a(data-open='code-hor-menu')
+            small
+              i.fa.fa-code  
+        ul.dropdown.menu.inline-block(data-dropdown-menu='')
+          li
+            a(href='#') Item 1
+            ul.menu
+              li
+                a(href='#') Item 1A
+              li
+                a(href='#') Item 1B
+              li
+                a(href='#') Item 1C
+              li
+                a(href='#') Item 1D
+          li
+            a(href='#') Item 2
+          li
+            a(href='#') Item 3
+          li
+            a(href='#') Item 4
+      .large-4.columns
+        h3
+          | Vertical Menu
+          a(data-open='code-vert-menu')
+            small
+              i.fa.fa-code  
+        ul.menu.vertical(style='max-width: 280px')
+          li
+            a(href='#')
+              i.fa.fa-home
+              |   Home
+          li
+            a(href='#')
+              i.fa.fa-book
+              |   Library
+          li
+            a(href='#')
+              i.fa.fa-pencil
+              |   Applications
+          li
+            a(href='#')
+              i.fa.fa-cog
+              |   Settings
+          li
+            a(href='#')
+              i.fa.fa-comments-o
+              |   Support
+      .large-4.columns
+        h3
+          | Drilldown Menu
+          a(data-open='code-drill-menu')
+            small
+              i.fa.fa-code  
+        ul.vertical.menu(data-drilldown='', style='max-width: 280px')
+          li
+            a(href='#Item-1') Item 1
+            ul.vertical.menu
+              li
+                a(href='#Item-1A') Item 1A
+              li
+                a(href='#Item-1A') Item 1B
+              li
+                a(href='#Item-1A') Item 1C
+          li
+            a(href='#Item-2') Item 2
+          li
+            a(href='#Item-2') Item 3
+          li
+            a(href='#Item-2') Item 4
+          li
+            a(href='#Item-2') Item 5
+    .row
+      hr.docs-section-margin
+      .large-6.columns
+        h3
+          | Pagination
+          a(data-open='code-pagination')
+            small
+              i.fa.fa-code  
+        ul.pagination(role='navigation', aria-label='Pagination')
+          li.pagination-previous.disabled
+            | Previous
+            span.show-for-sr page
+          li.current
+            span.show-for-sr You're on page
+            |  1
+          li
+            a(href='#', aria-label='Page 2') 2
+          li
+            a(href='#', aria-label='Page 3') 3
+          li
+            a(href='#', aria-label='Page 4') 4
+          li.ellipsis(aria-hidden='true')
+          li
+            a(href='#', aria-label='Page 12') 12
+          li
+            a(href='#', aria-label='Page 13') 13
+          li.pagination-next
+            a(href='#', aria-label='Next page')
+              | Next
+              span.show-for-sr page
+      .large-6.columns
+        h3
+          | Breadcrumbs
+          a(data-open='code-bread')
+            small
+              i.fa.fa-code  
+        nav(aria-label='You are here:', role='navigation')
+          ul.breadcrumbs
+            li
+              a(href='#') Home
+            li
+              a(href='#') Features
+            li.disabled Disabled item
+            li
+              span.show-for-sr Current:
+              |  Cloning
+    .row
+      hr.docs-section-margin
+      .large-12.columns
+        h2#orbit.highlighted Orbit Slider
+        .row
+          .large-6.medium-6.columns
+            h3
+              | Bullets inside
+              a(data-open='code-orbit1')
+                small
+                  i.fa.fa-code  
+            .orbit.bullets-inside(role='region', aria-label='Favorite Space Pictures', data-orbit='')
+              ul.orbit-container
+                button.orbit-previous
+                  span.show-for-sr Previous Slide
+                  | ◀︎
+                button.orbit-next
+                  span.show-for-sr Next Slide
+                  | ▶︎
+                li.is-active.orbit-slide
+                  img.orbit-image(src='http://foundation.zurb.com/sites/docs/assets/img/orbit/01.jpg', alt='Space')
+                  figcaption.orbit-caption Space, the final frontier.
+                li.orbit-slide
+                  img.orbit-image(src='http://foundation.zurb.com/sites/docs/assets/img/orbit/03.jpg', alt='Space')
+                  figcaption.orbit-caption Lets Rocket!
+                li.orbit-slide
+                  img.orbit-image(src='http://foundation.zurb.com/sites/docs/assets/img/orbit/04.jpg', alt='Space')
+                  figcaption.orbit-caption Encapsulating
+                li.orbit-slide
+                  img.orbit-image(src='http://foundation.zurb.com/sites/docs/assets/img/orbit/02.jpg', alt='Space')
+                  figcaption.orbit-caption Outta This World
+              nav.orbit-bullets
+                button.is-active(data-slide='0')
+                  span.show-for-sr First slide details.
+                  span.show-for-sr Current Slide
+                button(data-slide='1')
+                  span.show-for-sr Second slide details.
+                button(data-slide='2')
+                  span.show-for-sr Third slide details.
+                button(data-slide='3')
+                  span.show-for-sr Fourth slide details.
+          .large-6.medium-6.columns
+            h3
+              | Bullets outside
+              a(data-open='code-orbit2')
+                small
+                  i.fa.fa-code  
+            .orbit(role='region', aria-label='Favorite Space Pictures', data-orbit='')
+              ul.orbit-container
+                button.orbit-previous
+                  span.show-for-sr Previous Slide
+                  | ◀︎
+                button.orbit-next
+                  span.show-for-sr Next Slide
+                  | ▶︎
+                li.is-active.orbit-slide
+                  img.orbit-image(src='http://foundation.zurb.com/sites/docs/assets/img/orbit/01.jpg', alt='Space')
+                  figcaption.orbit-caption Space, the final frontier.
+                li.orbit-slide
+                  img.orbit-image(src='http://foundation.zurb.com/sites/docs/assets/img/orbit/03.jpg', alt='Space')
+                  figcaption.orbit-caption Lets Rocket!
+                li.orbit-slide
+                  img.orbit-image(src='http://foundation.zurb.com/sites/docs/assets/img/orbit/04.jpg', alt='Space')
+                  figcaption.orbit-caption Encapsulating
+                li.orbit-slide
+                  img.orbit-image(src='http://foundation.zurb.com/sites/docs/assets/img/orbit/02.jpg', alt='Space')
+                  figcaption.orbit-caption Outta This World
+              nav.orbit-bullets
+                button.is-active(data-slide='0')
+                  span.show-for-sr First slide details.
+                  span.show-for-sr Current Slide
+                button(data-slide='1')
+                  span.show-for-sr Second slide details.
+                button(data-slide='2')
+                  span.show-for-sr Third slide details.
+                button(data-slide='3')
+                  span.show-for-sr Fourth slide details.
+    hr.docs-section-margin
+    .row
+      .large-12.columns
+        h2#buttons.highlighted Buttons
+        p
+          | Dark Foundation Theme has many easy to use button styles that you can customize or override to fit your
+          | needs.
+        .row.docs-section-margin
+          .large-6.medium-6.columns
+            h3
+              | Coloring
+              a(data-open='code-btn-color')
+                small
+                  i.fa.fa-code  
+            a.medium.primary.button(href='#') Primary Button
+            a.medium.black.button(href='#') Black
+            a.medium.dark.button(href='#') Dark
+            a.medium.blue.button(href='#') Blue
+            a.secondary.button(href='#') Secondary
+            a.success.button(href='#') Success
+            a.alert.button(href='#') Alert
+            a.warning.button(href='#') Warning
+            a.disabled.button(href='#') Disabled
+          .large-6.medium-6.columns
+            h3
+              | Hollow Style
+              a(data-open='code-btn-hollow')
+                small
+                  i.fa.fa-code  
+            button.primary.hollow.button(href='#') Primary
+            button.secondary.hollow.button(href='#') Secondary
+            button.success.hollow.button(href='#') Success
+            button.alert.hollow.button(href='#') Alert
+            button.warning.hollow.button(href='#') Warning
+        .row
+          .large-6.medium-6.columns
+            h3
+              | Sizing
+              a(data-open='code-btn-sizing')
+                small
+                  i.fa.fa-code  
+            a.tiny.button(href='#') Tiny
+            a.small.button(href='#') Small
+            a.button(href='#') Basic
+            a.large.button(href='#') Large
+            a.expanded.button(href='#') Expanded
+          .large-2.medium-6.columns
+            h3
+              | Switch
+              a(data-open='code-switch')
+                small
+                  i.fa.fa-code  
+            .switch
+              input#exampleSwitch.switch-input(checked='', type='checkbox', name='exampleSwitch')
+              label.switch-paddle(for='exampleSwitch')
+                span.show-for-sr Download Kittens
+            .switch.large
+              input#yes-no.switch-input(type='checkbox', name='exampleSwitch')
+              label.switch-paddle(for='yes-no')
+                span.show-for-sr Do you like me?
+                span.switch-active(aria-hidden='true') Yes
+                span.switch-inactive(aria-hidden='true') No
+          .large-4.medium-6.columns
+            h3
+              | Dropdown Buttons
+              a(data-open='code-btn-drop')
+                small
+                  i.fa.fa-code  
+            button.dropdown.button Dropdown Button
+    hr.docs-section-margin
+    .row
+      .large-12.columns
+        h2#typography.highlighted Typography
+        .row
+          .large-4.medium-4.columns
+            h1
+              | Heading 1
+              a(data-open='code-headings')
+                small
+                  i.fa.fa-code  
+            h2 Heading 2
+            h3 Heading 3
+            h4 Heading 4
+            h5 Heading 5
+            h6 Heading 6
+          .large-4.medium-4.columns
+            h3
+              | Paragraph Styles
+              a(data-open='code-p')
+                small
+                  i.fa.fa-code  
+            p Standard text
+            p.primary
+              | Primary text - just add class
+              code
+                small .primary
+            p.secondary
+              | Secondary text - just add class
+              code
+                small .secondary
+            p.success
+              | Success text - just add class
+              code
+                small .success
+            p.warning
+              | Warning text - just add class
+              code
+                small .warning
+            p.alert
+              | Alert text - just add class
+              code
+                small .alert
+          .large-4.medium-4.columns
+            h3
+              | Text styling
+              a(data-open='code-body-text')
+                small
+                  i.fa.fa-code  
+            p
+              | Standart text with
+              a(href='#') link
+              | .
+            p
+              small This line of text is meant to be treated as fine print.
+            p
+              | The following snippet of text is
+              strong rendered as bold text
+              | .
+            p
+              | The following snippet of text is
+              em rendered as italicized text
+              | .
+    hr.docs-section-margin
+    .row
+      .large-4.medium-4.columns
+        h3
+          | Unordered List
+          a(data-open='code-unlist')
+            small
+              i.fa.fa-code  
+        ul
+          li List item
+          li
+            | List item
+            ul
+              li Nested list item
+              li Nested list item
+              li Nested list item
+          li List item
+          li List item
+          li List item
+      .large-4.medium-4.columns
+        h3
+          | Ordered List
+          a(data-open='code-olist')
+            small
+              i.fa.fa-code  
+        ol
+          li List item
+          li
+            | List item
+            ul
+              li Nested list item
+              li Nested list item
+              li Nested list item
+          li List item
+          li List item
+          li List item
+      .large-4.medium-4.columns
+        h3
+          | Definition List
+          a(data-open='code-dlist')
+            small
+              i.fa.fa-code  
+        dl
+          dt Time
+          dd
+            | The indefinite continued progress of existence and events in the past, present, and future regarded as a
+            | whole.
+          dt Space
+          dd A continuous area or expanse that is free, available, or unoccupied.
+    hr.docs-section-margin
+    .row
+      .large-12.columns
+        h3
+          | Blockquotes
+          a(data-open='code-bquote')
+            small
+              i.fa.fa-code  
+        blockquote
+          | Great things in business are never done by one person. They're done by a team of people.
+          cite(title='Source Title') Steve Jobs
+    hr.docs-section-margin
+    .row
+      .large-12.columns
+        h2#tables.highlighted
+          | Tables
+          a(data-open='code-table')
+            small
+              i.fa.fa-code  
+        table(width='100%')
+          thead
+            tr
+              th(width='200') Table Header
+              th Table Header
+              th(width='150') Table Header
+              th(width='150') Table Header
+          tbody
+            tr
+              td Regular Table Row
+              td
+                | This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.
+              td Content
+              td Content
+            tr
+              td Regular Table Row
+              td
+                | This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.
+              td Content
+              td Content
+            tr
+              td Regular Table Row
+              td
+                | This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.
+              td Content
+              td Content
+            tr.primary
+              td Primary Table Row
+              td This is longer content Donec id elit non mi porta gravida at eget metus.
+              td Content
+              td Content
+            tr.success
+              td Success Table Row
+              td
+                | This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.
+              td Content
+              td Content
+            tr.warning
+              td Warning Table Row
+              td
+                | This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.
+              td Content
+              td Content
+            tr.alert
+              td Alert Table Row
+              td
+                | This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.
+              td Content
+              td Content
+    hr.docs-section-margin
+    .row
+      .large-6.medium-6.columns
+        h2#tabs.highlighted
+          | Tabs
+          a(data-open='code-tabs')
+            small
+              i.fa.fa-code  
+        ul#example-tabs.tabs(data-tabs='')
+          li.tabs-title.is-active
+            a(href='#panel1', aria-selected='true') Tab 1
+          li.tabs-title
+            a(href='#panel2') Tab 2
+          li.tabs-title
+            a(href='#panel3') Tab 3
+        .tabs-content(data-tabs-content='example-tabs')
+          #panel1.tabs-panel.is-active
+            p
+              | Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie
+              | magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.
+          #panel2.tabs-panel
+            p
+              | Vivamus hendrerit arcu sed erat molestie vehicula. Ut in nulla enim. Phasellus molestie magna non est
+              | bibendum non venenatis nisl tempor. Sed auctor neque eu tellus rhoncus ut eleifend nibh
+              | porttitor.
+          #panel3.tabs-panel
+            p
+              | Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation
+              | +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
+              | craft beer twee.
+      .large-6.medium-6.columns
+        h2.highlighted
+          | Accordion
+          a(data-open='code-accordion')
+            small
+              i.fa.fa-code  
+        ul.accordion(data-accordion='')
+          li.accordion-item.is-active(data-accordion-item='')
+            a.accordion-title(href='#') Accordion 1
+            .accordion-content(data-tab-content='')
+              | I would start in the open state, due to using the `is-active` state class.
+          li.accordion-item(data-accordion-item='')
+            a.accordion-title(href='#') Accordion 2
+            .accordion-content(data-tab-content='')
+              | I would start in the open state, due to using the `is-active` state class.
+    hr.docs-section-margin
+    .row
+      .columns
+        h2#forms.highlighted
+          | Forms
+          a(data-open='code-forms')
+            small
+              i.fa.fa-code  
+        .row
+          .large-8.medium-8.columns
+            h4 Input Fields, Select Boxes and Textarea
+            form
+              .row
+                .large-12.columns
+                  label Input Label
+                  input(type='text', placeholder='large-12.columns')
+              .row
+                .large-4.medium-4.columns
+                  label Input Label
+                  input(type='text', placeholder='large-4.columns')
+                .large-4.medium-4.columns
+                  label Input Label
+                  input(type='text', placeholder='large-4.columns')
+                .large-4.medium-4.columns
+                  label Input Label
+                  input(type='text', placeholder='large-4.columns')
+              .row
+                .large-6.columns
+                  label Select Box
+                  select
+                    option(value='husker') Husker
+                    option(value='starbuck') Starbuck
+                    option(value='hotdog') Hot Dog
+                    option(value='apollo') Apollo
+                .large-6.columns
+                  label Inline Label
+                  .input-group
+                    span.input-group-label $
+                    input.input-group-field(type='number')
+              .row
+                .large-12.columns
+                  label Textarea Label
+                  textarea(placeholder='small-12.columns')
+            a.button.blue Submit
+            a.button.white Cancel
+          .large-4.medium-4.columns
+            h4 Checkboxes and Radio Buttons
+            form
+              .row
+                .large-12.columns
+                  input#pokemonRed(type='radio', name='pokemon', value='Red')
+                  label(for='pokemonRed')
+                    | Radio
+                    | 1
+                  input#pokemonBlue(type='radio', name='pokemon', value='Blue')
+                  label(for='pokemonBlue')
+                    | Radio
+                    | 2
+              .row
+                .large-12.columns
+                  input#checkbox1(type='checkbox')
+                  label(for='checkbox1') Checkbox 1
+                  input#checkbox2(type='checkbox')
+                  label(for='checkbox2') Checkbox 2
+              .row
+                .large-12.columns
+                  fieldset.fieldset
+                    legend Check these out
+                    input#checkbox12(type='checkbox')
+                    label(for='checkbox12') Checkbox 1
+                    input#checkbox22(type='checkbox')
+                    label(for='checkbox22') Checkbox 2
+    hr.docs-section-margin
+    .row
+      .large-12.medium-12.columns
+        h2#callouts.highlighted Callouts
+        .row
+          .large-6.medium-6.columns
+            h4
+              | Coloring
+              a(data-open='code-callout-color')
+                small
+                  i.fa.fa-code  
+            .row
+              .columns
+                .callout
+                  h5 Default Callout
+                  p Sample Text
+                  span
+            .row
+              .large-6.medium-6.columns
+                .success.callout
+                  p Success Callout
+              .large-6.medium-6.columns
+                .primary.callout
+                  p Primary Callout
+            .row
+              .large-4.medium-4.columns
+                .alert.callout
+                  p Alert Callout
+              .large-4.medium-4.columns
+                .warning.callout
+                  p Warning Callout
+              .large-4.medium-4.columns
+                .secondary.callout
+                  p Secondary Callout
+          .large-6.medium-6.columns
+            h4
+              | Making Closable
+              a(data-open='code-callout-close')
+                small
+                  i.fa.fa-code  
+            .success.callout(data-closable='')
+              h5 This a friendly message.
+              p And when you're done with me, I close using a Motion UI animation.
+              button.close-button(aria-label='Dismiss alert', type='button', data-close='')
+                span(aria-hidden='true') ×
+            .alert.callout(data-closable='')
+              h5 This is Important!
+              p
+                | But when you're done reading it, click the close button in the corner to dismiss this
+                | alert.
+              button.close-button(aria-label='Dismiss alert', type='button', data-close='')
+                span(aria-hidden='true') ×
+    hr
+    .row.text-right
+      small
+        | Made by
+        a(href='http://es-di.com') SD Web Design
+      br
+      br
+    #code-top-bar1.reveal.large(data-reveal='')
+      pre.
+        \n<div class="top-bar">
+            <div class="row column">
+                <div class="top-bar-left">
+                    <ul class="dropdown menu" data-dropdown-menu>
+                        <li class="menu-text">Site Title</li>
+                        <li>
+                            <a href="#">One</a>
+                            <ul class="menu vertical">
+                                <li><a href="#">One</a>
+                                    <ul class="menu vertical">
+                                        <li><a href="#">One</a></li>
+                                        <li><a href="#">Two</a></li>
+                                        <li><a href="#">Three</a></li>
+                                        <li><a href="#">Three</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">Two</a></li>
+                                <li><a href="#">Three</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Two</a></li>
+                        <li><a href="#">Three</a></li>
+                    </ul>
+                </div>
+                <div class="top-bar-right">
+                    <div class="top-bar-inner">
+                        <ul class="menu">
+                            <li><input type="search" placeholder="Search"></li>
+                            <li>
+                                <button type="button" class="button black">Search</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="top-bar-right">
+                    <div class="top-bar-inner">
+                        <div class="top-bar-text"> Custom text</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-top-bar2.reveal.large(data-reveal='')
+      pre.
+        \n<div class="top-bar black">
+            <div class="row column">
+                <div class="top-bar-left">
+                    <ul class="dropdown menu" data-dropdown-menu>
+                        <li class="menu-text">Site Title |
+                            <small>Description</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="top-bar-right">
+                    <ul class="dropdown menu" data-dropdown-menu>
+                        <li>
+                            <a href="#">One</a>
+                            <ul class="menu vertical">
+                                <li><a href="#">One</a>
+                                    <ul class="menu vertical">
+                                        <li><a href="#">One</a></li>
+                                        <li><a href="#">Two</a></li>
+                                        <li><a href="#">Three</a></li>
+                                        <li><a href="#">Four</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">Two</a></li>
+                                <li><a href="#">Three</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Two</a></li>
+                        <li><a href="#">Three</a></li>
+                        <li><a href="#">Four</a></li>
+                        <li><a href="#">Five</a></li>
+                        <li><a href="#">Six</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-title-bar1.reveal.large(data-reveal='')
+      pre.
+        \n<div class="title-bar">
+            <div class="title-bar-left">
+                <button class="menu-icon" type="button"></button>
+                <span class="title-bar-title">Foundation</span>
+            </div>
+            <div class="title-bar-right">
+                <button class="menu-icon" type="button"></button>
+            </div>
+        </div>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-title-bar2.reveal.large(data-reveal='')
+      pre.
+        \n<div class="title-bar black">
+            <div class="title-bar-left">
+                <button class="menu-icon" type="button"></button>
+                <span class="title-bar-title">Foundation</span>
+            </div>
+            <div class="title-bar-right">
+                <button class="menu-icon" type="button"></button>
+            </div>
+        </div>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-hor-menu.reveal.large(data-reveal='')
+      pre.
+        \n<ul class="dropdown menu" data-dropdown-menu>
+            <li>
+                <a href="#">Item 1</a>
+                <ul class="menu">
+                    <li><a href="#">Item 1A</a></li>
+                    <li><a href="#">Item 1B</a></li>
+                    <li><a href="#">Item 1C</a></li>
+                    <li><a href="#">Item 1D</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Item 2</a></li>
+            <li><a href="#">Item 3</a></li>
+            <li><a href="#">Item 4</a></li>
+        </ul>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-vert-menu.reveal.large(data-reveal='')
+      pre.
+        \n<ul class="menu vertical" style="max-width: 280px">
+            <li><a href="#"><i class="fa fa-home"></i>  Home</a></li>
+            <li><a href="#"><i class="fa fa-book"></i>  Library</a></li>
+            <li><a href="#"><i class="fa fa-pencil"></i>  Applications</a></li>
+            <li><a href="#"><i class="fa fa-cog"></i>  Settings</a></li>
+            <li><a href="#"><i class="fa fa-comments-o"></i>  Support</a></li>
+        </ul>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-drill-menu.reveal.large(data-reveal='')
+      pre.
+        \n<ul class="vertical menu" data-drilldown style="max-width: 280px">
+            <li>
+                <a href="#Item-1">Item 1</a>
+                <ul class="vertical menu" >
+                    <li><a href="#Item-1A">Item 1A</a></li>
+                    <li><a href="#Item-1A">Item 1B</a></li>
+                    <li><a href="#Item-1A">Item 1C</a></li>
+                </ul>
+            </li>
+            <li><a href="#Item-2">Item 2</a></li>
+            <li><a href="#Item-2">Item 3</a></li>
+            <li><a href="#Item-2">Item 4</a></li>
+            <li><a href="#Item-2">Item 5</a></li>
+        </ul>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-pagination.reveal.large(data-reveal='')
+      pre.
+        \n<ul class="pagination" role="navigation" aria-label="Pagination">
+            <li class="pagination-previous disabled">Previous <span class="show-for-sr">page</span></li>
+            <li class="current"><span class="show-for-sr">You're on page</span> 1</li>
+            <li><a href="#" aria-label="Page 2">2</a></li>
+            <li><a href="#" aria-label="Page 3">3</a></li>
+            <li><a href="#" aria-label="Page 4">4</a></li>
+            <li class="ellipsis" aria-hidden="true"></li>
+            <li><a href="#" aria-label="Page 12">12</a></li>
+            <li><a href="#" aria-label="Page 13">13</a></li>
+            <li class="pagination-next"><a href="#" aria-label="Next page">Next <span
+                    class="show-for-sr">page</span></a></li>
+        </ul>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-bread.reveal.large(data-reveal='')
+      pre.
+        \n<nav aria-label="You are here:" role="navigation">
+            <ul class="breadcrumbs">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Features</a></li>
+                <li class="disabled">Gene Splicing</li>
+                <li>
+                    <span class="show-for-sr">Current: </span> Cloning
+                </li>
+            </ul>
+        </nav>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-orbit1.reveal.large(data-reveal='')
+      pre.
+        \n<div class="orbit bullets-inside" role="region" aria-label="Favorite Space Pictures" data-orbit>
+            <ul class="orbit-container">
+                <button class="orbit-previous"><span class="show-for-sr">Previous Slide</span>◀︎
+                </button>
+                <button class="orbit-next"><span class="show-for-sr">Next Slide</span>▶︎</button>
+                <li class="is-active orbit-slide">
+                    <img class="orbit-image" src="http://foundation.zurb.com/sites/docs/assets/img/orbit/01.jpg"
+                         alt="Space">
+                    <figcaption class="orbit-caption">Space, the final frontier.</figcaption>
+                </li>
+                <li class="orbit-slide">
+                    <img class="orbit-image" src="http://foundation.zurb.com/sites/docs/assets/img/orbit/03.jpg"
+                         alt="Space">
+                    <figcaption class="orbit-caption">Lets Rocket!</figcaption>
+                </li>
+                <li class="orbit-slide">
+                    <img class="orbit-image" src="http://foundation.zurb.com/sites/docs/assets/img/orbit/04.jpg"
+                         alt="Space">
+                    <figcaption class="orbit-caption">Encapsulating</figcaption>
+                </li>
+                <li class="orbit-slide">
+                    <img class="orbit-image" src="http://foundation.zurb.com/sites/docs/assets/img/orbit/02.jpg"
+                         alt="Space">
+                    <figcaption class="orbit-caption">Outta This World</figcaption>
+                </li>
+            </ul>
+            <nav class="orbit-bullets">
+                <button class="is-active" data-slide="0"><span
+                        class="show-for-sr">First slide details.</span><span
+                        class="show-for-sr">Current Slide</span></button>
+                <button data-slide="1"><span class="show-for-sr">Second slide details.</span></button>
+                <button data-slide="2"><span class="show-for-sr">Third slide details.</span></button>
+                <button data-slide="3"><span class="show-for-sr">Fourth slide details.</span></button>
+            </nav>
+        </div>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-orbit2.reveal.large(data-reveal='')
+      pre.
+        \n<div class="orbit" role="region" aria-label="Favorite Space Pictures" data-orbit>
+            <ul class="orbit-container">
+                <button class="orbit-previous"><span class="show-for-sr">Previous Slide</span>◀︎
+                </button>
+                <button class="orbit-next"><span class="show-for-sr">Next Slide</span>▶︎</button>
+                <li class="is-active orbit-slide">
+                    <img class="orbit-image" src="http://foundation.zurb.com/sites/docs/assets/img/orbit/01.jpg"
+                         alt="Space">
+                    <figcaption class="orbit-caption">Space, the final frontier.</figcaption>
+                </li>
+                <li class="orbit-slide">
+                    <img class="orbit-image" src="http://foundation.zurb.com/sites/docs/assets/img/orbit/03.jpg"
+                         alt="Space">
+                    <figcaption class="orbit-caption">Lets Rocket!</figcaption>
+                </li>
+                <li class="orbit-slide">
+                    <img class="orbit-image" src="http://foundation.zurb.com/sites/docs/assets/img/orbit/04.jpg"
+                         alt="Space">
+                    <figcaption class="orbit-caption">Encapsulating</figcaption>
+                </li>
+                <li class="orbit-slide">
+                    <img class="orbit-image" src="http://foundation.zurb.com/sites/docs/assets/img/orbit/02.jpg"
+                         alt="Space">
+                    <figcaption class="orbit-caption">Outta This World</figcaption>
+                </li>
+            </ul>
+            <nav class="orbit-bullets">
+                <button class="is-active" data-slide="0"><span
+                        class="show-for-sr">First slide details.</span><span
+                        class="show-for-sr">Current Slide</span></button>
+                <button data-slide="1"><span class="show-for-sr">Second slide details.</span></button>
+                <button data-slide="2"><span class="show-for-sr">Third slide details.</span></button>
+                <button data-slide="3"><span class="show-for-sr">Fourth slide details.</span></button>
+            </nav>
+        </div>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-btn-color.reveal.large(data-reveal='')
+      pre.
+        \n<a href="#" class="medium primary button">Primary Button</a>
+        <a href="#" class="medium black button">Black</a>
+        <a href="#" class="medium dark button">Dark</a>
+        <a href="#" class="medium blue button">Blue</a>
+        <a class="secondary button" href="#">Secondary</a>
+        <a class="success button" href="#">Success</a>
+        <a class="alert button" href="#">Alert</a>
+        <a class="warning button" href="#">Warning</a>
+        <a class="disabled button" href="#">Disabled</a>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-btn-hollow.reveal.large(data-reveal='')
+      pre.
+        \n<button class="primary hollow button" href="#">Primary</button>
+        <button class="secondary hollow button" href="#">Secondary</button>
+        <button class="success hollow button" href="#">Success</button>
+        <button class="alert hollow button" href="#">Alert</button>
+        <button class="warning hollow button" href="#">Warning</button>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-btn-sizing.reveal.large(data-reveal='')
+      pre.
+        \n<a class="tiny button" href="#">Tiny</a>
+        <a class="small button" href="#">Small</a>
+        <a class="button" href="#">Basic</a>
+        <a class="large button" href="#">Large</a>
+        <a class="expanded button" href="#">Expanded</a>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-switch.reveal.large(data-reveal='')
+      pre.
+        \n<div class="switch">
+            <input class="switch-input" checked id="exampleSwitch" type="checkbox" name="exampleSwitch">
+            <label class="switch-paddle" for="exampleSwitch">
+                <span class="show-for-sr">Download Kittens</span>
+            </label>
+        </div>
+        <div class="switch large">
+            <input class="switch-input" id="yes-no" type="checkbox" name="exampleSwitch">
+            <label class="switch-paddle" for="yes-no">
+                <span class="switch-active" aria-hidden="true">Yes</span>
+                <span class="switch-inactive" aria-hidden="true">No</span>
+            </label>
+        </div>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-btn-drop.reveal.large(data-reveal='')
+      pre.
+        \n<button class="dropdown button">Dropdown Button</button>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-headings.reveal.large(data-reveal='')
+      pre.
+        \n<h1>Heading 1</h1>
+        <h2>Heading 2</h2>
+        <h3>Heading 3</h3>
+        <h4>Heading 4</h4>
+        <h5>Heading 5</h5>
+        <h6>Heading 6</h6>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-p.reveal.large(data-reveal='')
+      pre.
+        \n<p>Standard text</p>
+        <p class="primary">Primary text - just add class <code>
+            <small>.primary</small>
+        </code></p>
+        <p class="secondary">Secondary text - just add class <code>
+            <small>.secondary</small>
+        </code></p>
+        <p class="success">Success text - just add class <code>
+            <small>.success</small>
+        </code></p>
+        <p class="warning">Warning text - just add class <code>
+            <small>.warning</small>
+        </code></p>
+        <p class="alert">Alert text - just add class <code>
+            <small>.alert</small>
+        </code></p>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-body-text.reveal.large(data-reveal='')
+      pre.
+        \n<p>Standart text with <a href="#">link</a>.</p>
+        <p>
+            <small>This line of text is meant to be treated as fine print.</small>
+        </p>
+        <p>The following snippet of text is <strong>rendered as bold text</strong>.</p>
+        <p>The following snippet of text is <em>rendered as italicized text</em>.</p>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-unlist.reveal.large(data-reveal='')
+      pre.
+        \n<ul>
+            <li>List item</li>
+            <li>List item
+                <ul>
+                    <li>Nested list item</li>
+                    <li>Nested list item</li>
+                    <li>Nested list item</li>
+                </ul>
+            </li>
+            <li>List item</li>
+            <li>List item</li>
+            <li>List item</li>
+        </ul>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-olist.reveal.large(data-reveal='')
+      pre.
+        \n<ol>
+            <li>List item</li>
+            <li>List item
+                <ul>
+                    <li>Nested list item</li>
+                    <li>Nested list item</li>
+                    <li>Nested list item</li>
+                </ul>
+            </li>
+            <li>List item</li>
+            <li>List item</li>
+            <li>List item</li>
+        </ol>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-dlist.reveal.large(data-reveal='')
+      pre.
+        \n<dl>
+            <dt>Time</dt>
+            <dd>The indefinite continued progress of existence and events in the past, present, and future regarded as a
+                whole.
+            </dd>
+            <dt>Space</dt>
+            <dd>A continuous area or expanse that is free, available, or unoccupied.</dd>
+        </dl>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-bquote.reveal.large(data-reveal='')
+      pre.
+        \n<blockquote>
+            Great things in business are never done by one person. They're done by a team of people.
+            <cite title="Source Title">Steve Jobs</cite>
+        </blockquote>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-table.reveal.large(data-reveal='')
+      pre.
+        \n<table width="100%">
+            <thead>
+            <tr>
+                <th width="200">Table Header</th>
+                <th>Table Header</th>
+                <th width="150">Table Header</th>
+                <th width="150">Table Header</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Regular Table Row</td>
+                <td>This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.</td>
+                <td>Content </td>
+                <td>Content </td>
+            </tr>
+            <tr>
+                <td>Regular Table Row</td>
+                <td>This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.</td>
+                <td>Content </td>
+                <td>Content </td>
+            </tr>
+            <tr>
+                <td>Regular Table Row</td>
+                <td>This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.</td>
+                <td>Content </td>
+                <td>Content </td>
+            </tr>
+            <tr class="primary">
+                <td>Primary Table Row</td>
+                <td>This is longer content Donec id elit non mi porta gravida at eget metus.</td>
+                <td>Content </td>
+                <td>Content </td>
+            </tr>
+            <tr class="success">
+                <td>Success Table Row</td>
+                <td>This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.</td>
+                <td>Content </td>
+                <td>Content </td>
+            </tr>
+            <tr class="warning">
+                <td>Warning Table Row</td>
+                <td>This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.</td>
+                <td>Content </td>
+                <td>Content </td>
+            </tr>
+            <tr class="alert">
+                <td>Alert Table Row</td>
+                <td>This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.</td>
+                <td>Content </td>
+                <td>Content </td>
+            </tr>
+            </tbody>
+        </table>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-tabs.reveal.large(data-reveal='')
+      pre.
+        \n<ul class="tabs" data-tabs id="example-tabs">
+            <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Tab 1</a></li>
+            <li class="tabs-title"><a href="#panel2">Tab 2</a></li>
+            <li class="tabs-title"><a href="#panel3">Tab 3</a></li>
+        </ul>
+        <div class="tabs-content" data-tabs-content="example-tabs">
+            <div class="tabs-panel is-active" id="panel1">
+                <p>Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie
+                    magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+            </div>
+            <div class="tabs-panel" id="panel2">
+                <p>Vivamus hendrerit arcu sed erat molestie vehicula. Ut in nulla enim. Phasellus molestie magna non est
+                    bibendum non venenatis nisl tempor. Sed auctor neque eu tellus rhoncus ut eleifend nibh
+                    porttitor.</p>
+            </div>
+            <div class="tabs-panel" id="panel3">
+                <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation
+                    +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
+                    craft beer twee. </p>
+            </div>
+        </div>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-accordion.reveal.large(data-reveal='')
+      pre.
+        \n<ul class="accordion" data-accordion>
+            <li class="accordion-item is-active" data-accordion-item>
+                <a href="#" class="accordion-title">Accordion 1</a>
+                <div class="accordion-content" data-tab-content>
+                    I would start in the open state, due to using the `is-active` state class.
+                </div>
+            </li>
+            <li class="accordion-item " data-accordion-item>
+                <a href="#" class="accordion-title">Accordion 2</a>
+                <div class="accordion-content" data-tab-content>
+                    I would start in the open state, due to using the `is-active` state class.
+                </div>
+            </li>
+        </ul>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-forms.reveal.large(data-reveal='')
+      pre.
+        \n<div class="row">
+            <div class="large-8 medium-8 columns">
+                <h4>Input Fields, Select Boxes and Textarea</h4>
+                <form>
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <label>Input Label</label>
+                            <input type="text" placeholder="large-12.columns"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 medium-4 columns">
+                            <label>Input Label</label>
+                            <input type="text" placeholder="large-4.columns"/>
+                        </div>
+                        <div class="large-4 medium-4 columns">
+                            <label>Input Label</label>
+                            <input type="text" placeholder="large-4.columns"/>
+                        </div>
+                        <div class="large-4 medium-4 columns">
+                            <label>Input Label</label>
+                            <input type="text" placeholder="large-4.columns"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-6 columns">
+                            <label>Select Box</label>
+                            <select>
+                                <option value="husker">Husker</option>
+                                <option value="starbuck">Starbuck</option>
+                                <option value="hotdog">Hot Dog</option>
+                                <option value="apollo">Apollo</option>
+                            </select>
+                        </div>
+                        <div class="large-6 columns">
+                            <label>Inline Label</label>
+                            <div class="input-group">
+                                <span class="input-group-label">$</span>
+                                <input class="input-group-field" type="number">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <label>Textarea Label</label>
+                            <textarea placeholder="small-12.columns"></textarea>
+                        </div>
+                    </div>
+                </form>
+                <a class="button blue">Submit</a><a class="button">Cancel</a>
+            </div>
+            <div class="large-4 medium-4 columns">
+                <h4>Checkboxes and Radio Buttons</h4>
+                <form>
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <input type="radio" name="pokemon" value="Red" id="pokemonRed"><label for="pokemonRed">Radio
+                            1</label>
+                            <input type="radio" name="pokemon" value="Blue" id="pokemonBlue"><label
+                                for="pokemonBlue">Radio
+                            2</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <input id="checkbox1" type="checkbox"><label for="checkbox1">Checkbox 1</label>
+                            <input id="checkbox2" type="checkbox"><label for="checkbox2">Checkbox 2</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <fieldset class="fieldset">
+                                <legend>Check these out</legend>
+                                <input id="checkbox12" type="checkbox"><label for="checkbox12">Checkbox 1</label>
+                                <input id="checkbox22" type="checkbox"><label for="checkbox22">Checkbox 2</label>
+                            </fieldset>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-callout-color.reveal.large(data-reveal='')
+      pre.
+        \n<div class="row">
+            <div class="columns">
+                <div class="callout">
+                    <h5>Default Callout</h5>
+                    <p>Sample Text</p>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 medium-6 columns">
+                <div class="success callout">
+                    <p>Success Callout</p>
+                </div>
+            </div>
+            <div class="large-6 medium-6 columns">
+                <div class="primary callout">
+                    <p>Primary Callout</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-4 medium-4 columns">
+                <div class="alert callout">
+                    <p>Alert Callout</p>
+                </div>
+            </div>
+            <div class="large-4 medium-4 columns">
+                <div class="warning callout">
+                    <p>Warning Callout</p>
+                </div>
+            </div>
+            <div class="large-4 medium-4 columns">
+                <div class="secondary callout">
+                    <p>Secondary Callout</p>
+                </div>
+            </div>
+        </div>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    #code-callout-close.reveal.large(data-reveal='')
+      pre.
+        \n<div class="success callout" data-closable="slide-out-right">
+            <h5>This a friendly message.</h5>
+            <p>And when you're done with me, I close using a Motion UI animation.</p>
+            <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="alert callout" data-closable>
+            <h5>This is Important!</h5>
+            <p>But when you're done reading it, click the close button in the corner to dismiss this
+                alert.</p>
+            <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+      button.close-button(data-close='', aria-label='Close modal', type='button')
+        span(aria-hidden='true') ×
+    script(src='/bower_components/foundation-sites/dist/js/foundation.js')
+    script.
+      jQuery(document).ready(function () {
+        jQuery(document).foundation();
+      });

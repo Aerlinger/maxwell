@@ -165,8 +165,7 @@ class Util {
     return Math.floor(Math.random() * (x + 1));
   }
 
-  static getUnitText(value, unit, decimalPoints) {
-    if (decimalPoints == null) { decimalPoints = 2; }
+  static getUnitText(value, unit = "", decimalPoints = 2) {
     let absValue = Math.abs(value);
     if (absValue < 1e-18) { return `0 ${unit}`; }
     if (absValue < 1e-12) { return (value * 1e15).toFixed(decimalPoints) + " f" + unit; }
@@ -224,10 +223,6 @@ class Util {
     return decimalNum.toPrecision(2);
   }
 
-  static shortFormat(decimalNum) {
-    return decimalNum.toPrecision(1);
-  }
-
   static longFormat(decimalNum) {
     return decimalNum.toPrecision(4);
   }
@@ -280,7 +275,7 @@ class Util {
   }
 
   static isValue(x) {
-    return (typeof x == "string") || (typeof x == "number") || (typeof x == "boolean")
+    return !isNaN(x) && ((typeof x == "string") || (typeof x == "number") || (typeof x == "boolean"))
   }
 
   static commaFormat(plainNumber) {
@@ -295,6 +290,21 @@ class Util {
     while (pattern.test(x1)) { x1 = x1.replace(pattern, "$1,$2"); }
 
     return x1 + x2;
+  }
+
+  static colorHash() {
+
+  }
+
+  static getColorForId(id) {
+    let letters = '0123456789ABCDEF';
+    let color = '#';
+
+    for (let i = 0; i < 6; i++ ) {
+      color += letters[id % 16];
+    }
+
+    return color;
   }
 
   static typeOf(obj, klassType) {

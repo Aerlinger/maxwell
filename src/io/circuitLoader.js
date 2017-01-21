@@ -80,8 +80,6 @@ class CircuitLoader {
     circuit.Params = new SimulationParams(circuitParams);
     circuit.flags = parseInt(circuitParams['flags']);
 
-    // console.log("SIM PARAMS", circuit.Params)
-
     // Load each Circuit component from JSON data:
     let elms = [];
 
@@ -131,9 +129,7 @@ class CircuitLoader {
     }
 
 //    unless environment.isBrowser
-   console.log("--------------------------------------------------------------------\n");
-   console.log(circuit.Params);
-   console.log("--------------------------------------------------------------------\n");
+   //console.log(circuit.Params);
 
     return circuit;
   }

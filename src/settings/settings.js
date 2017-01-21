@@ -182,12 +182,12 @@ class Settings {
     this.WIRE_POSTS = true;
   
     // Line Widths:
-    this.POST_RADIUS = 1;
+    this.POST_RADIUS = 2;
     this.CURRENT_RADIUS = 2;
     this.CURRENT_COLOR = "rgba(255, 255, 255, 0.7)";
     this.LINE_WIDTH = 2;
     this.BOLD_LINE_WIDTH = 2;
-  
+
     // Grid
     this.GRID_SIZE = 8;
     this.SMALL_GRID = false;
@@ -206,7 +206,12 @@ class Settings {
     this.TEXT_COLOR = ColorPalette.black;
     this.TEXT_ERROR_COLOR = ColorPalette.red;
     this.TEXT_WARNING_COLOR = ColorPalette.yellow;
-  
+
+    this.TEXT_SIZE = 7;
+    this.FONT = 'Monaco';
+    this.TEXT_STYLE = '';
+    this.LABEL_COLOR = '#0000cd';
+
     this.SELECTION_MARQUEE_COLOR = ColorPalette.orange;
   
     this.GREY = "#666";
@@ -216,7 +221,7 @@ class Settings {
     this.COMPONENT_DECIMAL_PLACES = 1;
 
     this.GRID_COLOR = ColorPalette.darkyellow;
-    this.SWITCH_COLOR = "#333";
+    this.SWITCH_COLOR = "#666";
     this.FILL_COLOR = ColorPalette.white;
     this.BG_COLOR = ColorPalette.white;
     this.FG_COLOR = ColorPalette.white;

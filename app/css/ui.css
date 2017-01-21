@@ -1,0 +1,139 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* to remove the top and left whitespace */
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+/* just to be sure these are full screen*/
+
+canvas {
+  display: block;
+}
+
+/* To remove the scrollbars */
+
+#main_nav {
+  position: relative;
+  z-index: 10;
+  border-left: 1px solid #cacaca;
+}
+
+.fieldset legend {
+  background: none !important;
+  font-weight: bold;
+  color: #666;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+hr.component-title-sep {
+  margin-top: 0;
+}
+
+fieldset.fieldset .slider {
+  margin-bottom: 1em;
+}
+
+.switch.tiny .switch-label {
+  color: #444;
+  position: relative;
+  bottom: 6px;
+  left: 9px;
+  font-size: 12px;
+}
+
+.param-control {
+  margin-bottom: 15px;
+}
+
+#component_sidebar {
+  width: 260px;
+  height: 100%;
+  /*float: left;*/
+  top: 0;
+  position: absolute;
+  left: 0;
+  background: #333;
+  padding: 70px 10px 10px 10px;
+  overflow: auto;
+  overflow-x: hidden;
+  z-index: 5;
+
+  border-right: 1px solid #cacaca;
+}
+
+.item.component-item {
+  font-size: 10px;
+  padding: 5px;
+}
+
+.edit-form {
+  width: 260px;
+  height: 100%;
+  /*float: left;*/
+  /*top: 0;*/
+  /*position: absolute;*/
+  /*left: 0;*/
+  background: #EEE;
+  padding: 70px 10px 10px 10px;
+  overflow: auto;
+  overflow-x: hidden;
+  z-index: 5;
+}
+
+.sidepanel::-webkit-scrollbar {
+  width: 0.3em;
+}
+
+.sidepanel::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+.sidepanel::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+.slider-container input {
+  margin-top: 12px;
+}
+
+.off-canvas {
+  position: relative;
+  z-index: 5 !important;
+}
+
+.off-canvas-content {
+  position: relative;
+  z-index: 5 !important;
+}
+
+.off-canvas-wrapper {
+  /*overflow: auto !important;*/
+}
+
+/* to show the canvas bounds */
+canvas {
+  z-index: -1;
+  position: absolute;
+  background: #efe;
+  border: none;
+}
+
+.off-canvas > ul.vertical.menu > li > a {
+  background-color: red;
+}
+
+ul.vertical.menu .title {
+  background-color: blue;
+}
+
+.maxwell {
+  background-color: white !important;
+}

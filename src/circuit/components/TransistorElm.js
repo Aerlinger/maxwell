@@ -32,8 +32,8 @@ class TransistorElm extends CircuitComponent {
         data_type: parseFloat
       },
       "beta": {
-        name: "beta",
-        description: "Current multiplier",
+        name: "Beta",
+        description: "Current gain",
         default_value: 100,
         data_type: parseFloat,
         range: [0, Infinity]
@@ -150,10 +150,10 @@ class TransistorElm extends CircuitComponent {
     // TODO: add arrow poly
     if(this.arrowPoly && this.arrowPoly.numPoints() > 0) {
       try {
-        renderContext.drawThickPolygonP(this.arrowPoly);
+        renderContext.drawThickPolygonP(this.arrowPoly, Settings.STROKE_COLOR);
       } catch(e) {
-        console.log(this.pnp)
-        console.log(this.arrowPoly)
+        console.log(this.pnp);
+        console.log(this.arrowPoly);
       }
     }
 
@@ -191,7 +191,16 @@ class TransistorElm extends CircuitComponent {
 //        @drawCenteredText "C", @coll[0].x1 - 3 + 9 * ds, @coll[0].y + 4, Color.WHITE # x+6 if ds=1, -12 if -1
 //        @drawCenteredText "E", @emit[0].x1 - 3 + 9 * ds, @emit[0].y + 4, Color.WHITE
 
-    return renderContext.drawPosts(this);
+    if (this.emit[0] && this.emit[1]) {
+      renderContext.fillCircle(this.emit[0].x, this.emit[0].y, 0, 0, "#F00", "#F00");
+      renderContext.fillCircle(this.emit[1].x, this.emit[1].y, 0, 0, "#0F0", "#0F0");
+    }
+
+    if (this.emit[2]) {
+      renderContext.fillCircle(this.emit[2].x, this.emit[2].y, 0, 0, "#00F", "#00F");
+    }
+
+    renderContext.drawPosts(this);
   }
 
   getPost(n) {
@@ -244,7 +253,7 @@ class TransistorElm extends CircuitComponent {
     if (this.pnp === 1) {
       // console.log("PNP", "hs2", hs2, "Emit", this.emit[0], this.dsign(), this.dn(), this.pnp, this.point1, this.point2, "arrowPoly", Util.calcArrow(this.emit[1], this.emit[0], 8, 4))
 
-      return this.arrowPoly = Util.calcArrow(this.emit[1], this.emit[0], 8, 4);
+      this.arrowPoly = Util.calcArrow(this.emit[1], this.emit[0], 8, 4);
     } else {
       let pt = Util.interpolate(this.point1, this.point2, 1 - (11 / this.dn()), -5 * this.dsign() * this.pnp);
 

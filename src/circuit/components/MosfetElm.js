@@ -66,11 +66,11 @@ class MosfetElm extends CircuitComponent {
     this.noDiagonal = true;
     this.vt = this.getDefaultThreshold();
 
-    this.hs = 16;
-
     this.pnp = (parseInt(this.flags) & MosfetElm.FLAG_PNP) !== 0 ? -1 : 1;
 
     this.params['pnp'] = this.pnp;
+
+    this.setBboxPt(this.point1, this.point2, this.hs);
   }
 
 
@@ -195,6 +195,8 @@ class MosfetElm extends CircuitComponent {
 
   setPoints() {
     super.setPoints(...arguments);
+    this.hs = 16;
+
     // find the coordinates of the various points we need to draw the MOSFET.
     let hs2 = this.hs * this.dsign();
     this.src = Util.newPointArray(3);
@@ -210,10 +212,12 @@ class MosfetElm extends CircuitComponent {
     this.gate[1] = Util.interpolate(this.gate[0], this.gate[2], .5);
 
     if (this.pnp) {
-      return this.arrowPoly = Util.calcArrow(this.src[1], this.src[0], 10, 4);
+      this.arrowPoly = Util.calcArrow(this.src[1], this.src[0], 10, 4);
     } else {
-      return this.arrowPoly = Util.calcArrow(this.drn[0], this.drn[1], 12, 5);
+      this.arrowPoly = Util.calcArrow(this.drn[0], this.drn[1], 12, 5);
     }
+
+    this.setBboxPt(this.point1, this.point2, this.hs);
   }
 
 //    if @pnp is -1

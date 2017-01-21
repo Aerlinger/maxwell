@@ -12,7 +12,7 @@ class PhaseCompElm extends ChipElm {
   }
 
   getName() {
-    return "Phase comparator";
+    return "Phase Comparator";
   }
 
   setupPins() {

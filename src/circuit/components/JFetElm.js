@@ -22,6 +22,10 @@ class JfetElm extends MosfetElm {
     return .00125;
   }
 
+  getName() {
+    return "JFet"
+  }
+
   setPoints() {
     super.setPoints(...arguments);
 

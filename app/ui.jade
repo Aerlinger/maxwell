@@ -1,0 +1,185 @@
+extends ./layout
+
+block header
+  link(rel="stylesheet", href="/ui.css")
+  link(rel="stylesheet", href="/foundation/css/app.css")
+
+  script(type="text/javascript", src="/bower_components/foundation-sites/dist/js/foundation.js")
+
+  script.
+    function isLetter(str) {
+      return str.length === 1 && str.match(/[a-z]/i);
+    }
+
+    $(document).ready(function() {
+      $(document).foundation();
+
+      var canvas = document.getElementById('canvas');
+
+      Maxwell.createContext("ohms", "../circuits/v3/opint.json", canvas, function (circuitContext) {
+
+        circuitContext.onSelectionChanged = function (selectedComponents) {
+          console.log("SELECTED COMPONENTS", selectedComponents);
+
+          if (selectedComponents.length > 0) {
+            $("#edit_component_pane").foundation('open');
+          } else {
+            $("#edit_component_pane").foundation('close');
+          }
+        };
+
+        circuitContext.onComponentHover = function (component) {
+          var form = Maxwell.renderEdit(component);
+          var edit_pane = document.getElementById("edit_component_pane");
+
+          edit_pane.innerHTML = "";
+          edit_pane.append(form);
+        };
+
+        Maxwell.Components.map(function (component) {
+          $('#component_list').append(
+              '<li><a href="#" class="item component-item" data-name=' + component.name + '>' + (new component()).getName() + '</a></li>'
+          )
+        });
+
+        $('.component-item').click(function (evt) {
+          var componentName = $(this).data("name");
+
+          circuitContext.setPlaceComponent(componentName);
+        });
+
+        document.addEventListener('keydown', function(event) {
+          var charCode = String.fromCharCode(event.which);
+          var keycode = isLetter(charCode) ? charCode : event.which;
+
+          console.log(event.which, keycode);
+
+          switch(keycode) {
+            case "W":
+              console.log("WireElm");
+              circuitContext.setPlaceComponent("WireElm");
+              break;
+            case 'R':
+              circuitContext.setPlaceComponent("ResistorElm");
+              break;
+            case 'G':
+              circuitContext.setPlaceComponent("GroundElm");
+              break;
+            case 'C':
+              circuitContext.setPlaceComponent("CapacitorElm");
+              break;
+            case 'I':
+              circuitContext.setPlaceComponent("InductorElm");
+              break;
+            case 'O':
+              circuitContext.setPlaceComponent("OpAmpElm");
+              break;
+            case "D":
+              circuitContext.setPlaceComponent("DiodeElm");
+              break;
+            case "T":
+              circuitContext.setPlaceComponent("TransistorElm");
+              break;
+            case "Q":
+              circuitContext.clearPlaceComponent();
+              break;
+
+            // ESC
+            case 27:
+              circuitContext.resetSelection();
+              break;
+
+            // Backspace
+            case 8:
+              circuitContext.remove(circuitContext.getSelectedComponents());
+              break;
+
+            // Space
+            case 32:
+              circuitContext.togglePause();
+              break;
+          }
+        })
+      });
+
+      if (canvas) {
+        var ctx = canvas.getContext('2d');
+        //ctx = Sketch.augment(ctx, {autoclear: false});
+
+        // resize the canvas to fill browser window dynamically
+        //window.addEventListener('resize', resizeCanvas, false);
+
+        function resizeCanvas() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+
+          /**
+           * Your drawings need to be inside this function otherwise they will be reset when
+           * you resize the browser window and the canvas goes will be cleared.
+           */
+          drawStuff();
+        }
+
+        resizeCanvas();
+
+        function drawStuff() {
+          // draw updates on resize
+
+          //ctx.style = "#F00";
+          //ctx.fillRect(500, 500, 100, 200);
+        }
+
+        drawStuff();
+      }
+    });
+
+block content
+  canvas#canvas.maxwell
+
+  #main_nav.top-bar.sidepanel
+    .top-bar-left
+      ul.dropdown.menu(data-dropdown-menu='', data-multi-open=false)
+        li.menu-text Maxwell
+        li
+          a(href='#') Circuit
+          ul.menu.vertical
+            li
+              a(href='#') One
+            li
+              a(href='#') Two
+              ul.menu.vertical
+                li
+                  a(href='#') One
+                li
+                  a(href='#') Two
+                li
+                  a(href='#') Three
+            li
+              a(href='#') Three
+        li
+          a(href='#') Edit
+        li
+          a(href='#') Sample Circuits
+    .top-bar-right
+      //ul.menu
+        li
+          input(type='search', placeholder='Search')
+        li
+          button.button(type='button') Search
+
+  #component_sidebar.sidepanel
+
+    input(type='search', placeholder='Search components')
+    ul.vertical.menu(data-accordion-menu, data-multi-open="false")
+      li
+        a(href='#') Components
+        ul#component_list.is-active.menu.vertical.nested
+
+
+  #edit_component_pane.off-canvas.edit-form.position-right(data-off-canvas='')
+    //div#edit_pane.edit-form
+
+  //.off-canvas-content
+    button.button.float-right(type='button', data-toggle='edit_component_pane') Open
+
+  script.

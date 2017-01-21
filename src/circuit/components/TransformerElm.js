@@ -17,7 +17,7 @@ class TransformerElm extends CircuitComponent {
         name: "Ratio",
         default_value: 1,
         data_type: parseFloat,
-        input_type: "integer"
+        field_type: "integer"
       },
       // TODO: Name collision
       current0: {

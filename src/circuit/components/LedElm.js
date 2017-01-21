@@ -65,7 +65,7 @@ class LedElm extends DiodeElm {
   }
 
   getName() {
-    return "LED";
+    return "Light Emitting Diode";
   }
 
   setPoints() {
@@ -75,6 +75,8 @@ class LedElm extends DiodeElm {
     this.ledLead1 = Util.interpolate(this.point1, this.point2, 0.5 - (cr / this.dn()));
     this.ledLead2 = Util.interpolate(this.point1, this.point2, 0.5 + (cr / this.dn()));
     this.ledCenter = Util.interpolate(this.point1, this.point2, 0.5);
+
+    this.setBboxPt(this.point1, this.point2, cr);
   }
 
   needsShortcut() {
@@ -82,13 +84,15 @@ class LedElm extends DiodeElm {
   }
 
   draw(renderContext) {
+    let cr = 12;
+    
+    this.setBboxPt(this.point1, this.point2, cr);
+
     let voltageColor = Util.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.ledLead1, voltageColor);
 
     voltageColor = Util.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.ledLead2, this.point2, voltageColor);
-
-    let cr = 12;
 
     renderContext.drawCircle(this.ledCenter.x, this.ledCenter.y, cr, 2, Settings.PostColor);
 
@@ -107,7 +111,11 @@ class LedElm extends DiodeElm {
     renderContext.drawDots(this.point1, this.ledLead1, this.curcount);
     renderContext.drawDots(this.point2, this.ledLead2, -this.curcount);
 
-    return renderContext.drawPosts(this);
+    renderContext.drawPosts(this);
+
+    if (CircuitComponent.DEBUG) {
+      super.draw(renderContext);
+    }
   }
 }
 LedElm.initClass();

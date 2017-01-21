@@ -3,7 +3,7 @@ Wire = require('../../../src/circuit/components/WireElm.js')
 GroundElm = require('../../../src/circuit/components/GroundElm.js')
 ResistorElm = require('../../../src/circuit/components/ResistorElm.js')
 VoltageElm = require('../../../src/circuit/components/VoltageElm.js')
-Renderer = require('../../../src/render/renderer.js')
+#Renderer = require('../../../src/render/renderer.js')
 Maxwell = require('../../../src/Maxwell.js')
 
 #describe "Should render", ->

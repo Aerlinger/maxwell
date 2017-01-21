@@ -6,11 +6,11 @@ class VoltageElm extends CircuitComponent {
   static get Fields() {
     return {
       "waveform": {
-        name: "none",
+        name: "Waveform",
         default_value: 0,
         data_type: parseInt,
         range: [0, 6],
-        input_type: "select",
+        field_type: "select",
         select_values: {
           "DC Source": VoltageElm.WF_DC,
           "AC Source": VoltageElm.WF_AC,
@@ -29,38 +29,38 @@ class VoltageElm extends CircuitComponent {
         data_type: parseFloat
       },
       "maxVoltage": {
-        name: "Voltage",
+        name: "Max Voltage",
         unit: "Voltage",
         symbol: "V",
         default_value: 5,
         data_type: parseFloat
       },
       "bias": {
-        name: "Voltage",
+        name: "Voltage Bias",
         unit: "Voltage",
         symbol: "V",
         default_value: 0,
         data_type: parseFloat
       },
       "phaseShift": {
-        name: "degrees",
+        name: "Phase Shift",
         unit: "degrees",
         default_value: 0,
         symbol: "deg",
         data_type: parseFloat,
         range: [-360, 360],
         type: parseFloat,
-        input_type: "range"
+        field_type: "slider"
       },
       "dutyCycle": {
-        name: "percentage",
+        name: "Duty Cycle",
         unit: "",
         default_value: 0.5,
         symbol: "%",
         data_type: parseFloat,
         range: [0, 100],
         type: parseFloat,
-        input_type: "range"
+        field_type: "slider"
       }
     };
   }
@@ -201,7 +201,7 @@ class VoltageElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (CircuitComponent.DEBUG) {
-      return super.draw(renderContext);
+      super.draw(renderContext);
     }
   }
 

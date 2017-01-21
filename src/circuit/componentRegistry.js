@@ -122,12 +122,12 @@ class ComponentRegistry {
       'O': OutputElm,
       'T': TransformerElm,
   
-      'o': Scope,
+      // 'o': Scope,
   //    'h': Scope
-      '$': Scope,
-      '%': Scope,
-      '?': Scope,
-      'B': Scope,
+  //     '$': Scope,
+  //     '%': Scope,
+  //     '?': Scope,
+  //     'B': Scope,
   
       // Incomplete
   

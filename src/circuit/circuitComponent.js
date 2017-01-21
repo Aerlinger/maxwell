@@ -188,7 +188,7 @@ class CircuitComponent {
       this.point2 = new Point(x2, y2);
     }
 
-    return this.recomputeBounds();
+    this.recomputeBounds();
   }
 
   unitText() {
@@ -457,23 +457,34 @@ class CircuitComponent {
     return this.boundingBox;
   }
 
+  isPlaced() {
+    return this.point1 && this.point2 && this.point1.x && this.point1.y && this.point2.x && this.point2.y
+  }
+
   setBbox(x1, y1, x2, y2) {
+    if (!(Util.isValue(x1) && Util.isValue(y1) && Util.isValue(x2) && Util.isValue(y2) && Util.isValue(this.dpx1()) && Util.isValue(this.dpy1()))) {
+      // console.trace("Invalid BBox value. isPlaced: ", this.isPlaced(), ":", x1, y1, x2, y2, this.dpx1(), this.dpy1()
+      // throw new Error(["Invalid BBox value. isPlaced: ", this.isPlaced(), ":", x1, y1, x2, y2, this.dpx1(), this.dpy1()].join(" "));
+    }
+
     let x = Math.min(x1, x2);
     let y = Math.min(y1, y2);
     let width = Math.max(Math.abs(x2 - x1), 3);
     let height = Math.max(Math.abs(y2 - y1), 3);
 
-    let horizontalMargin = Math.floor(Math.abs(this.dpx1()));
-    let verticalMargin = Math.floor(Math.abs(this.dpy1()));
+    let horizontalMargin = Math.floor(Math.abs(this.dpx1())) || 0;
+    let verticalMargin = Math.floor(Math.abs(this.dpy1())) || 0;
 
-    return this.boundingBox = new Rectangle(x - horizontalMargin, y - verticalMargin, width + 2 * horizontalMargin, height + 2 * verticalMargin);
+    // console.log(x1, y1, x2, y2, horizontalMargin, verticalMargin);
+
+    this.boundingBox = new Rectangle(x - horizontalMargin, y - verticalMargin, width + 2 * horizontalMargin, height + 2 * verticalMargin);
   }
 
   setBboxPt(p1, p2, width) {
     let deltaX = (this.dpx1() * width);
     let deltaY = (this.dpy1() * width);
 
-    return this.setBbox(p1.x - deltaX, p1.y - deltaY, p1.x + deltaX, p1.y + deltaY);
+    return this.setBbox(p1.x - deltaX, p1.y - deltaY, p2.x + deltaX, p2.y + deltaY);
   }
 
 // Extended by subclasses
@@ -526,11 +537,14 @@ class CircuitComponent {
 
   draw(renderContext) {
     let post;
-    renderContext.drawRect(this.boundingBox.x - 2, this.boundingBox.y - 2, this.boundingBox.width + 2, this.boundingBox.height + 2, 0.5, "#8888CC");
+    let color = Util.getColorForId(this.component_id);
+
+    renderContext.drawRect(this.boundingBox.x - 2, this.boundingBox.y - 2, this.boundingBox.width + 2, this.boundingBox.height + 2, 0.5, color);
 
     // renderContext.drawValue 10, -15, this, @constructor.name
     // renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
 
+    /*
     renderContext.drawValue(-14, 0, this, this.toString());
 
     if (this.params) {
@@ -543,6 +557,7 @@ class CircuitComponent {
         i += 1;
       }
     }
+    */
 
     let outlineRadius = 7;
 
@@ -555,14 +570,16 @@ class CircuitComponent {
         nodeIdx += 1
     */
 
+
     if (this.point1) {
-      renderContext.drawCircle(this.point1.x, this.point1.y, outlineRadius - 1, 1, 'rgba(0,0,255,0.7)');
+      renderContext.drawCircle(this.point1.x, this.point1.y, outlineRadius - 1, 1, color);
     }
 
     if (this.point2) {
-      renderContext.drawCircle(this.point1.x, this.point1.y, outlineRadius - 1, 1, 'rgba(0,0,255,0.5)');
+      renderContext.drawRect(this.point2.x - (outlineRadius / 2), this.point2.y - (outlineRadius / 2), outlineRadius - 1, outlineRadius - 1, 2, color);
     }
-
+    
+    /*
     if (this.lead1) {
       renderContext.drawRect(this.lead1.x - (outlineRadius / 2), this.lead1.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
     }
@@ -570,13 +587,21 @@ class CircuitComponent {
     if (this.lead2) {
       renderContext.drawRect(this.lead2.x - (outlineRadius / 2), this.lead2.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
     }
+    */
 
-    return __range__(0, this.getPostCount(), false).map((postIdx) =>
-        (post = this.getPost(postIdx),
-            renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')));
+    /*
+    for (let i=0; i<this.getPostCount(); ++i) {
+      let post = this.getPost(i);
+      renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
+    }
+    */
   }
 
   updateDots(ds) {
+    if (this.Circuit && this.Circuit.isStopped) {
+      return
+    }
+
     if (ds == null) {
       ds = Settings.CURRENT_SEGMENT_LENGTH;
     }
@@ -686,9 +711,20 @@ class CircuitComponent {
   }
 
   setValue(paramName, paramValue) {
+    /**
+     * parseFunction converts a *possibly* stringified `paramValue` to a raw value. Common examples of parseFunction
+     * are builtins like parseFloat, parseInt, etc.
+     */
+    let parseFunction = (this.constructor.Fields[paramName] && this.constructor.Fields[paramName]['data_type'])
+
+    // default to a no-op if parseFunction isn't defined
+    if (!parseFunction) {
+      parseFunction = function noop(x) { return x; };
+    }
+
     if (this.isValidParam(paramName, paramValue)) {
-      this[paramName] = paramValue;
-      this.params[paramName] = paramValue;
+      this[paramName] = parseFunction(paramValue);
+      this.params[paramName] = parseFunction(paramValue);
     }
   }
 

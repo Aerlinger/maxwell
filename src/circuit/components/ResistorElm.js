@@ -11,6 +11,7 @@ class ResistorElm extends CircuitComponent {
     return {
       "resistance": {
         name: "Resistance",
+        description: "Amount of current per unit voltage applied to this resistor (ideal).",
         unit: "Ohms",
         default_value: 1000,
         symbol: "Ω",

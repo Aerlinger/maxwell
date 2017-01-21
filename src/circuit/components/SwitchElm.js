@@ -52,8 +52,8 @@ class SwitchElm extends CircuitComponent {
     this.ps = new Point(0, 0);
     this.ps2 = new Point(0, 0);
 
-    let openhs = 16;
-    return this.setBboxPt(this.point1, this.point2, openhs);
+    this.openhs = 16;
+    this.setBboxPt(this.point1, this.point2, this.openhs/2);
   }
 
   stamp(stamper) {
@@ -65,12 +65,13 @@ class SwitchElm extends CircuitComponent {
 
   draw(renderContext) {
     this.calcLeads(32);
+    this.setBboxPt(this.point1, this.point2, this.openhs/2);
+
     this.ps = new Point(0, 0);
     this.ps2 = new Point(0, 0);
 
-    let openhs = 16;
     let hs1 = ((this.position === 1) ? 0 : 2);
-    let hs2 = ((this.position === 1) ? openhs : 2);
+    let hs2 = ((this.position === 1) ? this.openhs : 2);
 
     renderContext.drawLeads(this);
 
@@ -83,11 +84,11 @@ class SwitchElm extends CircuitComponent {
 
 
     renderContext.drawPosts(this);
+    // Draw switch "Lever"
+    renderContext.drawLinePt(this.ps, this.ps2, Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
+
     renderContext.fillCircle(this.ps.x - Settings.POST_RADIUS/2 - 1, this.ps.y - Settings.POST_RADIUS/2 - 1, Settings.POST_RADIUS + 1, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
     renderContext.fillCircle(this.ps2.x - Settings.POST_RADIUS/2 - 1, this.ps2.y - Settings.POST_RADIUS/2 - 1, Settings.POST_RADIUS + 1, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
-
-    // Draw switch "Lever"
-    renderContext.drawLinePt(this.ps, this.ps2);
 
     if (CircuitComponent.DEBUG) {
       return super.draw(renderContext);
