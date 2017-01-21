@@ -82,6 +82,14 @@ class Circuit extends Observer {
   
     this.ON_ERROR = "ON_ERROR";
     this.ON_WARNING = "ON_WARNING";
+
+    this.hintMap = {
+      1: "HINT_LC",
+      2: "HINT_RC",
+      3: "HINT_3DB_C",
+      4: "HINT_TWINT",
+      5: "HINT_3DB_L"
+    }
   }
 
 
@@ -91,6 +99,10 @@ class Circuit extends Observer {
     if (name == null) { name = "untitled"; }
     this.name = name;
     this.Params = new SimulationParams();
+
+    this.hintType = null;
+    this.hintItem1 = null;
+    this.hintItem2 = null;
 
     this.flags = 0;
     this.isStopped = false;
@@ -210,6 +222,10 @@ class Circuit extends Observer {
       this.Solver.reconstruct();
       this.Solver.solveCircuit();
       this.notifyObservers(this.ON_COMPLETE_UPDATE);
+
+      // console.log(this.Solver.circuitMatrix);
+      // console.log(this.Solver.circuitRightSide);
+      // console.log(this.Solver.circuitRowInfo);
     }
 
 //    @write(@Solver.dumpFrame() + "\n")
@@ -332,6 +348,10 @@ class Circuit extends Observer {
     return this.nodeList = [];
   }
 
+  addScope(scope) {
+    this.scopes.push(scope);
+  }
+
   addCircuitNode(circuitNode) {
     return this.nodeList.push(circuitNode);
   }
@@ -450,8 +470,34 @@ class Circuit extends Observer {
     return this.Solver.getStamper();
   }
 
+  setHint(type, item1, item2)  {
+
+    if (typeof type == "string") {
+      if (parseInt(type)) {
+        this.hintType = Circuit.hintMap[parseInt(type)];
+      } else {
+        this.hintType = type;
+      }
+    } else {
+      this.hintType = Circuit.hintMap[parseInt(type)];
+    }
+    this.hintItem1 = parseInt(item1);
+    this.hintItem2 = parseInt(item2);
+  }
+
   serialize() {
-    return [{
+    let hint;
+
+    if (this.hintType) {
+      hint = {
+        name: "Hint",
+        hintType: this.hintType,
+        hintItem1: this.hintItem1,
+        hintItem2: this.hintItem2
+      }
+    }
+
+    let circuitObj = [{
           type: this.Params.name,
           timeStep: this.timeStep(),
           simSpeed: this.simSpeed(),
@@ -459,7 +505,15 @@ class Circuit extends Observer {
           voltageRange: this.voltageRange(),
           powerRange: this.powerRange(),
           flags: this.flags
-        }].concat(this.elementList.map(element => element.serialize()));
+        }]
+        .concat(this.elementList.map(element => element.serialize()))
+        .concat(this.scopes.map(scope => scope.serialize()))
+        ;
+
+    if (hint)
+      circuitObj.push(hint);
+
+    return circuitObj
   }
 
   toJson() {

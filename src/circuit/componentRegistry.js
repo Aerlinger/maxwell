@@ -64,7 +64,7 @@ let LedElm = require('./components/LedElm.js');
 let PotElm = require('./components/PotElm.js');
 let ClockElm = require('./components/ClockElm.js');
 
-let Scope = require('./components/Scope.js');
+let Scope = require('./Scope.js');
 
 //#
 // ElementMap

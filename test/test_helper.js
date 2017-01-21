@@ -108,7 +108,7 @@ AnalogSwitch2Elm = require('../src/circuit/components/AnalogSwitch2Elm.js');
 
 Util = require('../src/util/util');
 
-Scope = require('../src/circuit/components/Scope.js');
+Scope = require('../src/circuit/Scope.js');
 Point = require('../src/geom/point.js');
 Polygon = require('../src/geom/polygon.js');
 Rectangle = require('../src/geom/rectangle.js');

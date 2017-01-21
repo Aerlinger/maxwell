@@ -44,7 +44,7 @@ CircuitSolver = (function () {
     this.lastFrameTime = 0;
     this.lastIterTime = 0;
     this.analyzeFlag = true;
-    return this.simulationFrames = [];
+    this.simulationFrames = [];
   };
 
   CircuitSolver.prototype.reconstruct = function () {

@@ -62,7 +62,7 @@ let LedElm = require('../circuit/components/LedElm.js');
 let PotElm = require('../circuit/components/PotElm.js');
 let ClockElm = require('../circuit/components/ClockElm.js');
 
-let Scope = require('../circuit/components/Scope.js');
+let Scope = require('../circuit/Scope.js');
 
 let SimulationParams = require('../core/simulationParams.js');
 
@@ -74,62 +74,43 @@ let environment = require("../environment.js");
 
 class CircuitLoader {
   static createCircuitFromJsonData(jsonData) {
+    // Defensive copy
+    jsonData = JSON.parse(JSON.stringify(jsonData));
+
     let circuit = new Circuit();
 
+    // Extract circuit simulation params
     let circuitParams = jsonData.shift();
     circuit.Params = new SimulationParams(circuitParams);
     circuit.flags = parseInt(circuitParams['flags']);
 
-    // Load each Circuit component from JSON data:
-    let elms = [];
-
+    // Load each component from JSON data:
     for (let elementData of Array.from(jsonData)) {
       let type = elementData['name'];
       let ComponentClass = eval(type);
 
-      let [x1, y1, x2, y2] = elementData['pos'];
-      let flags = parseInt(elementData['flags']) || 0;
-      let params = elementData['params'];
+      if (!ComponentClass)
+        circuit.error(`No matching component for ${type}`);
 
-      if (!ComponentClass) {
-        circuit.warn(`No matching component for ${type}`);
-      } else if (type === "h") {
-        console.log("Hint found in file!");
-
-        //  TODO: Proper types
-        this.hintType = x1;
-        this.hintItem1 = x2;
-        this.hintItem2 = y1;
-        break;
-      } else if (type === "Scope") {
-      } else if (!type) {
+      if (!type)
         circuit.error(`Unrecognized Type ${type}`);
-      } else {
-        var newCircuitElm;
-        try {
-          newCircuitElm = new ComponentClass(x1, y1, x2, y2, params, parseInt(flags));
-        } catch (e) {
-          console.log(e);
-          console.log(`type: ${type}`);
-          console.log("elm: ", elementData);
-          console.log(e.stack);
 
-          if (!environment.isBrowser) {
-            process.exit(1);
-          }
-        }
+      else if (type === "Hint")
+        circuit.setHint(elementData['hintType'], elementData['hintItem1'], elementData['hintItem2']);
 
-        elms.push(newCircuitElm);
-        circuit.solder(newCircuitElm);
+      else if (type === "Scope")
+        circuit.addScope(new Scope(elementData["pos"], elementData["params"]));
+
+      else {
+        let [x1, y1, x2, y2] = elementData['pos'];
+        let flags = parseInt(elementData['flags']) || 0;
+
+        circuit.solder(new ComponentClass(x1, y1, x2, y2, elementData['params'], parseInt(flags)));
       }
     }
 
-    if (elms.length === 0) {
+    if (circuit.getElements().length === 0)
       console.error("No elements loaded. JSON most likely malformed");
-    }
-
-//    unless environment.isBrowser
-   //console.log(circuit.Params);
 
     return circuit;
   }

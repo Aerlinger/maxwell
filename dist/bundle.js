@@ -17630,7 +17630,7 @@
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {let AntennaElm = __webpack_require__(17);
+	let AntennaElm = __webpack_require__(17);
 	let WireElm = __webpack_require__(20);
 	let ResistorElm = __webpack_require__(21);
 	let GroundElm = __webpack_require__(22);
@@ -17694,7 +17694,7 @@
 	let PotElm = __webpack_require__(73);
 	let ClockElm = __webpack_require__(74);
 	
-	let Scope = __webpack_require__(75);
+	let Scope = __webpack_require__(93);
 	
 	let SimulationParams = __webpack_require__(76);
 	
@@ -17706,62 +17706,43 @@
 	
 	class CircuitLoader {
 	  static createCircuitFromJsonData(jsonData) {
+	    // Defensive copy
+	    jsonData = JSON.parse(JSON.stringify(jsonData));
+	
 	    let circuit = new Circuit();
 	
+	    // Extract circuit simulation params
 	    let circuitParams = jsonData.shift();
 	    circuit.Params = new SimulationParams(circuitParams);
 	    circuit.flags = parseInt(circuitParams['flags']);
 	
-	    // Load each Circuit component from JSON data:
-	    let elms = [];
-	
+	    // Load each component from JSON data:
 	    for (let elementData of Array.from(jsonData)) {
 	      let type = elementData['name'];
 	      let ComponentClass = eval(type);
 	
-	      let [x1, y1, x2, y2] = elementData['pos'];
-	      let flags = parseInt(elementData['flags']) || 0;
-	      let params = elementData['params'];
+	      if (!ComponentClass)
+	        circuit.error(`No matching component for ${type}`);
 	
-	      if (!ComponentClass) {
-	        circuit.warn(`No matching component for ${type}`);
-	      } else if (type === "h") {
-	        console.log("Hint found in file!");
-	
-	        //  TODO: Proper types
-	        this.hintType = x1;
-	        this.hintItem1 = x2;
-	        this.hintItem2 = y1;
-	        break;
-	      } else if (type === "Scope") {
-	      } else if (!type) {
+	      if (!type)
 	        circuit.error(`Unrecognized Type ${type}`);
-	      } else {
-	        var newCircuitElm;
-	        try {
-	          newCircuitElm = new ComponentClass(x1, y1, x2, y2, params, parseInt(flags));
-	        } catch (e) {
-	          console.log(e);
-	          console.log(`type: ${type}`);
-	          console.log("elm: ", elementData);
-	          console.log(e.stack);
 	
-	          if (!environment.isBrowser) {
-	            process.exit(1);
-	          }
-	        }
+	      else if (type === "Hint")
+	        circuit.setHint(elementData['hintType'], elementData['hintItem1'], elementData['hintItem2']);
 	
-	        elms.push(newCircuitElm);
-	        circuit.solder(newCircuitElm);
+	      else if (type === "Scope")
+	        circuit.addScope(new Scope(elementData["pos"], elementData["params"]));
+	
+	      else {
+	        let [x1, y1, x2, y2] = elementData['pos'];
+	        let flags = parseInt(elementData['flags']) || 0;
+	
+	        circuit.solder(new ComponentClass(x1, y1, x2, y2, elementData['params'], parseInt(flags)));
 	      }
 	    }
 	
-	    if (elms.length === 0) {
+	    if (circuit.getElements().length === 0)
 	      console.error("No elements loaded. JSON most likely malformed");
-	    }
-	
-	//    unless environment.isBrowser
-	   //console.log(circuit.Params);
 	
 	    return circuit;
 	  }
@@ -17790,7 +17771,6 @@
 	function __guardFunc__(func, transform) {
 	  return typeof func === 'function' ? transform(func) : undefined;
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
 /* 17 */
@@ -26371,84 +26351,7 @@
 
 
 /***/ },
-/* 75 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let Rectangle = __webpack_require__(3);
-	let Util = __webpack_require__(5);
-	
-	class Scope {
-	  static initClass() {
-	  
-	    this.VAL_POWER = 1;
-	    this.VAL_IB = 1;
-	    this.VAL_IC = 2;
-	    this.VAL_IE = 3;
-	    this.VAL_VBE = 4;
-	    this.VAL_VBC = 5;
-	    this.VAL_VCE = 6;
-	    this.VAL_R = 2;
-	  }
-	
-	  constructor() {
-	    this.rect = new Rectangle(0, 500, 200, 100);
-	  }
-	
-	  reset() {
-	    let lockScale, showMax, showMin, showV;
-	    this.minMaxV = 5;
-	    this.minMaxI = .1;
-	    this.speed = 64;
-	    this.showI = showV = showMax = true;
-	    this.showFreq = lockScale = showMin = false;
-	    this.plot2d = false;
-	
-	    // no showI for Output
-	    if ((elm !== null) && (this.elm instanceof OutputElm || this.elm instanceof LogicOutputElm || this.elm instanceof ProbeElm)) {
-	      this.showI = false;
-	    }
-	
-	    this.value = this.ivalue = 0;
-	
-	    if (this.elm instanceof TransistorElm) {
-	      return this.value = VAL_VCE;
-	    }
-	  }
-	
-	  getName() {
-	    return "Scope Output"
-	  }
-	
-	  resetGraph() {
-	    this.scopePointCount = 1;
-	
-	    while (this.scopePointCount <= this.rect.width) {
-	      this.scopePointCount *= 2;
-	    }
-	
-	    this.minV = Util.zeroArray(this.scopePointCount);
-	    this.maxV = Util.zeroArray(this.scopePointCount);
-	    this.minI = Util.zeroArray(this.scopePointCount);
-	    this.maxI = Util.zeroArray(this.scopePointCount);
-	
-	    return this.ptr = this.ctr = 0;
-	  }
-	
-	  draw(renderContext) {
-	    return renderContext.drawLinePt(this.rect.x, this.rect.y, this.rect.x + this.rect.width, this.rect.y + this.rect.height);
-	  }
-	
-	  setElm(ce){
-	    return this.elm = ce;
-	  }
-	}
-	Scope.initClass();
-	
-	
-	module.exports = Scope;
-
-
-/***/ },
+/* 75 */,
 /* 76 */
 /***/ function(module, exports) {
 
@@ -26606,6 +26509,14 @@
 	  
 	    this.ON_ERROR = "ON_ERROR";
 	    this.ON_WARNING = "ON_WARNING";
+	
+	    this.hintMap = {
+	      1: "HINT_LC",
+	      2: "HINT_RC",
+	      3: "HINT_3DB_C",
+	      4: "HINT_TWINT",
+	      5: "HINT_3DB_L"
+	    }
 	  }
 	
 	
@@ -26615,6 +26526,10 @@
 	    if (name == null) { name = "untitled"; }
 	    this.name = name;
 	    this.Params = new SimulationParams();
+	
+	    this.hintType = null;
+	    this.hintItem1 = null;
+	    this.hintItem2 = null;
 	
 	    this.flags = 0;
 	    this.isStopped = false;
@@ -26734,6 +26649,10 @@
 	      this.Solver.reconstruct();
 	      this.Solver.solveCircuit();
 	      this.notifyObservers(this.ON_COMPLETE_UPDATE);
+	
+	      // console.log(this.Solver.circuitMatrix);
+	      // console.log(this.Solver.circuitRightSide);
+	      // console.log(this.Solver.circuitRowInfo);
 	    }
 	
 	//    @write(@Solver.dumpFrame() + "\n")
@@ -26856,6 +26775,10 @@
 	    return this.nodeList = [];
 	  }
 	
+	  addScope(scope) {
+	    this.scopes.push(scope);
+	  }
+	
 	  addCircuitNode(circuitNode) {
 	    return this.nodeList.push(circuitNode);
 	  }
@@ -26974,8 +26897,34 @@
 	    return this.Solver.getStamper();
 	  }
 	
+	  setHint(type, item1, item2)  {
+	
+	    if (typeof type == "string") {
+	      if (parseInt(type)) {
+	        this.hintType = Circuit.hintMap[parseInt(type)];
+	      } else {
+	        this.hintType = type;
+	      }
+	    } else {
+	      this.hintType = Circuit.hintMap[parseInt(type)];
+	    }
+	    this.hintItem1 = parseInt(item1);
+	    this.hintItem2 = parseInt(item2);
+	  }
+	
 	  serialize() {
-	    return [{
+	    let hint;
+	
+	    if (this.hintType) {
+	      hint = {
+	        name: "Hint",
+	        hintType: this.hintType,
+	        hintItem1: this.hintItem1,
+	        hintItem2: this.hintItem2
+	      }
+	    }
+	
+	    let circuitObj = [{
 	          type: this.Params.name,
 	          timeStep: this.timeStep(),
 	          simSpeed: this.simSpeed(),
@@ -26983,7 +26932,15 @@
 	          voltageRange: this.voltageRange(),
 	          powerRange: this.powerRange(),
 	          flags: this.flags
-	        }].concat(this.elementList.map(element => element.serialize()));
+	        }]
+	        .concat(this.elementList.map(element => element.serialize()))
+	        .concat(this.scopes.map(scope => scope.serialize()))
+	        ;
+	
+	    if (hint)
+	      circuitObj.push(hint);
+	
+	    return circuitObj
 	  }
 	
 	  toJson() {
@@ -27192,7 +27149,7 @@
 	    this.lastFrameTime = 0;
 	    this.lastIterTime = 0;
 	    this.analyzeFlag = true;
-	    return this.simulationFrames = [];
+	    this.simulationFrames = [];
 	  };
 	
 	  CircuitSolver.prototype.reconstruct = function () {
@@ -28537,7 +28494,7 @@
 	let PotElm = __webpack_require__(73);
 	let ClockElm = __webpack_require__(74);
 	
-	let Scope = __webpack_require__(75);
+	let Scope = __webpack_require__(93);
 	
 	//#
 	// ElementMap
@@ -28805,7 +28762,7 @@
 	let PotElm = __webpack_require__(73);
 	let ClockElm = __webpack_require__(74);
 	
-	let Scope = __webpack_require__(75);
+	let Scope = __webpack_require__(93);
 	
 	
 	
@@ -29665,6 +29622,179 @@
 	}
 	
 	module.exports = CircuitCanvas;
+
+
+/***/ },
+/* 93 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let Rectangle = __webpack_require__(3);
+	let Util = __webpack_require__(5);
+	
+	class Scope {
+	  static initClass() {
+	  
+	    this.VAL_POWER = 1;
+	    this.VAL_IB = 1;
+	    this.VAL_IC = 2;
+	    this.VAL_IE = 3;
+	    this.VAL_VBE = 4;
+	    this.VAL_VBC = 5;
+	    this.VAL_VCE = 6;
+	    this.VAL_R = 2;
+	  }
+	
+	  // Position is a vector of [x1, y1, x2, y2] where x1, y1 is the upper-left corner and x2, y2 is the lower-right corner
+	  constructor(position, params) {
+	    this.params = params;
+	
+	    this.elm = params['elm'];
+	    this.speed = params['speed'];
+	    this.value = params['value'];
+	    this.options = params['options'];
+	    this.voltageRange = params["voltageRange"];
+	    this.currentRange = params["currentRange"];
+	
+	    this.pos = params['pos'] || 0;
+	    this.ye = params['ye'] || 0;
+	    this.label = params['label'] || "";
+	
+	    this.context = null;
+	
+	    if (!position) {
+	      // console.log(position, this.pos)
+	      // Bounding Box?
+	      this.boundingBox = new Rectangle(this.pos * 100, 100, this.pos * 100 + 300, 100);
+	    } else {
+	      this.boundingBox = new Rectangle(position[0], position[1], position[2] - position[0], position[3] - position[1]);
+	    }
+	  }
+	
+	  reset() {
+	    let lockScale, showMax, showMin, showV;
+	    this.minMaxV = 5;
+	    this.minMaxI = .1;
+	    this.speed = 64;
+	    this.showI = showV = showMax = true;
+	    this.showFreq = lockScale = showMin = false;
+	    this.plot2d = false;
+	
+	    // no showI for Output
+	    if ((elm !== null) && (this.elm instanceof OutputElm || this.elm instanceof LogicOutputElm || this.elm instanceof ProbeElm)) {
+	      this.showI = false;
+	    }
+	
+	    this.value = this.ivalue = 0;
+	
+	    if (this.elm instanceof TransistorElm) {
+	      return this.value = VAL_VCE;
+	    }
+	  }
+	
+	  getName() {
+	    return "Scope Output"
+	  }
+	
+	  resetGraph() {
+	    this.scopePointCount = 1;
+	
+	    while (this.scopePointCount <= this.boundingBox.width) {
+	      this.scopePointCount *= 2;
+	    }
+	
+	    this.minV = Util.zeroArray(this.scopePointCount);
+	    this.maxV = Util.zeroArray(this.scopePointCount);
+	    this.minI = Util.zeroArray(this.scopePointCount);
+	    this.maxI = Util.zeroArray(this.scopePointCount);
+	
+	    return this.ptr = this.ctr = 0;
+	  }
+	
+	  draw(renderContext) {
+	    return renderContext.drawLinePt(this.boundingBox.x, this.boundingBox.y, this.boundingBox.x + this.boundingBox.width, this.boundingBox.y + this.boundingBox.height);
+	  }
+	
+	  setElm(ce){
+	    return this.elm = ce;
+	  }
+	
+	  serialize() {
+	    let pos = [
+	      this.boundingBox.x,
+	      this.boundingBox.y,
+	      this.boundingBox.x + this.boundingBox.width,
+	      this.boundingBox.y + this.boundingBox.height
+	    ];
+	
+	    return {
+	      name: "Scope",
+	      pos: pos,
+	      params: {
+	        elm: this.elm,
+	        speed: this.speed,
+	        value: this.value,
+	        voltageRange: this.voltageRange,
+	        currentRange: this.currentRange,
+	        options: this.options,
+	        pos: this.pos,
+	        ye: this.ye
+	      }
+	    }
+	  }
+	
+	  sample() {
+	
+	  }
+	
+	  static tokenize(inputStr) {
+	    // inputStr = "1 64 0 34 12.0 1.220703125E-5 0 -1";
+	
+	    let tokens = inputStr.split(" ");
+	
+	    tokens.shift();
+	    let elm = parseInt(tokens[0]);
+	    let speed = parseFloat(tokens[1]);
+	    let value = parseFloat(tokens[2]);
+	    let options = parseInt(tokens[3]);
+	
+	    let voltageRange
+	    if (tokens.length > 4)
+	      voltageRange = parseFloat(tokens[4]);
+	
+	    let currentRange
+	    if (tokens.length > 5)
+	      currentRange = parseFloat(tokens[5]);
+	
+	    let pos;
+	    if (tokens.length > 6)
+	      pos = parseInt(tokens[6]);
+	
+	    let ye;
+	    if (tokens.length > 7)
+	      ye = parseFloat(tokens[7]);
+	
+	    let label;
+	    if (tokens.length > 8)
+	      label = tokens[8];
+	
+	    return {
+	      elm,
+	      speed,
+	      value,
+	      options,
+	      voltageRange,
+	      currentRange,
+	      pos,
+	      ye,
+	      label
+	    }
+	  }
+	
+	}
+	Scope.initClass();
+	
+	
+	module.exports = Scope;
 
 
 /***/ }

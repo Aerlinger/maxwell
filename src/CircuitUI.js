@@ -67,7 +67,7 @@ let LedElm = require('./circuit/components/LedElm.js');
 let PotElm = require('./circuit/components/PotElm.js');
 let ClockElm = require('./circuit/components/ClockElm.js');
 
-let Scope = require('./circuit/components/Scope.js');
+let Scope = require('./circuit/Scope.js');
 
 
 
