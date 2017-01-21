@@ -32,6 +32,11 @@ canvas {
   font-size: 12px;
 }
 
+.top-bar ul.vertical.submenu li, .top-bar ul.vertical.submenu li a {
+  padding: 0 !important;
+  font-size: 10px;
+}
+
 hr.component-title-sep {
   margin-top: 0;
 }

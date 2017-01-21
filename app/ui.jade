@@ -16,7 +16,7 @@ block header
 
       var canvas = document.getElementById('canvas');
 
-      Maxwell.createContext("ohms", "../circuits/v3/opint.json", canvas, function (circuitContext) {
+      Maxwell.createContext("ohms", "../circuits/v3/#{circuit_name}.json", canvas, function (circuitContext) {
 
         circuitContext.onSelectionChanged = function (selectedComponents) {
           console.log("SELECTED COMPONENTS", selectedComponents);
@@ -160,6 +160,11 @@ block content
           a(href='#') Edit
         li
           a(href='#') Sample Circuits
+          ul.menu.vertical
+            - for (var i=0; i<circuit_names.length; ++i)
+              li
+                a.item(href="/ui/" + circuit_names[i])= circuit_names[i]
+
     .top-bar-right
       //ul.menu
         li
