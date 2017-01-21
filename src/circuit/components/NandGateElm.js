@@ -10,7 +10,7 @@ class NandGateElm extends AndGateElm {
     return true;
   }
 
-  getGameName() {
+  getName() {
     return "NAND Gate";
   }
 }

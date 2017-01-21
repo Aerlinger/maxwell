@@ -65,7 +65,7 @@ class LedElm extends DiodeElm {
   }
 
   getName() {
-    return "LED";
+    return "Light Emitting Diode";
   }
 
   setPoints() {

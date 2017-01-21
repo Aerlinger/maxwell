@@ -17,7 +17,7 @@ class SevenSegElm extends ChipElm {
   }
 
   getName() {
-    return "7 segment display";
+    return "7 Segment Display";
   }
 
   setupPins() {
