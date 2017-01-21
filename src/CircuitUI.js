@@ -307,11 +307,13 @@ class CircuitUI extends Observer {
     }
 
     if (!this.highlightedComponent && !this.placeComponent && !this.highlightedNode) {
+      /*
       if (this.selectedComponents && (this.selectedComponents.length > 0)) {
         this.onSelectionChanged([])
       }
+      */
 
-      this.selectedComponents = [];
+      // this.selectedComponents = [];
 
       this.marquee = new SelectionMarquee(x, y);
     }
@@ -386,6 +388,9 @@ class CircuitUI extends Observer {
   }
 
   resetSelection() {
+    if (this.selectedComponents && (this.selectedComponents.length > 0)) {
+      this.onSelectionChanged([])
+    }
     this.selectedComponents = [];
   }
 
@@ -401,6 +406,8 @@ class CircuitUI extends Observer {
     let klass = eval(componentName);
 
     this.placeComponent = new klass();
+
+    this.resetSelection();
 
     return this.placeComponent;
   }

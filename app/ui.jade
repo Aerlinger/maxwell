@@ -161,7 +161,7 @@ block content
         li
           a(href='#') Sample Circuits
     .top-bar-right
-      ul.menu
+      //ul.menu
         li
           input(type='search', placeholder='Search')
         li
@@ -169,17 +169,12 @@ block content
 
   #component_sidebar.sidepanel
 
+    input(type='search', placeholder='Search components')
     ul.vertical.menu(data-accordion-menu, data-multi-open="false")
       li
         a(href='#') Components
         ul#component_list.is-active.menu.vertical.nested
-      li
-        a(href='#') Item 2
-        ul.menu.vertical.nested
-          li
-            a(href='#') Item 1A
-          li
-            a(href='#') Item 1B
+
 
   #edit_component_pane.off-canvas.edit-form.position-right(data-off-canvas='')
     //div#edit_pane.edit-form
