@@ -193,6 +193,8 @@ class Settings {
     this.SMALL_GRID = false;
   
     this.SHOW_VALUES = false;
+
+    this.TEXT_STROKE_COLOR = "#FFF";
   
     this.CURRENT_DISPLAY_TYPE = "DASHES";
   
@@ -209,7 +211,7 @@ class Settings {
 
     this.TEXT_SIZE = 7;
     this.FONT = 'Monaco';
-    this.TEXT_STYLE = '';
+    this.TEXT_STYLE = 'bold';
     this.LABEL_COLOR = '#0000cd';
 
     this.SELECTION_MARQUEE_COLOR = ColorPalette.orange;

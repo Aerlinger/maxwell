@@ -1406,6 +1406,8 @@
 	    this.SMALL_GRID = false;
 	  
 	    this.SHOW_VALUES = false;
+	
+	    this.TEXT_STROKE_COLOR = "#FFF";
 	  
 	    this.CURRENT_DISPLAY_TYPE = "DASHES";
 	  
@@ -1422,7 +1424,7 @@
 	
 	    this.TEXT_SIZE = 7;
 	    this.FONT = 'Monaco';
-	    this.TEXT_STYLE = '';
+	    this.TEXT_STYLE = 'bold';
 	    this.LABEL_COLOR = '#0000cd';
 	
 	    this.SELECTION_MARQUEE_COLOR = ColorPalette.orange;
@@ -29220,9 +29222,6 @@
 	  }
 	
 	  drawInfo() {
-	    // TODO: Find where to show data; below circuit, not too high unless we need it
-	//    bottomTextOffset = 100
-	//    ybase = @getCircuitBottom() - (1 * 15) - bottomTextOffset
 	    this.context.fillText(`t = ${Util.longFormat(this.Circuit.time)} s`, 10, 10);
 	    return this.context.fillText(`F.T. = ${this.Circuit.frames}`, 10, 20);
 	  }
@@ -29243,23 +29242,30 @@
 	    return console.error(`Simulation Error: ${msg}`);
 	  }
 	
-	  fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size=Settings.TEXT_SIZE) {
+	  fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size=Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
 	    this.context.save();
 	
+	    let lineWidth = this.context.lineWidth;
 	    let origFillStyle = this.context.fillStyle;
 	    let origFillColor = this.context.fillColor;
 	    let font = this.context.font;
 	
 	    this.context.fillStyle = fillColor;
-	    this.context.fillColor = fillColor;
+	    this.context.strokeStyle = strokeColor;
 	    this.context.font = `${Settings.TEXT_STYLE} ${size}pt ${Settings.FONT}`;
 	    this.context.fillText(text, x, y);
+	
+	    this.context.lineWidth = 0;
+	    this.context.strokeText(text, x, y);
 	
 	    let textMetrics = this.context.measureText(text);
 	
 	    this.context.fillStyle = origFillStyle;
 	    this.context.fillColor = origFillColor;
+	    this.context.lineWidth = lineWidth;
 	    this.context.font = font;
+	
+	    // this.context.stroke();
 	
 	    this.context.restore();
 	
