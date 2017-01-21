@@ -22,9 +22,10 @@ class CircuitCanvas extends Observer {
 
     //this.context = this.Canvas.getContext("2d");
 
-    this.context = Sketch.augment(this.Canvas.getContext("2d"), {
+    this.context = Sketch.augment(this.Canvas.getContext("2d", {alpha: false}), {
       autoclear: false,
       draw: this.draw,
+      alpha: false
       // mousemove: this.mousemove,
       // mousedown: this.mousedown,
       // mouseup: this.mouseup
@@ -71,7 +72,7 @@ class CircuitCanvas extends Observer {
     return console.error(`Simulation Error: ${msg}`);
   }
 
-  fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size=8) {
+  fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size=Settings.TEXT_SIZE) {
     this.context.save();
 
     let origFillStyle = this.context.fillStyle;
@@ -80,7 +81,7 @@ class CircuitCanvas extends Observer {
 
     // this.context.fillStyle = fillStyle;
     this.context.fillColor = fillColor;
-    this.context.font = `${size}pt Courier`;
+    this.context.font = `${Settings.TEXT_STYLE} ${size}pt ${Settings.FONT}`;
     this.context.fillText(text, x, y);
 
     let textMetrics = this.context.measureText(text);
@@ -159,12 +160,9 @@ class CircuitCanvas extends Observer {
     this.context.closePath();
   }
 
-  drawLine(x, y, x2, y2, color, lineWidth) {
-    if (color == null) { color = Settings.STROKE_COLOR; }
-    if (lineWidth == null) { lineWidth = Settings.LINE_WIDTH; }
+  drawLine(x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
 
     let origLineWidth = this.context.lineWidth;
-    this.context.save();
 
     if (!this.pathMode)
       this.context.beginPath();
@@ -188,8 +186,6 @@ class CircuitCanvas extends Observer {
 
     if (!this.pathMode)
       this.context.closePath();
-
-    return this.context.restore();
 
     this.context.lineWidth = origLineWidth;
   }

@@ -79,7 +79,7 @@ class ChipElm extends CircuitComponent {
   
         this.post = new Point(xa + (dax * self.cspc2), ya + (day * self.cspc2));
         this.stub = new Point(xa + (dax * self.cspc), ya + (day * self.cspc));
-  
+
         this.textloc = new Point(xa, ya);
   
         if (this.bubble) {
@@ -364,7 +364,9 @@ class ChipElm extends CircuitComponent {
         }
 
         let textSize = this.csize == 0 ? 6 : 8;
-        renderContext.fillText(p.text, p.textloc.x-4, p.textloc.y+2, textSize);
+
+        let mt = renderContext.context.measureText(p.text);
+        renderContext.fillText(p.text, p.textloc.x-mt.width/2, p.textloc.y+2, textSize);
 
         if (p.lineOver) {
           let ya = p.textloc.y - renderContext.context.measureText(p.text).height;

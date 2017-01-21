@@ -187,7 +187,7 @@ class Settings {
     this.CURRENT_COLOR = "rgba(255, 255, 255, 0.7)";
     this.LINE_WIDTH = 2;
     this.BOLD_LINE_WIDTH = 2;
-  
+
     // Grid
     this.GRID_SIZE = 8;
     this.SMALL_GRID = false;
@@ -206,7 +206,11 @@ class Settings {
     this.TEXT_COLOR = ColorPalette.black;
     this.TEXT_ERROR_COLOR = ColorPalette.red;
     this.TEXT_WARNING_COLOR = ColorPalette.yellow;
-  
+
+    this.TEXT_SIZE = 7;
+    this.FONT = 'Monaco';
+    this.TEXT_STYLE = 'bold';
+
     this.SELECTION_MARQUEE_COLOR = ColorPalette.orange;
   
     this.GREY = "#666";
