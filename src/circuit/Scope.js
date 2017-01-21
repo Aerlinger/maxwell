@@ -40,6 +40,13 @@ class Scope {
     }
   }
 
+  setContext(context) {
+
+  }
+
+
+
+
   reset() {
     let lockScale, showMax, showMin, showV;
     this.minMaxV = 5;

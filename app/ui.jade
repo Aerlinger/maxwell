@@ -17,6 +17,16 @@ block header
       $( ".plot-pane" ).draggable();
       $( ".plot-pane" ).resizable();
 
+      var sc = new Maxwell.ScopeCanvas($(".plot-pane .plot-context").get(0));
+
+      for (var i = -100; i < 100; i++) {
+        sc.addVoltage(i);
+      }
+
+      for (var i = -100; i < 100; i++) {
+        sc.addCurrent(100 * Math.sin(i / 50));
+      }
+
       var canvas = document.getElementById('canvas');
 
       Maxwell.createContext("ohms", "../circuits/v4/#{circuit_name}.json", canvas, function (circuitContext) {
