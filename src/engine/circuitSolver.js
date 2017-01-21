@@ -123,7 +123,7 @@ CircuitSolver = (function () {
     }
     this.frames++;
     this.Circuit.iterations++;
-    console.log(iter);
+
     this.simulationFrames.push(new SimulationFrame(this.Circuit));
     return this._updateTimings(lit);
   };

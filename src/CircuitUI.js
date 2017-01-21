@@ -318,6 +318,10 @@ class CircuitUI extends Observer {
 
     if (this.highlightedComponent) {
       this.selectedComponents = [this.highlightedComponent];
+
+      if (this.onSelectionChanged) {
+        this.onSelectionChanged(this.selectedComponents);
+      }
     }
 
     this.selectedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
@@ -326,37 +330,32 @@ class CircuitUI extends Observer {
       this.onNodeClick(this.selectedNode);
     }
 
-    return (() => {
-      let result = [];
-      for (var component of Array.from(this.Circuit.getElements())) {
-        let item;
-        if (component.getBoundingBox().contains(x, y)) {
-          this.notifyObservers(CircuitUI.ON_COMPONENT_CLICKED, component);
+    for (var component of this.Circuit.getElements()) {
 
-          if (!Array.from(this.selectedComponents).includes(component)) {
-            this.selectedComponents = [component];
+      if (component.getBoundingBox().contains(x, y)) {
+        this.notifyObservers(CircuitUI.ON_COMPONENT_CLICKED, component);
 
-            if (this.onSelectionChanged) {
-              this.onSelectionChanged(this.selectedComponents);
-            }
-          }
+        if (!Array.from(this.selectedComponents).includes(component)) {
+          this.selectedComponents = [component];
 
-          if (component.toggle) {
-            component.toggle();
-          }
-
-          if (component.onclick) {
-            component.onclick();
-          }
-
-          if (component.onComponentClick) {
-            component.onComponentClick();
+          if (this.onSelectionChanged) {
+            this.onSelectionChanged(this.selectedComponents);
           }
         }
-        result.push(item);
+
+        if (component.toggle) {
+          component.toggle();
+        }
+
+        if (component.onclick) {
+          component.onclick();
+        }
+
+        if (component.onComponentClick) {
+          component.onComponentClick();
+        }
       }
-      return result;
-    })();
+    }
   }
 
   mouseup(event) {

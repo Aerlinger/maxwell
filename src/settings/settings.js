@@ -209,7 +209,8 @@ class Settings {
 
     this.TEXT_SIZE = 7;
     this.FONT = 'Monaco';
-    this.TEXT_STYLE = 'bold';
+    this.TEXT_STYLE = '';
+    this.LABEL_COLOR = '#0000cd';
 
     this.SELECTION_MARQUEE_COLOR = ColorPalette.orange;
   

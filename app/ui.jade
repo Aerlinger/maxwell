@@ -16,34 +16,25 @@ block header
 
       var canvas = document.getElementById('canvas');
 
-      Maxwell.createContext("ohms", "../circuits/v3/ohms.json", canvas, function (circuitContext) {
-
+      Maxwell.createContext("ohms", "../circuits/v3/opint.json", canvas, function (circuitContext) {
 
         circuitContext.onSelectionChanged = function (selectedComponents) {
           console.log("SELECTED COMPONENTS", selectedComponents);
+
+          if (selectedComponents.length > 0) {
+            $("#edit_component_pane").foundation('open');
+          } else {
+            $("#edit_component_pane").foundation('close');
+          }
         };
 
         circuitContext.onComponentHover = function (component) {
           var form = Maxwell.renderEdit(component);
-
-          edit_pane = document.getElementById("edit_pane");
+          var edit_pane = document.getElementById("edit_component_pane");
 
           edit_pane.innerHTML = "";
           edit_pane.append(form);
         };
-
-        /*
-        $(document).keydown(function (e) {
-          console.log("keypress", e.keyCode);
-
-          var keyCode = e.keyCode;
-          if (keyCode == 13) {
-            console.log("DELETE");
-
-            renderer.remove(renderer.getSelectedComponents());
-          }
-        });
-        */
 
         Maxwell.Components.map(function (component) {
           $('#component_list').append(
@@ -145,7 +136,7 @@ block header
 block content
   canvas#canvas.maxwell
 
-  #main_nav.top-bar
+  #main_nav.top-bar.sidepanel
     .top-bar-left
       ul.dropdown.menu(data-dropdown-menu='', data-multi-open=false)
         li.menu-text Maxwell
@@ -176,7 +167,7 @@ block content
         li
           button.button(type='button') Search
 
-  div#component_sidebar
+  #component_sidebar.sidepanel
 
     ul.vertical.menu(data-accordion-menu, data-multi-open="false")
       li
@@ -190,10 +181,10 @@ block content
           li
             a(href='#') Item 1B
 
-  #offCanvasRight.off-canvas.position-right(data-off-canvas='')
-    div#edit_pane.edit-form
+  #edit_component_pane.off-canvas.edit-form.position-right(data-off-canvas='')
+    //div#edit_pane.edit-form
 
-  .off-canvas-content
-    button.button.float-right(type='button', data-toggle='offCanvasRight') Open Right
+  //.off-canvas-content
+    button.button.float-right(type='button', data-toggle='edit_component_pane') Open
 
   script.

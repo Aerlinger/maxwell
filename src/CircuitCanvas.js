@@ -83,7 +83,7 @@ class CircuitCanvas extends Observer {
     let origFillColor = this.context.fillColor;
     let font = this.context.font;
 
-    // this.context.fillStyle = fillStyle;
+    this.context.fillStyle = fillColor;
     this.context.fillColor = fillColor;
     this.context.font = `${Settings.TEXT_STYLE} ${size}pt ${Settings.FONT}`;
     this.context.fillText(text, x, y);
