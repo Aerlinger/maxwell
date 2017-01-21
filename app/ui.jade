@@ -37,8 +37,6 @@ block header
         };
 
         Maxwell.Components.map(function (component) {
-          console.log(component);
-
           $('#component_list').append(
               '<li><a href="#" class="item component-item" data-name=' + component.name + '>' + (new component()).getName() + '</a></li>'
           )

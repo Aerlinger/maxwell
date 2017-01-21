@@ -126,3 +126,7 @@ canvas {
 ul.vertical.menu .title {
   background-color: blue;
 }
+
+.maxwell {
+  background-color: white !important;
+}
