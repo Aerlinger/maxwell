@@ -4,7 +4,7 @@ fs = require 'fs'
 describe "CircuitLoader", ->
   describe "reads voltdividesimple.json and", ->
     before (done) ->
-      voltdividesimple = JSON.parse(fs.readFileSync("./circuits/v3/voltdividesimple.json"))
+      voltdividesimple = JSON.parse(fs.readFileSync("./circuits/v4/voltdividesimple.json"))
 
       @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
       done()

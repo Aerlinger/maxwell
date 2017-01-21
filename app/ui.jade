@@ -16,7 +16,7 @@ block header
 
       var canvas = document.getElementById('canvas');
 
-      Maxwell.createContext("ohms", "../circuits/v3/#{circuit_name}.json", canvas, function (circuitContext) {
+      Maxwell.createContext("ohms", "../circuits/v4/#{circuit_name}.json", canvas, function (circuitContext) {
 
         circuitContext.onSelectionChanged = function (selectedComponents) {
           console.log("SELECTED COMPONENTS", selectedComponents);

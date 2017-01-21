@@ -18,7 +18,7 @@ app.use("/circuits", express.static(path.join(__dirname, '../circuits')));
 
 var port = 6502;
 
-var circuit_names = glob.sync(__dirname + "/../circuits/v3/*.json").map(function(filename) {
+var circuit_names = glob.sync(__dirname + "/../circuits/v4/*.json").map(function(filename) {
   return path.basename(filename, ".json")
 });
 

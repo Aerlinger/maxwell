@@ -8,7 +8,7 @@ block header
       var canvas = $('canvas.maxwell').get(0);
       var renderer = null;
 
-      Maxwell.createContext("#{circuit}", "../circuits/v3/#{circuit}.json", canvas, function (circuitContext) {
+      Maxwell.createContext("#{circuit}", "../circuits/v4/#{circuit}.json", canvas, function (circuitContext) {
         console.log(circuitContext);
         console.log("Circuit loaded! ", circuitContext.Circuit, canvas);
 
