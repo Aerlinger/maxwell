@@ -49,12 +49,12 @@ class ZenerElm extends DiodeElm {
 
     // draw arrow vector
     // setPowerColor(g, true)
-    let color = Util.getVoltageColor(v1);
+    let color = renderContext.getVoltageColor(v1);
     renderContext.drawThickPolygonP(this.poly, color);
 
     // PLATE:
     // setVoltageColor(g, v2)
-    color = Util.getVoltageColor(v2);
+    color = renderContext.getVoltageColor(v2);
     renderContext.drawLinePt(this.cathode[0], this.cathode[1], v1);
 
     // Cathode "Wings"

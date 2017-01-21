@@ -45,7 +45,7 @@ class CurrentElm extends CircuitComponent {
     renderContext.drawDots(this.lead2, this.point2, this);
 
     let cr = 12;
-    let color = Util.getVoltageColor((this.volts[0] + this.volts[1]) / 2);
+    let color = renderContext.getVoltageColor((this.volts[0] + this.volts[1]) / 2);
 //      @setPowerColor false
     renderContext.drawCircle(this.center.x, this.center.y, cr);
     renderContext.fillCircle(this.center.x, this.center.y, cr, Settings.LINE_WIDTH, Settings.FG_COLOR);

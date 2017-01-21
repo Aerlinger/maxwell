@@ -55,14 +55,14 @@ class ProbeElm extends CircuitComponent {
 //    if @isSelected()
 //      color = Settings.SELECT_COLOR
 //    else
-    let color = Util.getVoltageColor(this.volts[0]);
+    let color = renderContext.getVoltageColor(this.volts[0]);
 
     renderContext.drawLinePt(this.point1, this.lead1, color);
 
 //    if @isSelected()
 //      color = Settings.SELECT_COLOR
 //    else
-    color = Util.getVoltageColor(this.volts[1]);
+    color = renderContext.getVoltageColor(this.volts[1]);
 
     renderContext.drawLinePt(this.lead2, this.point2, color);
 

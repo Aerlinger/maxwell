@@ -113,10 +113,10 @@ class SparkGapElm extends CircuitComponent {
 
     renderContext.drawLeads(this);
 
-    let color = Util.getVoltageColor(this.volts[0]);
+    let color = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawThickPolygonP(this.arrow1, color);
 
-    color = Util.getVoltageColor(this.volts[1]);
+    color = renderContext.getVoltageColor(this.volts[1]);
     renderContext.drawThickPolygonP(this.arrow2, color);
 
     if (this.state) { renderContext.drawDots(this.point1, this.point2, this); }

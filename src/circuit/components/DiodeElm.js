@@ -106,13 +106,13 @@ class DiodeElm extends CircuitComponent {
 
     // draw arrow
     //this.setPowerColor(true);
-    let color = Util.getVoltageColor(v1);
+    let color = renderContext.getVoltageColor(v1);
     renderContext.drawThickPolygonP(this.poly, color);
 
     //g.fillPolygon(poly);
 
     // draw the diode plate
-    color = Util.getVoltageColor(v2);
+    color = renderContext.getVoltageColor(v2);
     return renderContext.drawLinePt(this.cathode[0], this.cathode[1], color);
   }
 

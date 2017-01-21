@@ -84,16 +84,16 @@ class CapacitorElm extends CircuitComponent {
 //    @setBboxPt @point1, @point2, hs
 
     // draw leads
-    renderContext.drawLinePt(this.point1, this.lead1, Util.getVoltageColor(this.volts[0]));
-    renderContext.drawLinePt(this.point2, this.lead2, Util.getVoltageColor(this.volts[1]));
+    renderContext.drawLinePt(this.point1, this.lead1, renderContext.getVoltageColor(this.volts[0]));
+    renderContext.drawLinePt(this.point2, this.lead2, renderContext.getVoltageColor(this.volts[1]));
 
     this.updateDots();
     renderContext.drawDots(this.point1, this.lead1, this);
     renderContext.drawDots(this.lead2, this.point2, this);
 
     // draw plates
-    renderContext.drawLinePt(this.plate1[0], this.plate1[1], Util.getVoltageColor(this.volts[0]), Settings.LINE_WIDTH+1);
-    renderContext.drawLinePt(this.plate2[0], this.plate2[1], Util.getVoltageColor(this.volts[1]), Settings.LINE_WIDTH+1);
+    renderContext.drawLinePt(this.plate1[0], this.plate1[1], renderContext.getVoltageColor(this.volts[0]), Settings.LINE_WIDTH+1);
+    renderContext.drawLinePt(this.plate2[0], this.plate2[1], renderContext.getVoltageColor(this.volts[1]), Settings.LINE_WIDTH+1);
 
     renderContext.drawValue(20, 0, this, Util.getUnitText(this.capacitance, this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
 

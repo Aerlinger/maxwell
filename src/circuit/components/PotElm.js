@@ -68,10 +68,10 @@ class PotElm extends CircuitComponent {
       let startPosition = Util.interpolate(this.lead1, this.lead2, n*parallelOffset, width*offsets[n % 4]);
       let endPosition = Util.interpolate(this.lead1, this.lead2, (n+1)*parallelOffset, width*offsets[(n+1) % 4]);
 
-      renderContext.drawLinePt(startPosition, endPosition, Util.getVoltageColor(resistorSegmentVoltage), Settings.LINE_WIDTH);
+      renderContext.drawLinePt(startPosition, endPosition, renderContext.getVoltageColor(resistorSegmentVoltage), Settings.LINE_WIDTH);
     }
 
-    let voltColor = Util.getVoltageColor(this.volts[2]);
+    let voltColor = renderContext.getVoltageColor(this.volts[2]);
     // console.log("POSTS", this.post3, this.corner2, this.arrowPoint, this.arrow1, this.arrow2, this.midpoint);
 
     renderContext.drawLinePt(this.post3, this.corner2, voltColor);

@@ -63,7 +63,7 @@ class LogicInputElm extends SwitchElm {
 
     renderContext.fillText(s, this.point2.x, this.point2.y + 4);
 
-    let color = Util.getVoltageColor(this.volts[0]);
+    let color = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.lead1, color);
 
     this.updateDots();

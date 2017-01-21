@@ -2,6 +2,7 @@ let Observer = require('./util/observer');
 let Util = require('./util/util');
 let Point = require('./geom/point.js');
 let Settings = require('./settings/settings.js');
+let Color = require('./util/color.js');
 
 let CircuitComponent = require('./circuit/circuitComponent');
 let environment = require('./environment.js');
@@ -22,16 +23,13 @@ class CircuitCanvas extends Observer {
     this.draw = this.draw.bind(this);
     this.drawDots = this.drawDots.bind(this);
 
-    //this.context = this.Canvas.getContext("2d");
-
     if (environment.isBrowser) {
       this.context = Sketch.augment(this.Canvas.getContext("2d", {alpha: false}), {
         autoclear: false,
-        draw: this.draw,
-        alpha: false
-        // mousemove: this.mousemove,
-        // mousedown: this.mousedown,
-        // mouseup: this.mouseup
+        draw: this.draw
+        //mousemove: this.mousemove,
+        //mousedown: this.mousedown,
+        //mouseup: this.mouseup
         //fullscreen: false,
         //width: this.width,
         //height: this.height
@@ -53,27 +51,6 @@ class CircuitCanvas extends Observer {
         this.context.fillText(arr[idx], 500, (idx * 10) + 15);
       }
     }
-  }
-
-  drawInfo() {
-    this.context.fillText(`t = ${Util.longFormat(this.Circuit.time)} s`, 10, 10);
-    return this.context.fillText(`F.T. = ${this.Circuit.frames}`, 10, 20);
-  }
-
-  drawWarning(context) {
-    let msg = "";
-    for (let warning of Array.from(warningStack)) {
-      msg += warning + "\n";
-    }
-    return console.error(`Simulation Warning: ${msg}`);
-  }
-
-  drawError(context) {
-    let msg = "";
-    for (let error of Array.from(errorStack)) {
-      msg += error + "\n";
-    }
-    return console.error(`Simulation Error: ${msg}`);
   }
 
   fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size=Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
@@ -98,8 +75,6 @@ class CircuitCanvas extends Observer {
     this.context.fillColor = origFillColor;
     this.context.lineWidth = lineWidth;
     this.context.font = font;
-
-    // this.context.stroke();
 
     this.context.restore();
 
@@ -143,7 +118,7 @@ class CircuitCanvas extends Observer {
     this.context.stroke();
     this.context.closePath();
 
-    return this.context.restore();
+    this.context.restore();
   }
 
   drawRect(x, y, width, height, lineWidth, lineColor) {
@@ -211,7 +186,7 @@ class CircuitCanvas extends Observer {
     this.context.beginPath();
 
     this.context.moveTo(xlist[0], ylist[0]);
-    for (let i = 1, end = xlist.length, asc = 1 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    for (let i = 0; i < xlist.length; ++i) {
       this.context.lineTo(xlist[i], ylist[i]);
     }
 
@@ -223,6 +198,43 @@ class CircuitCanvas extends Observer {
 
     return this.context.restore();
   }
+
+  getVoltageColor(volts) {
+    // TODO: Define voltage range
+    let fullScaleVRange = this.Circuit.Params.voltageRange;
+
+    let RedGreen =
+        [ "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
+          "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
+          "#7f7f7f", "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747",
+          "#3fbf3f", "#37c737", "#2fcf2f", "#27d727", "#1fdf1f", "#17e717", "#0fef0f", "#07f707", "#00ff00" ];
+
+    let scale =
+        ["#B81B00", "#B21F00", "#AC2301", "#A72801", "#A12C02", "#9C3002", "#963503", "#913903",
+          "#8B3E04", "#854205", "#804605", "#7A4B06", "#754F06", "#6F5307", "#6A5807", "#645C08",
+          "#5F6109", "#596509", "#53690A", "#4E6E0A", "#48720B", "#43760B", "#3D7B0C", "#387F0C",
+          "#32840D", "#2C880E", "#278C0E", "#21910F", "#1C950F", "#169910", "#119E10", "#0BA211", "#06A712"];
+
+    let blueScale =
+        ["#EB1416", "#E91330", "#E7134A", "#E51363", "#E3137C", "#E11394", "#E013AC", "#DE13C3",
+          "#DC13DA", "#C312DA", "#AA12D8", "#9012D7", "#7712D5", "#5F12D3", "#4612D1", "#2F12CF",
+          "#1712CE", "#1123CC", "#1139CA", "#114FC8", "#1164C6", "#1179C4", "#118EC3", "#11A2C1",
+          "#11B6BF", "#10BDB1", "#10BB9B", "#10BA84", "#10B86F", "#10B659", "#10B444", "#10B230", "#10B11C"];
+
+    scale = Color.Gradients.voltage_default;
+
+    let numColors = scale.length - 1;
+
+    let value = Math.floor(((volts + fullScaleVRange) * numColors) / (2 * fullScaleVRange));
+    if (value < 0) {
+      value = 0;
+    } else if (value >= numColors) {
+      value = numColors - 1;
+    }
+
+    return scale[value];
+  }
+
 
   drawThickPolygonP(polygon, color, fill) {
     if (color == null) { color = Settings.STROKE_COLOR; }
@@ -236,7 +248,7 @@ class CircuitCanvas extends Observer {
     this.context.beginPath();
 
     this.context.moveTo(polygon.getX(0), polygon.getY(0));
-    for (let i = 0, end = numVertices, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    for (let i = 0; i < numVertices; ++i) {
       this.context.lineTo(polygon.getX(i), polygon.getY(i));
     }
 
@@ -245,22 +257,6 @@ class CircuitCanvas extends Observer {
     this.context.stroke();
     return this.context.restore();
   }
-
-  drawPolyLine(xList, yList, lineWidth, color) {
-    if (lineWidth == null) { lineWidth = Settings.LINE_WIDTH; }
-    if (color == null) { color = Settings.STROKE_COLOR; }
-    this.context.save();
-
-    this.context.beginPath();
-
-    this.context.moveTo(xlist[0], ylist[0]);
-    for (let i = 1, end = xlist.length, asc = 1 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-      this.context.lineTo(xlist[i], ylist[i]);
-    }
-
-    return this.context.restore();
-  }
-
 
   drawCoil(point1, point2, vStart, vEnd, hs) {
     let color, cx, hsx, voltageLevel;
@@ -274,22 +270,26 @@ class CircuitCanvas extends Observer {
     ps1.x = point1.x;
     ps1.y = point1.y;
 
-    return __range__(0, segments, false).map((i) =>
-        (cx = ((((i + 1) * 8) / segments) % 2) - 1,
-            hsx = Math.sqrt(1 - (cx * cx)),
-            ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs),
+    for (let i = 0; i < segments; ++i) {
+      cx = (((i + 1) * 8 / segments) % 2) - 1;
+      hsx = Math.sqrt(1 - cx * cx);
+      ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs);
+      voltageLevel = vStart + (vEnd - vStart) * i / segments;
+      color = this.getVoltageColor(voltageLevel);
 
-            voltageLevel = vStart + (((vEnd - vStart) * i) / segments),
-            color = Util.getVoltageColor(voltageLevel),
-            this.drawLinePt(ps1, ps2, color),
+      this.drawLinePt(ps1, ps2, color);
 
-            ps1.x = ps2.x,
-            ps1.y = ps2.y));
+      ps1.x = ps2.x;
+      ps1.y = ps2.y;
+    }
   }
 
   draw() {
     if (this.context) {
-      this.context.clear();
+
+      if (this.context.clear) {
+        this.context.clear();
+      }
       this.context.save();
       this.context.translate(this.xMargin, this.yMargin);
 
@@ -466,21 +466,21 @@ class CircuitCanvas extends Observer {
   // TODO: Move to CircuitComponent
   drawLeads(component) {
     if ((component.point1 != null) && (component.lead1 != null)) {
-      this.drawLinePt(component.point1, component.lead1, Util.getVoltageColor(component.volts[0]));
+      this.drawLinePt(component.point1, component.lead1, this.getVoltageColor(component.volts[0]));
     }
     if ((component.point2 != null) && (component.lead2 != null)) {
-      return this.drawLinePt(component.lead2, component.point2, Util.getVoltageColor(component.volts[1]));
+      return this.drawLinePt(component.lead2, component.point2, this.getVoltageColor(component.volts[1]));
     }
   }
 
   // TODO: Move to CircuitComponent
-  drawPosts(component, color) {
+  drawPosts(component, color = Settings.POST_COLOR) {
     let post;
-    if (color == null) { color = Settings.POST_COLOR; }
 
-    return __range__(0, component.getPostCount(), false).map((i) =>
-        (post = component.getPost(i), this.drawPost(post.x, post.y, color, color))
-    );
+    for (let i=0; i < component.getPostCount(); ++i) {
+      post = component.getPost(i);
+      this.drawPost(post.x, post.y, color, color);
+    }
   }
 
   drawPost(x0, y0, fillColor, strokeColor) {
@@ -498,28 +498,4 @@ class CircuitCanvas extends Observer {
   }
 }
 
-// CircuitCanvas.initClass();
-
 module.exports = CircuitCanvas;
-
-function __guardMethod__(obj, methodName, transform) {
-  if (typeof obj !== 'undefined' && obj !== null && typeof obj[methodName] === 'function') {
-    return transform(obj, methodName);
-  } else {
-    return undefined;
-  }
-}
-
-function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
-}
-
-function __range__(left, right, inclusive) {
-  let range = [];
-  let ascending = left < right;
-  let end = !inclusive ? right : ascending ? right + 1 : right - 1;
-  for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-    range.push(i);
-  }
-  return range;
-}

@@ -17882,7 +17882,7 @@
 	    renderContext.drawLinePt(this.point2, this.lead1, Settings.STROKE_COLOR, Settings.LINE_WIDTH+1);
 	    renderContext.drawLinePt(this.point2, this.point1, Settings.STROKE_COLOR);
 	
-	    let color = Util.getVoltageColor(this.volts[0]);
+	    let color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
 	
 	    let clock = (this.waveform === VoltageElm.WF_SQUARE) && ((this.flags & VoltageElm.FLAG_CLOCK) !== 0);
@@ -18357,7 +18357,7 @@
 	
 	  draw(renderContext) {
 	    let s;
-	    renderContext.drawLinePt(this.point1, this.point2, Util.getVoltageColor(this.volts[0]));
+	    renderContext.drawLinePt(this.point1, this.point2, renderContext.getVoltageColor(this.volts[0]));
 	    //  @setBboxPt @point1, @point2, 3
 	
 	    if (this.mustShowCurrent()) {
@@ -18739,13 +18739,13 @@
 	
 	    // draw arrow
 	    //this.setPowerColor(true);
-	    let color = Util.getVoltageColor(v1);
+	    let color = renderContext.getVoltageColor(v1);
 	    renderContext.drawThickPolygonP(this.poly, color);
 	
 	    //g.fillPolygon(poly);
 	
 	    // draw the diode plate
-	    color = Util.getVoltageColor(v2);
+	    color = renderContext.getVoltageColor(v2);
 	    return renderContext.drawLinePt(this.cathode[0], this.cathode[1], color);
 	  }
 	
@@ -18940,7 +18940,7 @@
 	
 	    renderContext.drawValue(-13, 35, this, s);
 	
-	    color = Util.getVoltageColor(this.volts[0]);
+	    color = renderContext.getVoltageColor(this.volts[0]);
 	
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
 	    renderContext.fillCircle(this.lead1.x + (2*Settings.POST_RADIUS), this.lead1.y, 2*Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
@@ -19057,16 +19057,16 @@
 	      renderContext.drawDots(this.point1, this.point2, this);
 	    }
 	
+	    renderContext.drawPosts(this);
+	
 	    this.ps = Util.interpolate(this.lead1, this.lead2, -0.05, hs1);
 	    this.ps2 = Util.interpolate(this.lead1, this.lead2, 1.05, hs2);
 	
-	
-	    renderContext.drawPosts(this);
 	    // Draw switch "Lever"
 	    renderContext.drawLinePt(this.ps, this.ps2, Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
 	
-	    renderContext.fillCircle(this.ps.x - Settings.POST_RADIUS/2 - 1, this.ps.y - Settings.POST_RADIUS/2 - 1, Settings.POST_RADIUS + 1, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
-	    renderContext.fillCircle(this.ps2.x - Settings.POST_RADIUS/2 - 1, this.ps2.y - Settings.POST_RADIUS/2 - 1, Settings.POST_RADIUS + 1, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+	    renderContext.fillCircle(this.ps.x, this.ps.y, Settings.POST_RADIUS + 1, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+	    renderContext.fillCircle(this.ps2.x, this.ps2.y, Settings.POST_RADIUS + 1, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
 	
 	    if (CircuitComponent.DEBUG) {
 	      return super.draw(renderContext);
@@ -19691,7 +19691,7 @@
 	    renderContext.drawDots(this.lead2, this.point2, this);
 	
 	    let cr = 12;
-	    let color = Util.getVoltageColor((this.volts[0] + this.volts[1]) / 2);
+	    let color = renderContext.getVoltageColor((this.volts[0] + this.volts[1]) / 2);
 	//      @setPowerColor false
 	    renderContext.drawCircle(this.center.x, this.center.y, cr);
 	    renderContext.fillCircle(this.center.x, this.center.y, cr, Settings.LINE_WIDTH, Settings.FG_COLOR);
@@ -19834,10 +19834,10 @@
 	  draw(renderContext) {
 	    this.setBboxPt(this.point1, this.point2, this.hs);
 	
-	    let color = Util.getVoltageColor(this.volts[1]);
+	    let color = renderContext.getVoltageColor(this.volts[1]);
 	    renderContext.drawLinePt(this.src[0], this.src[1], color);
 	
-	    color = Util.getVoltageColor(this.volts[2]);
+	    color = renderContext.getVoltageColor(this.volts[2]);
 	    renderContext.drawLinePt(this.drn[0], this.drn[1], color);
 	
 	    let segments = 6;
@@ -19845,20 +19845,20 @@
 	    let segf = 1.0 / segments;
 	    for (let i = 0, end = segments, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
 	      let v = this.volts[1] + (((this.volts[2] - this.volts[1]) * i) / segments);
-	      color = Util.getVoltageColor(v);
+	      color = renderContext.getVoltageColor(v);
 	      let ps1 = Util.interpolate(this.src[1], this.drn[1], i * segf);
 	      let ps2 = Util.interpolate(this.src[1], this.drn[1], (i + 1) * segf);
 	      renderContext.drawLinePt(ps1, ps2, color);
 	    }
 	
-	    color = Util.getVoltageColor(this.volts[1]);
+	    color = renderContext.getVoltageColor(this.volts[1]);
 	    renderContext.drawLinePt(this.src[1], this.src[2], color);
 	
-	    color = Util.getVoltageColor(this.volts[2]);
+	    color = renderContext.getVoltageColor(this.volts[2]);
 	    renderContext.drawLinePt(this.drn[1], this.drn[2], color);
 	
 	    if (!this.drawDigital()) {
-	      color = Util.getVoltageColor((this.pnp === 1 ? this.volts[1] : this.volts[2]));
+	      color = renderContext.getVoltageColor((this.pnp === 1 ? this.volts[1] : this.volts[2]));
 	      renderContext.drawThickPolygonP(this.arrowPoly, color);
 	    }
 	
@@ -19866,7 +19866,7 @@
 	//      Circuit.powerCheckItem
 	
 	    //g.setColor(Color.gray);
-	    color = Util.getVoltageColor(this.volts[0]);
+	    color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.gate[1], color);
 	    renderContext.drawLinePt(this.gate[0], this.gate[2], color);
 	    this.drawDigital() && (this.pnp === -1);
@@ -20310,11 +20310,11 @@
 	    */
 	
 	    // draw collector
-	    let color = Util.getVoltageColor(this.volts[1]);
+	    let color = renderContext.getVoltageColor(this.volts[1]);
 	    renderContext.drawLinePt(this.coll[0], this.coll[1], color);
 	
 	    // draw emitter
-	    color = Util.getVoltageColor(this.volts[2]);
+	    color = renderContext.getVoltageColor(this.volts[2]);
 	    renderContext.drawLinePt(this.emit[0], this.emit[1], color);
 	
 	    // draw arrow
@@ -20331,7 +20331,7 @@
 	    }
 	
 	    // draw base
-	    color = Util.getVoltageColor(this.volts[0]);
+	    color = renderContext.getVoltageColor(this.volts[0]);
 	//      g.setColor Color.gray  if Circuit.powerCheckItem
 	    renderContext.drawLinePt(this.point1, this.base, color);
 	
@@ -20348,7 +20348,7 @@
 	    renderContext.drawDots(this.coll[1], this.coll[0], this);
 	    renderContext.drawDots(this.emit[1], this.emit[0], this);
 	
-	    color = Util.getVoltageColor(this.volts[0]);
+	    color = renderContext.getVoltageColor(this.volts[0]);
 	//      @setPowerColor true
 	
 	    //g.fillPolygon(rectPoly);
@@ -20775,17 +20775,17 @@
 	    this.setBboxPt(this.point1, this.point2, Math.floor(this.opheight * this.dsign()));
 	
 	    // Terminal 1
-	    let color = Util.getVoltageColor(this.volts[0]);
+	    let color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.in1p[0], this.in1p[1], color);
 	//    renderContext.drawValue(@in1p[1].x, )
 	
 	    // Terminal 2
-	    color = Util.getVoltageColor(this.volts[1]);
+	    color = renderContext.getVoltageColor(this.volts[1]);
 	    renderContext.drawLinePt(this.in2p[0], this.in2p[1], color);
 	
 	
 	    // Terminal 3
-	    color = Util.getVoltageColor(this.volts[2]);
+	    color = renderContext.getVoltageColor(this.volts[2]);
 	    renderContext.drawLinePt(this.lead2, this.point2, color);
 	
 	    // Body
@@ -20992,12 +20992,12 @@
 	
 	    // draw arrow vector
 	    // setPowerColor(g, true)
-	    let color = Util.getVoltageColor(v1);
+	    let color = renderContext.getVoltageColor(v1);
 	    renderContext.drawThickPolygonP(this.poly, color);
 	
 	    // PLATE:
 	    // setVoltageColor(g, v2)
-	    color = Util.getVoltageColor(v2);
+	    color = renderContext.getVoltageColor(v2);
 	    renderContext.drawLinePt(this.cathode[0], this.cathode[1], v1);
 	
 	    // Cathode "Wings"
@@ -21112,15 +21112,15 @@
 	    this.setBboxPt(this.point1, this.point2, this.openhs);
 	
 	    // draw first lead
-	    let color = Util.getVoltageColor(this.volts[0]);
+	    let color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
 	
 	    // draw second lead
-	    color = Util.getVoltageColor(this.volts[1]);
+	    color = renderContext.getVoltageColor(this.volts[1]);
 	    renderContext.drawLinePt(this.swpoles[0], this.swposts[0], color);
 	
 	    // draw third lead
-	    color = Util.getVoltageColor(this.volts[2]);
+	    color = renderContext.getVoltageColor(this.volts[2]);
 	    renderContext.drawLinePt(this.swpoles[1], this.swposts[1], color);
 	
 	    this.updateDots();
@@ -21288,7 +21288,7 @@
 	      super.draw(renderContext);
 	    }
 	
-	    let color = Util.getVoltageColor(this.volts[0]);
+	    let color = renderContext.getVoltageColor(this.volts[0]);
 	    this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (SweepElm.circleSize / this.dn()));
 	
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
@@ -21839,12 +21839,12 @@
 	
 	  draw(renderContext){
 	    for (let i = 0; i < this.inputCount; i++) {
-	      renderContext.drawLinePt(this.inPosts[i], this.inGates[i], Util.getVoltageColor(this.volts[i]));
+	      renderContext.drawLinePt(this.inPosts[i], this.inGates[i], renderContext.getVoltageColor(this.volts[i]));
 	    }
 	
 	    this.setBboxPt(this.point1, this.point2, this.hs2)
 	
-	    renderContext.drawLinePt(this.lead2, this.point2, Util.getVoltageColor(this.volts[this.inputCount]));
+	    renderContext.drawLinePt(this.lead2, this.point2, renderContext.getVoltageColor(this.volts[this.inputCount]));
 	
 	    renderContext.drawThickPolygonP(this.gatePoly, Settings.STROKE_COLOR);
 	    if (this.linePoints !== null) {
@@ -22387,7 +22387,7 @@
 	
 	    renderContext.fillText(s, this.point2.x, this.point2.y);
 	
-	    let color = Util.getVoltageColor(this.volts[0]);
+	    let color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
 	    renderContext.drawPosts(this);
 	
@@ -23026,7 +23026,7 @@
 	
 	    let i;
 	    for (i = 0; i < 2; i++) {
-	      Util.getVoltageColor(this.volts[this.nCoil1 + i]);
+	      renderContext.getVoltageColor(this.volts[this.nCoil1 + i]);
 	      renderContext.drawLinePt(this.coilLeads[i], this.coilPosts[i]);
 	    }
 	
@@ -23055,7 +23055,7 @@
 	
 	      for (i = 0; i < 3; i++) {
 	        // draw lead
-	        Util.getVoltageColor(this.volts[this.nSwitch0 + po + i]);
+	        renderContext.getVoltageColor(this.volts[this.nSwitch0 + po + i]);
 	        renderContext.drawLinePt(this.swposts[p][i], this.swpoles[p][i]);
 	      }
 	
@@ -23388,11 +23388,11 @@
 	
 	    renderContext.drawLeads(this);
 	
-	    let color = Util.getVoltageColor(v1);
+	    let color = renderContext.getVoltageColor(v1);
 	    renderContext.drawThickPolygonP(this.poly, color);
 	
 	    // draw thing arrow is pointing to
-	    color = Util.getVoltageColor(v2);
+	    color = renderContext.getVoltageColor(v2);
 	    renderContext.drawLinePt(this.cathode[0], this.cathode[1], color);
 	
 	    renderContext.drawLinePt(this.lead2, this.gate[0], color);
@@ -25657,7 +25657,7 @@
 	  draw(renderContext) {
 	    let i;
 	    for (i = 0; i < 4; i++) {
-	      let color = Util.getVoltageColor(this.volts[i]);
+	      let color = renderContext.getVoltageColor(this.volts[i]);
 	
 	      // console.log(@ptEnds[i], @ptCoil[i], color)
 	      renderContext.drawLinePt(this.ptEnds[i], this.ptCoil[i], color);
@@ -26107,10 +26107,10 @@
 	    
 	    this.setBboxPt(this.point1, this.point2, cr);
 	
-	    let voltageColor = Util.getVoltageColor(this.volts[0]);
+	    let voltageColor = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.ledLead1, voltageColor);
 	
-	    voltageColor = Util.getVoltageColor(this.volts[0]);
+	    voltageColor = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.ledLead2, this.point2, voltageColor);
 	
 	    renderContext.drawCircle(this.ledCenter.x, this.ledCenter.y, cr, 2, Settings.PostColor);
@@ -26217,10 +26217,10 @@
 	      let startPosition = Util.interpolate(this.lead1, this.lead2, n*parallelOffset, width*offsets[n % 4]);
 	      let endPosition = Util.interpolate(this.lead1, this.lead2, (n+1)*parallelOffset, width*offsets[(n+1) % 4]);
 	
-	      renderContext.drawLinePt(startPosition, endPosition, Util.getVoltageColor(resistorSegmentVoltage), Settings.LINE_WIDTH);
+	      renderContext.drawLinePt(startPosition, endPosition, renderContext.getVoltageColor(resistorSegmentVoltage), Settings.LINE_WIDTH);
 	    }
 	
-	    let voltColor = Util.getVoltageColor(this.volts[2]);
+	    let voltColor = renderContext.getVoltageColor(this.volts[2]);
 	    // console.log("POSTS", this.post3, this.corner2, this.arrowPoint, this.arrow1, this.arrow2, this.midpoint);
 	
 	    renderContext.drawLinePt(this.post3, this.corner2, voltColor);
@@ -29168,6 +29168,7 @@
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
 	let Settings = __webpack_require__(2);
+	let Color = __webpack_require__(8);
 	
 	let CircuitComponent = __webpack_require__(1);
 	let environment = __webpack_require__(10);
@@ -29188,16 +29189,13 @@
 	    this.draw = this.draw.bind(this);
 	    this.drawDots = this.drawDots.bind(this);
 	
-	    //this.context = this.Canvas.getContext("2d");
-	
 	    if (environment.isBrowser) {
 	      this.context = Sketch.augment(this.Canvas.getContext("2d", {alpha: false}), {
 	        autoclear: false,
-	        draw: this.draw,
-	        alpha: false
-	        // mousemove: this.mousemove,
-	        // mousedown: this.mousedown,
-	        // mouseup: this.mouseup
+	        draw: this.draw
+	        //mousemove: this.mousemove,
+	        //mousedown: this.mousedown,
+	        //mouseup: this.mouseup
 	        //fullscreen: false,
 	        //width: this.width,
 	        //height: this.height
@@ -29219,27 +29217,6 @@
 	        this.context.fillText(arr[idx], 500, (idx * 10) + 15);
 	      }
 	    }
-	  }
-	
-	  drawInfo() {
-	    this.context.fillText(`t = ${Util.longFormat(this.Circuit.time)} s`, 10, 10);
-	    return this.context.fillText(`F.T. = ${this.Circuit.frames}`, 10, 20);
-	  }
-	
-	  drawWarning(context) {
-	    let msg = "";
-	    for (let warning of Array.from(warningStack)) {
-	      msg += warning + "\n";
-	    }
-	    return console.error(`Simulation Warning: ${msg}`);
-	  }
-	
-	  drawError(context) {
-	    let msg = "";
-	    for (let error of Array.from(errorStack)) {
-	      msg += error + "\n";
-	    }
-	    return console.error(`Simulation Error: ${msg}`);
 	  }
 	
 	  fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size=Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
@@ -29264,8 +29241,6 @@
 	    this.context.fillColor = origFillColor;
 	    this.context.lineWidth = lineWidth;
 	    this.context.font = font;
-	
-	    // this.context.stroke();
 	
 	    this.context.restore();
 	
@@ -29309,7 +29284,7 @@
 	    this.context.stroke();
 	    this.context.closePath();
 	
-	    return this.context.restore();
+	    this.context.restore();
 	  }
 	
 	  drawRect(x, y, width, height, lineWidth, lineColor) {
@@ -29377,7 +29352,7 @@
 	    this.context.beginPath();
 	
 	    this.context.moveTo(xlist[0], ylist[0]);
-	    for (let i = 1, end = xlist.length, asc = 1 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+	    for (let i = 0; i < xlist.length; ++i) {
 	      this.context.lineTo(xlist[i], ylist[i]);
 	    }
 	
@@ -29389,6 +29364,43 @@
 	
 	    return this.context.restore();
 	  }
+	
+	  getVoltageColor(volts) {
+	    // TODO: Define voltage range
+	    let fullScaleVRange = this.Circuit.Params.voltageRange;
+	
+	    let RedGreen =
+	        [ "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
+	          "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
+	          "#7f7f7f", "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747",
+	          "#3fbf3f", "#37c737", "#2fcf2f", "#27d727", "#1fdf1f", "#17e717", "#0fef0f", "#07f707", "#00ff00" ];
+	
+	    let scale =
+	        ["#B81B00", "#B21F00", "#AC2301", "#A72801", "#A12C02", "#9C3002", "#963503", "#913903",
+	          "#8B3E04", "#854205", "#804605", "#7A4B06", "#754F06", "#6F5307", "#6A5807", "#645C08",
+	          "#5F6109", "#596509", "#53690A", "#4E6E0A", "#48720B", "#43760B", "#3D7B0C", "#387F0C",
+	          "#32840D", "#2C880E", "#278C0E", "#21910F", "#1C950F", "#169910", "#119E10", "#0BA211", "#06A712"];
+	
+	    let blueScale =
+	        ["#EB1416", "#E91330", "#E7134A", "#E51363", "#E3137C", "#E11394", "#E013AC", "#DE13C3",
+	          "#DC13DA", "#C312DA", "#AA12D8", "#9012D7", "#7712D5", "#5F12D3", "#4612D1", "#2F12CF",
+	          "#1712CE", "#1123CC", "#1139CA", "#114FC8", "#1164C6", "#1179C4", "#118EC3", "#11A2C1",
+	          "#11B6BF", "#10BDB1", "#10BB9B", "#10BA84", "#10B86F", "#10B659", "#10B444", "#10B230", "#10B11C"];
+	
+	    scale = Color.Gradients.voltage_default;
+	
+	    let numColors = scale.length - 1;
+	
+	    let value = Math.floor(((volts + fullScaleVRange) * numColors) / (2 * fullScaleVRange));
+	    if (value < 0) {
+	      value = 0;
+	    } else if (value >= numColors) {
+	      value = numColors - 1;
+	    }
+	
+	    return scale[value];
+	  }
+	
 	
 	  drawThickPolygonP(polygon, color, fill) {
 	    if (color == null) { color = Settings.STROKE_COLOR; }
@@ -29402,7 +29414,7 @@
 	    this.context.beginPath();
 	
 	    this.context.moveTo(polygon.getX(0), polygon.getY(0));
-	    for (let i = 0, end = numVertices, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+	    for (let i = 0; i < numVertices; ++i) {
 	      this.context.lineTo(polygon.getX(i), polygon.getY(i));
 	    }
 	
@@ -29411,22 +29423,6 @@
 	    this.context.stroke();
 	    return this.context.restore();
 	  }
-	
-	  drawPolyLine(xList, yList, lineWidth, color) {
-	    if (lineWidth == null) { lineWidth = Settings.LINE_WIDTH; }
-	    if (color == null) { color = Settings.STROKE_COLOR; }
-	    this.context.save();
-	
-	    this.context.beginPath();
-	
-	    this.context.moveTo(xlist[0], ylist[0]);
-	    for (let i = 1, end = xlist.length, asc = 1 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-	      this.context.lineTo(xlist[i], ylist[i]);
-	    }
-	
-	    return this.context.restore();
-	  }
-	
 	
 	  drawCoil(point1, point2, vStart, vEnd, hs) {
 	    let color, cx, hsx, voltageLevel;
@@ -29440,22 +29436,26 @@
 	    ps1.x = point1.x;
 	    ps1.y = point1.y;
 	
-	    return __range__(0, segments, false).map((i) =>
-	        (cx = ((((i + 1) * 8) / segments) % 2) - 1,
-	            hsx = Math.sqrt(1 - (cx * cx)),
-	            ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs),
+	    for (let i = 0; i < segments; ++i) {
+	      cx = (((i + 1) * 8 / segments) % 2) - 1;
+	      hsx = Math.sqrt(1 - cx * cx);
+	      ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs);
+	      voltageLevel = vStart + (vEnd - vStart) * i / segments;
+	      color = this.getVoltageColor(voltageLevel);
 	
-	            voltageLevel = vStart + (((vEnd - vStart) * i) / segments),
-	            color = Util.getVoltageColor(voltageLevel),
-	            this.drawLinePt(ps1, ps2, color),
+	      this.drawLinePt(ps1, ps2, color);
 	
-	            ps1.x = ps2.x,
-	            ps1.y = ps2.y));
+	      ps1.x = ps2.x;
+	      ps1.y = ps2.y;
+	    }
 	  }
 	
 	  draw() {
 	    if (this.context) {
-	      this.context.clear();
+	
+	      if (this.context.clear) {
+	        this.context.clear();
+	      }
 	      this.context.save();
 	      this.context.translate(this.xMargin, this.yMargin);
 	
@@ -29632,21 +29632,21 @@
 	  // TODO: Move to CircuitComponent
 	  drawLeads(component) {
 	    if ((component.point1 != null) && (component.lead1 != null)) {
-	      this.drawLinePt(component.point1, component.lead1, Util.getVoltageColor(component.volts[0]));
+	      this.drawLinePt(component.point1, component.lead1, this.getVoltageColor(component.volts[0]));
 	    }
 	    if ((component.point2 != null) && (component.lead2 != null)) {
-	      return this.drawLinePt(component.lead2, component.point2, Util.getVoltageColor(component.volts[1]));
+	      return this.drawLinePt(component.lead2, component.point2, this.getVoltageColor(component.volts[1]));
 	    }
 	  }
 	
 	  // TODO: Move to CircuitComponent
-	  drawPosts(component, color) {
+	  drawPosts(component, color = Settings.POST_COLOR) {
 	    let post;
-	    if (color == null) { color = Settings.POST_COLOR; }
 	
-	    return __range__(0, component.getPostCount(), false).map((i) =>
-	        (post = component.getPost(i), this.drawPost(post.x, post.y, color, color))
-	    );
+	    for (let i=0; i < component.getPostCount(); ++i) {
+	      post = component.getPost(i);
+	      this.drawPost(post.x, post.y, color, color);
+	    }
 	  }
 	
 	  drawPost(x0, y0, fillColor, strokeColor) {
@@ -29664,31 +29664,7 @@
 	  }
 	}
 	
-	// CircuitCanvas.initClass();
-	
 	module.exports = CircuitCanvas;
-	
-	function __guardMethod__(obj, methodName, transform) {
-	  if (typeof obj !== 'undefined' && obj !== null && typeof obj[methodName] === 'function') {
-	    return transform(obj, methodName);
-	  } else {
-	    return undefined;
-	  }
-	}
-	
-	function __guard__(value, transform) {
-	  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
-	}
-	
-	function __range__(left, right, inclusive) {
-	  let range = [];
-	  let ascending = left < right;
-	  let end = !inclusive ? right : ascending ? right + 1 : right - 1;
-	  for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-	    range.push(i);
-	  }
-	  return range;
-	}
 
 
 /***/ }

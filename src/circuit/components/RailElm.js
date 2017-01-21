@@ -33,7 +33,7 @@ class RailElm extends VoltageElm {
     renderContext.drawLinePt(this.point2, this.lead1, Settings.STROKE_COLOR, Settings.LINE_WIDTH+1);
     renderContext.drawLinePt(this.point2, this.point1, Settings.STROKE_COLOR);
 
-    let color = Util.getVoltageColor(this.volts[0]);
+    let color = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.lead1, color);
 
     let clock = (this.waveform === VoltageElm.WF_SQUARE) && ((this.flags & VoltageElm.FLAG_CLOCK) !== 0);

@@ -241,7 +241,7 @@ class RelayElm extends CircuitComponent {
 
     let i;
     for (i = 0; i < 2; i++) {
-      Util.getVoltageColor(this.volts[this.nCoil1 + i]);
+      renderContext.getVoltageColor(this.volts[this.nCoil1 + i]);
       renderContext.drawLinePt(this.coilLeads[i], this.coilPosts[i]);
     }
 
@@ -270,7 +270,7 @@ class RelayElm extends CircuitComponent {
 
       for (i = 0; i < 3; i++) {
         // draw lead
-        Util.getVoltageColor(this.volts[this.nSwitch0 + po + i]);
+        renderContext.getVoltageColor(this.volts[this.nSwitch0 + po + i]);
         renderContext.drawLinePt(this.swposts[p][i], this.swpoles[p][i]);
       }
 

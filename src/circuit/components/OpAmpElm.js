@@ -91,17 +91,17 @@ class OpAmpElm extends CircuitComponent {
     this.setBboxPt(this.point1, this.point2, Math.floor(this.opheight * this.dsign()));
 
     // Terminal 1
-    let color = Util.getVoltageColor(this.volts[0]);
+    let color = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.in1p[0], this.in1p[1], color);
 //    renderContext.drawValue(@in1p[1].x, )
 
     // Terminal 2
-    color = Util.getVoltageColor(this.volts[1]);
+    color = renderContext.getVoltageColor(this.volts[1]);
     renderContext.drawLinePt(this.in2p[0], this.in2p[1], color);
 
 
     // Terminal 3
-    color = Util.getVoltageColor(this.volts[2]);
+    color = renderContext.getVoltageColor(this.volts[2]);
     renderContext.drawLinePt(this.lead2, this.point2, color);
 
     // Body

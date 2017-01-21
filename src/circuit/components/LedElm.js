@@ -88,10 +88,10 @@ class LedElm extends DiodeElm {
     
     this.setBboxPt(this.point1, this.point2, cr);
 
-    let voltageColor = Util.getVoltageColor(this.volts[0]);
+    let voltageColor = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.ledLead1, voltageColor);
 
-    voltageColor = Util.getVoltageColor(this.volts[0]);
+    voltageColor = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.ledLead2, this.point2, voltageColor);
 
     renderContext.drawCircle(this.ledCenter.x, this.ledCenter.y, cr, 2, Settings.PostColor);

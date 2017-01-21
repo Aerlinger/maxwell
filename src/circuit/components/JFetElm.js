@@ -62,15 +62,15 @@ class JfetElm extends MosfetElm {
       super.draw(renderContext);
     }
 
-    let color = Util.getVoltageColor(this.volts[1]);
+    let color = renderContext.getVoltageColor(this.volts[1]);
     renderContext.drawLinePt(this.src[0], this.src[1], color);
     renderContext.drawLinePt(this.src[1], this.src[2], color);
 
-    color = Util.getVoltageColor(this.volts[2]);
+    color = renderContext.getVoltageColor(this.volts[2]);
     renderContext.drawLinePt(this.drn[0], this.drn[1], color);
     renderContext.drawLinePt(this.drn[1], this.drn[2], color);
 
-    color = Util.getVoltageColor(this.volts[0]);
+    color = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.gatePt, color);
 
     renderContext.drawThickPolygonP(this.arrowPoly);

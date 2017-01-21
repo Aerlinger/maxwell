@@ -120,11 +120,11 @@ class ScrElm extends CircuitComponent {
 
     renderContext.drawLeads(this);
 
-    let color = Util.getVoltageColor(v1);
+    let color = renderContext.getVoltageColor(v1);
     renderContext.drawThickPolygonP(this.poly, color);
 
     // draw thing arrow is pointing to
-    color = Util.getVoltageColor(v2);
+    color = renderContext.getVoltageColor(v2);
     renderContext.drawLinePt(this.cathode[0], this.cathode[1], color);
 
     renderContext.drawLinePt(this.lead2, this.gate[0], color);

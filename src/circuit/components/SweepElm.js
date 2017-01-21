@@ -69,7 +69,7 @@ class SweepElm extends CircuitComponent {
       super.draw(renderContext);
     }
 
-    let color = Util.getVoltageColor(this.volts[0]);
+    let color = renderContext.getVoltageColor(this.volts[0]);
     this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (SweepElm.circleSize / this.dn()));
 
     renderContext.drawLinePt(this.point1, this.lead1, color);

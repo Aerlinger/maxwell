@@ -348,7 +348,7 @@ class ChipElm extends CircuitComponent {
       if (this.pins[i]) {
         let p = this.pins[i];
 
-        let voltageColor = Util.getVoltageColor(this.volts[i]);
+        let voltageColor = renderContext.getVoltageColor(this.volts[i]);
 
         let a = p.post;
         let b = p.stub;

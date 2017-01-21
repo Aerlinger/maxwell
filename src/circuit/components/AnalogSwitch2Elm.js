@@ -46,15 +46,15 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
   draw(renderContext) {
     this.setBboxPt(this.point1, this.point2, this.openhs);
 
-    let color = Util.getVoltageColor(this.volts[0]);
+    let color = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.lead1, color);
 
     // draw second lead
-    color = Util.getVoltageColor(this.volts[0]);
+    color = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.swpoles[0], this.swposts[0], color);
 
     // draw third lead
-    color = Util.getVoltageColor(this.volts[2]);
+    color = renderContext.getVoltageColor(this.volts[2]);
     renderContext.drawLinePt(this.swpoles[1], this.swposts[1], color);
 
     let position = this.open ? 1 : 0;

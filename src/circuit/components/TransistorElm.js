@@ -137,11 +137,11 @@ class TransistorElm extends CircuitComponent {
     */
 
     // draw collector
-    let color = Util.getVoltageColor(this.volts[1]);
+    let color = renderContext.getVoltageColor(this.volts[1]);
     renderContext.drawLinePt(this.coll[0], this.coll[1], color);
 
     // draw emitter
-    color = Util.getVoltageColor(this.volts[2]);
+    color = renderContext.getVoltageColor(this.volts[2]);
     renderContext.drawLinePt(this.emit[0], this.emit[1], color);
 
     // draw arrow
@@ -158,7 +158,7 @@ class TransistorElm extends CircuitComponent {
     }
 
     // draw base
-    color = Util.getVoltageColor(this.volts[0]);
+    color = renderContext.getVoltageColor(this.volts[0]);
 //      g.setColor Color.gray  if Circuit.powerCheckItem
     renderContext.drawLinePt(this.point1, this.base, color);
 
@@ -175,7 +175,7 @@ class TransistorElm extends CircuitComponent {
     renderContext.drawDots(this.coll[1], this.coll[0], this);
     renderContext.drawDots(this.emit[1], this.emit[0], this);
 
-    color = Util.getVoltageColor(this.volts[0]);
+    color = renderContext.getVoltageColor(this.volts[0]);
 //      @setPowerColor true
 
     //g.fillPolygon(rectPoly);

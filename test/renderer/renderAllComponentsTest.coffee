@@ -1,5 +1,5 @@
 describe "Render all components", ->
-  it.only "can render all components", ->
+  it "can render all components", ->
     this.timeout(5000)
 
     nComponents = Object.keys(ComponentRegistry.ComponentDefs).length

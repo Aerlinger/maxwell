@@ -21,7 +21,7 @@ class WireElm extends CircuitComponent {
 
   draw(renderContext) {
     let s;
-    renderContext.drawLinePt(this.point1, this.point2, Util.getVoltageColor(this.volts[0]));
+    renderContext.drawLinePt(this.point1, this.point2, renderContext.getVoltageColor(this.volts[0]));
     //  @setBboxPt @point1, @point2, 3
 
     if (this.mustShowCurrent()) {

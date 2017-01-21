@@ -76,15 +76,15 @@ class Switch2Elm extends SwitchElm {
     this.setBboxPt(this.point1, this.point2, this.openhs);
 
     // draw first lead
-    let color = Util.getVoltageColor(this.volts[0]);
+    let color = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.lead1, color);
 
     // draw second lead
-    color = Util.getVoltageColor(this.volts[1]);
+    color = renderContext.getVoltageColor(this.volts[1]);
     renderContext.drawLinePt(this.swpoles[0], this.swposts[0], color);
 
     // draw third lead
-    color = Util.getVoltageColor(this.volts[2]);
+    color = renderContext.getVoltageColor(this.volts[2]);
     renderContext.drawLinePt(this.swpoles[1], this.swposts[1], color);
 
     this.updateDots();

@@ -184,12 +184,12 @@ class VoltageElm extends CircuitComponent {
 
     if (this.waveform === VoltageElm.WF_DC) {
       let [ptA, ptB] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, Settings.GRID_SIZE);
-      renderContext.drawLinePt(this.lead1, ptA, Util.getVoltageColor(this.volts[0]));
-      renderContext.drawLinePt(ptA, ptB, Util.getVoltageColor(this.volts[0]));
+      renderContext.drawLinePt(this.lead1, ptA, renderContext.getVoltageColor(this.volts[0]));
+      renderContext.drawLinePt(ptA, ptB, renderContext.getVoltageColor(this.volts[0]));
 
       this.setBboxPt(this.point1, this.point2, Settings.GRID_SIZE);
       [ptA, ptB] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, 2 * Settings.GRID_SIZE);
-      renderContext.drawLinePt(ptA, ptB, Util.getVoltageColor(this.volts[1]));
+      renderContext.drawLinePt(ptA, ptB, renderContext.getVoltageColor(this.volts[1]));
 
       renderContext.drawValue(-25, 0, this, Util.getUnitText(this.getVoltageDiff(), this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
     } else {

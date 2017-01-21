@@ -22,7 +22,7 @@ class GroundElm extends CircuitComponent {
   draw(renderContext) {
     this.updateDots();
 
-    let color = Util.getVoltageColor(0);
+    let color = renderContext.getVoltageColor(0);
 
     renderContext.drawLinePt(this.point1, this.point2, color);
 

@@ -100,10 +100,10 @@ class MosfetElm extends CircuitComponent {
   draw(renderContext) {
     this.setBboxPt(this.point1, this.point2, this.hs);
 
-    let color = Util.getVoltageColor(this.volts[1]);
+    let color = renderContext.getVoltageColor(this.volts[1]);
     renderContext.drawLinePt(this.src[0], this.src[1], color);
 
-    color = Util.getVoltageColor(this.volts[2]);
+    color = renderContext.getVoltageColor(this.volts[2]);
     renderContext.drawLinePt(this.drn[0], this.drn[1], color);
 
     let segments = 6;
@@ -111,20 +111,20 @@ class MosfetElm extends CircuitComponent {
     let segf = 1.0 / segments;
     for (let i = 0, end = segments, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
       let v = this.volts[1] + (((this.volts[2] - this.volts[1]) * i) / segments);
-      color = Util.getVoltageColor(v);
+      color = renderContext.getVoltageColor(v);
       let ps1 = Util.interpolate(this.src[1], this.drn[1], i * segf);
       let ps2 = Util.interpolate(this.src[1], this.drn[1], (i + 1) * segf);
       renderContext.drawLinePt(ps1, ps2, color);
     }
 
-    color = Util.getVoltageColor(this.volts[1]);
+    color = renderContext.getVoltageColor(this.volts[1]);
     renderContext.drawLinePt(this.src[1], this.src[2], color);
 
-    color = Util.getVoltageColor(this.volts[2]);
+    color = renderContext.getVoltageColor(this.volts[2]);
     renderContext.drawLinePt(this.drn[1], this.drn[2], color);
 
     if (!this.drawDigital()) {
-      color = Util.getVoltageColor((this.pnp === 1 ? this.volts[1] : this.volts[2]));
+      color = renderContext.getVoltageColor((this.pnp === 1 ? this.volts[1] : this.volts[2]));
       renderContext.drawThickPolygonP(this.arrowPoly, color);
     }
 
@@ -132,7 +132,7 @@ class MosfetElm extends CircuitComponent {
 //      Circuit.powerCheckItem
 
     //g.setColor(Color.gray);
-    color = Util.getVoltageColor(this.volts[0]);
+    color = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.gate[1], color);
     renderContext.drawLinePt(this.gate[0], this.gate[2], color);
     this.drawDigital() && (this.pnp === -1);
