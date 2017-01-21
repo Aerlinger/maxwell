@@ -339,11 +339,11 @@ class ChipElm extends CircuitComponent {
   }
 
   drawChip(renderContext) {
-    let i;
+    //let i;
     this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
     renderContext.drawThickPolygon(this.rectPointsX, this.rectPointsY, Settings.STROKE_COLOR);
 
-    for (i = 0; i < this.getPostCount(); i++) {
+    for (let i = 0; i < this.getPostCount(); i++) {
 
       if (this.pins[i]) {
         let p = this.pins[i];
@@ -366,7 +366,7 @@ class ChipElm extends CircuitComponent {
         let textSize = this.csize == 0 ? 6 : 8;
 
         let mt = renderContext.context.measureText(p.text);
-        renderContext.fillText(p.text, p.textloc.x-mt.width/2, p.textloc.y+2, textSize);
+        renderContext.fillText(p.text, p.textloc.x-mt.width/2, p.textloc.y+3, textSize);
 
         if (p.lineOver) {
           let ya = p.textloc.y - renderContext.context.measureText(p.text).height;
@@ -384,14 +384,10 @@ class ChipElm extends CircuitComponent {
       return super.draw(renderContext);
     }
 
-    return (() => {
-      let result = [];
-      for (i = i, end1 = this.getPostCount(), asc1 = i <= end1; asc1 ? i < end1 : i > end1; asc1 ? i++ : i--) {
-        var asc1, end1;
-        result.push(renderContext.drawPost(this.pins[i].post.x, this.pins[i].post.y, this.nodes[i]));
-      }
-      return result;
-    })();
+
+    for (let i = 0; i < this.getPostCount(); ++i) {
+      renderContext.drawPost(this.pins[i].post.x, this.pins[i].post.y, this.nodes[i]);
+    }
   }
 
   _setPoints() {

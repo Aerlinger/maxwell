@@ -28,7 +28,8 @@ class RailElm extends VoltageElm {
   draw(renderContext) {
     this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (VoltageElm.circleSize / this.dn()));
 
-    this.setBboxPt(this.point1, this.point2, this.circleSize);
+    this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
+
     renderContext.drawLinePt(this.point2, this.lead1, Settings.STROKE_COLOR, Settings.LINE_WIDTH+1);
     renderContext.drawLinePt(this.point2, this.point1, Settings.STROKE_COLOR);
 
@@ -53,7 +54,7 @@ class RailElm extends VoltageElm {
       if (Math.abs(v) < 1) { s = v + "V"; } //showFormat.format(v)
       if (this.getVoltage() > 0) { s = `+${s}`; }
 
-      renderContext.fillText(s, this.point2.x, this.point2.y - 5);
+      renderContext.fillText(s, this.point2.x+8, this.point2.y - 5);
 
 //      s = "Ant" if this instanceof AntennaElm
       if (clock) { s = "CLK"; }
@@ -62,9 +63,10 @@ class RailElm extends VoltageElm {
     } else {
       this.drawWaveform(this.point2, renderContext);
     }
-    
+
+    // super.draw(renderContext);
     if (CircuitComponent.DEBUG) {
-      return super.draw(renderContext);
+      super.draw(renderContext);
     }
   }
 

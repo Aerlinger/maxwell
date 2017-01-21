@@ -1,7 +1,7 @@
 let Observer = require('./util/observer');
 let Util = require('./util/util');
-let Point = require('./geom/Point');
-let Settings = require('./settings/settings');
+let Point = require('./geom/point.js');
+let Settings = require('./settings/settings.js');
 
 let CircuitComponent = require('./circuit/circuitComponent');
 let environment = require('./environment.js');
@@ -254,8 +254,6 @@ class CircuitCanvas extends Observer {
     return this.context.restore();
   }
 
-
-  drawValue(x1, y1, circuitElm, str) {}
 
   drawCoil(point1, point2, vStart, vEnd, hs) {
     let color, cx, hsx, voltageLevel;

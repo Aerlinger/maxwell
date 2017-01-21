@@ -63,12 +63,10 @@ class TextElm extends CircuitComponent {
     let color = Settings.TEXT_COLOR;
     this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
 
-    let mt = renderContext.fillText(this.text, this.x1(), this.y1(), color, this.size);
+    let mt = renderContext.fillText(this.text, this.x1(), this.y1(), color, (2/3) * this.size);
 
     this.point2.x = this.boundingBox.x1 + this.boundingBox.width;
     this.point2.y = this.boundingBox.y1 + this.boundingBox.height;
-
-    let mt2 = renderContext.context.measureText(this.text);
 
     this.setBbox(this.x1(), this.y1() - this.size + 1, this.x1() + mt.width, this.y1());
 
