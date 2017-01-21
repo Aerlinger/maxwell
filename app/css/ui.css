@@ -125,7 +125,7 @@ fieldset.fieldset .slider {
 
 /* to show the canvas bounds */
 canvas {
-  z-index: -1;
+  z-index: 1;
   position: absolute;
   background: #efe;
   border: none;
