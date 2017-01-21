@@ -37,12 +37,13 @@ class CircuitCanvas extends Observer {
   }
 
   drawInfoText() {
-    if (this.highlightedComponent != null) {
+    if (this.circuitUI.highlightedComponent != null) {
       let arr = [];
-      this.highlightedComponent.getInfo(arr);
+      this.circuitUI.highlightedComponent.getInfo(arr);
 
-      return __range__(0, arr.length, false).map((idx) =>
-          this.context.fillText(arr[idx], 500, (idx * 10) + 15));
+      for (let idx=0; idx < arr.length; ++idx) {
+        this.context.fillText(arr[idx], 500, (idx * 10) + 15);
+      }
     }
   }
 
@@ -285,7 +286,9 @@ class CircuitCanvas extends Observer {
     if (this.context) {
       this.context.clear();
       this.context.save();
-      this.context.translate(this.xMargin, this.yMargin)
+      this.context.translate(this.xMargin, this.yMargin);
+
+      this.context.fillText("Time elapsed: " +  Util.getUnitText(this.Circuit.time, "s"), 10, 15);
     }
 
     if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
@@ -294,7 +297,10 @@ class CircuitCanvas extends Observer {
     }
 
     this.drawInfoText();
-    __guard__(this.circuitUI.marquee, x => x.draw(this));
+
+    if (this.circuitUI.marquee) {
+      this.circuitUI.marquee.draw(this)
+    }
 
     // UPDATE FRAME ----------------------------------------------------------------
     this.Circuit.updateCircuit();
@@ -405,7 +411,12 @@ class CircuitCanvas extends Observer {
 
   // TODO: Move to CircuitComponent
   drawDots(ptA, ptB, component) {
-    if (__guard__(this.Circuit, x => x.isStopped())) { return; }
+    /**
+     * Previous behavior was for current to not display when paused
+    if (this.Circuit && this.Circuit.isStopped) {
+      return
+    }
+    */
 
     let ds = Settings.CURRENT_SEGMENT_LENGTH;
 

@@ -165,8 +165,7 @@ class Util {
     return Math.floor(Math.random() * (x + 1));
   }
 
-  static getUnitText(value, unit, decimalPoints) {
-    if (decimalPoints == null) { decimalPoints = 2; }
+  static getUnitText(value, unit = "", decimalPoints = 2) {
     let absValue = Math.abs(value);
     if (absValue < 1e-18) { return `0 ${unit}`; }
     if (absValue < 1e-12) { return (value * 1e15).toFixed(decimalPoints) + " f" + unit; }
@@ -222,10 +221,6 @@ class Util {
 
   static showFormat(decimalNum) {
     return decimalNum.toPrecision(2);
-  }
-
-  static shortFormat(decimalNum) {
-    return decimalNum.toPrecision(1);
   }
 
   static longFormat(decimalNum) {

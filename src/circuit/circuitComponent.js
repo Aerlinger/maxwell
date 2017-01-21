@@ -598,6 +598,10 @@ class CircuitComponent {
   }
 
   updateDots(ds) {
+    if (this.Circuit && this.Circuit.isStopped) {
+      return
+    }
+
     if (ds == null) {
       ds = Settings.CURRENT_SEGMENT_LENGTH;
     }

@@ -93,6 +93,7 @@ class Circuit extends Observer {
     this.Params = new SimulationParams();
 
     this.flags = 0;
+    this.isStopped = false;
 
     this.clearAndReset();
   }
@@ -119,8 +120,6 @@ class Circuit extends Observer {
 
     this.time = 0;
     this.iterations = 0;
-
-    this.placementElement = null;
 
     this.clearErrors();
     return this.notifyObservers(this.ON_RESET);
@@ -202,20 +201,19 @@ class Circuit extends Observer {
           Solving is performed via LU factorization.
   */
   updateCircuit() {
-    this.notifyObservers(this.ON_START_UPDATE);
 
-    this.Solver.reconstruct();
 
-    if (this.Solver.isStopped || (this.placementElement !== null)) {
+    if (this.isStopped) {
       this.Solver.lastTime = 0;
     } else {
+      this.notifyObservers(this.ON_START_UPDATE);
+      this.Solver.reconstruct();
       this.Solver.solveCircuit();
+      this.notifyObservers(this.ON_COMPLETE_UPDATE);
     }
 
 //    @write(@Solver.dumpFrame() + "\n")
 //    @write(@dump() + "\n")
-
-    this.notifyObservers(this.ON_COMPLETE_UPDATE);
   }
 
   setSelected(component) {
@@ -399,6 +397,14 @@ class Circuit extends Observer {
   }
 
 
+  pause() {
+    this.isStopped = true;
+  }
+
+  resume() {
+    this.isStopped = false;
+  }
+
   //###################################################################################################################
   /* Simulation Accessor Methods
    *///################################################################################################################
@@ -410,10 +416,6 @@ class Circuit extends Observer {
   eachComponent(callback) {
     return Array.from(this.elementList).map((component) =>
       callback(component));
-  }
-
-  isStopped() {
-    return this.Solver.isStopped;
   }
 
   timeStep() {

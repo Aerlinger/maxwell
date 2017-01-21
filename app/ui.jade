@@ -7,12 +7,18 @@ block header
   script(type="text/javascript", src="/bower_components/foundation-sites/dist/js/foundation.js")
 
   script.
+    function isLetter(str) {
+      return str.length === 1 && str.match(/[a-z]/i);
+    }
+
     $(document).ready(function() {
       $(document).foundation();
 
       var canvas = document.getElementById('canvas');
 
       Maxwell.createContext("ohms", "../circuits/v3/ohms.json", canvas, function (circuitContext) {
+
+
         circuitContext.onSelectionChanged = function (selectedComponents) {
           console.log("SELECTED COMPONENTS", selectedComponents);
         };
@@ -26,6 +32,19 @@ block header
           edit_pane.append(form);
         };
 
+        /*
+        $(document).keydown(function (e) {
+          console.log("keypress", e.keyCode);
+
+          var keyCode = e.keyCode;
+          if (keyCode == 13) {
+            console.log("DELETE");
+
+            renderer.remove(renderer.getSelectedComponents());
+          }
+        });
+        */
+
         Maxwell.Components.map(function (component) {
           $('#component_list').append(
               '<li><a href="#" class="item component-item" data-name=' + component.name + '>' + component.name + '</a></li>'
@@ -37,6 +56,59 @@ block header
 
           circuitContext.setPlaceComponent(componentName);
         });
+
+        document.addEventListener('keydown', function(event) {
+          var charCode = String.fromCharCode(event.which);
+          var keycode = isLetter(charCode) ? charCode : event.which;
+
+          console.log(event.which, keycode);
+
+          switch(keycode) {
+            case "W":
+              console.log("WireElm");
+              circuitContext.setPlaceComponent("WireElm");
+              break;
+            case 'R':
+              circuitContext.setPlaceComponent("ResistorElm");
+              break;
+            case 'G':
+              circuitContext.setPlaceComponent("GroundElm");
+              break;
+            case 'C':
+              circuitContext.setPlaceComponent("CapacitorElm");
+              break;
+            case 'I':
+              circuitContext.setPlaceComponent("InductorElm");
+              break;
+            case 'O':
+              circuitContext.setPlaceComponent("OpAmpElm");
+              break;
+            case "D":
+              circuitContext.setPlaceComponent("DiodeElm");
+              break;
+            case "T":
+              circuitContext.setPlaceComponent("TransistorElm");
+              break;
+            case "Q":
+              circuitContext.clearPlaceComponent();
+              break;
+
+            // ESC
+            case 27:
+              circuitContext.resetSelection();
+              break;
+
+            // Backspace
+            case 8:
+              circuitContext.remove(circuitContext.getSelectedComponents());
+              break;
+
+            // Space
+            case 32:
+              circuitContext.togglePause();
+              break;
+          }
+        })
       });
 
       if (canvas) {

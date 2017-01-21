@@ -368,12 +368,26 @@ class CircuitUI extends Observer {
     }
   }
 
+  togglePause() {
+    if (this.Circuit.isStopped) {
+      this.Circuit.resume()
+    } else {
+      this.Circuit.pause()
+    }
+  }
+
   pause() {}
   play() {}
   restart() {}
 
   clearPlaceComponent() {
-    return this.placeComponent = null;
+    this.placeX = null;
+    this.placeY = null;
+    this.placeComponent = null;
+  }
+
+  resetSelection() {
+    this.selectedComponents = [];
   }
 
   getSelectedComponents() {
