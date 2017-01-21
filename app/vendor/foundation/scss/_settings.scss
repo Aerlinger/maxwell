@@ -50,20 +50,26 @@ $global-font-size: 100%;
 $global-width: rem-calc(1200);
 $global-lineheight: 1.5;
 $foundation-palette: (
-  primary: #1779ba,
-  secondary: #767676,
-  success: #3adb76,
+  primary: #FFF,
+  secondary: #888,
+  success: #13c25c,
   warning: #ffae00,
-  alert: #cc4b37,
+  alert: #ec5840,
 );
-$light-gray: #e6e6e6;
+$primary-color: #fff;
+$secondary-color: #888;
+$success-color: #13c25c;
+$warning-color: #ffae00;
+$alert-color: #ec5840;
+
+$light-gray: #ccc;
 $medium-gray: #cacaca;
-$dark-gray: #8a8a8a;
-$off-black: #555;
+$dark-gray: #333;
+$off-black: #1e1e1e;
 $black: #0a0a0a;
 $white: #fefefe;
-$body-background: $white;
-$body-font-color: $black;
+$body-background: #121212;
+$body-font-color: #a5a5a5;
 $body-font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
 $body-antialiased: true;
 $global-margin: 1rem;
@@ -197,8 +203,9 @@ $input-error-font-weight: $global-weight-bold;
 // 7. Accordion
 // ------------
 
-$accordion-background: $white;
+$accordion-background: $black;
 $accordion-plusminus: true;
+$accordion-item-color: foreground($accordion-background, $primary-color);
 $accordion-title-font-size: rem-calc(12);
 $accordion-item-color: $primary-color;
 $accordion-item-background-hover: $light-gray;
@@ -273,8 +280,8 @@ $buttongroup-radius-on-each: true;
 // 13. Callout
 // -----------
 
-$callout-background: $white;
-$callout-background-fade: 85%;
+$callout-background: #242424;
+$callout-background-fade: 0%;
 $callout-border: 1px solid rgba($black, 0.25);
 $callout-margin: 0 0 1rem 0;
 $callout-padding: 1rem;
@@ -352,47 +359,49 @@ $dropdownmenu-border: 1px solid $medium-gray;
 // 19. Forms
 // ---------
 
-$fieldset-border: 1px solid $medium-gray;
+$fieldset-border: 1px solid $dark-gray;
 $fieldset-padding: rem-calc(10);
 $fieldset-margin: rem-calc(18 0);
 $legend-padding: rem-calc(0 3);
 $form-spacing: rem-calc(8);
-$helptext-color: $off-black;
+$helptext-color: #777;
 $helptext-font-size: rem-calc(11);
 $helptext-font-style: italic;
 $input-prefix-color: $black;
 $input-prefix-background: $light-gray;
 $input-prefix-border: 1px solid $medium-gray;
 $input-prefix-padding: 1rem;
-$form-label-color: $off-black;
+$form-label-color: $medium-gray;
 $form-label-font-size: rem-calc(12);
 $form-label-font-weight: $global-weight-bold;
 $form-label-line-height: 1.3;
-$select-background: $white;
+$select-background: #1e1e1e;
 $select-triangle-color: $dark-gray;
 $select-radius: $global-radius;
-$input-color: $black;
+$input-color: $white;
 $input-placeholder-color: $medium-gray;
 $input-font-family: inherit;
 $input-font-size: rem-calc(12);
 $input-font-weight: $global-weight-normal;
-$input-background: $white;
-$input-background-focus: $white;
-$input-background-disabled: $light-gray;
-$input-border: 1px solid $medium-gray;
-$input-border-focus: 1px solid $dark-gray;
+$input-background: #1e1e1e;
+$input-background-focus: #2c2c2c;
+$input-background-disabled: $black;
+$input-border: 1px solid $light-gray;
+$input-border-focus: 1px solid #1e1e1e;
 $input-shadow: inset 0 1px 2px rgba($black, 0.1);
-$input-shadow-focus: 0 0 5px $medium-gray;
+$input-shadow-focus: 0 0 5px $dark-gray;
 $input-cursor-disabled: not-allowed;
 $input-transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
 $input-number-spinners: true;
-$input-radius: 0;
-$form-button-radius: 0;
+$input-radius: $global-radius;
+$form-button-radius: $global-radius;
+
+
 
 // 20. Label
 // ---------
 
-$label-background: $primary-color;
+$label-background: $dark-gray;
 $label-color: $white;
 $label-color-alt: $black;
 $label-palette: $foundation-palette;
@@ -434,7 +443,7 @@ $meter-fill-bad: $alert-color;
 
 $offcanvas-size: 250px;
 $offcanvas-vertical-size: 250px;
-$offcanvas-background: $light-gray;
+$offcanvas-background: #333;
 $offcanvas-shadow: 0 0 10px rgba($black, 0.7);
 $offcanvas-push-zindex: 1;
 $offcanvas-overlap-zindex: 10;
@@ -613,8 +622,8 @@ $tooltip-radius: $global-radius;
 // 37. Top Bar
 // -----------
 
-$topbar-padding: 0.5rem;
-$topbar-background: $light-gray;
+$topbar-padding: 0rem;
+$topbar-background: #1e1e1e;
 $topbar-submenu-background: $topbar-background;
 $topbar-title-spacing: 0.5rem 1rem 0.5rem 0;
 $topbar-input-width: 200px;

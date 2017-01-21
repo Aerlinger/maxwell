@@ -31,6 +31,10 @@ app.get('/ui', function (req, res) {
   res.render('ui');
 });
 
+app.get('/theme', function (req, res) {
+  res.render('theme-test.html');
+});
+
 app.get('/circuits/:circuit_name', function (req, res) {
   // console.log(__dirname + "../circuits/v3/*.json")
 

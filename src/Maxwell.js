@@ -270,7 +270,9 @@ ${circuitData}\
     componentTitle.innerText = circuitComponent.getName();
 
     container.append(componentTitle);
-    container.append(document.createElement("hr"));
+    let hr = document.createElement("hr");
+    hr.className = "component-title-sep";
+    container.append(hr);
 
     let form = document.createElement("form");
 

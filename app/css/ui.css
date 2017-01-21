@@ -21,6 +21,7 @@ canvas {
 #main_nav {
   position: relative;
   z-index: 10;
+  border-left: 1px solid #cacaca;
 }
 
 .fieldset legend {
@@ -29,6 +30,10 @@ canvas {
   color: #666;
   font-weight: bold;
   font-size: 12px;
+}
+
+hr.component-title-sep {
+  margin-top: 0;
 }
 
 fieldset.fieldset .slider {
@@ -54,11 +59,13 @@ fieldset.fieldset .slider {
   top: 0;
   position: absolute;
   left: 0;
-  background: #EEE;
+  background: #333;
   padding: 70px 10px 10px 10px;
   overflow: auto;
   overflow-x: hidden;
   z-index: 5;
+
+  border-right: 1px solid #cacaca;
 }
 
 .item.component-item {
