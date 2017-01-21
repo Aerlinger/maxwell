@@ -1,0 +1,44 @@
+[
+  {
+    "type": "capac.txt",
+    "timeStep": 0.000005,
+    "simSpeed": 180,
+    "currentSpeed": 55,
+    "voltageRange": 5,
+    "powerRange": 62,
+    "flags": 1
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [176, 256, 176, 80],
+    "flags": 0,
+    "params": {
+      "waveform": 1,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [176, 80, 336, 80],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [336, 80, 336, 256],
+    "flags": 0,
+    "params": {
+      "resistance": 500
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [176, 256, 336, 256],
+    "flags": 0,
+    "params": {}
+  }
+]
