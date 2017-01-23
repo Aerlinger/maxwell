@@ -29070,24 +29070,14 @@
 	
 	    for (let scopeElm of this.Circuit.getScopes()) {
 	      let scElm = CircuitUI.renderScopeCanvas();
-	      Canvas.parentNode.append(scElm);
-	
 	      $(scElm).draggable();
 	      $(scElm).resizable();
+	
+	      Canvas.parentNode.append(scElm);
 	
 	      let sc = new Maxwell.ScopeCanvas(this, scopeElm, scElm.firstChild);
 	
 	      this.scopeCanvases.push(sc);
-	
-	      /*
-	      for (var i = -100; i < 100; i++) {
-	        sc.addVoltage(i);
-	      }
-	
-	      for (var i = -100; i < 100; i++) {
-	        sc.addCurrent(100 * Math.sin(i / 50));
-	      }
-	      */
 	    }
 	  }
 	
@@ -29707,17 +29697,10 @@
 	
 	  drawScopes() {
 	    if (this.context) {
-	      /*
-	      for (let scope of this.Circuit.getScopes()) {
-	        var bbox = scope.circuitElm.getBoundingBox();
-	
-	        this.drawRect(bbox.x, bbox.y, bbox.width, bbox.height, 0, "#F0F");
-	        this.drawLine(bbox.x, bbox.y, )
-	      }
-	      */
-	
 	      for (let scopeCanvas of this.circuitUI.scopeCanvases) {
 	        var center = scopeCanvas.parentScope.circuitElm.getCenter();
+	
+	        this.context.save();
 	
 	        this.context.setLineDash([5, 5]);
 	        this.context.strokeStyle = "#CCC";
@@ -29727,8 +29710,7 @@
 	
 	        this.context.stroke();
 	
-	        // scopeCanvas.addVoltage(10*Math.random());
-	        // scopeCanvas.addCurrent(10*Math.random());
+	        this.context.restore();
 	      }
 	    }
 	  }

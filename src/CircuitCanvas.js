@@ -349,17 +349,10 @@ class CircuitCanvas extends Observer {
 
   drawScopes() {
     if (this.context) {
-      /*
-      for (let scope of this.Circuit.getScopes()) {
-        var bbox = scope.circuitElm.getBoundingBox();
-
-        this.drawRect(bbox.x, bbox.y, bbox.width, bbox.height, 0, "#F0F");
-        this.drawLine(bbox.x, bbox.y, )
-      }
-      */
-
       for (let scopeCanvas of this.circuitUI.scopeCanvases) {
         var center = scopeCanvas.parentScope.circuitElm.getCenter();
+
+        this.context.save();
 
         this.context.setLineDash([5, 5]);
         this.context.strokeStyle = "#CCC";
@@ -369,8 +362,7 @@ class CircuitCanvas extends Observer {
 
         this.context.stroke();
 
-        // scopeCanvas.addVoltage(10*Math.random());
-        // scopeCanvas.addCurrent(10*Math.random());
+        this.context.restore();
       }
     }
   }

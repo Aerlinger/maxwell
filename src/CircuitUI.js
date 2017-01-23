@@ -171,24 +171,14 @@ class CircuitUI extends Observer {
 
     for (let scopeElm of this.Circuit.getScopes()) {
       let scElm = CircuitUI.renderScopeCanvas();
-      Canvas.parentNode.append(scElm);
-
       $(scElm).draggable();
       $(scElm).resizable();
+
+      Canvas.parentNode.append(scElm);
 
       let sc = new Maxwell.ScopeCanvas(this, scopeElm, scElm.firstChild);
 
       this.scopeCanvases.push(sc);
-
-      /*
-      for (var i = -100; i < 100; i++) {
-        sc.addVoltage(i);
-      }
-
-      for (var i = -100; i < 100; i++) {
-        sc.addCurrent(100 * Math.sin(i / 50));
-      }
-      */
     }
   }
 
