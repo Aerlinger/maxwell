@@ -17,8 +17,8 @@ class CircuitCanvas extends Observer {
     this.Canvas = this.circuitUI.Canvas;
 
     // TODO: Extract to param
-    this.xMargin = 260;
-    this.yMargin = 56;
+    this.xMargin = circuitUI.xMargin;
+    this.yMargin = circuitUI.yMargin;
 
     this.draw = this.draw.bind(this);
     this.drawDots = this.drawDots.bind(this);
@@ -121,14 +121,12 @@ class CircuitCanvas extends Observer {
     this.context.restore();
   }
 
-  drawRect(x, y, width, height, lineWidth, lineColor) {
-    if (lineWidth == null) { lineWidth = Settings.LINE_WIDTH; }
-    if (lineColor == null) { lineColor = "#000000"; }
+  drawRect(x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor=Settings.STROKE_COLOR) {
     this.context.strokeStyle = lineColor;
     this.context.lineJoin = 'miter';
     this.context.lineWidth = 0;
     this.context.strokeRect(x, y, width, height);
-    return this.context.stroke();
+    this.context.stroke();
   }
 
   drawLinePt(pa, pb, color, lineWidth) {
@@ -316,6 +314,7 @@ class CircuitCanvas extends Observer {
     // -----------------------------------------------------------------------------
 
     this.drawComponents();
+    this.drawScopes();
 
     if (this.context) {
       if (this.circuitUI.placeComponent) {
@@ -345,6 +344,28 @@ class CircuitCanvas extends Observer {
 
     if (this.context) {
       this.context.restore()
+    }
+  }
+
+  drawScopes() {
+    if (this.context) {
+      for (let scopeCanvas of this.circuitUI.scopeCanvases) {
+        var center = scopeCanvas.parentScope.circuitElm.getCenter();
+
+        let strokeStyle = this.context.strokeStyle;
+        let lineDash = this.context.getLineDash();
+
+        this.context.setLineDash([5, 5]);
+        this.context.strokeStyle = "#CCC";
+        this.context.lineWidth = 1;
+        this.context.moveTo(center.x, center.y);
+        this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height()/2);
+
+        this.context.stroke();
+
+        this.context.strokeStyle = strokeStyle;
+        this.context.setLineDash(lineDash);
+      }
     }
   }
 

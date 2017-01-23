@@ -32,6 +32,11 @@ canvas {
   font-size: 12px;
 }
 
+ul.vertical.menu li a {
+  padding: 0.3rem !important;
+  font-size: 10px;
+}
+
 .top-bar ul.vertical.submenu li, .top-bar ul.vertical.submenu li a {
   padding: 0 !important;
   font-size: 10px;
@@ -58,14 +63,14 @@ fieldset.fieldset .slider {
 }
 
 #component_sidebar {
-  width: 260px;
+  width: 200px;
   height: 100%;
   /*float: left;*/
   top: 0;
   position: absolute;
   left: 0;
   background: #333;
-  padding: 70px 10px 10px 10px;
+  padding: 50px 5px 5px 5px;
   overflow: auto;
   overflow-x: hidden;
   z-index: 5;
@@ -90,6 +95,34 @@ fieldset.fieldset .slider {
   overflow: auto;
   overflow-x: hidden;
   z-index: 5;
+}
+
+.plot-pane {
+  position: absolute;
+  top: 50px;
+  left: 800px;
+
+  width: 300px;
+  height: 100px;
+  background-color: #CCC;
+
+  z-index: 8;
+}
+
+.plot-pane .close-button {
+  position: absolute;
+  top: -30px;
+  right: 5px;
+}
+
+.plot-pane .plot-context {
+  background-color: #EEE;
+
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  top: 5px;
+  bottom: 5px;
 }
 
 .sidepanel::-webkit-scrollbar {

@@ -12,11 +12,35 @@ block header
     }
 
     $(document).ready(function() {
-      $(document).foundation();
+
+      // Plotting
+
+      /*
+      $( ".plot-pane" ).draggable();
+      $( ".plot-pane" ).resizable();
+
+      var sc = new Maxwell.ScopeCanvas($(".plot-pane .plot-context").get(0));
+
+      $(".plot-pane").on("resize", function (evt) {
+        sc.resize(500, 500);
+      });
+
+      for (var i = -100; i < 100; i++) {
+        sc.addVoltage(i);
+      }
+
+      for (var i = -100; i < 100; i++) {
+        sc.addCurrent(100 * Math.sin(i / 50));
+      }
+      */
+
+      // Plotting
+
 
       var canvas = document.getElementById('canvas');
 
       Maxwell.createContext("ohms", "../circuits/v4/#{circuit_name}.json", canvas, function (circuitContext) {
+        window.circuitContext = circuitContext;
 
         circuitContext.onSelectionChanged = function (selectedComponents) {
           console.log("SELECTED COMPONENTS", selectedComponents);
@@ -136,13 +160,19 @@ block header
 block content
   canvas#canvas.maxwell
 
+  //.plot-pane
+    .plot-context
+    button(class="close-button", aria-label="Close alert", type="button")
+      span(aria-hidden="true")
+        | &times;
+
   #main_nav.top-bar.sidepanel
     .top-bar-left
       ul.dropdown.menu(data-dropdown-menu='', data-multi-open=false)
         li.menu-text Maxwell
         li
           a(href='#') Circuit
-          ul.menu.vertical
+          //ul.menu.vertical
             li
               a(href='#') One
             li
@@ -161,9 +191,9 @@ block content
         li
           a(href='#') Sample Circuits
           ul.menu.vertical
-            - for (var i=0; i<circuit_names.length; ++i)
+            - for (var example in examples)
               li
-                a.item(href="/ui/" + circuit_names[i])= circuit_names[i]
+                a.item(href="/ui/" + examples[example])= example
 
     .top-bar-right
       //ul.menu
@@ -173,12 +203,26 @@ block content
           button.button(type='button') Search
 
   #component_sidebar.sidepanel
+    ul#deeplinked-tabs.tabs(data-deep-link='true', data-tabs='')
+      li.tabs-title.is-active
+        a(href='#panel1d', aria-selected='true') Circuits
+      li.tabs-title
+        a(href='#panel2d') Components
 
-    input(type='search', placeholder='Search components')
-    ul.vertical.menu(data-accordion-menu, data-multi-open="false")
-      li
-        a(href='#') Components
+    .tabs-content(data-tabs-content='deeplinked-tabs')
+      #panel1d.tabs-panel.is-active
         ul#component_list.is-active.menu.vertical.nested
+          - for (var i=0; i<circuit_names.length; ++i)
+            li
+              a.item(href="/ui/" + circuit_names[i])= circuit_names[i]
+
+      #panel2d.tabs-panel
+        input(type='search', placeholder='Search components')
+        ul.is-active.menu.vertical.nested
+          - for (var component_name in component_names)
+            li
+              a.item(href="/ui/" + component_names[component_name].name)= component_names[component_name].name
+
 
 
   #edit_component_pane.off-canvas.edit-form.position-right(data-off-canvas='')
@@ -188,3 +232,4 @@ block content
     button.button.float-right(type='button', data-toggle='edit_component_pane') Open
 
   script.
+    $(document).foundation();

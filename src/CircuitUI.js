@@ -69,8 +69,6 @@ let ClockElm = require('./circuit/components/ClockElm.js');
 
 let Scope = require('./circuit/Scope.js');
 
-
-
 class SelectionMarquee extends Rectangle {
   constructor(x1, y1) {
     super();
@@ -130,7 +128,7 @@ class CircuitUI extends Observer {
     this.Canvas = Canvas;
 
     // TODO: Extract to param
-    this.xMargin = 260;
+    this.xMargin = 200;
     this.yMargin = 56;
 
     this.mousemove = this.mousemove.bind(this);
@@ -168,6 +166,32 @@ class CircuitUI extends Observer {
     this.onNodeHover = this.noop;
     this.onNodeClick = this.noop;   // @onNodeClick(component)
     this.onUpdateComplete = this.noop;  // @onUpdateComplete(circuit)
+
+    this.scopeCanvases = [];
+
+    for (let scopeElm of this.Circuit.getScopes()) {
+      let scElm = CircuitUI.renderScopeCanvas();
+      $(scElm).draggable();
+      $(scElm).resizable();
+
+      Canvas.parentNode.append(scElm);
+
+      let sc = new Maxwell.ScopeCanvas(this, scopeElm, scElm.firstChild);
+
+      this.scopeCanvases.push(sc);
+    }
+  }
+
+  static renderScopeCanvas() {
+    let scopeWrapper = document.createElement("div");
+    scopeWrapper.className = "plot-pane";
+
+    let scopeCanvas = document.createElement("div");
+    scopeCanvas.className = "plot-context";
+
+    scopeWrapper.append(scopeCanvas);
+
+    return scopeWrapper;
   }
 
   noop() {
@@ -289,10 +313,8 @@ class CircuitUI extends Observer {
   }
 
   mousedown(event) {
-    let x = event.offsetX;
-    let y = event.offsetY;
-
-    // console.log(this.highlightedComponent, this.placeComponent, this.highlightedNode);
+    let x = event.offsetX - this.xMargin;
+    let y = event.offsetY - this.yMargin;
 
     if (this.placeComponent) {
       if (!this.placeX && !this.placeY) {
@@ -333,7 +355,6 @@ class CircuitUI extends Observer {
     }
 
     for (var component of this.Circuit.getElements()) {
-
       if (component.getBoundingBox().contains(x, y)) {
         this.notifyObservers(CircuitUI.ON_COMPONENT_CLICKED, component);
 

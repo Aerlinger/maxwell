@@ -1,1 +1,370 @@
-[{"type":"default","timeStep":0.000005,"simSpeed":120,"currentSpeed":49,"voltageRange":5,"powerRange":50,"flags":1},{"name":"CapacitorElm","pos":[208,96,208,192],"flags":0,"params":{"capacitance":0.000006083084599140672,"voltdiff":-4.999993387010308}},{"name":"InductorElm","pos":[144,96,208,96],"flags":0,"params":{"inductance":0.022668006177034163,"current":-0.09999921210610777}},{"name":"WireElm","pos":[464,96,528,96],"flags":0,"params":{}},{"name":"ResistorElm","pos":[528,96,528,192],"flags":0,"params":{"resistance":50}},{"name":"GroundElm","pos":[208,192,208,208],"flags":0,"params":{}},{"name":"GroundElm","pos":[528,192,528,208],"flags":0,"params":{}},{"name":"OutputElm","pos":[528,96,576,96],"flags":0,"params":{}},{"name":"CapacitorElm","pos":[272,96,272,192],"flags":0,"params":{"capacitance":0.0000043948121369507934,"voltdiff":-5.000480507723924}},{"name":"InductorElm","pos":[208,96,272,96],"flags":0,"params":{"inductance":0.012560685575556797,"current":-0.1000058296956149}},{"name":"GroundElm","pos":[272,192,272,208],"flags":0,"params":{}},{"name":"CapacitorElm","pos":[336,96,336,192],"flags":0,"params":{"capacitance":0.0000032704856949098034,"voltdiff":-4.999333512699853}},{"name":"InductorElm","pos":[272,96,336,96],"flags":0,"params":{"inductance":0.009621226664444704,"current":-0.10000178631255717}},{"name":"GroundElm","pos":[336,192,336,208],"flags":0,"params":{}},{"name":"CapacitorElm","pos":[400,96,400,192],"flags":0,"params":{"capacitance":0.0000019267432478517496,"voltdiff":-4.9985368414433955}},{"name":"InductorElm","pos":[336,96,400,96],"flags":0,"params":{"inductance":0.006573613744873482,"current":-0.0999748516250718}},{"name":"GroundElm","pos":[400,192,400,208],"flags":0,"params":{}},{"name":"CapacitorElm","pos":[464,96,464,192],"flags":0,"params":{"capacitance":3.953712484972596e-7,"voltdiff":-4.99868176000584}},{"name":"InductorElm","pos":[400,96,464,96],"flags":0,"params":{"inductance":0.0029400148153217306,"current":-0.09997178060465385}},{"name":"GroundElm","pos":[464,192,464,208],"flags":0,"params":{}},{"name":"GroundElm","pos":[464,352,464,368],"flags":0,"params":{}},{"name":"InductorElm","pos":[400,272,464,272],"flags":0,"params":{"inductance":0.0037033695101520102,"current":-0.10336833872744124}},{"name":"CapacitorElm","pos":[464,272,464,352],"flags":0,"params":{"capacitance":4.979463676217806e-7,"voltdiff":-5.226853560161393}},{"name":"GroundElm","pos":[400,352,400,368],"flags":0,"params":{}},{"name":"InductorElm","pos":[336,272,400,272],"flags":0,"params":{"inductance":0.0082809859705,"current":-0.0973916022814173}},{"name":"CapacitorElm","pos":[400,272,400,352],"flags":0,"params":{"capacitance":0.000002427517293683718,"voltdiff":-5.045542492104053}},{"name":"GroundElm","pos":[336,352,336,368],"flags":0,"params":{}},{"name":"InductorElm","pos":[272,272,336,272],"flags":0,"params":{"inductance":0.012016178653842758,"current":-0.09363197455759392}},{"name":"CapacitorElm","pos":[336,272,336,352],"flags":0,"params":{"capacitance":0.000004112858198910477,"voltdiff":-4.706292766508745}},{"name":"GroundElm","pos":[272,352,272,368],"flags":0,"params":{}},{"name":"InductorElm","pos":[208,272,272,272],"flags":0,"params":{"inductance":0.01442033310922977,"current":-0.10308412962676379}},{"name":"CapacitorElm","pos":[272,272,272,352],"flags":0,"params":{"capacitance":0.000005369543031057315,"voltdiff":-4.878852155807363}},{"name":"OutputElm","pos":[528,272,576,272],"flags":0,"params":{}},{"name":"GroundElm","pos":[528,352,528,368],"flags":0,"params":{}},{"name":"GroundElm","pos":[208,352,208,368],"flags":0,"params":{}},{"name":"ResistorElm","pos":[528,272,528,352],"flags":0,"params":{"resistance":50}},{"name":"WireElm","pos":[464,272,528,272],"flags":0,"params":{}},{"name":"InductorElm","pos":[144,272,208,272],"flags":0,"params":{"inductance":0.012448659190544548,"current":-0.09950752670846397}},{"name":"CapacitorElm","pos":[208,272,208,352],"flags":0,"params":{"capacitance":0.0000059051646250635805,"voltdiff":-5.184027928619852}},{"name":"WireElm","pos":[144,96,144,192],"flags":0,"params":{}},{"name":"WireElm","pos":[144,192,144,272],"flags":0,"params":{}},{"name":"RailElm","pos":[144,192,96,192],"flags":0,"params":{"waveform":2,"frequency":80,"maxVoltage":5,"bias":0,"phaseShift":0,"dutyCycle":0.5}},{"name":"Scope","pos":[0,100,300,200],"params":{"elm":6,"speed":32,"value":0,"voltageRange":10,"currentRange":0.00009765625,"options":34,"pos":0,"ye":-1}},{"name":"Scope","pos":[100,100,500,200],"params":{"elm":31,"speed":32,"value":0,"voltageRange":10,"currentRange":0.00009765625,"options":34,"pos":1,"ye":-1}}]
+[
+  {
+    "type": "default",
+    "timeStep": 0.000005,
+    "simSpeed": 120,
+    "currentSpeed": 49,
+    "voltageRange": 5,
+    "powerRange": 50,
+    "flags": 1
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [208, 96, 208, 192],
+    "flags": 0,
+    "params": {
+      "capacitance": 0.000006083084599140672,
+      "voltdiff": -4.999993387010308
+    }
+  },
+  {
+    "name": "InductorElm",
+    "pos": [144, 96, 208, 96],
+    "flags": 0,
+    "params": {
+      "inductance": 0.022668006177034163,
+      "current": -0.09999921210610777
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [464, 96, 528, 96],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [528, 96, 528, 192],
+    "flags": 0,
+    "params": {
+      "resistance": 50
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [208, 192, 208, 208],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "GroundElm",
+    "pos": [528, 192, 528, 208],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "OutputElm",
+    "pos": [528, 96, 576, 96],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [272, 96, 272, 192],
+    "flags": 0,
+    "params": {
+      "capacitance": 0.0000043948121369507934,
+      "voltdiff": -5.000480507723924
+    }
+  },
+  {
+    "name": "InductorElm",
+    "pos": [208, 96, 272, 96],
+    "flags": 0,
+    "params": {
+      "inductance": 0.012560685575556797,
+      "current": -0.1000058296956149
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [272, 192, 272, 208],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [336, 96, 336, 192],
+    "flags": 0,
+    "params": {
+      "capacitance": 0.0000032704856949098034,
+      "voltdiff": -4.999333512699853
+    }
+  },
+  {
+    "name": "InductorElm",
+    "pos": [272, 96, 336, 96],
+    "flags": 0,
+    "params": {
+      "inductance": 0.009621226664444704,
+      "current": -0.10000178631255717
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [336, 192, 336, 208],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [400, 96, 400, 192],
+    "flags": 0,
+    "params": {
+      "capacitance": 0.0000019267432478517496,
+      "voltdiff": -4.9985368414433955
+    }
+  },
+  {
+    "name": "InductorElm",
+    "pos": [336, 96, 400, 96],
+    "flags": 0,
+    "params": {
+      "inductance": 0.006573613744873482,
+      "current": -0.0999748516250718
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [400, 192, 400, 208],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [464, 96, 464, 192],
+    "flags": 0,
+    "params": {
+      "capacitance": 3.953712484972596e-7,
+      "voltdiff": -4.99868176000584
+    }
+  },
+  {
+    "name": "InductorElm",
+    "pos": [400, 96, 464, 96],
+    "flags": 0,
+    "params": {
+      "inductance": 0.0029400148153217306,
+      "current": -0.09997178060465385
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [464, 192, 464, 208],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "GroundElm",
+    "pos": [464, 352, 464, 368],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "InductorElm",
+    "pos": [400, 272, 464, 272],
+    "flags": 0,
+    "params": {
+      "inductance": 0.0037033695101520102,
+      "current": -0.10336833872744124
+    }
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [464, 272, 464, 352],
+    "flags": 0,
+    "params": {
+      "capacitance": 4.979463676217806e-7,
+      "voltdiff": -5.226853560161393
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [400, 352, 400, 368],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "InductorElm",
+    "pos": [336, 272, 400, 272],
+    "flags": 0,
+    "params": {
+      "inductance": 0.0082809859705,
+      "current": -0.0973916022814173
+    }
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [400, 272, 400, 352],
+    "flags": 0,
+    "params": {
+      "capacitance": 0.000002427517293683718,
+      "voltdiff": -5.045542492104053
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [336, 352, 336, 368],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "InductorElm",
+    "pos": [272, 272, 336, 272],
+    "flags": 0,
+    "params": {
+      "inductance": 0.012016178653842758,
+      "current": -0.09363197455759392
+    }
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [336, 272, 336, 352],
+    "flags": 0,
+    "params": {
+      "capacitance": 0.000004112858198910477,
+      "voltdiff": -4.706292766508745
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [272, 352, 272, 368],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "InductorElm",
+    "pos": [208, 272, 272, 272],
+    "flags": 0,
+    "params": {
+      "inductance": 0.01442033310922977,
+      "current": -0.10308412962676379
+    }
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [272, 272, 272, 352],
+    "flags": 0,
+    "params": {
+      "capacitance": 0.000005369543031057315,
+      "voltdiff": -4.878852155807363
+    }
+  },
+  {
+    "name": "OutputElm",
+    "pos": [528, 272, 576, 272],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "GroundElm",
+    "pos": [528, 352, 528, 368],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "GroundElm",
+    "pos": [208, 352, 208, 368],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [528, 272, 528, 352],
+    "flags": 0,
+    "params": {
+      "resistance": 50
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [464, 272, 528, 272],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "InductorElm",
+    "pos": [144, 272, 208, 272],
+    "flags": 0,
+    "params": {
+      "inductance": 0.012448659190544548,
+      "current": -0.09950752670846397
+    }
+  },
+  {
+    "name": "CapacitorElm",
+    "pos": [208, 272, 208, 352],
+    "flags": 0,
+    "params": {
+      "capacitance": 0.0000059051646250635805,
+      "voltdiff": -5.184027928619852
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [144, 96, 144, 192],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [144, 192, 144, 272],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "RailElm",
+    "pos": [144, 192, 96, 192],
+    "flags": 0,
+    "params": {
+      "waveform": 2,
+      "frequency": 80,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "Scope",
+    "pos": [0, 100, 300, 200],
+    "params": {
+      "elm": 40,
+      "speed": 32,
+      "value": 0,
+      "voltageRange": 10,
+      "currentRange": 0.00009765625,
+      "options": 34,
+      "pos": 0,
+      "ye": -1
+    }
+  },
+  {
+    "name": "Scope",
+    "pos": [0, 100, 300, 200],
+    "params": {
+      "elm": 6,
+      "speed": 32,
+      "value": 0,
+      "voltageRange": 10,
+      "currentRange": 0.00009765625,
+      "options": 34,
+      "pos": 0,
+      "ye": -1
+    }
+  },
+  {
+    "name": "Scope",
+    "pos": [100, 100, 500, 200],
+    "params": {
+      "elm": 31,
+      "speed": 32,
+      "value": 0,
+      "voltageRange": 10,
+      "currentRange": 0.00009765625,
+      "options": 34,
+      "pos": 1,
+      "ye": -1
+    }
+  }
+]

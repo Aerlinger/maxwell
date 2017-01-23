@@ -3,7 +3,6 @@ let Util = require("../util/util.js");
 
 class Scope {
   static initClass() {
-  
     this.VAL_POWER = 1;
     this.VAL_IB = 1;
     this.VAL_IC = 2;
@@ -18,15 +17,15 @@ class Scope {
   constructor(position, params) {
     this.params = params;
 
-    this.elm = params['elm'];
-    this.speed = params['speed'];
-    this.value = params['value'];
+    this.elm = parseInt(params['elm']);
+    this.speed = parseFloat(params['speed']);
+    this.value = parseFloat(params['value']);
     this.options = params['options'];
-    this.voltageRange = params["voltageRange"];
-    this.currentRange = params["currentRange"];
+    this.voltageRange = parseFloat(params["voltageRange"]);
+    this.currentRange = parseFloat(params["currentRange"]);
 
-    this.pos = params['pos'] || 0;
-    this.ye = params['ye'] || 0;
+    this.pos = parseInt(params['pos']) || 0;
+    this.ye = parseInt(params['ye']) || 0;
     this.label = params['label'] || "";
 
     this.context = null;
@@ -40,10 +39,23 @@ class Scope {
     }
   }
 
+  setCanvas(scopeCanvas) {
+    this.scopeCanvas = scopeCanvas;
+  }
+
+  setCircuit(circuit) {
+    this.circuitElm = circuit.getElmByIdx(this.elm);
+    this.circuit = circuit;
+  }
+
+  setContext(context) {
+
+  }
+
   reset() {
     let lockScale, showMax, showMin, showV;
     this.minMaxV = 5;
-    this.minMaxI = .1;
+    this.minMaxI = 0.1;
     this.speed = 64;
     this.showI = showV = showMax = true;
     this.showFreq = lockScale = showMin = false;
@@ -112,8 +124,16 @@ class Scope {
     }
   }
 
-  sample() {
+  sampleVoltage(voltage) {
+    if (this.scopeCanvas) {
+      this.scopeCanvas.addVoltage(voltage);
+    }
+  }
 
+  sampleCurrent(voltage) {
+    if (this.scopeCanvas) {
+      this.scopeCanvas.addCurrent(voltage);
+    }
   }
 
   static tokenize(inputStr) {

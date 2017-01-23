@@ -75,6 +75,9 @@ class LogicInputElm extends SwitchElm {
     }
   }
 
+  getName(){
+    return "Input Logic"
+  }
 
   isTernary() {
     return this.flags & (LogicInputElm.FLAG_TERNARY !== 0);

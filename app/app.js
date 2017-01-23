@@ -5,6 +5,8 @@ var glob = require('glob');
 
 var app = express();
 
+var Maxwell = require("../src/Maxwell");
+
 app.set('views', __dirname);
 app.set('view engine', 'jade');
 
@@ -15,6 +17,23 @@ app.use("/bower_components", express.static(path.join(__dirname, '../bower_compo
 app.use("/dist", express.static(path.join(__dirname, '../dist')));
 app.use("/scripts", express.static(path.join(__dirname, './scripts')));
 app.use("/circuits", express.static(path.join(__dirname, '../circuits')));
+
+examples = {
+  'Simple resistance': 'resistors',
+  'Bessel & Butterworth filter': 'besselbutter',
+  'Mosfet Amplifier': 'mosfetamp',
+  'LC Ladder': 'ladder',
+  'Digital Comparator': 'fulladd',
+  'DRAM': 'dram',
+  'Half Adder': 'halfadd',
+  'Traffic light': 'traffic',
+  'Flash ADC': 'flashadc',
+  'DAC': 'dac',
+  'Decade Counter': 'deccounter',
+  'switched-cap': 'switched-cap',
+  'Binary to Decimal Decoder': 'decoder',
+  'Digital Sine': 'digsine'
+};
 
 var port = 6502;
 
@@ -36,8 +55,10 @@ app.get('/ui', function (req, res) {
 
 app.get('/ui/:circuit_name', function (req, res) {
   res.render('ui', {
+    examples: examples,
     circuit_name: req.params.circuit_name,
-    circuit_names: circuit_names
+    circuit_names: circuit_names,
+    component_names: Maxwell.Components
   });
 });
 

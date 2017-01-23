@@ -17694,7 +17694,7 @@
 	let PotElm = __webpack_require__(73);
 	let ClockElm = __webpack_require__(74);
 	
-	let Scope = __webpack_require__(93);
+	let Scope = __webpack_require__(75);
 	
 	let SimulationParams = __webpack_require__(76);
 	
@@ -18137,12 +18137,12 @@
 	
 	    if (this.waveform === VoltageElm.WF_DC) {
 	      let [ptA, ptB] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, Settings.GRID_SIZE);
-	      renderContext.drawLinePt(this.lead1, ptA, Util.getVoltageColor(this.volts[0]));
-	      renderContext.drawLinePt(ptA, ptB, Util.getVoltageColor(this.volts[0]));
+	      renderContext.drawLinePt(this.lead1, ptA, renderContext.getVoltageColor(this.volts[0]));
+	      renderContext.drawLinePt(ptA, ptB, renderContext.getVoltageColor(this.volts[0]));
 	
 	      this.setBboxPt(this.point1, this.point2, Settings.GRID_SIZE);
 	      [ptA, ptB] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, 2 * Settings.GRID_SIZE);
-	      renderContext.drawLinePt(ptA, ptB, Util.getVoltageColor(this.volts[1]));
+	      renderContext.drawLinePt(ptA, ptB, renderContext.getVoltageColor(this.volts[1]));
 	
 	      renderContext.drawValue(-25, 0, this, Util.getUnitText(this.getVoltageDiff(), this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
 	    } else {
@@ -18466,7 +18466,7 @@
 	      let startPosition = Util.interpolate(this.lead1, this.lead2, n*parallelOffset, width*offsets[n % 4]);
 	      let endPosition = Util.interpolate(this.lead1, this.lead2, (n+1)*parallelOffset, width*offsets[(n+1) % 4]);
 	
-	      renderContext.drawLinePt(startPosition, endPosition, Util.getVoltageColor(resistorSegmentVoltage), Settings.LINE_WIDTH);
+	      renderContext.drawLinePt(startPosition, endPosition, renderContext.getVoltageColor(resistorSegmentVoltage), Settings.LINE_WIDTH);
 	    }
 	
 	    renderContext.drawValue(14, 0, this, Util.getUnitText(this.resistance, this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
@@ -18544,7 +18544,7 @@
 	  draw(renderContext) {
 	    this.updateDots();
 	
-	    let color = Util.getVoltageColor(0);
+	    let color = renderContext.getVoltageColor(0);
 	
 	    renderContext.drawLinePt(this.point1, this.point2, color);
 	
@@ -19195,16 +19195,16 @@
 	//    @setBboxPt @point1, @point2, hs
 	
 	    // draw leads
-	    renderContext.drawLinePt(this.point1, this.lead1, Util.getVoltageColor(this.volts[0]));
-	    renderContext.drawLinePt(this.point2, this.lead2, Util.getVoltageColor(this.volts[1]));
+	    renderContext.drawLinePt(this.point1, this.lead1, renderContext.getVoltageColor(this.volts[0]));
+	    renderContext.drawLinePt(this.point2, this.lead2, renderContext.getVoltageColor(this.volts[1]));
 	
 	    this.updateDots();
 	    renderContext.drawDots(this.point1, this.lead1, this);
 	    renderContext.drawDots(this.lead2, this.point2, this);
 	
 	    // draw plates
-	    renderContext.drawLinePt(this.plate1[0], this.plate1[1], Util.getVoltageColor(this.volts[0]), Settings.LINE_WIDTH+1);
-	    renderContext.drawLinePt(this.plate2[0], this.plate2[1], Util.getVoltageColor(this.volts[1]), Settings.LINE_WIDTH+1);
+	    renderContext.drawLinePt(this.plate1[0], this.plate1[1], renderContext.getVoltageColor(this.volts[0]), Settings.LINE_WIDTH+1);
+	    renderContext.drawLinePt(this.plate2[0], this.plate2[1], renderContext.getVoltageColor(this.volts[1]), Settings.LINE_WIDTH+1);
 	
 	    renderContext.drawValue(20, 0, this, Util.getUnitText(this.capacitance, this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
 	
@@ -19557,10 +19557,10 @@
 	
 	    renderContext.drawLeads(this);
 	
-	    let color = Util.getVoltageColor(this.volts[0]);
+	    let color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawThickPolygonP(this.arrow1, color);
 	
-	    color = Util.getVoltageColor(this.volts[1]);
+	    color = renderContext.getVoltageColor(this.volts[1]);
 	    renderContext.drawThickPolygonP(this.arrow2, color);
 	
 	    if (this.state) { renderContext.drawDots(this.point1, this.point2, this); }
@@ -20117,15 +20117,15 @@
 	      super.draw(renderContext);
 	    }
 	
-	    let color = Util.getVoltageColor(this.volts[1]);
+	    let color = renderContext.getVoltageColor(this.volts[1]);
 	    renderContext.drawLinePt(this.src[0], this.src[1], color);
 	    renderContext.drawLinePt(this.src[1], this.src[2], color);
 	
-	    color = Util.getVoltageColor(this.volts[2]);
+	    color = renderContext.getVoltageColor(this.volts[2]);
 	    renderContext.drawLinePt(this.drn[0], this.drn[1], color);
 	    renderContext.drawLinePt(this.drn[1], this.drn[2], color);
 	
-	    color = Util.getVoltageColor(this.volts[0]);
+	    color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.gatePt, color);
 	
 	    renderContext.drawThickPolygonP(this.arrowPoly);
@@ -21577,14 +21577,14 @@
 	//    if @isSelected()
 	//      color = Settings.SELECT_COLOR
 	//    else
-	    let color = Util.getVoltageColor(this.volts[0]);
+	    let color = renderContext.getVoltageColor(this.volts[0]);
 	
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
 	
 	//    if @isSelected()
 	//      color = Settings.SELECT_COLOR
 	//    else
-	    color = Util.getVoltageColor(this.volts[1]);
+	    color = renderContext.getVoltageColor(this.volts[1]);
 	
 	    renderContext.drawLinePt(this.lead2, this.point2, color);
 	
@@ -22231,7 +22231,7 @@
 	
 	    renderContext.fillText(s, this.point2.x, this.point2.y + 4);
 	
-	    let color = Util.getVoltageColor(this.volts[0]);
+	    let color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
 	
 	    this.updateDots();
@@ -22582,15 +22582,15 @@
 	  draw(renderContext) {
 	    this.setBboxPt(this.point1, this.point2, this.openhs);
 	
-	    let color = Util.getVoltageColor(this.volts[0]);
+	    let color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
 	
 	    // draw second lead
-	    color = Util.getVoltageColor(this.volts[0]);
+	    color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.swpoles[0], this.swposts[0], color);
 	
 	    // draw third lead
-	    color = Util.getVoltageColor(this.volts[2]);
+	    color = renderContext.getVoltageColor(this.volts[2]);
 	    renderContext.drawLinePt(this.swpoles[1], this.swposts[1], color);
 	
 	    let position = this.open ? 1 : 0;
@@ -24238,7 +24238,7 @@
 	      if (this.pins[i]) {
 	        let p = this.pins[i];
 	
-	        let voltageColor = Util.getVoltageColor(this.volts[i]);
+	        let voltageColor = renderContext.getVoltageColor(this.volts[i]);
 	
 	        let a = p.post;
 	        let b = p.stub;
@@ -26351,7 +26351,179 @@
 
 
 /***/ },
-/* 75 */,
+/* 75 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let Rectangle = __webpack_require__(3);
+	let Util = __webpack_require__(5);
+	
+	class Scope {
+	  static initClass() {
+	  
+	    this.VAL_POWER = 1;
+	    this.VAL_IB = 1;
+	    this.VAL_IC = 2;
+	    this.VAL_IE = 3;
+	    this.VAL_VBE = 4;
+	    this.VAL_VBC = 5;
+	    this.VAL_VCE = 6;
+	    this.VAL_R = 2;
+	  }
+	
+	  // Position is a vector of [x1, y1, x2, y2] where x1, y1 is the upper-left corner and x2, y2 is the lower-right corner
+	  constructor(position, params) {
+	    this.params = params;
+	
+	    this.elm = params['elm'];
+	    this.speed = params['speed'];
+	    this.value = params['value'];
+	    this.options = params['options'];
+	    this.voltageRange = params["voltageRange"];
+	    this.currentRange = params["currentRange"];
+	
+	    this.pos = params['pos'] || 0;
+	    this.ye = params['ye'] || 0;
+	    this.label = params['label'] || "";
+	
+	    this.context = null;
+	
+	    if (!position) {
+	      // console.log(position, this.pos)
+	      // Bounding Box?
+	      this.boundingBox = new Rectangle(this.pos * 100, 100, this.pos * 100 + 300, 100);
+	    } else {
+	      this.boundingBox = new Rectangle(position[0], position[1], position[2] - position[0], position[3] - position[1]);
+	    }
+	  }
+	
+	  reset() {
+	    let lockScale, showMax, showMin, showV;
+	    this.minMaxV = 5;
+	    this.minMaxI = .1;
+	    this.speed = 64;
+	    this.showI = showV = showMax = true;
+	    this.showFreq = lockScale = showMin = false;
+	    this.plot2d = false;
+	
+	    // no showI for Output
+	    if ((elm !== null) && (this.elm instanceof OutputElm || this.elm instanceof LogicOutputElm || this.elm instanceof ProbeElm)) {
+	      this.showI = false;
+	    }
+	
+	    this.value = this.ivalue = 0;
+	
+	    if (this.elm instanceof TransistorElm) {
+	      return this.value = VAL_VCE;
+	    }
+	  }
+	
+	  getName() {
+	    return "Scope Output"
+	  }
+	
+	  resetGraph() {
+	    this.scopePointCount = 1;
+	
+	    while (this.scopePointCount <= this.boundingBox.width) {
+	      this.scopePointCount *= 2;
+	    }
+	
+	    this.minV = Util.zeroArray(this.scopePointCount);
+	    this.maxV = Util.zeroArray(this.scopePointCount);
+	    this.minI = Util.zeroArray(this.scopePointCount);
+	    this.maxI = Util.zeroArray(this.scopePointCount);
+	
+	    return this.ptr = this.ctr = 0;
+	  }
+	
+	  draw(renderContext) {
+	    return renderContext.drawLinePt(this.boundingBox.x, this.boundingBox.y, this.boundingBox.x + this.boundingBox.width, this.boundingBox.y + this.boundingBox.height);
+	  }
+	
+	  setElm(ce){
+	    return this.elm = ce;
+	  }
+	
+	  serialize() {
+	    let pos = [
+	      this.boundingBox.x,
+	      this.boundingBox.y,
+	      this.boundingBox.x + this.boundingBox.width,
+	      this.boundingBox.y + this.boundingBox.height
+	    ];
+	
+	    return {
+	      name: "Scope",
+	      pos: pos,
+	      params: {
+	        elm: this.elm,
+	        speed: this.speed,
+	        value: this.value,
+	        voltageRange: this.voltageRange,
+	        currentRange: this.currentRange,
+	        options: this.options,
+	        pos: this.pos,
+	        ye: this.ye
+	      }
+	    }
+	  }
+	
+	  sample() {
+	
+	  }
+	
+	  static tokenize(inputStr) {
+	    // inputStr = "1 64 0 34 12.0 1.220703125E-5 0 -1";
+	
+	    let tokens = inputStr.split(" ");
+	
+	    tokens.shift();
+	    let elm = parseInt(tokens[0]);
+	    let speed = parseFloat(tokens[1]);
+	    let value = parseFloat(tokens[2]);
+	    let options = parseInt(tokens[3]);
+	
+	    let voltageRange
+	    if (tokens.length > 4)
+	      voltageRange = parseFloat(tokens[4]);
+	
+	    let currentRange
+	    if (tokens.length > 5)
+	      currentRange = parseFloat(tokens[5]);
+	
+	    let pos;
+	    if (tokens.length > 6)
+	      pos = parseInt(tokens[6]);
+	
+	    let ye;
+	    if (tokens.length > 7)
+	      ye = parseFloat(tokens[7]);
+	
+	    let label;
+	    if (tokens.length > 8)
+	      label = tokens[8];
+	
+	    return {
+	      elm,
+	      speed,
+	      value,
+	      options,
+	      voltageRange,
+	      currentRange,
+	      pos,
+	      ye,
+	      label
+	    }
+	  }
+	
+	}
+	Scope.initClass();
+	
+	
+	module.exports = Scope;
+
+
+/***/ },
 /* 76 */
 /***/ function(module, exports) {
 
@@ -28494,7 +28666,7 @@
 	let PotElm = __webpack_require__(73);
 	let ClockElm = __webpack_require__(74);
 	
-	let Scope = __webpack_require__(93);
+	let Scope = __webpack_require__(75);
 	
 	//#
 	// ElementMap
@@ -28762,7 +28934,7 @@
 	let PotElm = __webpack_require__(73);
 	let ClockElm = __webpack_require__(74);
 	
-	let Scope = __webpack_require__(93);
+	let Scope = __webpack_require__(75);
 	
 	
 	
@@ -29622,179 +29794,6 @@
 	}
 	
 	module.exports = CircuitCanvas;
-
-
-/***/ },
-/* 93 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let Rectangle = __webpack_require__(3);
-	let Util = __webpack_require__(5);
-	
-	class Scope {
-	  static initClass() {
-	  
-	    this.VAL_POWER = 1;
-	    this.VAL_IB = 1;
-	    this.VAL_IC = 2;
-	    this.VAL_IE = 3;
-	    this.VAL_VBE = 4;
-	    this.VAL_VBC = 5;
-	    this.VAL_VCE = 6;
-	    this.VAL_R = 2;
-	  }
-	
-	  // Position is a vector of [x1, y1, x2, y2] where x1, y1 is the upper-left corner and x2, y2 is the lower-right corner
-	  constructor(position, params) {
-	    this.params = params;
-	
-	    this.elm = params['elm'];
-	    this.speed = params['speed'];
-	    this.value = params['value'];
-	    this.options = params['options'];
-	    this.voltageRange = params["voltageRange"];
-	    this.currentRange = params["currentRange"];
-	
-	    this.pos = params['pos'] || 0;
-	    this.ye = params['ye'] || 0;
-	    this.label = params['label'] || "";
-	
-	    this.context = null;
-	
-	    if (!position) {
-	      // console.log(position, this.pos)
-	      // Bounding Box?
-	      this.boundingBox = new Rectangle(this.pos * 100, 100, this.pos * 100 + 300, 100);
-	    } else {
-	      this.boundingBox = new Rectangle(position[0], position[1], position[2] - position[0], position[3] - position[1]);
-	    }
-	  }
-	
-	  reset() {
-	    let lockScale, showMax, showMin, showV;
-	    this.minMaxV = 5;
-	    this.minMaxI = .1;
-	    this.speed = 64;
-	    this.showI = showV = showMax = true;
-	    this.showFreq = lockScale = showMin = false;
-	    this.plot2d = false;
-	
-	    // no showI for Output
-	    if ((elm !== null) && (this.elm instanceof OutputElm || this.elm instanceof LogicOutputElm || this.elm instanceof ProbeElm)) {
-	      this.showI = false;
-	    }
-	
-	    this.value = this.ivalue = 0;
-	
-	    if (this.elm instanceof TransistorElm) {
-	      return this.value = VAL_VCE;
-	    }
-	  }
-	
-	  getName() {
-	    return "Scope Output"
-	  }
-	
-	  resetGraph() {
-	    this.scopePointCount = 1;
-	
-	    while (this.scopePointCount <= this.boundingBox.width) {
-	      this.scopePointCount *= 2;
-	    }
-	
-	    this.minV = Util.zeroArray(this.scopePointCount);
-	    this.maxV = Util.zeroArray(this.scopePointCount);
-	    this.minI = Util.zeroArray(this.scopePointCount);
-	    this.maxI = Util.zeroArray(this.scopePointCount);
-	
-	    return this.ptr = this.ctr = 0;
-	  }
-	
-	  draw(renderContext) {
-	    return renderContext.drawLinePt(this.boundingBox.x, this.boundingBox.y, this.boundingBox.x + this.boundingBox.width, this.boundingBox.y + this.boundingBox.height);
-	  }
-	
-	  setElm(ce){
-	    return this.elm = ce;
-	  }
-	
-	  serialize() {
-	    let pos = [
-	      this.boundingBox.x,
-	      this.boundingBox.y,
-	      this.boundingBox.x + this.boundingBox.width,
-	      this.boundingBox.y + this.boundingBox.height
-	    ];
-	
-	    return {
-	      name: "Scope",
-	      pos: pos,
-	      params: {
-	        elm: this.elm,
-	        speed: this.speed,
-	        value: this.value,
-	        voltageRange: this.voltageRange,
-	        currentRange: this.currentRange,
-	        options: this.options,
-	        pos: this.pos,
-	        ye: this.ye
-	      }
-	    }
-	  }
-	
-	  sample() {
-	
-	  }
-	
-	  static tokenize(inputStr) {
-	    // inputStr = "1 64 0 34 12.0 1.220703125E-5 0 -1";
-	
-	    let tokens = inputStr.split(" ");
-	
-	    tokens.shift();
-	    let elm = parseInt(tokens[0]);
-	    let speed = parseFloat(tokens[1]);
-	    let value = parseFloat(tokens[2]);
-	    let options = parseInt(tokens[3]);
-	
-	    let voltageRange
-	    if (tokens.length > 4)
-	      voltageRange = parseFloat(tokens[4]);
-	
-	    let currentRange
-	    if (tokens.length > 5)
-	      currentRange = parseFloat(tokens[5]);
-	
-	    let pos;
-	    if (tokens.length > 6)
-	      pos = parseInt(tokens[6]);
-	
-	    let ye;
-	    if (tokens.length > 7)
-	      ye = parseFloat(tokens[7]);
-	
-	    let label;
-	    if (tokens.length > 8)
-	      label = tokens[8];
-	
-	    return {
-	      elm,
-	      speed,
-	      value,
-	      options,
-	      voltageRange,
-	      currentRange,
-	      pos,
-	      ye,
-	      label
-	    }
-	  }
-	
-	}
-	Scope.initClass();
-	
-	
-	module.exports = Scope;
 
 
 /***/ }
