@@ -55,10 +55,7 @@
 	
 	let environment = __webpack_require__(10);
 	
-	
 	// let Maxwell = require("./Maxwell.js");
-	
-	
 	
 	//unless environment.isBrowser
 	//  Winston = require('winston')
@@ -28990,10 +28987,8 @@
 	  }
 	
 	  mousedown(event) {
-	    let x = event.offsetX;
-	    let y = event.offsetY;
-	
-	    // console.log(this.highlightedComponent, this.placeComponent, this.highlightedNode);
+	    let x = event.offsetX - this.xMargin;
+	    let y = event.offsetY - this.yMargin;
 	
 	    if (this.placeComponent) {
 	      if (!this.placeX && !this.placeY) {
@@ -29034,7 +29029,6 @@
 	    }
 	
 	    for (var component of this.Circuit.getElements()) {
-	
 	      if (component.getBoundingBox().contains(x, y)) {
 	        this.notifyObservers(CircuitUI.ON_COMPONENT_CLICKED, component);
 	
@@ -29877,7 +29871,12 @@
 	    this.graph.render();
 	  }
 	
-	
+	  resize(width, height) {
+	    this.graph.configure({
+	      width: width,
+	      height: height
+	    })
+	  }
 	
 	  addVoltage(value) {
 	    this.graph.series.addData({voltage: value});

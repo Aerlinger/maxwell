@@ -9,10 +9,7 @@ let ScopeCanvas = require("./render/ScopeCanvas");
 
 let environment = require("./environment.js");
 
-
 // let Maxwell = require("./Maxwell.js");
-
-
 
 //unless environment.isBrowser
 //  Winston = require('winston')

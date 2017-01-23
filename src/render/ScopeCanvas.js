@@ -61,7 +61,12 @@ class ScopeCanvas {
     this.graph.render();
   }
 
-
+  resize(width, height) {
+    this.graph.configure({
+      width: width,
+      height: height
+    })
+  }
 
   addVoltage(value) {
     this.graph.series.addData({voltage: value});

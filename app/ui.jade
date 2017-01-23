@@ -15,7 +15,12 @@ block header
       $( ".plot-pane" ).draggable();
       $( ".plot-pane" ).resizable();
 
+
       var sc = new Maxwell.ScopeCanvas($(".plot-pane .plot-context").get(0));
+
+      $(".plot-pane").on("resize", function (evt) {
+        sc.resize(500, 500);
+      });
 
       for (var i = -100; i < 100; i++) {
         sc.addVoltage(i);
@@ -198,13 +203,13 @@ block content
 
     .tabs-content(data-tabs-content='deeplinked-tabs')
       #panel1d.tabs-panel.is-active
-        input(type='search', placeholder='Search components')
         ul#component_list.is-active.menu.vertical.nested
           - for (var i=0; i<circuit_names.length; ++i)
             li
               a.item(href="/ui/" + circuit_names[i])= circuit_names[i]
 
       #panel2d.tabs-panel
+        input(type='search', placeholder='Search components')
         ul.is-active.menu.vertical.nested
           - for (var component_name in component_names)
             li
