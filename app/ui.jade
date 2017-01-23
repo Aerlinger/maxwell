@@ -12,8 +12,6 @@ block header
     }
 
     $(document).ready(function() {
-      $(document).foundation();
-
       $( ".plot-pane" ).draggable();
       $( ".plot-pane" ).resizable();
 
@@ -161,7 +159,7 @@ block content
         li.menu-text Maxwell
         li
           a(href='#') Circuit
-          ul.menu.vertical
+          //ul.menu.vertical
             li
               a(href='#') One
             li
@@ -179,7 +177,7 @@ block content
           a(href='#') Edit
         li
           a(href='#') Sample Circuits
-          ul.menu.vertical
+          //ul.menu.vertical
             - for (var i=0; i<circuit_names.length; ++i)
               li
                 a.item(href="/ui/" + circuit_names[i])= circuit_names[i]
@@ -192,12 +190,26 @@ block content
           button.button(type='button') Search
 
   #component_sidebar.sidepanel
+    ul#deeplinked-tabs.tabs(data-deep-link='true', data-tabs='')
+      li.tabs-title.is-active
+        a(href='#panel1d', aria-selected='true') Circuits
+      li.tabs-title
+        a(href='#panel2d') Components
 
-    input(type='search', placeholder='Search components')
-    ul.vertical.menu(data-accordion-menu, data-multi-open="false")
-      li
-        a(href='#') Components
+    .tabs-content(data-tabs-content='deeplinked-tabs')
+      #panel1d.tabs-panel.is-active
+        input(type='search', placeholder='Search components')
         ul#component_list.is-active.menu.vertical.nested
+          - for (var i=0; i<circuit_names.length; ++i)
+            li
+              a.item(href="/ui/" + circuit_names[i])= circuit_names[i]
+
+      #panel2d.tabs-panel
+        ul.is-active.menu.vertical.nested
+          - for (var component_name in component_names)
+            li
+              a.item(href="/ui/" + component_names[component_name].name)= component_names[component_name].name
+
 
 
   #edit_component_pane.off-canvas.edit-form.position-right(data-off-canvas='')
@@ -207,3 +219,4 @@ block content
     button.button.float-right(type='button', data-toggle='edit_component_pane') Open
 
   script.
+    $(document).foundation();

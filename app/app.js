@@ -5,6 +5,8 @@ var glob = require('glob');
 
 var app = express();
 
+var Maxwell = require("../src/Maxwell");
+
 app.set('views', __dirname);
 app.set('view engine', 'jade');
 
@@ -37,7 +39,8 @@ app.get('/ui', function (req, res) {
 app.get('/ui/:circuit_name', function (req, res) {
   res.render('ui', {
     circuit_name: req.params.circuit_name,
-    circuit_names: circuit_names
+    circuit_names: circuit_names,
+    component_names: Maxwell.Components
   });
 });
 

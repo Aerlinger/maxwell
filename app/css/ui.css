@@ -32,6 +32,11 @@ canvas {
   font-size: 12px;
 }
 
+ul.vertical.menu li a {
+  padding: 0.3rem !important;
+  font-size: 10px;
+}
+
 .top-bar ul.vertical.submenu li, .top-bar ul.vertical.submenu li a {
   padding: 0 !important;
   font-size: 10px;
@@ -65,7 +70,7 @@ fieldset.fieldset .slider {
   position: absolute;
   left: 0;
   background: #333;
-  padding: 70px 10px 10px 10px;
+  padding: 50px 5px 5px 5px;
   overflow: auto;
   overflow-x: hidden;
   z-index: 5;
