@@ -51,10 +51,11 @@
 	let Circuit = __webpack_require__(77);
 	let CircuitUI = __webpack_require__(91);
 	
+	let ScopeCanvas = __webpack_require__(93);
+	
 	let environment = __webpack_require__(10);
+	
 	// let Maxwell = require("./Maxwell.js");
-	
-	
 	
 	//unless environment.isBrowser
 	//  Winston = require('winston')
@@ -302,7 +303,6 @@
 	     </div>
 	   </div>
 	   */
-	
 	  static renderEdit(circuitComponent) {
 	    let fields = circuitComponent.constructor.Fields;
 	
@@ -399,8 +399,8 @@
 	}
 	
 	Maxwell.initClass();
-	
 	Maxwell.Renderer = CircuitUI;
+	Maxwell.ScopeCanvas = ScopeCanvas;
 	
 	if (environment.isBrowser) {
 	  window.Maxwell = Maxwell;
@@ -21607,7 +21607,7 @@
 	
 	  getInfo(arr) {
 	    arr[0] = "scope probe";
-	    return arr[1] = `Vd = ${getUnitText(this.getVoltageDiff(), "V")}`;
+	    return arr[1] = `Vd = ${Util.getUnitText(this.getVoltageDiff(), "V")}`;
 	  }
 	
 	  stamp(stamper) {}
@@ -22243,6 +22243,9 @@
 	    }
 	  }
 	
+	  getName(){
+	    return "Input Logic"
+	  }
 	
 	  isTernary() {
 	    return this.flags & (LogicInputElm.FLAG_TERNARY !== 0);
@@ -26359,7 +26362,6 @@
 	
 	class Scope {
 	  static initClass() {
-	  
 	    this.VAL_POWER = 1;
 	    this.VAL_IB = 1;
 	    this.VAL_IC = 2;
@@ -26374,15 +26376,15 @@
 	  constructor(position, params) {
 	    this.params = params;
 	
-	    this.elm = params['elm'];
-	    this.speed = params['speed'];
-	    this.value = params['value'];
+	    this.elm = parseInt(params['elm']);
+	    this.speed = parseFloat(params['speed']);
+	    this.value = parseFloat(params['value']);
 	    this.options = params['options'];
-	    this.voltageRange = params["voltageRange"];
-	    this.currentRange = params["currentRange"];
+	    this.voltageRange = parseFloat(params["voltageRange"]);
+	    this.currentRange = parseFloat(params["currentRange"]);
 	
-	    this.pos = params['pos'] || 0;
-	    this.ye = params['ye'] || 0;
+	    this.pos = parseInt(params['pos']) || 0;
+	    this.ye = parseInt(params['ye']) || 0;
 	    this.label = params['label'] || "";
 	
 	    this.context = null;
@@ -26396,10 +26398,23 @@
 	    }
 	  }
 	
+	  setCanvas(scopeCanvas) {
+	    this.scopeCanvas = scopeCanvas;
+	  }
+	
+	  setCircuit(circuit) {
+	    this.circuitElm = circuit.getElmByIdx(this.elm);
+	    this.circuit = circuit;
+	  }
+	
+	  setContext(context) {
+	
+	  }
+	
 	  reset() {
 	    let lockScale, showMax, showMin, showV;
 	    this.minMaxV = 5;
-	    this.minMaxI = .1;
+	    this.minMaxI = 0.1;
 	    this.speed = 64;
 	    this.showI = showV = showMax = true;
 	    this.showFreq = lockScale = showMin = false;
@@ -26468,8 +26483,16 @@
 	    }
 	  }
 	
-	  sample() {
+	  sampleVoltage(voltage) {
+	    if (this.scopeCanvas) {
+	      this.scopeCanvas.addVoltage(voltage);
+	    }
+	  }
 	
+	  sampleCurrent(voltage) {
+	    if (this.scopeCanvas) {
+	      this.scopeCanvas.addCurrent(voltage);
+	    }
 	  }
 	
 	  static tokenize(inputStr) {
@@ -26631,7 +26654,7 @@
 	let Util = __webpack_require__(5);
 	let environment = __webpack_require__(10);
 	
-	fs = __webpack_require__(88)
+	fs = __webpack_require__(88);
 	
 	
 	class Circuit extends Observer {
@@ -26813,7 +26836,6 @@
 	  */
 	  updateCircuit() {
 	
-	
 	    if (this.isStopped) {
 	      this.Solver.lastTime = 0;
 	    } else {
@@ -26821,6 +26843,15 @@
 	      this.Solver.reconstruct();
 	      this.Solver.solveCircuit();
 	      this.notifyObservers(this.ON_COMPLETE_UPDATE);
+	
+	      for (let scope of this.scopes) {
+	        if (scope.circuitElm) {
+	          // console.log(scope.circuitElm.getVoltageDiff());
+	
+	          scope.sampleVoltage(scope.circuitElm.getVoltageDiff());
+	          // scope.sampleCurrent(scope.circuitElm.getCurrent());
+	        }
+	      }
 	
 	      // console.log(this.Solver.circuitMatrix);
 	      // console.log(this.Solver.circuitRightSide);
@@ -26872,7 +26903,7 @@
 	
 	  // TODO: Scopes aren't implemented yet
 	  getScopes() {
-	    return [];
+	    return this.scopes;
 	  }
 	
 	  findElm(searchElm) {
@@ -26948,6 +26979,8 @@
 	  }
 	
 	  addScope(scope) {
+	    scope.setCircuit(this);
+	
 	    this.scopes.push(scope);
 	  }
 	
@@ -27023,6 +27056,8 @@
 	  resume() {
 	    this.isStopped = false;
 	  }
+	
+	
 	
 	  //###################################################################################################################
 	  /* Simulation Accessor Methods
@@ -28936,8 +28971,6 @@
 	
 	let Scope = __webpack_require__(75);
 	
-	
-	
 	class SelectionMarquee extends Rectangle {
 	  constructor(x1, y1) {
 	    super();
@@ -28997,7 +29030,7 @@
 	    this.Canvas = Canvas;
 	
 	    // TODO: Extract to param
-	    this.xMargin = 260;
+	    this.xMargin = 200;
 	    this.yMargin = 56;
 	
 	    this.mousemove = this.mousemove.bind(this);
@@ -29035,6 +29068,32 @@
 	    this.onNodeHover = this.noop;
 	    this.onNodeClick = this.noop;   // @onNodeClick(component)
 	    this.onUpdateComplete = this.noop;  // @onUpdateComplete(circuit)
+	
+	    this.scopeCanvases = [];
+	
+	    for (let scopeElm of this.Circuit.getScopes()) {
+	      let scElm = CircuitUI.renderScopeCanvas();
+	      $(scElm).draggable();
+	      $(scElm).resizable();
+	
+	      Canvas.parentNode.append(scElm);
+	
+	      let sc = new Maxwell.ScopeCanvas(this, scopeElm, scElm.firstChild);
+	
+	      this.scopeCanvases.push(sc);
+	    }
+	  }
+	
+	  static renderScopeCanvas() {
+	    let scopeWrapper = document.createElement("div");
+	    scopeWrapper.className = "plot-pane";
+	
+	    let scopeCanvas = document.createElement("div");
+	    scopeCanvas.className = "plot-context";
+	
+	    scopeWrapper.append(scopeCanvas);
+	
+	    return scopeWrapper;
 	  }
 	
 	  noop() {
@@ -29156,10 +29215,8 @@
 	  }
 	
 	  mousedown(event) {
-	    let x = event.offsetX;
-	    let y = event.offsetY;
-	
-	    // console.log(this.highlightedComponent, this.placeComponent, this.highlightedNode);
+	    let x = event.offsetX - this.xMargin;
+	    let y = event.offsetY - this.yMargin;
 	
 	    if (this.placeComponent) {
 	      if (!this.placeX && !this.placeY) {
@@ -29200,7 +29257,6 @@
 	    }
 	
 	    for (var component of this.Circuit.getElements()) {
-	
 	      if (component.getBoundingBox().contains(x, y)) {
 	        this.notifyObservers(CircuitUI.ON_COMPONENT_CLICKED, component);
 	
@@ -29312,8 +29368,8 @@
 	    this.Canvas = this.circuitUI.Canvas;
 	
 	    // TODO: Extract to param
-	    this.xMargin = 260;
-	    this.yMargin = 56;
+	    this.xMargin = circuitUI.xMargin;
+	    this.yMargin = circuitUI.yMargin;
 	
 	    this.draw = this.draw.bind(this);
 	    this.drawDots = this.drawDots.bind(this);
@@ -29416,14 +29472,12 @@
 	    this.context.restore();
 	  }
 	
-	  drawRect(x, y, width, height, lineWidth, lineColor) {
-	    if (lineWidth == null) { lineWidth = Settings.LINE_WIDTH; }
-	    if (lineColor == null) { lineColor = "#000000"; }
+	  drawRect(x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor=Settings.STROKE_COLOR) {
 	    this.context.strokeStyle = lineColor;
 	    this.context.lineJoin = 'miter';
 	    this.context.lineWidth = 0;
 	    this.context.strokeRect(x, y, width, height);
-	    return this.context.stroke();
+	    this.context.stroke();
 	  }
 	
 	  drawLinePt(pa, pb, color, lineWidth) {
@@ -29611,6 +29665,7 @@
 	    // -----------------------------------------------------------------------------
 	
 	    this.drawComponents();
+	    this.drawScopes();
 	
 	    if (this.context) {
 	      if (this.circuitUI.placeComponent) {
@@ -29640,6 +29695,28 @@
 	
 	    if (this.context) {
 	      this.context.restore()
+	    }
+	  }
+	
+	  drawScopes() {
+	    if (this.context) {
+	      for (let scopeCanvas of this.circuitUI.scopeCanvases) {
+	        var center = scopeCanvas.parentScope.circuitElm.getCenter();
+	
+	        let strokeStyle = this.context.strokeStyle;
+	        let lineDash = this.context.getLineDash();
+	
+	        this.context.setLineDash([5, 5]);
+	        this.context.strokeStyle = "#CCC";
+	        this.context.lineWidth = 1;
+	        this.context.moveTo(center.x, center.y);
+	        this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height()/2);
+	
+	        this.context.stroke();
+	
+	        this.context.strokeStyle = strokeStyle;
+	        this.context.setLineDash(lineDash);
+	      }
 	    }
 	  }
 	
@@ -29794,6 +29871,121 @@
 	}
 	
 	module.exports = CircuitCanvas;
+
+
+/***/ },
+/* 93 */
+/***/ function(module, exports) {
+
+	class ScopeCanvas {
+	  constructor(parentUI, parentScope, contextElement, x=800, y=700) {
+	    this.dataPoints = 400;
+	    this.timeInterval = 5;
+	
+	    this.parentUI = parentUI;
+	    this.frame = contextElement.parentElement;
+	    this.contextElement = contextElement;
+	    this.parentScope = parentScope;
+	    this.parentScope.setCanvas(this);
+	
+	    let self = this;
+	
+	    var voltageData = new Rickshaw.Series.FixedDuration([{name: 'voltage'}], undefined, {
+	      timeInterval: this.timeInterval,
+	      maxDataPoints: this.dataPoints,
+	      timeBase: 0
+	    });
+	
+	    /*
+	    var currentData = new Rickshaw.Series.FixedDuration([{name: 'current'}], undefined, {
+	      timeInterval: this.timeInterval,
+	      maxDataPoints: this.dataPoints,
+	      timeBase: 0
+	    });
+	    */
+	
+	    this.graph = new Rickshaw.Graph({
+	      element: contextElement,
+	      width: contextElement.offsetWidth,
+	      height: contextElement.offsetHeight,
+	      interpolation: 'linear',
+	      renderer: 'line',
+	      stroke: true,
+	      min: 'auto',
+	      series: voltageData
+	    });
+	
+	    var ticksTreatment = 'glow';
+	
+	    this.xAxis = new Rickshaw.Graph.Axis.X({
+	      graph: this.graph,
+	      ticksTreatment: ticksTreatment,
+	      timeFixture: new Rickshaw.Fixtures.Time.Local()
+	    });
+	
+	    this.xAxis.render();
+	
+	    this.yAxis = new Rickshaw.Graph.Axis.Y({
+	      graph: this.graph,
+	      tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+	      ticksTreatment: ticksTreatment
+	    });
+	
+	    this.yAxis.render();
+	
+	    this.highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
+	      graph: this.graph,
+	      // legend: legend
+	    });
+	
+	    this.hoverDetail = new Rickshaw.Graph.HoverDetail({
+	      graph: this.graph,
+	      xFormatter: function (x) {
+	        return new Date(x * 1000).toString();
+	      }
+	    });
+	
+	    this.graph.render();
+	  }
+	
+	  x() {
+	    return this.frame.offsetLeft - this.parentUI.xMargin;
+	  }
+	
+	  y() {
+	    return this.frame.offsetTop - this.parentUI.yMargin;
+	  }
+	
+	  height() {
+	    return this.frame.offsetHeight;
+	  }
+	
+	  width() {
+	    return this.frame.offsetWidth;
+	  }
+	
+	  resize(width, height) {
+	    this.graph.configure({
+	      width: width,
+	      height: height
+	    })
+	  }
+	
+	  addVoltage(value) {
+	    this.graph.series.addData({voltage: value});
+	
+	    this.graph.update();
+	  };
+	
+	  addCurrent(value) {
+	    this.graph.series.addData({current: value});
+	
+	    this.graph.update();
+	  };
+	
+	}
+	
+	module.exports = ScopeCanvas;
 
 
 /***/ }
