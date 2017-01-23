@@ -128,7 +128,7 @@ class CircuitUI extends Observer {
     this.Canvas = Canvas;
 
     // TODO: Extract to param
-    this.xMargin = 260;
+    this.xMargin = 200;
     this.yMargin = 56;
 
     this.mousemove = this.mousemove.bind(this);

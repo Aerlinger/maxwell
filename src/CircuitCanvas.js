@@ -17,8 +17,8 @@ class CircuitCanvas extends Observer {
     this.Canvas = this.circuitUI.Canvas;
 
     // TODO: Extract to param
-    this.xMargin = 260;
-    this.yMargin = 56;
+    this.xMargin = circuitUI.xMargin;
+    this.yMargin = circuitUI.yMargin;
 
     this.draw = this.draw.bind(this);
     this.drawDots = this.drawDots.bind(this);
@@ -352,7 +352,8 @@ class CircuitCanvas extends Observer {
       for (let scopeCanvas of this.circuitUI.scopeCanvases) {
         var center = scopeCanvas.parentScope.circuitElm.getCenter();
 
-        this.context.save();
+        let strokeStyle = this.context.strokeStyle;
+        let lineDash = this.context.getLineDash();
 
         this.context.setLineDash([5, 5]);
         this.context.strokeStyle = "#CCC";
@@ -362,7 +363,8 @@ class CircuitCanvas extends Observer {
 
         this.context.stroke();
 
-        this.context.restore();
+        this.context.strokeStyle = strokeStyle;
+        this.context.setLineDash(lineDash);
       }
     }
   }

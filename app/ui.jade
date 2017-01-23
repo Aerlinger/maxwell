@@ -190,10 +190,10 @@ block content
           a(href='#') Edit
         li
           a(href='#') Sample Circuits
-          //ul.menu.vertical
-            - for (var i=0; i<circuit_names.length; ++i)
+          ul.menu.vertical
+            - for (var example in examples)
               li
-                a.item(href="/ui/" + circuit_names[i])= circuit_names[i]
+                a.item(href="/ui/" + examples[example])= example
 
     .top-bar-right
       //ul.menu
