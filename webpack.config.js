@@ -9,7 +9,8 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.coffee/, loader: "coffee-loader" },
-      { test: /\.(coffee\.md|litcoffee)$/, loader: "coffee-loader?literate" }
+      { test: /\.(coffee\.md|litcoffee)$/, loader: "coffee-loader?literate" },
+      { test: "src", loader: 'babel-loader' }
     ]
   },
   resolve: {
