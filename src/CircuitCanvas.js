@@ -39,6 +39,8 @@ class CircuitCanvas extends Observer {
       this.context = this.Canvas.getContext("2d");
     }
 
+    // this.drawGrid();
+
     //this.context.lineJoin = 'miter';
   }
 
@@ -197,6 +199,8 @@ class CircuitCanvas extends Observer {
     return this.context.restore();
   }
 
+
+
   getVoltageColor(volts) {
     // TODO: Define voltage range
     let fullScaleVRange = this.Circuit.Params.voltageRange;
@@ -284,10 +288,11 @@ class CircuitCanvas extends Observer {
 
   draw() {
     if (this.context) {
-
       if (this.context.clear) {
         this.context.clear();
       }
+      // this.drawGrid();
+
       this.context.save();
       this.context.translate(this.xMargin, this.yMargin);
 

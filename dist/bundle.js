@@ -29396,6 +29396,8 @@
 	      this.context = this.Canvas.getContext("2d");
 	    }
 	
+	    // this.drawGrid();
+	
 	    //this.context.lineJoin = 'miter';
 	  }
 	
@@ -29554,6 +29556,8 @@
 	    return this.context.restore();
 	  }
 	
+	
+	
 	  getVoltageColor(volts) {
 	    // TODO: Define voltage range
 	    let fullScaleVRange = this.Circuit.Params.voltageRange;
@@ -29641,10 +29645,11 @@
 	
 	  draw() {
 	    if (this.context) {
-	
 	      if (this.context.clear) {
 	        this.context.clear();
 	      }
+	      // this.drawGrid();
+	
 	      this.context.save();
 	      this.context.translate(this.xMargin, this.yMargin);
 	
@@ -29951,7 +29956,9 @@
 	      }
 	    });
 	
-	    this.graph.render();
+	    this.resize(contextElement.offsetWidth, contextElement.offsetHeight);
+	
+	    // this.graph.render();
 	  }
 	
 	  x() {

@@ -12,31 +12,7 @@ block header
     }
 
     $(document).ready(function() {
-
-      // Plotting
-
-      /*
-      $( ".plot-pane" ).draggable();
-      $( ".plot-pane" ).resizable();
-
-      var sc = new Maxwell.ScopeCanvas($(".plot-pane .plot-context").get(0));
-
-      $(".plot-pane").on("resize", function (evt) {
-        sc.resize(500, 500);
-      });
-
-      for (var i = -100; i < 100; i++) {
-        sc.addVoltage(i);
-      }
-
-      for (var i = -100; i < 100; i++) {
-        sc.addCurrent(100 * Math.sin(i / 50));
-      }
-      */
-
-      // Plotting
-
-
+      var grid = document.getElementById('grid');
       var canvas = document.getElementById('canvas');
 
       Maxwell.createContext("ohms", "../circuits/v4/#{circuit_name}.json", canvas, function (circuitContext) {
@@ -126,6 +102,52 @@ block header
         })
       });
 
+      if (grid) {
+
+
+        var ctx = grid.getContext('2d');
+
+        function drawGrid() {
+          ctx.fillStyle = "#CCC";
+
+          for (let i = 0; i < grid.width; i += 8) {
+            for (let j = 0; j < grid.height; j += 8) {
+              ctx.fillRect(i, j, 1, 1);
+            }
+          }
+
+          ctx.fillStyle = "#000";
+        }
+
+        //ctx = Sketch.augment(ctx, {autoclear: false});
+
+        // resize the canvas to fill browser window dynamically
+        //window.addEventListener('resize', resizeCanvas, false);
+
+        function resizeGrid() {
+          grid.width = window.innerWidth;
+          grid.height = window.innerHeight;
+
+          /**
+           * Your drawings need to be inside this function otherwise they will be reset when
+           * you resize the browser window and the canvas goes will be cleared.
+           */
+          drawStuff();
+        }
+
+        resizeGrid();
+
+        function drawStuff() {
+          drawGrid();
+          // draw updates on resize
+
+          //ctx.style = "#F00";
+          //ctx.fillRect(500, 500, 100, 200);
+        }
+
+        drawStuff();
+      }
+
       if (canvas) {
         var ctx = canvas.getContext('2d');
         //ctx = Sketch.augment(ctx, {autoclear: false});
@@ -158,6 +180,7 @@ block header
     });
 
 block content
+  canvas#grid.grid
   canvas#canvas.maxwell
 
   //.plot-pane

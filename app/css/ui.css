@@ -116,13 +116,13 @@ fieldset.fieldset .slider {
 }
 
 .plot-pane .plot-context {
-  background-color: #EEE;
+  background-color: #FFF;
 
   position: absolute;
-  left: 5px;
-  right: 5px;
-  top: 5px;
-  bottom: 5px;
+  left: 2px;
+  right: 2px;
+  top: 2px;
+  bottom: 2px;
 }
 
 .sidepanel::-webkit-scrollbar {
@@ -160,7 +160,7 @@ fieldset.fieldset .slider {
 canvas {
   z-index: 1;
   position: absolute;
-  background: #efe;
+  /*background: #efe;*/
   border: none;
 }
 
@@ -172,6 +172,10 @@ ul.vertical.menu .title {
   background-color: blue;
 }
 
+.grid {
+  background-color: #EFEFFF !important;
+}
+
 .maxwell {
-  background-color: white !important;
+  /*background-color: #EEF !important;*/
 }

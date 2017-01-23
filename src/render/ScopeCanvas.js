@@ -66,7 +66,9 @@ class ScopeCanvas {
       }
     });
 
-    this.graph.render();
+    this.resize(contextElement.offsetWidth, contextElement.offsetHeight);
+
+    // this.graph.render();
   }
 
   x() {
