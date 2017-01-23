@@ -2,13 +2,15 @@
 
 A low-level javascript circuit simulation engine designed to model, simulate, and render complex electronic circuitry.
 
-## Demo Link:
-([http://circuitlab.herokuapp.com/ui/opint])[http://circuitlab.herokuapp.com/ui/opint]
+**Demo Link:** [http://circuitlab.herokuapp.com/ui/opint](http://circuitlab.herokuapp.com/ui/opint)
 
 
 ## Running the App
 
-- `node demo/app.js` 
+- `npm install`
+- `node demo/app.js`
+
+The application will run on localhost port 6502 by default.
 
 ## Features
   - Solvers for linear, nonlinear, analog, digital, and mixed-signal circuitry
@@ -171,59 +173,28 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
 
 ###Plotting and adding Oscilloscopes:
 
-  **Work in progress**
+  **(Work in progress)**
 
-  Use the addScope method to create a virtual oscilloscope to render values:
+## License
 
-  `circuitRenderer.addScope(node1, node2, ["voltage"], [opts])`
+Copyright (c) 2011-2017 Anthony Erlinger
 
-  ```javascript
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
 
-    options = {
-      interval: 10,
-      position: 'bottom'
-    }
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
 
-    circuitRenderer.addScope(node1, node2, ["voltage"], [opts])
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-  ```
-
-  **Positioning:**
-  Scope position can by passing one of the following values to the `position` options attribute:
-  * `top`
-  * `right`
-  * `bottom`
-  * `left`
-
-  Top/bottom aligned scopes use 25% height and full width and height of the canvas. Similarly, left/right scopes
-  use 33% canvas width and expand to full height. If more than one scope is aligned to the same position attributes
-  they will automatically arrange and stack to use space most effectively.*
-
-  Scopes can also be placed on the corners using the following attributes.
-  - `topleft`
-  - `topright`
-  - `bottomright`
-  - `bottomleft`
-
-
-  If desired, more granular positioning can also be achieved with the following attributes:
-  - `width`
-  - `height`
-  - `x` (relative to top-left corner of circuit canvas)
-  - `y` (relative to top-left corner of circuit canvas)
-
-  Either pixels or percentages can be used
-
-  Width and height attributes can be used with the positional attributes. For instance, if we wanted a scope taking up
-  half the canvas we could combine the attrubutes
-
-  ```javascript
-    options = {
-      ...
-      position: 'bottom',
-      height: '50%'
-      ...
-    }
-  ```
-
-## Acknowledgements
