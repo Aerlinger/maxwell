@@ -22169,6 +22169,7 @@
 	let CircuitComponent = __webpack_require__(1);
 	let SwitchElm = __webpack_require__(25);
 	let Util = __webpack_require__(5);
+	let Settings = __webpack_require__(2);
 	
 	class LogicInputElm extends SwitchElm {
 	  static initClass() {
@@ -22229,7 +22230,7 @@
 	      s = `${this.position}`;
 	    }
 	
-	    renderContext.fillText(s, this.point2.x, this.point2.y + 4);
+	    renderContext.fillText(s, this.point2.x - 5, this.point2.y + 6, Settings.TEXT_COLOR, 2*Settings.TEXT_SIZE);
 	
 	    let color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
@@ -22368,7 +22369,7 @@
 	
 	    this.value = s;
 	
-	    renderContext.fillText(s, this.point2.x, this.point2.y);
+	    renderContext.fillText(s, this.point2.x, this.point2.y + 6, Settings.TEXT_COLOR, 2*Settings.TEXT_SIZE);
 	
 	    let color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
