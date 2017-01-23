@@ -23,7 +23,7 @@ examples = {
   'Bessel & Butterworth filter': 'besselbutter',
   'Mosfet Amplifier': 'mosfetamp',
   'LC Ladder': 'ladder',
-  'Digital Comparator': 'fulladd',
+  'Digital Comparator': 'digcompare',
   'DRAM': 'dram',
   'Half Adder': 'halfadd',
   'Traffic light': 'traffic',

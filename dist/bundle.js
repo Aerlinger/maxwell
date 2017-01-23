@@ -29080,6 +29080,12 @@
 	
 	      let sc = new Maxwell.ScopeCanvas(this, scopeElm, scElm.firstChild);
 	
+	      $(scElm).on("resize", function(evt) {
+	        let innerElm = $(scElm).find(".plot-context");
+	
+	        sc.resize(innerElm.width(), innerElm.height());
+	      });
+	
 	      this.scopeCanvases.push(sc);
 	    }
 	  }
@@ -29968,7 +29974,9 @@
 	    this.graph.configure({
 	      width: width,
 	      height: height
-	    })
+	    });
+	
+	    this.graph.render();
 	  }
 	
 	  addVoltage(value) {

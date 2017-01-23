@@ -89,7 +89,9 @@ class ScopeCanvas {
     this.graph.configure({
       width: width,
       height: height
-    })
+    });
+
+    this.graph.render();
   }
 
   addVoltage(value) {
