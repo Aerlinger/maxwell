@@ -221,14 +221,6 @@ block content
             li
               a.item(href="/ui/" + circuit_names[i])= circuit_names[i]
 
-      #panel2d.tabs-panel
-        input(type='search', placeholder='Search components')
-        ul.is-active.menu.vertical.nested
-          - for (var component_name in component_names)
-            li
-              a.item(href="/ui/" + component_names[component_name].name)= component_names[component_name].name
-
-
 
   #edit_component_pane.off-canvas.edit-form.position-right(data-off-canvas='')
     //div#edit_pane.edit-form
