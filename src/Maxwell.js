@@ -257,7 +257,6 @@ ${circuitData}\
      </div>
    </div>
    */
-
   static renderEdit(circuitComponent) {
     let fields = circuitComponent.constructor.Fields;
 
@@ -354,9 +353,7 @@ Use \`Maxwell.createCircuit()\` to create a new empty circuit object.\
 }
 
 Maxwell.initClass();
-
 Maxwell.Renderer = CircuitUI;
-
 Maxwell.ScopeCanvas = ScopeCanvas;
 
 if (environment.isBrowser) {

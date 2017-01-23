@@ -32,7 +32,7 @@ let Rectangle = require('../geom/rectangle.js');
 let Util = require('../util/util.js');
 let environment = require("../environment.js");
 
-fs = require('fs')
+fs = require('fs');
 
 
 class Circuit extends Observer {
@@ -214,7 +214,6 @@ class Circuit extends Observer {
   */
   updateCircuit() {
 
-
     if (this.isStopped) {
       this.Solver.lastTime = 0;
     } else {
@@ -222,6 +221,15 @@ class Circuit extends Observer {
       this.Solver.reconstruct();
       this.Solver.solveCircuit();
       this.notifyObservers(this.ON_COMPLETE_UPDATE);
+
+      for (let scope of this.scopes) {
+        if (scope.circuitElm) {
+          // console.log(scope.circuitElm.getVoltageDiff());
+
+          scope.sampleVoltage(scope.circuitElm.getVoltageDiff());
+          // scope.sampleCurrent(scope.circuitElm.getCurrent());
+        }
+      }
 
       // console.log(this.Solver.circuitMatrix);
       // console.log(this.Solver.circuitRightSide);
@@ -273,7 +281,7 @@ class Circuit extends Observer {
 
   // TODO: Scopes aren't implemented yet
   getScopes() {
-    return [];
+    return this.scopes;
   }
 
   findElm(searchElm) {
@@ -349,6 +357,8 @@ class Circuit extends Observer {
   }
 
   addScope(scope) {
+    scope.setCircuit(this);
+
     this.scopes.push(scope);
   }
 
@@ -424,6 +434,8 @@ class Circuit extends Observer {
   resume() {
     this.isStopped = false;
   }
+
+
 
   //###################################################################################################################
   /* Simulation Accessor Methods

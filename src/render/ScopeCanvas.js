@@ -1,21 +1,29 @@
 class ScopeCanvas {
-  constructor(contextElement) {
+  constructor(parentUI, parentScope, contextElement, x=800, y=700) {
     this.dataPoints = 200;
-    this.timeInterval = 20;
+    this.timeInterval = 5;
+
+    this.parentUI = parentUI;
+    this.frame = contextElement.parentElement;
+    this.contextElement = contextElement;
+    this.parentScope = parentScope;
+    this.parentScope.setCanvas(this);
 
     let self = this;
 
     var voltageData = new Rickshaw.Series.FixedDuration([{name: 'voltage'}], undefined, {
-      timeInterval: 20,
+      timeInterval: this.timeInterval,
       maxDataPoints: this.dataPoints,
       timeBase: 0
     });
 
+    /*
     var currentData = new Rickshaw.Series.FixedDuration([{name: 'current'}], undefined, {
-      timeInterval: 20,
+      timeInterval: this.timeInterval,
       maxDataPoints: this.dataPoints,
       timeBase: 0
     });
+    */
 
     this.graph = new Rickshaw.Graph({
       element: contextElement,
@@ -59,6 +67,22 @@ class ScopeCanvas {
     });
 
     this.graph.render();
+  }
+
+  x() {
+    return this.frame.offsetLeft - this.parentUI.xMargin;
+  }
+
+  y() {
+    return this.frame.offsetTop - this.parentUI.yMargin;
+  }
+
+  height() {
+    return this.frame.offsetHeight;
+  }
+
+  width() {
+    return this.frame.offsetWidth;
   }
 
   resize(width, height) {

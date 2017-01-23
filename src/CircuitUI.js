@@ -69,8 +69,6 @@ let ClockElm = require('./circuit/components/ClockElm.js');
 
 let Scope = require('./circuit/Scope.js');
 
-
-
 class SelectionMarquee extends Rectangle {
   constructor(x1, y1) {
     super();
@@ -168,6 +166,42 @@ class CircuitUI extends Observer {
     this.onNodeHover = this.noop;
     this.onNodeClick = this.noop;   // @onNodeClick(component)
     this.onUpdateComplete = this.noop;  // @onUpdateComplete(circuit)
+
+    this.scopeCanvases = [];
+
+    for (let scopeElm of this.Circuit.getScopes()) {
+      let scElm = CircuitUI.renderScopeCanvas();
+      Canvas.parentNode.append(scElm);
+
+      $(scElm).draggable();
+      $(scElm).resizable();
+
+      let sc = new Maxwell.ScopeCanvas(this, scopeElm, scElm.firstChild);
+
+      this.scopeCanvases.push(sc);
+
+      /*
+      for (var i = -100; i < 100; i++) {
+        sc.addVoltage(i);
+      }
+
+      for (var i = -100; i < 100; i++) {
+        sc.addCurrent(100 * Math.sin(i / 50));
+      }
+      */
+    }
+  }
+
+  static renderScopeCanvas() {
+    let scopeWrapper = document.createElement("div");
+    scopeWrapper.className = "plot-pane";
+
+    let scopeCanvas = document.createElement("div");
+    scopeCanvas.className = "plot-context";
+
+    scopeWrapper.append(scopeCanvas);
+
+    return scopeWrapper;
   }
 
   noop() {
