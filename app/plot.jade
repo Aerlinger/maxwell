@@ -2,10 +2,13 @@ extends ./layout
 
 block header
   link(rel="stylesheet", href="/plot.css")
+  link(rel="stylesheet", href="/bower_components/c3/c3.css")
+  script(language="javascript", type="text/javascript", src="/bower_components/moment/moment.js")
   script(language="javascript", type="text/javascript", src="/bower_components/Flot/jquery.flot.js")
+  script(language="javascript", type="text/javascript", src="/bower_components/c3/c3.js")
 
   script.
-    $(document).ready(function (event) {
+    function flotDemo() {
       // We use an inline data source in the example, usually data would be fetched from a server
       var data = [];
       var totalPoints = 300;
@@ -97,22 +100,124 @@ block header
       update();
       update();
       update();
+    }
 
-      // RICKSHAW
-
+    function rickshawDemo() {
       var plotter = new Plotter("chart_container");
 
-      setInterval(function() {
+      setInterval(function () {
         t = 2 * Math.PI * ((Date.now() % 10000) / 10000);
 
         plotter.addData(100 * Math.sin(t));
       }, 20);
+    }
+
+    function c3demo() {
+      function seedData() {
+        var xCol = ['time'];
+        var voltage = ['Voltage'];
+        var current = ['Current'];
+
+        for (i=0; i<300; ++i) {
+          xCol.push(i);
+          voltage.push(5*Math.sin(i/20));
+          current.push(Math.sin(i/40));
+        }
+
+        return [xCol, voltage, current];
+      }
+
+      var chart = c3.generate({
+        bindto: '#chart',
+        data: {
+          x: 'time',
+          //        xFormat: '%Y%m%d', // 'xFormat' can be used as custom format of 'x'
+          columns: seedData(),
+          axes: {
+            Voltage: 'y',
+            Current: 'y2'
+          }
+        },
+        axis: {
+          time: {
+            type: 'index',
+            format: function(d) { return d + 's'; }
+          },
+          y2: {
+            show: true
+          }
+        },
+        duration: 0
+      });
+
+      function addData() {
+        var voltage = 5*Math.random();
+        var current = Math.random();
+
+        chart.flow({
+          columns: [
+            ['time', 301/100],
+            ['Voltage', voltage],
+            ['Current', current],
+          ],
+          duration: 0
+        });
+      }
+
+      /*
+      setTimeout(function () {
+
+        setTimeout(function () {
+          addData();
+        }, 1000)
+      }, 1000);
+      */
+
+      function update() {
+        addData();
+
+        setTimeout(update, 30);
+      }
+
+      update();
+      //update();
+      //update();
+
+      /*
+      var updateInterval = 20;
+      var i =7;
+
+      function update() {
+        addData(i);
+
+        i += 1;
+
+        setTimeout(update, updateInterval);
+      }
+      */
+
+      window.c3chart = chart;
+    }
+
+    $(document).ready(function (event) {
+
+      c3demo();
+      //c3demo2();
+
+      flotDemo();
+
+      // RICKSHAW
+      rickshawDemo()
+
     });
 
 
 block content
 
   .pusher
+    .chart
+      #chart.c3(style='max-height: 280px; position: relative;')
+
     #content
       .demo-container
         #placeholder.demo-placeholder
