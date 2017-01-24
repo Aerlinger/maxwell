@@ -1,0 +1,15 @@
+{
+  "name": "dygraphs",
+  "homepage": "https://github.com/danvk/dygraphs",
+  "version": "2.0.0",
+  "_release": "2.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.0.0",
+    "commit": "0a31d41e94fae75808da6caa36e96fcdd40fd23f"
+  },
+  "_source": "https://github.com/danvk/dygraphs.git",
+  "_target": "^2.0.0",
+  "_originalSource": "dygraphs",
+  "_direct": true
+}

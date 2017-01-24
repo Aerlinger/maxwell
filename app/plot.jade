@@ -3,9 +3,11 @@ extends ./layout
 block header
   link(rel="stylesheet", href="/plot.css")
   link(rel="stylesheet", href="/bower_components/c3/c3.css")
+  link(rel="stylesheet", href="/bower_components/dygraphs/css/dygraph.css")
   script(language="javascript", type="text/javascript", src="/bower_components/moment/moment.js")
   script(language="javascript", type="text/javascript", src="/bower_components/Flot/jquery.flot.js")
   script(language="javascript", type="text/javascript", src="/bower_components/c3/c3.js")
+  script(language="javascript", type="text/javascript", src="/dygraph.js")
 
   script.
     function flotDemo() {
@@ -112,6 +114,40 @@ block header
       }, 20);
     }
 
+    function dygraphsDemo() {
+      var data = [];
+      var t = new Date();
+
+      var i;
+      for (i = 0; i <= 10; i += 0.1) {
+        data.push([i, Math.random()]);
+      }
+
+      var g = new Dygraph(document.getElementById("div_g"), data,
+          {
+            drawPoints: true,
+            showRoller: true,
+            valueRange: [0.0, 1.2],
+            labels: ['X', 'Random']
+          });
+
+
+
+      // It sucks that these things aren't objects, and we need to store state in window.
+      window.intervalId = setInterval(function () {
+        var x = i;
+        var y = Math.random();
+
+        data.shift();
+        data.push([x, y]);
+
+        g.updateOptions({'file': data});
+
+        i += 0.1;
+      }, 30);
+
+    }
+
     function c3demo() {
       function seedData() {
         var xCol = ['time'];
@@ -201,13 +237,13 @@ block header
 
     $(document).ready(function (event) {
 
-      c3demo();
-      //c3demo2();
+      dygraphsDemo();
+      //c3demo();
 
-      flotDemo();
+      //flotDemo();
 
       // RICKSHAW
-      rickshawDemo()
+      //rickshawDemo()
 
     });
 
@@ -215,6 +251,8 @@ block header
 block content
 
   .pusher
+    #div_g(style="width:600px; height:300px;")
+
     .chart
       #chart.c3(style='max-height: 280px; position: relative;')
 

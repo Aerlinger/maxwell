@@ -12,6 +12,7 @@ app.set('view engine', 'jade');
 
 app.use(express.static(__dirname + '/css'));
 app.use(express.static(__dirname + '/js'));
+app.use("/vendor", express.static(path.join(__dirname, './vendor')));
 app.use("/foundation", express.static(path.join(__dirname, './vendor/foundation')));
 app.use("/bower_components", express.static(path.join(__dirname, '../bower_components')));
 app.use("/dist", express.static(path.join(__dirname, '../dist')));
