@@ -45,8 +45,8 @@ app.get('/', function (req, res) {
   res.redirect('/ui')
 });
 
-app.get('/plotting', function (req, res) {
-  res.render('plotting');
+app.get('/plot', function (req, res) {
+  res.render('plot', {});
 });
 
 app.get('/ui', function (req, res) {

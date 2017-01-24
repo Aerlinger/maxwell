@@ -32,6 +32,7 @@
     "dat.gui": "*",
     "bootstrap": "~3.3.2",
     "foundation-sites": "^6.3.0",
-    "jquery-ui": "jquery.ui#^1.12.1"
+    "jquery-ui": "jquery.ui#^1.12.1",
+    "Flot": "flot#^0.8.3"
   }
 }

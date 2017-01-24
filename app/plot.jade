@@ -1,41 +1,43 @@
 extends ./layout
 
 block header
-  script(language="javascript" type="text/javascript" src="/bower_examples/Flot/jquery.flot.js")
+  link(rel="stylesheet", href="/plot.css")
+  script(language="javascript", type="text/javascript", src="/bower_components/Flot/jquery.flot.js")
 
   script.
     $(document).ready(function (event) {
-      // We use an inline data source in the example, usually data would
-      // be fetched from a server
-      var data = [],
-          totalPoints = 300;
+      // We use an inline data source in the example, usually data would be fetched from a server
+      var data = [];
+      var totalPoints = 300;
 
       function getRandomData() {
         if (data.length > 0)
           data = data.slice(1);
+
         // Do a random walk
         while (data.length < totalPoints) {
-          var prev = data.length > 0 ? data[data.length - 1] : 50,
-              y = prev + Math.random() * 10 - 5;
-          if (y < 0) {
-            y = 0;
-          } else if (y > 100) {
-            y = 100;
-          }
+          var prev = data.length > 0 ? data[data.length - 1] : 50;
+          var y = prev + Math.random() * 10 - 5;
+
+          y = Math.max(Math.min(y, 100), 0);
+
           data.push(y);
         }
+
         // Zip the generated y values with the x values
         var res = [];
         for (var i = 0; i < data.length; ++i) {
           res.push([i, data[i]])
         }
+
         return res;
       }
 
       // Set up the control widget
-      var updateInterval = 30;
+      var updateInterval = 10;
       $("#updateInterval").val(updateInterval).change(function () {
         var v = $(this).val();
+
         if (v && !isNaN(+v)) {
           updateInterval = +v;
           if (updateInterval < 1) {
@@ -46,6 +48,7 @@ block header
           $(this).val("" + updateInterval);
         }
       });
+
       var plot = $.plot("#placeholder", [getRandomData()], {
         series: {
           shadowSize: 0	// Drawing is faster without shadows
@@ -59,26 +62,50 @@ block header
         }
       });
 
-      function update() {
-        plot.setData([getRandomData()]);
-        // Since the axes don't change, we don't need to call plot.setupGrid()
-        plot.draw();
-        setTimeout(update, updateInterval);
+      function addRandomData() {
+        //var prev = plotData[plotData.length - 1];
+        var prev = 50;
+        var y = prev + Math.random() * 10 - 5;
+
+        y = Math.max(Math.min(y, 100), 0);
+
+        plotData.shift();
+        plotData.push([totalPoints - 1, y]);
+
+        return plotData;
       }
 
+      function update() {
+        series = addRandomData();
+
+        plot.setData([series]);
+        // Since the axes don't change, we don't need to call plot.setupGrid()
+        plot.draw();
+
+        console.log(series);
+
+        //setTimeout(update, updateInterval);
+      }
+
+      var plotData = getRandomData();
+
+      console.log(plotData);
+
+      plot.setData([plotData]);
+      plot.draw();
+
       update();
-      // Add the Flot version string to the footer
-      $("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+      update();
+      update();
 
-
-
+      // RICKSHAW
 
       var plotter = new Plotter("chart_container");
 
       setInterval(function() {
         t = 2 * Math.PI * ((Date.now() % 10000) / 10000);
 
-         plotter.addData(100 * Math.sin(t));
+        plotter.addData(100 * Math.sin(t));
       }, 20);
     });
 
@@ -87,7 +114,7 @@ block content
 
   .pusher
     #content
-      .flot-container
+      .demo-container
         #placeholder.demo-placeholder
       p
         | You can update a chart periodically to get a real-time effect by using a timer to insert the new data in the plot and redraw it.
