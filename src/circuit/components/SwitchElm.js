@@ -87,11 +87,11 @@ class SwitchElm extends CircuitComponent {
     // Draw switch "Lever"
     renderContext.drawLinePt(this.ps, this.ps2, Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
 
-    renderContext.fillCircle(this.ps.x, this.ps.y, Settings.POST_RADIUS + 1, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
-    renderContext.fillCircle(this.ps2.x, this.ps2.y, Settings.POST_RADIUS + 1, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+    renderContext.fillCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+    renderContext.fillCircle(this.lead2.x, this.lead2.y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
 
     if (CircuitComponent.DEBUG) {
-      return super.draw(renderContext);
+      super.draw(renderContext);
     }
   }
 

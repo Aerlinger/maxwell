@@ -4,6 +4,7 @@ let Polygon = require('../../geom/polygon.js');
 let Rectangle = require('../../geom/rectangle.js');
 let Point = require('../../geom/point.js');
 let Util = require('../../util/util.js');
+let GateElm = require('./GateElm.js');
 
 class WireElm extends CircuitComponent {
   static initClass() {

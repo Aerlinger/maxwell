@@ -1,6 +1,7 @@
 let CircuitComponent = require("../circuitComponent.js");
 let ChipElm = require("./ChipElm.js");
 let Util = require('../../util/util.js');
+let Settings = require('../../settings/settings.js');
 
 class TimerElm extends ChipElm {
   static initClass() {
@@ -21,6 +22,7 @@ class TimerElm extends ChipElm {
         description: "Current multiplier",
         default_value: -1,
         data_type: Math.sign,
+
         field_type: "select",
         select_values: {"NPN": -1, "PNP": 1}
       }
@@ -53,6 +55,17 @@ class TimerElm extends ChipElm {
 
   hasReset() {
     return (this.flags & TimerElm.FLAG_RESET) !== 0;
+  }
+
+  draw(renderContext) {
+    this.setPoints();
+    this.drawChip(renderContext);
+
+    console.log("CS", this.csize);
+
+    let textSize = this.csize == 1 ? 8 : 11;
+
+    renderContext.fillText("555", this.getCenter().x - 14, this.getCenter().y, Settings.TEXT_COLOR, textSize)
   }
 
   setupPins() {

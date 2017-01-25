@@ -734,6 +734,20 @@
 	    return this.component_id === otherComponent.component_id;
 	  }
 	
+	  getNeighborsAtPostIdx(postIdx) {
+	    let post = this.getPost(postIdx);
+	
+	    for (let nodeIdx of this.nodes) {
+	      let node = this.Circuit.getNode(nodeIdx);
+	
+	      if (node.x == post.x && node.y == post.y) {
+	        return node.getNeighboringElements();
+	      }
+	    }
+	
+	    return [];
+	  }
+	
 	  drag(newX, newY) {
 	    newX = Util.snapGrid(newX);
 	    newY = Util.snapGrid(newY);
@@ -1452,8 +1466,10 @@
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
+	let Point = __webpack_require__(4);
+	
 	class Rectangle {
 	  constructor(x, y, width, height) {
 	    this.x = x;
@@ -1464,6 +1480,10 @@
 	
 	  contains(x, y) {
 	    return ((x >= this.x) && (x <= (this.x + this.width)) && (y >= this.y) && (y <= (this.y + this.height)));
+	  }
+	
+	  getCenter() {
+	    return new Point(this.x + this.width/2, this.y + this.height/2);
 	  }
 	
 	  equals(otherRect) {
@@ -18320,6 +18340,7 @@
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
 	let Util = __webpack_require__(5);
+	let GateElm = __webpack_require__(41);
 	
 	class WireElm extends CircuitComponent {
 	  static initClass() {
@@ -19045,11 +19066,11 @@
 	    // Draw switch "Lever"
 	    renderContext.drawLinePt(this.ps, this.ps2, Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
 	
-	    renderContext.fillCircle(this.ps.x, this.ps.y, Settings.POST_RADIUS + 1, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
-	    renderContext.fillCircle(this.ps2.x, this.ps2.y, Settings.POST_RADIUS + 1, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+	    renderContext.fillCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+	    renderContext.fillCircle(this.lead2.x, this.lead2.y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
 	
 	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	      super.draw(renderContext);
 	    }
 	  }
 	
@@ -21112,12 +21133,16 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    renderContext.fillCircle(this.swpoles[2].x, this.swpoles[2].y, Settings.POST_RADIUS, 0, Settings.POST_COLOR);
-	    renderContext.fillCircle(this.swpoles[1].x, this.swpoles[1].y, Settings.POST_RADIUS, 0, Settings.POST_COLOR);
-	    renderContext.fillCircle(this.swpoles[0].x, this.swpoles[0].y, Settings.POST_RADIUS, 0, Settings.POST_COLOR);
-	
 	    // Switch lever
 	    renderContext.drawLinePt(this.lead1, this.swpoles[this.position], Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
+	
+	
+	    renderContext.fillCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+	
+	    renderContext.fillCircle(this.swpoles[0].x, this.swpoles[0].y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+	    renderContext.fillCircle(this.swpoles[2].x, this.swpoles[2].y, Settings.POST_RADIUS, 1, Settings.POST_COLOR);
+	    renderContext.fillCircle(this.swpoles[1].x, this.swpoles[1].y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+	
 	
 	    if (CircuitComponent.DEBUG) {
 	      return super.draw(renderContext);
@@ -24022,6 +24047,10 @@
 	    this.Pin = Pin;
 	  }
 	
+	  getCenter() {
+	    return this.boundingBox.getCenter();
+	  }
+	
 	  // TODO: Need a better way of dealing with variable length params here
 	  constructor(xa, xb, ya, yb, params, f) {
 	    params = params || {}
@@ -24257,10 +24286,10 @@
 	          renderContext.fillCircle(p.bubbleX, p.bubbleY, 1, Settings.FILL_COLOR);
 	        }
 	
-	        let textSize = this.csize == 0 ? 6 : 8;
+	        let textSize = this.csize == 1 ? 6 : 8;
 	
 	        let mt = renderContext.context.measureText(p.text);
-	        renderContext.fillText(p.text, p.textloc.x-mt.width/2, p.textloc.y+3, textSize);
+	        renderContext.fillText(p.text, p.textloc.x-mt.width/2, p.textloc.y+3, Settings.TEXT_COLOR, textSize);
 	
 	        if (p.lineOver) {
 	          let ya = p.textloc.y - renderContext.context.measureText(p.text).height;
@@ -24426,6 +24455,7 @@
 	let CircuitComponent = __webpack_require__(1);
 	let ChipElm = __webpack_require__(57);
 	let Util = __webpack_require__(5);
+	let Settings = __webpack_require__(2);
 	
 	class TimerElm extends ChipElm {
 	  static initClass() {
@@ -24446,6 +24476,7 @@
 	        description: "Current multiplier",
 	        default_value: -1,
 	        data_type: Math.sign,
+	
 	        field_type: "select",
 	        select_values: {"NPN": -1, "PNP": 1}
 	      }
@@ -24478,6 +24509,17 @@
 	
 	  hasReset() {
 	    return (this.flags & TimerElm.FLAG_RESET) !== 0;
+	  }
+	
+	  draw(renderContext) {
+	    this.setPoints();
+	    this.drawChip(renderContext);
+	
+	    console.log("CS", this.csize);
+	
+	    let textSize = this.csize == 1 ? 8 : 11;
+	
+	    renderContext.fillText("555", this.getCenter().x - 14, this.getCenter().y, Settings.TEXT_COLOR, textSize)
 	  }
 	
 	  setupPins() {
@@ -26964,7 +27006,7 @@
 	      }
 	        
 	      if (componentMaxY > maxY) {
-	        return maxY = componentMaxY;
+	        maxY = componentMaxY;
 	      }
 	    });
 	
@@ -30031,7 +30073,7 @@
 
 	class ScopeCanvas {
 	  constructor(parentUI, scopeDiv, x=800, y=700) {
-	    this.dataPoints = 400;
+	    this.dataPoints = 200;
 	    this.timeInterval = 5;
 	
 	    this.parentUI = parentUI;

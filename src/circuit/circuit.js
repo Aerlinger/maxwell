@@ -337,7 +337,7 @@ class Circuit extends Observer {
       }
         
       if (componentMaxY > maxY) {
-        return maxY = componentMaxY;
+        maxY = componentMaxY;
       }
     });
 

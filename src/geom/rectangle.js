@@ -1,3 +1,5 @@
+let Point = require("./point.js");
+
 class Rectangle {
   constructor(x, y, width, height) {
     this.x = x;
@@ -8,6 +10,10 @@ class Rectangle {
 
   contains(x, y) {
     return ((x >= this.x) && (x <= (this.x + this.width)) && (y >= this.y) && (y <= (this.y + this.height)));
+  }
+
+  getCenter() {
+    return new Point(this.x + this.width/2, this.y + this.height/2);
   }
 
   equals(otherRect) {

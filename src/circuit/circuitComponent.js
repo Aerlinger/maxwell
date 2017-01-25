@@ -315,6 +315,20 @@ class CircuitComponent {
     return this.component_id === otherComponent.component_id;
   }
 
+  getNeighborsAtPostIdx(postIdx) {
+    let post = this.getPost(postIdx);
+
+    for (let nodeIdx of this.nodes) {
+      let node = this.Circuit.getNode(nodeIdx);
+
+      if (node.x == post.x && node.y == post.y) {
+        return node.getNeighboringElements();
+      }
+    }
+
+    return [];
+  }
+
   drag(newX, newY) {
     newX = Util.snapGrid(newX);
     newY = Util.snapGrid(newY);
