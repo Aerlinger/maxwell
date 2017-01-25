@@ -181,6 +181,10 @@ fieldset.fieldset .slider {
   bottom: 2px;
 }
 
+.tabs-panel {
+  padding: 10px 0 !important;
+}
+
 .sidepanel::-webkit-scrollbar {
   width: 0.3em;
 }
@@ -226,6 +230,16 @@ canvas {
 
 ul.vertical.menu .title {
   background-color: blue;
+}
+
+.is-accordion-submenu-parent > a {
+  font-size: 11px;
+  font-weight: bold;
+  border-left: 3px solid gray;
+}
+
+ul.vertical.menu li:not(.is-accordion-submenu-parent).is-accordion-submenu-item > a {
+  background-color: #333;
 }
 
 .grid {

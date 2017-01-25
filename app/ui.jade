@@ -37,11 +37,13 @@ block header
           edit_pane.append(form);
         };
 
+        /*
         Maxwell.Components.map(function (component) {
           $('#component_list').append(
               '<li><a href="#" class="item component-item" data-name=' + component.name + '>' + (new component()).getName() + '</a></li>'
           )
         });
+        */
 
         $('.component-item').click(function (evt) {
           var componentName = $(this).data("name");
@@ -195,7 +197,7 @@ block content
         li.menu-text Maxwell
         li
           a(href='#') Circuit
-          //ul.menu.vertical
+          ul.menu.vertical
             li
               a(href='#') One
             li
@@ -239,10 +241,25 @@ block content
 
     .tabs-content(data-tabs-content='deeplinked-tabs')
       #panel1d.tabs-panel.is-active
-        ul#component_list.is-active.menu.vertical.nested
-          - for (var i=0; i<circuit_names.length; ++i)
+        ul#component_list.is-active.menu.vertical(data-accordion-menu)
+          - for (var category in library)
             li
-              a.item(href="/ui/" + circuit_names[i])= circuit_names[i]
+              a.item(href="/ui/" + category)= category
+              ul.nested.vertical.menu.is-active
+                - for (var circuit in library[category])
+                  - if (typeof library[category][circuit] == "object")
+                    li
+                      a.item(href="/ui/" + circuit)= circuit
+                      ul.nested.vertical.menu.is-active
+                        - for (var subcircuit in library[category][circuit])
+                          li
+                            a.item(href="/ui/" + subcircuit)= library[category][circuit][subcircuit]
+
+                  - else
+                    li
+                      a.item(href="/ui/" + circuit)= library[category][circuit]
+
+
 
 
   #edit_component_pane.off-canvas.edit-form.position-right(data-off-canvas='')
