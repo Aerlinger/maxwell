@@ -39,6 +39,11 @@ class CircuitCanvas extends Observer {
       this.context = this.Canvas.getContext("2d");
     }
 
+    //this.setupScopes();
+    //this.renderPerformance();
+  }
+
+  setupScopes(){
     for (let scopeElm of this.Circuit.getScopes()) {
 
       let scElm = this.renderScopeCanvas(scopeElm.circuitElm.getName());
@@ -58,8 +63,6 @@ class CircuitCanvas extends Observer {
 
       // this.scopeCanvases.push(sc);
     }
-
-    this.renderPerformance();
   }
 
   renderPerformance() {
@@ -375,7 +378,9 @@ class CircuitCanvas extends Observer {
       this.fillText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
       this.fillText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 785, 15, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
 
-      this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
+      if (this.performanceMeter) {
+        this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
+      }
     }
 
     if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
@@ -436,21 +441,24 @@ class CircuitCanvas extends Observer {
       for (let scopeElm of this.Circuit.getScopes()) {
         let scopeCanvas = scopeElm.getCanvas();
 
-        var center = scopeElm.circuitElm.getCenter();
+        if (scopeCanvas) {
 
-        let strokeStyle = this.context.strokeStyle;
-        let lineDash = this.context.getLineDash();
+          var center = scopeElm.circuitElm.getCenter();
 
-        this.context.setLineDash([5, 5]);
-        this.context.strokeStyle = "#FFA500";
-        this.context.lineWidth = 1;
-        this.context.moveTo(center.x, center.y);
-        this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height() / 2);
+          let strokeStyle = this.context.strokeStyle;
+          let lineDash = this.context.getLineDash();
 
-        this.context.stroke();
+          this.context.setLineDash([5, 5]);
+          this.context.strokeStyle = "#FFA500";
+          this.context.lineWidth = 1;
+          this.context.moveTo(center.x, center.y);
+          this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height() / 2);
 
-        this.context.strokeStyle = strokeStyle;
-        this.context.setLineDash(lineDash);
+          this.context.stroke();
+
+          this.context.strokeStyle = strokeStyle;
+          this.context.setLineDash(lineDash);
+        }
       }
     }
   }

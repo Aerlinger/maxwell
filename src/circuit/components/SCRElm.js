@@ -109,11 +109,11 @@ class ScrElm extends CircuitComponent {
 
     dir *= -1;
     // leadlen /= 3;
-    console.log("dn", this.dn());
-    console.log("gatelen", gatelen);
-    console.log("dir", dir);
-    console.log("leadlen", leadlen);
-    console.trace("leadlen");
+    // console.log("dn", this.dn());
+    // console.log("gatelen", gatelen);
+    // console.log("dir", dir);
+    // console.log("leadlen", leadlen);
+    // console.trace("leadlen");
 
     this.gate[0] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, gatelen * dir);
     this.gate[1] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, Settings.GRID_SIZE * 4 * dir);

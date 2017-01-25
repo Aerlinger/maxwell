@@ -37,11 +37,13 @@ block header
           edit_pane.append(form);
         };
 
+        /*
         Maxwell.Components.map(function (component) {
           $('#component_list').append(
               '<li><a href="#" class="item component-item" data-name=' + component.name + '>' + (new component()).getName() + '</a></li>'
           )
         });
+        */
 
         $('.component-item').click(function (evt) {
           var componentName = $(this).data("name");

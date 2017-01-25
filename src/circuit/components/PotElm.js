@@ -11,7 +11,8 @@ class PotElm extends CircuitComponent {
         name: "Max Resistance",
         default_value: 1e4,
         data_type: parseFloat,
-        range: [0, Infinity]
+        range: [0, Infinity],
+        symbol: "Ω"
       },
       "position": {
         name: "Position",
@@ -20,7 +21,7 @@ class PotElm extends CircuitComponent {
         data_type: parseFloat
       },
       "sliderText": {
-        name: "sliderText",
+        name: "Slider Text",
         default_value: "",
         data_type(x) {
           return x;
@@ -34,7 +35,7 @@ class PotElm extends CircuitComponent {
 
     // this.sliderValue = this.position * 100;
 
-    // this.setPoints()
+    this.setPoints(xa, ya, xb, yb)
   }
 
 //  draw: (renderContext) ->
@@ -54,9 +55,9 @@ class PotElm extends CircuitComponent {
 
     let parallelOffset = 1 / numSegments;
 
-    this.updateDots();
-    renderContext.drawDots(this.point1, this.lead1, this);
-    renderContext.drawDots(this.lead2, this.point2, this);
+    // this.updateDots();
+    // renderContext.drawDots(this.point1, this.lead1, this);
+    // renderContext.drawDots(this.lead2, this.point2, this);
 
     // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
     let offsets = [0, 1, 0, -1];
@@ -74,6 +75,7 @@ class PotElm extends CircuitComponent {
     let voltColor = renderContext.getVoltageColor(this.volts[2]);
     // console.log("POSTS", this.post3, this.corner2, this.arrowPoint, this.arrow1, this.arrow2, this.midpoint);
 
+    renderContext.drawCircle(this.post3, this.corner2, voltColor);
     renderContext.drawLinePt(this.post3, this.corner2, voltColor);
     renderContext.drawLinePt(this.corner2, this.arrowPoint, voltColor);
     renderContext.drawLinePt(this.arrow1, this.arrowPoint, voltColor);
@@ -85,6 +87,10 @@ class PotElm extends CircuitComponent {
     // renderContext.drawDots(this.point1, this.lead1, this);
     // renderContext.drawDots(this.lead2, this.point2, this);
 
+
+    this.curcount_1 = this.updateDots(null, this.current1);
+    renderContext.drawDots(this.point1, this.lead1, this.curcount_1);
+
     renderContext.drawValue(14, 0, this, Util.getUnitText(this.resistance1, this.unitSymbol()));
 
     renderContext.drawPosts(this);
@@ -94,13 +100,21 @@ class PotElm extends CircuitComponent {
     }
   }
 
+  onToggle() {
+    console.log(this.post3);
+    console.log(this.corner2);
+    console.log(this.arrowPoint);
+    console.log(this.arrow1)
+    console.log(this.arrow2)
+  }
+
   unitSymbol() {
     return "Ω";
   }
 
   adjustmentValueChanged() {
     this.getParentCircuit().Solver.analyzeFlag = true;
-    return this.setPoints();
+    this.setPoints();
   }
 
   getPostCount() {
@@ -116,32 +130,46 @@ class PotElm extends CircuitComponent {
     return 50;
   }
 
-  setPoints() {
+  setPoints(x1, y1, x2, y2) {
     let dx;
-    super.setPoints(...arguments);
+    let dy;
+    super.setPoints(x1, y1, x2, y2);
 
     let offset = 0;
+    let dir = 0;
 
     // TODO: Check
-    if (Math.abs(this.dx()) > Math.abs(this.dy())) {
-      dx = Util.snapGrid(this.dx() / 2) * 2;
-      this.point2.x = this.point1.x + dx;
+    if (Math.abs(this.dx()) > Math.abs(this.dy())) {   // Horizontal
+      //dx = Util.snapGrid(this.dx() / 2) * 2;
 
-      offset = (this.dx() < 0) ? this.dy() : -this.dy();
+      offset = (this.dx() < 0) ? this.dx() : -this.dx();
 
-      this.point2.y = this.point1.y;
+      dir = Math.sign(this.dx());
+
+      //this.point2.y = this.point1.y;
+
+      offset = Util.snapGrid(-offset/2 + 2*Settings.GRID_SIZE*dir);
     } else {
-      let dy = Util.snapGrid(this.dy() / 2) * 2;
-      this.point2.y = this.point1.y + dy;
-      offset = (this.dy() > 0) ? this.dx() : -this.dx();
-      this.point2.x = this.point1.x;
+      //dy = Util.snapGrid(this.dy() / 2) * 2;
+      // this.point2.y = this.point1.y + dy;
+      offset = (this.dy() > 0) ? this.dy() : -this.dy();
+
+      dir = Math.sign(this.dy());
+
+      offset = Util.snapGrid(8*Settings.GRID_SIZE);
+      //this.point2.x = this.point1.x;
     }
+
+    //offset = this.dn();
+
+
+    console.log(this.point1, this.point2, this.dx(), this.dy());
 
     if (offset === 0) {
-      offset = Settings.GRID_SIZE;
+      offset = 2 * Settings.GRID_SIZE;
     }
 
-    let dn = Math.sqrt(Math.pow(this.point1.x - this.point2.x, 2), Math.pow(this.point1.y - this.point2.y, 2));
+    let dn = this.dn(); //Math.sqrt(Math.pow(this.point1.x - this.point2.x, 2), Math.pow(this.point1.y - this.point2.y, 2));
 
     let bodyLen = 32;
 
@@ -159,7 +187,9 @@ class PotElm extends CircuitComponent {
     [this.arrow1, this.arrow2] = Util.interpolateSymmetrical(this.corner2, this.arrowPoint, (clen - 8) / clen, 8);
 
     this.ps3 = new Point(0, 0);
-    return this.ps4 = new Point(0, 0);
+    this.ps4 = new Point(0, 0);
+
+    console.log("POSTS", dir, "offset", offset, "dn", dn, clen, this.position, "post3", this.post3, "corner2", this.corner2, "arrowPoint", this.arrowPoint, this.arrow1, this.arrow2, this.midpoint, "p1", this.point1, "p2", this.p2);
   }
 
   getPost(n) {
@@ -175,7 +205,7 @@ class PotElm extends CircuitComponent {
   calculateCurrent() {
     this.current1 = (this.volts[0] - this.volts[2]) / this.resistance1;
     this.current2 = (this.volts[1] - this.volts[2]) / this.resistance2;
-    return this.current3 = -this.current1 - this.current2;
+    this.current3 = -this.current1 - this.current2;
   }
 
   stamp(stamper) {

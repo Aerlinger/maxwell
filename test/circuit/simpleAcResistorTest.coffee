@@ -15,16 +15,16 @@ describe "Simple 5Vp-p AC Voltage source connected to a 500ohm resistor", ->
 
       done()
 
-    it.only "generates circuit matrices", ->
+    it "generates circuit matrices", ->
       console.log(@circuit.Solver.circuitMatrix)
       console.log(@circuit.Solver.circuitRightSide)
 
-    it.only "generates circuit matrices", ->
+    it "generates circuit matrices", ->
       @circuit.updateCircuit()
       console.log(@circuit.Solver.circuitMatrix)
       console.log(@circuit.Solver.circuitRightSide)
 
-    it.only "generates circuit matrices", ->
+    it "generates circuit matrices", ->
       @circuit.updateCircuit()
       @circuit.updateCircuit()
       console.log(@circuit.Solver.circuitMatrix)
