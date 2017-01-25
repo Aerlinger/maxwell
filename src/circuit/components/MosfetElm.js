@@ -208,7 +208,7 @@ class MosfetElm extends CircuitComponent {
 
     this.gate = Util.newPointArray(3);
 
-    [this.gate[0], this.gate[2]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (28 / this.dn()), hs2 / 2);  //,  # was 1-20/dn
+    [this.gate[0], this.gate[2]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (28 / this.dn()), 3*hs2 / 4);  //,  # was 1-20/dn
     this.gate[1] = Util.interpolate(this.gate[0], this.gate[2], .5);
 
     if (this.pnp) {

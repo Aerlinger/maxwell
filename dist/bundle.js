@@ -19156,7 +19156,7 @@
 	    color = renderContext.getVoltageColor(this.volts[0]);
 	
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
-	    renderContext.fillCircle(this.lead1.x + (2*Settings.POST_RADIUS), this.lead1.y, 2*Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+	    renderContext.fillCircle(this.lead1.x, this.lead1.y, 2*Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
 	    renderContext.drawPosts(this);
 	
 	    if (CircuitComponent.DEBUG) {
@@ -20155,7 +20155,7 @@
 	
 	    this.gate = Util.newPointArray(3);
 	
-	    [this.gate[0], this.gate[2]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (28 / this.dn()), hs2 / 2);  //,  # was 1-20/dn
+	    [this.gate[0], this.gate[2]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (28 / this.dn()), 3*hs2 / 4);  //,  # was 1-20/dn
 	    this.gate[1] = Util.interpolate(this.gate[0], this.gate[2], .5);
 	
 	    if (this.pnp) {
@@ -22701,32 +22701,38 @@
 	      r_on: {
 	        name: "On resistance",
 	        data_type: parseFloat,
-	        default_value: 100
+	        default_value: 100,
+	        symbol: "Ω"
 	      },
 	      r_off: {
 	        name: "Off resistance",
 	        data_type: parseFloat,
-	        default_value: 160 * 100
+	        default_value: 160 * 100,
+	        symbol: "Ω"
 	      },
 	      dopeWidth: {
 	        name: "Doping Width",
 	        data_type: parseFloat,
-	        default_value: 0
+	        default_value: 0,
+	        symbol: "m"
 	      },
 	      totalWidth: {
 	        name: "Total Width",
 	        data_type: parseFloat,
-	        default_value: 10e-9
+	        default_value: 10e-9,
+	        symbol: "m"
 	      },
 	      mobility: {
 	        name: "Majority carrier mobility",
 	        data_type: parseFloat,
-	        default_value: 1e-10
+	        default_value: 1e-10,
+	        symbol: "cm2/(V·s)"
 	      },
 	      resistance: {
 	        name: "Overall resistance",
 	        data_type: parseFloat,
-	        default_value: 100
+	        default_value: 100,
+	        symbol: "Ω"
 	      }
 	    };
 	  }
@@ -22748,6 +22754,46 @@
 	
 	  reset() {
 	    return this.dopeWidth = 0;
+	  }
+	
+	  draw(renderContext) {
+	    let segments = 6;
+	    let ox = 0;
+	    let v1 = this.volts[0];
+	    let v2 = this.volts[1];
+	    let hs = 2 + Math.floor(8 * (1 - this.dopeWidth / this.totalWidth));
+	    this.setBboxPt(this.point1, this.point2, hs);
+	    renderContext.drawLeads(this);
+	
+	    let segf = 1.0 / segments;
+	
+	    // draw zigzag
+	    for (let i = 0; i <= segments; i++) {
+	      let nx = (i & 1) == 0 ? 1 : -1;
+	      if (i == segments)
+	        nx = 0;
+	
+	      let v = v1 + (v2 - v1) * i / segments;
+	
+	      let color = renderContext.getVoltageColor(v);
+	
+	      let startPosition = Util.interpolate(this.lead1, this.lead2, i * segf, hs * ox);
+	      let endPosition = Util.interpolate(this.lead1, this.lead2, i * segf, hs * nx);
+	
+	      renderContext.drawLinePt(startPosition, endPosition, color);
+	
+	      if (i == segments)
+	        break;
+	
+	      startPosition = Util.interpolate(this.lead1, this.lead2, (i + 1) * segf, hs * nx);
+	      renderContext.drawLinePt(startPosition, endPosition);
+	
+	      ox = nx;
+	    }
+	
+	    renderContext.drawDots(this.point1, this.lead1, this);
+	    renderContext.drawDots(this.lead2, this.point2, this);
+	    renderContext.drawPosts(this);
 	  }
 	
 	  nonLinear() {
