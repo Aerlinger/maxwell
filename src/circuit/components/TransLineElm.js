@@ -116,6 +116,63 @@ class TransLineElm extends CircuitComponent {
     }
   }
 
+  draw(renderContext) {
+    this.setBboxPt(this.posts[0], this.posts[3], 0);
+    let segments = Math.floor(this.dn() / 2);
+
+    let ix0 = this.ptr - 1 + this.lenSteps;
+    let segf = 1. / segments;
+
+    //renderContext.setColor(Color.darkGray);
+    renderContext.drawRect(this.inner[2].x, this.inner[2].y, this.inner[1].x - this.inner[2].x, this.inner[1].y - this.inner[2].y + 1, Settings.GRAY);
+
+    for (let i = 0; i != 4; i++) {
+      let color = renderContext.getVoltageColor(this.volts[i]);
+      renderContext.drawLinePt(this.posts[i], this.inner[i], color);
+    }
+
+    if (this.voltageL != null) {
+      for (let i = 0; i < segments; i++) {
+        let ix1 = Math.floor((ix0 - this.lenSteps * i / segments) % this.lenSteps);
+        let ix2 = Math.floor((ix0 - this.lenSteps * (segments - 1 - i) / segments) % this.lenSteps);
+
+        let lhs = this.voltageL[ix1];
+        let rhs = this.voltageR[ix2];
+
+        let v = (lhs + rhs) / 2;
+
+        let color = renderContext.getVoltageColor(v);
+
+        let ps1 = Util.interpolate(this.inner[0], this.inner[1], i * segf);
+        let ps2 = Util.interpolate(this.inner[2], this.inner[3], i * segf);
+
+        renderContext.drawLine(ps1.x, ps1.y, ps2.x, ps2.y, color);
+
+        //g.drawLine(ps1.x, ps1.y, ps2.x, ps2.y);
+        // interpPoint(inner[2], inner[3], ps1, (i + 1) * segf);
+        ps1 = Util.interpolate(this.inner[2], this.inner[3], (i + 1) * segf);
+
+        renderContext.drawLinePt(ps1, ps2, color);
+      }
+    }
+
+    let color = renderContext.getVoltageColor(this.volts[0]);
+    //renderContext.drawLinePt(this.inner[0], this.inner[1], color);
+    renderContext.drawPosts(this);
+
+    /*
+     curCount1 = updateDotCount(-current1, curCount1);
+     curCount2 = updateDotCount(current2, curCount2);
+     if (sim.dragElm != this) {
+     drawDots(g, posts[0], inner[0], curCount1);
+     drawDots(g, posts[2], inner[2], -curCount1);
+     drawDots(g, posts[1], inner[1], -curCount2);
+     drawDots(g, posts[3], inner[3], curCount2);
+     }
+     */
+  }
+
+
   setCurrent(v, c) {
     if (v === this.voltSource1) {
       return this.current1 = c;
