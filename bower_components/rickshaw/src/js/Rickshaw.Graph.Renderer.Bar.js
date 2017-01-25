@@ -8,7 +8,8 @@ Rickshaw.Graph.Renderer.Bar = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
 
 		var defaults = Rickshaw.extend( $super(), {
 			gapSize: 0.05,
-			unstack: false
+			unstack: false,
+			opacity: 1.0
 		} );
 
 		delete defaults.tension;
@@ -74,6 +75,7 @@ Rickshaw.Graph.Renderer.Bar = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
 				.attr("y", function(d) { return (graph.y(d.y0 + Math.abs(d.y))) * (d.y < 0 ? -1 : 1 ) })
 				.attr("width", seriesBarWidth)
 				.attr("height", function(d) { return graph.y.magnitude(Math.abs(d.y)) })
+				.attr("opacity", series.opacity)
 				.attr("transform", transform);
 
 			Array.prototype.forEach.call(nodes[0], function(n) {
@@ -96,8 +98,13 @@ Rickshaw.Graph.Renderer.Bar = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
 		}
 
 		var frequentInterval = { count: 0, magnitude: 1 };
-
-		Rickshaw.keys(intervalCounts).forEach( function(i) {
+		
+		// Sorting object's keys returned to guarantee consistency when iterating over
+		// Keys order in `for .. in` loop is not specified and browsers behave differently here
+		// This results with different invterval value being calculated for different browsers
+		// See last but one section here: http://www.ecma-international.org/ecma-262/5.1/#sec-12.6.4
+		var keysSorted = Rickshaw.keys(intervalCounts).sort(function asc(a, b) { return Number(a) - Number(b); });
+		keysSorted.forEach( function(i) {
 			if (frequentInterval.count < intervalCounts[i]) {
 				frequentInterval = {
 					count: intervalCounts[i],

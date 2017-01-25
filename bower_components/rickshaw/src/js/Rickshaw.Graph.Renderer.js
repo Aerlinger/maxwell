@@ -23,13 +23,17 @@ Rickshaw.Graph.Renderer = Rickshaw.Class.create( {
 			unstack: true,
 			padding: { top: 0.01, right: 0, bottom: 0.01, left: 0 },
 			stroke: false,
-			fill: false
+			fill: false,
+			opacity: 1
 		};
 	},
 
 	domain: function(data) {
 		// Requires that at least one series contains some data
 		var stackedData = data || this.graph.stackedData || this.graph.stackData();
+
+		// filter out any series that may be empty in the current x-domain
+		stackedData = stackedData.filter(function (a) { return a && a.length !== 0; });
 
 		var xMin = +Infinity;
 		var xMax = -Infinity;
@@ -115,10 +119,13 @@ Rickshaw.Graph.Renderer = Rickshaw.Class.create( {
 
 		var fill = this.fill ? series.color : 'none';
 		var stroke = this.stroke ? series.color : 'none';
+		var strokeWidth = series.strokeWidth ? series.strokeWidth : this.strokeWidth;
+		var opacity = series.opacity ? series.opacity : this.opacity;
 
 		series.path.setAttribute('fill', fill);
 		series.path.setAttribute('stroke', stroke);
-		series.path.setAttribute('stroke-width', this.strokeWidth);
+		series.path.setAttribute('stroke-width', strokeWidth);
+		series.path.setAttribute('opacity', opacity);
 
 		if (series.className) {
 			d3.select(series.path).classed(series.className, true);

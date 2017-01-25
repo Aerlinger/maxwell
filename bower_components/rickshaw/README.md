@@ -1,3 +1,7 @@
+[![NPM version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
+[![Coverage Status][coverage-image]][coverage-url]
+
 # Rickshaw
 
 Rickshaw is a JavaScript toolkit for creating interactive time series graphs, developed at [Shutterstock](http://www.shutterstock.com)
@@ -69,6 +73,10 @@ Line smoothing / interpolation method (see [D3 docs](https://github.com/mbostock
   * `cardinal`: smooth curves via cardinal splines (default)
   * `basis`: smooth curves via B-splines
 
+##### stack
+
+Allows you to specify whether series should be stacked while in the context of stacking renderers (area, bar, etc).  Defaults to `stack: 'true'`. To unstack, `unstack: 'true'`.
+
 ### Methods
 
 Once you have instantiated a graph, call methods below to get pixels on the screen, change configuration, and set callbacks.
@@ -128,6 +136,15 @@ palette.color() // => first color in the palette
 palette.color() // => next color in the palette...
 ```
 
+Optionally, to palette.color() can take a numeric argument to specify which color from the palette should be used (zero-indexed).  This can be helpful when assigning a color to series of a plot with particular meaning:
+
+```javascript
+var palette = new Rickshaw.Color.Palette( { scheme: 'colorwheel' } );
+    
+palette.color(0) // => first color in the palette - red in this example
+palette.color(2) // => third color in the palette - light blue
+```
+
 #### Color Schemes
 
   * classic9
@@ -149,15 +166,35 @@ This library works in modern browsers and Internet Explorer 9+.
 Rickshaw relies on the HTMLElement#classList API, which isn't natively supported in Internet Explorer 9.  Rickshaw adds support by including a shim which implements the classList API by extending the HTMLElement prototype.  You can disable this behavior if you like, by setting `RICKSHAW_NO_COMPAT` to a true value before including the library. 
 
 
-## Dependencies & Building
+## Dependencies
 
 Rickshaw relies on the fantastic [D3 visualization library](http://mbostock.github.com/d3/) to do lots of the heavy lifting for stacking and rendering to SVG.
 
 Some extensions require [jQuery](http://jquery.com) and [jQuery UI](http://jqueryui.com), but for drawing some basic graphs you'll be okay without.
 
+Rickshaw uses [jsdom](https://github.com/tmpvar/jsdom) to run unit tests in Node to be able to do SVG manipulation. As of the jsdom 7.0.0 release, jsdom requires Node.js 4 or newer [jsdom changelog](https://github.com/tmpvar/jsdom/blob/master/Changelog.md#700). If you want to run the tests on your machine, and you don't have access to a version of node >= 4.0, you can `npm install jsdom@3`  so that you can run the tests using the [3.x branch of jsdom](https://github.com/tmpvar/jsdom/tree/3.x).
+
+## Building
+
 For building, we need [Node](http://nodejs.org) and [npm](http://npmjs.org).  Running `make` should get you going with any luck.
 
 After doing a build you can run the tests with the command: `npm test`
+
+If you'd like to do your own minification, you will need to give a hint to the minifier to leave variables named `$super` named `$super`.  For example, with uglify on the command line:
+
+```
+$ uglify-js --reserved-names "$super" rickshaw.js > rickshaw.min.js
+```
+
+Or a sample configuration with `grunt-contrib-uglify`: 
+
+```javascript
+uglify: {
+  options: {
+    mangle: { except: ["$super"] }
+  }
+}
+```
 
 ## Contributing
 
@@ -183,3 +220,9 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+[npm-image]: https://img.shields.io/npm/v/rickshaw.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/rickshaw
+[travis-image]: https://travis-ci.org/shutterstock/rickshaw.svg?branch=master
+[travis-url]: https://travis-ci.org/shutterstock/rickshaw
+[coverage-image]: https://coveralls.io/repos/github/shutterstock/rickshaw/badge.svg?branch=feature%2Ftest-coverage
+[coverage-url]: https://coveralls.io/github/shutterstock/rickshaw?branch=feature%2Ftest-coverage

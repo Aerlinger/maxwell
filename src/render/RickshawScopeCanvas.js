@@ -19,7 +19,7 @@ class RickshawScopeCanvas extends ScopeCanvas {
       min: 'auto',
       padding: {
         top: 0.08,
-        botom: 0.05,
+        botom: 0.09,
       },
       series: [
         {
@@ -78,7 +78,7 @@ class RickshawScopeCanvas extends ScopeCanvas {
       }
     });
 
-    this.resize(plotContext.offsetWidth, plotContext.offsetHeight);
+    this.resize(plotContext.offsetWidth, plotContext.offsetHeight - 5);
   }
 
   resize(width, height) {

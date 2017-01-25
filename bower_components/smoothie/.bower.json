@@ -1,0 +1,48 @@
+{
+  "name": "smoothie",
+  "main": "smoothie.js",
+  "homepage": "http://smoothiecharts.org",
+  "authors": [
+    {
+      "name": "Joe Walnes",
+      "homepage": "http://joewalnes.com)"
+    },
+    {
+      "name": "Drew Noakes",
+      "homepage": "https://drewnoakes.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:joewalnes/smoothie.git"
+  },
+  "description": "Smooooooth JavaScript charts for realtime streaming data",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "charts",
+    "charting",
+    "canvas"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "docs",
+    "examples",
+    "builder"
+  ],
+  "version": "1.27.0",
+  "_release": "1.27.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.27.0",
+    "commit": "bc155e61eb306bca513cba4f4d6aa2612f53a08a"
+  },
+  "_source": "https://github.com/joewalnes/smoothie.git",
+  "_target": "^1.27.0",
+  "_originalSource": "smoothie",
+  "_direct": true
+}

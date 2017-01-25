@@ -76,20 +76,20 @@ Rickshaw.Fixtures.Time.Local = function() {
 
 	this.ceil = function(time, unit) {
 
-		var date, floor, year;
+		var date, floor, year, offset;
 
 		if (unit.name == 'day') {
 
 			var nearFuture = new Date((time + unit.seconds - 1) * 1000);
 
 			var rounded = new Date(0);
+			rounded.setFullYear(nearFuture.getFullYear());
+			rounded.setMonth(nearFuture.getMonth());
+			rounded.setDate(nearFuture.getDate());
 			rounded.setMilliseconds(0);
 			rounded.setSeconds(0);
 			rounded.setMinutes(0);
 			rounded.setHours(0);
-			rounded.setDate(nearFuture.getDate());
-			rounded.setMonth(nearFuture.getMonth());
-			rounded.setFullYear(nearFuture.getFullYear());
 
 			return rounded.getTime() / 1000;
 		}
@@ -125,7 +125,7 @@ Rickshaw.Fixtures.Time.Local = function() {
 
 			return new Date(year, 0).getTime() / 1000;
 		}
-
-		return Math.ceil(time / unit.seconds) * unit.seconds;
+		offset = new Date(time * 1000).getTimezoneOffset() * 60;
+		return Math.ceil((time - offset) / unit.seconds) * unit.seconds + offset;
 	};
 };

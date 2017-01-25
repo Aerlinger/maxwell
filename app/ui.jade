@@ -5,6 +5,7 @@ block header
   link(rel="stylesheet", href="/foundation/css/app.css")
 
   script(type="text/javascript", src="/bower_components/foundation-sites/dist/js/foundation.js")
+  script(type="text/javascript", src="/bower_components/smoothie/smoothie.js")
 
   script.
     function isLetter(str) {
@@ -180,6 +181,7 @@ block header
     });
 
 block content
+  canvas#performance_sparkline(width="200", height="40")
   canvas#grid.grid
   canvas#canvas.maxwell
 

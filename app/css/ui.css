@@ -91,10 +91,18 @@ fieldset.fieldset .slider {
   /*position: absolute;*/
   /*left: 0;*/
   background: #EEE;
+  border: 1px solid lightgray;
   padding: 70px 10px 10px 10px;
   overflow: auto;
   overflow-x: hidden;
   z-index: 5;
+}
+
+#performance_sparkline {
+  position: absolute;
+  left: 709px;
+  top: 50px;
+  z-index: 12;
 }
 
 .plot-pane {

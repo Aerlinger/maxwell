@@ -50,14 +50,29 @@ class CircuitCanvas extends Observer {
       let sc = new Maxwell.ScopeCanvas(this, scElm);
       scopeElm.setCanvas(sc);
 
-      $(scElm).on("resize", function(evt) {
+      $(scElm).on("resize", function (evt) {
         let innerElm = $(scElm).find(".plot-context");
 
-        sc.resize(innerElm.width() - 5, innerElm.height() - 5);
+        sc.resize(innerElm.width(), innerElm.height() - 5);
       });
 
       // this.scopeCanvases.push(sc);
     }
+
+    this.renderPerformance();
+  }
+
+  renderPerformance() {
+    this.performanceMeter = new TimeSeries();
+
+    var chart = new SmoothieChart({
+      millisPerPixel: 35,
+      grid: {fillStyle: 'transparent', strokeStyle: 'transparent'},
+      labels: {fillStyle: '#000000', precision: 0}
+    });
+
+    chart.addTimeSeries(this.performanceMeter, {strokeStyle: 'rgba(255, 0, 200, 1)', lineWidth: 1});
+    chart.streamTo(document.getElementById("performance_sparkline"), 500);
   }
 
   renderScopeCanvas(elementName) {
@@ -89,13 +104,13 @@ class CircuitCanvas extends Observer {
       let arr = [];
       this.circuitUI.highlightedComponent.getInfo(arr);
 
-      for (let idx=0; idx < arr.length; ++idx) {
+      for (let idx = 0; idx < arr.length; ++idx) {
         this.context.fillText(arr[idx], 500, (idx * 10) + 15);
       }
     }
   }
 
-  fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size=Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
+  fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size = Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
     this.context.save();
 
     let lineWidth = this.context.lineWidth;
@@ -124,9 +139,15 @@ class CircuitCanvas extends Observer {
   }
 
   fillCircle(x, y, radius, lineWidth, fillColor, lineColor) {
-    if (lineWidth == null) { lineWidth = Settings.LINE_WIDTH; }
-    if (fillColor == null) { fillColor = '#FFFF00'; }
-    if (lineColor == null) { lineColor = null; }
+    if (lineWidth == null) {
+      lineWidth = Settings.LINE_WIDTH;
+    }
+    if (fillColor == null) {
+      fillColor = '#FFFF00';
+    }
+    if (lineColor == null) {
+      lineColor = null;
+    }
     this.context.save();
 
     this.context.beginPath();
@@ -148,8 +169,12 @@ class CircuitCanvas extends Observer {
 
 
   drawCircle(x, y, radius, lineWidth, lineColor) {
-    if (lineWidth == null) { lineWidth = Settings.LINE_WIDTH; }
-    if (lineColor == null) { lineColor = "#000000"; }
+    if (lineWidth == null) {
+      lineWidth = Settings.LINE_WIDTH;
+    }
+    if (lineColor == null) {
+      lineColor = "#000000";
+    }
     this.context.save();
 
     this.context.strokeStyle = lineColor;
@@ -163,7 +188,7 @@ class CircuitCanvas extends Observer {
     this.context.restore();
   }
 
-  drawRect(x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor=Settings.STROKE_COLOR) {
+  drawRect(x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR) {
     this.context.strokeStyle = lineColor;
     this.context.lineJoin = 'miter';
     this.context.lineWidth = 0;
@@ -172,7 +197,9 @@ class CircuitCanvas extends Observer {
   }
 
   drawLinePt(pa, pb, color, lineWidth) {
-    if (color == null) { color = Settings.STROKE_COLOR; }
+    if (color == null) {
+      color = Settings.STROKE_COLOR;
+    }
     return this.drawLine(pa.x, pa.y, pb.x, pb.y, color, lineWidth);
   }
 
@@ -217,8 +244,12 @@ class CircuitCanvas extends Observer {
   }
 
   drawThickPolygon(xlist, ylist, color, fill) {
-    if (color == null) { color = Settings.STROKE_COLOR; }
-    if (fill == null) { fill = Settings.FILL_COLOR; }
+    if (color == null) {
+      color = Settings.STROKE_COLOR;
+    }
+    if (fill == null) {
+      fill = Settings.FILL_COLOR;
+    }
     this.context.save();
 
     this.context.fillStyle = fill;
@@ -240,16 +271,15 @@ class CircuitCanvas extends Observer {
   }
 
 
-
   getVoltageColor(volts) {
     // TODO: Define voltage range
     let fullScaleVRange = this.Circuit.Params.voltageRange;
 
     let RedGreen =
-        [ "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
+        ["#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
           "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
           "#7f7f7f", "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747",
-          "#3fbf3f", "#37c737", "#2fcf2f", "#27d727", "#1fdf1f", "#17e717", "#0fef0f", "#07f707", "#00ff00" ];
+          "#3fbf3f", "#37c737", "#2fcf2f", "#27d727", "#1fdf1f", "#17e717", "#0fef0f", "#07f707", "#00ff00"];
 
     let scale =
         ["#B81B00", "#B21F00", "#AC2301", "#A72801", "#A12C02", "#9C3002", "#963503", "#913903",
@@ -279,8 +309,12 @@ class CircuitCanvas extends Observer {
 
 
   drawThickPolygonP(polygon, color, fill) {
-    if (color == null) { color = Settings.STROKE_COLOR; }
-    if (fill == null) { fill = Settings.FILL_COLOR; }
+    if (color == null) {
+      color = Settings.STROKE_COLOR;
+    }
+    if (fill == null) {
+      fill = Settings.FILL_COLOR;
+    }
     let numVertices = polygon.numPoints();
 
     this.context.save();
@@ -302,7 +336,9 @@ class CircuitCanvas extends Observer {
 
   drawCoil(point1, point2, vStart, vEnd, hs) {
     let color, cx, hsx, voltageLevel;
-    if (hs == null) { hs = null; }
+    if (hs == null) {
+      hs = null;
+    }
     hs = hs || 8;
     let segments = 40;
 
@@ -336,8 +372,10 @@ class CircuitCanvas extends Observer {
       this.context.save();
       this.context.translate(this.xMargin, this.yMargin);
 
-      this.context.fillText("Time elapsed: " +  Util.getUnitText(this.Circuit.time, "s"), 10, 15);
-      this.context.fillText("Frame Time: " +  Util.singleFloat(this.Circuit.lastFrameTime) + "ms", 800, 15);
+      this.fillText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
+      this.fillText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 385, 15, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
+
+      this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
     }
 
     if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
@@ -407,7 +445,7 @@ class CircuitCanvas extends Observer {
         this.context.strokeStyle = "#FFA500";
         this.context.lineWidth = 1;
         this.context.moveTo(center.x, center.y);
-        this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height()/2);
+        this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height() / 2);
 
         this.context.stroke();
 
@@ -427,11 +465,13 @@ class CircuitCanvas extends Observer {
         let voltage, x, y;
         let nodeIdx = 0;
         return Array.from(this.Circuit.getNodes()).map((node) =>
-            (({ x,
-              y } = node),
+            (({
+              x,
+              y
+            } = node),
                 voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx)),
 
-                this.context.fillText(`${nodeIdx}:${voltage}`, x+10, y-10, "#FF8C00"),
+                this.context.fillText(`${nodeIdx}:${voltage}`, x + 10, y - 10, "#FF8C00"),
                 nodeIdx++));
       }
     }
@@ -467,11 +507,11 @@ class CircuitCanvas extends Observer {
     this.context.fillStyle = Settings.TEXT_COLOR;
     if (component.isVertical()) {
 
-      ({ x } = component.getCenter()); //+ perpindicularOffset
-      ({ y } = component.getCenter()); //+ parallelOffset - stringHeight / 2.0
+      ({x} = component.getCenter()); //+ perpindicularOffset
+      ({y} = component.getCenter()); //+ parallelOffset - stringHeight / 2.0
 
       this.context.translate(x, y);
-      this.context.rotate(Math.PI/2);
+      this.context.rotate(Math.PI / 2);
       this.fillText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
     } else {
       x = component.getCenter().x + parallelOffset;
@@ -487,10 +527,10 @@ class CircuitCanvas extends Observer {
   drawDots(ptA, ptB, component) {
     /**
      * Previous behavior was for current to not display when paused
-    if (this.Circuit && this.Circuit.isStopped) {
+     if (this.Circuit && this.Circuit.isStopped) {
       return
     }
-    */
+     */
 
     let ds = Settings.CURRENT_SEGMENT_LENGTH;
 
@@ -546,15 +586,19 @@ class CircuitCanvas extends Observer {
   drawPosts(component, color = Settings.POST_COLOR) {
     let post;
 
-    for (let i=0; i < component.getPostCount(); ++i) {
+    for (let i = 0; i < component.getPostCount(); ++i) {
       post = component.getPost(i);
       this.drawPost(post.x, post.y, color, color);
     }
   }
 
   drawPost(x0, y0, fillColor, strokeColor) {
-    if (fillColor == null) { fillColor = Settings.POST_COLOR; }
-    if (strokeColor == null) { strokeColor = Settings.POST_COLOR; }
+    if (fillColor == null) {
+      fillColor = Settings.POST_COLOR;
+    }
+    if (strokeColor == null) {
+      strokeColor = Settings.POST_COLOR;
+    }
     return this.fillCircle(x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor);
   }
 
