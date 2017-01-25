@@ -25,10 +25,39 @@ class TunnelDiodeElm extends CircuitComponent {
     return true;
   }
 
-  setup() {}
+  setup() {
+  }
 
   getName() {
     return "Tunnel Diode"
+  }
+
+  draw(renderContext) {
+    this.setBbox(this.point1, this.point2, this.hs);
+
+    let v1 = this.volts[0];
+    let v2 = this.volts[1];
+
+    renderContext.drawLeads(this);
+
+    // draw arrow thingy
+    //setPowerColor(g, true);
+
+    this.updateDots();
+    renderContext.drawDots(this.point1, this.point2, this);
+
+    let color = renderContext.getVoltageColor(v1);
+
+    renderContext.drawThickPolygonP(this.poly);
+
+    // draw thing arrow is pointing to
+    color = renderContext.getVoltageColor(v2);
+
+    renderContext.drawLinePt(this.cathode[0], this.cathode[1], color);
+    renderContext.drawLinePt(this.cathode[2], this.cathode[0], color);
+    renderContext.drawLinePt(this.cathode[3], this.cathode[1], color);
+
+    renderContext.drawPosts(this);
   }
 
   setPoints() {
@@ -41,7 +70,7 @@ class TunnelDiodeElm extends CircuitComponent {
     [this.cathode[0], this.cathode[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, this.hs);
     [this.cathode[2], this.cathode[3]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0.8, this.hs);
 
-    return this.poly = Util.createPolygon(pa[0], pa[1], this.lead2);
+    this.poly = Util.createPolygon(pa[0], pa[1], this.lead2);
   }
 
   limitStep(vnew, vold) {
@@ -65,8 +94,8 @@ class TunnelDiodeElm extends CircuitComponent {
     let voltdiff = this.volts[0] - this.volts[1];
 
     this.current = (this.pip * Math.exp(-this.pvpp / this.pvt) * (Math.exp(voltdiff / this.pvt) - 1)) +
-      (this.pip * (voltdiff / this.pvp) * Math.exp(1 - (voltdiff / this.pvp))) +
-      (this.piv * Math.exp(voltdiff - this.pvv));
+        (this.pip * (voltdiff / this.pvp) * Math.exp(1 - (voltdiff / this.pvp))) +
+        (this.piv * Math.exp(voltdiff - this.pvv));
 
     //console.log("CUR: ", @current)
 
@@ -86,13 +115,13 @@ class TunnelDiodeElm extends CircuitComponent {
     this.lastvoltdiff = voltdiff;
 
     let i = (this.pip * Math.exp(-this.pvpp / this.pvt) * (Math.exp(voltdiff / this.pvt) - 1)) +
-      (this.pip * (voltdiff / this.pvp) * Math.exp(1 - (voltdiff / this.pvp))) +
-      (this.piv * Math.exp(voltdiff - this.pvv));
+        (this.pip * (voltdiff / this.pvp) * Math.exp(1 - (voltdiff / this.pvp))) +
+        (this.piv * Math.exp(voltdiff - this.pvv));
 
     let geq = ((this.pip * Math.exp(-this.pvpp / this.pvt) * Math.exp(voltdiff / this.pvt)) / this.pvt) +
-      ((this.pip * Math.exp(1 - (voltdiff / this.pvp))) / this.pvp);
-    ((- Math.exp(1 - (voltdiff / this.pvp)) * this.pip * voltdiff) / (this.pvp * this.pvp)) +
-      (Math.exp(voltdiff - this.pvv) * this.piv);
+        ((this.pip * Math.exp(1 - (voltdiff / this.pvp))) / this.pvp);
+    ((-Math.exp(1 - (voltdiff / this.pvp)) * this.pip * voltdiff) / (this.pvp * this.pvp)) +
+    (Math.exp(voltdiff - this.pvv) * this.piv);
 
     let nc = i - (geq * voltdiff);
 

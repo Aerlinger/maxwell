@@ -1,1 +1,64 @@
-[{"type":"default","timeStep":0.000005,"simSpeed":173,"currentSpeed":56,"voltageRange":2,"powerRange":50,"flags":1},{"name":"RailElm","pos":[320,208,320,160],"flags":0,"params":{"waveform":3,"frequency":50,"maxVoltage":0.28,"bias":0.26,"phaseShift":0,"dutyCycle":0.5}},{"name":"GroundElm","pos":[320,288,320,320],"flags":0,"params":{}},{"name":"TunnelDiodeElm","pos":[320,208,320,288],"flags":0,"params":{}},{"name":"Scope","pos":[0,100,300,200],"params":{"elm":2,"speed":32,"value":0,"voltageRange":0.625,"currentRange":0.0125,"options":35,"pos":0,"ye":-1}},{"name":"Scope","pos":[100,100,500,200],"params":{"elm":2,"speed":64,"value":0,"voltageRange":0.625,"currentRange":0.0125,"options":99,"pos":1,"ye":-1}}]
+[
+  {
+    "type": "default",
+    "timeStep": 0.000005,
+    "simSpeed": 173,
+    "currentSpeed": 56,
+    "voltageRange": 2,
+    "powerRange": 50,
+    "flags": 1
+  },
+  {
+    "name": "RailElm",
+    "pos": [320, 208, 320, 160],
+    "flags": 0,
+    "params": {
+      "waveform": 3,
+      "frequency": 50,
+      "maxVoltage": 0.28,
+      "bias": 0.26,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [320, 288, 320, 320],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "TunnelDiodeElm",
+    "pos": [320, 208, 320, 288],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "Scope",
+    "pos": [0, 100, 300, 200],
+    "params": {
+      "elm": 2,
+      "speed": 32,
+      "value": 0,
+      "voltageRange": 0.625,
+      "currentRange": 0.0125,
+      "options": 35,
+      "pos": 0,
+      "ye": -1
+    }
+  },
+  {
+    "name": "Scope",
+    "pos": [100, 100, 500, 200],
+    "params": {
+      "elm": 2,
+      "speed": 64,
+      "value": 0,
+      "voltageRange": 0.625,
+      "currentRange": 0.0125,
+      "options": 99,
+      "pos": 1,
+      "ye": -1
+    }
+  }
+]
