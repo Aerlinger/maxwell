@@ -108,6 +108,7 @@ class Circuit extends Observer {
     this.isStopped = false;
 
     this.clearAndReset();
+
   }
 
   write(buffer) {}
@@ -132,6 +133,7 @@ class Circuit extends Observer {
 
     this.time = 0;
     this.iterations = 0;
+    this.lastFrameTime = 0;
 
     this.clearErrors();
     return this.notifyObservers(this.ON_RESET);
@@ -217,6 +219,8 @@ class Circuit extends Observer {
     if (this.isStopped) {
       this.Solver.lastTime = 0;
     } else {
+      this.frameStartTime = performance.now();
+
       this.notifyObservers(this.ON_START_UPDATE);
       this.Solver.reconstruct();
       this.Solver.solveCircuit();
@@ -225,12 +229,14 @@ class Circuit extends Observer {
       for (let scope of this.scopes) {
         if (scope.circuitElm) {
           // console.log(scope.circuitElm.getVoltageDiff());
-
-
           scope.sampleVoltage(this.time, scope.circuitElm.getVoltageDiff());
           scope.sampleCurrent(this.time, scope.circuitElm.getCurrent());
         }
       }
+
+      this.frameEndTime = performance.now();
+
+      this.lastFrameTime = this.frameEndTime - this.frameStartTime;
 
       // console.log(this.Solver.circuitMatrix);
       // console.log(this.Solver.circuitRightSide);

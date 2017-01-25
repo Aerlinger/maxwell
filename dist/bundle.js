@@ -19152,7 +19152,7 @@
 	
 	    this.lead1 = Util.interpolate(this.point1, this.point2, 1 - ((((3 * s.length) / 2) + 8) / this.dn()));
 	
-	    renderContext.drawValue(-13, 35, this, s);
+	    renderContext.drawValue(-13, 35, this, s, 1.5*Settings.TEXT_SIZE);
 	
 	    color = renderContext.getVoltageColor(this.volts[0]);
 	
@@ -26777,6 +26777,7 @@
 	    this.isStopped = false;
 	
 	    this.clearAndReset();
+	
 	  }
 	
 	  write(buffer) {}
@@ -26801,6 +26802,7 @@
 	
 	    this.time = 0;
 	    this.iterations = 0;
+	    this.lastFrameTime = 0;
 	
 	    this.clearErrors();
 	    return this.notifyObservers(this.ON_RESET);
@@ -26886,6 +26888,8 @@
 	    if (this.isStopped) {
 	      this.Solver.lastTime = 0;
 	    } else {
+	      this.frameStartTime = performance.now();
+	
 	      this.notifyObservers(this.ON_START_UPDATE);
 	      this.Solver.reconstruct();
 	      this.Solver.solveCircuit();
@@ -26894,12 +26898,14 @@
 	      for (let scope of this.scopes) {
 	        if (scope.circuitElm) {
 	          // console.log(scope.circuitElm.getVoltageDiff());
-	
-	
 	          scope.sampleVoltage(this.time, scope.circuitElm.getVoltageDiff());
 	          scope.sampleCurrent(this.time, scope.circuitElm.getCurrent());
 	        }
 	      }
+	
+	      this.frameEndTime = performance.now();
+	
+	      this.lastFrameTime = this.frameEndTime - this.frameStartTime;
 	
 	      // console.log(this.Solver.circuitMatrix);
 	      // console.log(this.Solver.circuitRightSide);
@@ -29700,6 +29706,7 @@
 	      this.context.translate(this.xMargin, this.yMargin);
 	
 	      this.context.fillText("Time elapsed: " +  Util.getUnitText(this.Circuit.time, "s"), 10, 15);
+	      this.context.fillText("Frame Time: " +  Util.singleFloat(this.Circuit.lastFrameTime) + "ms", 800, 15);
 	    }
 	
 	    if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
@@ -29815,7 +29822,7 @@
 	    component.draw(this);
 	  }
 	
-	  drawValue(perpindicularOffset, parallelOffset, component, text = null, rotation = 0) {
+	  drawValue(perpindicularOffset, parallelOffset, component, text = null, text_size = Settings.TEXT_SIZE) {
 	    let x, y;
 	
 	    this.context.save();
@@ -29834,15 +29841,15 @@
 	
 	      this.context.translate(x, y);
 	      this.context.rotate(Math.PI/2);
-	      this.fillText(text, parallelOffset, -perpindicularOffset);
+	      this.fillText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
 	    } else {
 	      x = component.getCenter().x + parallelOffset;
 	      y = component.getCenter().y + perpindicularOffset;
 	
-	      this.fillText(text, x, y, Settings.TEXT_COLOR);
+	      this.fillText(text, x, y, Settings.TEXT_COLOR, text_size);
 	    }
 	
-	    return this.context.restore();
+	    this.context.restore();
 	  }
 	
 	  // TODO: Move to CircuitComponent

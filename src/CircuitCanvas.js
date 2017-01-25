@@ -337,6 +337,7 @@ class CircuitCanvas extends Observer {
       this.context.translate(this.xMargin, this.yMargin);
 
       this.context.fillText("Time elapsed: " +  Util.getUnitText(this.Circuit.time, "s"), 10, 15);
+      this.context.fillText("Frame Time: " +  Util.singleFloat(this.Circuit.lastFrameTime) + "ms", 800, 15);
     }
 
     if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
@@ -452,7 +453,7 @@ class CircuitCanvas extends Observer {
     component.draw(this);
   }
 
-  drawValue(perpindicularOffset, parallelOffset, component, text = null, rotation = 0) {
+  drawValue(perpindicularOffset, parallelOffset, component, text = null, text_size = Settings.TEXT_SIZE) {
     let x, y;
 
     this.context.save();
@@ -471,15 +472,15 @@ class CircuitCanvas extends Observer {
 
       this.context.translate(x, y);
       this.context.rotate(Math.PI/2);
-      this.fillText(text, parallelOffset, -perpindicularOffset);
+      this.fillText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
     } else {
       x = component.getCenter().x + parallelOffset;
       y = component.getCenter().y + perpindicularOffset;
 
-      this.fillText(text, x, y, Settings.TEXT_COLOR);
+      this.fillText(text, x, y, Settings.TEXT_COLOR, text_size);
     }
 
-    return this.context.restore();
+    this.context.restore();
   }
 
   // TODO: Move to CircuitComponent
