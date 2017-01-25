@@ -123,6 +123,12 @@ class CircuitSolver
 
       @Circuit.time += @Circuit.timeStep()
 
+      if ((iter + 20) % 21 == 0)
+        for scope in @Circuit.scopes
+          if (scope.circuitElm)
+            scope.sampleVoltage(@Circuit.time, scope.circuitElm.getVoltageDiff());
+            scope.sampleCurrent(@Circuit.time, scope.circuitElm.getCurrent());
+
       # TODO: Update scopes here
       # for scope in @Circuit.scopes
       # scope.timeStep()
@@ -130,7 +136,11 @@ class CircuitSolver
       tm = (new Date()).getTime()
       lit = tm
 
-      if (iter * 1000 >= stepRate * (tm - @lastIterTime)) or (tm - @lastFrameTime) > 500
+      if (tm - @lastFrameTime) > 300
+        #console.log("force break", iter)
+        break
+
+      if (iter * 1000 >= stepRate * (tm - @lastIterTime))
         break
 
       ++iter

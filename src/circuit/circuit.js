@@ -229,8 +229,9 @@ class Circuit extends Observer {
       for (let scope of this.scopes) {
         if (scope.circuitElm) {
           // console.log(scope.circuitElm.getVoltageDiff());
-          scope.sampleVoltage(this.time, scope.circuitElm.getVoltageDiff());
-          scope.sampleCurrent(this.time, scope.circuitElm.getCurrent());
+          // scope.sampleVoltage(this.time, scope.circuitElm.getVoltageDiff());
+          // scope.sampleCurrent(this.time, scope.circuitElm.getCurrent());
+          scope.redraw()
         }
       }
 

@@ -134,6 +134,12 @@ class Scope {
     }
   }
 
+  redraw() {
+    if (this.scopeCanvas) {
+      this.scopeCanvas.redraw();
+    }
+  }
+
   sampleCurrent(time, voltage) {
     if (this.scopeCanvas) {
       this.scopeCanvas.addCurrent(time, voltage);

@@ -162,7 +162,7 @@ class TappedTransformerElm extends CircuitComponent {
     this.voltdiff[1] = this.volts[2] - this.volts[3];
     this.voltdiff[2] = this.volts[3] - this.volts[4];
 
-    return [0, 1, 2].map((i) =>
+    [0, 1, 2].map((i) =>
       (this.curSourceValue[i] = this.current[i],
       [0, 1, 2].map((j) =>
         this.curSourceValue[i] = this.a[(i*3) + j] * this.voltdiff[j])));

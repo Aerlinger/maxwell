@@ -46,12 +46,12 @@
 
 	/* WEBPACK VAR INJECTION */(function(global) {let CircuitComponent = __webpack_require__(1);
 	let CircuitLoader = __webpack_require__(16);
-	let ComponentRegistry = __webpack_require__(84);
+	let ComponentRegistry = __webpack_require__(90);
 	
 	let Circuit = __webpack_require__(77);
-	let CircuitUI = __webpack_require__(85);
+	let CircuitUI = __webpack_require__(91);
 	
-	let RickshawScopeCanvas = __webpack_require__(87);
+	let RickshawScopeCanvas = __webpack_require__(93);
 	
 	let environment = __webpack_require__(10);
 	
@@ -17719,8 +17719,8 @@
 	let SimulationParams = __webpack_require__(76);
 	
 	let Circuit = __webpack_require__(77);
-	let Hint = __webpack_require__(83);
-	let fs = __webpack_require__(82);
+	let Hint = __webpack_require__(89);
+	let fs = __webpack_require__(88);
 	
 	let environment = __webpack_require__(10);
 	
@@ -25802,10 +25802,10 @@
 	
 	    if (this.isTrapezoidal()) {
 	      this.curSourceValue1 = (voltdiff1 * this.a1) + (voltdiff2 * this.a2) + this.current[0];
-	      return this.curSourceValue2 = (voltdiff1 * this.a3) + (voltdiff2 * this.a4) + this.current[1];
+	      this.curSourceValue2 = (voltdiff1 * this.a3) + (voltdiff2 * this.a4) + this.current[1];
 	    } else {
 	      this.curSourceValue1 = this.current[0];
-	      return this.curSourceValue2 = this.current[1];
+	      this.curSourceValue2 = this.current[1];
 	    }
 	  }
 	
@@ -25997,7 +25997,7 @@
 	    this.voltdiff[1] = this.volts[2] - this.volts[3];
 	    this.voltdiff[2] = this.volts[3] - this.volts[4];
 	
-	    return [0, 1, 2].map((i) =>
+	    [0, 1, 2].map((i) =>
 	      (this.curSourceValue[i] = this.current[i],
 	      [0, 1, 2].map((j) =>
 	        this.curSourceValue[i] = this.a[(i*3) + j] * this.voltdiff[j])));
@@ -26533,6 +26533,12 @@
 	    }
 	  }
 	
+	  redraw() {
+	    if (this.scopeCanvas) {
+	      this.scopeCanvas.redraw();
+	    }
+	  }
+	
 	  sampleCurrent(time, voltage) {
 	    if (this.scopeCanvas) {
 	      this.scopeCanvas.addCurrent(time, voltage);
@@ -26692,13 +26698,13 @@
 	let Logger = __webpack_require__(79);
 	let SimulationParams = __webpack_require__(76);
 	let SimulationFrame = __webpack_require__(80);
-	let CircuitSolver = __webpack_require__(89);
-	let Observer = __webpack_require__(81);
+	let CircuitSolver = __webpack_require__(81);
+	let Observer = __webpack_require__(87);
 	let Rectangle = __webpack_require__(3);
 	let Util = __webpack_require__(5);
 	let environment = __webpack_require__(10);
 	
-	fs = __webpack_require__(82);
+	fs = __webpack_require__(88);
 	
 	
 	class Circuit extends Observer {
@@ -26895,8 +26901,9 @@
 	      for (let scope of this.scopes) {
 	        if (scope.circuitElm) {
 	          // console.log(scope.circuitElm.getVoltageDiff());
-	          scope.sampleVoltage(this.time, scope.circuitElm.getVoltageDiff());
-	          scope.sampleCurrent(this.time, scope.circuitElm.getCurrent());
+	          // scope.sampleVoltage(this.time, scope.circuitElm.getVoltageDiff());
+	          // scope.sampleCurrent(this.time, scope.circuitElm.getCurrent());
+	          scope.redraw()
 	        }
 	      }
 	
@@ -27359,1637 +27366,19 @@
 
 /***/ },
 /* 81 */
-/***/ function(module, exports) {
-
-	class Observer {
-	
-	  addObserver(event, fn) {
-	    if (!this._events) { this._events = {}; }
-	    if (!this._events[event]) { this._events[event] = []; }
-	    return this._events[event].push(fn);
-	  }
-	
-	  removeObserver(event, fn) {
-	    if (!this._events) { this._events = {}; }
-	
-	    if (this._events[event]) {
-	      return this._events[event].splice(this._events[event].indexOf(fn), 1);
-	    }
-	  }
-	
-	  notifyObservers(event, ...args) {
-	    if (!this._events) { this._events = {}; }
-	
-	    if (this._events[event]) {
-	      return Array.from(this._events[event]).map((callback) =>
-	        callback.apply(this, args));
-	    }
-	  }
-	
-	  getObservers() {
-	    return this._events;
-	  }
-	}
-	
-	module.exports = Observer;
-
-
-/***/ },
-/* 82 */
-/***/ function(module, exports) {
-
-
-
-/***/ },
-/* 83 */
-/***/ function(module, exports) {
-
-	class Hint {
-	  static initClass() {
-	  
-	    this.HINT_LC = "@HINT_LC";
-	    this.HINT_RC = "@HINT_RC";
-	    this.HINT_3DB_C = "@HINT_3DB_C";
-	    this.HINT_TWINT = "@HINT_TWINT";
-	    this.HINT_3DB_L = "@HINT_3DB_L";
-	  
-	    this.hintType = -1;
-	    this.hintItem1 = -1;
-	    this.hintItem2 = -1;
-	  }
-	
-	
-	  constructor(Circuit) {
-	    this.Circuit = Circuit;
-	  }
-	
-	
-	  readHint(st) {
-	    if (typeof st === 'string') {
-	      st = st.split(' ');
-	    }
-	
-	    this.hintType = st[0];
-	    this.hintItem1 = st[1];
-	    return this.hintItem2 = st[2];
-	  }
-	
-	
-	  getHint() {
-	    let ce, ie, re;
-	    let c1 = this.Circuit.getElmByIdx(this.hintItem1);
-	    let c2 = this.Circuit.getElmByIdx(this.hintItem2);
-	
-	    if ((c1 == null) || (c2 == null)) { return null; }
-	
-	    if (this.hintType === this.HINT_LC) {
-	      if (!(c1 instanceof InductorElm)) { return null; }
-	      if (!(c2 instanceof CapacitorElm)) { return null; }
-	
-	      ie = c1;   // as InductorElm
-	      ce = c2;   // as CapacitorElm
-	
-	      return `res.f = ${getUnitText(1 / (2 * Math.PI * Math.sqrt(ie.inductance * ce.capacitance)), "Hz")}`;
-	    }
-	
-	    if (this.hintType === this.HINT_RC) {
-	      if (!(c1 instanceof ResistorElm)) { return null; }
-	      if (!(c2 instanceof CapacitorElm)) { return null; }
-	
-	      re = c1;   // as ResistorElm
-	      ce = c2;   // as CapacitorElm
-	
-	      return `RC = ${getUnitText(re.resistance * ce.capacitance, "s")}`;
-	    }
-	
-	    if (this.hintType === this.HINT_3DB_C) {
-	      if (!(c1 instanceof ResistorElm)) { return null; }
-	      if (!(c2 instanceof CapacitorElm)) { return null; }
-	
-	      re = c1;   // as ResistorElm
-	      ce = c2;   // as CapacitorElm
-	
-	      return `f.3db = ${getUnitText(1 / (2 * Math.PI * re.resistance * ce.capacitance), "Hz")}`;
-	    }
-	
-	    if (this.hintType === this.HINT_3DB_L) {
-	      if (!(c1 instanceof ResistorElm)) { return null; }
-	      if (!(c2 instanceof InductorElm)) { return null; }
-	
-	      re = c1;   // as ResistorElm
-	      ie = c2;   // as InductorElm
-	
-	      return `f.3db = ${getUnitText(re.resistance / (2 * Math.PI * ie.inductance), "Hz")}`;
-	    }
-	
-	    if (this.hintType === this.HINT_TWINT) {
-	      if (!(c1 instanceof ResistorElm)) { return null; }
-	      if (!(c2 instanceof CapacitorElm)) { return null; }
-	
-	      re = c1;   // as ResistorElm
-	      ce = c2;   // as CapacitorElm
-	
-	      return `fc = ${getUnitText(1 / (2 * Math.PI * re.resistance * ce.capacitance), "Hz")}`;
-	    }
-	
-	    return null;
-	  }
-	}
-	Hint.initClass();
-	
-	module.exports = Hint;
-
-
-/***/ },
-/* 84 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let CircuitComponent = __webpack_require__(1);
-	
-	let AntennaElm = __webpack_require__(17);
-	let WireElm = __webpack_require__(20);
-	let ResistorElm = __webpack_require__(22);
-	let GroundElm = __webpack_require__(23);
-	let VoltageElm = __webpack_require__(19);
-	let DiodeElm = __webpack_require__(24);
-	let OutputElm = __webpack_require__(25);
-	let SwitchElm = __webpack_require__(26);
-	let CapacitorElm = __webpack_require__(27);
-	let InductorElm = __webpack_require__(28);
-	let SparkGapElm = __webpack_require__(29);
-	let CurrentElm = __webpack_require__(30);
-	let RailElm = __webpack_require__(18);
-	let MosfetElm = __webpack_require__(31);
-	let JfetElm = __webpack_require__(32);
-	let TransistorElm = __webpack_require__(33);
-	let VarRailElm = __webpack_require__(34);
-	let OpAmpElm = __webpack_require__(35);
-	let ZenerElm = __webpack_require__(36);
-	let Switch2Elm = __webpack_require__(37);
-	let SweepElm = __webpack_require__(38);
-	let TextElm = __webpack_require__(39);
-	let ProbeElm = __webpack_require__(40);
-	
-	let AndGateElm = __webpack_require__(41);
-	let NandGateElm = __webpack_require__(42);
-	let OrGateElm = __webpack_require__(43);
-	let NorGateElm = __webpack_require__(44);
-	let XorGateElm = __webpack_require__(45);
-	let InverterElm = __webpack_require__(46);
-	
-	let LogicInputElm = __webpack_require__(47);
-	let LogicOutputElm = __webpack_require__(48);
-	let AnalogSwitchElm = __webpack_require__(49);
-	let AnalogSwitch2Elm = __webpack_require__(50);
-	let MemristorElm = __webpack_require__(51);
-	let RelayElm = __webpack_require__(52);
-	let TunnelDiodeElm = __webpack_require__(53);
-	
-	let ScrElm = __webpack_require__(54);
-	let TriodeElm = __webpack_require__(55);
-	
-	let DecadeElm = __webpack_require__(56);
-	let LatchElm = __webpack_require__(58);
-	let TimerElm = __webpack_require__(59);
-	let JKFlipFlopElm = __webpack_require__(60);
-	let DFlipFlopElm = __webpack_require__(61);
-	let CounterElm = __webpack_require__(62);
-	let DacElm = __webpack_require__(63);
-	let AdcElm = __webpack_require__(64);
-	let VcoElm = __webpack_require__(65);
-	let PhaseCompElm = __webpack_require__(66);
-	let SevenSegElm = __webpack_require__(67);
-	let CC2Elm = __webpack_require__(68);
-	
-	let TransLineElm = __webpack_require__(69);
-	
-	let TransformerElm = __webpack_require__(70);
-	let TappedTransformerElm = __webpack_require__(71);
-	
-	let LedElm = __webpack_require__(72);
-	let PotElm = __webpack_require__(73);
-	let ClockElm = __webpack_require__(74);
-	
-	let Scope = __webpack_require__(75);
-	
-	//#
-	// ElementMap
-	//
-	//   A Hash Map of circuit components within Maxwell
-	//
-	//   Each hash element is a key-value pair of the format {"ElementName": "ElementDescription"}
-	//
-	//   Elements that are tested working are prefixed with a '+'
-	//   Elements that are implemented but not tested have their names (key) prefixed with a '#'
-	//   Elements that are not yet implemented have their names (key) prefixed with a '-'
-	class ComponentRegistry {
-	  static initClass() {
-	    this.ComponentDefs = {
-	    // Working
-	      'w': WireElm,
-	      'r': ResistorElm,
-	      'g': GroundElm,
-	      'l': InductorElm,
-	      'c': CapacitorElm,
-	      'v': VoltageElm,
-	      'd': DiodeElm,
-	      's': SwitchElm,
-	      '187': SparkGapElm,
-	      'a': OpAmpElm,
-	      'f': MosfetElm,
-	  
-	    // Testing
-	      'A': AntennaElm,
-	      'R': RailElm,
-	      '170': SweepElm,
-	      '172': VarRailElm,
-	      'z': ZenerElm,
-	      'i': CurrentElm,
-	      't': TransistorElm,
-	      '174': PotElm,
-	  
-	      '150': AndGateElm,
-	      '151': NandGateElm,
-	      '152': OrGateElm,
-	      '153': NorGateElm,
-	      '154': XorGateElm,
-	  
-	      'I': InverterElm,
-	      'L': LogicInputElm,
-	      'M': LogicOutputElm,
-	  
-	      '159': AnalogSwitchElm,
-	      '160': AnalogSwitch2Elm,
-	  
-	    // In progress:
-	      'S': Switch2Elm,  // Needs interaction
-	      'x': TextElm,
-	      'p': ProbeElm,
-	      'O': OutputElm,
-	      'T': TransformerElm,
-	  
-	      // 'o': Scope,
-	  //    'h': Scope
-	  //     '$': Scope,
-	  //     '%': Scope,
-	  //     '?': Scope,
-	  //     'B': Scope,
-	  
-	      // Incomplete
-	  
-	      '150': AndGateElm,
-	      '151': NandGateElm,
-	      '152': OrGateElm,
-	      '153': NorGateElm,
-	      '154': XorGateElm,
-	      '155': DFlipFlopElm,
-	      '156': JKFlipFlopElm,
-	      '157': SevenSegElm,
-	      '158': VcoElm,
-	      '159': AnalogSwitchElm,
-	      '160': AnalogSwitch2Elm,
-	      '161': PhaseCompElm,
-	      '162': LedElm,
-	      '163': DecadeElm,
-	      '164': CounterElm,
-	      '165': TimerElm,
-	      '166': DacElm,
-	      '167': AdcElm,
-	      '168': LatchElm,
-	      '169': TappedTransformerElm,
-	      '170': SweepElm,
-	      '171': TransLineElm,
-	      '172': VarRailElm,
-	      '173': TriodeElm,
-	      '174': PotElm,
-	      '175': TunnelDiodeElm,
-	      '177': ScrElm,
-	      '178': RelayElm,
-	      '179': CC2Elm,
-	  //    '181': LampElm
-	      '187': SparkGapElm,
-	      'A': AntennaElm,
-	      'I': InverterElm,
-	      'L': LogicInputElm,
-	      'M': LogicOutputElm,
-	      'O': OutputElm,
-	      'R': RailElm,
-	      'S': Switch2Elm,
-	      'a': OpAmpElm,
-	      'c': CapacitorElm,
-	      'd': DiodeElm,
-	  //    'f': NMosfetElm
-	      'g': GroundElm,
-	      'i': CurrentElm,
-	      'j': JfetElm,
-	      'l': InductorElm,
-	      'm': MemristorElm,
-	      'p': ProbeElm,
-	      'r': ResistorElm,
-	      's': SwitchElm,
-	  //    't': NTransistorElm
-	  //    'v': DCVoltageElm
-	      'w': WireElm,
-	      'x': TextElm,
-	      'z': ZenerElm
-	  };
-	  
-	  
-	    this.InverseComponentDefs = {
-	      WireElm: 'w',
-	      ResistorElm: 'r',
-	      GroundElm: 'g',
-	      InductorElm: 'l',
-	      CapacitorElm: 'c',
-	      VoltageElm: 'v',
-	      DiodeElm: 'd',
-	      SwitchElm: 's',
-	      SparkGapElm: '187',
-	      OpAmpElm: 'a',
-	      MosfetElm: 'f',
-	      PotElm: '174',
-	  
-	      RailElm: 'R',
-	      VarRailElm: '17',
-	      ZenerElm: 'z',
-	      CurrentElm: 'i',
-	      TransistorElm: 't',
-	      JfetElm: 'j',
-	  
-	      Switch2Elm: 'S',
-	      SweepElm: '170',
-	      TextElm: 'x',
-	      ProbeElm: 'p',
-	      Scope: 'o',
-	      OutputElm: 'O',
-	      AntennaElm: 'A',
-	  
-	      AndGateElm: '150',
-	      NandGateElm: '151',
-	      OrGateElm: '152',
-	      NorGateElm: '153',
-	      XorGateElm: '154',
-	  
-	      InverterElm: 'I',
-	      LogicInputElm: 'L',
-	      LogicOutputElm: 'M',
-	  
-	      JkFlipFlopElm: '156',
-	      LatchElm: '168',
-	      TimerElm: '165',
-	  
-	      TransformerElm: 'T',
-	  
-	      AnalogSwitchElm: '159',
-	      AnalogSwitch2Elm: '160',
-	      MemristorElm: 'm'
-	    };
-	}
-	
-	  static enumerate() {
-	    let elms = {};
-	
-	    for (let _ in this.ComponentDefs) {
-	        let Component = this.ComponentDefs[_];
-	      elms[Component] = Component.Fields;
-	    }
-	
-	    return elms;
-	}
-	}
-	ComponentRegistry.initClass();
-	
-	
-	
-	
-	module.exports = ComponentRegistry;
-
-
-/***/ },
-/* 85 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let Rectangle = __webpack_require__(3);
-	let CircuitCanvas = __webpack_require__(86);
-	let Observer = __webpack_require__(81);
-	let Util = __webpack_require__(5);
-	
-	let AntennaElm = __webpack_require__(17);
-	let WireElm = __webpack_require__(20);
-	let ResistorElm = __webpack_require__(22);
-	let GroundElm = __webpack_require__(23);
-	let VoltageElm = __webpack_require__(19);
-	let DiodeElm = __webpack_require__(24);
-	let OutputElm = __webpack_require__(25);
-	let SwitchElm = __webpack_require__(26);
-	let CapacitorElm = __webpack_require__(27);
-	let InductorElm = __webpack_require__(28);
-	let SparkGapElm = __webpack_require__(29);
-	let CurrentElm = __webpack_require__(30);
-	let RailElm = __webpack_require__(18);
-	let MosfetElm = __webpack_require__(31);
-	let JfetElm = __webpack_require__(32);
-	let TransistorElm = __webpack_require__(33);
-	let VarRailElm = __webpack_require__(34);
-	let OpAmpElm = __webpack_require__(35);
-	let ZenerElm = __webpack_require__(36);
-	let Switch2Elm = __webpack_require__(37);
-	let SweepElm = __webpack_require__(38);
-	let TextElm = __webpack_require__(39);
-	let ProbeElm = __webpack_require__(40);
-	
-	let AndGateElm = __webpack_require__(41);
-	let NandGateElm = __webpack_require__(42);
-	let OrGateElm = __webpack_require__(43);
-	let NorGateElm = __webpack_require__(44);
-	let XorGateElm = __webpack_require__(45);
-	let InverterElm = __webpack_require__(46);
-	
-	let LogicInputElm = __webpack_require__(47);
-	let LogicOutputElm = __webpack_require__(48);
-	let AnalogSwitchElm = __webpack_require__(49);
-	let AnalogSwitch2Elm = __webpack_require__(50);
-	let MemristorElm = __webpack_require__(51);
-	let RelayElm = __webpack_require__(52);
-	let TunnelDiodeElm = __webpack_require__(53);
-	
-	let ScrElm = __webpack_require__(54);
-	let TriodeElm = __webpack_require__(55);
-	
-	let DecadeElm = __webpack_require__(56);
-	let LatchElm = __webpack_require__(58);
-	let TimerElm = __webpack_require__(59);
-	let JkFlipFlopElm = __webpack_require__(60);
-	let DFlipFlopElm = __webpack_require__(61);
-	let CounterElm = __webpack_require__(62);
-	let DacElm = __webpack_require__(63);
-	let AdcElm = __webpack_require__(64);
-	let VcoElm = __webpack_require__(65);
-	let PhaseCompElm = __webpack_require__(66);
-	let SevenSegElm = __webpack_require__(67);
-	let CC2Elm = __webpack_require__(68);
-	
-	let TransLineElm = __webpack_require__(69);
-	
-	let TransformerElm = __webpack_require__(70);
-	let TappedTransformerElm = __webpack_require__(71);
-	
-	let LedElm = __webpack_require__(72);
-	let PotElm = __webpack_require__(73);
-	let ClockElm = __webpack_require__(74);
-	
-	let Scope = __webpack_require__(75);
-	
-	class SelectionMarquee extends Rectangle {
-	  constructor(x1, y1) {
-	    super();
-	
-	    this.x1 = x1;
-	    this.y1 = y1;
-	  }
-	
-	  reposition(x, y) {
-	    let _x1 = Math.min(x, this.x1);
-	    let _x2 = Math.max(x, this.x1);
-	    let _y1 = Math.min(y, this.y1);
-	    let _y2 = Math.max(y, this.y1);
-	
-	    this.x2 = _x2;
-	    this.y2 = _y2;
-	
-	    this.x = this.x1 = _x1;
-	    this.y = this.y1 = _y1;
-	
-	    this.width = _x2 - _x1;
-	    this.height = _y2 - _y1;
-	  }
-	
-	  draw(renderContext) {
-	    renderContext.lineWidth = 0.1;
-	
-	    if ((this.x1 != null) && (this.x2 != null) && (this.y1 != null) && (this.y2 != null)) {
-	      renderContext.drawLine(this.x1, this.y1, this.x2, this.y1, "#FFFF00", 0);
-	      renderContext.drawLine(this.x1, this.y2, this.x2, this.y2, "#FFFF00", 1);
-	
-	      renderContext.drawLine(this.x1, this.y1, this.x1, this.y2, "#FFFF00", 1);
-	      renderContext.drawLine(this.x2, this.y1, this.x2, this.y2, "#FFFF00", 1);
-	    }
-	  }
-	}
-	
-	class CircuitUI extends Observer {
-	  static initClass() {
-	    this.ON_COMPONENT_HOVER = "ON_COMPONENT_HOVER";
-	    this.ON_COMPONENT_CLICKED = "ON_COMPONENT_CLICKED";
-	    this.ON_COMPONENTS_SELECTED = "ON_COMPONENTS_SELECTED";
-	    this.ON_COMPONENTS_DESELECTED = "ON_COMPONENTS_DESELECTED";
-	    this.ON_COMPONENTS_MOVED = "ON_COMPONENTS_MOVED";
-	
-	    this.STATE_EDIT;
-	    this.STATE_PLACE;
-	    this.STATE_RUN;
-	
-	    this.MOUSEDOWN = 1;
-	  }
-	
-	  constructor(Circuit, Canvas) {
-	    super();
-	
-	    this.Circuit = Circuit;
-	    this.Canvas = Canvas;
-	
-	    // TODO: Extract to param
-	    this.xMargin = 200;
-	    this.yMargin = 56;
-	
-	    this.mousemove = this.mousemove.bind(this);
-	    this.mousedown = this.mousedown.bind(this);
-	    this.mouseup = this.mouseup.bind(this);
-	    this.highlightedComponent = null;
-	    this.selectedNode = null;
-	    this.selectedComponents = [];
-	
-	    // TODO: Width and height are currently undefined
-	    this.width = this.Canvas.width;
-	    this.height = this.Canvas.height;
-	
-	    this.placeX = null;
-	    this.placeY = null;
-	
-	    this.state = this.STATE_RUN;
-	
-	    this.config = {
-	      keyboard: true
-	    };
-	
-	    this.CircuitCanvas = new CircuitCanvas(Circuit, this);
-	
-	    this.context = this.CircuitCanvas.context;
-	
-	    this.Canvas.addEventListener('mousemove', this.mousemove);
-	    this.Canvas.addEventListener('mousedown', this.mousedown);
-	    this.Canvas.addEventListener('mouseup', this.mouseup);
-	
-	    // Callbacks
-	    this.onSelectionChanged = this.noop;
-	    this.onComponentClick = this.noop;
-	    this.onComponentHover = this.noop;
-	    this.onNodeHover = this.noop;
-	    this.onNodeClick = this.noop;   // @onNodeClick(component)
-	    this.onUpdateComplete = this.noop;  // @onUpdateComplete(circuit)
-	
-	
-	  }
-	
-	  noop() {
-	  }
-	
-	  mousemove(event) {
-	    let component;
-	    let x = event.offsetX - this.xMargin;
-	    let y = event.offsetY - this.yMargin;
-	
-	    this.newlyHighlightedComponent = null;
-	
-	    this.lastX = this.snapX;
-	    this.lastY = this.snapY;
-	
-	    this.snapX = Util.snapGrid(x);
-	    this.snapY = Util.snapGrid(y);
-	
-	    // Handle Marquee
-	    if (this.marquee) {
-	      this.marquee.reposition(x, y);
-	
-	      this.selectedComponents = [];
-	
-	      for (let component of this.Circuit.getElements()) {
-	        if (this.marquee.collidesWithComponent(component)) {
-	          this.selectedComponents.push(component);
-	          this.onSelectionChanged(this.selectedComponents);
-	        }
-	      }
-	
-	    } else {
-	      this.previouslyHighlightedNode = this.highlightedNode;
-	      this.highlightedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
-	
-	      if (this.highlightedNode) {
-	        this.onNodeHover(this.highlightedNode);
-	      } else {
-	        // TODO: WIP for interactive element placing
-	        if (this.placeComponent) {
-	          this.placeComponent.setPoints();
-	
-	          if (this.placeX && this.placeY) {
-	            this.placeComponent.point1.x = this.placeX;
-	            this.placeComponent.point1.y = this.placeY;
-	
-	            this.placeComponent.point2.x = this.snapX;
-	            this.placeComponent.point2.y = this.snapY;
-	          }
-	          // if (this.placeComponent.x1() && this.placeComponent.y1()) {
-	            // console.log(this.snapX, this.lastX," ", this.snapY, this.lastY);
-	            // console.log(this.snapX - this.lastX," ", this.snapY - this.lastY);
-	
-	            // this.placeComponent.point1.x = this.placeX;
-	            // this.placeComponent.point1.y = this.placeY;
-	          // }
-	        }
-	
-	        for (let component of this.Circuit.getElements()) {
-	          if (component.getBoundingBox().contains(x, y)) {
-	            this.newlyHighlightedComponent = component;
-	          }
-	        }
-	      }
-	
-	      if (this.previouslyHighlightedNode && !this.highlightedNode && this.onNodeUnhover) {
-	        this.onNodeUnhover(this.previouslyHighlightedNode);
-	      }
-	
-	      if (this.selectedNode) {
-	        for (let element of this.selectedNode.getNeighboringElements()) {
-	          if (element) {
-	            // console.log(element);
-	            let post = element.getPostAt(this.selectedNode.x, this.selectedNode.y);
-	            if (post) {
-	              post.x = this.snapX;
-	              post.y = this.snapY;
-	            } else {
-	              console.warn("No post at", this.selectedNode.x, this.selectedNode.y);
-	            }
-	
-	            element.recomputeBounds();
-	          }
-	        }
-	
-	        this.selectedNode.x = this.snapX;
-	        this.selectedNode.y = this.snapY;
-	      }
-	
-	      if (this.newlyHighlightedComponent) {
-	        if (this.newlyHighlightedComponent !== this.highlightedComponent) {
-	          this.highlightedComponent = this.newlyHighlightedComponent;
-	
-	
-	          if (this.onComponentHover)
-	            this.onComponentHover(this.highlightedComponent);
-	
-	          this.notifyObservers(CircuitUI.ON_COMPONENT_HOVER, this.highlightedComponent);
-	        }
-	
-	      } else {
-	        if (this.highlightedComponent && this.onComponentUnhover) {
-	          this.onComponentUnhover(this.highlightedComponent);
-	        }
-	
-	        this.highlightedComponent = null;
-	      }
-	    }
-	
-	    if (!this.marquee && !this.selectedNode && (this.selectedComponents && this.selectedComponents.length > 0) && (event.which === CircuitUI.MOUSEDOWN) && ((this.lastX !== this.snapX) || (this.lastY !== this.snapY))) {
-	      return (() => {
-	        let result = [];
-	        for (component of Array.from(this.selectedComponents)) {
-	          result.push(component.move(this.snapX - this.lastX, this.snapY - this.lastY));
-	        }
-	        return result;
-	      })();
-	    }
-	  }
-	
-	  mousedown(event) {
-	    let x = event.offsetX - this.xMargin;
-	    let y = event.offsetY - this.yMargin;
-	
-	    if (this.placeComponent) {
-	      if (!this.placeX && !this.placeY) {
-	        this.placeX = this.snapX;
-	        this.placeY = this.snapY;
-	      } else {
-	        this.Circuit.solder(this.placeComponent);
-	        this.placeComponent = null;
-	        this.placeX = null;
-	        this.placeY = null;
-	      }
-	    }
-	
-	    if (!this.highlightedComponent && !this.placeComponent && !this.highlightedNode) {
-	      /*
-	      if (this.selectedComponents && (this.selectedComponents.length > 0)) {
-	        this.onSelectionChanged([])
-	      }
-	      */
-	
-	      // this.selectedComponents = [];
-	
-	      this.marquee = new SelectionMarquee(x, y);
-	    }
-	
-	    if (this.highlightedComponent) {
-	      this.selectedComponents = [this.highlightedComponent];
-	
-	      if (this.onSelectionChanged) {
-	        this.onSelectionChanged(this.selectedComponents);
-	      }
-	    }
-	
-	    this.selectedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
-	
-	    if (this.selectedNode && this.onNodeClick) {
-	      this.onNodeClick(this.selectedNode);
-	    }
-	
-	    for (var component of this.Circuit.getElements()) {
-	      if (component.getBoundingBox().contains(x, y)) {
-	        this.notifyObservers(CircuitUI.ON_COMPONENT_CLICKED, component);
-	
-	        if (!Array.from(this.selectedComponents).includes(component)) {
-	          this.selectedComponents = [component];
-	
-	          if (this.onSelectionChanged) {
-	            this.onSelectionChanged(this.selectedComponents);
-	          }
-	        }
-	
-	        if (component.toggle) {
-	          component.toggle();
-	        }
-	
-	        if (component.onclick) {
-	          component.onclick();
-	        }
-	
-	        if (component.onComponentClick) {
-	          component.onComponentClick();
-	        }
-	      }
-	    }
-	  }
-	
-	  mouseup(event) {
-	    this.marquee = null;
-	    this.selectedNode = null;
-	
-	    if (this.selectedComponents && this.selectedComponents.length > 0) {
-	      return this.notifyObservers(CircuitUI.ON_COMPONENTS_DESELECTED, this.selectedComponents);
-	    }
-	  }
-	
-	  togglePause() {
-	    if (this.Circuit.isStopped) {
-	      this.Circuit.resume()
-	    } else {
-	      this.Circuit.pause()
-	    }
-	  }
-	
-	  pause() {}
-	  play() {}
-	  restart() {}
-	
-	  clearPlaceComponent() {
-	    this.placeX = null;
-	    this.placeY = null;
-	    this.placeComponent = null;
-	  }
-	
-	  resetSelection() {
-	    if (this.selectedComponents && (this.selectedComponents.length > 0)) {
-	      this.onSelectionChanged([])
-	    }
-	    this.selectedComponents = [];
-	  }
-	
-	  getSelectedComponents() {
-	    return this.selectedComponents;
-	  }
-	
-	  getPlaceComponent() {
-	    return this.placeComponent;
-	  }
-	
-	  setPlaceComponent(componentName) {
-	    let klass = eval(componentName);
-	
-	    this.placeComponent = new klass();
-	
-	    this.resetSelection();
-	
-	    return this.placeComponent;
-	  }
-	
-	  remove(components) {
-	    console.log("components", components);
-	    return this.Circuit.destroy(components);
-	  }
-	}
-	
-	CircuitUI.initClass();
-	module.exports = CircuitUI;
-
-
-/***/ },
-/* 86 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let Observer = __webpack_require__(81);
-	let Util = __webpack_require__(5);
-	let Point = __webpack_require__(4);
-	let Settings = __webpack_require__(2);
-	let Color = __webpack_require__(8);
-	
-	let CircuitComponent = __webpack_require__(1);
-	let environment = __webpack_require__(10);
-	
-	class CircuitCanvas extends Observer {
-	
-	  constructor(Circuit, circuitUI) {
-	    super();
-	
-	    this.circuitUI = circuitUI;
-	    this.Circuit = Circuit;
-	    this.Canvas = this.circuitUI.Canvas;
-	
-	    // TODO: Extract to param
-	    this.xMargin = circuitUI.xMargin;
-	    this.yMargin = circuitUI.yMargin;
-	
-	    this.draw = this.draw.bind(this);
-	    this.drawDots = this.drawDots.bind(this);
-	
-	    if (environment.isBrowser) {
-	      this.context = Sketch.augment(this.Canvas.getContext("2d", {alpha: false}), {
-	        autoclear: false,
-	        draw: this.draw
-	        //mousemove: this.mousemove,
-	        //mousedown: this.mousedown,
-	        //mouseup: this.mouseup
-	        //fullscreen: false,
-	        //width: this.width,
-	        //height: this.height
-	      });
-	
-	    } else {
-	      this.context = this.Canvas.getContext("2d");
-	    }
-	
-	    for (let scopeElm of this.Circuit.getScopes()) {
-	
-	      let scElm = this.renderScopeCanvas(scopeElm.circuitElm.getName());
-	      $(scElm).draggable();
-	      $(scElm).resizable();
-	
-	      this.Canvas.parentNode.append(scElm);
-	
-	      let sc = new Maxwell.ScopeCanvas(this, scElm);
-	      scopeElm.setCanvas(sc);
-	
-	      $(scElm).on("resize", function (evt) {
-	        let innerElm = $(scElm).find(".plot-context");
-	
-	        sc.resize(innerElm.width(), innerElm.height() - 5);
-	      });
-	
-	      // this.scopeCanvases.push(sc);
-	    }
-	
-	    this.renderPerformance();
-	  }
-	
-	  renderPerformance() {
-	    this.performanceMeter = new TimeSeries();
-	
-	    var chart = new SmoothieChart({
-	      millisPerPixel: 35,
-	      grid: {fillStyle: 'transparent', strokeStyle: 'transparent'},
-	      labels: {fillStyle: '#000000', precision: 0}
-	    });
-	
-	    chart.addTimeSeries(this.performanceMeter, {strokeStyle: 'rgba(255, 0, 200, 1)', lineWidth: 1});
-	    chart.streamTo(document.getElementById("performance_sparkline"), 500);
-	  }
-	
-	  renderScopeCanvas(elementName) {
-	    let scopeWrapper = document.createElement("div");
-	    scopeWrapper.className = "plot-pane";
-	
-	    let leftAxis = document.createElement("div");
-	    leftAxis.className = "left-axis";
-	
-	    let scopeCanvas = document.createElement("div");
-	    scopeCanvas.className = "plot-context";
-	
-	    if (elementName) {
-	      let label = document.createElement("div");
-	      label.className = "plot-label";
-	      label.innerText = elementName;
-	
-	      scopeWrapper.append(label);
-	    }
-	
-	    scopeWrapper.append(leftAxis);
-	    scopeWrapper.append(scopeCanvas);
-	
-	    return scopeWrapper;
-	  }
-	
-	  drawInfoText() {
-	    if (this.circuitUI.highlightedComponent != null) {
-	      let arr = [];
-	      this.circuitUI.highlightedComponent.getInfo(arr);
-	
-	      for (let idx = 0; idx < arr.length; ++idx) {
-	        this.fillText(arr[idx], 600, (idx * 10) + 5, "#1b4e24");
-	      }
-	    }
-	  }
-	
-	  fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size = Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
-	    this.context.save();
-	
-	    let lineWidth = this.context.lineWidth;
-	    let origFillStyle = this.context.fillStyle;
-	    let origFillColor = this.context.fillColor;
-	    let font = this.context.font;
-	
-	    this.context.fillStyle = fillColor;
-	    this.context.strokeStyle = strokeColor;
-	    this.context.font = `${Settings.TEXT_STYLE} ${size}pt ${Settings.FONT}`;
-	    this.context.fillText(text, x, y);
-	
-	    this.context.lineWidth = 0;
-	    this.context.strokeText(text, x, y);
-	
-	    let textMetrics = this.context.measureText(text);
-	
-	    this.context.fillStyle = origFillStyle;
-	    this.context.fillColor = origFillColor;
-	    this.context.lineWidth = lineWidth;
-	    this.context.font = font;
-	
-	    this.context.restore();
-	
-	    return textMetrics;
-	  }
-	
-	  fillCircle(x, y, radius, lineWidth, fillColor, lineColor) {
-	    if (lineWidth == null) {
-	      lineWidth = Settings.LINE_WIDTH;
-	    }
-	    if (fillColor == null) {
-	      fillColor = '#FFFF00';
-	    }
-	    if (lineColor == null) {
-	      lineColor = null;
-	    }
-	    this.context.save();
-	
-	    this.context.beginPath();
-	    this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
-	
-	    if (lineColor) {
-	      this.context.lineWidth = lineWidth;
-	      this.context.strokeStyle = lineColor;
-	      this.context.stroke();
-	    }
-	
-	    this.context.fillStyle = fillColor;
-	    this.context.fill();
-	
-	    this.context.closePath();
-	
-	    return this.context.restore();
-	  }
-	
-	
-	  drawCircle(x, y, radius, lineWidth, lineColor) {
-	    if (lineWidth == null) {
-	      lineWidth = Settings.LINE_WIDTH;
-	    }
-	    if (lineColor == null) {
-	      lineColor = "#000000";
-	    }
-	    this.context.save();
-	
-	    this.context.strokeStyle = lineColor;
-	    this.context.lineWidth = lineWidth;
-	
-	    this.context.beginPath();
-	    this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
-	    this.context.stroke();
-	    this.context.closePath();
-	
-	    this.context.restore();
-	  }
-	
-	  drawRect(x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR) {
-	    this.context.strokeStyle = lineColor;
-	    this.context.lineJoin = 'miter';
-	    this.context.lineWidth = 0;
-	    this.context.strokeRect(x, y, width, height);
-	    this.context.stroke();
-	  }
-	
-	  drawLinePt(pa, pb, color, lineWidth) {
-	    if (color == null) {
-	      color = Settings.STROKE_COLOR;
-	    }
-	    return this.drawLine(pa.x, pa.y, pb.x, pb.y, color, lineWidth);
-	  }
-	
-	  beginPath() {
-	    this.pathMode = true;
-	    this.context.beginPath();
-	  }
-	
-	  closePath() {
-	    this.pathMode = false;
-	    this.context.closePath();
-	  }
-	
-	  drawLine(x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
-	
-	    let origLineWidth = this.context.lineWidth;
-	
-	    if (!this.pathMode)
-	      this.context.beginPath();
-	
-	    if (this.boldLines) {
-	      this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
-	      this.context.strokeStyle = Settings.SELECT_COLOR;
-	      if (!this.pathMode)
-	        this.context.moveTo(x, y);
-	      this.context.lineTo(x2, y2);
-	      this.context.stroke();
-	
-	    } else {
-	      this.context.strokeStyle = color;
-	      this.context.lineWidth = lineWidth;
-	      if (!this.pathMode)
-	        this.context.moveTo(x, y);
-	      this.context.lineTo(x2, y2);
-	      this.context.stroke();
-	    }
-	
-	    if (!this.pathMode)
-	      this.context.closePath();
-	
-	    this.context.lineWidth = origLineWidth;
-	  }
-	
-	  drawThickPolygon(xlist, ylist, color, fill) {
-	    if (color == null) {
-	      color = Settings.STROKE_COLOR;
-	    }
-	    if (fill == null) {
-	      fill = Settings.FILL_COLOR;
-	    }
-	    this.context.save();
-	
-	    this.context.fillStyle = fill;
-	    this.context.strokeStyle = color;
-	    this.context.beginPath();
-	
-	    this.context.moveTo(xlist[0], ylist[0]);
-	    for (let i = 0; i < xlist.length; ++i) {
-	      this.context.lineTo(xlist[i], ylist[i]);
-	    }
-	
-	    this.context.closePath();
-	    this.context.stroke();
-	    if (color) {
-	      this.context.fill();
-	    }
-	
-	    return this.context.restore();
-	  }
-	
-	
-	  getVoltageColor(volts) {
-	    // TODO: Define voltage range
-	    let fullScaleVRange = this.Circuit.Params.voltageRange;
-	
-	    let RedGreen =
-	        ["#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
-	          "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
-	          "#7f7f7f", "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747",
-	          "#3fbf3f", "#37c737", "#2fcf2f", "#27d727", "#1fdf1f", "#17e717", "#0fef0f", "#07f707", "#00ff00"];
-	
-	    let scale =
-	        ["#B81B00", "#B21F00", "#AC2301", "#A72801", "#A12C02", "#9C3002", "#963503", "#913903",
-	          "#8B3E04", "#854205", "#804605", "#7A4B06", "#754F06", "#6F5307", "#6A5807", "#645C08",
-	          "#5F6109", "#596509", "#53690A", "#4E6E0A", "#48720B", "#43760B", "#3D7B0C", "#387F0C",
-	          "#32840D", "#2C880E", "#278C0E", "#21910F", "#1C950F", "#169910", "#119E10", "#0BA211", "#06A712"];
-	
-	    let blueScale =
-	        ["#EB1416", "#E91330", "#E7134A", "#E51363", "#E3137C", "#E11394", "#E013AC", "#DE13C3",
-	          "#DC13DA", "#C312DA", "#AA12D8", "#9012D7", "#7712D5", "#5F12D3", "#4612D1", "#2F12CF",
-	          "#1712CE", "#1123CC", "#1139CA", "#114FC8", "#1164C6", "#1179C4", "#118EC3", "#11A2C1",
-	          "#11B6BF", "#10BDB1", "#10BB9B", "#10BA84", "#10B86F", "#10B659", "#10B444", "#10B230", "#10B11C"];
-	
-	    scale = Color.Gradients.voltage_default;
-	
-	    let numColors = scale.length - 1;
-	
-	    let value = Math.floor(((volts + fullScaleVRange) * numColors) / (2 * fullScaleVRange));
-	    if (value < 0) {
-	      value = 0;
-	    } else if (value >= numColors) {
-	      value = numColors - 1;
-	    }
-	
-	    return scale[value];
-	  }
-	
-	
-	  drawThickPolygonP(polygon, color, fill) {
-	    if (color == null) {
-	      color = Settings.STROKE_COLOR;
-	    }
-	    if (fill == null) {
-	      fill = Settings.FILL_COLOR;
-	    }
-	    let numVertices = polygon.numPoints();
-	
-	    this.context.save();
-	
-	    this.context.fillStyle = fill;
-	    this.context.strokeStyle = color;
-	    this.context.beginPath();
-	
-	    this.context.moveTo(polygon.getX(0), polygon.getY(0));
-	    for (let i = 0; i < numVertices; ++i) {
-	      this.context.lineTo(polygon.getX(i), polygon.getY(i));
-	    }
-	
-	    this.context.closePath();
-	    this.context.fill();
-	    this.context.stroke();
-	    return this.context.restore();
-	  }
-	
-	  drawCoil(point1, point2, vStart, vEnd, hs) {
-	    let color, cx, hsx, voltageLevel;
-	    if (hs == null) {
-	      hs = null;
-	    }
-	    hs = hs || 8;
-	    let segments = 40;
-	
-	    let ps1 = new Point(0, 0);
-	    let ps2 = new Point(0, 0);
-	
-	    ps1.x = point1.x;
-	    ps1.y = point1.y;
-	
-	    for (let i = 0; i < segments; ++i) {
-	      cx = (((i + 1) * 8 / segments) % 2) - 1;
-	      hsx = Math.sqrt(1 - cx * cx);
-	      ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs);
-	      voltageLevel = vStart + (vEnd - vStart) * i / segments;
-	      color = this.getVoltageColor(voltageLevel);
-	
-	      this.drawLinePt(ps1, ps2, color);
-	
-	      ps1.x = ps2.x;
-	      ps1.y = ps2.y;
-	    }
-	  }
-	
-	  draw() {
-	    if (this.context) {
-	      if (this.context.clear) {
-	        this.context.clear();
-	      }
-	      // this.drawGrid();
-	
-	      this.context.save();
-	      this.context.translate(this.xMargin, this.yMargin);
-	
-	      this.fillText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
-	      this.fillText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 785, 15, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
-	
-	      this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
-	    }
-	
-	    if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
-	      this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
-	      this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
-	    }
-	
-	    this.drawInfoText();
-	
-	    if (this.circuitUI.marquee) {
-	      this.circuitUI.marquee.draw(this)
-	    }
-	
-	    // UPDATE FRAME ----------------------------------------------------------------
-	    this.Circuit.updateCircuit();
-	
-	    if (this.circuitUI.onUpdateComplete) {
-	      this.circuitUI.onUpdateComplete();
-	    }
-	    // -----------------------------------------------------------------------------
-	
-	    this.drawScopes();
-	    this.drawComponents();
-	
-	    if (this.context) {
-	      if (this.circuitUI.placeComponent) {
-	        this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
-	
-	        if (this.circuitUI.placeY && this.circuitUI.placeX && this.circuitUI.placeComponent.x2() && this.circuitUI.placeComponent.y2()) {
-	          this.drawComponent(this.circuitUI.placeComponent);
-	        }
-	      }
-	
-	      if (this.circuitUI.selectedNode) {
-	        this.drawCircle(this.circuitUI.selectedNode.x, this.circuitUI.selectedNode.y, Settings.POST_RADIUS + 3, 3, Settings.HIGHLIGHT_COLOR);
-	      }
-	
-	      if (this.circuitUI.highlightedComponent) {
-	        this.drawCircle(this.circuitUI.highlightedComponent.x1(), this.circuitUI.highlightedComponent.y1(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
-	        this.drawCircle(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
-	      }
-	
-	      // this.context.clear();
-	    }
-	
-	    // for (let nodeIdx=0; nodeIdx<this.Circuit.numNodes(); ++nodeIdx) {
-	    // let node = this.Circuit.getNode(nodeIdx);
-	    // this.fillText(`${nodeIdx} ${node.x},${node.y}`, node.x + 5, node.y - 5);
-	    // }
-	
-	    if (this.context) {
-	      this.context.restore()
-	    }
-	  }
-	
-	  drawScopes() {
-	    if (this.context) {
-	      for (let scopeElm of this.Circuit.getScopes()) {
-	        let scopeCanvas = scopeElm.getCanvas();
-	
-	        var center = scopeElm.circuitElm.getCenter();
-	
-	        let strokeStyle = this.context.strokeStyle;
-	        let lineDash = this.context.getLineDash();
-	
-	        this.context.setLineDash([5, 5]);
-	        this.context.strokeStyle = "#FFA500";
-	        this.context.lineWidth = 1;
-	        this.context.moveTo(center.x, center.y);
-	        this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height() / 2);
-	
-	        this.context.stroke();
-	
-	        this.context.strokeStyle = strokeStyle;
-	        this.context.setLineDash(lineDash);
-	      }
-	    }
-	  }
-	
-	  drawComponents() {
-	    if (this.context) {
-	      for (var component of Array.from(this.Circuit.getElements())) {
-	        this.drawComponent(component);
-	      }
-	
-	      if (CircuitComponent.DEBUG) {
-	        let voltage, x, y;
-	        let nodeIdx = 0;
-	        return Array.from(this.Circuit.getNodes()).map((node) =>
-	            (({
-	              x,
-	              y
-	            } = node),
-	                voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx)),
-	
-	                this.context.fillText(`${nodeIdx}:${voltage}`, x + 10, y - 10, "#FF8C00"),
-	                nodeIdx++));
-	      }
-	    }
-	  }
-	
-	  drawComponent(component) {
-	
-	    if (component && Array.from(this.circuitUI.selectedComponents).includes(component)) {
-	      this.drawBoldLines();
-	      for (let i = 0; i < component.getPostCount(); ++i) {
-	        let post = component.getPost(i);
-	        this.drawCircle(post.x, post.y, Settings.POST_RADIUS + 2, 2, Settings.SELECT_COLOR);
-	      }
-	    } else {
-	      this.drawDefaultLines();
-	    }
-	
-	    // Main entry point to draw component
-	    component.draw(this);
-	  }
-	
-	  drawValue(perpindicularOffset, parallelOffset, component, text = null, text_size = Settings.TEXT_SIZE) {
-	    let x, y;
-	
-	    this.context.save();
-	    this.context.textAlign = "center";
-	
-	    this.context.font = "bold 7pt Courier";
-	
-	    let stringWidth = this.context.measureText(text).width;
-	    let stringHeight = this.context.measureText(text).actualBoundingBoxAscent || 0;
-	
-	    this.context.fillStyle = Settings.TEXT_COLOR;
-	    if (component.isVertical()) {
-	
-	      ({x} = component.getCenter()); //+ perpindicularOffset
-	      ({y} = component.getCenter()); //+ parallelOffset - stringHeight / 2.0
-	
-	      this.context.translate(x, y);
-	      this.context.rotate(Math.PI / 2);
-	      this.fillText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
-	    } else {
-	      x = component.getCenter().x + parallelOffset;
-	      y = component.getCenter().y + perpindicularOffset;
-	
-	      this.fillText(text, x, y, Settings.TEXT_COLOR, text_size);
-	    }
-	
-	    this.context.restore();
-	  }
-	
-	  // TODO: Move to CircuitComponent
-	  drawDots(ptA, ptB, component) {
-	    /**
-	     * Previous behavior was for current to not display when paused
-	     if (this.Circuit && this.Circuit.isStopped) {
-	      return
-	    }
-	     */
-	
-	    let ds = Settings.CURRENT_SEGMENT_LENGTH;
-	
-	    let dx = ptB.x - ptA.x;
-	    let dy = ptB.y - ptA.y;
-	    let dn = Math.sqrt((dx * dx) + (dy * dy));
-	
-	    let newPos = component.curcount;
-	
-	    return (() => {
-	      let result = [];
-	      while (newPos < dn) {
-	        let xOffset = ptA.x + ((newPos * dx) / dn);
-	        let yOffset = ptA.y + ((newPos * dy) / dn);
-	
-	        if (Settings.CURRENT_DISPLAY_TYPE === Settings.CURENT_TYPE_DOTS) {
-	          this.fillCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR);
-	        } else {
-	          let xOffset0 = xOffset - ((3 * dx) / dn);
-	          let yOffset0 = yOffset - ((3 * dy) / dn);
-	
-	          let xOffset1 = xOffset + ((3 * dx) / dn);
-	          let yOffset1 = yOffset + ((3 * dy) / dn);
-	
-	          this.context.save();
-	          this.context.strokeStyle = Settings.CURRENT_COLOR;
-	          this.context.lineWidth = Settings.CURRENT_RADIUS;
-	          this.context.beginPath();
-	          this.context.moveTo(xOffset0, yOffset0);
-	          this.context.lineTo(xOffset1, yOffset1);
-	          this.context.stroke();
-	          this.context.closePath();
-	          this.context.restore();
-	        }
-	
-	        result.push(newPos += ds);
-	      }
-	      return result;
-	    })();
-	  }
-	
-	  // TODO: Move to CircuitComponent
-	  drawLeads(component) {
-	    if ((component.point1 != null) && (component.lead1 != null)) {
-	      this.drawLinePt(component.point1, component.lead1, this.getVoltageColor(component.volts[0]));
-	    }
-	    if ((component.point2 != null) && (component.lead2 != null)) {
-	      return this.drawLinePt(component.lead2, component.point2, this.getVoltageColor(component.volts[1]));
-	    }
-	  }
-	
-	  // TODO: Move to CircuitComponent
-	  drawPosts(component, color = Settings.POST_COLOR) {
-	    let post;
-	
-	    for (let i = 0; i < component.getPostCount(); ++i) {
-	      post = component.getPost(i);
-	      this.drawPost(post.x, post.y, color, color);
-	    }
-	  }
-	
-	  drawPost(x0, y0, fillColor, strokeColor) {
-	    if (fillColor == null) {
-	      fillColor = Settings.POST_COLOR;
-	    }
-	    if (strokeColor == null) {
-	      strokeColor = Settings.POST_COLOR;
-	    }
-	    return this.fillCircle(x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor);
-	  }
-	
-	  drawBoldLines() {
-	    return this.boldLines = true;
-	  }
-	
-	  drawDefaultLines() {
-	    return this.boldLines = false;
-	  }
-	}
-	
-	module.exports = CircuitCanvas;
-
-
-/***/ },
-/* 87 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let ScopeCanvas = __webpack_require__(88);
-	let Util = __webpack_require__(5);
-	
-	class RickshawScopeCanvas extends ScopeCanvas {
-	  constructor(parentUI, scopeDiv, x=800, y=700) {
-	    super(parentUI, scopeDiv, x, y);
-	
-	    var plotContext = scopeDiv.getElementsByClassName("plot-context")[0];
-	    var leftAxisDiv = scopeDiv.getElementsByClassName("left-axis")[0];
-	
-	    this.graph = new Rickshaw.Graph({
-	      element: plotContext,
-	      width: plotContext.offsetWidth ,
-	      height: plotContext.offsetHeight,
-	      interpolation: 'linear',
-	      renderer: 'line',
-	      stroke: false,
-	      strokeWidth: 1,
-	      min: 'auto',
-	      padding: {
-	        top: 0.08,
-	        botom: 0.09,
-	      },
-	      series: [
-	        {
-	          color: "#F00",
-	          data: [],
-	          name: 'Voltage'
-	        },
-	        {
-	          color: "#00F",
-	          data: [],
-	          name: 'Current'
-	        }
-	      ]
-	    });
-	
-	    var ticksTreatment = 'glow';
-	
-	    this.xAxis = new Rickshaw.Graph.Axis.X({
-	      graph: this.graph,
-	      //element: leftAxisDiv,
-	      ticksTreatment: ticksTreatment,
-	      timeFixture: new Rickshaw.Fixtures.Time.Local(),
-	      tickFormat: function(d) { return Util.getUnitText(d, "s", 0) }
-	    });
-	
-	    //this.xAxis.render();
-	    new Rickshaw.Graph.Axis.Y({
-	      graph: this.graph,
-	      tickFormat: function(d) { return Util.getUnitText(d, "V", 0) },
-	      pixelsPerTick: 30,
-	      tickSize: 4,
-	      tickTransformation: function(svg) {
-	        svg.style("text-anchor", "end").attr("dx", "-0.8em").attr("dy", "-0.3em").attr("transform", 'rotate(-90)');
-	      }
-	    });
-	
-	    new Rickshaw.Graph.Axis.Y({
-	      graph: this.graph,
-	      tickFormat: function(d) { return Util.getUnitText(d, "V", 0) },
-	      pixelsPerTick: 30,
-	      tickSize: 4,
-	      tickTransformation: function(svg) {
-	        svg.style("text-anchor", "end").attr("dx", "-0.8em").attr("dy", "-0.3em").attr("transform", 'rotate(-90)');
-	      }
-	    });
-	
-	    this.highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
-	      graph: this.graph,
-	      // legend: legend
-	    });
-	
-	    new Rickshaw.Graph.HoverDetail({
-	      graph: this.graph,
-	      xFormatter: function (x) {
-	        return x + "s";
-	      }
-	    });
-	
-	    this.resize(plotContext.offsetWidth, plotContext.offsetHeight - 5);
-	  }
-	
-	  resize(width, height) {
-	    this.graph.configure({
-	      width: width,
-	      height: height
-	
-	
-	    });
-	
-	    this.graph.render();
-	  }
-	
-	  addVoltage(time, value) {
-	    this.graph.series[0].data.push({x: time, y: value});
-	
-	    if (this.graph.series[0].data.length > this.dataPoints) {
-	      this.graph.series[0].data.shift();
-	    }
-	
-	    this.graph.update();
-	  };
-	
-	  addCurrent(time, value) {
-	    this.graph.series[1].data.push({x: time, y: value});
-	
-	    if (this.graph.series[1].data.length > this.dataPoints) {
-	      this.graph.series[1].data.shift();
-	    }
-	
-	    this.graph.update();
-	  };
-	
-	}
-	
-	module.exports = RickshawScopeCanvas;
-
-
-/***/ },
-/* 88 */
-/***/ function(module, exports) {
-
-	class ScopeCanvas {
-	  constructor(parentUI, scopeDiv, x=800, y=700) {
-	    this.dataPoints = 200;
-	    this.timeInterval = 5;
-	
-	    this.parentUI = parentUI;
-	    this.scopeDiv = scopeDiv;
-	  }
-	
-	  x() {
-	    return this.scopeDiv.offsetLeft - this.parentUI.xMargin;
-	  }
-	
-	  y() {
-	    return this.scopeDiv.offsetTop - this.parentUI.yMargin;
-	  }
-	
-	  height() {
-	    return this.scopeDiv.offsetHeight;
-	  }
-	
-	  width() {
-	    return this.scopeDiv.offsetWidth;
-	  }
-	
-	  resize(width, height) {
-	  }
-	
-	  addVoltage(value) {
-	  };
-	
-	  addCurrent(value) {
-	  };
-	}
-	
-	module.exports = ScopeCanvas;
-
-
-/***/ },
-/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var CapacitorElm, CircuitNode, CircuitNodeLink, CircuitSolver, CurrentElm, GroundElm, InductorElm, MatrixStamper, Pathfinder, RailElm, RowInfo, Setting, SimulationFrame, Util, VoltageElm, WireElm, sprintf;
 	
-	MatrixStamper = __webpack_require__(90);
+	MatrixStamper = __webpack_require__(82);
 	
-	Pathfinder = __webpack_require__(92);
+	Pathfinder = __webpack_require__(84);
 	
-	CircuitNode = __webpack_require__(93);
+	CircuitNode = __webpack_require__(85);
 	
-	CircuitNodeLink = __webpack_require__(94);
+	CircuitNodeLink = __webpack_require__(86);
 	
-	RowInfo = __webpack_require__(91);
+	RowInfo = __webpack_require__(83);
 	
 	Setting = __webpack_require__(2);
 	
@@ -29062,7 +27451,7 @@
 	  };
 	
 	  CircuitSolver.prototype.solveCircuit = function() {
-	    var circuitElm, iter, j, lit, res, stepRate, subiter, tm, _i, _j, _k, _l, _len, _len1, _ref, _ref1, _ref2, _ref3;
+	    var circuitElm, iter, j, lit, res, scope, stepRate, subiter, tm, _i, _j, _k, _l, _len, _len1, _len2, _m, _ref, _ref1, _ref2, _ref3, _ref4;
 	    this.sysTime = (new Date()).getTime();
 	    if ((this.circuitMatrix == null) || this.Circuit.numElements() === 0) {
 	      this.circuitMatrix = null;
@@ -29111,9 +27500,22 @@
 	        break;
 	      }
 	      this.Circuit.time += this.Circuit.timeStep();
+	      if ((iter + 20) % 21 === 0) {
+	        _ref4 = this.Circuit.scopes;
+	        for (_m = 0, _len2 = _ref4.length; _m < _len2; _m++) {
+	          scope = _ref4[_m];
+	          if (scope.circuitElm) {
+	            scope.sampleVoltage(this.Circuit.time, scope.circuitElm.getVoltageDiff());
+	            scope.sampleCurrent(this.Circuit.time, scope.circuitElm.getCurrent());
+	          }
+	        }
+	      }
 	      tm = (new Date()).getTime();
 	      lit = tm;
-	      if ((iter * 1000 >= stepRate * (tm - this.lastIterTime)) || (tm - this.lastFrameTime) > 500) {
+	      if ((tm - this.lastFrameTime) > 300) {
+	        break;
+	      }
+	      if (iter * 1000 >= stepRate * (tm - this.lastIterTime)) {
 	        break;
 	      }
 	      ++iter;
@@ -29764,10 +28166,10 @@
 
 
 /***/ },
-/* 90 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let RowInfo = __webpack_require__(91);
+	let RowInfo = __webpack_require__(83);
 	let Util = __webpack_require__(5);
 	
 	class MatrixStamper {
@@ -29935,7 +28337,7 @@
 
 
 /***/ },
-/* 91 */
+/* 83 */
 /***/ function(module, exports) {
 
 	class RowInfo {
@@ -29982,7 +28384,7 @@
 
 
 /***/ },
-/* 92 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let VoltageElm = __webpack_require__(19);
@@ -30103,7 +28505,7 @@
 
 
 /***/ },
-/* 93 */
+/* 85 */
 /***/ function(module, exports) {
 
 	class CircuitNode {
@@ -30145,7 +28547,7 @@
 
 
 /***/ },
-/* 94 */
+/* 86 */
 /***/ function(module, exports) {
 
 	class CircuitNodeLink {
@@ -30169,6 +28571,1626 @@
 	}
 	
 	module.exports = CircuitNodeLink;
+
+
+/***/ },
+/* 87 */
+/***/ function(module, exports) {
+
+	class Observer {
+	
+	  addObserver(event, fn) {
+	    if (!this._events) { this._events = {}; }
+	    if (!this._events[event]) { this._events[event] = []; }
+	    return this._events[event].push(fn);
+	  }
+	
+	  removeObserver(event, fn) {
+	    if (!this._events) { this._events = {}; }
+	
+	    if (this._events[event]) {
+	      return this._events[event].splice(this._events[event].indexOf(fn), 1);
+	    }
+	  }
+	
+	  notifyObservers(event, ...args) {
+	    if (!this._events) { this._events = {}; }
+	
+	    if (this._events[event]) {
+	      return Array.from(this._events[event]).map((callback) =>
+	        callback.apply(this, args));
+	    }
+	  }
+	
+	  getObservers() {
+	    return this._events;
+	  }
+	}
+	
+	module.exports = Observer;
+
+
+/***/ },
+/* 88 */
+/***/ function(module, exports) {
+
+
+
+/***/ },
+/* 89 */
+/***/ function(module, exports) {
+
+	class Hint {
+	  static initClass() {
+	  
+	    this.HINT_LC = "@HINT_LC";
+	    this.HINT_RC = "@HINT_RC";
+	    this.HINT_3DB_C = "@HINT_3DB_C";
+	    this.HINT_TWINT = "@HINT_TWINT";
+	    this.HINT_3DB_L = "@HINT_3DB_L";
+	  
+	    this.hintType = -1;
+	    this.hintItem1 = -1;
+	    this.hintItem2 = -1;
+	  }
+	
+	
+	  constructor(Circuit) {
+	    this.Circuit = Circuit;
+	  }
+	
+	
+	  readHint(st) {
+	    if (typeof st === 'string') {
+	      st = st.split(' ');
+	    }
+	
+	    this.hintType = st[0];
+	    this.hintItem1 = st[1];
+	    return this.hintItem2 = st[2];
+	  }
+	
+	
+	  getHint() {
+	    let ce, ie, re;
+	    let c1 = this.Circuit.getElmByIdx(this.hintItem1);
+	    let c2 = this.Circuit.getElmByIdx(this.hintItem2);
+	
+	    if ((c1 == null) || (c2 == null)) { return null; }
+	
+	    if (this.hintType === this.HINT_LC) {
+	      if (!(c1 instanceof InductorElm)) { return null; }
+	      if (!(c2 instanceof CapacitorElm)) { return null; }
+	
+	      ie = c1;   // as InductorElm
+	      ce = c2;   // as CapacitorElm
+	
+	      return `res.f = ${getUnitText(1 / (2 * Math.PI * Math.sqrt(ie.inductance * ce.capacitance)), "Hz")}`;
+	    }
+	
+	    if (this.hintType === this.HINT_RC) {
+	      if (!(c1 instanceof ResistorElm)) { return null; }
+	      if (!(c2 instanceof CapacitorElm)) { return null; }
+	
+	      re = c1;   // as ResistorElm
+	      ce = c2;   // as CapacitorElm
+	
+	      return `RC = ${getUnitText(re.resistance * ce.capacitance, "s")}`;
+	    }
+	
+	    if (this.hintType === this.HINT_3DB_C) {
+	      if (!(c1 instanceof ResistorElm)) { return null; }
+	      if (!(c2 instanceof CapacitorElm)) { return null; }
+	
+	      re = c1;   // as ResistorElm
+	      ce = c2;   // as CapacitorElm
+	
+	      return `f.3db = ${getUnitText(1 / (2 * Math.PI * re.resistance * ce.capacitance), "Hz")}`;
+	    }
+	
+	    if (this.hintType === this.HINT_3DB_L) {
+	      if (!(c1 instanceof ResistorElm)) { return null; }
+	      if (!(c2 instanceof InductorElm)) { return null; }
+	
+	      re = c1;   // as ResistorElm
+	      ie = c2;   // as InductorElm
+	
+	      return `f.3db = ${getUnitText(re.resistance / (2 * Math.PI * ie.inductance), "Hz")}`;
+	    }
+	
+	    if (this.hintType === this.HINT_TWINT) {
+	      if (!(c1 instanceof ResistorElm)) { return null; }
+	      if (!(c2 instanceof CapacitorElm)) { return null; }
+	
+	      re = c1;   // as ResistorElm
+	      ce = c2;   // as CapacitorElm
+	
+	      return `fc = ${getUnitText(1 / (2 * Math.PI * re.resistance * ce.capacitance), "Hz")}`;
+	    }
+	
+	    return null;
+	  }
+	}
+	Hint.initClass();
+	
+	module.exports = Hint;
+
+
+/***/ },
+/* 90 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let CircuitComponent = __webpack_require__(1);
+	
+	let AntennaElm = __webpack_require__(17);
+	let WireElm = __webpack_require__(20);
+	let ResistorElm = __webpack_require__(22);
+	let GroundElm = __webpack_require__(23);
+	let VoltageElm = __webpack_require__(19);
+	let DiodeElm = __webpack_require__(24);
+	let OutputElm = __webpack_require__(25);
+	let SwitchElm = __webpack_require__(26);
+	let CapacitorElm = __webpack_require__(27);
+	let InductorElm = __webpack_require__(28);
+	let SparkGapElm = __webpack_require__(29);
+	let CurrentElm = __webpack_require__(30);
+	let RailElm = __webpack_require__(18);
+	let MosfetElm = __webpack_require__(31);
+	let JfetElm = __webpack_require__(32);
+	let TransistorElm = __webpack_require__(33);
+	let VarRailElm = __webpack_require__(34);
+	let OpAmpElm = __webpack_require__(35);
+	let ZenerElm = __webpack_require__(36);
+	let Switch2Elm = __webpack_require__(37);
+	let SweepElm = __webpack_require__(38);
+	let TextElm = __webpack_require__(39);
+	let ProbeElm = __webpack_require__(40);
+	
+	let AndGateElm = __webpack_require__(41);
+	let NandGateElm = __webpack_require__(42);
+	let OrGateElm = __webpack_require__(43);
+	let NorGateElm = __webpack_require__(44);
+	let XorGateElm = __webpack_require__(45);
+	let InverterElm = __webpack_require__(46);
+	
+	let LogicInputElm = __webpack_require__(47);
+	let LogicOutputElm = __webpack_require__(48);
+	let AnalogSwitchElm = __webpack_require__(49);
+	let AnalogSwitch2Elm = __webpack_require__(50);
+	let MemristorElm = __webpack_require__(51);
+	let RelayElm = __webpack_require__(52);
+	let TunnelDiodeElm = __webpack_require__(53);
+	
+	let ScrElm = __webpack_require__(54);
+	let TriodeElm = __webpack_require__(55);
+	
+	let DecadeElm = __webpack_require__(56);
+	let LatchElm = __webpack_require__(58);
+	let TimerElm = __webpack_require__(59);
+	let JKFlipFlopElm = __webpack_require__(60);
+	let DFlipFlopElm = __webpack_require__(61);
+	let CounterElm = __webpack_require__(62);
+	let DacElm = __webpack_require__(63);
+	let AdcElm = __webpack_require__(64);
+	let VcoElm = __webpack_require__(65);
+	let PhaseCompElm = __webpack_require__(66);
+	let SevenSegElm = __webpack_require__(67);
+	let CC2Elm = __webpack_require__(68);
+	
+	let TransLineElm = __webpack_require__(69);
+	
+	let TransformerElm = __webpack_require__(70);
+	let TappedTransformerElm = __webpack_require__(71);
+	
+	let LedElm = __webpack_require__(72);
+	let PotElm = __webpack_require__(73);
+	let ClockElm = __webpack_require__(74);
+	
+	let Scope = __webpack_require__(75);
+	
+	//#
+	// ElementMap
+	//
+	//   A Hash Map of circuit components within Maxwell
+	//
+	//   Each hash element is a key-value pair of the format {"ElementName": "ElementDescription"}
+	//
+	//   Elements that are tested working are prefixed with a '+'
+	//   Elements that are implemented but not tested have their names (key) prefixed with a '#'
+	//   Elements that are not yet implemented have their names (key) prefixed with a '-'
+	class ComponentRegistry {
+	  static initClass() {
+	    this.ComponentDefs = {
+	    // Working
+	      'w': WireElm,
+	      'r': ResistorElm,
+	      'g': GroundElm,
+	      'l': InductorElm,
+	      'c': CapacitorElm,
+	      'v': VoltageElm,
+	      'd': DiodeElm,
+	      's': SwitchElm,
+	      '187': SparkGapElm,
+	      'a': OpAmpElm,
+	      'f': MosfetElm,
+	  
+	    // Testing
+	      'A': AntennaElm,
+	      'R': RailElm,
+	      '170': SweepElm,
+	      '172': VarRailElm,
+	      'z': ZenerElm,
+	      'i': CurrentElm,
+	      't': TransistorElm,
+	      '174': PotElm,
+	  
+	      '150': AndGateElm,
+	      '151': NandGateElm,
+	      '152': OrGateElm,
+	      '153': NorGateElm,
+	      '154': XorGateElm,
+	  
+	      'I': InverterElm,
+	      'L': LogicInputElm,
+	      'M': LogicOutputElm,
+	  
+	      '159': AnalogSwitchElm,
+	      '160': AnalogSwitch2Elm,
+	  
+	    // In progress:
+	      'S': Switch2Elm,  // Needs interaction
+	      'x': TextElm,
+	      'p': ProbeElm,
+	      'O': OutputElm,
+	      'T': TransformerElm,
+	  
+	      // 'o': Scope,
+	  //    'h': Scope
+	  //     '$': Scope,
+	  //     '%': Scope,
+	  //     '?': Scope,
+	  //     'B': Scope,
+	  
+	      // Incomplete
+	  
+	      '150': AndGateElm,
+	      '151': NandGateElm,
+	      '152': OrGateElm,
+	      '153': NorGateElm,
+	      '154': XorGateElm,
+	      '155': DFlipFlopElm,
+	      '156': JKFlipFlopElm,
+	      '157': SevenSegElm,
+	      '158': VcoElm,
+	      '159': AnalogSwitchElm,
+	      '160': AnalogSwitch2Elm,
+	      '161': PhaseCompElm,
+	      '162': LedElm,
+	      '163': DecadeElm,
+	      '164': CounterElm,
+	      '165': TimerElm,
+	      '166': DacElm,
+	      '167': AdcElm,
+	      '168': LatchElm,
+	      '169': TappedTransformerElm,
+	      '170': SweepElm,
+	      '171': TransLineElm,
+	      '172': VarRailElm,
+	      '173': TriodeElm,
+	      '174': PotElm,
+	      '175': TunnelDiodeElm,
+	      '177': ScrElm,
+	      '178': RelayElm,
+	      '179': CC2Elm,
+	  //    '181': LampElm
+	      '187': SparkGapElm,
+	      'A': AntennaElm,
+	      'I': InverterElm,
+	      'L': LogicInputElm,
+	      'M': LogicOutputElm,
+	      'O': OutputElm,
+	      'R': RailElm,
+	      'S': Switch2Elm,
+	      'a': OpAmpElm,
+	      'c': CapacitorElm,
+	      'd': DiodeElm,
+	  //    'f': NMosfetElm
+	      'g': GroundElm,
+	      'i': CurrentElm,
+	      'j': JfetElm,
+	      'l': InductorElm,
+	      'm': MemristorElm,
+	      'p': ProbeElm,
+	      'r': ResistorElm,
+	      's': SwitchElm,
+	  //    't': NTransistorElm
+	  //    'v': DCVoltageElm
+	      'w': WireElm,
+	      'x': TextElm,
+	      'z': ZenerElm
+	  };
+	  
+	  
+	    this.InverseComponentDefs = {
+	      WireElm: 'w',
+	      ResistorElm: 'r',
+	      GroundElm: 'g',
+	      InductorElm: 'l',
+	      CapacitorElm: 'c',
+	      VoltageElm: 'v',
+	      DiodeElm: 'd',
+	      SwitchElm: 's',
+	      SparkGapElm: '187',
+	      OpAmpElm: 'a',
+	      MosfetElm: 'f',
+	      PotElm: '174',
+	  
+	      RailElm: 'R',
+	      VarRailElm: '17',
+	      ZenerElm: 'z',
+	      CurrentElm: 'i',
+	      TransistorElm: 't',
+	      JfetElm: 'j',
+	  
+	      Switch2Elm: 'S',
+	      SweepElm: '170',
+	      TextElm: 'x',
+	      ProbeElm: 'p',
+	      Scope: 'o',
+	      OutputElm: 'O',
+	      AntennaElm: 'A',
+	  
+	      AndGateElm: '150',
+	      NandGateElm: '151',
+	      OrGateElm: '152',
+	      NorGateElm: '153',
+	      XorGateElm: '154',
+	  
+	      InverterElm: 'I',
+	      LogicInputElm: 'L',
+	      LogicOutputElm: 'M',
+	  
+	      JkFlipFlopElm: '156',
+	      LatchElm: '168',
+	      TimerElm: '165',
+	  
+	      TransformerElm: 'T',
+	  
+	      AnalogSwitchElm: '159',
+	      AnalogSwitch2Elm: '160',
+	      MemristorElm: 'm'
+	    };
+	}
+	
+	  static enumerate() {
+	    let elms = {};
+	
+	    for (let _ in this.ComponentDefs) {
+	        let Component = this.ComponentDefs[_];
+	      elms[Component] = Component.Fields;
+	    }
+	
+	    return elms;
+	}
+	}
+	ComponentRegistry.initClass();
+	
+	
+	
+	
+	module.exports = ComponentRegistry;
+
+
+/***/ },
+/* 91 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let Rectangle = __webpack_require__(3);
+	let CircuitCanvas = __webpack_require__(92);
+	let Observer = __webpack_require__(87);
+	let Util = __webpack_require__(5);
+	
+	let AntennaElm = __webpack_require__(17);
+	let WireElm = __webpack_require__(20);
+	let ResistorElm = __webpack_require__(22);
+	let GroundElm = __webpack_require__(23);
+	let VoltageElm = __webpack_require__(19);
+	let DiodeElm = __webpack_require__(24);
+	let OutputElm = __webpack_require__(25);
+	let SwitchElm = __webpack_require__(26);
+	let CapacitorElm = __webpack_require__(27);
+	let InductorElm = __webpack_require__(28);
+	let SparkGapElm = __webpack_require__(29);
+	let CurrentElm = __webpack_require__(30);
+	let RailElm = __webpack_require__(18);
+	let MosfetElm = __webpack_require__(31);
+	let JfetElm = __webpack_require__(32);
+	let TransistorElm = __webpack_require__(33);
+	let VarRailElm = __webpack_require__(34);
+	let OpAmpElm = __webpack_require__(35);
+	let ZenerElm = __webpack_require__(36);
+	let Switch2Elm = __webpack_require__(37);
+	let SweepElm = __webpack_require__(38);
+	let TextElm = __webpack_require__(39);
+	let ProbeElm = __webpack_require__(40);
+	
+	let AndGateElm = __webpack_require__(41);
+	let NandGateElm = __webpack_require__(42);
+	let OrGateElm = __webpack_require__(43);
+	let NorGateElm = __webpack_require__(44);
+	let XorGateElm = __webpack_require__(45);
+	let InverterElm = __webpack_require__(46);
+	
+	let LogicInputElm = __webpack_require__(47);
+	let LogicOutputElm = __webpack_require__(48);
+	let AnalogSwitchElm = __webpack_require__(49);
+	let AnalogSwitch2Elm = __webpack_require__(50);
+	let MemristorElm = __webpack_require__(51);
+	let RelayElm = __webpack_require__(52);
+	let TunnelDiodeElm = __webpack_require__(53);
+	
+	let ScrElm = __webpack_require__(54);
+	let TriodeElm = __webpack_require__(55);
+	
+	let DecadeElm = __webpack_require__(56);
+	let LatchElm = __webpack_require__(58);
+	let TimerElm = __webpack_require__(59);
+	let JkFlipFlopElm = __webpack_require__(60);
+	let DFlipFlopElm = __webpack_require__(61);
+	let CounterElm = __webpack_require__(62);
+	let DacElm = __webpack_require__(63);
+	let AdcElm = __webpack_require__(64);
+	let VcoElm = __webpack_require__(65);
+	let PhaseCompElm = __webpack_require__(66);
+	let SevenSegElm = __webpack_require__(67);
+	let CC2Elm = __webpack_require__(68);
+	
+	let TransLineElm = __webpack_require__(69);
+	
+	let TransformerElm = __webpack_require__(70);
+	let TappedTransformerElm = __webpack_require__(71);
+	
+	let LedElm = __webpack_require__(72);
+	let PotElm = __webpack_require__(73);
+	let ClockElm = __webpack_require__(74);
+	
+	let Scope = __webpack_require__(75);
+	
+	class SelectionMarquee extends Rectangle {
+	  constructor(x1, y1) {
+	    super();
+	
+	    this.x1 = x1;
+	    this.y1 = y1;
+	  }
+	
+	  reposition(x, y) {
+	    let _x1 = Math.min(x, this.x1);
+	    let _x2 = Math.max(x, this.x1);
+	    let _y1 = Math.min(y, this.y1);
+	    let _y2 = Math.max(y, this.y1);
+	
+	    this.x2 = _x2;
+	    this.y2 = _y2;
+	
+	    this.x = this.x1 = _x1;
+	    this.y = this.y1 = _y1;
+	
+	    this.width = _x2 - _x1;
+	    this.height = _y2 - _y1;
+	  }
+	
+	  draw(renderContext) {
+	    renderContext.lineWidth = 0.1;
+	
+	    if ((this.x1 != null) && (this.x2 != null) && (this.y1 != null) && (this.y2 != null)) {
+	      renderContext.drawLine(this.x1, this.y1, this.x2, this.y1, "#FFFF00", 0);
+	      renderContext.drawLine(this.x1, this.y2, this.x2, this.y2, "#FFFF00", 1);
+	
+	      renderContext.drawLine(this.x1, this.y1, this.x1, this.y2, "#FFFF00", 1);
+	      renderContext.drawLine(this.x2, this.y1, this.x2, this.y2, "#FFFF00", 1);
+	    }
+	  }
+	}
+	
+	class CircuitUI extends Observer {
+	  static initClass() {
+	    this.ON_COMPONENT_HOVER = "ON_COMPONENT_HOVER";
+	    this.ON_COMPONENT_CLICKED = "ON_COMPONENT_CLICKED";
+	    this.ON_COMPONENTS_SELECTED = "ON_COMPONENTS_SELECTED";
+	    this.ON_COMPONENTS_DESELECTED = "ON_COMPONENTS_DESELECTED";
+	    this.ON_COMPONENTS_MOVED = "ON_COMPONENTS_MOVED";
+	
+	    this.STATE_EDIT;
+	    this.STATE_PLACE;
+	    this.STATE_RUN;
+	
+	    this.MOUSEDOWN = 1;
+	  }
+	
+	  constructor(Circuit, Canvas) {
+	    super();
+	
+	    this.Circuit = Circuit;
+	    this.Canvas = Canvas;
+	
+	    // TODO: Extract to param
+	    this.xMargin = 200;
+	    this.yMargin = 56;
+	
+	    this.mousemove = this.mousemove.bind(this);
+	    this.mousedown = this.mousedown.bind(this);
+	    this.mouseup = this.mouseup.bind(this);
+	    this.highlightedComponent = null;
+	    this.selectedNode = null;
+	    this.selectedComponents = [];
+	
+	    // TODO: Width and height are currently undefined
+	    this.width = this.Canvas.width;
+	    this.height = this.Canvas.height;
+	
+	    this.placeX = null;
+	    this.placeY = null;
+	
+	    this.state = this.STATE_RUN;
+	
+	    this.config = {
+	      keyboard: true
+	    };
+	
+	    this.CircuitCanvas = new CircuitCanvas(Circuit, this);
+	
+	    this.context = this.CircuitCanvas.context;
+	
+	    this.Canvas.addEventListener('mousemove', this.mousemove);
+	    this.Canvas.addEventListener('mousedown', this.mousedown);
+	    this.Canvas.addEventListener('mouseup', this.mouseup);
+	
+	    // Callbacks
+	    this.onSelectionChanged = this.noop;
+	    this.onComponentClick = this.noop;
+	    this.onComponentHover = this.noop;
+	    this.onNodeHover = this.noop;
+	    this.onNodeClick = this.noop;   // @onNodeClick(component)
+	    this.onUpdateComplete = this.noop;  // @onUpdateComplete(circuit)
+	
+	
+	  }
+	
+	  noop() {
+	  }
+	
+	  mousemove(event) {
+	    let component;
+	    let x = event.offsetX - this.xMargin;
+	    let y = event.offsetY - this.yMargin;
+	
+	    this.newlyHighlightedComponent = null;
+	
+	    this.lastX = this.snapX;
+	    this.lastY = this.snapY;
+	
+	    this.snapX = Util.snapGrid(x);
+	    this.snapY = Util.snapGrid(y);
+	
+	    // Handle Marquee
+	    if (this.marquee) {
+	      this.marquee.reposition(x, y);
+	
+	      this.selectedComponents = [];
+	
+	      for (let component of this.Circuit.getElements()) {
+	        if (this.marquee.collidesWithComponent(component)) {
+	          this.selectedComponents.push(component);
+	          this.onSelectionChanged(this.selectedComponents);
+	        }
+	      }
+	
+	    } else {
+	      this.previouslyHighlightedNode = this.highlightedNode;
+	      this.highlightedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
+	
+	      if (this.highlightedNode) {
+	        this.onNodeHover(this.highlightedNode);
+	      } else {
+	        // TODO: WIP for interactive element placing
+	        if (this.placeComponent) {
+	          this.placeComponent.setPoints();
+	
+	          if (this.placeX && this.placeY) {
+	            this.placeComponent.point1.x = this.placeX;
+	            this.placeComponent.point1.y = this.placeY;
+	
+	            this.placeComponent.point2.x = this.snapX;
+	            this.placeComponent.point2.y = this.snapY;
+	          }
+	          // if (this.placeComponent.x1() && this.placeComponent.y1()) {
+	            // console.log(this.snapX, this.lastX," ", this.snapY, this.lastY);
+	            // console.log(this.snapX - this.lastX," ", this.snapY - this.lastY);
+	
+	            // this.placeComponent.point1.x = this.placeX;
+	            // this.placeComponent.point1.y = this.placeY;
+	          // }
+	        }
+	
+	        for (let component of this.Circuit.getElements()) {
+	          if (component.getBoundingBox().contains(x, y)) {
+	            this.newlyHighlightedComponent = component;
+	          }
+	        }
+	      }
+	
+	      if (this.previouslyHighlightedNode && !this.highlightedNode && this.onNodeUnhover) {
+	        this.onNodeUnhover(this.previouslyHighlightedNode);
+	      }
+	
+	      if (this.selectedNode) {
+	        for (let element of this.selectedNode.getNeighboringElements()) {
+	          if (element) {
+	            // console.log(element);
+	            let post = element.getPostAt(this.selectedNode.x, this.selectedNode.y);
+	            if (post) {
+	              post.x = this.snapX;
+	              post.y = this.snapY;
+	            } else {
+	              console.warn("No post at", this.selectedNode.x, this.selectedNode.y);
+	            }
+	
+	            element.recomputeBounds();
+	          }
+	        }
+	
+	        this.selectedNode.x = this.snapX;
+	        this.selectedNode.y = this.snapY;
+	      }
+	
+	      if (this.newlyHighlightedComponent) {
+	        if (this.newlyHighlightedComponent !== this.highlightedComponent) {
+	          this.highlightedComponent = this.newlyHighlightedComponent;
+	
+	
+	          if (this.onComponentHover)
+	            this.onComponentHover(this.highlightedComponent);
+	
+	          this.notifyObservers(CircuitUI.ON_COMPONENT_HOVER, this.highlightedComponent);
+	        }
+	
+	      } else {
+	        if (this.highlightedComponent && this.onComponentUnhover) {
+	          this.onComponentUnhover(this.highlightedComponent);
+	        }
+	
+	        this.highlightedComponent = null;
+	      }
+	    }
+	
+	    if (!this.marquee && !this.selectedNode && (this.selectedComponents && this.selectedComponents.length > 0) && (event.which === CircuitUI.MOUSEDOWN) && ((this.lastX !== this.snapX) || (this.lastY !== this.snapY))) {
+	      return (() => {
+	        let result = [];
+	        for (component of Array.from(this.selectedComponents)) {
+	          result.push(component.move(this.snapX - this.lastX, this.snapY - this.lastY));
+	        }
+	        return result;
+	      })();
+	    }
+	  }
+	
+	  mousedown(event) {
+	    let x = event.offsetX - this.xMargin;
+	    let y = event.offsetY - this.yMargin;
+	
+	    if (this.placeComponent) {
+	      if (!this.placeX && !this.placeY) {
+	        this.placeX = this.snapX;
+	        this.placeY = this.snapY;
+	      } else {
+	        this.Circuit.solder(this.placeComponent);
+	        this.placeComponent = null;
+	        this.placeX = null;
+	        this.placeY = null;
+	      }
+	    }
+	
+	    if (!this.highlightedComponent && !this.placeComponent && !this.highlightedNode) {
+	      /*
+	      if (this.selectedComponents && (this.selectedComponents.length > 0)) {
+	        this.onSelectionChanged([])
+	      }
+	      */
+	
+	      // this.selectedComponents = [];
+	
+	      this.marquee = new SelectionMarquee(x, y);
+	    }
+	
+	    if (this.highlightedComponent) {
+	      this.selectedComponents = [this.highlightedComponent];
+	
+	      if (this.onSelectionChanged) {
+	        this.onSelectionChanged(this.selectedComponents);
+	      }
+	    }
+	
+	    this.selectedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
+	
+	    if (this.selectedNode && this.onNodeClick) {
+	      this.onNodeClick(this.selectedNode);
+	    }
+	
+	    for (var component of this.Circuit.getElements()) {
+	      if (component.getBoundingBox().contains(x, y)) {
+	        this.notifyObservers(CircuitUI.ON_COMPONENT_CLICKED, component);
+	
+	        if (!Array.from(this.selectedComponents).includes(component)) {
+	          this.selectedComponents = [component];
+	
+	          if (this.onSelectionChanged) {
+	            this.onSelectionChanged(this.selectedComponents);
+	          }
+	        }
+	
+	        if (component.toggle) {
+	          component.toggle();
+	        }
+	
+	        if (component.onclick) {
+	          component.onclick();
+	        }
+	
+	        if (component.onComponentClick) {
+	          component.onComponentClick();
+	        }
+	      }
+	    }
+	  }
+	
+	  mouseup(event) {
+	    this.marquee = null;
+	    this.selectedNode = null;
+	
+	    if (this.selectedComponents && this.selectedComponents.length > 0) {
+	      return this.notifyObservers(CircuitUI.ON_COMPONENTS_DESELECTED, this.selectedComponents);
+	    }
+	  }
+	
+	  togglePause() {
+	    if (this.Circuit.isStopped) {
+	      this.Circuit.resume()
+	    } else {
+	      this.Circuit.pause()
+	    }
+	  }
+	
+	  pause() {}
+	  play() {}
+	  restart() {}
+	
+	  clearPlaceComponent() {
+	    this.placeX = null;
+	    this.placeY = null;
+	    this.placeComponent = null;
+	  }
+	
+	  resetSelection() {
+	    if (this.selectedComponents && (this.selectedComponents.length > 0)) {
+	      this.onSelectionChanged([])
+	    }
+	    this.selectedComponents = [];
+	  }
+	
+	  getSelectedComponents() {
+	    return this.selectedComponents;
+	  }
+	
+	  getPlaceComponent() {
+	    return this.placeComponent;
+	  }
+	
+	  setPlaceComponent(componentName) {
+	    let klass = eval(componentName);
+	
+	    this.placeComponent = new klass();
+	
+	    this.resetSelection();
+	
+	    return this.placeComponent;
+	  }
+	
+	  remove(components) {
+	    console.log("components", components);
+	    return this.Circuit.destroy(components);
+	  }
+	}
+	
+	CircuitUI.initClass();
+	module.exports = CircuitUI;
+
+
+/***/ },
+/* 92 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let Observer = __webpack_require__(87);
+	let Util = __webpack_require__(5);
+	let Point = __webpack_require__(4);
+	let Settings = __webpack_require__(2);
+	let Color = __webpack_require__(8);
+	
+	let CircuitComponent = __webpack_require__(1);
+	let environment = __webpack_require__(10);
+	
+	class CircuitCanvas extends Observer {
+	
+	  constructor(Circuit, circuitUI) {
+	    super();
+	
+	    this.circuitUI = circuitUI;
+	    this.Circuit = Circuit;
+	    this.Canvas = this.circuitUI.Canvas;
+	
+	    // TODO: Extract to param
+	    this.xMargin = circuitUI.xMargin;
+	    this.yMargin = circuitUI.yMargin;
+	
+	    this.draw = this.draw.bind(this);
+	    this.drawDots = this.drawDots.bind(this);
+	
+	    if (environment.isBrowser) {
+	      this.context = Sketch.augment(this.Canvas.getContext("2d", {alpha: false}), {
+	        autoclear: false,
+	        draw: this.draw
+	        //mousemove: this.mousemove,
+	        //mousedown: this.mousedown,
+	        //mouseup: this.mouseup
+	        //fullscreen: false,
+	        //width: this.width,
+	        //height: this.height
+	      });
+	
+	    } else {
+	      this.context = this.Canvas.getContext("2d");
+	    }
+	
+	    for (let scopeElm of this.Circuit.getScopes()) {
+	
+	      let scElm = this.renderScopeCanvas(scopeElm.circuitElm.getName());
+	      $(scElm).draggable();
+	      $(scElm).resizable();
+	
+	      this.Canvas.parentNode.append(scElm);
+	
+	      let sc = new Maxwell.ScopeCanvas(this, scElm);
+	      scopeElm.setCanvas(sc);
+	
+	      $(scElm).on("resize", function (evt) {
+	        let innerElm = $(scElm).find(".plot-context");
+	
+	        sc.resize(innerElm.width(), innerElm.height() - 5);
+	      });
+	
+	      // this.scopeCanvases.push(sc);
+	    }
+	
+	    this.renderPerformance();
+	  }
+	
+	  renderPerformance() {
+	    this.performanceMeter = new TimeSeries();
+	
+	    var chart = new SmoothieChart({
+	      millisPerPixel: 35,
+	      grid: {fillStyle: 'transparent', strokeStyle: 'transparent'},
+	      labels: {fillStyle: '#000000', precision: 0}
+	    });
+	
+	    chart.addTimeSeries(this.performanceMeter, {strokeStyle: 'rgba(255, 0, 200, 1)', lineWidth: 1});
+	    chart.streamTo(document.getElementById("performance_sparkline"), 500);
+	  }
+	
+	  renderScopeCanvas(elementName) {
+	    let scopeWrapper = document.createElement("div");
+	    scopeWrapper.className = "plot-pane";
+	
+	    let leftAxis = document.createElement("div");
+	    leftAxis.className = "left-axis";
+	
+	    let scopeCanvas = document.createElement("div");
+	    scopeCanvas.className = "plot-context";
+	
+	    if (elementName) {
+	      let label = document.createElement("div");
+	      label.className = "plot-label";
+	      label.innerText = elementName;
+	
+	      scopeWrapper.append(label);
+	    }
+	
+	    scopeWrapper.append(leftAxis);
+	    scopeWrapper.append(scopeCanvas);
+	
+	    return scopeWrapper;
+	  }
+	
+	  drawInfoText() {
+	    if (this.circuitUI.highlightedComponent != null) {
+	      let arr = [];
+	      this.circuitUI.highlightedComponent.getInfo(arr);
+	
+	      for (let idx = 0; idx < arr.length; ++idx) {
+	        this.fillText(arr[idx], 600, (idx * 10) + 5, "#1b4e24");
+	      }
+	    }
+	  }
+	
+	  fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size = Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
+	    this.context.save();
+	
+	    let lineWidth = this.context.lineWidth;
+	    let origFillStyle = this.context.fillStyle;
+	    let origFillColor = this.context.fillColor;
+	    let font = this.context.font;
+	
+	    this.context.fillStyle = fillColor;
+	    this.context.strokeStyle = strokeColor;
+	    this.context.font = `${Settings.TEXT_STYLE} ${size}pt ${Settings.FONT}`;
+	    this.context.fillText(text, x, y);
+	
+	    this.context.lineWidth = 0;
+	    this.context.strokeText(text, x, y);
+	
+	    let textMetrics = this.context.measureText(text);
+	
+	    this.context.fillStyle = origFillStyle;
+	    this.context.fillColor = origFillColor;
+	    this.context.lineWidth = lineWidth;
+	    this.context.font = font;
+	
+	    this.context.restore();
+	
+	    return textMetrics;
+	  }
+	
+	  fillCircle(x, y, radius, lineWidth, fillColor, lineColor) {
+	    if (lineWidth == null) {
+	      lineWidth = Settings.LINE_WIDTH;
+	    }
+	    if (fillColor == null) {
+	      fillColor = '#FFFF00';
+	    }
+	    if (lineColor == null) {
+	      lineColor = null;
+	    }
+	    this.context.save();
+	
+	    this.context.beginPath();
+	    this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
+	
+	    if (lineColor) {
+	      this.context.lineWidth = lineWidth;
+	      this.context.strokeStyle = lineColor;
+	      this.context.stroke();
+	    }
+	
+	    this.context.fillStyle = fillColor;
+	    this.context.fill();
+	
+	    this.context.closePath();
+	
+	    return this.context.restore();
+	  }
+	
+	
+	  drawCircle(x, y, radius, lineWidth, lineColor) {
+	    if (lineWidth == null) {
+	      lineWidth = Settings.LINE_WIDTH;
+	    }
+	    if (lineColor == null) {
+	      lineColor = "#000000";
+	    }
+	    this.context.save();
+	
+	    this.context.strokeStyle = lineColor;
+	    this.context.lineWidth = lineWidth;
+	
+	    this.context.beginPath();
+	    this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
+	    this.context.stroke();
+	    this.context.closePath();
+	
+	    this.context.restore();
+	  }
+	
+	  drawRect(x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR) {
+	    this.context.strokeStyle = lineColor;
+	    this.context.lineJoin = 'miter';
+	    this.context.lineWidth = 0;
+	    this.context.strokeRect(x, y, width, height);
+	    this.context.stroke();
+	  }
+	
+	  drawLinePt(pa, pb, color, lineWidth) {
+	    if (color == null) {
+	      color = Settings.STROKE_COLOR;
+	    }
+	    return this.drawLine(pa.x, pa.y, pb.x, pb.y, color, lineWidth);
+	  }
+	
+	  beginPath() {
+	    this.pathMode = true;
+	    this.context.beginPath();
+	  }
+	
+	  closePath() {
+	    this.pathMode = false;
+	    this.context.closePath();
+	  }
+	
+	  drawLine(x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
+	
+	    let origLineWidth = this.context.lineWidth;
+	
+	    if (!this.pathMode)
+	      this.context.beginPath();
+	
+	    if (this.boldLines) {
+	      this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
+	      this.context.strokeStyle = Settings.SELECT_COLOR;
+	      if (!this.pathMode)
+	        this.context.moveTo(x, y);
+	      this.context.lineTo(x2, y2);
+	      this.context.stroke();
+	
+	    } else {
+	      this.context.strokeStyle = color;
+	      this.context.lineWidth = lineWidth;
+	      if (!this.pathMode)
+	        this.context.moveTo(x, y);
+	      this.context.lineTo(x2, y2);
+	      this.context.stroke();
+	    }
+	
+	    if (!this.pathMode)
+	      this.context.closePath();
+	
+	    this.context.lineWidth = origLineWidth;
+	  }
+	
+	  drawThickPolygon(xlist, ylist, color, fill) {
+	    if (color == null) {
+	      color = Settings.STROKE_COLOR;
+	    }
+	    if (fill == null) {
+	      fill = Settings.FILL_COLOR;
+	    }
+	    this.context.save();
+	
+	    this.context.fillStyle = fill;
+	    this.context.strokeStyle = color;
+	    this.context.beginPath();
+	
+	    this.context.moveTo(xlist[0], ylist[0]);
+	    for (let i = 0; i < xlist.length; ++i) {
+	      this.context.lineTo(xlist[i], ylist[i]);
+	    }
+	
+	    this.context.closePath();
+	    this.context.stroke();
+	    if (color) {
+	      this.context.fill();
+	    }
+	
+	    return this.context.restore();
+	  }
+	
+	
+	  getVoltageColor(volts) {
+	    // TODO: Define voltage range
+	    let fullScaleVRange = this.Circuit.Params.voltageRange;
+	
+	    let RedGreen =
+	        ["#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
+	          "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
+	          "#7f7f7f", "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747",
+	          "#3fbf3f", "#37c737", "#2fcf2f", "#27d727", "#1fdf1f", "#17e717", "#0fef0f", "#07f707", "#00ff00"];
+	
+	    let scale =
+	        ["#B81B00", "#B21F00", "#AC2301", "#A72801", "#A12C02", "#9C3002", "#963503", "#913903",
+	          "#8B3E04", "#854205", "#804605", "#7A4B06", "#754F06", "#6F5307", "#6A5807", "#645C08",
+	          "#5F6109", "#596509", "#53690A", "#4E6E0A", "#48720B", "#43760B", "#3D7B0C", "#387F0C",
+	          "#32840D", "#2C880E", "#278C0E", "#21910F", "#1C950F", "#169910", "#119E10", "#0BA211", "#06A712"];
+	
+	    let blueScale =
+	        ["#EB1416", "#E91330", "#E7134A", "#E51363", "#E3137C", "#E11394", "#E013AC", "#DE13C3",
+	          "#DC13DA", "#C312DA", "#AA12D8", "#9012D7", "#7712D5", "#5F12D3", "#4612D1", "#2F12CF",
+	          "#1712CE", "#1123CC", "#1139CA", "#114FC8", "#1164C6", "#1179C4", "#118EC3", "#11A2C1",
+	          "#11B6BF", "#10BDB1", "#10BB9B", "#10BA84", "#10B86F", "#10B659", "#10B444", "#10B230", "#10B11C"];
+	
+	    scale = Color.Gradients.voltage_default;
+	
+	    let numColors = scale.length - 1;
+	
+	    let value = Math.floor(((volts + fullScaleVRange) * numColors) / (2 * fullScaleVRange));
+	    if (value < 0) {
+	      value = 0;
+	    } else if (value >= numColors) {
+	      value = numColors - 1;
+	    }
+	
+	    return scale[value];
+	  }
+	
+	
+	  drawThickPolygonP(polygon, color, fill) {
+	    if (color == null) {
+	      color = Settings.STROKE_COLOR;
+	    }
+	    if (fill == null) {
+	      fill = Settings.FILL_COLOR;
+	    }
+	    let numVertices = polygon.numPoints();
+	
+	    this.context.save();
+	
+	    this.context.fillStyle = fill;
+	    this.context.strokeStyle = color;
+	    this.context.beginPath();
+	
+	    this.context.moveTo(polygon.getX(0), polygon.getY(0));
+	    for (let i = 0; i < numVertices; ++i) {
+	      this.context.lineTo(polygon.getX(i), polygon.getY(i));
+	    }
+	
+	    this.context.closePath();
+	    this.context.fill();
+	    this.context.stroke();
+	    return this.context.restore();
+	  }
+	
+	  drawCoil(point1, point2, vStart, vEnd, hs) {
+	    let color, cx, hsx, voltageLevel;
+	    if (hs == null) {
+	      hs = null;
+	    }
+	    hs = hs || 8;
+	    let segments = 40;
+	
+	    let ps1 = new Point(0, 0);
+	    let ps2 = new Point(0, 0);
+	
+	    ps1.x = point1.x;
+	    ps1.y = point1.y;
+	
+	    for (let i = 0; i < segments; ++i) {
+	      cx = (((i + 1) * 8 / segments) % 2) - 1;
+	      hsx = Math.sqrt(1 - cx * cx);
+	      ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs);
+	      voltageLevel = vStart + (vEnd - vStart) * i / segments;
+	      color = this.getVoltageColor(voltageLevel);
+	
+	      this.drawLinePt(ps1, ps2, color);
+	
+	      ps1.x = ps2.x;
+	      ps1.y = ps2.y;
+	    }
+	  }
+	
+	  draw() {
+	    if (this.context) {
+	      if (this.context.clear) {
+	        this.context.clear();
+	      }
+	      // this.drawGrid();
+	
+	      this.context.save();
+	      this.context.translate(this.xMargin, this.yMargin);
+	
+	      this.fillText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
+	      this.fillText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 785, 15, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
+	
+	      this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
+	    }
+	
+	    if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
+	      this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
+	      this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
+	    }
+	
+	    this.drawInfoText();
+	
+	    if (this.circuitUI.marquee) {
+	      this.circuitUI.marquee.draw(this)
+	    }
+	
+	    // UPDATE FRAME ----------------------------------------------------------------
+	    this.Circuit.updateCircuit();
+	
+	    if (this.circuitUI.onUpdateComplete) {
+	      this.circuitUI.onUpdateComplete();
+	    }
+	    // -----------------------------------------------------------------------------
+	
+	    this.drawScopes();
+	    this.drawComponents();
+	
+	    if (this.context) {
+	      if (this.circuitUI.placeComponent) {
+	        this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
+	
+	        if (this.circuitUI.placeY && this.circuitUI.placeX && this.circuitUI.placeComponent.x2() && this.circuitUI.placeComponent.y2()) {
+	          this.drawComponent(this.circuitUI.placeComponent);
+	        }
+	      }
+	
+	      if (this.circuitUI.selectedNode) {
+	        this.drawCircle(this.circuitUI.selectedNode.x, this.circuitUI.selectedNode.y, Settings.POST_RADIUS + 3, 3, Settings.HIGHLIGHT_COLOR);
+	      }
+	
+	      if (this.circuitUI.highlightedComponent) {
+	        this.drawCircle(this.circuitUI.highlightedComponent.x1(), this.circuitUI.highlightedComponent.y1(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+	        this.drawCircle(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+	      }
+	
+	      // this.context.clear();
+	    }
+	
+	    // for (let nodeIdx=0; nodeIdx<this.Circuit.numNodes(); ++nodeIdx) {
+	    // let node = this.Circuit.getNode(nodeIdx);
+	    // this.fillText(`${nodeIdx} ${node.x},${node.y}`, node.x + 5, node.y - 5);
+	    // }
+	
+	    if (this.context) {
+	      this.context.restore()
+	    }
+	  }
+	
+	  drawScopes() {
+	    if (this.context) {
+	      for (let scopeElm of this.Circuit.getScopes()) {
+	        let scopeCanvas = scopeElm.getCanvas();
+	
+	        var center = scopeElm.circuitElm.getCenter();
+	
+	        let strokeStyle = this.context.strokeStyle;
+	        let lineDash = this.context.getLineDash();
+	
+	        this.context.setLineDash([5, 5]);
+	        this.context.strokeStyle = "#FFA500";
+	        this.context.lineWidth = 1;
+	        this.context.moveTo(center.x, center.y);
+	        this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height() / 2);
+	
+	        this.context.stroke();
+	
+	        this.context.strokeStyle = strokeStyle;
+	        this.context.setLineDash(lineDash);
+	      }
+	    }
+	  }
+	
+	  drawComponents() {
+	    if (this.context) {
+	      for (var component of Array.from(this.Circuit.getElements())) {
+	        this.drawComponent(component);
+	      }
+	
+	      if (CircuitComponent.DEBUG) {
+	        let voltage, x, y;
+	        let nodeIdx = 0;
+	        return Array.from(this.Circuit.getNodes()).map((node) =>
+	            (({
+	              x,
+	              y
+	            } = node),
+	                voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx)),
+	
+	                this.context.fillText(`${nodeIdx}:${voltage}`, x + 10, y - 10, "#FF8C00"),
+	                nodeIdx++));
+	      }
+	    }
+	  }
+	
+	  drawComponent(component) {
+	
+	    if (component && Array.from(this.circuitUI.selectedComponents).includes(component)) {
+	      this.drawBoldLines();
+	      for (let i = 0; i < component.getPostCount(); ++i) {
+	        let post = component.getPost(i);
+	        this.drawCircle(post.x, post.y, Settings.POST_RADIUS + 2, 2, Settings.SELECT_COLOR);
+	      }
+	    } else {
+	      this.drawDefaultLines();
+	    }
+	
+	    // Main entry point to draw component
+	    component.draw(this);
+	  }
+	
+	  drawValue(perpindicularOffset, parallelOffset, component, text = null, text_size = Settings.TEXT_SIZE) {
+	    let x, y;
+	
+	    this.context.save();
+	    this.context.textAlign = "center";
+	
+	    this.context.font = "bold 7pt Courier";
+	
+	    let stringWidth = this.context.measureText(text).width;
+	    let stringHeight = this.context.measureText(text).actualBoundingBoxAscent || 0;
+	
+	    this.context.fillStyle = Settings.TEXT_COLOR;
+	    if (component.isVertical()) {
+	
+	      ({x} = component.getCenter()); //+ perpindicularOffset
+	      ({y} = component.getCenter()); //+ parallelOffset - stringHeight / 2.0
+	
+	      this.context.translate(x, y);
+	      this.context.rotate(Math.PI / 2);
+	      this.fillText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
+	    } else {
+	      x = component.getCenter().x + parallelOffset;
+	      y = component.getCenter().y + perpindicularOffset;
+	
+	      this.fillText(text, x, y, Settings.TEXT_COLOR, text_size);
+	    }
+	
+	    this.context.restore();
+	  }
+	
+	  // TODO: Move to CircuitComponent
+	  drawDots(ptA, ptB, component) {
+	    /**
+	     * Previous behavior was for current to not display when paused
+	     if (this.Circuit && this.Circuit.isStopped) {
+	      return
+	    }
+	     */
+	
+	    let ds = Settings.CURRENT_SEGMENT_LENGTH;
+	
+	    let dx = ptB.x - ptA.x;
+	    let dy = ptB.y - ptA.y;
+	    let dn = Math.sqrt((dx * dx) + (dy * dy));
+	
+	    let newPos = component.curcount;
+	
+	    return (() => {
+	      let result = [];
+	      while (newPos < dn) {
+	        let xOffset = ptA.x + ((newPos * dx) / dn);
+	        let yOffset = ptA.y + ((newPos * dy) / dn);
+	
+	        if (Settings.CURRENT_DISPLAY_TYPE === Settings.CURENT_TYPE_DOTS) {
+	          this.fillCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR);
+	        } else {
+	          let xOffset0 = xOffset - ((3 * dx) / dn);
+	          let yOffset0 = yOffset - ((3 * dy) / dn);
+	
+	          let xOffset1 = xOffset + ((3 * dx) / dn);
+	          let yOffset1 = yOffset + ((3 * dy) / dn);
+	
+	          this.context.save();
+	          this.context.strokeStyle = Settings.CURRENT_COLOR;
+	          this.context.lineWidth = Settings.CURRENT_RADIUS;
+	          this.context.beginPath();
+	          this.context.moveTo(xOffset0, yOffset0);
+	          this.context.lineTo(xOffset1, yOffset1);
+	          this.context.stroke();
+	          this.context.closePath();
+	          this.context.restore();
+	        }
+	
+	        result.push(newPos += ds);
+	      }
+	      return result;
+	    })();
+	  }
+	
+	  // TODO: Move to CircuitComponent
+	  drawLeads(component) {
+	    if ((component.point1 != null) && (component.lead1 != null)) {
+	      this.drawLinePt(component.point1, component.lead1, this.getVoltageColor(component.volts[0]));
+	    }
+	    if ((component.point2 != null) && (component.lead2 != null)) {
+	      return this.drawLinePt(component.lead2, component.point2, this.getVoltageColor(component.volts[1]));
+	    }
+	  }
+	
+	  // TODO: Move to CircuitComponent
+	  drawPosts(component, color = Settings.POST_COLOR) {
+	    let post;
+	
+	    for (let i = 0; i < component.getPostCount(); ++i) {
+	      post = component.getPost(i);
+	      this.drawPost(post.x, post.y, color, color);
+	    }
+	  }
+	
+	  drawPost(x0, y0, fillColor, strokeColor) {
+	    if (fillColor == null) {
+	      fillColor = Settings.POST_COLOR;
+	    }
+	    if (strokeColor == null) {
+	      strokeColor = Settings.POST_COLOR;
+	    }
+	    return this.fillCircle(x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor);
+	  }
+	
+	  drawBoldLines() {
+	    return this.boldLines = true;
+	  }
+	
+	  drawDefaultLines() {
+	    return this.boldLines = false;
+	  }
+	}
+	
+	module.exports = CircuitCanvas;
+
+
+/***/ },
+/* 93 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let ScopeCanvas = __webpack_require__(94);
+	let Util = __webpack_require__(5);
+	
+	class RickshawScopeCanvas extends ScopeCanvas {
+	  constructor(parentUI, scopeDiv, x=800, y=700) {
+	    super(parentUI, scopeDiv, x, y);
+	
+	    var plotContext = scopeDiv.getElementsByClassName("plot-context")[0];
+	    var leftAxisDiv = scopeDiv.getElementsByClassName("left-axis")[0];
+	
+	    this.graph = new Rickshaw.Graph({
+	      element: plotContext,
+	      width: plotContext.offsetWidth ,
+	      height: plotContext.offsetHeight,
+	      interpolation: 'linear',
+	      renderer: 'line',
+	      stroke: false,
+	      strokeWidth: 1,
+	      min: 'auto',
+	      padding: {
+	        top: 0.08,
+	        botom: 0.09,
+	      },
+	      series: [
+	        {
+	          color: "#F00",
+	          data: [],
+	          name: 'Voltage'
+	        },
+	        {
+	          color: "#00F",
+	          data: [],
+	          name: 'Current'
+	        }
+	      ]
+	    });
+	
+	    var ticksTreatment = 'glow';
+	
+	    this.xAxis = new Rickshaw.Graph.Axis.X({
+	      graph: this.graph,
+	      //element: leftAxisDiv,
+	      ticksTreatment: ticksTreatment,
+	      timeFixture: new Rickshaw.Fixtures.Time.Local(),
+	      tickFormat: function(d) { return Util.getUnitText(d, "s", 0) }
+	    });
+	
+	    //this.xAxis.render();
+	    new Rickshaw.Graph.Axis.Y({
+	      graph: this.graph,
+	      tickFormat: function(d) { return Util.getUnitText(d, "V", 0) },
+	      pixelsPerTick: 30,
+	      tickSize: 4,
+	      tickTransformation: function(svg) {
+	        svg.style("text-anchor", "end").attr("dx", "-0.8em").attr("dy", "-0.3em").attr("transform", 'rotate(-90)');
+	      }
+	    });
+	
+	    new Rickshaw.Graph.Axis.Y({
+	      graph: this.graph,
+	      tickFormat: function(d) { return Util.getUnitText(d, "V", 0) },
+	      pixelsPerTick: 30,
+	      tickSize: 4,
+	      tickTransformation: function(svg) {
+	        svg.style("text-anchor", "end").attr("dx", "-0.8em").attr("dy", "-0.3em").attr("transform", 'rotate(-90)');
+	      }
+	    });
+	
+	    this.highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
+	      graph: this.graph,
+	      // legend: legend
+	    });
+	
+	    new Rickshaw.Graph.HoverDetail({
+	      graph: this.graph,
+	      xFormatter: function (x) {
+	        return x + "s";
+	      }
+	    });
+	
+	    this.resize(plotContext.offsetWidth, plotContext.offsetHeight - 5);
+	  }
+	
+	  resize(width, height) {
+	    this.graph.configure({
+	      width: width,
+	      height: height
+	
+	
+	    });
+	
+	    this.graph.render();
+	  }
+	
+	  addVoltage(time, value) {
+	    this.graph.series[0].data.push({x: time, y: value});
+	
+	    if (this.graph.series[0].data.length > this.dataPoints) {
+	      this.graph.series[0].data.shift();
+	    }
+	
+	    // this.graph.update();
+	  };
+	
+	  addCurrent(time, value) {
+	    this.graph.series[1].data.push({x: time, y: value});
+	
+	    if (this.graph.series[1].data.length > this.dataPoints) {
+	      this.graph.series[1].data.shift();
+	    }
+	
+	    //this.graph.update();
+	  };
+	
+	  redraw() {
+	    this.graph.update();
+	  }
+	}
+	
+	module.exports = RickshawScopeCanvas;
+
+
+/***/ },
+/* 94 */
+/***/ function(module, exports) {
+
+	class ScopeCanvas {
+	  constructor(parentUI, scopeDiv, x=800, y=700) {
+	    this.dataPoints = 400;
+	
+	    this.parentUI = parentUI;
+	    this.scopeDiv = scopeDiv;
+	  }
+	
+	  x() {
+	    return this.scopeDiv.offsetLeft - this.parentUI.xMargin;
+	  }
+	
+	  y() {
+	    return this.scopeDiv.offsetTop - this.parentUI.yMargin;
+	  }
+	
+	  height() {
+	    return this.scopeDiv.offsetHeight;
+	  }
+	
+	  width() {
+	    return this.scopeDiv.offsetWidth;
+	  }
+	
+	  resize(width, height) {
+	  }
+	
+	  addVoltage(value) {
+	  };
+	
+	  addCurrent(value) {
+	  };
+	}
+	
+	module.exports = ScopeCanvas;
 
 
 /***/ }

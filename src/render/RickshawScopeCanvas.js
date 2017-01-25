@@ -99,7 +99,7 @@ class RickshawScopeCanvas extends ScopeCanvas {
       this.graph.series[0].data.shift();
     }
 
-    this.graph.update();
+    // this.graph.update();
   };
 
   addCurrent(time, value) {
@@ -109,9 +109,12 @@ class RickshawScopeCanvas extends ScopeCanvas {
       this.graph.series[1].data.shift();
     }
 
-    this.graph.update();
+    //this.graph.update();
   };
 
+  redraw() {
+    this.graph.update();
+  }
 }
 
 module.exports = RickshawScopeCanvas;

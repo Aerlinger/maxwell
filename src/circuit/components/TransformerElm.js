@@ -261,10 +261,10 @@ class TransformerElm extends CircuitComponent {
 
     if (this.isTrapezoidal()) {
       this.curSourceValue1 = (voltdiff1 * this.a1) + (voltdiff2 * this.a2) + this.current[0];
-      return this.curSourceValue2 = (voltdiff1 * this.a3) + (voltdiff2 * this.a4) + this.current[1];
+      this.curSourceValue2 = (voltdiff1 * this.a3) + (voltdiff2 * this.a4) + this.current[1];
     } else {
       this.curSourceValue1 = this.current[0];
-      return this.curSourceValue2 = this.current[1];
+      this.curSourceValue2 = this.current[1];
     }
   }
 
