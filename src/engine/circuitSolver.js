@@ -17,7 +17,7 @@ var CurrentElm = require('../circuit/components/CurrentElm.js');
 
 var sprintf = require("sprintf-js").sprintf;
 
-CircuitSolver = (function () {
+var CircuitSolver = (function () {
   CircuitSolver.SIZE_LIMIT = 100;
   CircuitSolver.MAXIMUM_SUBITERATIONS = 5000;
 

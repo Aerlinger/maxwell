@@ -17652,29 +17652,29 @@
 
 	let AntennaElm = __webpack_require__(17);
 	let WireElm = __webpack_require__(20);
-	let ResistorElm = __webpack_require__(21);
-	let GroundElm = __webpack_require__(22);
+	let ResistorElm = __webpack_require__(22);
+	let GroundElm = __webpack_require__(23);
 	let VoltageElm = __webpack_require__(19);
-	let DiodeElm = __webpack_require__(23);
-	let OutputElm = __webpack_require__(24);
-	let SwitchElm = __webpack_require__(25);
-	let CapacitorElm = __webpack_require__(26);
-	let InductorElm = __webpack_require__(27);
-	let SparkGapElm = __webpack_require__(28);
-	let CurrentElm = __webpack_require__(29);
+	let DiodeElm = __webpack_require__(24);
+	let OutputElm = __webpack_require__(25);
+	let SwitchElm = __webpack_require__(26);
+	let CapacitorElm = __webpack_require__(27);
+	let InductorElm = __webpack_require__(28);
+	let SparkGapElm = __webpack_require__(29);
+	let CurrentElm = __webpack_require__(30);
 	let RailElm = __webpack_require__(18);
-	let MosfetElm = __webpack_require__(30);
-	let JfetElm = __webpack_require__(31);
-	let TransistorElm = __webpack_require__(32);
-	let VarRailElm = __webpack_require__(33);
-	let OpAmpElm = __webpack_require__(34);
-	let ZenerElm = __webpack_require__(35);
-	let Switch2Elm = __webpack_require__(36);
-	let SweepElm = __webpack_require__(37);
-	let TextElm = __webpack_require__(38);
-	let ProbeElm = __webpack_require__(39);
+	let MosfetElm = __webpack_require__(31);
+	let JfetElm = __webpack_require__(32);
+	let TransistorElm = __webpack_require__(33);
+	let VarRailElm = __webpack_require__(34);
+	let OpAmpElm = __webpack_require__(35);
+	let ZenerElm = __webpack_require__(36);
+	let Switch2Elm = __webpack_require__(37);
+	let SweepElm = __webpack_require__(38);
+	let TextElm = __webpack_require__(39);
+	let ProbeElm = __webpack_require__(40);
 	
-	let AndGateElm = __webpack_require__(40);
+	let AndGateElm = __webpack_require__(41);
 	let NandGateElm = __webpack_require__(42);
 	let OrGateElm = __webpack_require__(43);
 	let NorGateElm = __webpack_require__(44);
@@ -18340,7 +18340,7 @@
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
 	let Util = __webpack_require__(5);
-	let GateElm = __webpack_require__(41);
+	let GateElm = __webpack_require__(21);
 	
 	class WireElm extends CircuitComponent {
 	  static initClass() {
@@ -18427,6 +18427,219 @@
 
 /***/ },
 /* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let CircuitComponent = __webpack_require__(1);
+	let Util = __webpack_require__(5);
+	let Settings = __webpack_require__(2);
+	
+	class GateElm extends CircuitComponent {
+	  static initClass() {
+	    this.FLAG_SMALL = 1;
+	  }
+	
+	  static get Fields() {
+	    return {
+	      inputCount: {
+	        name: "Input count",
+	        data_type: parseInt,
+	        default_value: 2,
+	        field: "integer"
+	      },
+	      lastOutput: {
+	        name: "Last Output",
+	        data_type(x) {
+	          return x > 2.5;
+	        },
+	        default_value: false
+	      }
+	    };
+	  }
+	
+	  constructor(xa, ya, xb, yb, params, f) {
+	    let size;
+	    if (parseInt(f) & (GateElm.FLAG_SMALL !== 0)) {
+	      size = 1;
+	    } else {
+	      size = 2;
+	    }
+	
+	    super(xa, ya, xb, yb, params, f);
+	
+	    this.setSize(size);
+	
+	    this.noDiagonal = true;
+	    this.linePoints = null;
+	
+	    this.setPoints()
+	  }
+	
+	  isInverting() {
+	    return false;
+	  }
+	
+	  setSize(s) {
+	    this.gsize = s;
+	    this.gwidth = 7 * s;
+	    this.gwidth2 = 14 * s;
+	    this.gheight = 8 * s;
+	    if (s === 1) {
+	      return this.flags = GateElm.FLAG_SMALL;
+	    } else {
+	      return this.flags = 0;
+	    }
+	  }
+	
+	  setPoints() {
+	    super.setPoints(...arguments);
+	
+	//    if @dn() > 150
+	//      @setSize(2)
+	
+	    let hs = this.gheight;
+	    this.ww = Math.floor(this.gwidth2);
+	
+	    if (this.ww > (this.dn()/2)) {
+	      this.ww = Math.floor(this.dn()/2);
+	    }
+	
+	    if (this.isInverting() && ((this.ww + 8) > (this.dn()/2))) {
+	      this.ww = Math.floor(this.dn() / 2) - 8;
+	    }
+	
+	    this.calcLeads(this.ww*2);
+	
+	    this.inPosts = Util.newPointArray(this.inputCount);
+	    this.inGates = Util.newPointArray(this.inputCount);
+	
+	    this.allocNodes();
+	
+	    let i0 = -Math.floor(this.inputCount / 2);
+	
+	    for (let i = 0, end = this.inputCount, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+	      if ((i0 === 0) && ((this.inputCount & 1) === 0)) {
+	        i0 += 1;
+	      }
+	
+	      this.inPosts[i] = Util.interpolate(this.point1, this.point2, 0, hs * i0);
+	      this.inGates[i] = Util.interpolate(this.lead1, this.lead2, 0, hs * i0);
+	
+	      if (this.lastOutput ^ this.isInverting()) {
+	        this.volts[i] = 5;
+	      } else {
+	        this.volts[i] = 0;
+	      }
+	
+	      i0 += 1;
+	    }
+	
+	    this.hs2 = this.gwidth * (Math.floor(this.inputCount / 2) + 1);
+	    this.setBboxPt(this.point1, this.point2, this.hs2);
+	  }
+	
+	
+	  doStep(stamper) {
+	    let res;
+	    let f = this.calcFunction();
+	
+	    if (this.isInverting()) {
+	      f = (f > 0) ? 0 : 1;
+	    }
+	
+	    this.lastOutput = (f > 0);
+	    this.params['lastOutput'] = (f > 0);
+	
+	    if (f) {
+	      res = 5;
+	    } else {
+	      res = 0;
+	    }
+	
+	    // console.log("V", this.volts, f, res);
+	
+	    // console.log("GATE " + this.getName() + "nodes: " + this.nodes[this.inputCount] + " vs: " +  this.voltSource + "res: " + res)
+	
+	    return stamper.updateVoltageSource(0, this.nodes[this.inputCount], this.voltSource, res);
+	  }
+	
+	
+	  draw(renderContext){
+	    for (let i = 0; i < this.inputCount; i++) {
+	      renderContext.drawLinePt(this.inPosts[i], this.inGates[i], renderContext.getVoltageColor(this.volts[i]));
+	    }
+	
+	    this.setBboxPt(this.point1, this.point2, this.hs2)
+	
+	    renderContext.drawLinePt(this.lead2, this.point2, renderContext.getVoltageColor(this.volts[this.inputCount]));
+	
+	    renderContext.drawThickPolygonP(this.gatePoly, Settings.STROKE_COLOR);
+	    if (this.linePoints !== null) {
+	      for (let i = 0; i< this.linePoints.length - 1; i++) {
+	        renderContext.drawLinePt(this.linePoints[i], this.linePoints[i + 1]);
+	      }
+	    }
+	
+	    if (this.isInverting()) {
+	      renderContext.fillCircle(this.pcircle.x, this.pcircle.y, Settings.POST_RADIUS + 2, 2, "#FFFFFF", Settings.STROKE_COLOR);
+	    }
+	
+	    this.updateDots();
+	    renderContext.drawDots(this.lead2, this.point2, this);
+	
+	    renderContext.drawPosts(this);
+	    // renderContext.drawPosts(this);
+	
+	    for (let i = 0; i < this.getPostCount(); i++) {
+	      let post = this.getPost(i);
+	      renderContext.drawPost(post.x, post.y)
+	    }
+	
+	    if (CircuitComponent.DEBUG) {
+	      return super.draw(renderContext);
+	    }
+	  }
+	
+	  getPostCount() {
+	    return this.inputCount + 1;
+	  }
+	
+	  getVoltageSourceCount() {
+	    return 1;
+	  }
+	
+	  getPost(n) {
+	    if (n === this.inputCount) {
+	      return this.point2;
+	    }
+	
+	    return this.inPosts[n];
+	  }
+	
+	  getInput(n){
+	    //    console.log("INPUT #{n} is #{@volts[n]}")
+	    return this.volts[n] > 2.5;
+	  }
+	
+	  getConnection(n1, n2){
+	    return false;
+	  }
+	
+	  hasGroundConnection(n1) {
+	    return n1 === this.inputCount;
+	  }
+	
+	  stamp(stamper) {
+	    return stamper.stampVoltageSource(0, this.nodes[this.inputCount], this.voltSource);
+	  }
+	}
+	
+	GateElm.initClass();
+	
+	module.exports = GateElm;
+
+
+/***/ },
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -18538,7 +18751,7 @@
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -18629,7 +18842,7 @@
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -18897,7 +19110,7 @@
 
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -18974,7 +19187,7 @@
 
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -19127,7 +19340,7 @@
 
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -19309,7 +19522,7 @@
 
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -19460,7 +19673,7 @@
 
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -19642,7 +19855,7 @@
 
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -19730,7 +19943,7 @@
 
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -20071,7 +20284,7 @@
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -20081,7 +20294,7 @@
 	let Point = __webpack_require__(4);
 	let Util = __webpack_require__(5);
 	
-	let MosfetElm = __webpack_require__(30);
+	let MosfetElm = __webpack_require__(31);
 	
 	class JfetElm extends MosfetElm {
 	
@@ -20169,7 +20382,7 @@
 
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -20603,7 +20816,7 @@
 
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -20680,7 +20893,7 @@
 
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -20939,7 +21152,7 @@
 
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -20947,7 +21160,7 @@
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
-	let DiodeElm = __webpack_require__(23);
+	let DiodeElm = __webpack_require__(24);
 	let Util = __webpack_require__(5);
 	
 	class ZenerElm extends DiodeElm {
@@ -21032,7 +21245,7 @@
 
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -21040,7 +21253,7 @@
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
-	let SwitchElm = __webpack_require__(25);
+	let SwitchElm = __webpack_require__(26);
 	let Util = __webpack_require__(5);
 	
 	let _ = __webpack_require__(14);
@@ -21219,7 +21432,7 @@
 
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -21443,7 +21656,7 @@
 
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -21542,7 +21755,7 @@
 
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -21648,10 +21861,10 @@
 
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let GateElm = __webpack_require__(41);
+	let GateElm = __webpack_require__(21);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
 	
@@ -21705,224 +21918,11 @@
 
 
 /***/ },
-/* 41 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let CircuitComponent = __webpack_require__(1);
-	let Util = __webpack_require__(5);
-	let Settings = __webpack_require__(2);
-	
-	class GateElm extends CircuitComponent {
-	  static initClass() {
-	    this.FLAG_SMALL = 1;
-	  }
-	
-	  static get Fields() {
-	    return {
-	      inputCount: {
-	        name: "Input count",
-	        data_type: parseInt,
-	        default_value: 2,
-	        field: "integer"
-	      },
-	      lastOutput: {
-	        name: "Last Output",
-	        data_type(x) {
-	          return x > 2.5;
-	        },
-	        default_value: false
-	      }
-	    };
-	  }
-	
-	  constructor(xa, ya, xb, yb, params, f) {
-	    let size;
-	    if (parseInt(f) & (GateElm.FLAG_SMALL !== 0)) {
-	      size = 1;
-	    } else {
-	      size = 2;
-	    }
-	
-	    super(xa, ya, xb, yb, params, f);
-	
-	    this.setSize(size);
-	
-	    this.noDiagonal = true;
-	    this.linePoints = null;
-	
-	    this.setPoints()
-	  }
-	
-	  isInverting() {
-	    return false;
-	  }
-	
-	  setSize(s) {
-	    this.gsize = s;
-	    this.gwidth = 7 * s;
-	    this.gwidth2 = 14 * s;
-	    this.gheight = 8 * s;
-	    if (s === 1) {
-	      return this.flags = GateElm.FLAG_SMALL;
-	    } else {
-	      return this.flags = 0;
-	    }
-	  }
-	
-	  setPoints() {
-	    super.setPoints(...arguments);
-	
-	//    if @dn() > 150
-	//      @setSize(2)
-	
-	    let hs = this.gheight;
-	    this.ww = Math.floor(this.gwidth2);
-	
-	    if (this.ww > (this.dn()/2)) {
-	      this.ww = Math.floor(this.dn()/2);
-	    }
-	
-	    if (this.isInverting() && ((this.ww + 8) > (this.dn()/2))) {
-	      this.ww = Math.floor(this.dn() / 2) - 8;
-	    }
-	
-	    this.calcLeads(this.ww*2);
-	
-	    this.inPosts = Util.newPointArray(this.inputCount);
-	    this.inGates = Util.newPointArray(this.inputCount);
-	
-	    this.allocNodes();
-	
-	    let i0 = -Math.floor(this.inputCount / 2);
-	
-	    for (let i = 0, end = this.inputCount, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-	      if ((i0 === 0) && ((this.inputCount & 1) === 0)) {
-	        i0 += 1;
-	      }
-	
-	      this.inPosts[i] = Util.interpolate(this.point1, this.point2, 0, hs * i0);
-	      this.inGates[i] = Util.interpolate(this.lead1, this.lead2, 0, hs * i0);
-	
-	      if (this.lastOutput ^ this.isInverting()) {
-	        this.volts[i] = 5;
-	      } else {
-	        this.volts[i] = 0;
-	      }
-	
-	      i0 += 1;
-	    }
-	
-	    this.hs2 = this.gwidth * (Math.floor(this.inputCount / 2) + 1);
-	    this.setBboxPt(this.point1, this.point2, this.hs2);
-	  }
-	
-	
-	  doStep(stamper) {
-	    let res;
-	    let f = this.calcFunction();
-	
-	    if (this.isInverting()) {
-	      f = (f > 0) ? 0 : 1;
-	    }
-	
-	    this.lastOutput = (f > 0);
-	    this.params['lastOutput'] = (f > 0);
-	
-	    if (f) {
-	      res = 5;
-	    } else {
-	      res = 0;
-	    }
-	
-	    // console.log("V", this.volts, f, res);
-	
-	    // console.log("GATE " + this.getName() + "nodes: " + this.nodes[this.inputCount] + " vs: " +  this.voltSource + "res: " + res)
-	
-	    return stamper.updateVoltageSource(0, this.nodes[this.inputCount], this.voltSource, res);
-	  }
-	
-	
-	  draw(renderContext){
-	    for (let i = 0; i < this.inputCount; i++) {
-	      renderContext.drawLinePt(this.inPosts[i], this.inGates[i], renderContext.getVoltageColor(this.volts[i]));
-	    }
-	
-	    this.setBboxPt(this.point1, this.point2, this.hs2)
-	
-	    renderContext.drawLinePt(this.lead2, this.point2, renderContext.getVoltageColor(this.volts[this.inputCount]));
-	
-	    renderContext.drawThickPolygonP(this.gatePoly, Settings.STROKE_COLOR);
-	    if (this.linePoints !== null) {
-	      for (let i = 0; i< this.linePoints.length - 1; i++) {
-	        renderContext.drawLinePt(this.linePoints[i], this.linePoints[i + 1]);
-	      }
-	    }
-	
-	    if (this.isInverting()) {
-	      renderContext.fillCircle(this.pcircle.x, this.pcircle.y, Settings.POST_RADIUS + 2, 2, "#FFFFFF", Settings.STROKE_COLOR);
-	    }
-	
-	    this.updateDots();
-	    renderContext.drawDots(this.lead2, this.point2, this);
-	
-	    renderContext.drawPosts(this);
-	    // renderContext.drawPosts(this);
-	
-	    for (let i = 0; i < this.getPostCount(); i++) {
-	      let post = this.getPost(i);
-	      renderContext.drawPost(post.x, post.y)
-	    }
-	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
-	    }
-	  }
-	
-	  getPostCount() {
-	    return this.inputCount + 1;
-	  }
-	
-	  getVoltageSourceCount() {
-	    return 1;
-	  }
-	
-	  getPost(n) {
-	    if (n === this.inputCount) {
-	      return this.point2;
-	    }
-	
-	    return this.inPosts[n];
-	  }
-	
-	  getInput(n){
-	    //    console.log("INPUT #{n} is #{@volts[n]}")
-	    return this.volts[n] > 2.5;
-	  }
-	
-	  getConnection(n1, n2){
-	    return false;
-	  }
-	
-	  hasGroundConnection(n1) {
-	    return n1 === this.inputCount;
-	  }
-	
-	  stamp(stamper) {
-	    return stamper.stampVoltageSource(0, this.nodes[this.inputCount], this.voltSource);
-	  }
-	}
-	
-	GateElm.initClass();
-	
-	module.exports = GateElm;
-
-
-/***/ },
 /* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let Util = __webpack_require__(5);
-	let AndGateElm = __webpack_require__(40);
+	let AndGateElm = __webpack_require__(41);
 	
 	class NandGateElm extends AndGateElm {
 	  constructor(xa, ya, xb, yb, params, f){
@@ -21945,7 +21945,7 @@
 /* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let GateElm = __webpack_require__(41);
+	let GateElm = __webpack_require__(21);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
 	
@@ -22192,7 +22192,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let SwitchElm = __webpack_require__(25);
+	let SwitchElm = __webpack_require__(26);
 	let Util = __webpack_require__(5);
 	let Settings = __webpack_require__(2);
 	
@@ -26044,7 +26044,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let DiodeElm = __webpack_require__(23);
+	let DiodeElm = __webpack_require__(24);
 	let Util = __webpack_require__(5);
 	let Settings = __webpack_require__(2);
 	
@@ -27358,6 +27358,8 @@
 /* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	var MatrixStamper = __webpack_require__(82);
 	var Pathfinder = __webpack_require__(84);
 	var CircuitNode = __webpack_require__(85);
@@ -27367,17 +27369,17 @@
 	var Setting = __webpack_require__(2);
 	var Util = __webpack_require__(5);
 	var SimulationFrame = __webpack_require__(80);
-	var GroundElm = __webpack_require__(22);
+	var GroundElm = __webpack_require__(23);
 	var RailElm = __webpack_require__(18);
 	var VoltageElm = __webpack_require__(19);
 	var WireElm = __webpack_require__(20);
-	var CapacitorElm = __webpack_require__(26);
-	var InductorElm = __webpack_require__(27);
-	var CurrentElm = __webpack_require__(29);
+	var CapacitorElm = __webpack_require__(27);
+	var InductorElm = __webpack_require__(28);
+	var CurrentElm = __webpack_require__(30);
 	
 	var sprintf = __webpack_require__(9).sprintf;
 	
-	CircuitSolver = (function () {
+	var CircuitSolver = function () {
 	  CircuitSolver.SIZE_LIMIT = 100;
 	  CircuitSolver.MAXIMUM_SUBITERATIONS = 5000;
 	
@@ -27408,7 +27410,7 @@
 	  };
 	
 	  CircuitSolver.prototype.reconstruct = function () {
-	    if (!this.analyzeFlag || (this.Circuit.numElements() === 0)) {
+	    if (!this.analyzeFlag || this.Circuit.numElements() === 0) {
 	      return;
 	    }
 	    this.Circuit.clearErrors();
@@ -27426,14 +27428,14 @@
 	
 	  CircuitSolver.prototype.solveCircuit = function () {
 	    var circuitElm, iter, j, lit, res, stepRate, subiter, tm, _i, _j, _k, _l, _len, _len1, _ref, _ref1, _ref2, _ref3;
-	    this.sysTime = (new Date()).getTime();
-	    if ((this.circuitMatrix == null) || this.Circuit.numElements() === 0) {
+	    this.sysTime = new Date().getTime();
+	    if (this.circuitMatrix == null || this.Circuit.numElements() === 0) {
 	      this.circuitMatrix = null;
 	      console.error("Called solve circuit when circuit Matrix not initialized");
 	      return;
 	    }
 	    stepRate = Math.floor(160 * this.getIterCount());
-	    tm = (new Date()).getTime();
+	    tm = new Date().getTime();
 	    lit = this.lastIterTime;
 	    iter = 1;
 	    while (true) {
@@ -27474,9 +27476,9 @@
 	        break;
 	      }
 	      this.Circuit.time += this.Circuit.timeStep();
-	      tm = (new Date()).getTime();
+	      tm = new Date().getTime();
 	      lit = tm;
-	      if ((iter * 1000 >= stepRate * (tm - this.lastIterTime)) || (tm - this.lastFrameTime) > 500) {
+	      if (iter * 1000 >= stepRate * (tm - this.lastIterTime) || tm - this.lastFrameTime > 500) {
 	        break;
 	      }
 	      ++iter;
@@ -27495,13 +27497,13 @@
 	  CircuitSolver.prototype._updateTimings = function (lastIterationTime) {
 	    var currentSpeed, inc, sysTime;
 	    this.lastIterTime = lastIterationTime;
-	    sysTime = (new Date()).getTime();
+	    sysTime = new Date().getTime();
 	    if (this.lastTime !== 0) {
 	      inc = Math.floor(sysTime - this.lastTime);
 	      currentSpeed = Math.exp(this.Circuit.currentSpeed() / 3.5 - 14.2);
 	      this.Circuit.Params.setCurrentMult(1.7 * inc * currentSpeed);
 	    }
-	    if ((sysTime - this.secTime) >= 1000) {
+	    if (sysTime - this.secTime >= 1000) {
 	      this.frames = 0;
 	      this.steps = 0;
 	      this.secTime = sysTime;
@@ -27535,13 +27537,13 @@
 	      if (Util.typeOf(ce, RailElm)) {
 	        gotRail = true;
 	      }
-	      if ((volt == null) && Util.typeOf(ce, VoltageElm)) {
+	      if (volt == null && Util.typeOf(ce, VoltageElm)) {
 	        volt = ce;
 	      }
 	    }
 	    circuitNode = new CircuitNode(this);
 	    circuitNode.x = circuitNode.y = -1;
-	    if (!gotGround && !gotRail && (volt != null)) {
+	    if (!gotGround && !gotRail && volt != null) {
 	      pt = volt.getPost(0);
 	      circuitNode.x = pt.x;
 	      circuitNode.y = pt.y;
@@ -27674,12 +27676,12 @@
 	      if (changed) {
 	        continue;
 	      }
-	      _results.push((function () {
+	      _results.push(function () {
 	        var _l, _ref3, _results1;
 	        _results1 = [];
 	        for (nodeIdx = _l = 0, _ref3 = this.Circuit.numNodes(); 0 <= _ref3 ? _l < _ref3 : _l > _ref3; nodeIdx = 0 <= _ref3 ? ++_l : --_l) {
 	          if (!closure[nodeIdx] && !this.Circuit.nodeList[nodeIdx].intern) {
-	            console.warn("Node " + nodeIdx + " unconnected! -> " + (this.Circuit.nodeList[nodeIdx].toString()));
+	            console.warn("Node " + nodeIdx + " unconnected! -> " + this.Circuit.nodeList[nodeIdx].toString());
 	            this.Stamper.stampResistor(0, nodeIdx, 1e8);
 	            closure[nodeIdx] = true;
 	            changed = true;
@@ -27689,7 +27691,7 @@
 	          }
 	        }
 	        return _results1;
-	      }).call(this));
+	      }.call(this));
 	    }
 	    return _results;
 	  };
@@ -27712,7 +27714,7 @@
 	          return;
 	        }
 	      }
-	      if ((Util.typeOf(ce, VoltageElm) && ce.getPostCount() === 2) || ce instanceof WireElm) {
+	      if (Util.typeOf(ce, VoltageElm) && ce.getPostCount() === 2 || ce instanceof WireElm) {
 	        pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
 	        if (pathfinder.findPath(ce.getNode(0))) {
 	          this.Circuit.halt("Voltage source/wire loop with no resistance!", ce);
@@ -27749,12 +27751,10 @@
 	      for (col = _i = 0, _ref = this.matrixSize; 0 <= _ref ? _i < _ref : _i > _ref; col = 0 <= _ref ? ++_i : --_i) {
 	        if (this.circuitRowInfo[col].type === RowInfo.ROW_CONST) {
 	          rsadd -= this.circuitRowInfo[col].value * this.circuitMatrix[row][col];
-	        } else if (this.circuitMatrix[row][col] === 0) {
-	
-	        } else if (qp === -1) {
+	        } else if (this.circuitMatrix[row][col] === 0) {} else if (qp === -1) {
 	          qp = col;
 	          lastVal = this.circuitMatrix[row][col];
-	        } else if (qm === -1 && (this.circuitMatrix[row][col] === -lastVal)) {
+	        } else if (qm === -1 && this.circuitMatrix[row][col] === -lastVal) {
 	          qm = col;
 	        } else {
 	          break;
@@ -27775,15 +27775,13 @@
 	          }
 	          if (elt.type === RowInfo.ROW_EQUAL) {
 	            elt.type = RowInfo.ROW_NORMAL;
-	          } else if (elt.type !== RowInfo.ROW_NORMAL) {
-	
-	          } else {
+	          } else if (elt.type !== RowInfo.ROW_NORMAL) {} else {
 	            elt.type = RowInfo.ROW_CONST;
 	            elt.value = (this.circuitRightSide[row] + rsadd) / lastVal;
 	            this.circuitRowInfo[row].dropRow = true;
 	            row = -1;
 	          }
-	        } else if ((this.circuitRightSide[row] + rsadd) === 0) {
+	        } else if (this.circuitRightSide[row] + rsadd === 0) {
 	          if (elt.type !== RowInfo.ROW_NORMAL) {
 	            qq = qm;
 	            qm = qp;
@@ -27809,7 +27807,7 @@
 	        if (rowInfo.type === RowInfo.ROW_EQUAL) {
 	          for (j = _k = 0, _ref2 = CircuitSolver.SIZE_LIMIT; 0 <= _ref2 ? _k < _ref2 : _k > _ref2; j = 0 <= _ref2 ? ++_k : --_k) {
 	            rowNodeEq = this.circuitRowInfo[rowInfo.nodeEq];
-	            if ((rowNodeEq.type !== RowInfo.ROW_EQUAL) || (row === rowNodeEq.nodeEq)) {
+	            if (rowNodeEq.type !== RowInfo.ROW_EQUAL || row === rowNodeEq.nodeEq) {
 	              break;
 	            }
 	            rowInfo.nodeEq = rowNodeEq.nodeEq;
@@ -27872,14 +27870,14 @@
 	    if (this.circuitNonLinear) {
 	      _results = [];
 	      for (row = _j = 0, _ref1 = this.matrixSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; row = 0 <= _ref1 ? ++_j : --_j) {
-	        _results.push((function () {
+	        _results.push(function () {
 	          var _k, _ref2, _results1;
 	          _results1 = [];
 	          for (col = _k = 0, _ref2 = this.matrixSize; 0 <= _ref2 ? _k < _ref2 : _k > _ref2; col = 0 <= _ref2 ? ++_k : --_k) {
 	            _results1.push(this.origMatrix[row][col] = this.circuitMatrix[row][col]);
 	          }
 	          return _results1;
-	        }).call(this));
+	        }.call(this));
 	      }
 	      return _results;
 	    }
@@ -27893,14 +27891,14 @@
 	    if (this.circuitNonLinear) {
 	      _results = [];
 	      for (row = _j = 0, _ref1 = this.circuitMatrixSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; row = 0 <= _ref1 ? ++_j : --_j) {
-	        _results.push((function () {
+	        _results.push(function () {
 	          var _k, _ref2, _results1;
 	          _results1 = [];
 	          for (col = _k = 0, _ref2 = this.circuitMatrixSize; 0 <= _ref2 ? _k < _ref2 : _k > _ref2; col = 0 <= _ref2 ? ++_k : --_k) {
 	            _results1.push(this.circuitMatrix[row][col] = this.origMatrix[row][col]);
 	          }
 	          return _results1;
-	        }).call(this));
+	        }.call(this));
 	      }
 	      return _results;
 	    }
@@ -27922,7 +27920,7 @@
 	      this.converged = false;
 	      return false;
 	    }
-	    if (nodeIdx < (this.Circuit.numNodes() - 1)) {
+	    if (nodeIdx < this.Circuit.numNodes() - 1) {
 	      circuitNode = this.Circuit.nodeList[nodeIdx + 1];
 	      _ref = circuitNode.links;
 	      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -27936,15 +27934,11 @@
 	    return true;
 	  };
 	
-	
 	  /*
 	   luFactor: finds a solution to a factored matrix through LU (Lower-Upper) factorization
-	
-	   Called once each frame for resistive circuits, otherwise called many times each frame
-	
-	   returns a falsy value if the provided circuitMatrix can't be factored
-	
-	   @param (input/output) circuitMatrix 2D matrix to be solved
+	    Called once each frame for resistive circuits, otherwise called many times each frame
+	    returns a falsy value if the provided circuitMatrix can't be factored
+	    @param (input/output) circuitMatrix 2D matrix to be solved
 	   @param (input) matrixSize number or rows/columns in the matrix
 	   @param (output) pivotArray pivot index
 	   */
@@ -28026,14 +28020,11 @@
 	    return true;
 	  };
 	
-	
 	  /*
 	   Step 2: `lu_solve`: (Called by lu_factor)
 	   finds a solution to a factored matrix through LU (Lower-Upper) factorization
-	
-	   Called once each frame for resistive circuits, otherwise called many times each frame
-	
-	   @param circuitMatrix matrix to be solved
+	    Called once each frame for resistive circuits, otherwise called many times each frame
+	    @param circuitMatrix matrix to be solved
 	   @param numRows dimension
 	   @param pivotVector pivot index
 	   @param circuitRightSide Right-side (dependent) matrix
@@ -28121,12 +28112,9 @@
 	  };
 	
 	  return CircuitSolver;
-	
-	})();
+	}();
 	
 	module.exports = CircuitSolver;
-	
-
 
 /***/ },
 /* 82 */
@@ -28351,10 +28339,10 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let VoltageElm = __webpack_require__(19);
-	let CurrentElm = __webpack_require__(29);
-	let ResistorElm = __webpack_require__(21);
-	let InductorElm = __webpack_require__(27);
-	let CapacitorElm = __webpack_require__(26);
+	let CurrentElm = __webpack_require__(30);
+	let ResistorElm = __webpack_require__(22);
+	let InductorElm = __webpack_require__(28);
+	let CapacitorElm = __webpack_require__(27);
 	let Util = __webpack_require__(5);
 	
 	class Pathfinder {
@@ -28687,29 +28675,29 @@
 	
 	let AntennaElm = __webpack_require__(17);
 	let WireElm = __webpack_require__(20);
-	let ResistorElm = __webpack_require__(21);
-	let GroundElm = __webpack_require__(22);
+	let ResistorElm = __webpack_require__(22);
+	let GroundElm = __webpack_require__(23);
 	let VoltageElm = __webpack_require__(19);
-	let DiodeElm = __webpack_require__(23);
-	let OutputElm = __webpack_require__(24);
-	let SwitchElm = __webpack_require__(25);
-	let CapacitorElm = __webpack_require__(26);
-	let InductorElm = __webpack_require__(27);
-	let SparkGapElm = __webpack_require__(28);
-	let CurrentElm = __webpack_require__(29);
+	let DiodeElm = __webpack_require__(24);
+	let OutputElm = __webpack_require__(25);
+	let SwitchElm = __webpack_require__(26);
+	let CapacitorElm = __webpack_require__(27);
+	let InductorElm = __webpack_require__(28);
+	let SparkGapElm = __webpack_require__(29);
+	let CurrentElm = __webpack_require__(30);
 	let RailElm = __webpack_require__(18);
-	let MosfetElm = __webpack_require__(30);
-	let JfetElm = __webpack_require__(31);
-	let TransistorElm = __webpack_require__(32);
-	let VarRailElm = __webpack_require__(33);
-	let OpAmpElm = __webpack_require__(34);
-	let ZenerElm = __webpack_require__(35);
-	let Switch2Elm = __webpack_require__(36);
-	let SweepElm = __webpack_require__(37);
-	let TextElm = __webpack_require__(38);
-	let ProbeElm = __webpack_require__(39);
+	let MosfetElm = __webpack_require__(31);
+	let JfetElm = __webpack_require__(32);
+	let TransistorElm = __webpack_require__(33);
+	let VarRailElm = __webpack_require__(34);
+	let OpAmpElm = __webpack_require__(35);
+	let ZenerElm = __webpack_require__(36);
+	let Switch2Elm = __webpack_require__(37);
+	let SweepElm = __webpack_require__(38);
+	let TextElm = __webpack_require__(39);
+	let ProbeElm = __webpack_require__(40);
 	
-	let AndGateElm = __webpack_require__(40);
+	let AndGateElm = __webpack_require__(41);
 	let NandGateElm = __webpack_require__(42);
 	let OrGateElm = __webpack_require__(43);
 	let NorGateElm = __webpack_require__(44);
@@ -28955,29 +28943,29 @@
 	
 	let AntennaElm = __webpack_require__(17);
 	let WireElm = __webpack_require__(20);
-	let ResistorElm = __webpack_require__(21);
-	let GroundElm = __webpack_require__(22);
+	let ResistorElm = __webpack_require__(22);
+	let GroundElm = __webpack_require__(23);
 	let VoltageElm = __webpack_require__(19);
-	let DiodeElm = __webpack_require__(23);
-	let OutputElm = __webpack_require__(24);
-	let SwitchElm = __webpack_require__(25);
-	let CapacitorElm = __webpack_require__(26);
-	let InductorElm = __webpack_require__(27);
-	let SparkGapElm = __webpack_require__(28);
-	let CurrentElm = __webpack_require__(29);
+	let DiodeElm = __webpack_require__(24);
+	let OutputElm = __webpack_require__(25);
+	let SwitchElm = __webpack_require__(26);
+	let CapacitorElm = __webpack_require__(27);
+	let InductorElm = __webpack_require__(28);
+	let SparkGapElm = __webpack_require__(29);
+	let CurrentElm = __webpack_require__(30);
 	let RailElm = __webpack_require__(18);
-	let MosfetElm = __webpack_require__(30);
-	let JfetElm = __webpack_require__(31);
-	let TransistorElm = __webpack_require__(32);
-	let VarRailElm = __webpack_require__(33);
-	let OpAmpElm = __webpack_require__(34);
-	let ZenerElm = __webpack_require__(35);
-	let Switch2Elm = __webpack_require__(36);
-	let SweepElm = __webpack_require__(37);
-	let TextElm = __webpack_require__(38);
-	let ProbeElm = __webpack_require__(39);
+	let MosfetElm = __webpack_require__(31);
+	let JfetElm = __webpack_require__(32);
+	let TransistorElm = __webpack_require__(33);
+	let VarRailElm = __webpack_require__(34);
+	let OpAmpElm = __webpack_require__(35);
+	let ZenerElm = __webpack_require__(36);
+	let Switch2Elm = __webpack_require__(37);
+	let SweepElm = __webpack_require__(38);
+	let TextElm = __webpack_require__(39);
+	let ProbeElm = __webpack_require__(40);
 	
-	let AndGateElm = __webpack_require__(40);
+	let AndGateElm = __webpack_require__(41);
 	let NandGateElm = __webpack_require__(42);
 	let OrGateElm = __webpack_require__(43);
 	let NorGateElm = __webpack_require__(44);

@@ -10,7 +10,7 @@ module.exports = {
     loaders: [
       { test: /\.coffee/, loader: "coffee-loader" },
       { test: /\.(coffee\.md|litcoffee)$/, loader: "coffee-loader?literate" },
-      { test: "src", loader: 'babel-loader' }
+      { test: /circuitSolver.js/, loader: 'babel-loader' }
     ]
   },
   resolve: {
