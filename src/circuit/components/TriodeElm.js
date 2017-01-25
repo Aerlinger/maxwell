@@ -56,6 +56,50 @@ class TriodeElm extends CircuitComponent {
     }
   }
 
+  draw(renderContext) {
+    this.setBbox(this.point1, this.plate[0], 16);
+
+    renderContext.fillCircle(this.point2.x, this.point2.y, this.circler);
+
+    this.setBbox(this.cath[0].x, this.cath[1].y, this.point2.x + this.circler, this.point2.y + this.circler);
+
+    //setPowerColor(g, true);
+    // draw plate
+
+    let color  = renderContext.getVoltageColor(this.volts[0]);
+
+    renderContext.drawLinePt(this.plate[0], this.plate[1], color);
+    renderContext.drawLinePt(this.plate[2], this.plate[3], color);
+
+    // draw grid
+    color = renderContext.getVoltageColor(this.volts[1]);
+
+    for (let i = 0; i != 8; i += 2) {
+      renderContext.drawLinePt(this.grid[i], this.grid[i + 1], color);
+    }
+    // draw cathode
+    color = renderContext.getVoltageColor(this.volts[2]);
+
+    for (let i = 0; i != 3; i++) {
+      renderContext.drawLinePt(this.cath[i], this.cath[i + 1], color);
+    }
+
+    // draw dots
+    /*
+    curcountp = updateDotCount(currentp, curcountp);
+    curcountc = updateDotCount(currentc, curcountc);
+    curcountg = updateDotCount(currentg, curcountg);
+    if (sim.dragElm != this) {
+      drawDots(g, plate[0], midgrid, curcountp);
+      drawDots(g, midgrid, midcath, curcountc);
+      drawDots(g, midcath, cath[1], curcountc + 8);
+      drawDots(g, cath[1], cath[0], curcountc + 8);
+      drawDots(g, point1, midgrid, curcountg);
+    }
+    */
+    renderContext.drawPosts(this);
+  }
+
   getPostCount() {
     return 3;
   }
