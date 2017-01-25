@@ -5,7 +5,7 @@ let ComponentRegistry = require('./circuit/componentRegistry.js');
 let Circuit = require('./circuit/circuit.js');
 let CircuitUI = require('./CircuitUI.js');
 
-let ScopeCanvas = require("./render/ScopeCanvas");
+let RickshawScopeCanvas = require("./render/RickshawScopeCanvas");
 
 let environment = require("./environment.js");
 
@@ -354,7 +354,7 @@ Use \`Maxwell.createCircuit()\` to create a new empty circuit object.\
 
 Maxwell.initClass();
 Maxwell.Renderer = CircuitUI;
-Maxwell.ScopeCanvas = ScopeCanvas;
+Maxwell.ScopeCanvas = RickshawScopeCanvas;
 
 if (environment.isBrowser) {
   window.Maxwell = Maxwell;

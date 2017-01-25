@@ -56,6 +56,7 @@ block header
 
       var plot = $.plot("#placeholder", [getRandomData()], {
         series: {
+          lines: { show: true },
           shadowSize: 0	// Drawing is faster without shadows
         },
         yaxis: {
@@ -63,7 +64,9 @@ block header
           max: 100
         },
         xaxis: {
-          show: false
+          min: 3,
+          max: 303,
+          autoscaleMargin: 10
         }
       });
 
@@ -74,8 +77,8 @@ block header
 
         y = Math.max(Math.min(y, 100), 0);
 
-        plotData.shift();
-        plotData.push([totalPoints - 1, y]);
+        xMin = plotData.shift()[0];
+        plotData.push([xMin + 300, y]);
 
         return plotData;
       }
@@ -237,10 +240,10 @@ block header
 
     $(document).ready(function (event) {
 
-      dygraphsDemo();
+      //dygraphsDemo();
       //c3demo();
 
-      //flotDemo();
+      flotDemo();
 
       // RICKSHAW
       //rickshawDemo()
