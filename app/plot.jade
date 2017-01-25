@@ -6,6 +6,7 @@ block header
   link(rel="stylesheet", href="/bower_components/dygraphs/css/dygraph.css")
   script(language="javascript", type="text/javascript", src="/bower_components/moment/moment.js")
   script(language="javascript", type="text/javascript", src="/bower_components/Flot/jquery.flot.js")
+  script(language="javascript", type="text/javascript", src="/bower_components/Flot/jquery.flot.crosshair.js")
   script(language="javascript", type="text/javascript", src="/bower_components/c3/c3.js")
   script(language="javascript", type="text/javascript", src="/dygraph.js")
 
@@ -14,6 +15,14 @@ block header
       // We use an inline data source in the example, usually data would be fetched from a server
       var data = [];
       var totalPoints = 300;
+
+      var sin = [], cos = [];
+      for (var i = 7; i < 21; i += 0.1) {
+        sin.push([i, Math.sin(i)]);
+        cos.push([i, Math.cos(i)]);
+      }
+
+      var frame = 0;
 
       function getRandomData() {
         if (data.length > 0)
@@ -38,73 +47,138 @@ block header
         return res;
       }
 
-      // Set up the control widget
-      var updateInterval = 10;
-      $("#updateInterval").val(updateInterval).change(function () {
-        var v = $(this).val();
 
-        if (v && !isNaN(+v)) {
-          updateInterval = +v;
-          if (updateInterval < 1) {
-            updateInterval = 1;
-          } else if (updateInterval > 2000) {
-            updateInterval = 2000;
-          }
-          $(this).val("" + updateInterval);
-        }
-      });
-
-      var plot = $.plot("#placeholder", [getRandomData()], {
+      var plot = $.plot("#placeholder", [
+        {data: sin, label: "Current"},
+        {data: cos, label: "Voltage"}
+      ], {
         series: {
-          lines: { show: true },
-          shadowSize: 0	// Drawing is faster without shadows
+          lines: {
+            show: true
+          }
+        },
+        crosshair: {
+          mode: "x"
+        },
+        grid: {
+          hoverable: true,
+          autoHighlight: false
         },
         yaxis: {
-          min: 0,
-          max: 100
-        },
-        xaxis: {
-          min: 3,
-          max: 303,
-          autoscaleMargin: 10
+          min: -1.2,
+          max: 1.2
         }
       });
 
       function addRandomData() {
-        //var prev = plotData[plotData.length - 1];
-        var prev = 50;
-        var y = prev + Math.random() * 10 - 5;
+        var last_sin = sin[sin.length - 1];
+        var last_cos = cos[cos.length - 1];
 
-        y = Math.max(Math.min(y, 100), 0);
+        last_time = last_sin[0];
+        next_time = last_time + 0.1;
 
-        xMin = plotData.shift()[0];
-        plotData.push([xMin + 300, y]);
+        sin.shift();
+        cos.shift();
 
-        return plotData;
+        sin.push([next_time, Math.sin(next_time)]);
+        cos.push([next_time, Math.cos(next_time)]);
+
+        return [
+          {data: sin, label: "Current"},
+          {data: cos, label: "Voltage"}
+        ]
       }
 
+      //var plotLegends = $("#placeholder .legendLabel");
+      $("#placeholder .legendLabel").each(function () {
+        // fix the widths so they don't jump around
+        $(this).css('width', $(this).width());
+      });
+      var updateLegendTimeout = null;
+      var latestPosition = null;
+
+
+      function updateLegend() {
+        updateLegendTimeout = null;
+        var pos = latestPosition;
+        var axes = plot.getAxes();
+        if (pos.x < axes.xaxis.min || pos.x > axes.xaxis.max ||
+            pos.y < axes.yaxis.min || pos.y > axes.yaxis.max) {
+          return;
+        }
+
+        var i, j, dataset = plot.getData();
+
+        for (i = 0; i < dataset.length; ++i) {
+          var series = dataset[i];
+
+          // Find the nearest points, x-wise
+          for (j = 0; j < series.data.length; ++j) {
+            if (series.data[j][0] > pos.x) {
+              break;
+            }
+          }
+          // Now Interpolate
+          var y,
+              p1 = series.data[j - 1],
+              p2 = series.data[j];
+          if (p1 == null) {
+            y = p2[1];
+          } else if (p2 == null) {
+            y = p1[1];
+          } else {
+            y = p1[1] + (p2[1] - p1[1]) * (pos.x - p1[0]) / (p2[0] - p1[0]);
+          }
+
+          console.log(frame, i, j, dataset, y);
+          $("#placeholder .legendLabel").eq(i).text("X:" + y);
+        }
+      }
+
+
+      $("#placeholder").bind("plothover", function (event, pos, item) {
+        latestPosition = pos;
+        console.log("HOVER", pos);
+        //updateLegend();
+
+        /*
+        if (!updateLegendTimeout) {
+          updateLegendTimeout = setTimeout(updateLegend, 50);
+        }
+        */
+      });
+
+      var updateInterval = 30;
       function update() {
         series = addRandomData();
 
-        plot.setData([series]);
+        plot.getOptions().xaxes[0].min = series[0][0];
+        plot.getOptions().xaxes[0].max = series[series.length - 1][0];
+        plot.setData(series);
+        plot.setupGrid();
+        //updateLegend();
+
         // Since the axes don't change, we don't need to call plot.setupGrid()
+
+        if (latestPosition) {
+          //console.log("LP", series[0].data[0], latestPosition);
+          updateLegend();
+        }
         plot.draw();
 
-        console.log(series);
+        frame += 1;
 
-        //setTimeout(update, updateInterval);
+        setTimeout(update, updateInterval);
+
+
       }
 
-      var plotData = getRandomData();
-
-      console.log(plotData);
-
-      plot.setData([plotData]);
-      plot.draw();
 
       update();
-      update();
-      update();
+
+      //var plotLegends = $("#placeholder .legendLabel");
+
+      window.flotPlot = plot;
     }
 
     function rickshawDemo() {
@@ -218,7 +292,7 @@ block header
         setTimeout(update, 30);
       }
 
-      update();
+      //update();
       //update();
       //update();
 
@@ -262,12 +336,6 @@ block content
     #content
       .demo-container
         #placeholder.demo-placeholder
-      p
-        | You can update a chart periodically to get a real-time effect by using a timer to insert the new data in the plot and redraw it.
-      p
-        | Time between updates:
-        input#updateInterval(type='text', value='', style='text-align: right; width:5em')
-        |  milliseconds
 
 
     #chart_container.draggable.ui-widget-content

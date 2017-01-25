@@ -124,15 +124,15 @@ class Scope {
     }
   }
 
-  sampleVoltage(voltage) {
+  sampleVoltage(time, voltage) {
     if (this.scopeCanvas) {
-      this.scopeCanvas.addVoltage(voltage);
+      this.scopeCanvas.addVoltage(time, voltage);
     }
   }
 
-  sampleCurrent(voltage) {
+  sampleCurrent(time, voltage) {
     if (this.scopeCanvas) {
-      this.scopeCanvas.addCurrent(voltage);
+      this.scopeCanvas.addCurrent(time, voltage);
     }
   }
 

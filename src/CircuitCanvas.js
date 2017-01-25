@@ -318,8 +318,8 @@ class CircuitCanvas extends Observer {
     }
     // -----------------------------------------------------------------------------
 
-    this.drawComponents();
     this.drawScopes();
+    this.drawComponents();
 
     if (this.context) {
       if (this.circuitUI.placeComponent) {
@@ -361,7 +361,7 @@ class CircuitCanvas extends Observer {
         let lineDash = this.context.getLineDash();
 
         this.context.setLineDash([5, 5]);
-        this.context.strokeStyle = "#CCC";
+        this.context.strokeStyle = "#FFA500";
         this.context.lineWidth = 1;
         this.context.moveTo(center.x, center.y);
         this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height()/2);

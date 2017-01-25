@@ -1,20 +1,8 @@
-class RickshawScopeCanvas {
+let ScopeCanvas = require("./ScopeCanvas.js");
+
+class RickshawScopeCanvas extends ScopeCanvas {
   constructor(parentUI, parentScope, contextElement, x=800, y=700) {
     super(parentUI, parentScope, contextElement, x, y);
-
-    var voltageData = new Rickshaw.Series.FixedDuration([{name: 'voltage'}], undefined, {
-      timeInterval: this.timeInterval,
-      maxDataPoints: this.dataPoints,
-      timeBase: 0
-    });
-
-    /*
-     var currentData = new Rickshaw.Series.FixedDuration([{name: 'current'}], undefined, {
-     timeInterval: this.timeInterval,
-     maxDataPoints: this.dataPoints,
-     timeBase: 0
-     });
-     */
 
     this.graph = new Rickshaw.Graph({
       element: contextElement,
@@ -22,9 +10,23 @@ class RickshawScopeCanvas {
       height: contextElement.offsetHeight,
       interpolation: 'linear',
       renderer: 'line',
-      stroke: true,
+      stroke: false,
+      strokeWidth: 1,
       min: 'auto',
-      series: voltageData
+      series: [
+        {
+          color: "#F00",
+          strokeWidth: 1,
+          data: [],
+          name: 'Voltage'
+        },
+        {
+          color: "#00F",
+          strokeWidth: 1,
+          data: [],
+          name: 'Current'
+        }
+      ]
     });
 
     var ticksTreatment = 'glow';
@@ -37,13 +39,19 @@ class RickshawScopeCanvas {
 
     this.xAxis.render();
 
-    this.yAxis = new Rickshaw.Graph.Axis.Y({
+    new Rickshaw.Graph.Axis.Y({
       graph: this.graph,
       tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
       ticksTreatment: ticksTreatment
     });
 
-    this.yAxis.render();
+
+    new Rickshaw.Graph.Axis.Y({
+      orientation: "right",
+      graph: this.graph,
+      tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+      ticksTreatment: ticksTreatment
+    });
 
     this.highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
       graph: this.graph,
@@ -53,13 +61,22 @@ class RickshawScopeCanvas {
     this.hoverDetail = new Rickshaw.Graph.HoverDetail({
       graph: this.graph,
       xFormatter: function (x) {
-        return new Date(x * 1000).toString();
+        return x + "s";
+
       }
     });
 
     this.resize(contextElement.offsetWidth, contextElement.offsetHeight);
 
-    // this.graph.render();
+    /*
+    for (var i=0 ; i<this.dataPoints; ++i) {
+      this.graph.series[0].data.push({x: 0, y: 0});
+    }
+    */
+
+    this.graph.update();
+
+    this.graph.render();
   }
 
   x() {
@@ -87,14 +104,22 @@ class RickshawScopeCanvas {
     this.graph.render();
   }
 
-  addVoltage(value) {
-    this.graph.series.addData({voltage: value});
+  addVoltage(time, value) {
+    this.graph.series[0].data.push({x: time, y: value});
+
+    if (this.graph.series[0].data.length > this.dataPoints) {
+      this.graph.series[0].data.shift();
+    }
 
     this.graph.update();
   };
 
-  addCurrent(value) {
-    this.graph.series.addData({current: value});
+  addCurrent(time, value) {
+    this.graph.series[1].data.push({x: time, y: value});
+
+    if (this.graph.series[1].data.length > this.dataPoints) {
+      this.graph.series[1].data.shift();
+    }
 
     this.graph.update();
   };
