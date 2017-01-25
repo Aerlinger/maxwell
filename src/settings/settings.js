@@ -213,6 +213,8 @@ class Settings {
     this.FONT = 'Monaco';
     this.TEXT_STYLE = 'bold';
     this.LABEL_COLOR = '#0000cd';
+    this.PIN_LABEL_COLOR = '#444';
+    this.SECONDARY_COLOR = '#777';
 
     this.SELECTION_MARQUEE_COLOR = ColorPalette.orange;
   

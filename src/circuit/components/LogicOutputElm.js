@@ -64,7 +64,7 @@ class LogicOutputElm extends CircuitComponent {
 
     this.value = s;
 
-    renderContext.fillText(s, this.point2.x, this.point2.y + 6, Settings.TEXT_COLOR, 2*Settings.TEXT_SIZE);
+    renderContext.fillText(s, this.point2.x - 1, this.point2.y + 8, Settings.TEXT_COLOR, 1.5*Settings.TEXT_SIZE);
 
     let color = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.lead1, color);

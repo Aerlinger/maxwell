@@ -1440,6 +1440,8 @@
 	    this.FONT = 'Monaco';
 	    this.TEXT_STYLE = 'bold';
 	    this.LABEL_COLOR = '#0000cd';
+	    this.PIN_LABEL_COLOR = '#444';
+	    this.SECONDARY_COLOR = '#777';
 	
 	    this.SELECTION_MARQUEE_COLOR = ColorPalette.orange;
 	  
@@ -1697,8 +1699,6 @@
 	
 	    return a;
 	  }
-	
-	  static drawValue(x1, y1, circuitElm, str) {}
 	
 	  static printArray(arr) {
 	    return Array.from(arr).map((subarr) => console.log(subarr));
@@ -17899,16 +17899,16 @@
 	      //this.setPowerColor(g, false);
 	      let v = this.getVoltage();
 	
-	      let s = Util.getUnitText(v, "V");
+	      let s = Util.getUnitText(v, "V", 1);
 	      if (Math.abs(v) < 1) { s = v + "V"; } //showFormat.format(v)
 	      if (this.getVoltage() > 0) { s = `+${s}`; }
 	
-	      renderContext.fillText(s, this.point2.x+8, this.point2.y - 5);
+	      renderContext.fillText(s, this.point2.x+4, this.point2.y - 7, Settings.TEXT_COLOR, 1.3*Settings.TEXT_SIZE);
 	
 	//      s = "Ant" if this instanceof AntennaElm
 	      if (clock) { s = "CLK"; }
 	
-	      Util.drawValue(0, 0, this, s);
+	      //renderContext.drawValue(0, 0, this, s);
 	    } else {
 	      this.drawWaveform(this.point2, renderContext);
 	    }
@@ -18183,13 +18183,12 @@
 	  }
 	
 	  drawWaveform(center, renderContext) {
-	    let color = Settings.STROKE_COLOR;
-	
 	    let xc = center.x;
 	    let yc = center.y;
 	
-	    // TODO:
-	    renderContext.fillCircle(xc, yc, VoltageElm.circleSize, 2, Settings.FG_COLOR);
+	    renderContext.fillCircle(xc, yc, VoltageElm.circleSize, 2, Settings.FILL_COLOR);
+	
+	    let color = Settings.SECONDARY_COLOR;
 	
 	    let wl = 8;
 	    let xl = 5;
@@ -21005,8 +21004,8 @@
 	    // Body
 	    renderContext.drawThickPolygonP(this.triangle, Settings.STROKE_COLOR, Settings.FG_COLOR);
 	
-	    renderContext.fillText("+", this.in1p[1].x + 5, this.in1p[1].y + 3, Settings.TEXT_COLOR);
-	    renderContext.fillText("-", this.in2p[1].x + 5, this.in2p[1].y + 3, Settings.TEXT_COLOR);
+	    renderContext.fillText("+", this.in1p[1].x + 5, this.in1p[1].y + 3, Settings.LABEL_COLOR);
+	    renderContext.fillText("-", this.in2p[1].x + 5, this.in2p[1].y + 3, Settings.LABEL_COLOR);
 	
 	    if (this.getParentCircuit() && this.getParentCircuit()) {
 	      this.updateDots();
@@ -22394,7 +22393,7 @@
 	
 	    this.value = s;
 	
-	    renderContext.fillText(s, this.point2.x, this.point2.y + 6, Settings.TEXT_COLOR, 2*Settings.TEXT_SIZE);
+	    renderContext.fillText(s, this.point2.x - 1, this.point2.y + 8, Settings.TEXT_COLOR, 1.5*Settings.TEXT_SIZE);
 	
 	    let color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
@@ -24289,7 +24288,7 @@
 	        let textSize = this.csize == 1 ? 6 : 8;
 	
 	        let mt = renderContext.context.measureText(p.text);
-	        renderContext.fillText(p.text, p.textloc.x-mt.width/2, p.textloc.y+3, Settings.TEXT_COLOR, textSize);
+	        renderContext.fillText(p.text, p.textloc.x-mt.width/2, p.textloc.y+3, Settings.PIN_LABEL_COLOR, textSize);
 	
 	        if (p.lineOver) {
 	          let ya = p.textloc.y - renderContext.context.measureText(p.text).height;
@@ -24515,11 +24514,9 @@
 	    this.setPoints();
 	    this.drawChip(renderContext);
 	
-	    console.log("CS", this.csize);
-	
 	    let textSize = this.csize == 1 ? 8 : 11;
 	
-	    renderContext.fillText("555", this.getCenter().x - 14, this.getCenter().y, Settings.TEXT_COLOR, textSize)
+	    renderContext.fillText("555", this.getCenter().x - 14, this.getCenter().y, Settings.LABEL_COLOR, textSize)
 	  }
 	
 	  setupPins() {
@@ -28304,7 +28301,7 @@
 	      this.circuitUI.highlightedComponent.getInfo(arr);
 	
 	      for (let idx = 0; idx < arr.length; ++idx) {
-	        this.context.fillText(arr[idx], 500, (idx * 10) + 15);
+	        this.fillText(arr[idx], 600, (idx * 10) + 5, "#1b4e24");
 	      }
 	    }
 	  }
@@ -28572,7 +28569,7 @@
 	      this.context.translate(this.xMargin, this.yMargin);
 	
 	      this.fillText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
-	      this.fillText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 385, 15, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
+	      this.fillText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 785, 15, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
 	
 	      this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
 	    }

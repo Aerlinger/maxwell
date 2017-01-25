@@ -140,8 +140,6 @@ class Util {
     return a;
   }
 
-  static drawValue(x1, y1, circuitElm, str) {}
-
   static printArray(arr) {
     return Array.from(arr).map((subarr) => console.log(subarr));
   }

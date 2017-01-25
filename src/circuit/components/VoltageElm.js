@@ -210,13 +210,12 @@ class VoltageElm extends CircuitComponent {
   }
 
   drawWaveform(center, renderContext) {
-    let color = Settings.STROKE_COLOR;
-
     let xc = center.x;
     let yc = center.y;
 
-    // TODO:
-    renderContext.fillCircle(xc, yc, VoltageElm.circleSize, 2, Settings.FG_COLOR);
+    renderContext.fillCircle(xc, yc, VoltageElm.circleSize, 2, Settings.FILL_COLOR);
+
+    let color = Settings.SECONDARY_COLOR;
 
     let wl = 8;
     let xl = 5;
