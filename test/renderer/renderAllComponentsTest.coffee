@@ -1,4 +1,4 @@
-describe "Render all components", ->
+describe.only "Render all components", ->
   it "can render all components", ->
     this.timeout(5000)
 

@@ -26056,7 +26056,51 @@
 	
 	  draw(renderContext) {
 	    super.draw(renderContext);
-	    return this.current[3] = this.current[1] - this.current[2];
+	
+	    this.current[3] = this.current[1] - this.current[2];
+	
+	    let color;
+	
+	    for (let i = 0; i != 5; i++) {
+	      color = renderContext.getVoltageColor(this.volts[i]);
+	      renderContext.drawLinePt(this.ptEnds[i], this.ptCoil[i], color);
+	    }
+	    for (let i = 0; i != 4; i++) {
+	      if (i == 1)
+	        continue;
+	
+	      // setPowerColor(g, current[i] * (volts[i] - volts[i + 1]));
+	      renderContext.drawCoil(this.ptCoil[i], this.ptCoil[i + 1], this.volts[i], this.volts[i + 1], i > 1 ? -6 : 6);
+	    }
+	
+	    //renderContext.getVoltageColor(needsHighlight() ? selectColor : lightGrayColor);
+	
+	    for (let i = 0; i != 4; i += 2) {
+	      renderContext.drawLinePt(this.ptCore[i], this.ptCore[i + 1]);
+	    }
+	
+	    /*
+	    // calc current of tap wire
+	    this.current[3] = this.current[1] - this.current[2];
+	    for (i = 0; i != 4; i++)
+	      curcount[i] = updateDotCount(current[i], curcount[i]);
+	
+	
+	    // primary dots
+	    drawDots(g, ptEnds[0], ptCoil[0], curcount[0]);
+	    drawDots(g, ptCoil[0], ptCoil[1], curcount[0]);
+	    drawDots(g, ptCoil[1], ptEnds[1], curcount[0]);
+	
+	    // secondary dots
+	    drawDots(g, ptEnds[2], ptCoil[2], curcount[1]);
+	    drawDots(g, ptCoil[2], ptCoil[3], curcount[1]);
+	    drawDots(g, ptCoil[3], ptEnds[3], curcount[3]);
+	    drawDots(g, ptCoil[3], ptCoil[4], curcount[2]);
+	    drawDots(g, ptCoil[4], ptEnds[4], curcount[2]);
+	    */
+	
+	    renderContext.drawPosts(this);
+	    this.setBboxPt(this.ptEnds[0], this.ptEnds[4], 0);
 	  }
 	
 	  getName() {
