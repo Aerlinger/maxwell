@@ -30158,7 +30158,7 @@
 
 	class ScopeCanvas {
 	  constructor(parentUI, scopeDiv, x=800, y=700) {
-	    this.dataPoints = 400;
+	    this.dataPoints = 800;
 	
 	    this.parentUI = parentUI;
 	    this.scopeDiv = scopeDiv;

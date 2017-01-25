@@ -129,10 +129,6 @@ class CircuitSolver
             scope.sampleVoltage(@Circuit.time, scope.circuitElm.getVoltageDiff());
             scope.sampleCurrent(@Circuit.time, scope.circuitElm.getCurrent());
 
-      # TODO: Update scopes here
-      # for scope in @Circuit.scopes
-      # scope.timeStep()
-
       tm = (new Date()).getTime()
       lit = tm
 
