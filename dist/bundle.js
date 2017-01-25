@@ -22256,7 +22256,7 @@
 	      s = `${this.position}`;
 	    }
 	
-	    renderContext.fillText(s, this.point2.x - 5, this.point2.y + 6, Settings.TEXT_COLOR, 2*Settings.TEXT_SIZE);
+	    renderContext.fillText(s, this.point2.x - 5, this.point2.y + 6, Settings.TEXT_COLOR, 1.5*Settings.TEXT_SIZE);
 	
 	    let color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
@@ -26538,7 +26538,7 @@
 	    this.curcount_1 = this.updateDots(null, this.current1);
 	    renderContext.drawDots(this.point1, this.lead1, this.curcount_1);
 	
-	    renderContext.drawValue(14, 0, this, Util.getUnitText(this.resistance1, this.unitSymbol()));
+	    renderContext.drawValue(-this.dir*18, 0, this, Util.getUnitText(this.resistance1, this.unitSymbol()));
 	
 	    renderContext.drawPosts(this);
 	
@@ -26583,7 +26583,7 @@
 	    super.setPoints(x1, y1, x2, y2);
 	
 	    let offset = 0;
-	    let dir = 0;
+	    this.dir = 0;
 	
 	    // TODO: Check
 	    if (Math.abs(this.dx()) > Math.abs(this.dy())) {   // Horizontal
@@ -26591,17 +26591,17 @@
 	
 	      offset = (this.dx() < 0) ? this.dx() : -this.dx();
 	
-	      dir = Math.sign(this.dx());
+	      this.dir = Math.sign(this.dx());
 	
 	      //this.point2.y = this.point1.y;
 	
-	      offset = Util.snapGrid(-offset/2 + 2*Settings.GRID_SIZE*dir);
+	      offset = Util.snapGrid(-offset/2 + 2*Settings.GRID_SIZE*this.dir);
 	    } else {
 	      //dy = Util.snapGrid(this.dy() / 2) * 2;
 	      // this.point2.y = this.point1.y + dy;
 	      offset = (this.dy() > 0) ? this.dy() : -this.dy();
 	
-	      dir = Math.sign(this.dy());
+	      this.dir = Math.sign(this.dy());
 	
 	      offset = Util.snapGrid(8*Settings.GRID_SIZE);
 	      //this.point2.x = this.point1.x;
@@ -26636,7 +26636,7 @@
 	    this.ps3 = new Point(0, 0);
 	    this.ps4 = new Point(0, 0);
 	
-	    console.log("POSTS", dir, "offset", offset, "dn", dn, clen, this.position, "post3", this.post3, "corner2", this.corner2, "arrowPoint", this.arrowPoint, this.arrow1, this.arrow2, this.midpoint, "p1", this.point1, "p2", this.p2);
+	    console.log("POSTS", this.dir, "offset", offset, "dn", dn, clen, this.position, "post3", this.post3, "corner2", this.corner2, "arrowPoint", this.arrowPoint, this.arrow1, this.arrow2, this.midpoint, "p1", this.point1, "p2", this.p2);
 	  }
 	
 	  getPost(n) {
