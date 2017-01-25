@@ -219,7 +219,7 @@ class Circuit extends Observer {
     if (this.isStopped) {
       this.Solver.lastTime = 0;
     } else {
-      this.frameStartTime = performance.now();
+      this.frameStartTime = Date.now();
 
       this.notifyObservers(this.ON_START_UPDATE);
       this.Solver.reconstruct();
@@ -235,7 +235,7 @@ class Circuit extends Observer {
         }
       }
 
-      this.frameEndTime = performance.now();
+      this.frameEndTime = Date.now();
 
       this.lastFrameTime = this.frameEndTime - this.frameStartTime;
 

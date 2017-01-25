@@ -538,7 +538,12 @@ class CircuitCanvas extends Observer {
     let dy = ptB.y - ptA.y;
     let dn = Math.sqrt((dx * dx) + (dy * dy));
 
-    let newPos = component.curcount;
+    let newPos;
+    if (typeof(component) == "number") {
+      newPos = component
+    } else {
+      newPos = component.curcount;
+    }
 
     return (() => {
       let result = [];

@@ -75,20 +75,21 @@ class SwitchElm extends CircuitComponent {
 
     renderContext.drawLeads(this);
 
+    this.ps = Util.interpolate(this.lead1, this.lead2, -0.05, hs1);
+    this.ps2 = Util.interpolate(this.lead1, this.lead2, 1.05, hs2);
+
+    this.updateDots();
     if (this.position === 0) {
       renderContext.drawDots(this.point1, this.point2, this);
     }
-
-    renderContext.drawPosts(this);
-
-    this.ps = Util.interpolate(this.lead1, this.lead2, -0.05, hs1);
-    this.ps2 = Util.interpolate(this.lead1, this.lead2, 1.05, hs2);
 
     // Draw switch "Lever"
     renderContext.drawLinePt(this.ps, this.ps2, Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
 
     renderContext.fillCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
     renderContext.fillCircle(this.lead2.x, this.lead2.y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+
+    renderContext.drawPosts(this);
 
     if (CircuitComponent.DEBUG) {
       super.draw(renderContext);

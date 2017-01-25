@@ -611,7 +611,7 @@ class CircuitComponent {
     */
   }
 
-  updateDots(ds) {
+  updateDots(ds, current = null) {
     if (this.Circuit && this.Circuit.isStopped) {
       return
     }
@@ -624,7 +624,7 @@ class CircuitComponent {
         this.curcount = 0;
       }
 
-      let currentIncrement = this.current * this.Circuit.Params.getCurrentMult();
+      let currentIncrement = (current || this.current) * this.Circuit.Params.getCurrentMult();
 
       this.curcount = (this.curcount + currentIncrement) % ds;
       if (this.curcount < 0) {

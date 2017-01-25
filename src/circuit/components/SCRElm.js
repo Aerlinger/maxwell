@@ -55,16 +55,20 @@ class ScrElm extends CircuitComponent {
     this.volts[this.cnode] = -this.lastvac;
     this.volts[this.gnode] = -this.lastvag;
 
+    this.curcount_a = 0;
+    this.curcount_c = 0;
+    this.curcount_g = 0;
+
     // this.params['volts'] = this.volts;
 
     // delete this.params['lastvac'];
     // delete this.params['lastvag'];
 
     this.setup();
-    this.setPoints();
+    //this.setPoints();
   }
 
-  setPoints() {
+  setPoints(x1, y1, x2, y2) {
     super.setPoints(...arguments);
 
     let dir = 0;
@@ -92,8 +96,10 @@ class ScrElm extends CircuitComponent {
     this.gate = new Array(2);
     let leadlen = (this.dn() - 16) / 2;
 
-    let gatelen = Settings.GRID_SIZE;
-    gatelen += leadlen % Settings.GRID_SIZE;
+    let gatelen = 2*Settings.GRID_SIZE;
+    //gatelen = gatelen + (leadlen % 2*Settings.GRID_SIZE);
+
+    gatelen = 24;
 
     if (leadlen < gatelen) {
       this.point2.x = this.point1.x;
@@ -101,8 +107,43 @@ class ScrElm extends CircuitComponent {
       return;
     }
 
+    dir *= -1;
+    // leadlen /= 3;
+    console.log("dn", this.dn());
+    console.log("gatelen", gatelen);
+    console.log("dir", dir);
+    console.log("leadlen", leadlen);
+    console.trace("leadlen");
+
     this.gate[0] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, gatelen * dir);
-    this.gate[1] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, Settings.GRID_SIZE * 2 * dir);
+    this.gate[1] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, Settings.GRID_SIZE * 4 * dir);
+
+    this.setBboxPt(this.point1, this.point2, this.hs)
+
+
+    /*
+    let gatelen = Settings.GRID_SIZE;
+    gatelen = gatelen + (leadlen % 2*Settings.GRID_SIZE);
+
+    //gatelen = 24;
+
+    if (leadlen < gatelen) {
+      this.point2.x = this.point1.x;
+      this.point2.y = this.point1.y;
+      return;
+    }
+
+    //dir *= -1;
+    // leadlen /= 3;
+    console.log("dn", this.dn());
+    console.log("gatelen", gatelen);
+    console.log("dir", dir);
+    console.log("leadlen", leadlen);
+    console.trace("leadlen");
+
+    this.gate[0] = Util.interpolate(this.lead2, this.point2, 2 * gatelen / leadlen, 2 * gatelen * dir);
+    this.gate[1] = Util.interpolate(this.lead2, this.point2, 2 * gatelen / leadlen, Settings.GRID_SIZE * 4 * dir);
+    */
 
     this.setBboxPt(this.point1, this.point2, this.hs)
   }
@@ -112,6 +153,7 @@ class ScrElm extends CircuitComponent {
   }
 
   draw(renderContext) {
+    //this.setPoints()
     this.setBboxPt(this.point1, this.point2, this.hs)
 //    adjustBbox(@gate[0], @gate[1])
 
@@ -123,6 +165,11 @@ class ScrElm extends CircuitComponent {
     let color = renderContext.getVoltageColor(v1);
     renderContext.drawThickPolygonP(this.poly, color);
 
+    renderContext.fillCircle(this.gate[0].x, this.gate[0].y, 4, 2, "#00F");
+    renderContext.fillCircle(this.gate[1].x, this.gate[1].y, 4, 2, "#F00");
+    // renderContext.fillCircle(this.lead2.x, this.lead2.y, 4, 2, "#F0F");
+    // renderContext.fillCircle(this.point2.x, this.point2.y, 4, 2, "#FF0");
+
     // draw thing arrow is pointing to
     color = renderContext.getVoltageColor(v2);
     renderContext.drawLinePt(this.cathode[0], this.cathode[1], color);
@@ -130,16 +177,22 @@ class ScrElm extends CircuitComponent {
     renderContext.drawLinePt(this.lead2, this.gate[0], color);
     renderContext.drawLinePt(this.gate[0], this.gate[1], color);
 
-    this.curcount_a = this.updateDots(this.ia, this.curcount_a);
-    this.curcount_c = this.updateDots(this.ic, this.curcount_c);
-    this.curcount_g = this.updateDots(this.ig, this.curcount_g);
+    this.curcount_a = this.updateDots(null, this.ia);
+    renderContext.drawDots(this.lead2, this.point1, this.curcount_a);
 
-    renderContext.drawDots(this.point1, this.lead2, this.curcount_a);
+    this.curcount_c = this.updateDots(null, this.ic);
     renderContext.drawDots(this.point2, this.lead2, this.curcount_c);
-    renderContext.drawDots(this.gate[1], this.gate[0], this.curcount_g);
-//    renderContext.drawDots(@gate[0], @lead2, @curcount_g + distance(@gate[1], @gate[0]))
+
+    //this.curcount_g = this.updateDots(null, this.ig);
+    // renderContext.drawDots(this.gate[1], this.gate[0], this.curcount_g);
+    // renderContext.drawDots(this.gate[0], this.lead2, this.curcount_g);
+
 
     renderContext.drawPosts(this);
+
+//    renderContext.drawDots(@gate[0], @lead2, @curcount_g + distance(@gate[1], @gate[0]))
+
+
 
     if (CircuitComponent.DEBUG) {
       super.draw(renderContext);
@@ -344,7 +397,7 @@ class ScrElm extends CircuitComponent {
   calculateCurrent() {
     this.ic = (this.volts[this.cnode] - this.volts[this.gnode]) / this.cresistance;
     this.ia = (this.volts[this.anode] - this.volts[this.inode]) / this.aresistance;
-    return this.ig = -this.ic - this.ia;
+    this.ig = -this.ic - this.ia;
   }
 }
 ScrElm.initClass();
