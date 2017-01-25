@@ -200,8 +200,8 @@ class VoltageElm extends CircuitComponent {
 
     renderContext.drawPosts(this);
 
-    if (CircuitComponent.DEBUG) {
-      super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      super.debugDraw(renderContext);
     }
   }
 
@@ -235,6 +235,11 @@ class VoltageElm extends CircuitComponent {
         renderContext.drawLine(xc2, yc - wl, xc2, yc + wl, color);
         renderContext.drawLine(xc + wl, yc + wl, xc2, yc + wl, color);
         renderContext.drawLine(xc + wl, yc, xc + wl, yc + wl, color);
+
+        let str = this.params.maxVoltage + "V @ " + this.params.frequency + "Hz";
+        renderContext.drawValue(35, 0, this, str);
+        renderContext.drawValue(45, 0, this, Util.floatToPercent(this.params.dutyCycle));
+
         break;
 
       case VoltageElm.WF_PULSE:
@@ -247,6 +252,8 @@ class VoltageElm extends CircuitComponent {
         renderContext.drawLine(xc - wl/2, yc, xc + wl, yc, color);
         renderContext.closePath();
 
+        renderContext.drawValue(25, 0, this, this.params.maxVoltage + "V @ " + this.params.frequency + "Hz");
+
         yc -= wl / 2;
 
         break;
@@ -255,6 +262,7 @@ class VoltageElm extends CircuitComponent {
         renderContext.drawLine(xc, yc - wl, xc - wl, yc, color);
         renderContext.drawLine(xc, yc - wl, xc, yc + wl, color);
         renderContext.drawLine(xc, yc + wl, xc + wl, yc, color);
+        renderContext.drawValue(35, 0, this, this.params.maxVoltage + "V @ " + this.params.frequency + "Hz");
         break;
 
       case VoltageElm.WF_TRIANGLE:
@@ -263,6 +271,7 @@ class VoltageElm extends CircuitComponent {
         renderContext.drawLine(xc - xl, yc - wl, xc, yc, color);
         renderContext.drawLine(xc, yc, xc + xl, yc + wl, color);
         renderContext.drawLine(xc + xl, yc + wl, xc + (xl * 2), yc, color);
+        renderContext.drawValue(35, 0, this, this.params.maxVoltage + "V @ " + this.params.frequency + "Hz");
         break;
 
       case VoltageElm.WF_AC:
@@ -280,6 +289,8 @@ class VoltageElm extends CircuitComponent {
           oy = yy;
           i++;
         }
+
+        renderContext.drawValue(25, 0, this, this.params.maxVoltage + "V @ " + this.params.frequency + "Hz");
         break;
     }
 

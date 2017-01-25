@@ -25,8 +25,8 @@ class CurrentElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-    if (CircuitComponent.DEBUG) {
-      super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      super.debugDraw(renderContext);
     }
 
     this.calcLeads(26);
@@ -55,6 +55,8 @@ class CurrentElm extends CircuitComponent {
 //      if Circuit.showValuesCheckItem
 //        s = DrawHelper.getShortUnitText(@currentValue, "A")
 //        @drawValues s, cr  if @dx() is 0 or @dy() is 0
+
+    renderContext.drawValue(20, 0, this, this.params.currentValue + "A");
 
     return renderContext.drawPosts(this);
   }

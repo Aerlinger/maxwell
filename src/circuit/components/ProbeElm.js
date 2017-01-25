@@ -37,8 +37,8 @@ class ProbeElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-    if (CircuitComponent.DEBUG) {
-      super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      super.debugDraw(renderContext);
     }
 
     let hs = 8;

@@ -419,19 +419,19 @@
 
 	/**
 	 CircuitComponent:
-	   Base class from which all components inherit
+	 Base class from which all components inherit
 	
 	 @author Anthony Erlinger
 	 @year 2012
 	
 	 Uses the Observer Design Pattern:
-	   Observes: Circuit, CircuitRender
-	   Observed By: CircuitCanvas
+	 Observes: Circuit, CircuitRender
+	 Observed By: CircuitCanvas
 	
 	 Events:
-	  <None>
+	 <None>
 	
-	*/
+	 */
 	
 	let Settings = __webpack_require__(2);
 	let Rectangle = __webpack_require__(3);
@@ -448,7 +448,7 @@
 	  }
 	
 	  static initClass() {
-	    this.DEBUG = false;
+	    this.DEBUG = true;
 	  }
 	
 	  constructor(x1, y1, x2, y2, params, f) {
@@ -502,7 +502,7 @@
 	
 	      } else {
 	        if ((default_value != null) && (default_value != undefined)) {
-	          if (CircuitComponent.DEBUG) {
+	          if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	            console.log(`INFO: Assigning default value of ${default_value} for ${param_name} in ${this.constructor.name} (was ${this[param_name]})`)
 	          }
 	        } else {
@@ -554,7 +554,6 @@
 	  sety2(value) {
 	    return this.point2.y = value;
 	  }
-	
 	
 	  x1() {
 	    return this.point1.x;
@@ -978,30 +977,30 @@
 	    // renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
 	
 	    /*
-	    renderContext.drawValue(-14, 0, this, this.toString());
+	     renderContext.drawValue(-14, 0, this, this.toString());
 	
-	    if (this.params) {
-	      let height = 8;
-	      let i = 0;
-	      for (let value = 0; value < this.params.length; value++) {
-	        let name = this.params[value];
-	        console.log(name, value);
-	        renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
-	        i += 1;
-	      }
-	    }
-	    */
+	     if (this.params) {
+	     let height = 8;
+	     let i = 0;
+	     for (let value = 0; value < this.params.length; value++) {
+	     let name = this.params[value];
+	     console.log(name, value);
+	     renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
+	     i += 1;
+	     }
+	     }
+	     */
 	
 	    let outlineRadius = 7;
 	
 	    /*
-	    // Draw node values
-	    nodeIdx = 0
-	    for node in @nodes
-	      if @point1 && @point2
-	        renderContext.drawValue 25+10*nodeIdx, -10*nodeIdx, this, "#{node}-#{@getVoltageForNode(node)}"
-	        nodeIdx += 1
-	    */
+	     // Draw node values
+	     nodeIdx = 0
+	     for node in @nodes
+	     if @point1 && @point2
+	     renderContext.drawValue 25+10*nodeIdx, -10*nodeIdx, this, "#{node}-#{@getVoltageForNode(node)}"
+	     nodeIdx += 1
+	     */
 	
 	
 	    if (this.point1) {
@@ -1011,23 +1010,87 @@
 	    if (this.point2) {
 	      renderContext.drawRect(this.point2.x - (outlineRadius / 2), this.point2.y - (outlineRadius / 2), outlineRadius - 1, outlineRadius - 1, 2, color);
 	    }
-	    
-	    /*
-	    if (this.lead1) {
-	      renderContext.drawRect(this.lead1.x - (outlineRadius / 2), this.lead1.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
-	    }
-	
-	    if (this.lead2) {
-	      renderContext.drawRect(this.lead2.x - (outlineRadius / 2), this.lead2.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
-	    }
-	    */
 	
 	    /*
-	    for (let i=0; i<this.getPostCount(); ++i) {
+	     if (this.lead1) {
+	     renderContext.drawRect(this.lead1.x - (outlineRadius / 2), this.lead1.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
+	     }
+	
+	     if (this.lead2) {
+	     renderContext.drawRect(this.lead2.x - (outlineRadius / 2), this.lead2.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
+	     }
+	     */
+	
+	    /*
+	     for (let i=0; i<this.getPostCount(); ++i) {
+	     let post = this.getPost(i);
+	     renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
+	     }
+	     */
+	  }
+	
+	  debugDraw(renderContext) {
+	    let post;
+	    let color = Util.getColorForId(this.component_id);
+	
+	    renderContext.drawRect(this.boundingBox.x - 2, this.boundingBox.y - 2, this.boundingBox.width + 2, this.boundingBox.height + 2, 0.5, "#F00");
+	
+	    // renderContext.drawValue 10, -15, this, @constructor.name
+	    // renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
+	
+	    /*
+	     renderContext.drawValue(-14, 0, this, this.toString());
+	
+	     if (this.params) {
+	     let height = 8;
+	     let i = 0;
+	     for (let value = 0; value < this.params.length; value++) {
+	     let name = this.params[value];
+	     console.log(name, value);
+	     renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
+	     i += 1;
+	     }
+	     }
+	     */
+	
+	    let outlineRadius = 7;
+	
+	    /*
+	     // Draw node values
+	     nodeIdx = 0
+	     for node in @nodes
+	     if @point1 && @point2
+	     renderContext.drawValue 25+10*nodeIdx, -10*nodeIdx, this, "#{node}-#{@getVoltageForNode(node)}"
+	     nodeIdx += 1
+	     */
+	
+	
+	    /*
+	
+	     if (this.point1) {
+	     renderContext.drawCircle(this.point1.x, this.point1.y, outlineRadius - 1, 1, color);
+	     }
+	
+	     if (this.point2) {
+	     renderContext.drawRect(this.point2.x - (outlineRadius / 2), this.point2.y - (outlineRadius / 2), outlineRadius - 1, outlineRadius - 1, 2, color);
+	     }
+	
+	
+	     if (this.lead1) {
+	     renderContext.drawRect(this.lead1.x - (outlineRadius / 2), this.lead1.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
+	     }
+	
+	     if (this.lead2) {
+	     renderContext.drawRect(this.lead2.x - (outlineRadius / 2), this.lead2.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
+	     }
+	     */
+	
+	
+	    for (let i = 0; i < this.getPostCount(); ++i) {
 	      let post = this.getPost(i);
 	      renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
 	    }
-	    */
+	
 	  }
 	
 	  updateDots(ds, current = null) {
@@ -1152,7 +1215,9 @@
 	
 	    // default to a no-op if parseFunction isn't defined
 	    if (!parseFunction) {
-	      parseFunction = function noop(x) { return x; };
+	      parseFunction = function noop(x) {
+	        return x;
+	      };
 	    }
 	
 	    if (this.isValidParam(paramName, paramValue)) {
@@ -1168,10 +1233,10 @@
 	  /**
 	   Returns the JSON metadata object for this field with an additional key/value pair for the assigned value.
 	   Used externally to edit/update component values
-	  
+	
 	   Eg:
 	   voltageElm.getFieldWithValue("waveform")
-	  
+	
 	   {
 	     name: "none"
 	     default_value: 0
@@ -1181,7 +1246,7 @@
 	     select_values: ...
 	     value: 2   Square wave
 	   }
-	  
+	
 	   @see @Fields
 	   */
 	  getFieldWithValue(param_name) {
@@ -1799,6 +1864,10 @@
 	    } else {
 	      return sprintf("%0.2f", f);
 	    }
+	  }
+	
+	  static floatToPercent(f, digits = 1) {
+	    return sprintf("%0.0f", f * 100) + "%";
 	  }
 	
 	  static isFunction(v) {
@@ -17913,13 +17982,13 @@
 	      this.drawWaveform(this.point2, renderContext);
 	    }
 	
-	    // super.draw(renderContext);
-	    if (CircuitComponent.DEBUG) {
-	      super.draw(renderContext);
+	    // super.debugDraw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
 	    }
 	  }
 	
-	//    if CircuitComponent.DEBUG
+	//    if this.Circuit.debugModeEnabled()
 	//      super(renderContext)
 	
 	
@@ -18173,8 +18242,8 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -18208,6 +18277,11 @@
 	        renderContext.drawLine(xc2, yc - wl, xc2, yc + wl, color);
 	        renderContext.drawLine(xc + wl, yc + wl, xc2, yc + wl, color);
 	        renderContext.drawLine(xc + wl, yc, xc + wl, yc + wl, color);
+	
+	        let str = this.params.maxVoltage + "V @ " + this.params.frequency + "Hz";
+	        renderContext.drawValue(35, 0, this, str);
+	        renderContext.drawValue(45, 0, this, Util.floatToPercent(this.params.dutyCycle));
+	
 	        break;
 	
 	      case VoltageElm.WF_PULSE:
@@ -18220,6 +18294,8 @@
 	        renderContext.drawLine(xc - wl/2, yc, xc + wl, yc, color);
 	        renderContext.closePath();
 	
+	        renderContext.drawValue(25, 0, this, this.params.maxVoltage + "V @ " + this.params.frequency + "Hz");
+	
 	        yc -= wl / 2;
 	
 	        break;
@@ -18228,6 +18304,7 @@
 	        renderContext.drawLine(xc, yc - wl, xc - wl, yc, color);
 	        renderContext.drawLine(xc, yc - wl, xc, yc + wl, color);
 	        renderContext.drawLine(xc, yc + wl, xc + wl, yc, color);
+	        renderContext.drawValue(35, 0, this, this.params.maxVoltage + "V @ " + this.params.frequency + "Hz");
 	        break;
 	
 	      case VoltageElm.WF_TRIANGLE:
@@ -18236,6 +18313,7 @@
 	        renderContext.drawLine(xc - xl, yc - wl, xc, yc, color);
 	        renderContext.drawLine(xc, yc, xc + xl, yc + wl, color);
 	        renderContext.drawLine(xc + xl, yc + wl, xc + (xl * 2), yc, color);
+	        renderContext.drawValue(35, 0, this, this.params.maxVoltage + "V @ " + this.params.frequency + "Hz");
 	        break;
 	
 	      case VoltageElm.WF_AC:
@@ -18253,6 +18331,8 @@
 	          oy = yy;
 	          i++;
 	        }
+	
+	        renderContext.drawValue(25, 0, this, this.params.maxVoltage + "V @ " + this.params.frequency + "Hz");
 	        break;
 	    }
 	
@@ -18372,8 +18452,8 @@
 	    if (Settings.WIRE_POSTS)
 	      renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -18593,8 +18673,8 @@
 	      renderContext.drawPost(post.x, post.y)
 	    }
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -18707,8 +18787,8 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -18795,8 +18875,8 @@
 	      renderContext.drawLinePt(pt1, pt2, color);
 	    }
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -18862,7 +18942,7 @@
 	  static get Fields() {
 	    return {
 	      fwdrop: {
-	        name: "Voltage",
+	        name: "Voltage Drop",
 	        unit: "Voltage",
 	        symbol: "V",
 	        default_value: DiodeElm.DEFAULT_DROP,
@@ -18928,8 +19008,8 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -19160,8 +19240,8 @@
 	    renderContext.fillCircle(this.lead1.x, this.lead1.y, 2*Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -19283,8 +19363,8 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -19445,8 +19525,8 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -19622,8 +19702,8 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -19777,8 +19857,8 @@
 	//      @arrow2 = DrawHelper.calcArrow(@point2, p1, alen, alen)
 	
 	  draw(renderContext) {
-	    if (CircuitComponent.DEBUG) {
-	      super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
 	    }
 	
 	    this.updateDots();
@@ -19886,8 +19966,8 @@
 	  }
 	
 	  draw(renderContext) {
-	    if (CircuitComponent.DEBUG) {
-	      super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
 	    }
 	
 	    this.calcLeads(26);
@@ -19916,6 +19996,8 @@
 	//      if Circuit.showValuesCheckItem
 	//        s = DrawHelper.getShortUnitText(@currentValue, "A")
 	//        @drawValues s, cr  if @dx() is 0 or @dy() is 0
+	
+	    renderContext.drawValue(20, 0, this, this.params.currentValue + "A");
 	
 	    return renderContext.drawPosts(this);
 	  }
@@ -20112,8 +20194,8 @@
 	    renderContext.drawDots(this.drn[1], this.drn[0], this);
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -20348,8 +20430,8 @@
 	
 	
 	  draw(renderContext) {
-	    if (CircuitComponent.DEBUG) {
-	      super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
 	    }
 	
 	    let color = renderContext.getVoltageColor(this.volts[1]);
@@ -20486,8 +20568,8 @@
 	  }
 	
 	  draw(renderContext) {
-	    if (CircuitComponent.DEBUG) {
-	      super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
 	    }
 	
 	    //@dsign() = -@dsign()  unless (@flags & TransistorElm.FLAG_FLIP) is 0
@@ -21017,8 +21099,8 @@
 	      renderContext.drawPosts(this);
 	    }
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -21184,8 +21266,8 @@
 	  }
 	
 	  draw(renderContext) {
-	    if (CircuitComponent.DEBUG) {
-	      super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
 	    }
 	
 	    this.updateDots();
@@ -21358,13 +21440,13 @@
 	    renderContext.fillCircle(this.swpoles[1].x, this.swpoles[1].y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
 	
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	
 	  }
 	
-	//    if CircuitComponent.DEBUG
+	//    if this.Circuit.debugModeEnabled()
 	//      super(renderContext)
 	
 	  getPost(n) {
@@ -21503,8 +21585,8 @@
 	  }
 	
 	  draw(renderContext) {
-	    if (CircuitComponent.DEBUG) {
-	      super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
 	    }
 	
 	    let color = renderContext.getVoltageColor(this.volts[0]);
@@ -21732,8 +21814,8 @@
 	
 	    this.setBbox(this.x1(), this.y1() - this.size + 1, this.x1() + mt.width, this.y1());
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -21798,8 +21880,8 @@
 	  }
 	
 	  draw(renderContext) {
-	    if (CircuitComponent.DEBUG) {
-	      super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
 	    }
 	
 	    let hs = 8;
@@ -22146,8 +22228,8 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -22265,8 +22347,8 @@
 	    renderContext.drawDots(this.point1, this.lead1, this);
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -22401,8 +22483,8 @@
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -22497,8 +22579,8 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -22638,8 +22720,8 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -22796,6 +22878,10 @@
 	    renderContext.drawDots(this.point1, this.lead1, this);
 	    renderContext.drawDots(this.lead2, this.point2, this);
 	    renderContext.drawPosts(this);
+	
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
+	    }
 	  }
 	
 	  nonLinear() {
@@ -23136,8 +23222,8 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -23227,6 +23313,8 @@
 	    this.lastvoltdiff = 0;
 	
 	    this.setup();
+	
+	    this.setPoints()
 	  }
 	
 	  reset() {
@@ -23245,6 +23333,8 @@
 	  }
 	
 	  draw(renderContext) {
+	    this.setPoints()
+	
 	    this.setBbox(this.point1, this.point2, this.hs);
 	
 	    let v1 = this.volts[0];
@@ -23270,6 +23360,10 @@
 	    renderContext.drawLinePt(this.cathode[3], this.cathode[1], color);
 	
 	    renderContext.drawPosts(this);
+	
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
+	    }
 	  }
 	
 	  setPoints() {
@@ -23546,9 +23640,8 @@
 	//    renderContext.drawDots(@gate[0], @lead2, @curcount_g + distance(@gate[1], @gate[0]))
 	
 	
-	
-	    if (CircuitComponent.DEBUG) {
-	      super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -23786,6 +23879,7 @@
 	    this.gridCurrentR = 6000;
 	
 	    this.setup();
+	    this.setPoints();
 	  }
 	
 	  setup() {
@@ -23861,6 +23955,10 @@
 	    }
 	    */
 	    renderContext.drawPosts(this);
+	
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
+	    }
 	  }
 	
 	  getPostCount() {
@@ -24476,8 +24574,8 @@
 	      renderContext.drawPolyline(this.clockPointsX, this.clockPointsY, 3);
 	    }
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	
 	
@@ -25659,7 +25757,7 @@
 	  }
 	
 	  draw(renderContext) {
-	    this.setBboxPt(this.posts[0], this.posts[3], 0);
+	    this.setBboxPt(this.posts[0], this.posts[3], 5);
 	    let segments = Math.floor(this.dn() / 2);
 	
 	    let ix0 = this.ptr - 1 + this.lenSteps;
@@ -25932,8 +26030,8 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -26112,7 +26210,7 @@
 	  }
 	
 	  draw(renderContext) {
-	    super.draw(renderContext);
+	    super.debugDraw(renderContext);
 	
 	    this.current[3] = this.current[1] - this.current[2];
 	
@@ -26430,8 +26528,8 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
 	    }
 	  }
 	}
@@ -26542,8 +26640,8 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (CircuitComponent.DEBUG) {
-	      return super.draw(renderContext);
+	    if (this.Circuit.debugModeEnabled()) {
+	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -26922,6 +27020,7 @@
 	    this.timeStep = parseFloat(params['timeStep'] || 5.0e-06);
 	    this.title = params['title'] || "Default";
 	    this.topic = params['topic'] || null;
+	    this.debug = params['debug'] || null;
 	  }
 	  
 	  toJson() {
@@ -26939,7 +27038,8 @@
 	      simSpeed: this.simSpeed,
 	      timeStep: this.timeStep,
 	      title: this.title,
-	      topic: this.topic
+	      topic: this.topic,
+	      debug: this.debug
 	    };
 	  }
 	
@@ -27134,7 +27234,7 @@
 	    newElement.onSolder(this);
 	
 	    this.invalidate();
-	    return this.recomputeBounds();
+	    this.recomputeBounds();
 	  }
 	
 	  // "Desolders" an existing element to this circuit (removes it to the element list array).
@@ -27149,7 +27249,11 @@
 	    //  if node.getNeighboringElements().length == 1
 	    //    @nodeList.de
 	
-	    return this.recomputeBounds();
+	    this.recomputeBounds();
+	  }
+	
+	  debugModeEnabled() {
+	    return this.Params.debug
 	  }
 	
 	  toString() {
@@ -28306,7 +28410,7 @@
 	        ++j;
 	      }
 	      if (largest === 0) {
-	        throw new Error("Singular matrix (" + i + ", " + j + ") -> " + largest);
+	        console.error("Singular matrix (" + i + ", " + j + ") -> " + largest);
 	      }
 	      this.scaleFactors[i] = 1.0 / largest;
 	      ++i;
@@ -29756,8 +29860,8 @@
 	      this.context = this.Canvas.getContext("2d");
 	    }
 	
-	    //this.setupScopes();
-	    //this.renderPerformance();
+	    this.setupScopes();
+	    this.renderPerformance();
 	  }
 	
 	  setupScopes(){
@@ -30186,7 +30290,7 @@
 	        this.drawComponent(component);
 	      }
 	
-	      if (CircuitComponent.DEBUG) {
+	      if (this.Circuit.debugModeEnabled()) {
 	        let voltage, x, y;
 	        let nodeIdx = 0;
 	        return Array.from(this.Circuit.getNodes()).map((node) =>
@@ -30267,6 +30371,8 @@
 	    if (typeof(component) == "number") {
 	      newPos = component
 	    } else {
+	      if (!component)
+	        return;
 	      newPos = component.curcount;
 	    }
 	

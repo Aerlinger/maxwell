@@ -102,6 +102,10 @@ class MemristorElm extends CircuitComponent {
     renderContext.drawDots(this.point1, this.lead1, this);
     renderContext.drawDots(this.lead2, this.point2, this);
     renderContext.drawPosts(this);
+
+    if (this.Circuit.debugModeEnabled()) {
+      return super.debugDraw(renderContext);
+    }
   }
 
   nonLinear() {

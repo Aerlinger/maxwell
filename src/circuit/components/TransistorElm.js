@@ -98,8 +98,8 @@ class TransistorElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-    if (CircuitComponent.DEBUG) {
-      super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      super.debugDraw(renderContext);
     }
 
     //@dsign() = -@dsign()  unless (@flags & TransistorElm.FLAG_FLIP) is 0

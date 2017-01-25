@@ -15,6 +15,8 @@ class TunnelDiodeElm extends CircuitComponent {
     this.lastvoltdiff = 0;
 
     this.setup();
+
+    this.setPoints()
   }
 
   reset() {
@@ -33,6 +35,8 @@ class TunnelDiodeElm extends CircuitComponent {
   }
 
   draw(renderContext) {
+    this.setPoints()
+
     this.setBbox(this.point1, this.point2, this.hs);
 
     let v1 = this.volts[0];
@@ -58,6 +62,10 @@ class TunnelDiodeElm extends CircuitComponent {
     renderContext.drawLinePt(this.cathode[3], this.cathode[1], color);
 
     renderContext.drawPosts(this);
+
+    if (this.Circuit.debugModeEnabled()) {
+      super.debugDraw(renderContext);
+    }
   }
 
   setPoints() {

@@ -15,6 +15,7 @@ class SimulationParams {
     this.timeStep = parseFloat(params['timeStep'] || 5.0e-06);
     this.title = params['title'] || "Default";
     this.topic = params['topic'] || null;
+    this.debug = params['debug'] || null;
   }
   
   toJson() {
@@ -32,7 +33,8 @@ class SimulationParams {
       simSpeed: this.simSpeed,
       timeStep: this.timeStep,
       title: this.title,
-      topic: this.topic
+      topic: this.topic,
+      debug: this.debug
     };
   }
 

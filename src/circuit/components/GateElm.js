@@ -163,8 +163,8 @@ class GateElm extends CircuitComponent {
       renderContext.drawPost(post.x, post.y)
     }
 
-    if (CircuitComponent.DEBUG) {
-      return super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      return super.debugDraw(renderContext);
     }
   }
 

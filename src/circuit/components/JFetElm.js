@@ -58,8 +58,8 @@ class JfetElm extends MosfetElm {
 
 
   draw(renderContext) {
-    if (CircuitComponent.DEBUG) {
-      super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      super.debugDraw(renderContext);
     }
 
     let color = renderContext.getVoltageColor(this.volts[1]);

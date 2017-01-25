@@ -39,8 +39,8 @@ class CircuitCanvas extends Observer {
       this.context = this.Canvas.getContext("2d");
     }
 
-    //this.setupScopes();
-    //this.renderPerformance();
+    this.setupScopes();
+    this.renderPerformance();
   }
 
   setupScopes(){
@@ -469,7 +469,7 @@ class CircuitCanvas extends Observer {
         this.drawComponent(component);
       }
 
-      if (CircuitComponent.DEBUG) {
+      if (this.Circuit.debugModeEnabled()) {
         let voltage, x, y;
         let nodeIdx = 0;
         return Array.from(this.Circuit.getNodes()).map((node) =>
@@ -550,6 +550,8 @@ class CircuitCanvas extends Observer {
     if (typeof(component) == "number") {
       newPos = component
     } else {
+      if (!component)
+        return;
       newPos = component.curcount;
     }
 

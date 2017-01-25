@@ -15,7 +15,7 @@ class DiodeElm extends CircuitComponent {
   static get Fields() {
     return {
       fwdrop: {
-        name: "Voltage",
+        name: "Voltage Drop",
         unit: "Voltage",
         symbol: "V",
         default_value: DiodeElm.DEFAULT_DROP,
@@ -81,8 +81,8 @@ class DiodeElm extends CircuitComponent {
 
     renderContext.drawPosts(this);
 
-    if (CircuitComponent.DEBUG) {
-      return super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      return super.debugDraw(renderContext);
     }
   }
 

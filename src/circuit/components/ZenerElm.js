@@ -26,8 +26,8 @@ class ZenerElm extends DiodeElm {
   }
 
   draw(renderContext) {
-    if (CircuitComponent.DEBUG) {
-      super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      super.debugDraw(renderContext);
     }
 
     this.updateDots();

@@ -117,7 +117,7 @@ class TransLineElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-    this.setBboxPt(this.posts[0], this.posts[3], 0);
+    this.setBboxPt(this.posts[0], this.posts[3], 5);
     let segments = Math.floor(this.dn() / 2);
 
     let ix0 = this.ptr - 1 + this.lenSteps;

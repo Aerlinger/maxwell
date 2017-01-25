@@ -295,8 +295,8 @@ class RelayElm extends CircuitComponent {
 
     renderContext.drawPosts(this);
 
-    if (CircuitComponent.DEBUG) {
-      super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      super.debugDraw(renderContext);
     }
   }
 

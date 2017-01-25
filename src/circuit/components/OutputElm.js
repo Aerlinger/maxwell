@@ -45,8 +45,8 @@ class OutputElm extends CircuitComponent {
     renderContext.fillCircle(this.lead1.x, this.lead1.y, 2*Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
     renderContext.drawPosts(this);
 
-    if (CircuitComponent.DEBUG) {
-      return super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      return super.debugDraw(renderContext);
     }
   }
 

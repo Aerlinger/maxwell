@@ -39,8 +39,8 @@ class GroundElm extends CircuitComponent {
       renderContext.drawLinePt(pt1, pt2, color);
     }
 
-    if (CircuitComponent.DEBUG) {
-      return super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      return super.debugDraw(renderContext);
     }
   }
 

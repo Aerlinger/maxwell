@@ -241,6 +241,10 @@ class Util {
     }
   }
 
+  static floatToPercent(f, digits = 1) {
+    return sprintf("%0.0f", f * 100) + "%";
+  }
+
   static isFunction(v) {
     return typeof v === "function";
   }

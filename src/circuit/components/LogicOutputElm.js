@@ -70,8 +70,8 @@ class LogicOutputElm extends CircuitComponent {
     renderContext.drawLinePt(this.point1, this.lead1, color);
     renderContext.drawPosts(this);
 
-    if (CircuitComponent.DEBUG) {
-      return super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      return super.debugDraw(renderContext);
     }
   }
 

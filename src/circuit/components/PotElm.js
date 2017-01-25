@@ -95,8 +95,8 @@ class PotElm extends CircuitComponent {
 
     renderContext.drawPosts(this);
 
-    if (CircuitComponent.DEBUG) {
-      return super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      return super.debugDraw(renderContext);
     }
   }
 

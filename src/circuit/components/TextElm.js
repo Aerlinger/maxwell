@@ -70,8 +70,8 @@ class TextElm extends CircuitComponent {
 
     this.setBbox(this.x1(), this.y1() - this.size + 1, this.x1() + mt.width, this.y1());
 
-    if (CircuitComponent.DEBUG) {
-      return super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      return super.debugDraw(renderContext);
     }
   }
 

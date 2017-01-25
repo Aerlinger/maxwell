@@ -157,7 +157,7 @@ class Circuit extends Observer {
     newElement.onSolder(this);
 
     this.invalidate();
-    return this.recomputeBounds();
+    this.recomputeBounds();
   }
 
   // "Desolders" an existing element to this circuit (removes it to the element list array).
@@ -172,7 +172,11 @@ class Circuit extends Observer {
     //  if node.getNeighboringElements().length == 1
     //    @nodeList.de
 
-    return this.recomputeBounds();
+    this.recomputeBounds();
+  }
+
+  debugModeEnabled() {
+    return this.Params.debug
   }
 
   toString() {

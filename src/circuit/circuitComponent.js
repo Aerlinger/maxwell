@@ -1,18 +1,18 @@
 /**
  CircuitComponent:
-   Base class from which all components inherit
+ Base class from which all components inherit
 
  @author Anthony Erlinger
  @year 2012
 
  Uses the Observer Design Pattern:
-   Observes: Circuit, CircuitRender
-   Observed By: CircuitCanvas
+ Observes: Circuit, CircuitRender
+ Observed By: CircuitCanvas
 
  Events:
-  <None>
+ <None>
 
-*/
+ */
 
 let Settings = require('../settings/settings.js');
 let Rectangle = require('../geom/rectangle.js');
@@ -29,7 +29,7 @@ class CircuitComponent {
   }
 
   static initClass() {
-    this.DEBUG = false;
+    this.DEBUG = true;
   }
 
   constructor(x1, y1, x2, y2, params, f) {
@@ -83,7 +83,7 @@ class CircuitComponent {
 
       } else {
         if ((default_value != null) && (default_value != undefined)) {
-          if (CircuitComponent.DEBUG) {
+          if (this.Circuit && this.Circuit.debugModeEnabled()) {
             console.log(`INFO: Assigning default value of ${default_value} for ${param_name} in ${this.constructor.name} (was ${this[param_name]})`)
           }
         } else {
@@ -135,7 +135,6 @@ class CircuitComponent {
   sety2(value) {
     return this.point2.y = value;
   }
-
 
   x1() {
     return this.point1.x;
@@ -559,30 +558,30 @@ class CircuitComponent {
     // renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
 
     /*
-    renderContext.drawValue(-14, 0, this, this.toString());
+     renderContext.drawValue(-14, 0, this, this.toString());
 
-    if (this.params) {
-      let height = 8;
-      let i = 0;
-      for (let value = 0; value < this.params.length; value++) {
-        let name = this.params[value];
-        console.log(name, value);
-        renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
-        i += 1;
-      }
-    }
-    */
+     if (this.params) {
+     let height = 8;
+     let i = 0;
+     for (let value = 0; value < this.params.length; value++) {
+     let name = this.params[value];
+     console.log(name, value);
+     renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
+     i += 1;
+     }
+     }
+     */
 
     let outlineRadius = 7;
 
     /*
-    // Draw node values
-    nodeIdx = 0
-    for node in @nodes
-      if @point1 && @point2
-        renderContext.drawValue 25+10*nodeIdx, -10*nodeIdx, this, "#{node}-#{@getVoltageForNode(node)}"
-        nodeIdx += 1
-    */
+     // Draw node values
+     nodeIdx = 0
+     for node in @nodes
+     if @point1 && @point2
+     renderContext.drawValue 25+10*nodeIdx, -10*nodeIdx, this, "#{node}-#{@getVoltageForNode(node)}"
+     nodeIdx += 1
+     */
 
 
     if (this.point1) {
@@ -592,23 +591,87 @@ class CircuitComponent {
     if (this.point2) {
       renderContext.drawRect(this.point2.x - (outlineRadius / 2), this.point2.y - (outlineRadius / 2), outlineRadius - 1, outlineRadius - 1, 2, color);
     }
-    
-    /*
-    if (this.lead1) {
-      renderContext.drawRect(this.lead1.x - (outlineRadius / 2), this.lead1.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
-    }
-
-    if (this.lead2) {
-      renderContext.drawRect(this.lead2.x - (outlineRadius / 2), this.lead2.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
-    }
-    */
 
     /*
-    for (let i=0; i<this.getPostCount(); ++i) {
+     if (this.lead1) {
+     renderContext.drawRect(this.lead1.x - (outlineRadius / 2), this.lead1.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
+     }
+
+     if (this.lead2) {
+     renderContext.drawRect(this.lead2.x - (outlineRadius / 2), this.lead2.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
+     }
+     */
+
+    /*
+     for (let i=0; i<this.getPostCount(); ++i) {
+     let post = this.getPost(i);
+     renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
+     }
+     */
+  }
+
+  debugDraw(renderContext) {
+    let post;
+    let color = Util.getColorForId(this.component_id);
+
+    renderContext.drawRect(this.boundingBox.x - 2, this.boundingBox.y - 2, this.boundingBox.width + 2, this.boundingBox.height + 2, 0.5, "#F00");
+
+    // renderContext.drawValue 10, -15, this, @constructor.name
+    // renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
+
+    /*
+     renderContext.drawValue(-14, 0, this, this.toString());
+
+     if (this.params) {
+     let height = 8;
+     let i = 0;
+     for (let value = 0; value < this.params.length; value++) {
+     let name = this.params[value];
+     console.log(name, value);
+     renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
+     i += 1;
+     }
+     }
+     */
+
+    let outlineRadius = 7;
+
+    /*
+     // Draw node values
+     nodeIdx = 0
+     for node in @nodes
+     if @point1 && @point2
+     renderContext.drawValue 25+10*nodeIdx, -10*nodeIdx, this, "#{node}-#{@getVoltageForNode(node)}"
+     nodeIdx += 1
+     */
+
+
+    /*
+
+     if (this.point1) {
+     renderContext.drawCircle(this.point1.x, this.point1.y, outlineRadius - 1, 1, color);
+     }
+
+     if (this.point2) {
+     renderContext.drawRect(this.point2.x - (outlineRadius / 2), this.point2.y - (outlineRadius / 2), outlineRadius - 1, outlineRadius - 1, 2, color);
+     }
+
+
+     if (this.lead1) {
+     renderContext.drawRect(this.lead1.x - (outlineRadius / 2), this.lead1.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
+     }
+
+     if (this.lead2) {
+     renderContext.drawRect(this.lead2.x - (outlineRadius / 2), this.lead2.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
+     }
+     */
+
+
+    for (let i = 0; i < this.getPostCount(); ++i) {
       let post = this.getPost(i);
       renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
     }
-    */
+
   }
 
   updateDots(ds, current = null) {
@@ -733,7 +796,9 @@ class CircuitComponent {
 
     // default to a no-op if parseFunction isn't defined
     if (!parseFunction) {
-      parseFunction = function noop(x) { return x; };
+      parseFunction = function noop(x) {
+        return x;
+      };
     }
 
     if (this.isValidParam(paramName, paramValue)) {
@@ -749,10 +814,10 @@ class CircuitComponent {
   /**
    Returns the JSON metadata object for this field with an additional key/value pair for the assigned value.
    Used externally to edit/update component values
-  
+
    Eg:
    voltageElm.getFieldWithValue("waveform")
-  
+
    {
      name: "none"
      default_value: 0
@@ -762,7 +827,7 @@ class CircuitComponent {
      select_values: ...
      value: 2   Square wave
    }
-  
+
    @see @Fields
    */
   getFieldWithValue(param_name) {

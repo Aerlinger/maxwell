@@ -64,13 +64,13 @@ class RailElm extends VoltageElm {
       this.drawWaveform(this.point2, renderContext);
     }
 
-    // super.draw(renderContext);
-    if (CircuitComponent.DEBUG) {
-      super.draw(renderContext);
+    // super.debugDraw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      super.debugDraw(renderContext);
     }
   }
 
-//    if CircuitComponent.DEBUG
+//    if this.Circuit.debugModeEnabled()
 //      super(renderContext)
 
 

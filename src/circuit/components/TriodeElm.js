@@ -23,6 +23,7 @@ class TriodeElm extends CircuitComponent {
     this.gridCurrentR = 6000;
 
     this.setup();
+    this.setPoints();
   }
 
   setup() {
@@ -98,6 +99,10 @@ class TriodeElm extends CircuitComponent {
     }
     */
     renderContext.drawPosts(this);
+
+    if (this.Circuit.debugModeEnabled()) {
+      super.debugDraw(renderContext);
+    }
   }
 
   getPostCount() {

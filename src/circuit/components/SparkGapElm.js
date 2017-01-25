@@ -98,8 +98,8 @@ class SparkGapElm extends CircuitComponent {
 //      @arrow2 = DrawHelper.calcArrow(@point2, p1, alen, alen)
 
   draw(renderContext) {
-    if (CircuitComponent.DEBUG) {
-      super.draw(renderContext);
+    if (this.Circuit.debugModeEnabled()) {
+      super.debugDraw(renderContext);
     }
 
     this.updateDots();

@@ -581,7 +581,7 @@ class CircuitSolver
 
       # Check for singular matrix:
       if largest == 0
-        throw new Error("Singular matrix (#{i}, #{j}) -> #{largest}")
+        console.error("Singular matrix (#{i}, #{j}) -> #{largest}")
 
       @scaleFactors[i] = 1.0 / largest
       ++i
