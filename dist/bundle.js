@@ -26403,6 +26403,10 @@
 	    this.scopeCanvas = scopeCanvas;
 	  }
 	
+	  getCanvas(scopeCanvas) {
+	    return this.scopeCanvas;
+	  }
+	
 	  setCircuit(circuit) {
 	    this.circuitElm = circuit.getElmByIdx(this.elm);
 	    this.circuit = circuit;
@@ -29071,37 +29075,7 @@
 	    this.onNodeClick = this.noop;   // @onNodeClick(component)
 	    this.onUpdateComplete = this.noop;  // @onUpdateComplete(circuit)
 	
-	    this.scopeCanvases = [];
 	
-	    for (let scopeElm of this.Circuit.getScopes()) {
-	      let scElm = CircuitUI.renderScopeCanvas();
-	      $(scElm).draggable();
-	      $(scElm).resizable();
-	
-	      Canvas.parentNode.append(scElm);
-	
-	      let sc = new Maxwell.ScopeCanvas(this, scopeElm, scElm.firstChild);
-	
-	      $(scElm).on("resize", function(evt) {
-	        let innerElm = $(scElm).find(".plot-context");
-	
-	        sc.resize(innerElm.width(), innerElm.height());
-	      });
-	
-	      this.scopeCanvases.push(sc);
-	    }
-	  }
-	
-	  static renderScopeCanvas() {
-	    let scopeWrapper = document.createElement("div");
-	    scopeWrapper.className = "plot-pane";
-	
-	    let scopeCanvas = document.createElement("div");
-	    scopeCanvas.className = "plot-context";
-	
-	    scopeWrapper.append(scopeCanvas);
-	
-	    return scopeWrapper;
 	  }
 	
 	  noop() {
@@ -29398,9 +29372,49 @@
 	      this.context = this.Canvas.getContext("2d");
 	    }
 	
-	    // this.drawGrid();
+	    for (let scopeElm of this.Circuit.getScopes()) {
 	
-	    //this.context.lineJoin = 'miter';
+	      let scElm = this.renderScopeCanvas(scopeElm.circuitElm.getName());
+	      $(scElm).draggable();
+	      $(scElm).resizable();
+	
+	      this.Canvas.parentNode.append(scElm);
+	
+	      let sc = new Maxwell.ScopeCanvas(this, scElm);
+	      scopeElm.setCanvas(sc);
+	
+	      $(scElm).on("resize", function(evt) {
+	        let innerElm = $(scElm).find(".plot-context");
+	
+	        sc.resize(innerElm.width() - 5, innerElm.height() - 5);
+	      });
+	
+	      // this.scopeCanvases.push(sc);
+	    }
+	  }
+	
+	  renderScopeCanvas(elementName) {
+	    let scopeWrapper = document.createElement("div");
+	    scopeWrapper.className = "plot-pane";
+	
+	    let leftAxis = document.createElement("div");
+	    leftAxis.className = "left-axis";
+	
+	    let scopeCanvas = document.createElement("div");
+	    scopeCanvas.className = "plot-context";
+	
+	    if (elementName) {
+	      let label = document.createElement("div");
+	      label.className = "plot-label";
+	      label.innerText = elementName;
+	
+	      scopeWrapper.append(label);
+	    }
+	
+	    scopeWrapper.append(leftAxis);
+	    scopeWrapper.append(scopeCanvas);
+	
+	    return scopeWrapper;
 	  }
 	
 	  drawInfoText() {
@@ -29713,8 +29727,10 @@
 	
 	  drawScopes() {
 	    if (this.context) {
-	      for (let scopeCanvas of this.circuitUI.scopeCanvases) {
-	        var center = scopeCanvas.parentScope.circuitElm.getCenter();
+	      for (let scopeElm of this.Circuit.getScopes()) {
+	        let scopeCanvas = scopeElm.getCanvas();
+	
+	        var center = scopeElm.circuitElm.getCenter();
 	
 	        let strokeStyle = this.context.strokeStyle;
 	        let lineDash = this.context.getLineDash();
@@ -29891,30 +29907,36 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let ScopeCanvas = __webpack_require__(94);
+	let Util = __webpack_require__(5);
 	
 	class RickshawScopeCanvas extends ScopeCanvas {
-	  constructor(parentUI, parentScope, contextElement, x=800, y=700) {
-	    super(parentUI, parentScope, contextElement, x, y);
+	  constructor(parentUI, scopeDiv, x=800, y=700) {
+	    super(parentUI, scopeDiv, x, y);
+	
+	    var plotContext = scopeDiv.getElementsByClassName("plot-context")[0];
+	    var leftAxisDiv = scopeDiv.getElementsByClassName("left-axis")[0];
 	
 	    this.graph = new Rickshaw.Graph({
-	      element: contextElement,
-	      width: contextElement.offsetWidth,
-	      height: contextElement.offsetHeight,
+	      element: plotContext,
+	      width: plotContext.offsetWidth ,
+	      height: plotContext.offsetHeight,
 	      interpolation: 'linear',
 	      renderer: 'line',
 	      stroke: false,
 	      strokeWidth: 1,
 	      min: 'auto',
+	      padding: {
+	        top: 0.08,
+	        botom: 0.05,
+	      },
 	      series: [
 	        {
 	          color: "#F00",
-	          strokeWidth: 1,
 	          data: [],
 	          name: 'Voltage'
 	        },
 	        {
 	          color: "#00F",
-	          strokeWidth: 1,
 	          data: [],
 	          name: 'Current'
 	        }
@@ -29925,24 +29947,31 @@
 	
 	    this.xAxis = new Rickshaw.Graph.Axis.X({
 	      graph: this.graph,
+	      //element: leftAxisDiv,
 	      ticksTreatment: ticksTreatment,
-	      timeFixture: new Rickshaw.Fixtures.Time.Local()
+	      timeFixture: new Rickshaw.Fixtures.Time.Local(),
+	      tickFormat: function(d) { return Util.getUnitText(d, "s", 0) }
 	    });
 	
-	    this.xAxis.render();
+	    //this.xAxis.render();
+	    new Rickshaw.Graph.Axis.Y({
+	      graph: this.graph,
+	      tickFormat: function(d) { return Util.getUnitText(d, "V", 0) },
+	      pixelsPerTick: 30,
+	      tickSize: 4,
+	      tickTransformation: function(svg) {
+	        svg.style("text-anchor", "end").attr("dx", "-0.8em").attr("dy", "-0.3em").attr("transform", 'rotate(-90)');
+	      }
+	    });
 	
 	    new Rickshaw.Graph.Axis.Y({
 	      graph: this.graph,
-	      tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
-	      ticksTreatment: ticksTreatment
-	    });
-	
-	
-	    new Rickshaw.Graph.Axis.Y({
-	      orientation: "right",
-	      graph: this.graph,
-	      tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
-	      ticksTreatment: ticksTreatment
+	      tickFormat: function(d) { return Util.getUnitText(d, "V", 0) },
+	      pixelsPerTick: 30,
+	      tickSize: 4,
+	      tickTransformation: function(svg) {
+	        svg.style("text-anchor", "end").attr("dx", "-0.8em").attr("dy", "-0.3em").attr("transform", 'rotate(-90)');
+	      }
 	    });
 	
 	    this.highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
@@ -29950,47 +29979,22 @@
 	      // legend: legend
 	    });
 	
-	    this.hoverDetail = new Rickshaw.Graph.HoverDetail({
+	    new Rickshaw.Graph.HoverDetail({
 	      graph: this.graph,
 	      xFormatter: function (x) {
 	        return x + "s";
-	
 	      }
 	    });
 	
-	    this.resize(contextElement.offsetWidth, contextElement.offsetHeight);
-	
-	    /*
-	    for (var i=0 ; i<this.dataPoints; ++i) {
-	      this.graph.series[0].data.push({x: 0, y: 0});
-	    }
-	    */
-	
-	    this.graph.update();
-	
-	    this.graph.render();
-	  }
-	
-	  x() {
-	    return this.frame.offsetLeft - this.parentUI.xMargin;
-	  }
-	
-	  y() {
-	    return this.frame.offsetTop - this.parentUI.yMargin;
-	  }
-	
-	  height() {
-	    return this.frame.offsetHeight;
-	  }
-	
-	  width() {
-	    return this.frame.offsetWidth;
+	    this.resize(plotContext.offsetWidth, plotContext.offsetHeight);
 	  }
 	
 	  resize(width, height) {
 	    this.graph.configure({
 	      width: width,
 	      height: height
+	
+	
 	    });
 	
 	    this.graph.render();
@@ -30026,35 +30030,31 @@
 /***/ function(module, exports) {
 
 	class ScopeCanvas {
-	  constructor(parentUI, parentScope, contextElement, x=800, y=700) {
+	  constructor(parentUI, scopeDiv, x=800, y=700) {
 	    this.dataPoints = 400;
 	    this.timeInterval = 5;
 	
 	    this.parentUI = parentUI;
-	    this.frame = contextElement.parentElement;
-	    this.contextElement = contextElement;
-	    this.parentScope = parentScope;
-	    this.parentScope.setCanvas(this);
+	    this.scopeDiv = scopeDiv;
 	  }
 	
 	  x() {
-	    return this.frame.offsetLeft - this.parentUI.xMargin;
+	    return this.scopeDiv.offsetLeft - this.parentUI.xMargin;
 	  }
 	
 	  y() {
-	    return this.frame.offsetTop - this.parentUI.yMargin;
+	    return this.scopeDiv.offsetTop - this.parentUI.yMargin;
 	  }
 	
 	  height() {
-	    return this.frame.offsetHeight;
+	    return this.scopeDiv.offsetHeight;
 	  }
 	
 	  width() {
-	    return this.frame.offsetWidth;
+	    return this.scopeDiv.offsetWidth;
 	  }
 	
 	  resize(width, height) {
-	
 	  }
 	
 	  addVoltage(value) {

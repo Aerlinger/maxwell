@@ -1,28 +1,34 @@
 let ScopeCanvas = require("./ScopeCanvas.js");
+let Util = require("../util/util.js");
 
 class RickshawScopeCanvas extends ScopeCanvas {
-  constructor(parentUI, parentScope, contextElement, x=800, y=700) {
-    super(parentUI, parentScope, contextElement, x, y);
+  constructor(parentUI, scopeDiv, x=800, y=700) {
+    super(parentUI, scopeDiv, x, y);
+
+    var plotContext = scopeDiv.getElementsByClassName("plot-context")[0];
+    var leftAxisDiv = scopeDiv.getElementsByClassName("left-axis")[0];
 
     this.graph = new Rickshaw.Graph({
-      element: contextElement,
-      width: contextElement.offsetWidth,
-      height: contextElement.offsetHeight,
+      element: plotContext,
+      width: plotContext.offsetWidth ,
+      height: plotContext.offsetHeight,
       interpolation: 'linear',
       renderer: 'line',
       stroke: false,
       strokeWidth: 1,
       min: 'auto',
+      padding: {
+        top: 0.08,
+        botom: 0.05,
+      },
       series: [
         {
           color: "#F00",
-          strokeWidth: 1,
           data: [],
           name: 'Voltage'
         },
         {
           color: "#00F",
-          strokeWidth: 1,
           data: [],
           name: 'Current'
         }
@@ -33,24 +39,31 @@ class RickshawScopeCanvas extends ScopeCanvas {
 
     this.xAxis = new Rickshaw.Graph.Axis.X({
       graph: this.graph,
+      //element: leftAxisDiv,
       ticksTreatment: ticksTreatment,
-      timeFixture: new Rickshaw.Fixtures.Time.Local()
+      timeFixture: new Rickshaw.Fixtures.Time.Local(),
+      tickFormat: function(d) { return Util.getUnitText(d, "s", 0) }
     });
 
-    this.xAxis.render();
+    //this.xAxis.render();
+    new Rickshaw.Graph.Axis.Y({
+      graph: this.graph,
+      tickFormat: function(d) { return Util.getUnitText(d, "V", 0) },
+      pixelsPerTick: 30,
+      tickSize: 4,
+      tickTransformation: function(svg) {
+        svg.style("text-anchor", "end").attr("dx", "-0.8em").attr("dy", "-0.3em").attr("transform", 'rotate(-90)');
+      }
+    });
 
     new Rickshaw.Graph.Axis.Y({
       graph: this.graph,
-      tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
-      ticksTreatment: ticksTreatment
-    });
-
-
-    new Rickshaw.Graph.Axis.Y({
-      orientation: "right",
-      graph: this.graph,
-      tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
-      ticksTreatment: ticksTreatment
+      tickFormat: function(d) { return Util.getUnitText(d, "V", 0) },
+      pixelsPerTick: 30,
+      tickSize: 4,
+      tickTransformation: function(svg) {
+        svg.style("text-anchor", "end").attr("dx", "-0.8em").attr("dy", "-0.3em").attr("transform", 'rotate(-90)');
+      }
     });
 
     this.highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
@@ -58,47 +71,22 @@ class RickshawScopeCanvas extends ScopeCanvas {
       // legend: legend
     });
 
-    this.hoverDetail = new Rickshaw.Graph.HoverDetail({
+    new Rickshaw.Graph.HoverDetail({
       graph: this.graph,
       xFormatter: function (x) {
         return x + "s";
-
       }
     });
 
-    this.resize(contextElement.offsetWidth, contextElement.offsetHeight);
-
-    /*
-    for (var i=0 ; i<this.dataPoints; ++i) {
-      this.graph.series[0].data.push({x: 0, y: 0});
-    }
-    */
-
-    this.graph.update();
-
-    this.graph.render();
-  }
-
-  x() {
-    return this.frame.offsetLeft - this.parentUI.xMargin;
-  }
-
-  y() {
-    return this.frame.offsetTop - this.parentUI.yMargin;
-  }
-
-  height() {
-    return this.frame.offsetHeight;
-  }
-
-  width() {
-    return this.frame.offsetWidth;
+    this.resize(plotContext.offsetWidth, plotContext.offsetHeight);
   }
 
   resize(width, height) {
     this.graph.configure({
       width: width,
       height: height
+
+
     });
 
     this.graph.render();

@@ -43,6 +43,10 @@ class Scope {
     this.scopeCanvas = scopeCanvas;
   }
 
+  getCanvas(scopeCanvas) {
+    return this.scopeCanvas;
+  }
+
   setCircuit(circuit) {
     this.circuitElm = circuit.getElmByIdx(this.elm);
     this.circuit = circuit;

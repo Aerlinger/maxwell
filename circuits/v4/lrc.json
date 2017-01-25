@@ -74,6 +74,20 @@
     "name": "Scope",
     "pos": [0, 100, 300, 200],
     "params": {
+      "elm": 0,
+      "speed": 64,
+      "value": 0,
+      "voltageRange": 0.625,
+      "currentRange": 0.05,
+      "options": 3,
+      "pos": 0,
+      "ye": 0
+    }
+  },
+  {
+    "name": "Scope",
+    "pos": [0, 100, 300, 200],
+    "params": {
       "elm": 4,
       "speed": 64,
       "value": 0,
@@ -92,20 +106,6 @@
       "speed": 64,
       "value": 0,
       "voltageRange": 10,
-      "currentRange": 0.05,
-      "options": 3,
-      "pos": 0,
-      "ye": 0
-    }
-  },
-  {
-    "name": "Scope",
-    "pos": [0, 100, 300, 200],
-    "params": {
-      "elm": 0,
-      "speed": 64,
-      "value": 0,
-      "voltageRange": 0.625,
       "currentRange": 0.05,
       "options": 3,
       "pos": 0,

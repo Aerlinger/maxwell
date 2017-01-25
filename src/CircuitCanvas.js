@@ -39,9 +39,49 @@ class CircuitCanvas extends Observer {
       this.context = this.Canvas.getContext("2d");
     }
 
-    // this.drawGrid();
+    for (let scopeElm of this.Circuit.getScopes()) {
 
-    //this.context.lineJoin = 'miter';
+      let scElm = this.renderScopeCanvas(scopeElm.circuitElm.getName());
+      $(scElm).draggable();
+      $(scElm).resizable();
+
+      this.Canvas.parentNode.append(scElm);
+
+      let sc = new Maxwell.ScopeCanvas(this, scElm);
+      scopeElm.setCanvas(sc);
+
+      $(scElm).on("resize", function(evt) {
+        let innerElm = $(scElm).find(".plot-context");
+
+        sc.resize(innerElm.width() - 5, innerElm.height() - 5);
+      });
+
+      // this.scopeCanvases.push(sc);
+    }
+  }
+
+  renderScopeCanvas(elementName) {
+    let scopeWrapper = document.createElement("div");
+    scopeWrapper.className = "plot-pane";
+
+    let leftAxis = document.createElement("div");
+    leftAxis.className = "left-axis";
+
+    let scopeCanvas = document.createElement("div");
+    scopeCanvas.className = "plot-context";
+
+    if (elementName) {
+      let label = document.createElement("div");
+      label.className = "plot-label";
+      label.innerText = elementName;
+
+      scopeWrapper.append(label);
+    }
+
+    scopeWrapper.append(leftAxis);
+    scopeWrapper.append(scopeCanvas);
+
+    return scopeWrapper;
   }
 
   drawInfoText() {
@@ -354,8 +394,10 @@ class CircuitCanvas extends Observer {
 
   drawScopes() {
     if (this.context) {
-      for (let scopeCanvas of this.circuitUI.scopeCanvases) {
-        var center = scopeCanvas.parentScope.circuitElm.getCenter();
+      for (let scopeElm of this.Circuit.getScopes()) {
+        let scopeCanvas = scopeElm.getCanvas();
+
+        var center = scopeElm.circuitElm.getCenter();
 
         let strokeStyle = this.context.strokeStyle;
         let lineDash = this.context.getLineDash();

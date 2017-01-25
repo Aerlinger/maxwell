@@ -167,37 +167,7 @@ class CircuitUI extends Observer {
     this.onNodeClick = this.noop;   // @onNodeClick(component)
     this.onUpdateComplete = this.noop;  // @onUpdateComplete(circuit)
 
-    this.scopeCanvases = [];
 
-    for (let scopeElm of this.Circuit.getScopes()) {
-      let scElm = CircuitUI.renderScopeCanvas();
-      $(scElm).draggable();
-      $(scElm).resizable();
-
-      Canvas.parentNode.append(scElm);
-
-      let sc = new Maxwell.ScopeCanvas(this, scopeElm, scElm.firstChild);
-
-      $(scElm).on("resize", function(evt) {
-        let innerElm = $(scElm).find(".plot-context");
-
-        sc.resize(innerElm.width(), innerElm.height());
-      });
-
-      this.scopeCanvases.push(sc);
-    }
-  }
-
-  static renderScopeCanvas() {
-    let scopeWrapper = document.createElement("div");
-    scopeWrapper.className = "plot-pane";
-
-    let scopeCanvas = document.createElement("div");
-    scopeCanvas.className = "plot-context";
-
-    scopeWrapper.append(scopeCanvas);
-
-    return scopeWrapper;
   }
 
   noop() {
