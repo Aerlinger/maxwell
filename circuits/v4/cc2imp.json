@@ -1,1 +1,314 @@
-[{"type":"default","timeStep":0.000005,"simSpeed":119,"currentSpeed":51,"voltageRange":5,"powerRange":50,"flags":1},{"name":"OpAmpElm","pos":[160,208,272,208],"flags":1,"params":{"maxOut":15,"minOut":-15,"gbw":1000000}},{"name":"MosfetElm","pos":[272,176,336,176],"flags":0,"params":{"vt":1.5,"pnp":1}},{"name":"MosfetElm","pos":[272,240,336,240],"flags":1,"params":{"vt":1.5,"pnp":-1}},{"name":"WireElm","pos":[272,176,272,208],"flags":0,"params":{}},{"name":"WireElm","pos":[272,208,272,240],"flags":0,"params":{}},{"name":"WireElm","pos":[336,192,336,208],"flags":0,"params":{}},{"name":"WireElm","pos":[336,208,336,224],"flags":0,"params":{}},{"name":"WireElm","pos":[336,208,368,208],"flags":0,"params":{}},{"name":"WireElm","pos":[160,288,160,224],"flags":1,"params":{}},{"name":"WireElm","pos":[336,256,336,320],"flags":0,"params":{}},{"name":"MosfetElm","pos":[400,368,336,368],"flags":0,"params":{"vt":1.5,"pnp":1}},{"name":"MosfetElm","pos":[400,368,464,368],"flags":0,"params":{"vt":1.5,"pnp":1}},{"name":"WireElm","pos":[336,320,400,320],"flags":0,"params":{}},{"name":"WireElm","pos":[400,320,400,368],"flags":0,"params":{}},{"name":"WireElm","pos":[336,320,336,352],"flags":0,"params":{}},{"name":"MosfetElm","pos":[400,112,336,112],"flags":1,"params":{"vt":1.5,"pnp":-1}},{"name":"MosfetElm","pos":[400,112,464,112],"flags":1,"params":{"vt":1.5,"pnp":-1}},{"name":"WireElm","pos":[336,128,336,160],"flags":0,"params":{}},{"name":"WireElm","pos":[336,160,400,160],"flags":0,"params":{}},{"name":"WireElm","pos":[400,160,400,112],"flags":0,"params":{}},{"name":"WireElm","pos":[464,128,464,208],"flags":0,"params":{}},{"name":"WireElm","pos":[464,208,464,352],"flags":0,"params":{}},{"name":"VarRailElm","pos":[160,192,96,192],"flags":0,"params":{"waveform":6,"frequency":2,"maxVoltage":4,"bias":-4,"phaseShift":0,"dutyCycle":0.5,"sliderText":"Y Voltage"}},{"name":"PotElm","pos":[64,224,160,224],"flags":0,"params":{"maxResistance":500,"position":0.7079000000000001,"sliderText":"X Resistance"}},{"name":"ResistorElm","pos":[112,256,112,320],"flags":0,"params":{"resistance":100}},{"name":"GroundElm","pos":[112,320,112,336],"flags":0,"params":{}},{"name":"WireElm","pos":[464,208,512,208],"flags":1,"params":{}},{"name":"ResistorElm","pos":[512,208,576,208],"flags":0,"params":{"resistance":100}},{"name":"GroundElm","pos":[576,208,576,224],"flags":0,"params":{}},{"name":"RailElm","pos":[336,96,336,48],"flags":0,"params":{"waveform":0,"frequency":40,"maxVoltage":10,"bias":0,"phaseShift":0,"dutyCycle":0.5}},{"name":"RailElm","pos":[464,96,464,48],"flags":0,"params":{"waveform":0,"frequency":40,"maxVoltage":10,"bias":0,"phaseShift":0,"dutyCycle":0.5}},{"name":"RailElm","pos":[336,384,336,432],"flags":0,"params":{"waveform":0,"frequency":40,"maxVoltage":-10,"bias":0,"phaseShift":0,"dutyCycle":0.5}},{"name":"RailElm","pos":[464,384,464,432],"flags":0,"params":{"waveform":0,"frequency":40,"maxVoltage":-10,"bias":0,"phaseShift":0,"dutyCycle":0.5}},{"name":"WireElm","pos":[160,288,368,288],"flags":2,"params":{}},{"name":"WireElm","pos":[368,288,368,208],"flags":0,"params":{}},{"name":"TextElm","pos":[94,165,109,171],"flags":0,"params":{"text":"Y","size":24}},{"name":"TextElm","pos":[156,326,171,332],"flags":0,"params":{"text":"X","size":24}},{"name":"TextElm","pos":[501,177,516,183],"flags":0,"params":{"text":"Z","size":24}}]
+[
+  {
+    "type": "default",
+    "timeStep": 0.000005,
+    "simSpeed": 119,
+    "currentSpeed": 51,
+    "voltageRange": 5,
+    "powerRange": 50,
+    "flags": 1
+  },
+  {
+    "name": "OpAmpElm",
+    "pos": [160, 208, 272, 208],
+    "flags": 1,
+    "params": {
+      "maxOut": 15,
+      "minOut": -15,
+      "gbw": 1000000
+    }
+  },
+  {
+    "name": "MosfetElm",
+    "pos": [272, 176, 336, 176],
+    "flags": 0,
+    "params": {
+      "vt": 1.5,
+      "pnp": 1
+    }
+  },
+  {
+    "name": "MosfetElm",
+    "pos": [272, 240, 336, 240],
+    "flags": 1,
+    "params": {
+      "vt": 1.5,
+      "pnp": -1
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [272, 176, 272, 208],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [272, 208, 272, 240],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [336, 192, 336, 208],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [336, 208, 336, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [336, 208, 368, 208],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [160, 288, 160, 224],
+    "flags": 1,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [336, 256, 336, 320],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "MosfetElm",
+    "pos": [400, 368, 336, 368],
+    "flags": 0,
+    "params": {
+      "vt": 1.5,
+      "pnp": 1
+    }
+  },
+  {
+    "name": "MosfetElm",
+    "pos": [400, 368, 464, 368],
+    "flags": 0,
+    "params": {
+      "vt": 1.5,
+      "pnp": 1
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [336, 320, 400, 320],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [400, 320, 400, 368],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [336, 320, 336, 352],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "MosfetElm",
+    "pos": [400, 112, 336, 112],
+    "flags": 1,
+    "params": {
+      "vt": 1.5,
+      "pnp": -1
+    }
+  },
+  {
+    "name": "MosfetElm",
+    "pos": [400, 112, 464, 112],
+    "flags": 1,
+    "params": {
+      "vt": 1.5,
+      "pnp": -1
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [336, 128, 336, 160],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [336, 160, 400, 160],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [400, 160, 400, 112],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [464, 128, 464, 208],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [464, 208, 464, 352],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [160, 192, 96, 192],
+    "flags": 0,
+    "params": {
+      "waveform": 6,
+      "frequency": 2,
+      "maxVoltage": 4,
+      "bias": -4,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Y Voltage"
+    }
+  },
+  {
+    "name": "PotElm",
+    "pos": [160, 224, 64, 224],
+    "flags": 0,
+    "params": {
+      "maxResistance": 500,
+      "position": 0.7079000000000001,
+      "sliderText": "X Resistance"
+    }
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [112, 256, 112, 320],
+    "flags": 0,
+    "params": {
+      "resistance": 100
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [112, 320, 112, 336],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [464, 208, 512, 208],
+    "flags": 1,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [512, 208, 576, 208],
+    "flags": 0,
+    "params": {
+      "resistance": 100
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [576, 208, 576, 224],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "RailElm",
+    "pos": [336, 96, 336, 48],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 10,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [464, 96, 464, 48],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 10,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [336, 384, 336, 432],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": -10,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [464, 384, 464, 432],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": -10,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [160, 288, 368, 288],
+    "flags": 2,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [368, 288, 368, 208],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "TextElm",
+    "pos": [94, 165, 109, 171],
+    "flags": 0,
+    "params": {
+      "text": "Y",
+      "size": 24
+    }
+  },
+  {
+    "name": "TextElm",
+    "pos": [156, 326, 171, 332],
+    "flags": 0,
+    "params": {
+      "text": "X",
+      "size": 24
+    }
+  },
+  {
+    "name": "TextElm",
+    "pos": [501, 177, 516, 183],
+    "flags": 0,
+    "params": {
+      "text": "Z",
+      "size": 24
+    }
+  }
+]

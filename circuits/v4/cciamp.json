@@ -1,1 +1,98 @@
-[{"type":"default","timeStep":0.000005,"simSpeed":172,"currentSpeed":50,"voltageRange":5,"powerRange":50,"flags":1},{"name":"CC2Elm","pos":[208,176,304,176],"flags":0,"params":{"volts":[],"gain":1}},{"name":"CurrentElm","pos":[144,304,208,304],"flags":0,"params":{"currentValue":0.01}},{"name":"GroundElm","pos":[144,304,144,320],"flags":0,"params":{}},{"name":"WireElm","pos":[208,240,208,304],"flags":0,"params":{}},{"name":"ResistorElm","pos":[208,176,112,176],"flags":0,"params":{"resistance":10}},{"name":"GroundElm","pos":[112,176,112,192],"flags":0,"params":{}},{"name":"GroundElm","pos":[400,256,400,272],"flags":0,"params":{}},{"name":"WireElm","pos":[208,240,144,240],"flags":0,"params":{}},{"name":"PotElm","pos":[144,240,80,240],"flags":0,"params":{"maxResistance":100,"position":0.7277,"sliderText":"Multiplier"}},{"name":"PotElm","pos":[352,208,448,208],"flags":0,"params":{"maxResistance":100,"position":0.32180000000000003,"sliderText":"Z Resistance"}},{"name":"GroundElm","pos":[112,272,112,288],"flags":0,"params":{}},{"name":"WireElm","pos":[304,208,352,208],"flags":1,"params":{}}]
+[
+  {
+    "type": "default",
+    "timeStep": 0.000005,
+    "simSpeed": 172,
+    "currentSpeed": 50,
+    "voltageRange": 5,
+    "powerRange": 50,
+    "flags": 1
+  },
+  {
+    "name": "CC2Elm",
+    "pos": [208, 176, 304, 176],
+    "flags": 0,
+    "params": {
+      "volts": [],
+      "gain": 1
+    }
+  },
+  {
+    "name": "CurrentElm",
+    "pos": [144, 304, 208, 304],
+    "flags": 0,
+    "params": {
+      "currentValue": 0.01
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [144, 304, 144, 320],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [208, 240, 208, 304],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [208, 176, 112, 176],
+    "flags": 0,
+    "params": {
+      "resistance": 10
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [112, 176, 112, 192],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "GroundElm",
+    "pos": [400, 240, 400, 280],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [208, 240, 144, 240],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "PotElm",
+    "pos": [144, 240, 80, 240],
+    "flags": 0,
+    "params": {
+      "maxResistance": 100,
+      "position": 0.7277,
+      "sliderText": "Multiplier"
+    }
+  },
+  {
+    "name": "PotElm",
+    "pos": [448, 208, 352, 208],
+    "flags": 0,
+    "params": {
+      "maxResistance": 100,
+      "position": 0.32180000000000003,
+      "sliderText": "Z Resistance"
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [112, 256, 112, 288],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [304, 208, 352, 208],
+    "flags": 1,
+    "params": {}
+  }
+]
