@@ -22,7 +22,7 @@ class MosfetElm extends CircuitComponent {
     return {
       "vt": {
         data_type: parseFloat,
-        name: "Voltage",
+        name: "Threshold Voltage",
         description: "Threshold voltage",
         units: "Volts",
         symbol: "V",

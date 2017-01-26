@@ -16,7 +16,7 @@ class GateElm extends CircuitComponent {
         field: "integer"
       },
       lastOutput: {
-        name: "Last Output",
+        name: "Initial State",
         data_type(x) {
           return x > 2.5;
         },

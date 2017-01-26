@@ -7,7 +7,8 @@ class TappedTransformerElm extends CircuitComponent {
       inductance: {
         name: "Inductance",
         data_type: parseFloat,
-        default_value: 4
+        default_value: 4,
+        symbol: "H"
       },
       ratio: {
         name: "Ratio",
@@ -17,17 +18,20 @@ class TappedTransformerElm extends CircuitComponent {
       current0: {
         name: "Current0",
         data_type: parseFloat,
-        default_value: 0
+        default_value: 0,
+        symbol: "A"
       },
       current1: {
         name: "Current1",
         data_type: parseFloat,
-        default_value: 1
+        default_value: 1,
+        symbol: "A"
       },
       current2: {
         name: "Current2",
         data_type: parseFloat,
-        default_value: 0
+        default_value: 0,
+        symbol: "A"
       }
     };
   }

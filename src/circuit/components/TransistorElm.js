@@ -17,7 +17,7 @@ class TransistorElm extends CircuitComponent {
         select_values: {"NPN": -1, "PNP": 1}
       },
       "lastvbe": {
-        name: "Voltage",
+        name: "Initial VBE",
         unit: "Voltage",
         symbol: "V",
         default_value: 0,
@@ -25,7 +25,7 @@ class TransistorElm extends CircuitComponent {
         type: "physical"
       },
       "lastvbc": {
-        name: "Voltage",
+        name: "Initial VBC",
         unit: "Voltage",
         symbol: "V",
         default_value: 0,

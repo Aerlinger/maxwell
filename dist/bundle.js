@@ -18526,7 +18526,7 @@
 	        field: "integer"
 	      },
 	      lastOutput: {
-	        name: "Last Output",
+	        name: "Initial State",
 	        data_type(x) {
 	          return x > 2.5;
 	        },
@@ -20053,7 +20053,7 @@
 	    return {
 	      "vt": {
 	        data_type: parseFloat,
-	        name: "Voltage",
+	        name: "Threshold Voltage",
 	        description: "Threshold voltage",
 	        units: "Volts",
 	        symbol: "V",
@@ -20487,7 +20487,7 @@
 	        select_values: {"NPN": -1, "PNP": 1}
 	      },
 	      "lastvbe": {
-	        name: "Voltage",
+	        name: "Initial VBE",
 	        unit: "Voltage",
 	        symbol: "V",
 	        default_value: 0,
@@ -20495,7 +20495,7 @@
 	        type: "physical"
 	      },
 	      "lastvbc": {
-	        name: "Voltage",
+	        name: "Initial VBC",
 	        unit: "Voltage",
 	        symbol: "V",
 	        default_value: 0,
@@ -22531,12 +22531,14 @@
 	      r_on: {
 	        name: "On Resistance",
 	        data_type: parseFloat,
-	        default_value: 20
+	        default_value: 20,
+	        symbol: "Ω"
 	      },
 	      r_off: {
 	        name: "Off Resistance",
 	        data_type: parseFloat,
-	        default_value: 1e10
+	        default_value: 1e10,
+	        symbol: "Ω"
 	      }
 	    };
 	  }
@@ -25881,7 +25883,8 @@
 	      inductance: {
 	        name: "Inductance",
 	        default_value: 1e-3,
-	        data_type: parseFloat
+	        data_type: parseFloat,
+	        symbol: "H"
 	      },
 	      ratio: {
 	        name: "Ratio",
@@ -25893,12 +25896,14 @@
 	      current0: {
 	        name: "Current L",
 	        data_type: parseFloat,
-	        default_value: 1e-3
+	        default_value: 1e-3,
+	        symbol: "A"
 	      },
 	      current1: {
 	        name: "Current R",
 	        data_type: parseFloat,
-	        default_value: 1e-3
+	        default_value: 1e-3,
+	        symbol: "A"
 	      },
 	      couplingCoef: {
 	        name: "Coupling Coefficient",
@@ -25916,10 +25921,6 @@
 	    this.curcount = 0;
 	
 	    this.current = [this.current0, this.current1];
-	    // this.params["current"] = [this.current0, this.current1];
-	
-	    // delete this.params["current0"];
-	    // delete this.params["current1"];
 	
 	    this.noDiagonal = true;
 	  }
@@ -26171,7 +26172,8 @@
 	      inductance: {
 	        name: "Inductance",
 	        data_type: parseFloat,
-	        default_value: 4
+	        default_value: 4,
+	        symbol: "H"
 	      },
 	      ratio: {
 	        name: "Ratio",
@@ -26181,17 +26183,20 @@
 	      current0: {
 	        name: "Current0",
 	        data_type: parseFloat,
-	        default_value: 0
+	        default_value: 0,
+	        symbol: "A"
 	      },
 	      current1: {
 	        name: "Current1",
 	        data_type: parseFloat,
-	        default_value: 1
+	        default_value: 1,
+	        symbol: "A"
 	      },
 	      current2: {
 	        name: "Current2",
 	        data_type: parseFloat,
-	        default_value: 0
+	        default_value: 0,
+	        symbol: "A"
 	      }
 	    };
 	  }

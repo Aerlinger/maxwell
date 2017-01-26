@@ -13,12 +13,14 @@ class AnalogSwitchElm extends CircuitComponent {
       r_on: {
         name: "On Resistance",
         data_type: parseFloat,
-        default_value: 20
+        default_value: 20,
+        symbol: "Ω"
       },
       r_off: {
         name: "Off Resistance",
         data_type: parseFloat,
-        default_value: 1e10
+        default_value: 1e10,
+        symbol: "Ω"
       }
     };
   }

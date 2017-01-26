@@ -11,7 +11,8 @@ class TransformerElm extends CircuitComponent {
       inductance: {
         name: "Inductance",
         default_value: 1e-3,
-        data_type: parseFloat
+        data_type: parseFloat,
+        symbol: "H"
       },
       ratio: {
         name: "Ratio",
@@ -23,12 +24,14 @@ class TransformerElm extends CircuitComponent {
       current0: {
         name: "Current L",
         data_type: parseFloat,
-        default_value: 1e-3
+        default_value: 1e-3,
+        symbol: "A"
       },
       current1: {
         name: "Current R",
         data_type: parseFloat,
-        default_value: 1e-3
+        default_value: 1e-3,
+        symbol: "A"
       },
       couplingCoef: {
         name: "Coupling Coefficient",
@@ -46,10 +49,6 @@ class TransformerElm extends CircuitComponent {
     this.curcount = 0;
 
     this.current = [this.current0, this.current1];
-    // this.params["current"] = [this.current0, this.current1];
-
-    // delete this.params["current0"];
-    // delete this.params["current1"];
 
     this.noDiagonal = true;
   }
