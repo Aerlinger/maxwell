@@ -154,17 +154,6 @@ class CapacitorElm extends CircuitComponent {
     }
   }
 
-  getInfo(arr) {
-    super.getInfo();
-
-    arr[0] = "capacitor";
-    this.getBasicInfo(arr);
-    arr[3] = `C = ${Util.getUnitText(this.capacitance, "F")}`;
-    arr[4] = `P = ${Util.getUnitText(this.getPower(), "W")}`;
-    let v = this.getVoltageDiff();
-    return arr[4] = `U = ${Util.getUnitText(.5 * this.capacitance * v * v, "J")}`;
-  }
-
   needsShortcut() {
     return true;
   }

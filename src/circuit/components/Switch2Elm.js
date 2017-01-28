@@ -149,7 +149,6 @@ class Switch2Elm extends SwitchElm {
 
   toggle() {
     super.toggle();
-    // let self = this;
 
     if (this.link !== 0) {
       this.getParentCircuit().eachComponent(function(component) {
@@ -168,11 +167,6 @@ class Switch2Elm extends SwitchElm {
       return false;
     }
     return Util.comparePair(n1, n2, 0, 1 + this.position);
-  }
-
-  getInfo(arr) {
-    arr[0] = ((this.link === 0) ? "switch (SPDT)" : "switch (DPDT)");
-    return arr[1] = `I = ${this.getCurrent()}`;
   }
 
   hasCenterOff() {

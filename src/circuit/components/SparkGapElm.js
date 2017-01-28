@@ -150,15 +150,6 @@ class SparkGapElm extends CircuitComponent {
     stamper.stampNonLinear(this.nodes[1]);
   }
 
-  getInfo(arr) {
-    arr[0] = "spark gap";
-    this.getBasicInfo(arr);
-    arr[3] = (this.state ? "on" : "off");
-    arr[4] = `Ron = ${Util.getUnitText(this.onresistance, "Ω")}`;
-    arr[5] = `Roff = ${Util.getUnitText(this.offresistance, "Ω")}`;
-    return arr[6] = `Vbreakdown = ${Util.getUnitText(this.breakdown, "V")}`;
-  }
-
   needsShortcut() {
     return false;
   }

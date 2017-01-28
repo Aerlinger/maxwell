@@ -363,25 +363,28 @@ class TransistorElm extends CircuitComponent {
     return stamper.stampRightSide(this.nodes[2], -this.ie + (gee * vbe) + (gec * vbc));
   }
 
-  getInfo(arr) {
-    arr[0] = `transistor (${(this.pnp === -1) ? "PNP)" : "NPN)"} beta=${this.beta.toFixed(4)}`;
-    arr[0] = "";
+  getSummary() {
+    let arr = [];
+
+    arr[0] = `(${(this.pnp === -1) ? "PNP)" : "NPN)"}`;
 
     let vbc = this.volts[0] - this.volts[1];
     let vbe = this.volts[0] - this.volts[2];
     let vce = this.volts[1] - this.volts[2];
 
     if ((vbc * this.pnp) > .2) {
-      arr[1] = ((vbe * this.pnp) > .2 ? "saturation" : "reverse active");
+      arr[1] = ((vbe * this.pnp) > .2 ? "Saturation" : "Reverse active");
     } else {
-      arr[1] = ((vbe * this.pnp) > .2 ? "fwd active" : "cutoff");
+      arr[1] = ((vbe * this.pnp) > .2 ? "Fwd active" : "Cutoff");
     }
 
     arr[2] = `Ic = ${Util.getUnitText(this.ic, "A")}`;
     arr[3] = `Ib = ${Util.getUnitText(this.ib, "A")}`;
     arr[4] = `Vbe = ${Util.getUnitText(vbe, "V")}`;
     arr[5] = `Vbc = ${Util.getUnitText(vbc, "V")}`;
-    return arr[6] = `Vce = ${Util.getUnitText(vce, "V")}`;
+    arr[6] = `Vce = ${Util.getUnitText(vce, "V")}`;
+
+    return super.getSummary(arr);
   }
 
   getScopeValue(x) {

@@ -126,13 +126,6 @@ class InductorElm extends CircuitComponent {
     return this.current;
   }
 
-  getInfo(arr) {
-    arr[0] = "inductor";
-    this.getBasicInfo(arr);
-    arr[3] = `L = ${Util.getUnitText(this.inductance, "H")}`;
-    return arr[4] = `P = ${Util.getUnitText(this.getPower(), "W")}`;
-  }
-
   getVoltageDiff() {
     return this.volts[0] - this.volts[1];
   }

@@ -40,7 +40,7 @@ class GroundElm extends CircuitComponent {
     }
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      super.debugDraw(renderContext);
     }
   }
 
@@ -59,12 +59,6 @@ class GroundElm extends CircuitComponent {
 
   getVoltageSourceCount() {
     return 1;
-  }
-
-  getInfo(arr) {
-    super.getInfo();
-    arr[0] = "ground";
-    return arr[1] = `I = ${Util.getUnitText(this.getCurrent(), "A")}`;
   }
 
   hasGroundConnection(n1) {

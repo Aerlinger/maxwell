@@ -404,6 +404,11 @@ class CircuitComponent {
     };
   }
 
+  simpleString() {
+    let name = this.constructor.name.replace("Elm", "");
+    return `${name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}]`;
+  }
+
   toString() {
     let paramStrs = [];
 
@@ -413,10 +418,9 @@ class CircuitComponent {
       }
     }
 
-    let paramStr = `{${paramStrs.join(", ")}}`;
-    let name = this.constructor.name.replace("Elm", "");
+    let paramStr = ` {${paramStrs.join(", ")}}`;
 
-    return `${name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}]` + paramStr;
+    return this.simpleString() + paramStr;
   }
 
   getVoltageSourceCount() {
@@ -524,15 +528,22 @@ class CircuitComponent {
   }
 
 // Extended by subclasses
-  getInfo(arr) {
-    return arr = new Array(15);
-  }
+  getSummary(additonalInfo = []) {
+    let summary = [
+      `${this.constructor.name} (${this.getName()})`,
+      this.simpleString(),
+      `V: ${Util.getUnitText(this.getVoltageDiff(), "V")}`,
+      `I = ${Util.getUnitText(this.getCurrent(), "A")}`,
+      `P = ${Util.getUnitText(this.getCurrent(), "W")}`
+    ];
 
-// Extended by subclasses
-  getBasicInfo(arr) {
-    arr[1] = `I = ${Util.getUnitText(this.getCurrent(), "A")}`;
-    arr[2] = `Vd = ${Util.getUnitText(this.getVoltageDiff(), "V")}`;
-    return 3;
+
+    if (additonalInfo && additonalInfo.length > 0)
+      summary = summary.concat(additonalInfo);
+
+    let paramsSummary = Object.keys(this.params).map((param) => {return `  ${param}: ${this.getFieldText(param)}`});
+
+    return summary.concat(paramsSummary);
   }
 
   getScopeValue(x) {

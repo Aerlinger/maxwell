@@ -90,7 +90,7 @@ class ResistorElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      super.debugDraw(renderContext);
     }
   }
 
@@ -100,15 +100,6 @@ class ResistorElm extends CircuitComponent {
   
   getName() {
     return "Resistor"
-  }
-
-  getInfo(arr) {
-    arr[0] = "resistor";
-    this.getBasicInfo(arr);
-    arr[3] = `R = ${Util.getUnitText(this.resistance, this.unitSymbol())}`;
-    arr[4] = `P = ${Util.getUnitText(this.getPower(), "W")}`;
-
-    return arr;
   }
 
   needsShortcut() {

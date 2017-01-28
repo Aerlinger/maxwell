@@ -79,11 +79,6 @@ class ProbeElm extends CircuitComponent {
     return (this.flags & ProbeElm.FLAG_SHOWVOLTAGE) !== 0;
   }
 
-  getInfo(arr) {
-    arr[0] = "scope probe";
-    return arr[1] = `Vd = ${Util.getUnitText(this.getVoltageDiff(), "V")}`;
-  }
-
   stamp(stamper) {}
 
   getConnection(n1, n2) {

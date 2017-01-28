@@ -59,14 +59,6 @@ class WireElm extends CircuitComponent {
     return 1;
   }
 
-  getInfo(arr) {
-    super.getInfo();
-
-    arr[0] = "Wire";
-    arr[1] = `I = ${Util.getUnitText(this.getCurrent(), "A")}`;
-    return arr[2] = `V = ${Util.getUnitText(this.volts[0], "V")}`;
-  }
-
   getPower() {
     return 0;
   }

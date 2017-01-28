@@ -899,6 +899,11 @@
 	    };
 	  }
 	
+	  simpleString() {
+	    let name = this.constructor.name.replace("Elm", "");
+	    return `${name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}]`;
+	  }
+	
 	  toString() {
 	    let paramStrs = [];
 	
@@ -908,10 +913,9 @@
 	      }
 	    }
 	
-	    let paramStr = `{${paramStrs.join(", ")}}`;
-	    let name = this.constructor.name.replace("Elm", "");
+	    let paramStr = ` {${paramStrs.join(", ")}}`;
 	
-	    return `${name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}]` + paramStr;
+	    return this.simpleString() + paramStr;
 	  }
 	
 	  getVoltageSourceCount() {
@@ -1019,15 +1023,22 @@
 	  }
 	
 	// Extended by subclasses
-	  getInfo(arr) {
-	    return arr = new Array(15);
-	  }
+	  getSummary(additonalInfo = []) {
+	    let summary = [
+	      `${this.constructor.name} (${this.getName()})`,
+	      this.simpleString(),
+	      `V: ${Util.getUnitText(this.getVoltageDiff(), "V")}`,
+	      `I = ${Util.getUnitText(this.getCurrent(), "A")}`,
+	      `P = ${Util.getUnitText(this.getCurrent(), "W")}`
+	    ];
 	
-	// Extended by subclasses
-	  getBasicInfo(arr) {
-	    arr[1] = `I = ${Util.getUnitText(this.getCurrent(), "A")}`;
-	    arr[2] = `Vd = ${Util.getUnitText(this.getVoltageDiff(), "V")}`;
-	    return 3;
+	
+	    if (additonalInfo && additonalInfo.length > 0)
+	      summary = summary.concat(additonalInfo);
+	
+	    let paramsSummary = Object.keys(this.params).map((param) => {return `  ${param}: ${this.getFieldText(param)}`});
+	
+	    return summary.concat(paramsSummary);
 	  }
 	
 	  getScopeValue(x) {
@@ -18563,14 +18574,6 @@
 	    return 1;
 	  }
 	
-	  getInfo(arr) {
-	    super.getInfo();
-	
-	    arr[0] = "Wire";
-	    arr[1] = `I = ${Util.getUnitText(this.getCurrent(), "A")}`;
-	    return arr[2] = `V = ${Util.getUnitText(this.volts[0], "V")}`;
-	  }
-	
 	  getPower() {
 	    return 0;
 	  }
@@ -18901,7 +18904,7 @@
 	    renderContext.drawPosts(this);
 	
 	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
-	      return super.debugDraw(renderContext);
+	      super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -18911,15 +18914,6 @@
 	  
 	  getName() {
 	    return "Resistor"
-	  }
-	
-	  getInfo(arr) {
-	    arr[0] = "resistor";
-	    this.getBasicInfo(arr);
-	    arr[3] = `R = ${Util.getUnitText(this.resistance, this.unitSymbol())}`;
-	    arr[4] = `P = ${Util.getUnitText(this.getPower(), "W")}`;
-	
-	    return arr;
 	  }
 	
 	  needsShortcut() {
@@ -18989,7 +18983,7 @@
 	    }
 	
 	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
-	      return super.debugDraw(renderContext);
+	      super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -19008,12 +19002,6 @@
 	
 	  getVoltageSourceCount() {
 	    return 1;
-	  }
-	
-	  getInfo(arr) {
-	    super.getInfo();
-	    arr[0] = "ground";
-	    return arr[1] = `I = ${Util.getUnitText(this.getCurrent(), "A")}`;
 	  }
 	
 	  hasGroundConnection(n1) {
@@ -19218,15 +19206,6 @@
 	    }
 	  }
 	
-	  getInfo(arr) {
-	    super.getInfo();
-	    arr[0] = "diode";
-	    arr[1] = `I = ${Util.getUnitText(this.getCurrent(), "A")}`;
-	    arr[2] = `Vd = ${Util.getUnitText(this.getVoltageDiff(), "V")}`;
-	    arr[3] = `P = ${Util.getUnitText(this.getPower(), "W")}`;
-	    return arr[4] = `Vf = ${Util.getUnitText(this.fwdrop, "V")}`;
-	  }
-	
 	  // TODO: fix
 	  needsShortcut() {
 	    return true;
@@ -19350,11 +19329,6 @@
 	
 	  getVoltageDiff() {
 	    return this.volts[0];
-	  }
-	
-	  getInfo(arr) {
-	    arr[0] = "output";
-	    return arr[1] = `V = ${Util.getUnitText(this.volts[0], "V")}`;
 	  }
 	
 	  stamp(stamper) {}
@@ -19486,8 +19460,13 @@
 	
 	  toggle() {
 	    console.log(`Toggling...${this}`);
+	
+	    this.params['position']++;
 	    this.position++;
-	    if (this.position >= this.posCount) { this.position = 0; }
+	    if (this.position >= this.posCount) {
+	      this.params['position'] = 0;
+	      this.position = 0;
+	    }
 	    
 	    this.Circuit.Solver.analyzeFlag = true;
 	  }
@@ -19680,17 +19659,6 @@
 	    }
 	  }
 	
-	  getInfo(arr) {
-	    super.getInfo();
-	
-	    arr[0] = "capacitor";
-	    this.getBasicInfo(arr);
-	    arr[3] = `C = ${Util.getUnitText(this.capacitance, "F")}`;
-	    arr[4] = `P = ${Util.getUnitText(this.getPower(), "W")}`;
-	    let v = this.getVoltageDiff();
-	    return arr[4] = `U = ${Util.getUnitText(.5 * this.capacitance * v * v, "J")}`;
-	  }
-	
 	  needsShortcut() {
 	    return true;
 	  }
@@ -19834,13 +19802,6 @@
 	    }
 	
 	    return this.current;
-	  }
-	
-	  getInfo(arr) {
-	    arr[0] = "inductor";
-	    this.getBasicInfo(arr);
-	    arr[3] = `L = ${Util.getUnitText(this.inductance, "H")}`;
-	    return arr[4] = `P = ${Util.getUnitText(this.getPower(), "W")}`;
 	  }
 	
 	  getVoltageDiff() {
@@ -20013,15 +19974,6 @@
 	    stamper.stampNonLinear(this.nodes[1]);
 	  }
 	
-	  getInfo(arr) {
-	    arr[0] = "spark gap";
-	    this.getBasicInfo(arr);
-	    arr[3] = (this.state ? "on" : "off");
-	    arr[4] = `Ron = ${Util.getUnitText(this.onresistance, "Ω")}`;
-	    arr[5] = `Roff = ${Util.getUnitText(this.offresistance, "Ω")}`;
-	    return arr[6] = `Vbreakdown = ${Util.getUnitText(this.breakdown, "V")}`;
-	  }
-	
 	  needsShortcut() {
 	    return false;
 	  }
@@ -20105,12 +20057,6 @@
 	  stamp(stamper) {
 	    this.current = this.currentValue;
 	    return stamper.stampCurrentSource(this.nodes[0], this.nodes[1], this.current);
-	  }
-	
-	  getInfo(arr) {
-	    super.getInfo();
-	    arr[0] = "current source";
-	    return this.getBasicInfo(arr);
 	  }
 	
 	  getVoltageDiff() {
@@ -20931,25 +20877,28 @@
 	    return stamper.stampRightSide(this.nodes[2], -this.ie + (gee * vbe) + (gec * vbc));
 	  }
 	
-	  getInfo(arr) {
-	    arr[0] = `transistor (${(this.pnp === -1) ? "PNP)" : "NPN)"} beta=${this.beta.toFixed(4)}`;
-	    arr[0] = "";
+	  getSummary() {
+	    let arr = [];
+	
+	    arr[0] = `(${(this.pnp === -1) ? "PNP)" : "NPN)"}`;
 	
 	    let vbc = this.volts[0] - this.volts[1];
 	    let vbe = this.volts[0] - this.volts[2];
 	    let vce = this.volts[1] - this.volts[2];
 	
 	    if ((vbc * this.pnp) > .2) {
-	      arr[1] = ((vbe * this.pnp) > .2 ? "saturation" : "reverse active");
+	      arr[1] = ((vbe * this.pnp) > .2 ? "Saturation" : "Reverse active");
 	    } else {
-	      arr[1] = ((vbe * this.pnp) > .2 ? "fwd active" : "cutoff");
+	      arr[1] = ((vbe * this.pnp) > .2 ? "Fwd active" : "Cutoff");
 	    }
 	
 	    arr[2] = `Ic = ${Util.getUnitText(this.ic, "A")}`;
 	    arr[3] = `Ib = ${Util.getUnitText(this.ib, "A")}`;
 	    arr[4] = `Vbe = ${Util.getUnitText(vbe, "V")}`;
 	    arr[5] = `Vbc = ${Util.getUnitText(vbc, "V")}`;
-	    return arr[6] = `Vce = ${Util.getUnitText(vce, "V")}`;
+	    arr[6] = `Vce = ${Util.getUnitText(vce, "V")}`;
+	
+	    return super.getSummary(arr);
 	  }
 	
 	  getScopeValue(x) {
@@ -21560,7 +21509,6 @@
 	
 	  toggle() {
 	    super.toggle();
-	    // let self = this;
 	
 	    if (this.link !== 0) {
 	      this.getParentCircuit().eachComponent(function(component) {
@@ -21579,11 +21527,6 @@
 	      return false;
 	    }
 	    return Util.comparePair(n1, n2, 0, 1 + this.position);
-	  }
-	
-	  getInfo(arr) {
-	    arr[0] = ((this.link === 0) ? "switch (SPDT)" : "switch (DPDT)");
-	    return arr[1] = `I = ${this.getCurrent()}`;
 	  }
 	
 	  hasCenterOff() {
@@ -21914,10 +21857,6 @@
 	    return (this.flags & TextElm.FLAG_CENTER) !== 0;
 	  }
 	
-	  getInfo(arr) {
-	    return arr[0] = this.text;
-	  }
-	
 	  getPostCount() {
 	    return 0;
 	  }
@@ -22011,11 +21950,6 @@
 	
 	  mustShowVoltage() {
 	    return (this.flags & ProbeElm.FLAG_SHOWVOLTAGE) !== 0;
-	  }
-	
-	  getInfo(arr) {
-	    arr[0] = "scope probe";
-	    return arr[1] = `Vd = ${Util.getUnitText(this.getVoltageDiff(), "V")}`;
 	  }
 	
 	  stamp(stamper) {}
@@ -30108,10 +30042,12 @@
 	      }
 	    }
 	
+	    /*
 	    if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
 	      this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
 	      this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
 	    }
+	    */
 	
 	    this.drawInfoText();
 	
@@ -30131,11 +30067,11 @@
 	    this.drawComponents();
 	
 	    if (this.context) {
-	      if (this.circuitUI.highlightedNode)
-	        this.drawRect(this.circuitUI.highlightedNode.x - 10 + 0.5, this.circuitUI.highlightedNode.y - 10 + 0.5, 21, 21, 1, "#0F0");
+	      // if (this.circuitUI.highlightedNode)
+	      //   this.drawRect(this.circuitUI.highlightedNode.x - 10 + 0.5, this.circuitUI.highlightedNode.y - 10 + 0.5, 21, 21, 1, "#0F0");
 	
-	      if (this.circuitUI.selectedNode)
-	        this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
+	      // if (this.circuitUI.selectedNode)
+	      //   this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
 	
 	      if (this.circuitUI.placeComponent) {
 	        this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
@@ -30148,8 +30084,14 @@
 	      if (this.circuitUI.highlightedComponent) {
 	        this.circuitUI.highlightedComponent.draw(this);
 	
-	        this.drawRect(this.circuitUI.highlightedComponent.x1(), this.circuitUI.highlightedComponent.y1(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
-	        this.drawRect(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+	        this.context.save();
+	        this.context.fillStyle = Settings.POST_COLOR;
+	        this.context.fillRect(this.circuitUI.highlightedComponent.x1()-2*Settings.POST_RADIUS, this.circuitUI.highlightedComponent.y1()-2*Settings.POST_RADIUS, 4*Settings.POST_RADIUS, 4*Settings.POST_RADIUS);
+	
+	        if (this.circuitUI.highlightedComponent.x2())
+	          this.context.fillRect(this.circuitUI.highlightedComponent.x2()-2*Settings.POST_RADIUS, this.circuitUI.highlightedComponent.y2()-2*Settings.POST_RADIUS, 4*Settings.POST_RADIUS, 4*Settings.POST_RADIUS);
+	        this.context.restore();
+	        // this.drawRect(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
 	      }
 	    }
 	
@@ -30195,11 +30137,12 @@
 	
 	  drawInfoText() {
 	    if (this.circuitUI.highlightedComponent != null) {
-	      let arr = [];
-	      this.circuitUI.highlightedComponent.getInfo(arr);
+	      let summaryArr = this.circuitUI.highlightedComponent.getSummary();
 	
-	      for (let idx = 0; idx < arr.length; ++idx) {
-	        this.fillText(arr[idx], 600, (idx * 10) + 5, "#1b4e24");
+	      if (summaryArr) {
+	        for (let idx = 0; idx < summaryArr.length; ++idx) {
+	          this.fillText(summaryArr[idx], 500, (idx * 11) + 5, "#1b4e24");
+	        }
 	      }
 	    }
 	  }
@@ -30213,7 +30156,6 @@
 	    this.pathMode = false;
 	    this.context.closePath();
 	  }
-	
 	
 	  getVoltageColor(volts) {
 	    let fullScaleVRange = this.Circuit.Params.voltageRange;

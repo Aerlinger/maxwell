@@ -51,11 +51,6 @@ class OutputElm extends CircuitComponent {
     return this.volts[0];
   }
 
-  getInfo(arr) {
-    arr[0] = "output";
-    return arr[1] = `V = ${Util.getUnitText(this.volts[0], "V")}`;
-  }
-
   stamp(stamper) {}
 }
 OutputElm.initClass();

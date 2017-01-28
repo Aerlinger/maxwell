@@ -183,15 +183,6 @@ class DiodeElm extends CircuitComponent {
     }
   }
 
-  getInfo(arr) {
-    super.getInfo();
-    arr[0] = "diode";
-    arr[1] = `I = ${Util.getUnitText(this.getCurrent(), "A")}`;
-    arr[2] = `Vd = ${Util.getUnitText(this.getVoltageDiff(), "V")}`;
-    arr[3] = `P = ${Util.getUnitText(this.getPower(), "W")}`;
-    return arr[4] = `Vf = ${Util.getUnitText(this.fwdrop, "V")}`;
-  }
-
   // TODO: fix
   needsShortcut() {
     return true;

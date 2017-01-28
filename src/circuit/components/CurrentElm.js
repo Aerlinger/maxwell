@@ -70,12 +70,6 @@ class CurrentElm extends CircuitComponent {
     return stamper.stampCurrentSource(this.nodes[0], this.nodes[1], this.current);
   }
 
-  getInfo(arr) {
-    super.getInfo();
-    arr[0] = "current source";
-    return this.getBasicInfo(arr);
-  }
-
   getVoltageDiff() {
     return this.volts[1] - this.volts[0];
   }

@@ -89,10 +89,6 @@ class TextElm extends CircuitComponent {
     return (this.flags & TextElm.FLAG_CENTER) !== 0;
   }
 
-  getInfo(arr) {
-    return arr[0] = this.text;
-  }
-
   getPostCount() {
     return 0;
   }

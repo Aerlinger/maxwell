@@ -98,10 +98,12 @@ class CircuitCanvas extends Observer {
       }
     }
 
+    /*
     if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
       this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
       this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
     }
+    */
 
     this.drawInfoText();
 
@@ -121,11 +123,11 @@ class CircuitCanvas extends Observer {
     this.drawComponents();
 
     if (this.context) {
-      if (this.circuitUI.highlightedNode)
-        this.drawRect(this.circuitUI.highlightedNode.x - 10 + 0.5, this.circuitUI.highlightedNode.y - 10 + 0.5, 21, 21, 1, "#0F0");
+      // if (this.circuitUI.highlightedNode)
+      //   this.drawRect(this.circuitUI.highlightedNode.x - 10 + 0.5, this.circuitUI.highlightedNode.y - 10 + 0.5, 21, 21, 1, "#0F0");
 
-      if (this.circuitUI.selectedNode)
-        this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
+      // if (this.circuitUI.selectedNode)
+      //   this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
 
       if (this.circuitUI.placeComponent) {
         this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
@@ -138,8 +140,14 @@ class CircuitCanvas extends Observer {
       if (this.circuitUI.highlightedComponent) {
         this.circuitUI.highlightedComponent.draw(this);
 
-        this.drawRect(this.circuitUI.highlightedComponent.x1(), this.circuitUI.highlightedComponent.y1(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
-        this.drawRect(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+        this.context.save();
+        this.context.fillStyle = Settings.POST_COLOR;
+        this.context.fillRect(this.circuitUI.highlightedComponent.x1()-2*Settings.POST_RADIUS, this.circuitUI.highlightedComponent.y1()-2*Settings.POST_RADIUS, 4*Settings.POST_RADIUS, 4*Settings.POST_RADIUS);
+
+        if (this.circuitUI.highlightedComponent.x2())
+          this.context.fillRect(this.circuitUI.highlightedComponent.x2()-2*Settings.POST_RADIUS, this.circuitUI.highlightedComponent.y2()-2*Settings.POST_RADIUS, 4*Settings.POST_RADIUS, 4*Settings.POST_RADIUS);
+        this.context.restore();
+        // this.drawRect(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
       }
     }
 
@@ -185,11 +193,12 @@ class CircuitCanvas extends Observer {
 
   drawInfoText() {
     if (this.circuitUI.highlightedComponent != null) {
-      let arr = [];
-      this.circuitUI.highlightedComponent.getInfo(arr);
+      let summaryArr = this.circuitUI.highlightedComponent.getSummary();
 
-      for (let idx = 0; idx < arr.length; ++idx) {
-        this.fillText(arr[idx], 600, (idx * 10) + 5, "#1b4e24");
+      if (summaryArr) {
+        for (let idx = 0; idx < summaryArr.length; ++idx) {
+          this.fillText(summaryArr[idx], 500, (idx * 11) + 5, "#1b4e24");
+        }
       }
     }
   }
@@ -203,7 +212,6 @@ class CircuitCanvas extends Observer {
     this.pathMode = false;
     this.context.closePath();
   }
-
 
   getVoltageColor(volts) {
     let fullScaleVRange = this.Circuit.Params.voltageRange;
