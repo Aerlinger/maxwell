@@ -76,6 +76,7 @@ class CapacitorElm extends CircuitComponent {
 
     this.plate1 = [new Point(0, 0), new Point(0, 0)];
     this.plate2 = [new Point(0, 0), new Point(0, 0)];
+
     [this.plate1[0], this.plate1[1]] = Util.interpolateSymmetrical(this.point1, this.point2, f, 12);
     [this.plate2[0], this.plate2[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - f, 12);
   }

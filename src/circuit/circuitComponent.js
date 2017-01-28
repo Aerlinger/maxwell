@@ -197,6 +197,10 @@ class CircuitComponent {
     this.recomputeBounds();
   }
 
+  place() {
+    this.recomputeBounds();
+  }
+
   unitText() {
     return "?";
   }
@@ -686,10 +690,12 @@ class CircuitComponent {
      */
 
 
+    /*
     for (let i = 0; i < this.getPostCount(); ++i) {
       let post = this.getPost(i);
       renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
     }
+    */
 
   }
 

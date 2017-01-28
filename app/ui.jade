@@ -12,6 +12,49 @@ block header
       return str.length === 1 && str.match(/[a-z]/i);
     }
 
+    function bindCircuitEvents(circuitContext) {
+      circuitContext.onSelectionChanged = function (components) {
+        console.log("SELECTION CHANGED:", components);
+      };
+
+      circuitContext.onComponentHover = function (component) {
+        console.log("ON HOVER:", component.toString(), "V:", component.volts);
+        var form = Maxwell.renderEdit(component);
+
+        console.log("renderEdit\n", form);
+
+        window.editInfo = form;
+
+        // document.getElementById("edit_component").innerHTML = form;
+      };
+
+      circuitContext.onComponentUnhover = function (component) {
+        console.log("ON UNHOVER:", component.toString());
+      };
+
+      circuitContext.onComponentClick = function (component) {
+        console.log("ON CLICK:", component.getProperties());
+      };
+
+      circuitContext.onUpdateComplete = function (context) {
+        //if (context.highlightedComponent) {
+        //   plotter.addData(context.highlightedComponent.getVoltageDiff())
+        //}
+      };
+
+      circuitContext.onNodeHover = function (node) {
+        console.log("NODE HOVER: ", node.getVoltage());
+      };
+
+      circuitContext.onNodeUnhover = function (node) {
+        console.log("NODE UNHOVER: ", node.getVoltage());
+      };
+
+      circuitContext.onNodeClick = function (node) {
+        console.log("NODE CLICK: ", node.x, node.y);
+      };
+    }
+
     $(document).ready(function() {
       var grid = document.getElementById('grid');
       var canvas = document.getElementById('canvas');
@@ -66,11 +109,20 @@ block header
             case 'G':
               circuitContext.setPlaceComponent("GroundElm");
               break;
+            case 'S':
+              circuitContext.setPlaceComponent("SwitchElm");
+              break;
             case 'C':
               circuitContext.setPlaceComponent("CapacitorElm");
               break;
             case 'I':
               circuitContext.setPlaceComponent("InductorElm");
+              break;
+            case 'V':
+              circuitContext.setPlaceComponent("VoltageElm");
+              break;
+            case 'A':
+              circuitContext.setPlaceComponent("RailElm");
               break;
             case 'O':
               circuitContext.setPlaceComponent("OpAmpElm");
@@ -80,6 +132,9 @@ block header
               break;
             case "T":
               circuitContext.setPlaceComponent("TransistorElm");
+              break;
+            case "M":
+              circuitContext.setPlaceComponent("MosfetElm");
               break;
             case "Q":
               circuitContext.clearPlaceComponent();
@@ -100,6 +155,8 @@ block header
               circuitContext.togglePause();
               break;
           }
+
+          bindCircuitEvents(circuitContext);
         })
       });
 

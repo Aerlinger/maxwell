@@ -741,6 +741,9 @@ class CircuitSolver
   dumpFrame: ->
     matrixRowCount = @circuitRightSide.length
 
+    if !@circuitMatrix || !!@circuitMatrix[0]
+      return ""
+
     circuitMatrixDump = ""
     circuitRightSideDump = "  RS: ["
 

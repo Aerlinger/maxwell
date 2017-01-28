@@ -37,10 +37,10 @@ fs = require('fs');
 
 class Circuit extends Observer {
   static initClass() {
-    this.DEBUG = true;
+    this.DEBUG = false;
 
     this.components = [
-  // Working
+      // Working
       "WireElm",
       "ResistorElm",
       "GroundElm",
@@ -52,36 +52,36 @@ class Circuit extends Observer {
       "SparkGapElm",
       "OpAmpElm",
       "MosfetElm",
-  
-  // Testing
+
+      // Testing
       "RailElm",
       "VarRailElm",
       "ZenerElm",
       "CurrentElm",
       "TransistorElm",
-  
-  // In progress:
+
+      // In progress:
       "Switch2Elm",  // Needs interaction
       "TextElm",
       "ProbeElm",
       "OutputElm"
     ];
-  
+
     // Messages Dispatched to listeners:
     //###################################################################################################################
-  
+
     this.ON_START_UPDATE = "ON_START_UPDATE";
     this.ON_COMPLETE_UPDATE = "ON_END_UPDATE";
-  
+
     this.ON_RESET = "ON_RESET";
-  
+
     this.ON_SOLDER = "ON_SOLDER";
     this.ON_DESOLDER = "ON_DESOLDER";
-  
+
     this.ON_ADD_COMPONENT = "ON_ADD_COMPONENT";
     this.ON_REMOVE_COMPONENT = "ON_MOVE_COMPONENT";
     this.ON_MOVE_COMPONENT = "ON_MOVE_COMPONENT";
-  
+
     this.ON_ERROR = "ON_ERROR";
     this.ON_WARNING = "ON_WARNING";
 
@@ -95,10 +95,12 @@ class Circuit extends Observer {
   }
 
 
-  constructor(name){
+  constructor(name) {
     super();
 
-    if (name == null) { name = "untitled"; }
+    if (name == null) {
+      name = "untitled";
+    }
     this.name = name;
     this.Params = new SimulationParams();
 
@@ -172,10 +174,18 @@ class Circuit extends Observer {
     Util.removeFromArray(this.elementList, component);
 
     // TODO: REMOVE NODES
-    //for node in component.nodes
-    //  if node.getNeighboringElements().length == 1
-    //    @nodeList.de
 
+    for (let nodeIdx of component.nodes) {
+      let node = this.getNode(nodeIdx);
+
+      console.log("DE", node.getNeighboringElements());
+
+      if (node.getNeighboringElements() == [this]) {
+        console.log("Orphaned node: ", nodeIdx)
+      }
+    }
+
+    this.invalidate();
     this.recomputeBounds();
   }
 
@@ -216,12 +226,12 @@ class Circuit extends Observer {
    *///################################################################################################################
 
   /*
-  UpdateCircuit: Updates the circuit each frame.
-    1. ) Reconstruct Circuit:
-          Rebuilds a data representation of the circuit (only applied when circuit changes)
-    2. ) Solve Circuit build matrix representation of the circuit solve for the voltage and current for each component.
-          Solving is performed via LU factorization.
-  */
+   UpdateCircuit: Updates the circuit each frame.
+   1. ) Reconstruct Circuit:
+   Rebuilds a data representation of the circuit (only applied when circuit changes)
+   2. ) Solve Circuit build matrix representation of the circuit solve for the voltage and current for each component.
+   Solving is performed via LU factorization.
+   */
   updateCircuit() {
 
     if (this.isStopped) {
@@ -281,7 +291,7 @@ class Circuit extends Observer {
 
     console.warn(e.stack);
     Logger.error(message);
-    
+
     return this.stopMessage = message;
   }
 
@@ -305,7 +315,9 @@ class Circuit extends Observer {
 
   findElm(searchElm) {
     for (let circuitElm of Array.from(this.elementList)) {
-      if (searchElm === circuitElm) { return circuitElm; }
+      if (searchElm === circuitElm) {
+        return circuitElm;
+      }
     }
     return false;
   }
@@ -334,7 +346,7 @@ class Circuit extends Observer {
     let maxX = -10000000000;
     let maxY = -10000000000;
 
-    this.eachComponent(function(component) {
+    this.eachComponent(function (component) {
       let componentBounds = component.boundingBox;
 
       let componentMinX = componentBounds.x;
@@ -353,7 +365,7 @@ class Circuit extends Observer {
       if (componentMaxX > maxX) {
         maxX = componentMaxX;
       }
-        
+
       if (componentMaxY > maxY) {
         maxY = componentMaxY;
       }
@@ -419,7 +431,7 @@ class Circuit extends Observer {
         for (let circuitElm of Array.from(this.elementList)) {
           // If firstCircuitNode isn't the same as the second
           if ((firstCircuitNode.elm.equalTo(circuitElm) === false) && circuitElm.boundingBox.contains(circuitNode.x,
-            circuitNode.y)) {
+                  circuitNode.y)) {
             numBadPoints++;
           }
         }
@@ -434,18 +446,12 @@ class Circuit extends Observer {
   }
 
   destroy(components) {
-    return Array.from(components).map((component) =>
-      (() => {
-        let result = [];
-        for (let circuitComponent of Array.from(this.getElements())) {
-          let item;
-          if (circuitComponent.equalTo(component)) {
-            item = this.desolder(circuitComponent, true);
-          }
-          result.push(item);
-        }
-        return result;
-      })());
+    for (let component of components) {
+      for (let circuitComponent of Array.from(this.getElements())) {
+        if (circuitComponent.equalTo(component))
+          this.desolder(circuitComponent, true);
+      }
+    }
   }
 
 
@@ -458,7 +464,6 @@ class Circuit extends Observer {
   }
 
 
-
   //###################################################################################################################
   /* Simulation Accessor Methods
    *///################################################################################################################
@@ -469,7 +474,7 @@ class Circuit extends Observer {
 
   eachComponent(callback) {
     return Array.from(this.elementList).map((component) =>
-      callback(component));
+        callback(component));
   }
 
   timeStep() {
@@ -504,7 +509,7 @@ class Circuit extends Observer {
     return this.Solver.getStamper();
   }
 
-  setHint(type, item1, item2)  {
+  setHint(type, item1, item2) {
 
     if (typeof type == "string") {
       if (parseInt(type)) {
@@ -540,8 +545,8 @@ class Circuit extends Observer {
           powerRange: this.powerRange(),
           flags: this.flags
         }]
-        .concat(this.elementList.map(element => element.serialize()))
-        .concat(this.scopes.map(scope => scope.serialize()))
+            .concat(this.elementList.map(element => element.serialize()))
+            .concat(this.scopes.map(scope => scope.serialize()))
         ;
 
     if (hint)
@@ -579,7 +584,9 @@ class Circuit extends Observer {
 
   dumpFrameJson(filename) {
     let circuitFramsJson;
-    if (filename == null) { filename = `./dump/${this.Params.name}_FRAMES.json`; }
+    if (filename == null) {
+      filename = `./dump/${this.Params.name}_FRAMES.json`;
+    }
     circuitFramsJson = JSON.stringify(this.frameJson(), null, 2);
 
     return fs.writeFileSync(filename, circuitFramsJson)

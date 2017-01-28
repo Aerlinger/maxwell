@@ -47,7 +47,6 @@ block header
         return res;
       }
 
-
       var plot = $.plot("#placeholder", [
         {data: sin, label: "Current"},
         {data: cos, label: "Voltage"}
@@ -207,8 +206,6 @@ block header
             valueRange: [0.0, 1.2],
             labels: ['X', 'Random']
           });
-
-
 
       // It sucks that these things aren't objects, and we need to store state in window.
       window.intervalId = setInterval(function () {

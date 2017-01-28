@@ -186,7 +186,7 @@ class Settings {
     this.CURRENT_RADIUS = 2;
     this.CURRENT_COLOR = "rgba(255, 255, 255, 0.7)";
     this.LINE_WIDTH = 2;
-    this.BOLD_LINE_WIDTH = 2;
+    this.BOLD_LINE_WIDTH = 6;
 
     // Grid
     this.GRID_SIZE = 8;
@@ -199,9 +199,11 @@ class Settings {
     this.CURRENT_DISPLAY_TYPE = "DASHES";
   
     // ColorPalettes:
-    this.SELECT_COLOR = ColorPalette.yellow;
-    this.HIGHLIGHT_COLOR = ColorPalette.orange;
+    // this.SELECT_COLOR = ColorPalette.ivory;
+    this.SELECT_COLOR = "#333";
+    this.HIGHLIGHT_COLOR = ColorPalette.orangered;
     this.POST_COLOR = ColorPalette.black;
+    this.POST_OUTLINE_COLOR = ColorPalette.slateblue;
     this.DOTS_COLOR = ColorPalette.yellow;
     this.DOTS_OUTLINE = ColorPalette.orange;
   

@@ -96,12 +96,14 @@ class SelectionMarquee extends Rectangle {
   draw(renderContext) {
     renderContext.lineWidth = 0.1;
 
-    if ((this.x1 != null) && (this.x2 != null) && (this.y1 != null) && (this.y2 != null)) {
-      renderContext.drawLine(this.x1, this.y1, this.x2, this.y1, "#FFFF00", 0);
-      renderContext.drawLine(this.x1, this.y2, this.x2, this.y2, "#FFFF00", 1);
+    let lineShift = 0.5;
 
-      renderContext.drawLine(this.x1, this.y1, this.x1, this.y2, "#FFFF00", 1);
-      renderContext.drawLine(this.x2, this.y1, this.x2, this.y2, "#FFFF00", 1);
+    if ((this.x1 != null) && (this.x2 != null) && (this.y1 != null) && (this.y2 != null)) {
+      renderContext.drawLine(this.x1 + lineShift, this.y1 + lineShift, this.x2 + lineShift, this.y1 + lineShift, "#FFFF00", 0);
+      renderContext.drawLine(this.x1 + lineShift, this.y2 + lineShift, this.x2 + lineShift, this.y2 + lineShift, "#FFFF00", 1);
+
+      renderContext.drawLine(this.x1 + lineShift, this.y1 + lineShift, this.x1 + lineShift, this.y2 + lineShift, "#FFFF00", 1);
+      renderContext.drawLine(this.x2 + lineShift, this.y1 + lineShift, this.x2 + lineShift, this.y2 + lineShift, "#FFFF00", 1);
     }
   }
 }
@@ -162,7 +164,8 @@ class CircuitUI extends Observer {
     this.onUpdateComplete = this.noop;
   }
 
-  noop() {}
+  noop() {
+  }
 
   mousemove(event) {
     let component;
@@ -177,91 +180,101 @@ class CircuitUI extends Observer {
     this.snapX = Util.snapGrid(x);
     this.snapY = Util.snapGrid(y);
 
-    // Handle Marquee
-    if (this.marquee) {
-      this.marquee.reposition(x, y);
+    // TODO: WIP for interactive element placing
+    if (this.placeComponent) {
+      this.placeComponent.setPoints();
 
-      this.selectedComponents = [];
+      if (this.placeX && this.placeY) {
+        this.placeComponent.point1.x = this.placeX;
+        this.placeComponent.point1.y = this.placeY;
 
-      for (let component of this.Circuit.getElements()) {
-        if (this.marquee.collidesWithComponent(component)) {
-          this.selectedComponents.push(component);
-          this.onSelectionChanged(this.selectedComponents);
-        }
+        this.placeComponent.point2.x = this.snapX;
+        this.placeComponent.point2.y = this.snapY;
+
+        this.placeComponent.place();
       }
-
     } else {
-      this.previouslyHighlightedNode = this.highlightedNode;
-      this.highlightedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
 
-      if (this.highlightedNode) {
-        this.onNodeHover(this.highlightedNode);
-      } else {
-        // TODO: WIP for interactive element placing
-        if (this.placeComponent) {
-          this.placeComponent.setPoints();
+      // Update marquee
+      if (this.marquee) {
+        this.marquee.reposition(x, y);
 
-          if (this.placeX && this.placeY) {
-            this.placeComponent.point1.x = this.placeX;
-            this.placeComponent.point1.y = this.placeY;
-
-            this.placeComponent.point2.x = this.snapX;
-            this.placeComponent.point2.y = this.snapY;
-          }
-        }
+        this.selectedComponents = [];
 
         for (let component of this.Circuit.getElements()) {
-          if (component.getBoundingBox().contains(x, y)) {
-            this.newlyHighlightedComponent = component;
-          }
-        }
-      }
-
-      if (this.previouslyHighlightedNode && !this.highlightedNode && this.onNodeUnhover) {
-        this.onNodeUnhover(this.previouslyHighlightedNode);
-      }
-
-      if (this.selectedNode) {
-        for (let element of this.selectedNode.getNeighboringElements()) {
-          if (element) {
-            // console.log(element);
-            let post = element.getPostAt(this.selectedNode.x, this.selectedNode.y);
-            if (post) {
-              post.x = this.snapX;
-              post.y = this.snapY;
-            } else {
-              console.warn("No post at", this.selectedNode.x, this.selectedNode.y);
-            }
-
-            element.recomputeBounds();
+          if (this.marquee.collidesWithComponent(component)) {
+            this.selectedComponents.push(component);
+            this.onSelectionChanged(this.selectedComponents);
           }
         }
 
-        this.selectedNode.x = this.snapX;
-        this.selectedNode.y = this.snapY;
-      }
-
-      if (this.newlyHighlightedComponent) {
-        if (this.newlyHighlightedComponent !== this.highlightedComponent) {
-          this.highlightedComponent = this.newlyHighlightedComponent;
-
-
-          if (this.onComponentHover)
-            this.onComponentHover(this.highlightedComponent);
-
-          this.notifyObservers(CircuitUI.ON_COMPONENT_HOVER, this.highlightedComponent);
-        }
-
+        // Update highlighted node
       } else {
-        if (this.highlightedComponent && this.onComponentUnhover) {
-          this.onComponentUnhover(this.highlightedComponent);
+        this.previouslyHighlightedNode = this.highlightedNode;
+        this.highlightedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
+
+        if (this.highlightedNode) {
+
+          if (this.previouslyHighlightedNode != this.highlightedNode) {
+            this.onNodeHover(this.highlightedNode);
+          }
+        } else {
+
+          for (let component of this.Circuit.getElements()) {
+            if (component.getBoundingBox().contains(x, y)) {
+              this.newlyHighlightedComponent = component;
+            }
+          }
         }
 
-        this.highlightedComponent = null;
+        if (this.previouslyHighlightedNode && !this.highlightedNode && this.onNodeUnhover) {
+          this.onNodeUnhover(this.previouslyHighlightedNode);
+        }
+
+        if (this.selectedNode) {
+          for (let element of this.selectedNode.getNeighboringElements()) {
+            if (element) {
+              // console.log(element);
+              let post = element.getPostAt(this.selectedNode.x, this.selectedNode.y);
+              if (post) {
+                post.x = this.snapX;
+                post.y = this.snapY;
+
+                element.place()
+              } else {
+                console.warn("No post at", this.selectedNode.x, this.selectedNode.y);
+              }
+
+              element.recomputeBounds();
+            }
+          }
+
+          this.selectedNode.x = this.snapX;
+          this.selectedNode.y = this.snapY;
+        }
+
+        // COMPONENT HOVER/UNHOVER EVENT
+        if (this.newlyHighlightedComponent) {
+          if (this.newlyHighlightedComponent !== this.highlightedComponent) {
+            this.highlightedComponent = this.newlyHighlightedComponent;
+
+            if (this.onComponentHover)
+              this.onComponentHover(this.highlightedComponent);
+
+            this.notifyObservers(CircuitUI.ON_COMPONENT_HOVER, this.highlightedComponent);
+          }
+
+        } else {
+          if (this.highlightedComponent && this.onComponentUnhover)
+            this.onComponentUnhover(this.highlightedComponent);
+
+          this.highlightedComponent = null;
+        }
       }
     }
 
-    if (!this.marquee && !this.selectedNode && (this.selectedComponents && this.selectedComponents.length > 0) && (event.which === CircuitUI.MOUSEDOWN) && ((this.lastX !== this.snapX) || (this.lastY !== this.snapY))) {
+    // Move components
+    if (!this.marquee && !this.isPlacingComponent() && !this.selectedNode && (this.selectedComponents && this.selectedComponents.length > 0) && (event.which === CircuitUI.MOUSEDOWN) && ((this.lastX !== this.snapX) || (this.lastY !== this.snapY))) {
       for (let component of Array.from(this.selectedComponents)) {
         component.move(this.snapX - this.lastX, this.snapY - this.lastY);
       }
@@ -282,6 +295,8 @@ class CircuitUI extends Observer {
 
         // Place the component
         this.Circuit.solder(this.placeComponent);
+
+        this.placeComponent.place();
         this.placeComponent = null;
         this.placeX = null;
         this.placeY = null;
@@ -346,9 +361,18 @@ class CircuitUI extends Observer {
       this.Circuit.pause();
   }
 
-  pause() {}
-  play() {}
-  restart() {}
+  pause() {
+  }
+
+  play() {
+  }
+
+  restart() {
+  }
+
+  isPlacingComponent() {
+    return !!this.placeComponent;
+  }
 
   clearPlaceComponent() {
     this.placeX = null;

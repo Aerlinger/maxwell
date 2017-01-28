@@ -46,12 +46,12 @@
 
 	/* WEBPACK VAR INJECTION */(function(global) {let CircuitComponent = __webpack_require__(1);
 	let CircuitLoader = __webpack_require__(16);
-	let ComponentRegistry = __webpack_require__(91);
+	let ComponentRegistry = __webpack_require__(90);
 	
-	let Circuit = __webpack_require__(78);
-	let CircuitUI = __webpack_require__(92);
+	let Circuit = __webpack_require__(77);
+	let CircuitUI = __webpack_require__(91);
 	
-	let RickshawScopeCanvas = __webpack_require__(94);
+	let RickshawScopeCanvas = __webpack_require__(93);
 	
 	let environment = __webpack_require__(10);
 	
@@ -616,6 +616,10 @@
 	    this.recomputeBounds();
 	  }
 	
+	  place() {
+	    this.recomputeBounds();
+	  }
+	
 	  unitText() {
 	    return "?";
 	  }
@@ -1105,10 +1109,12 @@
 	     */
 	
 	
+	    /*
 	    for (let i = 0; i < this.getPostCount(); ++i) {
 	      let post = this.getPost(i);
 	      renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
 	    }
+	    */
 	
 	  }
 	
@@ -1507,7 +1513,7 @@
 	    this.CURRENT_RADIUS = 2;
 	    this.CURRENT_COLOR = "rgba(255, 255, 255, 0.7)";
 	    this.LINE_WIDTH = 2;
-	    this.BOLD_LINE_WIDTH = 2;
+	    this.BOLD_LINE_WIDTH = 6;
 	
 	    // Grid
 	    this.GRID_SIZE = 8;
@@ -1520,9 +1526,11 @@
 	    this.CURRENT_DISPLAY_TYPE = "DASHES";
 	  
 	    // ColorPalettes:
-	    this.SELECT_COLOR = ColorPalette.yellow;
-	    this.HIGHLIGHT_COLOR = ColorPalette.orange;
+	    // this.SELECT_COLOR = ColorPalette.ivory;
+	    this.SELECT_COLOR = "#333";
+	    this.HIGHLIGHT_COLOR = ColorPalette.orangered;
 	    this.POST_COLOR = ColorPalette.black;
+	    this.POST_OUTLINE_COLOR = ColorPalette.slateblue;
 	    this.DOTS_COLOR = ColorPalette.yellow;
 	    this.DOTS_OUTLINE = ColorPalette.orange;
 	  
@@ -17774,35 +17782,35 @@
 	let ScrElm = __webpack_require__(54);
 	let TriodeElm = __webpack_require__(55);
 	
-	let DecadeElm = __webpack_require__(57);
-	let LatchElm = __webpack_require__(59);
-	let TimerElm = __webpack_require__(60);
-	let JkFlipFlopElm = __webpack_require__(61);
-	let DFlipFlopElm = __webpack_require__(62);
-	let CounterElm = __webpack_require__(63);
-	let DacElm = __webpack_require__(64);
-	let AdcElm = __webpack_require__(65);
-	let VcoElm = __webpack_require__(66);
-	let PhaseCompElm = __webpack_require__(67);
-	let SevenSegElm = __webpack_require__(68);
-	let CC2Elm = __webpack_require__(69);
+	let DecadeElm = __webpack_require__(56);
+	let LatchElm = __webpack_require__(58);
+	let TimerElm = __webpack_require__(59);
+	let JkFlipFlopElm = __webpack_require__(60);
+	let DFlipFlopElm = __webpack_require__(61);
+	let CounterElm = __webpack_require__(62);
+	let DacElm = __webpack_require__(63);
+	let AdcElm = __webpack_require__(64);
+	let VcoElm = __webpack_require__(65);
+	let PhaseCompElm = __webpack_require__(66);
+	let SevenSegElm = __webpack_require__(67);
+	let CC2Elm = __webpack_require__(68);
 	
-	let TransLineElm = __webpack_require__(70);
+	let TransLineElm = __webpack_require__(69);
 	
-	let TransformerElm = __webpack_require__(71);
-	let TappedTransformerElm = __webpack_require__(72);
+	let TransformerElm = __webpack_require__(70);
+	let TappedTransformerElm = __webpack_require__(71);
 	
-	let LedElm = __webpack_require__(73);
-	let PotElm = __webpack_require__(74);
-	let ClockElm = __webpack_require__(75);
+	let LedElm = __webpack_require__(72);
+	let PotElm = __webpack_require__(73);
+	let ClockElm = __webpack_require__(74);
 	
-	let Scope = __webpack_require__(76);
+	let Scope = __webpack_require__(75);
 	
-	let SimulationParams = __webpack_require__(77);
+	let SimulationParams = __webpack_require__(76);
 	
-	let Circuit = __webpack_require__(78);
-	let Hint = __webpack_require__(90);
-	let fs = __webpack_require__(89);
+	let Circuit = __webpack_require__(77);
+	let Hint = __webpack_require__(89);
+	let fs = __webpack_require__(88);
 	
 	let environment = __webpack_require__(10);
 	
@@ -19489,6 +19497,7 @@
 	
 	    this.plate1 = [new Point(0, 0), new Point(0, 0)];
 	    this.plate2 = [new Point(0, 0), new Point(0, 0)];
+	
 	    [this.plate1[0], this.plate1[1]] = Util.interpolateSymmetrical(this.point1, this.point2, f, 12);
 	    [this.plate2[0], this.plate2[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - f, 12);
 	  }
@@ -24079,11 +24088,10 @@
 
 
 /***/ },
-/* 56 */,
-/* 57 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let ChipElm = __webpack_require__(58);
+	let ChipElm = __webpack_require__(57);
 	
 	class DecadeElm extends ChipElm {
 	
@@ -24165,7 +24173,7 @@
 
 
 /***/ },
-/* 58 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -24626,11 +24634,11 @@
 
 
 /***/ },
-/* 59 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(58);
+	let ChipElm = __webpack_require__(57);
 	let Util = __webpack_require__(5);
 	
 	class LatchElm extends ChipElm {
@@ -24697,11 +24705,11 @@
 
 
 /***/ },
-/* 60 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(58);
+	let ChipElm = __webpack_require__(57);
 	let Util = __webpack_require__(5);
 	let Settings = __webpack_require__(2);
 	
@@ -24840,11 +24848,11 @@
 
 
 /***/ },
-/* 61 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(58);
+	let ChipElm = __webpack_require__(57);
 	let Util = __webpack_require__(5);
 	
 	class JkFlipFlopElm extends ChipElm {
@@ -24915,11 +24923,11 @@
 
 
 /***/ },
-/* 62 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(58);
+	let ChipElm = __webpack_require__(57);
 	let Util = __webpack_require__(5);
 	
 	class DFlipFlopElm extends ChipElm {
@@ -25003,11 +25011,11 @@
 
 
 /***/ },
-/* 63 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(58);
+	let ChipElm = __webpack_require__(57);
 	let Util = __webpack_require__(5);
 	
 	class CounterElm extends ChipElm {
@@ -25109,11 +25117,11 @@
 
 
 /***/ },
-/* 64 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(58);
+	let ChipElm = __webpack_require__(57);
 	let Util = __webpack_require__(5);
 	
 	class DacElm extends ChipElm {
@@ -25175,11 +25183,11 @@
 
 
 /***/ },
-/* 65 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(58);
+	let ChipElm = __webpack_require__(57);
 	let Util = __webpack_require__(5);
 	
 	class AdcElm extends ChipElm {
@@ -25248,11 +25256,11 @@
 	}
 
 /***/ },
-/* 66 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(58);
+	let ChipElm = __webpack_require__(57);
 	let Util = __webpack_require__(5);
 	
 	// TODO Fails on this line: stamper.updateVoltageSource(0, this.nodes[1], this.pins[1].voltSource, vo);
@@ -25361,11 +25369,11 @@
 
 
 /***/ },
-/* 67 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(58);
+	let ChipElm = __webpack_require__(57);
 	let Util = __webpack_require__(5);
 	
 	class PhaseCompElm extends ChipElm {
@@ -25454,12 +25462,12 @@
 
 
 /***/ },
-/* 68 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
 	let Settings = __webpack_require__(2);
-	let ChipElm = __webpack_require__(58);
+	let ChipElm = __webpack_require__(57);
 	
 	class SevenSegElm extends ChipElm {
 	
@@ -25541,11 +25549,11 @@
 
 
 /***/ },
-/* 69 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(58);
+	let ChipElm = __webpack_require__(57);
 	let Util = __webpack_require__(5);
 	
 	class CC2Elm extends ChipElm {
@@ -25614,7 +25622,7 @@
 
 
 /***/ },
-/* 70 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -25846,7 +25854,7 @@
 
 
 /***/ },
-/* 71 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -26121,7 +26129,7 @@
 
 
 /***/ },
-/* 72 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -26379,7 +26387,7 @@
 
 
 /***/ },
-/* 73 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -26507,7 +26515,7 @@
 
 
 /***/ },
-/* 74 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -26734,7 +26742,7 @@
 
 
 /***/ },
-/* 75 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let RailElm = __webpack_require__(18);
@@ -26764,7 +26772,7 @@
 
 
 /***/ },
-/* 76 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let Rectangle = __webpack_require__(3);
@@ -26967,7 +26975,7 @@
 
 
 /***/ },
-/* 77 */
+/* 76 */
 /***/ function(module, exports) {
 
 	class SimulationParams {
@@ -27034,7 +27042,7 @@
 
 
 /***/ },
-/* 78 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//###################################################################################################################
@@ -27061,25 +27069,25 @@
 	//
 	//###################################################################################################################
 	
-	let Oscilloscope = __webpack_require__(79);
-	let Logger = __webpack_require__(80);
-	let SimulationParams = __webpack_require__(77);
-	let SimulationFrame = __webpack_require__(81);
-	let CircuitSolver = __webpack_require__(82);
-	let Observer = __webpack_require__(88);
+	let Oscilloscope = __webpack_require__(78);
+	let Logger = __webpack_require__(79);
+	let SimulationParams = __webpack_require__(76);
+	let SimulationFrame = __webpack_require__(80);
+	let CircuitSolver = __webpack_require__(81);
+	let Observer = __webpack_require__(87);
 	let Rectangle = __webpack_require__(3);
 	let Util = __webpack_require__(5);
 	let environment = __webpack_require__(10);
 	
-	fs = __webpack_require__(89);
+	fs = __webpack_require__(88);
 	
 	
 	class Circuit extends Observer {
 	  static initClass() {
-	    this.DEBUG = true;
+	    this.DEBUG = false;
 	
 	    this.components = [
-	  // Working
+	      // Working
 	      "WireElm",
 	      "ResistorElm",
 	      "GroundElm",
@@ -27091,36 +27099,36 @@
 	      "SparkGapElm",
 	      "OpAmpElm",
 	      "MosfetElm",
-	  
-	  // Testing
+	
+	      // Testing
 	      "RailElm",
 	      "VarRailElm",
 	      "ZenerElm",
 	      "CurrentElm",
 	      "TransistorElm",
-	  
-	  // In progress:
+	
+	      // In progress:
 	      "Switch2Elm",  // Needs interaction
 	      "TextElm",
 	      "ProbeElm",
 	      "OutputElm"
 	    ];
-	  
+	
 	    // Messages Dispatched to listeners:
 	    //###################################################################################################################
-	  
+	
 	    this.ON_START_UPDATE = "ON_START_UPDATE";
 	    this.ON_COMPLETE_UPDATE = "ON_END_UPDATE";
-	  
+	
 	    this.ON_RESET = "ON_RESET";
-	  
+	
 	    this.ON_SOLDER = "ON_SOLDER";
 	    this.ON_DESOLDER = "ON_DESOLDER";
-	  
+	
 	    this.ON_ADD_COMPONENT = "ON_ADD_COMPONENT";
 	    this.ON_REMOVE_COMPONENT = "ON_MOVE_COMPONENT";
 	    this.ON_MOVE_COMPONENT = "ON_MOVE_COMPONENT";
-	  
+	
 	    this.ON_ERROR = "ON_ERROR";
 	    this.ON_WARNING = "ON_WARNING";
 	
@@ -27134,10 +27142,12 @@
 	  }
 	
 	
-	  constructor(name){
+	  constructor(name) {
 	    super();
 	
-	    if (name == null) { name = "untitled"; }
+	    if (name == null) {
+	      name = "untitled";
+	    }
 	    this.name = name;
 	    this.Params = new SimulationParams();
 	
@@ -27211,10 +27221,18 @@
 	    Util.removeFromArray(this.elementList, component);
 	
 	    // TODO: REMOVE NODES
-	    //for node in component.nodes
-	    //  if node.getNeighboringElements().length == 1
-	    //    @nodeList.de
 	
+	    for (let nodeIdx of component.nodes) {
+	      let node = this.getNode(nodeIdx);
+	
+	      console.log("DE", node.getNeighboringElements());
+	
+	      if (node.getNeighboringElements() == [this]) {
+	        console.log("Orphaned node: ", nodeIdx)
+	      }
+	    }
+	
+	    this.invalidate();
 	    this.recomputeBounds();
 	  }
 	
@@ -27255,12 +27273,12 @@
 	   *///################################################################################################################
 	
 	  /*
-	  UpdateCircuit: Updates the circuit each frame.
-	    1. ) Reconstruct Circuit:
-	          Rebuilds a data representation of the circuit (only applied when circuit changes)
-	    2. ) Solve Circuit build matrix representation of the circuit solve for the voltage and current for each component.
-	          Solving is performed via LU factorization.
-	  */
+	   UpdateCircuit: Updates the circuit each frame.
+	   1. ) Reconstruct Circuit:
+	   Rebuilds a data representation of the circuit (only applied when circuit changes)
+	   2. ) Solve Circuit build matrix representation of the circuit solve for the voltage and current for each component.
+	   Solving is performed via LU factorization.
+	   */
 	  updateCircuit() {
 	
 	    if (this.isStopped) {
@@ -27320,7 +27338,7 @@
 	
 	    console.warn(e.stack);
 	    Logger.error(message);
-	    
+	
 	    return this.stopMessage = message;
 	  }
 	
@@ -27344,7 +27362,9 @@
 	
 	  findElm(searchElm) {
 	    for (let circuitElm of Array.from(this.elementList)) {
-	      if (searchElm === circuitElm) { return circuitElm; }
+	      if (searchElm === circuitElm) {
+	        return circuitElm;
+	      }
 	    }
 	    return false;
 	  }
@@ -27373,7 +27393,7 @@
 	    let maxX = -10000000000;
 	    let maxY = -10000000000;
 	
-	    this.eachComponent(function(component) {
+	    this.eachComponent(function (component) {
 	      let componentBounds = component.boundingBox;
 	
 	      let componentMinX = componentBounds.x;
@@ -27392,7 +27412,7 @@
 	      if (componentMaxX > maxX) {
 	        maxX = componentMaxX;
 	      }
-	        
+	
 	      if (componentMaxY > maxY) {
 	        maxY = componentMaxY;
 	      }
@@ -27458,7 +27478,7 @@
 	        for (let circuitElm of Array.from(this.elementList)) {
 	          // If firstCircuitNode isn't the same as the second
 	          if ((firstCircuitNode.elm.equalTo(circuitElm) === false) && circuitElm.boundingBox.contains(circuitNode.x,
-	            circuitNode.y)) {
+	                  circuitNode.y)) {
 	            numBadPoints++;
 	          }
 	        }
@@ -27473,18 +27493,12 @@
 	  }
 	
 	  destroy(components) {
-	    return Array.from(components).map((component) =>
-	      (() => {
-	        let result = [];
-	        for (let circuitComponent of Array.from(this.getElements())) {
-	          let item;
-	          if (circuitComponent.equalTo(component)) {
-	            item = this.desolder(circuitComponent, true);
-	          }
-	          result.push(item);
-	        }
-	        return result;
-	      })());
+	    for (let component of components) {
+	      for (let circuitComponent of Array.from(this.getElements())) {
+	        if (circuitComponent.equalTo(component))
+	          this.desolder(circuitComponent, true);
+	      }
+	    }
 	  }
 	
 	
@@ -27497,7 +27511,6 @@
 	  }
 	
 	
-	
 	  //###################################################################################################################
 	  /* Simulation Accessor Methods
 	   *///################################################################################################################
@@ -27508,7 +27521,7 @@
 	
 	  eachComponent(callback) {
 	    return Array.from(this.elementList).map((component) =>
-	      callback(component));
+	        callback(component));
 	  }
 	
 	  timeStep() {
@@ -27543,7 +27556,7 @@
 	    return this.Solver.getStamper();
 	  }
 	
-	  setHint(type, item1, item2)  {
+	  setHint(type, item1, item2) {
 	
 	    if (typeof type == "string") {
 	      if (parseInt(type)) {
@@ -27579,8 +27592,8 @@
 	          powerRange: this.powerRange(),
 	          flags: this.flags
 	        }]
-	        .concat(this.elementList.map(element => element.serialize()))
-	        .concat(this.scopes.map(scope => scope.serialize()))
+	            .concat(this.elementList.map(element => element.serialize()))
+	            .concat(this.scopes.map(scope => scope.serialize()))
 	        ;
 	
 	    if (hint)
@@ -27618,7 +27631,9 @@
 	
 	  dumpFrameJson(filename) {
 	    let circuitFramsJson;
-	    if (filename == null) { filename = `./dump/${this.Params.name}_FRAMES.json`; }
+	    if (filename == null) {
+	      filename = `./dump/${this.Params.name}_FRAMES.json`;
+	    }
 	    circuitFramsJson = JSON.stringify(this.frameJson(), null, 2);
 	
 	    return fs.writeFileSync(filename, circuitFramsJson)
@@ -27638,7 +27653,7 @@
 
 
 /***/ },
-/* 79 */
+/* 78 */
 /***/ function(module, exports) {
 
 	class Oscilloscope {
@@ -27681,7 +27696,7 @@
 
 
 /***/ },
-/* 80 */
+/* 79 */
 /***/ function(module, exports) {
 
 	let errorStack = undefined;
@@ -27710,7 +27725,7 @@
 
 
 /***/ },
-/* 81 */
+/* 80 */
 /***/ function(module, exports) {
 
 	class SimulationFrame {
@@ -27746,26 +27761,26 @@
 
 
 /***/ },
-/* 82 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var CapacitorElm, CircuitNode, CircuitNodeLink, CircuitSolver, CurrentElm, GroundElm, InductorElm, MatrixStamper, Pathfinder, RailElm, RowInfo, Setting, SimulationFrame, Util, VoltageElm, WireElm, sprintf;
 	
-	MatrixStamper = __webpack_require__(83);
+	MatrixStamper = __webpack_require__(82);
 	
-	Pathfinder = __webpack_require__(85);
+	Pathfinder = __webpack_require__(84);
 	
-	CircuitNode = __webpack_require__(86);
+	CircuitNode = __webpack_require__(85);
 	
-	CircuitNodeLink = __webpack_require__(87);
+	CircuitNodeLink = __webpack_require__(86);
 	
-	RowInfo = __webpack_require__(84);
+	RowInfo = __webpack_require__(83);
 	
 	Setting = __webpack_require__(2);
 	
 	Util = __webpack_require__(5);
 	
-	SimulationFrame = __webpack_require__(81);
+	SimulationFrame = __webpack_require__(80);
 	
 	GroundElm = __webpack_require__(23);
 	
@@ -28537,6 +28552,9 @@
 	  CircuitSolver.prototype.dumpFrame = function() {
 	    var circuitMatrixDump, circuitRightSideDump, i, j, matrixRowCount, out, _i, _j;
 	    matrixRowCount = this.circuitRightSide.length;
+	    if (!this.circuitMatrix || !!this.circuitMatrix[0]) {
+	      return "";
+	    }
 	    circuitMatrixDump = "";
 	    circuitRightSideDump = "  RS: [";
 	    for (i = _i = 0; 0 <= matrixRowCount ? _i < matrixRowCount : _i > matrixRowCount; i = 0 <= matrixRowCount ? ++_i : --_i) {
@@ -28568,10 +28586,10 @@
 
 
 /***/ },
-/* 83 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let RowInfo = __webpack_require__(84);
+	let RowInfo = __webpack_require__(83);
 	let Util = __webpack_require__(5);
 	
 	class MatrixStamper {
@@ -28739,7 +28757,7 @@
 
 
 /***/ },
-/* 84 */
+/* 83 */
 /***/ function(module, exports) {
 
 	class RowInfo {
@@ -28796,7 +28814,7 @@
 
 
 /***/ },
-/* 85 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let VoltageElm = __webpack_require__(19);
@@ -28917,7 +28935,7 @@
 
 
 /***/ },
-/* 86 */
+/* 85 */
 /***/ function(module, exports) {
 
 	class CircuitNode {
@@ -28955,7 +28973,7 @@
 
 
 /***/ },
-/* 87 */
+/* 86 */
 /***/ function(module, exports) {
 
 	class CircuitNodeLink {
@@ -28980,7 +28998,7 @@
 
 
 /***/ },
-/* 88 */
+/* 87 */
 /***/ function(module, exports) {
 
 	class Observer {
@@ -29017,13 +29035,13 @@
 
 
 /***/ },
-/* 89 */
+/* 88 */
 /***/ function(module, exports) {
 
 
 
 /***/ },
-/* 90 */
+/* 89 */
 /***/ function(module, exports) {
 
 	class Hint {
@@ -29123,7 +29141,7 @@
 
 
 /***/ },
-/* 91 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -29170,29 +29188,29 @@
 	let ScrElm = __webpack_require__(54);
 	let TriodeElm = __webpack_require__(55);
 	
-	let DecadeElm = __webpack_require__(57);
-	let LatchElm = __webpack_require__(59);
-	let TimerElm = __webpack_require__(60);
-	let JKFlipFlopElm = __webpack_require__(61);
-	let DFlipFlopElm = __webpack_require__(62);
-	let CounterElm = __webpack_require__(63);
-	let DacElm = __webpack_require__(64);
-	let AdcElm = __webpack_require__(65);
-	let VcoElm = __webpack_require__(66);
-	let PhaseCompElm = __webpack_require__(67);
-	let SevenSegElm = __webpack_require__(68);
-	let CC2Elm = __webpack_require__(69);
+	let DecadeElm = __webpack_require__(56);
+	let LatchElm = __webpack_require__(58);
+	let TimerElm = __webpack_require__(59);
+	let JKFlipFlopElm = __webpack_require__(60);
+	let DFlipFlopElm = __webpack_require__(61);
+	let CounterElm = __webpack_require__(62);
+	let DacElm = __webpack_require__(63);
+	let AdcElm = __webpack_require__(64);
+	let VcoElm = __webpack_require__(65);
+	let PhaseCompElm = __webpack_require__(66);
+	let SevenSegElm = __webpack_require__(67);
+	let CC2Elm = __webpack_require__(68);
 	
-	let TransLineElm = __webpack_require__(70);
+	let TransLineElm = __webpack_require__(69);
 	
-	let TransformerElm = __webpack_require__(71);
-	let TappedTransformerElm = __webpack_require__(72);
+	let TransformerElm = __webpack_require__(70);
+	let TappedTransformerElm = __webpack_require__(71);
 	
-	let LedElm = __webpack_require__(73);
-	let PotElm = __webpack_require__(74);
-	let ClockElm = __webpack_require__(75);
+	let LedElm = __webpack_require__(72);
+	let PotElm = __webpack_require__(73);
+	let ClockElm = __webpack_require__(74);
 	
-	let Scope = __webpack_require__(76);
+	let Scope = __webpack_require__(75);
 	
 	//#
 	// ElementMap
@@ -29388,12 +29406,12 @@
 
 
 /***/ },
-/* 92 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let Rectangle = __webpack_require__(3);
-	let CircuitCanvas = __webpack_require__(93);
-	let Observer = __webpack_require__(88);
+	let CircuitCanvas = __webpack_require__(92);
+	let Observer = __webpack_require__(87);
 	let Util = __webpack_require__(5);
 	
 	let AntennaElm = __webpack_require__(17);
@@ -29438,29 +29456,29 @@
 	let ScrElm = __webpack_require__(54);
 	let TriodeElm = __webpack_require__(55);
 	
-	let DecadeElm = __webpack_require__(57);
-	let LatchElm = __webpack_require__(59);
-	let TimerElm = __webpack_require__(60);
-	let JkFlipFlopElm = __webpack_require__(61);
-	let DFlipFlopElm = __webpack_require__(62);
-	let CounterElm = __webpack_require__(63);
-	let DacElm = __webpack_require__(64);
-	let AdcElm = __webpack_require__(65);
-	let VcoElm = __webpack_require__(66);
-	let PhaseCompElm = __webpack_require__(67);
-	let SevenSegElm = __webpack_require__(68);
-	let CC2Elm = __webpack_require__(69);
+	let DecadeElm = __webpack_require__(56);
+	let LatchElm = __webpack_require__(58);
+	let TimerElm = __webpack_require__(59);
+	let JkFlipFlopElm = __webpack_require__(60);
+	let DFlipFlopElm = __webpack_require__(61);
+	let CounterElm = __webpack_require__(62);
+	let DacElm = __webpack_require__(63);
+	let AdcElm = __webpack_require__(64);
+	let VcoElm = __webpack_require__(65);
+	let PhaseCompElm = __webpack_require__(66);
+	let SevenSegElm = __webpack_require__(67);
+	let CC2Elm = __webpack_require__(68);
 	
-	let TransLineElm = __webpack_require__(70);
+	let TransLineElm = __webpack_require__(69);
 	
-	let TransformerElm = __webpack_require__(71);
-	let TappedTransformerElm = __webpack_require__(72);
+	let TransformerElm = __webpack_require__(70);
+	let TappedTransformerElm = __webpack_require__(71);
 	
-	let LedElm = __webpack_require__(73);
-	let PotElm = __webpack_require__(74);
-	let ClockElm = __webpack_require__(75);
+	let LedElm = __webpack_require__(72);
+	let PotElm = __webpack_require__(73);
+	let ClockElm = __webpack_require__(74);
 	
-	let Scope = __webpack_require__(76);
+	let Scope = __webpack_require__(75);
 	
 	class SelectionMarquee extends Rectangle {
 	  constructor(x1, y1) {
@@ -29489,12 +29507,14 @@
 	  draw(renderContext) {
 	    renderContext.lineWidth = 0.1;
 	
-	    if ((this.x1 != null) && (this.x2 != null) && (this.y1 != null) && (this.y2 != null)) {
-	      renderContext.drawLine(this.x1, this.y1, this.x2, this.y1, "#FFFF00", 0);
-	      renderContext.drawLine(this.x1, this.y2, this.x2, this.y2, "#FFFF00", 1);
+	    let lineShift = 0.5;
 	
-	      renderContext.drawLine(this.x1, this.y1, this.x1, this.y2, "#FFFF00", 1);
-	      renderContext.drawLine(this.x2, this.y1, this.x2, this.y2, "#FFFF00", 1);
+	    if ((this.x1 != null) && (this.x2 != null) && (this.y1 != null) && (this.y2 != null)) {
+	      renderContext.drawLine(this.x1 + lineShift, this.y1 + lineShift, this.x2 + lineShift, this.y1 + lineShift, "#FFFF00", 0);
+	      renderContext.drawLine(this.x1 + lineShift, this.y2 + lineShift, this.x2 + lineShift, this.y2 + lineShift, "#FFFF00", 1);
+	
+	      renderContext.drawLine(this.x1 + lineShift, this.y1 + lineShift, this.x1 + lineShift, this.y2 + lineShift, "#FFFF00", 1);
+	      renderContext.drawLine(this.x2 + lineShift, this.y1 + lineShift, this.x2 + lineShift, this.y2 + lineShift, "#FFFF00", 1);
 	    }
 	  }
 	}
@@ -29555,7 +29575,8 @@
 	    this.onUpdateComplete = this.noop;
 	  }
 	
-	  noop() {}
+	  noop() {
+	  }
 	
 	  mousemove(event) {
 	    let component;
@@ -29570,91 +29591,101 @@
 	    this.snapX = Util.snapGrid(x);
 	    this.snapY = Util.snapGrid(y);
 	
-	    // Handle Marquee
-	    if (this.marquee) {
-	      this.marquee.reposition(x, y);
+	    // TODO: WIP for interactive element placing
+	    if (this.placeComponent) {
+	      this.placeComponent.setPoints();
 	
-	      this.selectedComponents = [];
+	      if (this.placeX && this.placeY) {
+	        this.placeComponent.point1.x = this.placeX;
+	        this.placeComponent.point1.y = this.placeY;
 	
-	      for (let component of this.Circuit.getElements()) {
-	        if (this.marquee.collidesWithComponent(component)) {
-	          this.selectedComponents.push(component);
-	          this.onSelectionChanged(this.selectedComponents);
-	        }
+	        this.placeComponent.point2.x = this.snapX;
+	        this.placeComponent.point2.y = this.snapY;
+	
+	        this.placeComponent.place();
 	      }
-	
 	    } else {
-	      this.previouslyHighlightedNode = this.highlightedNode;
-	      this.highlightedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
 	
-	      if (this.highlightedNode) {
-	        this.onNodeHover(this.highlightedNode);
-	      } else {
-	        // TODO: WIP for interactive element placing
-	        if (this.placeComponent) {
-	          this.placeComponent.setPoints();
+	      // Update marquee
+	      if (this.marquee) {
+	        this.marquee.reposition(x, y);
 	
-	          if (this.placeX && this.placeY) {
-	            this.placeComponent.point1.x = this.placeX;
-	            this.placeComponent.point1.y = this.placeY;
-	
-	            this.placeComponent.point2.x = this.snapX;
-	            this.placeComponent.point2.y = this.snapY;
-	          }
-	        }
+	        this.selectedComponents = [];
 	
 	        for (let component of this.Circuit.getElements()) {
-	          if (component.getBoundingBox().contains(x, y)) {
-	            this.newlyHighlightedComponent = component;
-	          }
-	        }
-	      }
-	
-	      if (this.previouslyHighlightedNode && !this.highlightedNode && this.onNodeUnhover) {
-	        this.onNodeUnhover(this.previouslyHighlightedNode);
-	      }
-	
-	      if (this.selectedNode) {
-	        for (let element of this.selectedNode.getNeighboringElements()) {
-	          if (element) {
-	            // console.log(element);
-	            let post = element.getPostAt(this.selectedNode.x, this.selectedNode.y);
-	            if (post) {
-	              post.x = this.snapX;
-	              post.y = this.snapY;
-	            } else {
-	              console.warn("No post at", this.selectedNode.x, this.selectedNode.y);
-	            }
-	
-	            element.recomputeBounds();
+	          if (this.marquee.collidesWithComponent(component)) {
+	            this.selectedComponents.push(component);
+	            this.onSelectionChanged(this.selectedComponents);
 	          }
 	        }
 	
-	        this.selectedNode.x = this.snapX;
-	        this.selectedNode.y = this.snapY;
-	      }
-	
-	      if (this.newlyHighlightedComponent) {
-	        if (this.newlyHighlightedComponent !== this.highlightedComponent) {
-	          this.highlightedComponent = this.newlyHighlightedComponent;
-	
-	
-	          if (this.onComponentHover)
-	            this.onComponentHover(this.highlightedComponent);
-	
-	          this.notifyObservers(CircuitUI.ON_COMPONENT_HOVER, this.highlightedComponent);
-	        }
-	
+	        // Update highlighted node
 	      } else {
-	        if (this.highlightedComponent && this.onComponentUnhover) {
-	          this.onComponentUnhover(this.highlightedComponent);
+	        this.previouslyHighlightedNode = this.highlightedNode;
+	        this.highlightedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
+	
+	        if (this.highlightedNode) {
+	
+	          if (this.previouslyHighlightedNode != this.highlightedNode) {
+	            this.onNodeHover(this.highlightedNode);
+	          }
+	        } else {
+	
+	          for (let component of this.Circuit.getElements()) {
+	            if (component.getBoundingBox().contains(x, y)) {
+	              this.newlyHighlightedComponent = component;
+	            }
+	          }
 	        }
 	
-	        this.highlightedComponent = null;
+	        if (this.previouslyHighlightedNode && !this.highlightedNode && this.onNodeUnhover) {
+	          this.onNodeUnhover(this.previouslyHighlightedNode);
+	        }
+	
+	        if (this.selectedNode) {
+	          for (let element of this.selectedNode.getNeighboringElements()) {
+	            if (element) {
+	              // console.log(element);
+	              let post = element.getPostAt(this.selectedNode.x, this.selectedNode.y);
+	              if (post) {
+	                post.x = this.snapX;
+	                post.y = this.snapY;
+	
+	                element.place()
+	              } else {
+	                console.warn("No post at", this.selectedNode.x, this.selectedNode.y);
+	              }
+	
+	              element.recomputeBounds();
+	            }
+	          }
+	
+	          this.selectedNode.x = this.snapX;
+	          this.selectedNode.y = this.snapY;
+	        }
+	
+	        // COMPONENT HOVER/UNHOVER EVENT
+	        if (this.newlyHighlightedComponent) {
+	          if (this.newlyHighlightedComponent !== this.highlightedComponent) {
+	            this.highlightedComponent = this.newlyHighlightedComponent;
+	
+	            if (this.onComponentHover)
+	              this.onComponentHover(this.highlightedComponent);
+	
+	            this.notifyObservers(CircuitUI.ON_COMPONENT_HOVER, this.highlightedComponent);
+	          }
+	
+	        } else {
+	          if (this.highlightedComponent && this.onComponentUnhover)
+	            this.onComponentUnhover(this.highlightedComponent);
+	
+	          this.highlightedComponent = null;
+	        }
 	      }
 	    }
 	
-	    if (!this.marquee && !this.selectedNode && (this.selectedComponents && this.selectedComponents.length > 0) && (event.which === CircuitUI.MOUSEDOWN) && ((this.lastX !== this.snapX) || (this.lastY !== this.snapY))) {
+	    // Move components
+	    if (!this.marquee && !this.isPlacingComponent() && !this.selectedNode && (this.selectedComponents && this.selectedComponents.length > 0) && (event.which === CircuitUI.MOUSEDOWN) && ((this.lastX !== this.snapX) || (this.lastY !== this.snapY))) {
 	      for (let component of Array.from(this.selectedComponents)) {
 	        component.move(this.snapX - this.lastX, this.snapY - this.lastY);
 	      }
@@ -29675,6 +29706,8 @@
 	
 	        // Place the component
 	        this.Circuit.solder(this.placeComponent);
+	
+	        this.placeComponent.place();
 	        this.placeComponent = null;
 	        this.placeX = null;
 	        this.placeY = null;
@@ -29739,9 +29772,18 @@
 	      this.Circuit.pause();
 	  }
 	
-	  pause() {}
-	  play() {}
-	  restart() {}
+	  pause() {
+	  }
+	
+	  play() {
+	  }
+	
+	  restart() {
+	  }
+	
+	  isPlacingComponent() {
+	    return !!this.placeComponent;
+	  }
 	
 	  clearPlaceComponent() {
 	    this.placeX = null;
@@ -29781,10 +29823,10 @@
 
 
 /***/ },
-/* 93 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let Observer = __webpack_require__(88);
+	let Observer = __webpack_require__(87);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
 	let Settings = __webpack_require__(2);
@@ -29805,6 +29847,8 @@
 	    // TODO: Extract to param
 	    this.xMargin = circuitUI.xMargin;
 	    this.yMargin = circuitUI.yMargin;
+	
+	    this.lineShift = 0;
 	
 	    this.draw = this.draw.bind(this);
 	    this.drawDots = this.drawDots.bind(this);
@@ -29905,6 +29949,12 @@
 	    this.drawComponents();
 	
 	    if (this.context) {
+	      if (this.circuitUI.highlightedNode)
+	        this.drawRect(this.circuitUI.highlightedNode.x - 10, this.circuitUI.highlightedNode.y - 10, 21, 21, 5, "#0F0");
+	
+	      if (this.circuitUI.selectedNode)
+	        this.drawRect(this.circuitUI.selectedNode.x - 10, this.circuitUI.selectedNode.y - 10, 21, 21, 5, "#0FF");
+	
 	      if (this.circuitUI.placeComponent) {
 	        this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
 	
@@ -29913,31 +29963,28 @@
 	        }
 	      }
 	
-	      if (this.circuitUI.selectedNode) {
-	        this.drawCircle(this.circuitUI.selectedNode.x, this.circuitUI.selectedNode.y, Settings.POST_RADIUS + 3, 3, Settings.HIGHLIGHT_COLOR);
-	      }
-	
 	      if (this.circuitUI.highlightedComponent) {
-	        this.drawCircle(this.circuitUI.highlightedComponent.x1(), this.circuitUI.highlightedComponent.y1(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
-	        this.drawCircle(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+	        this.circuitUI.highlightedComponent.draw(this);
+	
+	        this.drawRect(this.circuitUI.highlightedComponent.x1(), this.circuitUI.highlightedComponent.y1(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+	        this.drawRect(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
 	      }
-	
-	      // this.context.clear();
 	    }
-	
-	    // for (let nodeIdx=0; nodeIdx<this.Circuit.numNodes(); ++nodeIdx) {
-	    // let node = this.Circuit.getNode(nodeIdx);
-	    // this.fillText(`${nodeIdx} ${node.x},${node.y}`, node.x + 5, node.y - 5);
-	    // }
 	
 	    if (this.context) {
 	      if (this.Circuit && this.Circuit.debugModeEnabled()) {
-	        //this.drawDebugInfo();
+	        this.drawDebugInfo();
 	        this.drawDebugOverlay();
 	      }
 	
 	      this.context.restore()
 	    }
+	  }
+	
+	  withSelection(func) {
+	
+	
+	    func(this)
 	  }
 	
 	  renderScopeCanvas(elementName) {
@@ -30015,6 +30062,13 @@
 	    ps1.x = point1.x;
 	    ps1.y = point1.y;
 	
+	    this.context.save()
+	
+	    this.context.beginPath();
+	    this.context.lineJoin = 'round';
+	
+	    this.context.moveTo(ps1.x + this.lineShift, ps1.y + this.lineShift);
+	
 	    for (let i = 0; i < segments; ++i) {
 	      cx = (((i + 1) * 8 / segments) % 2) - 1;
 	      hsx = Math.sqrt(1 - cx * cx);
@@ -30022,11 +30076,24 @@
 	      voltageLevel = vStart + (vEnd - vStart) * i / segments;
 	      color = this.getVoltageColor(voltageLevel);
 	
-	      this.drawLinePt(ps1, ps2, color);
+	      if (this.boldLines) {
+	        this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
+	        this.context.strokeStyle = Settings.SELECT_COLOR;
+	      } else {
+	        this.context.lineWidth = Settings.LINE_WIDTH;
+	        this.context.strokeStyle = color;
+	      }
+	
+	      this.context.lineTo(ps2.x + this.lineShift, ps2.y + this.lineShift);
 	
 	      ps1.x = ps2.x;
 	      ps1.y = ps2.y;
 	    }
+	
+	    this.context.stroke();
+	    this.context.closePath();
+	
+	    this.context.restore()
 	  }
 	
 	  drawScopes() {
@@ -30079,13 +30146,16 @@
 	  drawComponent(component) {
 	    if (component && Array.from(this.circuitUI.selectedComponents).includes(component)) {
 	      this.drawBoldLines();
-	      for (let i = 0; i < component.getPostCount(); ++i) {
-	        let post = component.getPost(i);
-	        this.drawCircle(post.x, post.y, Settings.POST_RADIUS + 2, 2, Settings.SELECT_COLOR);
-	      }
-	    } else {
-	      this.drawDefaultLines();
+	      component.draw(this);
+	      /*
+	       for (let i = 0; i < component.getPostCount(); ++i) {
+	       let post = component.getPost(i);
+	       this.drawCircle(post.x, post.y, Settings.POST_RADIUS + 2, 2, Settings.SELECT_COLOR);
+	       }
+	       */
 	    }
+	
+	    this.drawDefaultLines();
 	
 	    // Main entry point to draw component
 	    component.draw(this);
@@ -30157,9 +30227,10 @@
 	    // Nodes
 	    let nodeIdx = 0;
 	    for (let node of this.Circuit.getNodes()) {
+	
 	      this.context.beginPath();
-	      this.context.arc(node.x, node.y, 5, 0, 2 * Math.PI, true);
-	      this.context.strokeStyle = "#003aff";
+	      this.context.arc(node.x, node.y, 1, 0, 2 * Math.PI, true);
+	      this.context.strokeStyle = "#ff00ab";
 	      this.context.stroke();
 	      this.context.fillText(nodeIdx, node.x + 5, node.y + 20);
 	
@@ -30250,11 +30321,11 @@
 	
 	    for (let i = 0; i < component.getPostCount(); ++i) {
 	      post = component.getPost(i);
-	      this.drawPost(post.x, post.y, color, color);
+	      this.drawPost(post.x, post.y, color);
 	    }
 	  }
 	
-	  drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_COLOR) {
+	  drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_OUTLINE_COLOR) {
 	    this.fillCircle(x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor);
 	  }
 	
@@ -30325,8 +30396,8 @@
 	
 	    this.context.strokeStyle = lineColor;
 	    this.context.lineJoin = 'miter';
-	    this.context.lineWidth = 0;
-	    this.context.strokeRect(x, y, width, height);
+	    this.context.lineWidth = lineWidth;
+	    this.context.strokeRect(x + this.lineShift, y + this.lineShift, width, height);
 	    this.context.stroke();
 	
 	    this.context.restore();
@@ -30376,6 +30447,8 @@
 	    this.context.restore();
 	  }
 	
+	
+	
 	  drawLine(x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
 	    this.context.save();
 	
@@ -30391,8 +30464,8 @@
 	    }
 	
 	    if (!this.pathMode)
-	      this.context.moveTo(x, y);
-	    this.context.lineTo(x2, y2);
+	      this.context.moveTo(x + this.lineShift, y + this.lineShift);
+	    this.context.lineTo(x2 + this.lineShift, y2 + this.lineShift);
 	    this.context.stroke();
 	
 	    if (!this.pathMode)
@@ -30449,10 +30522,10 @@
 
 
 /***/ },
-/* 94 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let ScopeCanvas = __webpack_require__(95);
+	let ScopeCanvas = __webpack_require__(94);
 	let Util = __webpack_require__(5);
 	
 	class RickshawScopeCanvas extends ScopeCanvas {
@@ -30575,7 +30648,7 @@
 
 
 /***/ },
-/* 95 */
+/* 94 */
 /***/ function(module, exports) {
 
 	class ScopeCanvas {

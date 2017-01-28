@@ -20,6 +20,8 @@ class CircuitCanvas extends Observer {
     this.xMargin = circuitUI.xMargin;
     this.yMargin = circuitUI.yMargin;
 
+    this.lineShift = 0;
+
     this.draw = this.draw.bind(this);
     this.drawDots = this.drawDots.bind(this);
 
@@ -119,6 +121,12 @@ class CircuitCanvas extends Observer {
     this.drawComponents();
 
     if (this.context) {
+      if (this.circuitUI.highlightedNode)
+        this.drawRect(this.circuitUI.highlightedNode.x - 10, this.circuitUI.highlightedNode.y - 10, 21, 21, 5, "#0F0");
+
+      if (this.circuitUI.selectedNode)
+        this.drawRect(this.circuitUI.selectedNode.x - 10, this.circuitUI.selectedNode.y - 10, 21, 21, 5, "#0FF");
+
       if (this.circuitUI.placeComponent) {
         this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
 
@@ -127,31 +135,28 @@ class CircuitCanvas extends Observer {
         }
       }
 
-      if (this.circuitUI.selectedNode) {
-        this.drawCircle(this.circuitUI.selectedNode.x, this.circuitUI.selectedNode.y, Settings.POST_RADIUS + 3, 3, Settings.HIGHLIGHT_COLOR);
-      }
-
       if (this.circuitUI.highlightedComponent) {
-        this.drawCircle(this.circuitUI.highlightedComponent.x1(), this.circuitUI.highlightedComponent.y1(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
-        this.drawCircle(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+        this.circuitUI.highlightedComponent.draw(this);
+
+        this.drawRect(this.circuitUI.highlightedComponent.x1(), this.circuitUI.highlightedComponent.y1(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+        this.drawRect(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
       }
-
-      // this.context.clear();
     }
-
-    // for (let nodeIdx=0; nodeIdx<this.Circuit.numNodes(); ++nodeIdx) {
-    // let node = this.Circuit.getNode(nodeIdx);
-    // this.fillText(`${nodeIdx} ${node.x},${node.y}`, node.x + 5, node.y - 5);
-    // }
 
     if (this.context) {
       if (this.Circuit && this.Circuit.debugModeEnabled()) {
-        //this.drawDebugInfo();
+        this.drawDebugInfo();
         this.drawDebugOverlay();
       }
 
       this.context.restore()
     }
+  }
+
+  withSelection(func) {
+
+
+    func(this)
   }
 
   renderScopeCanvas(elementName) {
@@ -229,6 +234,13 @@ class CircuitCanvas extends Observer {
     ps1.x = point1.x;
     ps1.y = point1.y;
 
+    this.context.save()
+
+    this.context.beginPath();
+    this.context.lineJoin = 'round';
+
+    this.context.moveTo(ps1.x + this.lineShift, ps1.y + this.lineShift);
+
     for (let i = 0; i < segments; ++i) {
       cx = (((i + 1) * 8 / segments) % 2) - 1;
       hsx = Math.sqrt(1 - cx * cx);
@@ -236,11 +248,24 @@ class CircuitCanvas extends Observer {
       voltageLevel = vStart + (vEnd - vStart) * i / segments;
       color = this.getVoltageColor(voltageLevel);
 
-      this.drawLinePt(ps1, ps2, color);
+      if (this.boldLines) {
+        this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
+        this.context.strokeStyle = Settings.SELECT_COLOR;
+      } else {
+        this.context.lineWidth = Settings.LINE_WIDTH;
+        this.context.strokeStyle = color;
+      }
+
+      this.context.lineTo(ps2.x + this.lineShift, ps2.y + this.lineShift);
 
       ps1.x = ps2.x;
       ps1.y = ps2.y;
     }
+
+    this.context.stroke();
+    this.context.closePath();
+
+    this.context.restore()
   }
 
   drawScopes() {
@@ -293,13 +318,16 @@ class CircuitCanvas extends Observer {
   drawComponent(component) {
     if (component && Array.from(this.circuitUI.selectedComponents).includes(component)) {
       this.drawBoldLines();
-      for (let i = 0; i < component.getPostCount(); ++i) {
-        let post = component.getPost(i);
-        this.drawCircle(post.x, post.y, Settings.POST_RADIUS + 2, 2, Settings.SELECT_COLOR);
-      }
-    } else {
-      this.drawDefaultLines();
+      component.draw(this);
+      /*
+       for (let i = 0; i < component.getPostCount(); ++i) {
+       let post = component.getPost(i);
+       this.drawCircle(post.x, post.y, Settings.POST_RADIUS + 2, 2, Settings.SELECT_COLOR);
+       }
+       */
     }
+
+    this.drawDefaultLines();
 
     // Main entry point to draw component
     component.draw(this);
@@ -371,9 +399,10 @@ class CircuitCanvas extends Observer {
     // Nodes
     let nodeIdx = 0;
     for (let node of this.Circuit.getNodes()) {
+
       this.context.beginPath();
-      this.context.arc(node.x, node.y, 5, 0, 2 * Math.PI, true);
-      this.context.strokeStyle = "#003aff";
+      this.context.arc(node.x, node.y, 1, 0, 2 * Math.PI, true);
+      this.context.strokeStyle = "#ff00ab";
       this.context.stroke();
       this.context.fillText(nodeIdx, node.x + 5, node.y + 20);
 
@@ -464,11 +493,11 @@ class CircuitCanvas extends Observer {
 
     for (let i = 0; i < component.getPostCount(); ++i) {
       post = component.getPost(i);
-      this.drawPost(post.x, post.y, color, color);
+      this.drawPost(post.x, post.y, color);
     }
   }
 
-  drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_COLOR) {
+  drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_OUTLINE_COLOR) {
     this.fillCircle(x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor);
   }
 
@@ -539,8 +568,8 @@ class CircuitCanvas extends Observer {
 
     this.context.strokeStyle = lineColor;
     this.context.lineJoin = 'miter';
-    this.context.lineWidth = 0;
-    this.context.strokeRect(x, y, width, height);
+    this.context.lineWidth = lineWidth;
+    this.context.strokeRect(x + this.lineShift, y + this.lineShift, width, height);
     this.context.stroke();
 
     this.context.restore();
@@ -590,6 +619,8 @@ class CircuitCanvas extends Observer {
     this.context.restore();
   }
 
+
+
   drawLine(x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
     this.context.save();
 
@@ -605,8 +636,8 @@ class CircuitCanvas extends Observer {
     }
 
     if (!this.pathMode)
-      this.context.moveTo(x, y);
-    this.context.lineTo(x2, y2);
+      this.context.moveTo(x + this.lineShift, y + this.lineShift);
+    this.context.lineTo(x2 + this.lineShift, y2 + this.lineShift);
     this.context.stroke();
 
     if (!this.pathMode)
