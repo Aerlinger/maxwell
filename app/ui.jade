@@ -18,10 +18,10 @@ block header
       };
 
       circuitContext.onComponentHover = function (component) {
-        console.log("ON HOVER:", component.toString(), "V:", component.volts);
+        console.log("ON COMPONENT HOVER:", component.toString(), "V:", component.volts);
         var form = Maxwell.renderEdit(component);
 
-        console.log("renderEdit\n", form);
+        //console.log("renderEdit\n", form);
 
         window.editInfo = form;
 
@@ -29,11 +29,15 @@ block header
       };
 
       circuitContext.onComponentUnhover = function (component) {
-        console.log("ON UNHOVER:", component.toString());
+        console.log("ON COMPONENT UNHOVER:", component.toString());
       };
 
       circuitContext.onComponentClick = function (component) {
-        console.log("ON CLICK:", component.getProperties());
+        //console.log("ON COMPONENT CLICK:", component);
+      };
+
+      circuitContext.onComponentsDrag = function (components) {
+        console.log("ON COMPONENTS DRAG:", components);
       };
 
       circuitContext.onUpdateComplete = function (context) {
@@ -53,6 +57,10 @@ block header
       circuitContext.onNodeClick = function (node) {
         console.log("NODE CLICK: ", node.x, node.y);
       };
+
+      circuitContext.onNodeDrag = function (node) {
+        console.log("NODE DRAG: ", node.x, node.y);
+      };
     }
 
     $(document).ready(function() {
@@ -62,8 +70,8 @@ block header
       Maxwell.createContext("ohms", "../circuits/v4/#{circuit_name}.json", canvas, function (circuitContext) {
         window.circuitContext = circuitContext;
 
-        circuitContext.onSelectionChanged = function (selectedComponents) {
-          console.log("SELECTED COMPONENTS", selectedComponents);
+        circuitContext.onSelectionChanged = function (changeObj) {
+          console.log("SELECTED COMPONENTS", changeObj);
 
           if (selectedComponents.length > 0) {
             $("#edit_component_pane").foundation('open');
@@ -93,6 +101,8 @@ block header
 
           circuitContext.setPlaceComponent(componentName);
         });
+
+        bindCircuitEvents(circuitContext);
 
         document.addEventListener('keydown', function(event) {
           var charCode = String.fromCharCode(event.which);
@@ -156,7 +166,7 @@ block header
               break;
           }
 
-          bindCircuitEvents(circuitContext);
+
         })
       });
 

@@ -122,10 +122,10 @@ class CircuitCanvas extends Observer {
 
     if (this.context) {
       if (this.circuitUI.highlightedNode)
-        this.drawRect(this.circuitUI.highlightedNode.x - 10, this.circuitUI.highlightedNode.y - 10, 21, 21, 5, "#0F0");
+        this.drawRect(this.circuitUI.highlightedNode.x - 10 + 0.5, this.circuitUI.highlightedNode.y - 10 + 0.5, 21, 21, 1, "#0F0");
 
       if (this.circuitUI.selectedNode)
-        this.drawRect(this.circuitUI.selectedNode.x - 10, this.circuitUI.selectedNode.y - 10, 21, 21, 5, "#0FF");
+        this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
 
       if (this.circuitUI.placeComponent) {
         this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
@@ -275,12 +275,9 @@ class CircuitCanvas extends Observer {
 
         if (scopeCanvas) {
 
-          this.context.save();
-          
-          var center = scopeElm.circuitElm.getCenter();
 
-          let strokeStyle = this.context.strokeStyle;
-          let lineDash = this.context.getLineDash();
+          var center = scopeElm.circuitElm.getCenter();
+          this.context.save();
 
           this.context.setLineDash([5, 5]);
           this.context.strokeStyle = "#FFA500";
@@ -290,9 +287,6 @@ class CircuitCanvas extends Observer {
 
           this.context.stroke();
 
-          this.context.strokeStyle = strokeStyle;
-          this.context.setLineDash(lineDash);
-          
           this.context.restore();
         }
       }
@@ -420,7 +414,7 @@ class CircuitCanvas extends Observer {
     // Nodes
   }
 
-  drawDebugInfo(x = 1100, y = 200) {
+  drawDebugInfo(x = 1100, y = 50) {
     if (!this.Circuit || !this.context) {
       return;
     }

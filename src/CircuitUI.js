@@ -140,6 +140,8 @@ class CircuitUI extends Observer {
     this.width = this.Canvas.width;
     this.height = this.Canvas.height;
 
+    this.previouslySelectedComponents = [];
+
     this.placeX = null;
     this.placeY = null;
 
@@ -150,6 +152,7 @@ class CircuitUI extends Observer {
     this.CircuitCanvas = new CircuitCanvas(Circuit, this);
 
     this.context = this.CircuitCanvas.context;
+    this.isDragging = false;
 
     this.Canvas.addEventListener('mousemove', this.mousemove);
     this.Canvas.addEventListener('mousedown', this.mousedown);
@@ -198,15 +201,50 @@ class CircuitUI extends Observer {
       // Update marquee
       if (this.marquee) {
         this.marquee.reposition(x, y);
+        this.allSelectedComponents = [];
 
-        this.selectedComponents = [];
+        //this.selectedComponents = [];
 
         for (let component of this.Circuit.getElements()) {
           if (this.marquee.collidesWithComponent(component)) {
-            this.selectedComponents.push(component);
-            this.onSelectionChanged(this.selectedComponents);
+            this.allSelectedComponents.push(component);
+
+            /*
+            if (this.selectedComponents.indexOf(component) < 0) {
+              this.selectedComponents.push(component);
+              this.onSelectionChanged(this.selectedComponents);
+            }
+            */
           }
         }
+
+        // UPDATE MARQUEE SELECTION
+        // TODO OPTIMIZE
+        if (this.allSelectedComponents.length != this.previouslySelectedComponents.length) {
+          let newlySelectedComponents = [];
+          let newlyUnselectedComponents = [];
+
+          for (let currentlySelectedComponent of this.allSelectedComponents)
+            if (this.previouslySelectedComponents.indexOf(currentlySelectedComponent) < 0)
+              newlySelectedComponents.push(currentlySelectedComponent);
+
+          for (let previouslySelectedComponent of this.previouslySelectedComponents)
+            if (this.allSelectedComponents.indexOf(previouslySelectedComponent) < 0)
+              newlyUnselectedComponents.push(previouslySelectedComponent);
+
+
+          if (newlySelectedComponents.length > 0 || newlyUnselectedComponents.length > 0) {
+            this.onSelectionChanged({
+              selection: this.allSelectedComponents,
+              added: newlySelectedComponents,
+              removed: newlyUnselectedComponents
+            })
+          }
+        }
+
+        this.selectedComponents = this.allSelectedComponents;
+        this.previouslySelectedComponents = this.allSelectedComponents;
+
 
         // Update highlighted node
       } else {
@@ -215,9 +253,9 @@ class CircuitUI extends Observer {
 
         if (this.highlightedNode) {
 
-          if (this.previouslyHighlightedNode != this.highlightedNode) {
+          if (!this.selectedNode && this.previouslyHighlightedNode != this.highlightedNode)
             this.onNodeHover(this.highlightedNode);
-          }
+
         } else {
 
           for (let component of this.Circuit.getElements()) {
@@ -227,9 +265,8 @@ class CircuitUI extends Observer {
           }
         }
 
-        if (this.previouslyHighlightedNode && !this.highlightedNode && this.onNodeUnhover) {
+        if (!this.selectedNode && this.previouslyHighlightedNode && !this.highlightedNode && this.onNodeUnhover)
           this.onNodeUnhover(this.previouslyHighlightedNode);
-        }
 
         if (this.selectedNode) {
           for (let element of this.selectedNode.getNeighboringElements()) {
@@ -249,32 +286,47 @@ class CircuitUI extends Observer {
             }
           }
 
+          this.lastNodeX = this.selectedNode.x;
+          this.lastNodeY = this.selectedNode.y;
+
           this.selectedNode.x = this.snapX;
           this.selectedNode.y = this.snapY;
-        }
 
-        // COMPONENT HOVER/UNHOVER EVENT
-        if (this.newlyHighlightedComponent) {
-          if (this.newlyHighlightedComponent !== this.highlightedComponent) {
-            this.highlightedComponent = this.newlyHighlightedComponent;
+          if (this.onNodeDrag && ((this.lastNodeX != this.selectedNode.x) || (this.lastNodeY != this.selectedNode.y))) {
+            this.onNodeDrag(this.selectedNode);
 
-            if (this.onComponentHover)
-              this.onComponentHover(this.highlightedComponent);
-
-            this.notifyObservers(CircuitUI.ON_COMPONENT_HOVER, this.highlightedComponent);
+            this.lastNodeX = this.selectedNode.x;
+            this.lastNodeY = this.selectedNode.y;
           }
-
         } else {
-          if (this.highlightedComponent && this.onComponentUnhover)
-            this.onComponentUnhover(this.highlightedComponent);
 
-          this.highlightedComponent = null;
+          // COMPONENT HOVER/UNHOVER EVENT
+          if (this.newlyHighlightedComponent) {
+            if (this.newlyHighlightedComponent !== this.highlightedComponent) {
+              this.highlightedComponent = this.newlyHighlightedComponent;
+
+              if (this.onComponentHover && !this.isDragging)
+                this.onComponentHover(this.highlightedComponent);
+
+              this.notifyObservers(CircuitUI.ON_COMPONENT_HOVER, this.highlightedComponent);
+            }
+
+          } else {
+            if (this.highlightedComponent && this.onComponentUnhover && !this.isDragging)
+              this.onComponentUnhover(this.highlightedComponent);
+
+            this.highlightedComponent = null;
+          }
         }
       }
     }
 
     // Move components
     if (!this.marquee && !this.isPlacingComponent() && !this.selectedNode && (this.selectedComponents && this.selectedComponents.length > 0) && (event.which === CircuitUI.MOUSEDOWN) && ((this.lastX !== this.snapX) || (this.lastY !== this.snapY))) {
+      this.isDragging = true;
+      if (this.onComponentsDrag)
+        this.onComponentsDrag(this.selectedComponents);
+
       for (let component of Array.from(this.selectedComponents)) {
         component.move(this.snapX - this.lastX, this.snapY - this.lastY);
       }
@@ -301,46 +353,48 @@ class CircuitUI extends Observer {
         this.placeX = null;
         this.placeY = null;
       }
-    }
+    } else {
 
-    if (!this.highlightedComponent && !this.placeComponent && !this.highlightedNode) {
-      this.marquee = new SelectionMarquee(x, y);
-    }
-
-    if (this.highlightedComponent) {
-      this.selectedComponents = [this.highlightedComponent];
-
-      if (this.onSelectionChanged) {
-        this.onSelectionChanged(this.selectedComponents);
+      if (!this.highlightedComponent && !this.placeComponent && !this.highlightedNode) {
+        this.marquee = new SelectionMarquee(x, y);
       }
-    }
 
-    this.selectedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
+      if (this.highlightedComponent) {
+        if (this.selectedComponents.length > 1 || this.selectedComponents.indexOf(this.highlightedComponent) < 0) {
+          let added = (this.selectedComponents.indexOf(this.highlightedComponent) < 0) ? [this.highlightedComponent] : [];
+          let removed = (this.selectedComponents.indexOf(this.highlightedComponent) < 0) ? [] : [this.highlightedComponent];
 
-    if (this.selectedNode && this.onNodeClick) {
-      this.onNodeClick(this.selectedNode);
-    }
+          this.onSelectionChanged({
+            selection: [this.highlightedComponent],
+            added: added,
+            removed: removed
+          });
 
-    for (let component of this.Circuit.getElements()) {
-      if (component.getBoundingBox().contains(x, y)) {
-        this.notifyObservers(CircuitUI.ON_COMPONENT_CLICKED, component);
-
-        if (!Array.from(this.selectedComponents).includes(component)) {
-          this.selectedComponents = [component];
-
-          if (this.onSelectionChanged) {
-            this.onSelectionChanged(this.selectedComponents);
-          }
+          this.selectedComponents = [this.highlightedComponent];
         }
+      }
 
-        if (component.toggle)
-          component.toggle();
+      this.selectedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
 
-        if (component.onclick)
-          component.onclick();
+      if (this.selectedNode && this.onNodeClick)
+        this.onNodeClick(this.selectedNode);
 
-        if (component.onComponentClick)
-          component.onComponentClick();
+      for (let component of this.Circuit.getElements()) {
+        if (component.getBoundingBox().contains(x, y)) {
+          this.notifyObservers(CircuitUI.ON_COMPONENT_CLICKED, component);
+
+          if (this.onComponentClick)
+            this.onComponentClick(component);
+
+          if (component.toggle)
+            component.toggle();
+
+          if (component.onclick)
+            component.onclick();
+
+          if (component.onComponentClick)
+            component.onComponentClick();
+        }
       }
     }
   }
@@ -348,6 +402,7 @@ class CircuitUI extends Observer {
   mouseup(event) {
     this.marquee = null;
     this.selectedNode = null;
+    this.isDragging = false;
 
     if (this.selectedComponents && this.selectedComponents.length > 0) {
       this.notifyObservers(CircuitUI.ON_COMPONENTS_DESELECTED, this.selectedComponents);
@@ -382,7 +437,11 @@ class CircuitUI extends Observer {
 
   resetSelection() {
     if (this.selectedComponents && (this.selectedComponents.length > 0))
-      this.onSelectionChanged([]);
+      this.onSelectionChanged({
+        selection: [],
+        added:[],
+        removed: this.selectedComponents
+      });
 
     this.selectedComponents = [];
   }
