@@ -499,8 +499,8 @@ class CircuitComponent {
   }
 
   setBbox(x1, y1, x2, y2) {
-    if (!(Util.isValue(x1) && Util.isValue(y1) && Util.isValue(x2) && Util.isValue(y2) && Util.isValue(this.dpx1()) && Util.isValue(this.dpy1())))
-      console.trace(`Invalid BBox value for ${this.constructor.name} isPlaced: ${this.isPlaced()} [${this.x1()} ${this.y1()} ${this.x2()} ${this.y2()}] -> bbox(${x1}, ${y1}, ${x2}, ${y2})`);
+    //if (!(Util.isValue(x1) && Util.isValue(y1) && Util.isValue(x2) && Util.isValue(y2) && Util.isValue(this.dpx1()) && Util.isValue(this.dpy1())))
+      //console.trace(`Invalid BBox value for ${this.constructor.name} isPlaced: ${this.isPlaced()} [${this.x1()} ${this.y1()} ${this.x2()} ${this.y2()}] -> bbox(${x1}, ${y1}, ${x2}, ${y2})`);
 
     let x = Math.min(x1, x2);
     let y = Math.min(y1, y2);

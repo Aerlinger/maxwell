@@ -1,0 +1,752 @@
+[
+  {
+    "timeStep": 0.000005,
+    "simSpeed": 10,
+    "currentSpeed": 63,
+    "voltageRange": 10,
+    "powerRange": 62,
+    "flags": 0
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [50, 50, 150, 50],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [100, 100, 100, 150],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [50, 250, 150, 250],
+    "flags": 0,
+    "params": {
+      "waveform": 1,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [100, 300, 100, 350],
+    "flags": 0,
+    "params": {
+      "waveform": 1,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [50, 450, 150, 450],
+    "flags": 0,
+    "params": {
+      "waveform": 2,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [100, 500, 100, 550],
+    "flags": 0,
+    "params": {
+      "waveform": 2,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [50, 650, 150, 650],
+    "flags": 0,
+    "params": {
+      "waveform": 3,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [100, 700, 100, 750],
+    "flags": 0,
+    "params": {
+      "waveform": 3,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [50, 850, 150, 850],
+    "flags": 0,
+    "params": {
+      "waveform": 4,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [100, 900, 100, 950],
+    "flags": 0,
+    "params": {
+      "waveform": 4,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [50, 1050, 150, 1050],
+    "flags": 0,
+    "params": {
+      "waveform": 5,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [100, 1100, 100, 1150],
+    "flags": 0,
+    "params": {
+      "waveform": 5,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [50, 1250, 150, 1250],
+    "flags": 0,
+    "params": {
+      "waveform": 6,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "VoltageElm",
+    "pos": [100, 1300, 100, 1350],
+    "flags": 0,
+    "params": {
+      "waveform": 6,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [200, 1450, 300, 1450],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [250, 1500, 250, 1550],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [200, 50, 300, 50],
+    "flags": 0,
+    "params": {
+      "waveform": 1,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [250, 100, 250, 150],
+    "flags": 0,
+    "params": {
+      "waveform": 1,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [200, 250, 300, 250],
+    "flags": 0,
+    "params": {
+      "waveform": 2,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [250, 300, 250, 350],
+    "flags": 0,
+    "params": {
+      "waveform": 2,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [200, 450, 300, 450],
+    "flags": 0,
+    "params": {
+      "waveform": 3,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [250, 500, 250, 550],
+    "flags": 0,
+    "params": {
+      "waveform": 3,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [200, 650, 300, 650],
+    "flags": 0,
+    "params": {
+      "waveform": 4,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [250, 700, 250, 750],
+    "flags": 0,
+    "params": {
+      "waveform": 4,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [200, 850, 300, 850],
+    "flags": 0,
+    "params": {
+      "waveform": 5,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [250, 900, 250, 950],
+    "flags": 0,
+    "params": {
+      "waveform": 5,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [200, 1050, 300, 1050],
+    "flags": 0,
+    "params": {
+      "waveform": 6,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "RailElm",
+    "pos": [250, 1100, 250, 1150],
+    "flags": 0,
+    "params": {
+      "waveform": 6,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [350, 1250, 450, 1250],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [400, 1300, 400, 1350],
+    "flags": 0,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [350, 1450, 450, 1450],
+    "flags": 0,
+    "params": {
+      "waveform": 1,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [400, 1500, 400, 1550],
+    "flags": 0,
+    "params": {
+      "waveform": 1,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [350, 50, 450, 50],
+    "flags": 0,
+    "params": {
+      "waveform": 2,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [400, 100, 400, 150],
+    "flags": 0,
+    "params": {
+      "waveform": 2,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [350, 250, 450, 250],
+    "flags": 0,
+    "params": {
+      "waveform": 3,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [400, 300, 400, 350],
+    "flags": 0,
+    "params": {
+      "waveform": 3,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [350, 450, 450, 450],
+    "flags": 0,
+    "params": {
+      "waveform": 4,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [400, 500, 400, 550],
+    "flags": 0,
+    "params": {
+      "waveform": 4,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [350, 650, 450, 650],
+    "flags": 0,
+    "params": {
+      "waveform": 5,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [400, 700, 400, 750],
+    "flags": 0,
+    "params": {
+      "waveform": 5,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [350, 850, 450, 850],
+    "flags": 0,
+    "params": {
+      "waveform": 6,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [400, 900, 400, 950],
+    "flags": 0,
+    "params": {
+      "waveform": 6,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "ClockElm",
+    "pos": [500, 1050, 500, 1050],
+    "flags": 1,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ClockElm",
+    "pos": [550, 1100, 550, 1100],
+    "flags": 1,
+    "params": {
+      "waveform": 0,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ClockElm",
+    "pos": [500, 1250, 500, 1250],
+    "flags": 1,
+    "params": {
+      "waveform": 1,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ClockElm",
+    "pos": [550, 1300, 550, 1300],
+    "flags": 1,
+    "params": {
+      "waveform": 1,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ClockElm",
+    "pos": [500, 1450, 500, 1450],
+    "flags": 1,
+    "params": {
+      "waveform": 2,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ClockElm",
+    "pos": [550, 1500, 550, 1500],
+    "flags": 1,
+    "params": {
+      "waveform": 2,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ClockElm",
+    "pos": [500, 50, 500, 50],
+    "flags": 1,
+    "params": {
+      "waveform": 3,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ClockElm",
+    "pos": [550, 100, 550, 100],
+    "flags": 1,
+    "params": {
+      "waveform": 3,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ClockElm",
+    "pos": [500, 250, 500, 250],
+    "flags": 1,
+    "params": {
+      "waveform": 4,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ClockElm",
+    "pos": [550, 300, 550, 300],
+    "flags": 1,
+    "params": {
+      "waveform": 4,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ClockElm",
+    "pos": [500, 450, 500, 450],
+    "flags": 1,
+    "params": {
+      "waveform": 5,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ClockElm",
+    "pos": [550, 500, 550, 500],
+    "flags": 1,
+    "params": {
+      "waveform": 5,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ClockElm",
+    "pos": [500, 650, 500, 650],
+    "flags": 1,
+    "params": {
+      "waveform": 6,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  },
+  {
+    "name": "ClockElm",
+    "pos": [550, 700, 550, 700],
+    "flags": 1,
+    "params": {
+      "waveform": 6,
+      "frequency": 40,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5
+    }
+  }
+]

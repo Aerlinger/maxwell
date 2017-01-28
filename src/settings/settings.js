@@ -183,6 +183,7 @@ class Settings {
   
     // Line Widths:
     this.POST_RADIUS = 2;
+    this.POST_OUTLINE_SIZE = 1;
     this.CURRENT_RADIUS = 2;
     this.CURRENT_COLOR = "rgba(255, 255, 255, 0.7)";
     this.LINE_WIDTH = 2;
@@ -202,10 +203,13 @@ class Settings {
     // this.SELECT_COLOR = ColorPalette.ivory;
     this.SELECT_COLOR = "#573400";
     this.HIGHLIGHT_COLOR = ColorPalette.orangered;
+
+    this.LIGHT_POST_COLOR = "#333";
     this.POST_COLOR = ColorPalette.black;
     this.POST_OUTLINE_COLOR = "#666";
     this.POST_SELECT_COLOR = '#ff8c00';
     this.POST_SELECT_OUTLINE_COLOR = '#F0F';
+
     this.DOTS_COLOR = ColorPalette.yellow;
     this.DOTS_OUTLINE = ColorPalette.orange;
   
@@ -225,7 +229,6 @@ class Settings {
     this.GREY = "#666";
     this.GRAY = "#666";
   
-    this.LIGHT_POST_COLOR = "#333";
     this.COMPONENT_DECIMAL_PLACES = 1;
 
     this.GRID_COLOR = ColorPalette.darkyellow;

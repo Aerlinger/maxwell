@@ -509,7 +509,7 @@ class CircuitCanvas extends Observer {
   }
 
   drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_OUTLINE_COLOR) {
-    let oulineWidth = 1;
+    let oulineWidth = Settings.POST_OUTLINE_SIZE;
 
     if (this.boldLines) {
       strokeColor = Settings.POST_SELECT_OUTLINE_COLOR;
@@ -552,7 +552,7 @@ class CircuitCanvas extends Observer {
     this.context.save();
 
     this.context.beginPath();
-    this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
+    this.context.arc(x, y, radius, 0, 2 * Math.PI);
 
     if (lineColor && lineWidth > 0) {
       this.context.lineWidth = lineWidth;

@@ -53,6 +53,73 @@
 	
 	let RickshawScopeCanvas = __webpack_require__(93);
 	
+	let AcRailElm = __webpack_require__(95);
+	let AntennaElm = __webpack_require__(17);
+	let WireElm = __webpack_require__(20);
+	let ResistorElm = __webpack_require__(22);
+	let GroundElm = __webpack_require__(23);
+	let VoltageElm = __webpack_require__(19);
+	let DiodeElm = __webpack_require__(24);
+	let OutputElm = __webpack_require__(25);
+	let SwitchElm = __webpack_require__(26);
+	let CapacitorElm = __webpack_require__(27);
+	let InductorElm = __webpack_require__(28);
+	let SparkGapElm = __webpack_require__(29);
+	let CurrentElm = __webpack_require__(30);
+	let RailElm = __webpack_require__(18);
+	let MosfetElm = __webpack_require__(31);
+	let JfetElm = __webpack_require__(32);
+	let TransistorElm = __webpack_require__(33);
+	let VarRailElm = __webpack_require__(34);
+	let OpAmpElm = __webpack_require__(35);
+	let ZenerElm = __webpack_require__(36);
+	let Switch2Elm = __webpack_require__(37);
+	let SweepElm = __webpack_require__(38);
+	let TextElm = __webpack_require__(39);
+	let ProbeElm = __webpack_require__(40);
+	
+	let AndGateElm = __webpack_require__(41);
+	let NandGateElm = __webpack_require__(42);
+	let OrGateElm = __webpack_require__(43);
+	let NorGateElm = __webpack_require__(44);
+	let XorGateElm = __webpack_require__(45);
+	let InverterElm = __webpack_require__(46);
+	
+	let LogicInputElm = __webpack_require__(47);
+	let LogicOutputElm = __webpack_require__(48);
+	let AnalogSwitchElm = __webpack_require__(49);
+	let AnalogSwitch2Elm = __webpack_require__(50);
+	let MemristorElm = __webpack_require__(51);
+	let RelayElm = __webpack_require__(52);
+	let TunnelDiodeElm = __webpack_require__(53);
+	
+	let ScrElm = __webpack_require__(54);
+	let TriodeElm = __webpack_require__(55);
+	
+	let DecadeElm = __webpack_require__(56);
+	let LatchElm = __webpack_require__(58);
+	let TimerElm = __webpack_require__(59);
+	let JkFlipFlopElm = __webpack_require__(60);
+	let DFlipFlopElm = __webpack_require__(61);
+	let CounterElm = __webpack_require__(62);
+	let DacElm = __webpack_require__(63);
+	let AdcElm = __webpack_require__(64);
+	let VcoElm = __webpack_require__(65);
+	let PhaseCompElm = __webpack_require__(66);
+	let SevenSegElm = __webpack_require__(67);
+	let CC2Elm = __webpack_require__(68);
+	
+	let TransLineElm = __webpack_require__(69);
+	
+	let TransformerElm = __webpack_require__(70);
+	let TappedTransformerElm = __webpack_require__(71);
+	
+	let LedElm = __webpack_require__(72);
+	let PotElm = __webpack_require__(73);
+	let ClockElm = __webpack_require__(74);
+	
+	
+	
 	let environment = __webpack_require__(10);
 	
 	// let Maxwell = require("./Maxwell.js");
@@ -408,6 +475,15 @@
 	  console.log("Not in browser, declaring global Maxwell object");
 	  global.Maxwell = Maxwell;
 	}
+	
+	Maxwell.ComponentLibrary = {
+	  VoltageElm,
+	  RailElm,
+	  VarRailElm,
+	  ClockElm,
+	  AntennaElm,
+	  AcRailElm
+	};
 	
 	module.exports = Maxwell;
 	
@@ -918,8 +994,8 @@
 	  }
 	
 	  setBbox(x1, y1, x2, y2) {
-	    if (!(Util.isValue(x1) && Util.isValue(y1) && Util.isValue(x2) && Util.isValue(y2) && Util.isValue(this.dpx1()) && Util.isValue(this.dpy1())))
-	      console.trace(`Invalid BBox value for ${this.constructor.name} isPlaced: ${this.isPlaced()} [${this.x1()} ${this.y1()} ${this.x2()} ${this.y2()}] -> bbox(${x1}, ${y1}, ${x2}, ${y2})`);
+	    //if (!(Util.isValue(x1) && Util.isValue(y1) && Util.isValue(x2) && Util.isValue(y2) && Util.isValue(this.dpx1()) && Util.isValue(this.dpy1())))
+	      //console.trace(`Invalid BBox value for ${this.constructor.name} isPlaced: ${this.isPlaced()} [${this.x1()} ${this.y1()} ${this.x2()} ${this.y2()}] -> bbox(${x1}, ${y1}, ${x2}, ${y2})`);
 	
 	    let x = Math.min(x1, x2);
 	    let y = Math.min(y1, y2);
@@ -1510,6 +1586,7 @@
 	  
 	    // Line Widths:
 	    this.POST_RADIUS = 2;
+	    this.POST_OUTLINE_SIZE = 1;
 	    this.CURRENT_RADIUS = 2;
 	    this.CURRENT_COLOR = "rgba(255, 255, 255, 0.7)";
 	    this.LINE_WIDTH = 2;
@@ -1529,10 +1606,13 @@
 	    // this.SELECT_COLOR = ColorPalette.ivory;
 	    this.SELECT_COLOR = "#573400";
 	    this.HIGHLIGHT_COLOR = ColorPalette.orangered;
+	
+	    this.LIGHT_POST_COLOR = "#333";
 	    this.POST_COLOR = ColorPalette.black;
 	    this.POST_OUTLINE_COLOR = "#666";
 	    this.POST_SELECT_COLOR = '#ff8c00';
 	    this.POST_SELECT_OUTLINE_COLOR = '#F0F';
+	
 	    this.DOTS_COLOR = ColorPalette.yellow;
 	    this.DOTS_OUTLINE = ColorPalette.orange;
 	  
@@ -1552,7 +1632,6 @@
 	    this.GREY = "#666";
 	    this.GRAY = "#666";
 	  
-	    this.LIGHT_POST_COLOR = "#333";
 	    this.COMPONENT_DECIMAL_PLACES = 1;
 	
 	    this.GRID_COLOR = ColorPalette.darkyellow;
@@ -30440,7 +30519,7 @@
 	  }
 	
 	  drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_OUTLINE_COLOR) {
-	    let oulineWidth = 1;
+	    let oulineWidth = Settings.POST_OUTLINE_SIZE;
 	
 	    if (this.boldLines) {
 	      strokeColor = Settings.POST_SELECT_OUTLINE_COLOR;
@@ -30483,7 +30562,7 @@
 	    this.context.save();
 	
 	    this.context.beginPath();
-	    this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
+	    this.context.arc(x, y, radius, 0, 2 * Math.PI);
 	
 	    if (lineColor && lineWidth > 0) {
 	      this.context.lineWidth = lineWidth;
@@ -30808,6 +30887,28 @@
 	}
 	
 	module.exports = ScopeCanvas;
+
+
+/***/ },
+/* 95 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let RailElm = __webpack_require__(18);
+	let VoltageElm = __webpack_require__(19);
+	
+	class ACRailElm extends RailElm {
+	  constructor(xa, ya, xb, yb, params, f) {
+	    super(xa, ya, xa, ya, params, f);
+	
+	    this.waveform = VoltageElm.WF_AC;
+	  }
+	
+	  getName() {
+	    return "AC Voltage Rail"
+	  }
+	}
+	
+	module.exports = ACRailElm;
 
 
 /***/ }
