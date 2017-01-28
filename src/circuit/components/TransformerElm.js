@@ -45,7 +45,7 @@ class TransformerElm extends CircuitComponent {
     super(xa, ya, xb, yb, params, f);
 
     // this.drawWidth = Math.max(32, Math.abs(yb - ya));
-    this.drawWidth = Math.max(32, this.dn());
+    this.drawWidth = this.dn();//Math.max(32, this.dn());
     this.curcount = 0;
     this.current = [this.current0, this.current1];
     this.noDiagonal = true;
@@ -74,11 +74,11 @@ class TransformerElm extends CircuitComponent {
     this.ptEnds[1] = this.point2;
 
 //    console.log("SP: ", @point1, @point2, 0, -@dsign(), @width)
-    let hs = -this.dsign() * this.drawWidth;
+    let hs = this.drawWidth;
     hs = 32;
     
-    this.ptEnds[2] = Util.interpolate(this.point1, this.point2, 0, -hs * 2);
-    this.ptEnds[3] = Util.interpolate(this.point1, this.point2, 1, -hs * 2);
+    this.ptEnds[2] = Util.interpolate(this.point1, this.point2, 0, -hs);
+    this.ptEnds[3] = Util.interpolate(this.point1, this.point2, 1, -hs);
 
     let ce = 0.5 - (12 / this.dn());
     let cd = 0.5 - (2 / this.dn());

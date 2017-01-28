@@ -502,7 +502,15 @@ class CircuitCanvas extends Observer {
   }
 
   drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_OUTLINE_COLOR) {
-    this.fillCircle(x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor);
+    let outlineRadius = 2;
+
+    if (this.boldLines) {
+      strokeColor = Settings.SELECT_COLOR;
+      fillColor = Settings.POST_SELECT_COLOR;
+      outlineRadius += 2;
+    }
+
+    this.fillCircle(x0, y0, Settings.POST_RADIUS, outlineRadius, fillColor, strokeColor);
   }
 
   drawBoldLines() {

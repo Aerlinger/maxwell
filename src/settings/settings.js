@@ -186,7 +186,7 @@ class Settings {
     this.CURRENT_RADIUS = 2;
     this.CURRENT_COLOR = "rgba(255, 255, 255, 0.7)";
     this.LINE_WIDTH = 2;
-    this.BOLD_LINE_WIDTH = 6;
+    this.BOLD_LINE_WIDTH = 4;
 
     // Grid
     this.GRID_SIZE = 8;
@@ -200,10 +200,11 @@ class Settings {
   
     // ColorPalettes:
     // this.SELECT_COLOR = ColorPalette.ivory;
-    this.SELECT_COLOR = "#333";
+    this.SELECT_COLOR = "#573400";
     this.HIGHLIGHT_COLOR = ColorPalette.orangered;
     this.POST_COLOR = ColorPalette.black;
     this.POST_OUTLINE_COLOR = ColorPalette.slateblue;
+    this.POST_SELECT_COLOR = ColorPalette.orange;
     this.DOTS_COLOR = ColorPalette.yellow;
     this.DOTS_OUTLINE = ColorPalette.orange;
   

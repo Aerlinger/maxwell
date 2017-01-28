@@ -47,6 +47,7 @@ class RailElm extends VoltageElm {
       color = "#FFFFFF";  //((if @needsHighlight() then Settings.SELECT_COLOR else "#FFFFFF"))
 
       //this.setPowerColor(g, false);
+
       let v = this.getVoltage();
 
       let s = Util.getUnitText(v, "V", 1);

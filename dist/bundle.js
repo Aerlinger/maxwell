@@ -1513,7 +1513,7 @@
 	    this.CURRENT_RADIUS = 2;
 	    this.CURRENT_COLOR = "rgba(255, 255, 255, 0.7)";
 	    this.LINE_WIDTH = 2;
-	    this.BOLD_LINE_WIDTH = 6;
+	    this.BOLD_LINE_WIDTH = 4;
 	
 	    // Grid
 	    this.GRID_SIZE = 8;
@@ -1527,10 +1527,11 @@
 	  
 	    // ColorPalettes:
 	    // this.SELECT_COLOR = ColorPalette.ivory;
-	    this.SELECT_COLOR = "#333";
+	    this.SELECT_COLOR = "#573400";
 	    this.HIGHLIGHT_COLOR = ColorPalette.orangered;
 	    this.POST_COLOR = ColorPalette.black;
 	    this.POST_OUTLINE_COLOR = ColorPalette.slateblue;
+	    this.POST_SELECT_COLOR = ColorPalette.orange;
 	    this.DOTS_COLOR = ColorPalette.yellow;
 	    this.DOTS_OUTLINE = ColorPalette.orange;
 	  
@@ -18021,6 +18022,7 @@
 	      color = "#FFFFFF";  //((if @needsHighlight() then Settings.SELECT_COLOR else "#FFFFFF"))
 	
 	      //this.setPowerColor(g, false);
+	
 	      let v = this.getVoltage();
 	
 	      let s = Util.getUnitText(v, "V", 1);
@@ -18211,6 +18213,10 @@
 	  }
 	
 	  getVoltage() {
+	    if (!this.Circuit) {
+	      return 0;
+	    }
+	
 	    let omega = (2 * Math.PI * (this.Circuit.time - this.freqTimeZero) * this.frequency) + this.phaseShift;
 	
 	    switch (this.waveform) {
@@ -25926,7 +25932,7 @@
 	    super(xa, ya, xb, yb, params, f);
 	
 	    // this.drawWidth = Math.max(32, Math.abs(yb - ya));
-	    this.drawWidth = Math.max(32, this.dn());
+	    this.drawWidth = this.dn();//Math.max(32, this.dn());
 	    this.curcount = 0;
 	    this.current = [this.current0, this.current1];
 	    this.noDiagonal = true;
@@ -25955,11 +25961,11 @@
 	    this.ptEnds[1] = this.point2;
 	
 	//    console.log("SP: ", @point1, @point2, 0, -@dsign(), @width)
-	    let hs = -this.dsign() * this.drawWidth;
+	    let hs = this.drawWidth;
 	    hs = 32;
 	    
-	    this.ptEnds[2] = Util.interpolate(this.point1, this.point2, 0, -hs * 2);
-	    this.ptEnds[3] = Util.interpolate(this.point1, this.point2, 1, -hs * 2);
+	    this.ptEnds[2] = Util.interpolate(this.point1, this.point2, 0, -hs);
+	    this.ptEnds[3] = Util.interpolate(this.point1, this.point2, 1, -hs);
 	
 	    let ce = 0.5 - (12 / this.dn());
 	    let cd = 0.5 - (2 / this.dn());
@@ -27106,7 +27112,7 @@
 	
 	class Circuit extends Observer {
 	  static initClass() {
-	    this.DEBUG = true;
+	    this.DEBUG = false;
 	
 	    this.components = [
 	      // Working
@@ -30434,7 +30440,15 @@
 	  }
 	
 	  drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_OUTLINE_COLOR) {
-	    this.fillCircle(x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor);
+	    let outlineRadius = 2;
+	
+	    if (this.boldLines) {
+	      strokeColor = Settings.SELECT_COLOR;
+	      fillColor = Settings.POST_SELECT_COLOR;
+	      outlineRadius += 2;
+	    }
+	
+	    this.fillCircle(x0, y0, Settings.POST_RADIUS, outlineRadius, fillColor, strokeColor);
 	  }
 	
 	  drawBoldLines() {

@@ -132,6 +132,10 @@ class VoltageElm extends CircuitComponent {
   }
 
   getVoltage() {
+    if (!this.Circuit) {
+      return 0;
+    }
+
     let omega = (2 * Math.PI * (this.Circuit.time - this.freqTimeZero) * this.frequency) + this.phaseShift;
 
     switch (this.waveform) {
