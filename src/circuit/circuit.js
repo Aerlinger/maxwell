@@ -37,6 +37,8 @@ fs = require('fs');
 
 class Circuit extends Observer {
   static initClass() {
+    this.DEBUG = true;
+
     this.components = [
   // Working
       "WireElm",
@@ -149,8 +151,8 @@ class Circuit extends Observer {
     this.notifyObservers(this.ON_SOLDER);
 
     newElement.Circuit = this;
-    newElement.setPoints();
-    newElement.recomputeBounds();
+    // newElement.setPoints(newElement.x1, newElement.y1, newElement.x2, newElement.y2);
+    //newElement.recomputeBounds();
 
     this.elementList.push(newElement);
 
@@ -178,7 +180,7 @@ class Circuit extends Observer {
   }
 
   debugModeEnabled() {
-    return this.Params.debug
+    return Circuit.DEBUG || this.Params.debug;
   }
 
   toString() {

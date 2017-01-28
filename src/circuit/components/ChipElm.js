@@ -7,6 +7,26 @@ let self = undefined;
 let Pin = undefined;
 class ChipElm extends CircuitComponent {
 
+  static get Fields() {
+    return {
+      "bits": {
+        name: "Number of Bits",
+        default_value: 4,
+        data_type: (v) => {v},
+        range: [0, Infinity]
+      },
+      "volts": {
+        name: "Volts",
+        description: "Initial voltages on output",
+        unit: "Volts",
+        default_value: 0,
+        symbol: "V",
+        data_type: (v) => {v},
+        range: [0, Infinity]
+      }
+    };
+  }
+
   static initClass() {
     this.FLAG_SMALL = 1;
     this.FLAG_FLIP_X = 1024;
@@ -75,8 +95,6 @@ class ChipElm extends CircuitComponent {
         let xa = Math.floor(px + (self.cspc2 * dx * this.pos) + sx);
         let ya = Math.floor(py + (self.cspc2 * dy * this.pos) + sy);
   
-  //      console.log("SET POINT", px, py, dx, dy, dax, day, sx, sy, self.cspc2, @pos)
-  
         this.post = new Point(xa + (dax * self.cspc2), ya + (day * self.cspc2));
         this.stub = new Point(xa + (dax * self.cspc), ya + (day * self.cspc));
 
@@ -129,12 +147,16 @@ class ChipElm extends CircuitComponent {
   }
 
   getCenter() {
-    return this.boundingBox.getCenter();
+    let minX = Math.min(...this.rectPointsX);
+    let maxX = Math.max(...this.rectPointsX);
+    let minY = Math.min(...this.rectPointsY);
+    let maxY = Math.max(...this.rectPointsY);
+
+    return new Point((maxX + minX) / 2.0, (maxY + minY) / 2.0);
   }
 
-  // TODO: Need a better way of dealing with variable length params here
   constructor(xa, xb, ya, yb, params, f) {
-    params = params || {}
+    params = params || {};
     
     super(xa, xb, ya, yb, {}, f);
 
@@ -143,50 +165,41 @@ class ChipElm extends CircuitComponent {
     this.setSize(((f & ChipElm.FLAG_SMALL) !== 0) ? 1 : 2);
     
     // TODO: Needs cleanup 
+    if (params['volts']) {
+      this.params.volts = params["volts"].slice();
+    }
 
-    if (params) {
-      // TODO: DRY
+    if (this.needsBits()) {
+      this.bits = parseInt(params['bits']);
+      this.params['bits'] = this.bits;
+    }
 
-      if (params['volts']) {
-        this.params.volts = params["volts"].slice();
-      }
+    self = this;
+    this.setupPins();
+    this._setPoints();
 
-      if (this.needsBits()) {
-        this.bits = parseInt(params['bits']);
-        this.params['bits'] = this.bits;
-      }
-
-      self = this;
-      this.setupPins();
-      this._setPoints();
-
-      for (let i=0; i<this.getPostCount(); ++i) {
-        if (this.pins[i].state) {
-          this.volts[i] = parseFloat(params['volts'].shift());
-          this.pins[i].value = (this.volts[i] > 2.5);
-        }
+    for (let i=0; i<this.getPostCount(); ++i) {
+      if (this.pins[i].state) {
+        this.volts[i] = parseFloat(params['volts'].shift());
+        this.pins[i].value = (this.volts[i] > 2.5);
       }
     }
 
     this.noDiagonal = true;
+  }
 
-    /*
-    let numPosts = this.getPostCount();
-    
-    for (let i = 0; i < numPosts; i++) {
-      if (!this.pins[i]) {
-        console.error(`No pin found at ${i}`);
-        return;
-      }
+  setPoints(x1, y1, x2, y2) {
+    if (!x1 || !y1)
+      console.trace("No x1, y1 location for ", this.getName());
 
-      if (this.pins[i].state) {
-        this.volts[i] = __guard__(initial_voltages, x1 => x1.shift());
-        this.pins[i].value = this.volts[i] > 2.5;
-      }
-    }
-    */
+    if (!x2 || !y2)
+      console.trace("No x2, y2 location for ", this.getName());
 
-    // console.log(this.params['volts'])
+    if (!this.point1)
+      this.point1 = new Point(x1, y1);
+
+    if (!this.point2)
+      this.point2 = new Point(x2, y2);
   }
 
   inspect() {
@@ -268,23 +281,17 @@ class ChipElm extends CircuitComponent {
   }
 
   setCurrent(x, c) {
-    return (() => {
-      let result = [];
-      for (let i = 0, end = this.getPostCount(), asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-        let item;
-        let pin = this.pins[i];
-        if (pin.output && (pin.voltSource === x)) {
-          item = pin.current = c;
-        }
-        result.push(item);
+    for (let i = 0; i < this.getPostCount(); ++i) {
+      let pin = this.pins[i];
+
+      if (pin.output && (pin.voltSource === x)) {
+        pin.current = c;
       }
-      return result;
-    })();
+    }
   }
 
-
   setVoltageSource(j, vs) {
-    for (let i = 0, end = this.getPostCount(), asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    for (let i = 0; i < this.getPostCount(); ++i) {
       let p = this.pins[i];
       if ((p.output && j--) === 0) {
         p.voltSource = vs;
@@ -297,8 +304,7 @@ class ChipElm extends CircuitComponent {
 
   doStep(stamper) {
     let i, p;
-    for (i = 0, end = this.getPostCount(), asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-      var asc, end;
+    for (let i = 0; i < this.getPostCount(); ++i) {
       p = this.pins[i];
       if (!p.output) {
         p.value = this.volts[i] > 2.5;
@@ -307,35 +313,25 @@ class ChipElm extends CircuitComponent {
 
     this.execute();
 
-    return (() => {
-      let result = [];
-      for (i = 0, end1 = this.getPostCount(), asc1 = 0 <= end1; asc1 ? i < end1 : i > end1; asc1 ? i++ : i--) {
-        var asc1, end1;
-        let item;
-        p = this.pins[i];
-        if (p.output) {
-          item = stamper.updateVoltageSource(0, this.nodes[i], p.voltSource, p.value ? 5 : 0);
-        }
-        result.push(item);
+    let result = [];
+    for (let i = 0; i < this.getPostCount(); ++i) {
+      p = this.pins[i];
+      if (p.output) {
+        stamper.updateVoltageSource(0, this.nodes[i], p.voltSource, p.value ? 5 : 0);
       }
-      return result;
-    })();
+    }
   }
 
   stamp(stamper) {
-    return (() => {
-      let result = [];
-      for (let i = 0, end = this.getPostCount(), asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-        let item;
-        let p = this.pins[i];
+    // this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
 
-        if (p.output) {
-          item = stamper.stampVoltageSource(0, this.nodes[i], p.voltSource);
-        }
-        result.push(item);
+    for (let i = 0; i < this.getPostCount(); ++i) {
+      let p = this.pins[i];
+
+      if (p.output) {
+        stamper.stampVoltageSource(0, this.nodes[i], p.voltSource);
       }
-      return result;
-    })();
+    }
   }
 
   draw(renderContext) {
@@ -344,7 +340,7 @@ class ChipElm extends CircuitComponent {
 
   drawChip(renderContext) {
     //let i;
-    this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
+    // this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
     renderContext.drawThickPolygon(this.rectPointsX, this.rectPointsY, Settings.STROKE_COLOR);
 
     for (let i = 0; i < this.getPostCount(); i++) {
@@ -394,6 +390,10 @@ class ChipElm extends CircuitComponent {
     }
   }
 
+  recomputeBounds() {
+
+  }
+
   _setPoints() {
 //    if @x2 - @x1 > @sizeX*@cspc2 # dragging
 //      @setSize(2)
@@ -412,8 +412,7 @@ class ChipElm extends CircuitComponent {
     this.rectPointsX = [xr, xr + xs, xr + xs, xr];
     this.rectPointsY = [yr, yr, yr + ys, yr + ys];
 
-    // this.setBbox(xr, yr, this.rectPointsX[2], this.rectPointsY[2]);
-    this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
+    this.setBbox(xr, yr, this.rectPointsX[2], this.rectPointsY[2]);
 
     for (let i = 0; i < this.getPostCount(); i++) {
       let p = this.pins[i];
@@ -438,6 +437,8 @@ class ChipElm extends CircuitComponent {
         p.setPoint(x0, y0, 0, 1, 1, 0, xs - this.cspc2, 0);
       }
     }
+
+    this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
   }
 
   toJson() {
@@ -452,7 +453,3 @@ class ChipElm extends CircuitComponent {
 ChipElm.initClass();
 
 module.exports = ChipElm;
-
-function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
-}

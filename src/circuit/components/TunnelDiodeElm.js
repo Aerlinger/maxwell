@@ -16,7 +16,7 @@ class TunnelDiodeElm extends CircuitComponent {
 
     this.setup();
 
-    this.setPoints()
+    this.setPoints(xa, xb, ya, yb)
   }
 
   reset() {
@@ -35,10 +35,6 @@ class TunnelDiodeElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-    this.setPoints()
-
-    this.setBbox(this.point1, this.point2, this.hs);
-
     let v1 = this.volts[0];
     let v2 = this.volts[1];
 
@@ -68,8 +64,9 @@ class TunnelDiodeElm extends CircuitComponent {
     }
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
+  setPoints(x1, y1, x2, y2) {
+    super.setPoints(x1, y1, x2, y2);
+
     this.calcLeads(16);
     this.cathode = new Array(4);
     let pa = new Array(2);

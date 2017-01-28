@@ -46,12 +46,12 @@
 
 	/* WEBPACK VAR INJECTION */(function(global) {let CircuitComponent = __webpack_require__(1);
 	let CircuitLoader = __webpack_require__(16);
-	let ComponentRegistry = __webpack_require__(90);
+	let ComponentRegistry = __webpack_require__(91);
 	
-	let Circuit = __webpack_require__(77);
-	let CircuitUI = __webpack_require__(91);
+	let Circuit = __webpack_require__(78);
+	let CircuitUI = __webpack_require__(92);
 	
-	let RickshawScopeCanvas = __webpack_require__(93);
+	let RickshawScopeCanvas = __webpack_require__(94);
 	
 	let environment = __webpack_require__(10);
 	
@@ -593,18 +593,25 @@
 	
 	  dsign() {
 	    if (this.dy() === 0)
-	      return Math.sign(this.dx())
+	      return Math.sign(this.dx());
 	    else
-	      return Math.sign(this.dy())
+	      return Math.sign(this.dy());
 	  }
 	
 	  setPoints(x1, y1, x2, y2) {
-	    if (!this.point1) {
+	    /*
+	    if (!x1 || !y1)
+	      console.trace("No x1, y1 location for ", this.getName());
+	
+	    if (!x2 || !y2)
+	      console.trace("No x2, y2 location for ", this.getName());
+	      */
+	
+	    if (!this.point1)
 	      this.point1 = new Point(x1, y1);
-	    }
-	    if (!this.point2) {
+	
+	    if (!this.point2)
 	      this.point2 = new Point(x2, y2);
-	    }
 	
 	    this.recomputeBounds();
 	  }
@@ -769,13 +776,17 @@
 	    this.point2.x += deltaX;
 	    this.point2.y += deltaY;
 	
-	    this.recomputeBounds();
+	    //this.recomputeBounds();
 	
 	    if (this.getParentCircuit()) {
 	      this.getParentCircuit().invalidate();
 	    }
 	
-	    return this.setPoints();
+	    this.setPoints(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
+	
+	    if (this.place) {
+	      this.place()
+	    }
 	  }
 	
 	  moveTo(x, y) {
@@ -883,7 +894,15 @@
 	  }
 	
 	  recomputeBounds() {
-	    return this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
+	    let center = this.getCenter();
+	
+	    let x = center.x;
+	    let y = center.y;
+	
+	    let width = Math.max(this.width(), 5);
+	    let height = Math.max(this.height(), 5);
+	
+	    this.setBbox(x-width/2, y-height/2, x + width/2, y+height/2);
 	  }
 	
 	  getBoundingBox() {
@@ -891,33 +910,32 @@
 	  }
 	
 	  isPlaced() {
-	    return this.point1 && this.point2 && this.point1.x && this.point1.y && this.point2.x && this.point2.y
+	    return this.point1 && this.point1.x && this.point1.y
 	  }
 	
 	  setBbox(x1, y1, x2, y2) {
-	    if (!(Util.isValue(x1) && Util.isValue(y1) && Util.isValue(x2) && Util.isValue(y2) && Util.isValue(this.dpx1()) && Util.isValue(this.dpy1()))) {
-	      // console.trace("Invalid BBox value. isPlaced: ", this.isPlaced(), ":", x1, y1, x2, y2, this.dpx1(), this.dpy1()
-	      // throw new Error(["Invalid BBox value. isPlaced: ", this.isPlaced(), ":", x1, y1, x2, y2, this.dpx1(), this.dpy1()].join(" "));
-	    }
+	    if (!(Util.isValue(x1) && Util.isValue(y1) && Util.isValue(x2) && Util.isValue(y2) && Util.isValue(this.dpx1()) && Util.isValue(this.dpy1())))
+	      console.trace(`Invalid BBox value for ${this.constructor.name} isPlaced: ${this.isPlaced()} [${this.x1()} ${this.y1()} ${this.x2()} ${this.y2()}] -> bbox(${x1}, ${y1}, ${x2}, ${y2})`);
 	
 	    let x = Math.min(x1, x2);
 	    let y = Math.min(y1, y2);
 	    let width = Math.max(Math.abs(x2 - x1), 3);
 	    let height = Math.max(Math.abs(y2 - y1), 3);
 	
-	    let horizontalMargin = Math.floor(Math.abs(this.dpx1())) || 0;
-	    let verticalMargin = Math.floor(Math.abs(this.dpy1())) || 0;
-	
-	    // console.log(x1, y1, x2, y2, horizontalMargin, verticalMargin);
-	
-	    this.boundingBox = new Rectangle(x - horizontalMargin, y - verticalMargin, width + 2 * horizontalMargin, height + 2 * verticalMargin);
+	    this.boundingBox = new Rectangle(x, y, width, height);
 	  }
 	
-	  setBboxPt(p1, p2, width) {
-	    let deltaX = (this.dpx1() * width);
-	    let deltaY = (this.dpy1() * width);
+	  setBboxPt(p1, p2, width = 1) {
+	    //let width = Math.max(Math.abs(x2 - x1), 3);
+	    //let height = Math.max(Math.abs(y2 - y1), 3);
 	
-	    return this.setBbox(p1.x - deltaX, p1.y - deltaY, p2.x + deltaX, p2.y + deltaY);
+	    let deltaX = (this.dy()/this.dn() * width);
+	    let deltaY = (this.dx()/this.dn() * width);
+	
+	    //let deltaX = 0;
+	    //let deltaY = 0;
+	
+	    this.setBbox(p1.x - deltaX/2, p1.y - deltaY/2, p2.x + deltaX/2, p2.y + deltaY/2);
 	  }
 	
 	// Extended by subclasses
@@ -1034,7 +1052,7 @@
 	    let post;
 	    let color = Util.getColorForId(this.component_id);
 	
-	    renderContext.drawRect(this.boundingBox.x - 2, this.boundingBox.y - 2, this.boundingBox.width + 2, this.boundingBox.height + 2, 0.5, "#F00");
+	    renderContext.drawRect(this.boundingBox.x, this.boundingBox.y, this.boundingBox.width, this.boundingBox.height, 0, color);
 	
 	    // renderContext.drawValue 10, -15, this, @constructor.name
 	    // renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
@@ -1283,7 +1301,13 @@
 	
 	    let paramValue = this.params[fieldname];
 	
-	    return Util.getUnitText(paramValue, symbol, decimalPoints);
+	    //console.log(fieldname, paramValue);
+	
+	    if (typeof paramValue == 'number') {
+	      return Util.getUnitText(paramValue, symbol, decimalPoints);
+	    } else {
+	      return paramValue;
+	    }
 	  };
 	}
 	
@@ -1809,42 +1833,6 @@
 	    return (value * 1e-9).toFixed(decimalPoints) + " G" + unit;
 	  }
 	
-	  static getVoltageColor(volts, fullScaleVRange) {
-	    // TODO: Define voltage range
-	    if (fullScaleVRange == null) { fullScaleVRange = 5; }
-	
-	    let RedGreen =
-	      [ "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
-	        "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
-	        "#7f7f7f", "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747",
-	        "#3fbf3f", "#37c737", "#2fcf2f", "#27d727", "#1fdf1f", "#17e717", "#0fef0f", "#07f707", "#00ff00" ];
-	
-	    let scale =
-	      ["#B81B00", "#B21F00", "#AC2301", "#A72801", "#A12C02", "#9C3002", "#963503", "#913903",
-	        "#8B3E04", "#854205", "#804605", "#7A4B06", "#754F06", "#6F5307", "#6A5807", "#645C08",
-	        "#5F6109", "#596509", "#53690A", "#4E6E0A", "#48720B", "#43760B", "#3D7B0C", "#387F0C",
-	        "#32840D", "#2C880E", "#278C0E", "#21910F", "#1C950F", "#169910", "#119E10", "#0BA211", "#06A712"];
-	
-	    let blueScale =
-	      ["#EB1416", "#E91330", "#E7134A", "#E51363", "#E3137C", "#E11394", "#E013AC", "#DE13C3",
-	        "#DC13DA", "#C312DA", "#AA12D8", "#9012D7", "#7712D5", "#5F12D3", "#4612D1", "#2F12CF",
-	        "#1712CE", "#1123CC", "#1139CA", "#114FC8", "#1164C6", "#1179C4", "#118EC3", "#11A2C1",
-	        "#11B6BF", "#10BDB1", "#10BB9B", "#10BA84", "#10B86F", "#10B659", "#10B444", "#10B230", "#10B11C"];
-	
-	    scale = Color.Gradients.voltage_default;
-	
-	    let numColors = scale.length - 1;
-	
-	    let value = Math.floor(((volts + fullScaleVRange) * numColors) / (2 * fullScaleVRange));
-	    if (value < 0) {
-	      value = 0;
-	    } else if (value >= numColors) {
-	      value = numColors - 1;
-	    }
-	
-	    return scale[value];
-	  }
-	
 	  static snapGrid(x) {
 	    return Settings.GRID_SIZE * Math.round(x/Settings.GRID_SIZE);
 	  }
@@ -1935,7 +1923,7 @@
 	    let color = '#';
 	
 	    for (let i = 0; i < 6; i++ ) {
-	      color += letters[id % 16];
+	      color += letters[(i+3)*(i+4)*id % 16];
 	    }
 	
 	    return color;
@@ -17786,35 +17774,35 @@
 	let ScrElm = __webpack_require__(54);
 	let TriodeElm = __webpack_require__(55);
 	
-	let DecadeElm = __webpack_require__(56);
-	let LatchElm = __webpack_require__(58);
-	let TimerElm = __webpack_require__(59);
-	let JkFlipFlopElm = __webpack_require__(60);
-	let DFlipFlopElm = __webpack_require__(61);
-	let CounterElm = __webpack_require__(62);
-	let DacElm = __webpack_require__(63);
-	let AdcElm = __webpack_require__(64);
-	let VcoElm = __webpack_require__(65);
-	let PhaseCompElm = __webpack_require__(66);
-	let SevenSegElm = __webpack_require__(67);
-	let CC2Elm = __webpack_require__(68);
+	let DecadeElm = __webpack_require__(57);
+	let LatchElm = __webpack_require__(59);
+	let TimerElm = __webpack_require__(60);
+	let JkFlipFlopElm = __webpack_require__(61);
+	let DFlipFlopElm = __webpack_require__(62);
+	let CounterElm = __webpack_require__(63);
+	let DacElm = __webpack_require__(64);
+	let AdcElm = __webpack_require__(65);
+	let VcoElm = __webpack_require__(66);
+	let PhaseCompElm = __webpack_require__(67);
+	let SevenSegElm = __webpack_require__(68);
+	let CC2Elm = __webpack_require__(69);
 	
-	let TransLineElm = __webpack_require__(69);
+	let TransLineElm = __webpack_require__(70);
 	
-	let TransformerElm = __webpack_require__(70);
-	let TappedTransformerElm = __webpack_require__(71);
+	let TransformerElm = __webpack_require__(71);
+	let TappedTransformerElm = __webpack_require__(72);
 	
-	let LedElm = __webpack_require__(72);
-	let PotElm = __webpack_require__(73);
-	let ClockElm = __webpack_require__(74);
+	let LedElm = __webpack_require__(73);
+	let PotElm = __webpack_require__(74);
+	let ClockElm = __webpack_require__(75);
 	
-	let Scope = __webpack_require__(75);
+	let Scope = __webpack_require__(76);
 	
-	let SimulationParams = __webpack_require__(76);
+	let SimulationParams = __webpack_require__(77);
 	
-	let Circuit = __webpack_require__(77);
-	let Hint = __webpack_require__(89);
-	let fs = __webpack_require__(88);
+	let Circuit = __webpack_require__(78);
+	let Hint = __webpack_require__(90);
+	let fs = __webpack_require__(89);
 	
 	let environment = __webpack_require__(10);
 	
@@ -17984,7 +17972,7 @@
 	  draw(renderContext) {
 	    this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (VoltageElm.circleSize / this.dn()));
 	
-	    this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
+	    //this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
 	
 	    renderContext.drawLinePt(this.point2, this.lead1, Settings.STROKE_COLOR, Settings.LINE_WIDTH+1);
 	    renderContext.drawLinePt(this.point2, this.point1, Settings.STROKE_COLOR);
@@ -18562,7 +18550,7 @@
 	    this.noDiagonal = true;
 	    this.linePoints = null;
 	
-	    this.setPoints()
+	    this.place()
 	  }
 	
 	  isInverting() {
@@ -18581,8 +18569,8 @@
 	    }
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
+	  place() {
+	    //super.setPoints(...arguments);
 	
 	//    if @dn() > 150
 	//      @setSize(2)
@@ -18607,7 +18595,7 @@
 	
 	    let i0 = -Math.floor(this.inputCount / 2);
 	
-	    for (let i = 0, end = this.inputCount, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+	    for (let i = 0; i<this.inputCount; ++i) {
 	      if ((i0 === 0) && ((this.inputCount & 1) === 0)) {
 	        i0 += 1;
 	      }
@@ -18625,7 +18613,7 @@
 	    }
 	
 	    this.hs2 = this.gwidth * (Math.floor(this.inputCount / 2) + 1);
-	    this.setBboxPt(this.point1, this.point2, this.hs2);
+	    this.setBboxPt(this.lead1, this.lead2, 2 * this.hs2);
 	  }
 	
 	
@@ -18659,7 +18647,7 @@
 	      renderContext.drawLinePt(this.inPosts[i], this.inGates[i], renderContext.getVoltageColor(this.volts[i]));
 	    }
 	
-	    this.setBboxPt(this.point1, this.point2, this.hs2)
+	    //this.setBboxPt(this.point1, this.point2, this.hs2)
 	
 	    renderContext.drawLinePt(this.lead2, this.point2, renderContext.getVoltageColor(this.volts[this.inputCount]));
 	
@@ -18892,7 +18880,6 @@
 	    }
 	  }
 	
-	
 	  setCurrent(x, currentVal) {
 	    return this.current = -currentVal;
 	  }
@@ -18978,6 +18965,8 @@
 	    this.crit = 0;
 	    this.leakage = 1e-14;
 	
+	    this.setBboxPt(this.point1, this.point2, this.hs);
+	
 	    this.setup();
 	  }
 	
@@ -19031,7 +19020,7 @@
 	  }
 	
 	  drawDiode(renderContext) {
-	    this.setBboxPt(this.point1, this.point2, this.hs);
+	
 	    let v1 = this.volts[0];
 	    let v2 = this.volts[1];
 	
@@ -19213,6 +19202,8 @@
 	  constructor(xa, ya, xb, yb, params, f) {
 	    // st not used for OutputElm
 	    super(xa, ya, xb, yb, params, f);
+	
+	    this.place()
 	  }
 	
 	  getPostCount() {
@@ -19223,22 +19214,17 @@
 	    return "Output"
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
-	    this.lead1 = new Point(0, 0);
+	  place() {
+	    this.s = ((this.flags & OutputElm.FLAG_VALUE) !== 0 ? Util.getUnitText(this.volts[0], "V") : "out");
+	    this.lead1 = Util.interpolate(this.point1, this.point2, 1 - ((((3 * this.s.length) / 2) + 8) / this.dn()));
 	
-	    return this.setBboxPt(this.lead1, this.point1, 8);
+	    this.setBboxPt(this.lead1, this.point1, 8);
 	  }
 	
 	  draw(renderContext) {
-	    let color = "#FFF";
-	    let s = ((this.flags & OutputElm.FLAG_VALUE) !== 0 ? Util.getUnitText(this.volts[0], "V") : "out");
+	    renderContext.drawValue(-13, 35, this, this.s, 1.5*Settings.TEXT_SIZE);
 	
-	    this.lead1 = Util.interpolate(this.point1, this.point2, 1 - ((((3 * s.length) / 2) + 8) / this.dn()));
-	
-	    renderContext.drawValue(-13, 35, this, s, 1.5*Settings.TEXT_SIZE);
-	
-	    color = renderContext.getVoltageColor(this.volts[0]);
+	    let color = renderContext.getVoltageColor(this.volts[0]);
 	
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
 	    renderContext.fillCircle(this.lead1.x, this.lead1.y, 2*Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
@@ -19248,7 +19234,6 @@
 	      return super.debugDraw(renderContext);
 	    }
 	  }
-	
 	
 	  getVoltageDiff() {
 	    return this.volts[0];
@@ -19315,10 +19300,12 @@
 	
 	    this.ps = new Point(0, 0);
 	    this.ps2 = new Point(0, 0);
+	
+	    this.place()
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
+	  place() {
+	    //super.setPoints(...arguments);
 	
 	    this.calcLeads(32);
 	    this.ps = new Point(0, 0);
@@ -19337,7 +19324,7 @@
 	
 	  draw(renderContext) {
 	    this.calcLeads(32);
-	    this.setBboxPt(this.point1, this.point2, this.openhs/2);
+	    //this.setBboxPt(this.point1, this.point2, this.openhs/2);
 	
 	    this.ps = new Point(0, 0);
 	    this.ps2 = new Point(0, 0);
@@ -19466,6 +19453,7 @@
 	    this.curSourceValue = 0;
 	
 	    // console.log("ca", xa);
+	    this.place()
 	  }
 	
 	  isTrapezoidal() {
@@ -19489,10 +19477,10 @@
 	    return this.voltdiff = 1e-3;
 	  }
 	
-	  setPoints() {
+	  place() {
 	    // console.log("capelm", arguments);
 	//    super(arguments...)
-	    super.setPoints(...arguments);
+	    //super.setPoints(...arguments);
 	
 	    let f = ((this.dn() / 2) - 4) / this.dn();
 	
@@ -19643,6 +19631,8 @@
 	    this.nodes = new Array(2);
 	    this.compResistance = 0;  //1e-3
 	    this.curSourceValue = 0;
+	
+	    this.place()
 	  }
 	
 	  reset() {
@@ -19652,9 +19642,9 @@
 	    return this.curcount = 0;
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
-	    return this.calcLeads(32);
+	  place() {
+	    //super.setPoints(...arguments);
+	    this.calcLeads(32);
 	  }
 	
 	  stamp(stamper) {
@@ -19768,7 +19758,7 @@
 	  static get Fields() {
 	    return {
 	      "onresistance": {
-	        name: "Resistance",
+	        name: "On Resistance",
 	        unit: "Ohms",
 	        default_value: 1e3,
 	        symbol: "Ω",
@@ -19777,7 +19767,7 @@
 	        type: "physical"
 	      },
 	      "offresistance": {
-	        name: "Resistance",
+	        name: "Off Resistance",
 	        unit: "Ohms",
 	        default_value: 1e9,
 	        symbol: "Ω",
@@ -19786,7 +19776,7 @@
 	        type: "physical"
 	      },
 	      "breakdown": {
-	        name: "Voltage",
+	        name: "Breakdown Voltage",
 	        unit: "Voltage",
 	        symbol: "V",
 	        default_value: 1e3,
@@ -19796,7 +19786,7 @@
 	      },
 	      "holdcurrent": {
 	        unit: "Amperes",
-	        name: "Current",
+	        name: "Hold Current",
 	        symbol: "A",
 	        default_value: 0.001,
 	        data_type: parseFloat,
@@ -19810,20 +19800,23 @@
 	    return "Spark Gap"
 	  }
 	
-	
 	  constructor(xa, ya, xb, yb, params, f) {
 	    super(xa, ya, xb, yb, params, f);
 	
+	    /*
 	    this.resistance = 0;
 	    this.offresistance = 1e9;
 	    this.onresistance = 1e3;
 	    this.breakdown = 1e3;
 	    this.holdcurrent = 0.001;
+	    */
 	    this.state = false;
+	
+	    this.place()
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
+	  place() {
+	    //super.setPoints(...arguments);
 	
 	    let dist = 16;
 	    let alen = 8;
@@ -19836,31 +19829,14 @@
 	    p1 = Util.interpolate(this.point1, this.point2, (this.dn() + alen) / (2 * this.dn()));
 	    this.arrow2 = Util.calcArrow(this.point2, p1, alen, alen);
 	
-	    return this.setBboxPt(this.point1, this.point2, 8);
+	    this.setBboxPt(this.point1, this.point2, 8);
 	  }
-	
-	
-	//    if st
-	//      st = st.split(" ")  if typeof st is "string"
-	//      @onresistance = parseFloat(st?.shift())  if st
-	//      @offresistance = parseFloat(st?.shift())  if st
-	//      @breakdown = parseFloat(st?.shift())  if st
-	//      @holdcurrent = parseFloat(st?.shift())  if st
 	
 	  nonLinear() {
 	    return true;
 	  }
 	
-	//      p1 = DrawHelper.interpPoint(@point1, @point2, (@dn() - alen) / (2 * @dn()))
-	//      @arrow1 = DrawHelper.calcArrow(@point1, p1, alen, alen)
-	//      p1 = DrawHelper.interpPoint(@point1, @point2, (@dn() + alen) / (2 * @dn()))
-	//      @arrow2 = DrawHelper.calcArrow(@point2, p1, alen, alen)
-	
 	  draw(renderContext) {
-	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
-	      super.debugDraw(renderContext);
-	    }
-	
 	    this.updateDots();
 	
 	    let dist = 16;
@@ -19873,28 +19849,38 @@
 	    renderContext.drawLeads(this);
 	
 	    let color = renderContext.getVoltageColor(this.volts[0]);
-	    renderContext.drawThickPolygonP(this.arrow1, color);
+	    renderContext.drawThickPolygonP(this.arrow1, color, color);
 	
 	    color = renderContext.getVoltageColor(this.volts[1]);
-	    renderContext.drawThickPolygonP(this.arrow2, color);
+	    renderContext.drawThickPolygonP(this.arrow2, color, color);
 	
 	    if (this.state) { renderContext.drawDots(this.point1, this.point2, this); }
-	    return renderContext.drawPosts(this);
+	
+	    renderContext.drawPosts(this);
+	
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
+	    }
 	  }
 	
 	  calculateCurrent() {
-	    return this.current = (this.volts[0] - this.volts[1]) / this.resistance;
+	    this.current = (this.volts[0] - this.volts[1]) / this.resistance;
 	  }
 	
 	  reset() {
 	    super.reset();
-	    return this.state = false;
+	    this.state = false;
 	  }
 	
 	  startIteration() {
-	    if (Math.abs(this.current) < this.holdcurrent) { this.state = false; }
+	    if (Math.abs(this.current) < this.holdcurrent)
+	      this.state = false;
+	
 	    let vd = this.volts[0] - this.volts[1];
-	    if (Math.abs(vd) > this.breakdown) { return this.state = true; }
+	
+	    if (Math.abs(vd) > this.breakdown) {
+	      this.state = true;
+	    }
 	  }
 	
 	  doStep(stamper) {
@@ -19905,12 +19891,12 @@
 	      this.resistance = this.offresistance;
 	    }
 	
-	    return stamper.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
+	    stamper.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	  }
 	
 	  stamp(stamper) {
 	    stamper.stampNonLinear(this.nodes[0]);
-	    return stamper.stampNonLinear(this.nodes[1]);
+	    stamper.stampNonLinear(this.nodes[1]);
 	  }
 	
 	  getInfo(arr) {
@@ -20097,9 +20083,10 @@
 	
 	    this.params['pnp'] = this.pnp;
 	
-	    this.setBboxPt(this.point1, this.point2, this.hs);
-	  }
+	    //this.setBboxPt(this.point1, this.point2, this.hs);
 	
+	    this.place()
+	  }
 	
 	  getDefaultThreshold() {
 	    return 1.5;
@@ -20125,7 +20112,7 @@
 	  }
 	
 	  draw(renderContext) {
-	    this.setBboxPt(this.point1, this.point2, this.hs);
+	    //this.setBboxPt(this.point1, this.point2, this.hs);
 	
 	    let color = renderContext.getVoltageColor(this.volts[1]);
 	    renderContext.drawLinePt(this.src[0], this.src[1], color);
@@ -20220,8 +20207,8 @@
 	    return true;
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
+	  place() {
+	    //super.setPoints(...arguments);
 	    this.hs = 16;
 	
 	    // find the coordinates of the various points we need to draw the MOSFET.
@@ -20244,7 +20231,7 @@
 	      this.arrowPoly = Util.calcArrow(this.drn[0], this.drn[1], 12, 5);
 	    }
 	
-	    this.setBboxPt(this.point1, this.point2, this.hs);
+	    this.setBboxPt(this.point1, this.point2, 2*this.hs);
 	  }
 	
 	//    if @pnp is -1
@@ -20380,6 +20367,8 @@
 	  constructor(xa, ya, xb, yb, params, f) {
 	    super(xa, ya, xb, yb, params, f);
 	    this.noDiagonal = true;
+	
+	    this.place()
 	  }
 	
 	  getDefaultThreshold() {
@@ -20394,8 +20383,8 @@
 	    return "JFet"
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
+	  place() {
+	    super.place();
 	
 	    let hs2 = this.hs * this.dsign();
 	
@@ -20421,9 +20410,8 @@
 	      this.arrowPoly = Util.calcArrow(this.point1, this.gatePt, 8, 3);
 	    }
 	
-	    return this.setBboxPt(this.point1, this.point2, this.hs);
+	    this.setBboxPt(this.point1, this.point2, this.hs);
 	  }
-	
 	
 	  draw(renderContext) {
 	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
@@ -20539,7 +20527,7 @@
 	    this.volts[2] = -this.lastvbc;
 	
 	    this.setup();
-	    this.setPoints();
+	    this.place();
 	  }
 	
 	  setup() {
@@ -20687,8 +20675,8 @@
 	    return ((this.volts[0] - this.volts[2]) * this.ib) + ((this.volts[1] - this.volts[2]) * this.ic);
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
+	  place() {
+	    // super.setPoints(...arguments);
 	
 	    this.renderSize = 16;
 	
@@ -20714,7 +20702,7 @@
 	
 	    this.rectPoly = Util.createPolygonFromArray(this.rect);
 	
-	    this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
+	    this.setBboxPt(this.point1, this.point2, this.renderSize);
 	
 	    if (this.pnp === 1) {
 	      // console.log("PNP", "hs2", hs2, "Emit", this.emit[0], this.dsign(), this.dn(), this.pnp, this.point1, this.point2, "arrowPoly", Util.calcArrow(this.emit[1], this.emit[0], 8, 4))
@@ -20753,7 +20741,7 @@
 	  stamp(stamper) {
 	    stamper.stampNonLinear(this.nodes[0]);
 	    stamper.stampNonLinear(this.nodes[1]);
-	    return stamper.stampNonLinear(this.nodes[2]);
+	    stamper.stampNonLinear(this.nodes[2]);
 	  }
 	
 	  // TODO: DI refactor by passing solver object
@@ -21029,7 +21017,7 @@
 	    this.setSize((f & OpAmpElm.FLAG_SMALL) !== 0 ? 1 : 2);
 	    this.setGain();
 	
-	    this.setPoints();
+	    this.place();
 	    this.allocNodes();
 	  }
 	
@@ -21045,7 +21033,7 @@
 	
 	  draw(renderContext) {
 	    // this.setBbox(this.point1.x, this.in1p[0].y, this.point2.x, this.in2p[0].y);
-	    this.setBboxPt(this.point1, this.point2, Math.floor(this.opheight * this.dsign()));
+	    //this.setBboxPt(this.point1, this.point2, Math.floor(this.opheight * this.dsign()));
 	
 	    // Terminal 1
 	    let color = renderContext.getVoltageColor(this.volts[0]);
@@ -21090,9 +21078,9 @@
 	    return this.opwidth = 13 * s;
 	  }
 	
-	  setPoints() {
+	  place() {
 	    let ww;
-	    super.setPoints(...arguments);
+	    //super.setPoints(...arguments);
 	//    @setSize 2
 	
 	    if (ww > (this.dn() / 2)) {
@@ -21116,7 +21104,7 @@
 	    [tris[0], tris[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, hs * 2);
 	    this.triangle = Util.createPolygonFromArray([tris[0], tris[1], this.lead2]);
 	
-	    this.setBboxPt(this.point1, this.point2, hs)
+	    this.setBboxPt(this.lead1, this.lead2, 2*hs)
 	  }
 	
 	  getName() {
@@ -21271,7 +21259,7 @@
 	    // PLATE:
 	    // setVoltageColor(g, v2)
 	    color = renderContext.getVoltageColor(v2);
-	    renderContext.drawLinePt(this.cathode[0], this.cathode[1], v1);
+	    renderContext.drawLinePt(this.cathode[0], this.cathode[1], color);
 	
 	    // Cathode "Wings"
 	    renderContext.drawLinePt(this.wing[0], this.cathode[0], color);
@@ -21343,15 +21331,18 @@
 	
 	    this.openhs = 16;
 	    this.noDiagonal = true;
+	
+	    this.place()
 	  }
 	
 	  getName() {
 	    return "Two-way switch"
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
-	//    @calcLeads(32);
+	  place() {
+	    super.place();
+	    //super.setPoints(...arguments);
+	    // @calcLeads(32);
 	
 	    this.swposts = Util.newPointArray(2);
 	    this.swpoles = Util.newPointArray(3);
@@ -21363,7 +21354,7 @@
 	
 	    this.posCount = this.hasCenterOff() ? 3 : 2;
 	
-	    this.setBboxPt(this.point1, this.point2, this.openhs);
+	    this.setBboxPt(this.point1, this.point2, 2*this.openhs);
 	  }
 	
 	  draw(renderContext) {
@@ -21382,7 +21373,7 @@
 	      this.posCount = 2;
 	    }
 	
-	    this.setBboxPt(this.point1, this.point2, this.openhs);
+	    //this.setBboxPt(this.point1, this.point2, this.openhs);
 	
 	    // draw first lead
 	    let color = renderContext.getVoltageColor(this.volts[0]);
@@ -21759,7 +21750,9 @@
 	    this.lines.push(this.text);
 	    // this.size = ;
 	
-	    this.setPoints(xa, ya, xb, yb)
+	    this.place();
+	
+	    //this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
 	  }
 	
 	  stamp() {}
@@ -21779,16 +21772,24 @@
 	    return "Text Label"
 	  }
 	
+	  place() {
+	    //super.setPoints(x1, y1, x2 ,y2);
+	
+	    this.point2 =  new Point(this.point1.x + 5 * this.text.length, this.point1.y);
+	
+	    this.setBbox(this.point1.x, this.point1.y - this.size, this.point1.x + 5 * this.text.length, this.point1.y + this.size);
+	  }
+	
 	  draw(renderContext) {
 	    let color = Settings.LABEL_COLOR;
-	    this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
+	    //this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
 	
 	    let mt = renderContext.fillText(this.text, this.x1(), this.y1(), color, (2/3) * this.size);
 	
 	    this.point2.x = this.boundingBox.x1 + this.boundingBox.width;
 	    this.point2.y = this.boundingBox.y1 + this.boundingBox.height;
 	
-	    this.setBbox(this.x1(), this.y1() - this.size + 1, this.x1() + mt.width, this.y1());
+	    //this.setBbox(this.x1(), this.y1() - this.size + 1, this.x1() + mt.width, this.y1());
 	
 	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
@@ -21928,8 +21929,8 @@
 	    super(xa, ya, xb, yb, params, f);
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
+	  place() {
+	    super.place();
 	
 	    let triPoints = Util.newPointArray(23);
 	
@@ -22014,9 +22015,9 @@
 	    return "OR Gate";
 	  }
 	
-	  setPoints() {
+	  place() {
 	    let a, b, i;
-	    super.setPoints(...arguments);
+	    super.place();
 	
 	    let triPoints = Util.newPointArray(38);
 	
@@ -22097,9 +22098,9 @@
 	    super(xa, ya, xb, yb, params, f);
 	  }
 	
-	  setPoints() {
+	  place() {
 	    let a, b;
-	    super.setPoints(...arguments);
+	    super.place();
 	
 	    this.linePoints = Util.newPointArray(5);
 	
@@ -22154,16 +22155,14 @@
 	
 	    this.noDiagonal = true;
 	
-	    this.setPoints()
+	    this.place()
 	  }
 	
 	  getName() {
 	    return "Inverter"
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
-	
+	  place() {
 	    this.hs = 16;
 	    let ww = 16;
 	
@@ -22184,11 +22183,11 @@
 	
 	    this.gatePoly = Util.createPolygonFromArray(triPoints);
 	
-	    this.setBboxPt(this.point1, this.point2, this.hs);
+	    this.setBboxPt(this.lead1, this.lead2, 2*this.hs);
 	  }
 	
 	  draw(renderContext) {
-	    this.setBboxPt(this.point1, this.point2, this.hs);
+	    //this.setBboxPt(this.point1, this.point2, this.hs);
 	
 	    renderContext.drawLeads(this);
 	
@@ -22409,6 +22408,8 @@
 	
 	  constructor(xa, ya, xb, yb, params, f) {
 	    super(xa, ya, xb, yb, params, f);
+	
+	    this.place()
 	  }
 	
 	
@@ -22460,10 +22461,8 @@
 	    }
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
-	
-	    return this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (12 / this.dn()));
+	  place() {
+	    this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (12 / this.dn()));
 	  }
 	
 	
@@ -22962,7 +22961,7 @@
 	    this.curSourceValue = 0;
 	
 	    this.setupPoles();
-	    this.setPoints();
+	    this.place();
 	
 	    this.noDiagonal = true;
 	  }
@@ -22982,9 +22981,9 @@
 	    return "Relay"
 	  }
 	
-	  setPoints() {
+	  place() {
 	    let i, j;
-	    super.setPoints(...arguments);
+	    //super.setPoints(...arguments);
 	    this.setupPoles();
 	    this.allocNodes();
 	    this.openhs = -this.dsign() * 16;
@@ -23138,7 +23137,7 @@
 	  }
 	
 	  draw(renderContext) {
-	    this.setPoints();
+	    //this.setPoints();
 	
 	    let i;
 	    for (i = 0; i < 2; i++) {
@@ -23288,7 +23287,7 @@
 	
 	    this.setup();
 	
-	    this.setPoints()
+	    this.setPoints(xa, xb, ya, yb)
 	  }
 	
 	  reset() {
@@ -23307,10 +23306,6 @@
 	  }
 	
 	  draw(renderContext) {
-	    this.setPoints()
-	
-	    this.setBbox(this.point1, this.point2, this.hs);
-	
 	    let v1 = this.volts[0];
 	    let v2 = this.volts[1];
 	
@@ -23340,8 +23335,9 @@
 	    }
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
+	  setPoints(x1, y1, x2, y2) {
+	    super.setPoints(x1, y1, x2, y2);
+	
 	    this.calcLeads(16);
 	    this.cathode = new Array(4);
 	    let pa = new Array(2);
@@ -23487,11 +23483,10 @@
 	
 	    this.setup();
 	    //this.setPoints();
+	    this.place()
 	  }
 	
-	  setPoints(x1, y1, x2, y2) {
-	    super.setPoints(...arguments);
-	
+	  place() {
 	    let dir = 0;
 	    if (Math.abs(this.dx()) > Math.abs(this.dy())) {
 	      dir = -Math.sign(this.dx()) * Math.sign(this.dy());
@@ -23830,6 +23825,7 @@
 
 	let CircuitComponent = __webpack_require__(1);
 	let Util = __webpack_require__(5);
+	let Settings = __webpack_require__(2);
 	
 	class TriodeElm extends CircuitComponent {
 	  static get Fields() {
@@ -23853,7 +23849,7 @@
 	    this.gridCurrentR = 6000;
 	
 	    this.setup();
-	    this.setPoints();
+	    this.place();
 	  }
 	
 	  setup() {
@@ -23888,11 +23884,11 @@
 	  }
 	
 	  draw(renderContext) {
-	    this.setBbox(this.point1, this.plate[0], 16);
+	    //this.setBbox(this.point1, this.plate[0], 16);
 	
-	    renderContext.fillCircle(this.point2.x, this.point2.y, this.circler);
+	    renderContext.fillCircle(this.point2.x, this.point2.y, this.circler, Settings.LINE_WIDTH, Settings.FG_COLOR, Settings.STROKE_COLOR);
 	
-	    this.setBbox(this.cath[0].x, this.cath[1].y, this.point2.x + this.circler, this.point2.y + this.circler);
+	    //this.setBbox(this.cath[0].x, this.cath[1].y, this.point2.x + this.circler, this.point2.y + this.circler);
 	
 	    //setPowerColor(g, true);
 	    // draw plate
@@ -23947,9 +23943,7 @@
 	    return (this.volts[0] - this.volts[2]) * this.current;
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
-	
+	  place() {
 	    this.plate = new Array(4);
 	    this.grid = new Array(8);
 	    this.cath = new Array(4);
@@ -23965,7 +23959,8 @@
 	    [this.plate[2], this.plate[3]] = Util.interpolateSymmetrical(this.point2, this.plate[1], 1, platew);
 	
 	    let circler = 24;
-	    this.grid[1] = Util.interpolate(this.point1, this.point2, (this.dn() - circler) / this.dn(), 0);
+	    this.circler = circler;
+	    this.grid[1] = Util.interpolate(this.point1, this.point2, (this.dn() - this.circler) / this.dn(), 0);
 	
 	    for (let i = 0; i < 3; i++) {
 	      this.grid[2 + (i * 2)] = Util.interpolate(this.grid[1], this.point2, ((i * 3) + 1) / 4.5, 0);
@@ -23979,7 +23974,17 @@
 	
 	    [this.cath[1], this.cath[2]] = Util.interpolateSymmetrical(this.point2, this.plate[1], -1, cathw);
 	    this.cath[3] = Util.interpolate(this.point2, this.plate[1], -1.2, -cathw);
-	    return this.cath[0] = Util.interpolate(this.point2, this.plate[1], Math.floor(-farw / nearw), cathw);
+	    this.cath[0] = Util.interpolate(this.point2, this.plate[1], Math.floor(-farw / nearw), cathw);
+	
+	    let yMin = this.plate[0].y;
+	    let yMax = this.cath[0].y;
+	    let xMin = this.grid[0].x;
+	    let xMax = this.cath[0].x;
+	    // this.setBbox(xMin, xMax, yMin, yMax);
+	
+	    // this.setBbox(this.point1.x, this.plate[0].y, this.point2.x + this.circler, this.point2.y + this.circler);
+	    this.setBboxPt(this.point1, this.grid[this.grid.length - 1], 2*this.circler);
+	    //this.setBbox(352, 232, 384, 248)
 	  }
 	
 	  stamp(stamper) {
@@ -24074,10 +24079,11 @@
 
 
 /***/ },
-/* 56 */
+/* 56 */,
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(58);
 	
 	class DecadeElm extends ChipElm {
 	
@@ -24159,7 +24165,7 @@
 
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -24170,6 +24176,26 @@
 	let self = undefined;
 	let Pin = undefined;
 	class ChipElm extends CircuitComponent {
+	
+	  static get Fields() {
+	    return {
+	      "bits": {
+	        name: "Number of Bits",
+	        default_value: 4,
+	        data_type: (v) => {v},
+	        range: [0, Infinity]
+	      },
+	      "volts": {
+	        name: "Volts",
+	        description: "Initial voltages on output",
+	        unit: "Volts",
+	        default_value: 0,
+	        symbol: "V",
+	        data_type: (v) => {v},
+	        range: [0, Infinity]
+	      }
+	    };
+	  }
 	
 	  static initClass() {
 	    this.FLAG_SMALL = 1;
@@ -24239,8 +24265,6 @@
 	        let xa = Math.floor(px + (self.cspc2 * dx * this.pos) + sx);
 	        let ya = Math.floor(py + (self.cspc2 * dy * this.pos) + sy);
 	  
-	  //      console.log("SET POINT", px, py, dx, dy, dax, day, sx, sy, self.cspc2, @pos)
-	  
 	        this.post = new Point(xa + (dax * self.cspc2), ya + (day * self.cspc2));
 	        this.stub = new Point(xa + (dax * self.cspc), ya + (day * self.cspc));
 	
@@ -24293,12 +24317,16 @@
 	  }
 	
 	  getCenter() {
-	    return this.boundingBox.getCenter();
+	    let minX = Math.min(...this.rectPointsX);
+	    let maxX = Math.max(...this.rectPointsX);
+	    let minY = Math.min(...this.rectPointsY);
+	    let maxY = Math.max(...this.rectPointsY);
+	
+	    return new Point((maxX + minX) / 2.0, (maxY + minY) / 2.0);
 	  }
 	
-	  // TODO: Need a better way of dealing with variable length params here
 	  constructor(xa, xb, ya, yb, params, f) {
-	    params = params || {}
+	    params = params || {};
 	    
 	    super(xa, xb, ya, yb, {}, f);
 	
@@ -24307,50 +24335,41 @@
 	    this.setSize(((f & ChipElm.FLAG_SMALL) !== 0) ? 1 : 2);
 	    
 	    // TODO: Needs cleanup 
+	    if (params['volts']) {
+	      this.params.volts = params["volts"].slice();
+	    }
 	
-	    if (params) {
-	      // TODO: DRY
+	    if (this.needsBits()) {
+	      this.bits = parseInt(params['bits']);
+	      this.params['bits'] = this.bits;
+	    }
 	
-	      if (params['volts']) {
-	        this.params.volts = params["volts"].slice();
-	      }
+	    self = this;
+	    this.setupPins();
+	    this._setPoints();
 	
-	      if (this.needsBits()) {
-	        this.bits = parseInt(params['bits']);
-	        this.params['bits'] = this.bits;
-	      }
-	
-	      self = this;
-	      this.setupPins();
-	      this._setPoints();
-	
-	      for (let i=0; i<this.getPostCount(); ++i) {
-	        if (this.pins[i].state) {
-	          this.volts[i] = parseFloat(params['volts'].shift());
-	          this.pins[i].value = (this.volts[i] > 2.5);
-	        }
+	    for (let i=0; i<this.getPostCount(); ++i) {
+	      if (this.pins[i].state) {
+	        this.volts[i] = parseFloat(params['volts'].shift());
+	        this.pins[i].value = (this.volts[i] > 2.5);
 	      }
 	    }
 	
 	    this.noDiagonal = true;
+	  }
 	
-	    /*
-	    let numPosts = this.getPostCount();
-	    
-	    for (let i = 0; i < numPosts; i++) {
-	      if (!this.pins[i]) {
-	        console.error(`No pin found at ${i}`);
-	        return;
-	      }
+	  setPoints(x1, y1, x2, y2) {
+	    if (!x1 || !y1)
+	      console.trace("No x1, y1 location for ", this.getName());
 	
-	      if (this.pins[i].state) {
-	        this.volts[i] = __guard__(initial_voltages, x1 => x1.shift());
-	        this.pins[i].value = this.volts[i] > 2.5;
-	      }
-	    }
-	    */
+	    if (!x2 || !y2)
+	      console.trace("No x2, y2 location for ", this.getName());
 	
-	    // console.log(this.params['volts'])
+	    if (!this.point1)
+	      this.point1 = new Point(x1, y1);
+	
+	    if (!this.point2)
+	      this.point2 = new Point(x2, y2);
 	  }
 	
 	  inspect() {
@@ -24432,23 +24451,17 @@
 	  }
 	
 	  setCurrent(x, c) {
-	    return (() => {
-	      let result = [];
-	      for (let i = 0, end = this.getPostCount(), asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-	        let item;
-	        let pin = this.pins[i];
-	        if (pin.output && (pin.voltSource === x)) {
-	          item = pin.current = c;
-	        }
-	        result.push(item);
+	    for (let i = 0; i < this.getPostCount(); ++i) {
+	      let pin = this.pins[i];
+	
+	      if (pin.output && (pin.voltSource === x)) {
+	        pin.current = c;
 	      }
-	      return result;
-	    })();
+	    }
 	  }
 	
-	
 	  setVoltageSource(j, vs) {
-	    for (let i = 0, end = this.getPostCount(), asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+	    for (let i = 0; i < this.getPostCount(); ++i) {
 	      let p = this.pins[i];
 	      if ((p.output && j--) === 0) {
 	        p.voltSource = vs;
@@ -24461,8 +24474,7 @@
 	
 	  doStep(stamper) {
 	    let i, p;
-	    for (i = 0, end = this.getPostCount(), asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-	      var asc, end;
+	    for (let i = 0; i < this.getPostCount(); ++i) {
 	      p = this.pins[i];
 	      if (!p.output) {
 	        p.value = this.volts[i] > 2.5;
@@ -24471,35 +24483,25 @@
 	
 	    this.execute();
 	
-	    return (() => {
-	      let result = [];
-	      for (i = 0, end1 = this.getPostCount(), asc1 = 0 <= end1; asc1 ? i < end1 : i > end1; asc1 ? i++ : i--) {
-	        var asc1, end1;
-	        let item;
-	        p = this.pins[i];
-	        if (p.output) {
-	          item = stamper.updateVoltageSource(0, this.nodes[i], p.voltSource, p.value ? 5 : 0);
-	        }
-	        result.push(item);
+	    let result = [];
+	    for (let i = 0; i < this.getPostCount(); ++i) {
+	      p = this.pins[i];
+	      if (p.output) {
+	        stamper.updateVoltageSource(0, this.nodes[i], p.voltSource, p.value ? 5 : 0);
 	      }
-	      return result;
-	    })();
+	    }
 	  }
 	
 	  stamp(stamper) {
-	    return (() => {
-	      let result = [];
-	      for (let i = 0, end = this.getPostCount(), asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-	        let item;
-	        let p = this.pins[i];
+	    // this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
 	
-	        if (p.output) {
-	          item = stamper.stampVoltageSource(0, this.nodes[i], p.voltSource);
-	        }
-	        result.push(item);
+	    for (let i = 0; i < this.getPostCount(); ++i) {
+	      let p = this.pins[i];
+	
+	      if (p.output) {
+	        stamper.stampVoltageSource(0, this.nodes[i], p.voltSource);
 	      }
-	      return result;
-	    })();
+	    }
 	  }
 	
 	  draw(renderContext) {
@@ -24508,7 +24510,7 @@
 	
 	  drawChip(renderContext) {
 	    //let i;
-	    this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
+	    // this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
 	    renderContext.drawThickPolygon(this.rectPointsX, this.rectPointsY, Settings.STROKE_COLOR);
 	
 	    for (let i = 0; i < this.getPostCount(); i++) {
@@ -24558,6 +24560,10 @@
 	    }
 	  }
 	
+	  recomputeBounds() {
+	
+	  }
+	
 	  _setPoints() {
 	//    if @x2 - @x1 > @sizeX*@cspc2 # dragging
 	//      @setSize(2)
@@ -24576,8 +24582,7 @@
 	    this.rectPointsX = [xr, xr + xs, xr + xs, xr];
 	    this.rectPointsY = [yr, yr, yr + ys, yr + ys];
 	
-	    // this.setBbox(xr, yr, this.rectPointsX[2], this.rectPointsY[2]);
-	    this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
+	    this.setBbox(xr, yr, this.rectPointsX[2], this.rectPointsY[2]);
 	
 	    for (let i = 0; i < this.getPostCount(); i++) {
 	      let p = this.pins[i];
@@ -24602,6 +24607,8 @@
 	        p.setPoint(x0, y0, 0, 1, 1, 0, xs - this.cspc2, 0);
 	      }
 	    }
+	
+	    this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
 	  }
 	
 	  toJson() {
@@ -24616,18 +24623,14 @@
 	ChipElm.initClass();
 	
 	module.exports = ChipElm;
-	
-	function __guard__(value, transform) {
-	  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
-	}
 
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(58);
 	let Util = __webpack_require__(5);
 	
 	class LatchElm extends ChipElm {
@@ -24694,11 +24697,11 @@
 
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(58);
 	let Util = __webpack_require__(5);
 	let Settings = __webpack_require__(2);
 	
@@ -24714,6 +24717,7 @@
 	    this.N_RST = 6;
 	  }
 	
+	  /*
 	  static get Fields() {
 	    return {
 	      "volts": {
@@ -24727,6 +24731,7 @@
 	      }
 	    }
 	  }
+	  */
 	
 	  constructor(xa, xb, ya, yb, params = {volts: [0.0], bits: [0]}, f = "0") {
 	    super(xa, xb, ya, yb, params, f);
@@ -24757,7 +24762,7 @@
 	  }
 	
 	  draw(renderContext) {
-	    this.setPoints();
+	    //this.setPoints();
 	    this.drawChip(renderContext);
 	
 	    let textSize = this.csize == 1 ? 8 : 11;
@@ -24835,11 +24840,11 @@
 
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(58);
 	let Util = __webpack_require__(5);
 	
 	class JkFlipFlopElm extends ChipElm {
@@ -24910,11 +24915,11 @@
 
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(58);
 	let Util = __webpack_require__(5);
 	
 	class DFlipFlopElm extends ChipElm {
@@ -24998,11 +25003,11 @@
 
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(58);
 	let Util = __webpack_require__(5);
 	
 	class CounterElm extends ChipElm {
@@ -25013,7 +25018,7 @@
 	  constructor(xa, xb, ya, yb, params, f) {
 	    // console.log("FLAG", f)
 	
-	    params = params || {"bits": 4, "volts": [0, 0, 0, 0]}
+	    params = params || {"bits": 4, "volts": [0, 0, 0, 0]};
 	
 	    super(xa, xb, ya, yb, params, f);
 	  }
@@ -25104,11 +25109,11 @@
 
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(58);
 	let Util = __webpack_require__(5);
 	
 	class DacElm extends ChipElm {
@@ -25170,11 +25175,11 @@
 
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(58);
 	let Util = __webpack_require__(5);
 	
 	class AdcElm extends ChipElm {
@@ -25243,11 +25248,11 @@
 	}
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(58);
 	let Util = __webpack_require__(5);
 	
 	// TODO Fails on this line: stamper.updateVoltageSource(0, this.nodes[1], this.pins[1].voltSource, vo);
@@ -25356,11 +25361,11 @@
 
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(58);
 	let Util = __webpack_require__(5);
 	
 	class PhaseCompElm extends ChipElm {
@@ -25449,12 +25454,12 @@
 
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
 	let Settings = __webpack_require__(2);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(58);
 	
 	class SevenSegElm extends ChipElm {
 	
@@ -25536,11 +25541,11 @@
 
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(58);
 	let Util = __webpack_require__(5);
 	
 	class CC2Elm extends ChipElm {
@@ -25609,7 +25614,7 @@
 
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -25651,6 +25656,8 @@
 	    // delete this.params['resistance'];
 	
 	    this.ptr = 0;
+	
+	    this.place()
 	  }
 	
 	  getName() {
@@ -25680,9 +25687,7 @@
 	    this.ptr = 0;
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
-	
+	  place() {
 	    let ds = (this.dy() === 0) ? Math.sign(this.dx()) : -Math.sign(this.dy());
 	
 	    let p3 = Util.interpolate(this.point1, this.point2, 0, -Math.floor(this.channelWidth * ds));
@@ -25695,7 +25700,9 @@
 	    let p8 = Util.interpolate(this.point1, this.point2, 1, -Math.floor((this.channelWidth / 2) + sep) * ds);
 	
 	    this.posts = [p3, p4, this.point1, this.point2];
-	    return this.inner = [p7, p8, p5, p6];
+	    this.inner = [p7, p8, p5, p6];
+	
+	    this.setBboxPt(this.posts[0], this.posts[3], 5);
 	  }
 	
 	  getConnection(n1, n2) {
@@ -25731,7 +25738,7 @@
 	  }
 	
 	  draw(renderContext) {
-	    this.setBboxPt(this.posts[0], this.posts[3], 5);
+	    //this.setBboxPt(this.posts[0], this.posts[3], 5);
 	    let segments = Math.floor(this.dn() / 2);
 	
 	    let ix0 = this.ptr - 1 + this.lenSteps;
@@ -25839,7 +25846,7 @@
 
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -25888,13 +25895,13 @@
 	  constructor(xa, ya, xb, yb, params, f) {
 	    super(xa, ya, xb, yb, params, f);
 	
-	    this.width = Math.max(32, Math.abs(yb - ya));
-	
+	    // this.drawWidth = Math.max(32, Math.abs(yb - ya));
+	    this.drawWidth = Math.max(32, this.dn());
 	    this.curcount = 0;
-	
 	    this.current = [this.current0, this.current1];
-	
 	    this.noDiagonal = true;
+	
+	    this.place()
 	  }
 	
 	  getName() {
@@ -25905,10 +25912,10 @@
 	    return (this.flags & TransformerElm.FLAG_BACK_EULER) === 0;
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
+	  place() {
+	    // super.setPoints(...arguments);
 	
-	    this.point2.y = this.point1.y;
+	    //this.point2.y = this.point1.y;
 	
 	    this.ptEnds = Util.newPointArray(4);
 	    this.ptCoil = Util.newPointArray(4);
@@ -25918,49 +25925,31 @@
 	    this.ptEnds[1] = this.point2;
 	
 	//    console.log("SP: ", @point1, @point2, 0, -@dsign(), @width)
-	    this.ptEnds[2] = Util.interpolate(this.point1, this.point2, 0, -this.dsign() * this.width);
-	    this.ptEnds[3] = Util.interpolate(this.point1, this.point2, 1, -this.dsign() * this.width);
+	    let hs = -this.dsign() * this.drawWidth;
+	    hs = 32;
+	    
+	    this.ptEnds[2] = Util.interpolate(this.point1, this.point2, 0, -hs * 2);
+	    this.ptEnds[3] = Util.interpolate(this.point1, this.point2, 1, -hs * 2);
 	
 	    let ce = 0.5 - (12 / this.dn());
 	    let cd = 0.5 - (2 / this.dn());
 	
 	    let i = 0;
-	    return (() => {
-	      let result = [];
-	      while (i < 4) {
-	        this.ptCoil[i]     = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], ce);
-	        this.ptCoil[i + 1] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], 1 - ce);
-	        this.ptCore[i]     = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], cd);
-	        this.ptCore[i + 1] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], 1 - cd);
+	    while (i < 4) {
+	      this.ptCoil[i]     = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], ce);
+	      this.ptCoil[i + 1] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], 1 - ce);
+	      this.ptCore[i]     = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], cd);
+	      this.ptCore[i + 1] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], 1 - cd);
 	
-	        result.push(i += 2);
-	      }
-	      return result;
-	    })();
+	      i+=2;
+	    }
+	
+	    this.setBboxPt(this.point1, this.ptEnds[3]);
 	  }
 	
 	  getPost(n) {
 	    return this.ptEnds[n];
 	  }
-	
-	
-	  //CURRENT: 0.0 0.0 0.0 4.076513432371698E-11
-	  //CURRENT: 3.8782799757450996E-4 0.0 0.0 4.076513432371698E-11
-	  //CURRENT: 3.8782799757450996E-4 -4.5613036132278495 0.0 4.076513432371698E-11
-	  //CURRENT: 3.8782799757450996E-4 -4.5613036132278495 0.0 4.076513432371698E-11
-	
-	  //CALC CURRENT: 0,0,0,4.967879427950679
-	  //CALC CURRENT: 0.00038782799757450996,0,0,4.967879427950679
-	  //CALC CURRENT: 0.00038782799757450996,0.4065758146820641,0,4.967879427950679
-	  //CALC CURRENT: 0.00038782799757450996,0.4065758146820641,0,4.967879427950679
-	
-	//  getProperties: ->
-	//    currentProperties = super()
-	//    currentProperties['current'] = 0
-	//    currentProperties
-	
-	//  getCurrent: ->
-	//    0
 	
 	  getPostCount() {
 	    return 4;
@@ -25976,7 +25965,7 @@
 	    this.volts[3] = 0;
 	
 	    this.curcount[0] = 0;
-	    return this.curcount[1] = 0;
+	    this.curcount[1] = 0;
 	  }
 	
 	  draw(renderContext) {
@@ -26060,7 +26049,7 @@
 	    stamper.stampRightSide(this.nodes[0]);
 	    stamper.stampRightSide(this.nodes[1]);
 	    stamper.stampRightSide(this.nodes[2]);
-	    return stamper.stampRightSide(this.nodes[3]);
+	    stamper.stampRightSide(this.nodes[3]);
 	  }
 	
 	  calculateCurrent() {
@@ -26069,7 +26058,7 @@
 	    let voltdiff1 = this.volts[0] - this.volts[2];
 	    let voltdiff2 = this.volts[1] - this.volts[3];
 	    this.current[0] = (voltdiff1 * this.a1) + (voltdiff2 * this.a2) + this.curSourceValue1;
-	    return this.current[1] = (voltdiff1 * this.a3) + (voltdiff2 * this.a4) + this.curSourceValue2;
+	    this.current[1] = (voltdiff1 * this.a3) + (voltdiff2 * this.a4) + this.curSourceValue2;
 	  }
 	
 	//  setNode: (j, k) ->
@@ -26082,7 +26071,7 @@
 	//    console.log("DO STEP", @curSourceValue1, @curSourceValue2, @isTrapezoidal())
 	//    console.log(@nodes)
 	    stamper.stampCurrentSource(this.nodes[0], this.nodes[2], this.curSourceValue1);
-	    return stamper.stampCurrentSource(this.nodes[1], this.nodes[3], this.curSourceValue2);
+	    stamper.stampCurrentSource(this.nodes[1], this.nodes[3], this.curSourceValue2);
 	  }
 	
 	//    console.log(@Circuit.Solver.circuitRightSide)
@@ -26132,7 +26121,7 @@
 
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -26184,6 +26173,7 @@
 	    // delete this.params['current2'];
 	
 	    this.noDiagonal = true;
+	    this.place()
 	  }
 	
 	  draw(renderContext) {
@@ -26232,16 +26222,16 @@
 	    */
 	
 	    renderContext.drawPosts(this);
-	    this.setBboxPt(this.ptEnds[0], this.ptEnds[4], 0);
+	    
 	  }
 	
 	  getName() {
 	    return "Tapped Transformer"
 	  }
 	
-	  setPoints() {
+	  place() {
 	    let b;
-	    super.setPoints(...arguments);
+	    //super.setPoints(...arguments);
 	
 	    let hs = 32;
 	
@@ -26265,7 +26255,9 @@
 	    this.ptCoil[3] = Util.interpolate(this.ptEnds[0], this.ptEnds[2], 1 - ce, -hs);
 	    this.ptCoil[4] = Util.interpolate(this.ptEnds[0], this.ptEnds[2], 1 - ce, -hs * 2);
 	
-	    return [0, 1].map((i) =>
+	    this.setBboxPt(this.ptEnds[0], this.ptEnds[4], 0);
+	    
+	    [0, 1].map((i) =>
 	      (b = -hs * i * 2,
 	      this.ptCore[i] = Util.interpolate(this.ptEnds[0], this.ptEnds[2], cd, b),
 	      this.ptCore[i + 2] = Util.interpolate(this.ptEnds[0], this.ptEnds[2], 1 - cd, b)));
@@ -26387,7 +26379,7 @@
 
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -26453,16 +26445,14 @@
 	
 	    this.setup();
 	
-	    this.setPoints();
+	    this.place();
 	  }
 	
 	  getName() {
 	    return "Light Emitting Diode";
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
-	
+	  place() {
 	    let cr = 12;
 	    this.ledLead1 = Util.interpolate(this.point1, this.point2, 0.5 - (cr / this.dn()));
 	    this.ledLead2 = Util.interpolate(this.point1, this.point2, 0.5 + (cr / this.dn()));
@@ -26517,7 +26507,7 @@
 
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -26744,7 +26734,7 @@
 
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let RailElm = __webpack_require__(18);
@@ -26774,7 +26764,7 @@
 
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let Rectangle = __webpack_require__(3);
@@ -26977,7 +26967,7 @@
 
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports) {
 
 	class SimulationParams {
@@ -27044,7 +27034,7 @@
 
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//###################################################################################################################
@@ -27071,21 +27061,23 @@
 	//
 	//###################################################################################################################
 	
-	let Oscilloscope = __webpack_require__(78);
-	let Logger = __webpack_require__(79);
-	let SimulationParams = __webpack_require__(76);
-	let SimulationFrame = __webpack_require__(80);
-	let CircuitSolver = __webpack_require__(81);
-	let Observer = __webpack_require__(87);
+	let Oscilloscope = __webpack_require__(79);
+	let Logger = __webpack_require__(80);
+	let SimulationParams = __webpack_require__(77);
+	let SimulationFrame = __webpack_require__(81);
+	let CircuitSolver = __webpack_require__(82);
+	let Observer = __webpack_require__(88);
 	let Rectangle = __webpack_require__(3);
 	let Util = __webpack_require__(5);
 	let environment = __webpack_require__(10);
 	
-	fs = __webpack_require__(88);
+	fs = __webpack_require__(89);
 	
 	
 	class Circuit extends Observer {
 	  static initClass() {
+	    this.DEBUG = true;
+	
 	    this.components = [
 	  // Working
 	      "WireElm",
@@ -27198,8 +27190,8 @@
 	    this.notifyObservers(this.ON_SOLDER);
 	
 	    newElement.Circuit = this;
-	    newElement.setPoints();
-	    newElement.recomputeBounds();
+	    // newElement.setPoints(newElement.x1, newElement.y1, newElement.x2, newElement.y2);
+	    //newElement.recomputeBounds();
 	
 	    this.elementList.push(newElement);
 	
@@ -27227,7 +27219,7 @@
 	  }
 	
 	  debugModeEnabled() {
-	    return this.Params.debug
+	    return Circuit.DEBUG || this.Params.debug;
 	  }
 	
 	  toString() {
@@ -27646,7 +27638,7 @@
 
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports) {
 
 	class Oscilloscope {
@@ -27689,7 +27681,7 @@
 
 
 /***/ },
-/* 79 */
+/* 80 */
 /***/ function(module, exports) {
 
 	let errorStack = undefined;
@@ -27718,7 +27710,7 @@
 
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports) {
 
 	class SimulationFrame {
@@ -27754,26 +27746,26 @@
 
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var CapacitorElm, CircuitNode, CircuitNodeLink, CircuitSolver, CurrentElm, GroundElm, InductorElm, MatrixStamper, Pathfinder, RailElm, RowInfo, Setting, SimulationFrame, Util, VoltageElm, WireElm, sprintf;
 	
-	MatrixStamper = __webpack_require__(82);
+	MatrixStamper = __webpack_require__(83);
 	
-	Pathfinder = __webpack_require__(84);
+	Pathfinder = __webpack_require__(85);
 	
-	CircuitNode = __webpack_require__(85);
+	CircuitNode = __webpack_require__(86);
 	
-	CircuitNodeLink = __webpack_require__(86);
+	CircuitNodeLink = __webpack_require__(87);
 	
-	RowInfo = __webpack_require__(83);
+	RowInfo = __webpack_require__(84);
 	
 	Setting = __webpack_require__(2);
 	
 	Util = __webpack_require__(5);
 	
-	SimulationFrame = __webpack_require__(80);
+	SimulationFrame = __webpack_require__(81);
 	
 	GroundElm = __webpack_require__(23);
 	
@@ -28218,7 +28210,6 @@
 	            qp = qq;
 	            elt = this.circuitRowInfo[qp];
 	            if (elt.type !== RowInfo.ROW_NORMAL) {
-	              console.warn("elt.type != RowInfo.ROW_NORMAL", elt);
 	              continue;
 	            }
 	          }
@@ -28389,9 +28380,6 @@
 	          largest = x;
 	        }
 	        ++j;
-	      }
-	      if (largest === 0) {
-	        console.error("Singular matrix (" + i + ", " + j + ") -> " + largest);
 	      }
 	      this.scaleFactors[i] = 1.0 / largest;
 	      ++i;
@@ -28580,10 +28568,10 @@
 
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let RowInfo = __webpack_require__(83);
+	let RowInfo = __webpack_require__(84);
 	let Util = __webpack_require__(5);
 	
 	class MatrixStamper {
@@ -28751,7 +28739,7 @@
 
 
 /***/ },
-/* 83 */
+/* 84 */
 /***/ function(module, exports) {
 
 	class RowInfo {
@@ -28808,7 +28796,7 @@
 
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let VoltageElm = __webpack_require__(19);
@@ -28929,7 +28917,7 @@
 
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports) {
 
 	class CircuitNode {
@@ -28967,7 +28955,7 @@
 
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports) {
 
 	class CircuitNodeLink {
@@ -28992,7 +28980,7 @@
 
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports) {
 
 	class Observer {
@@ -29029,13 +29017,13 @@
 
 
 /***/ },
-/* 88 */
+/* 89 */
 /***/ function(module, exports) {
 
 
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports) {
 
 	class Hint {
@@ -29135,7 +29123,7 @@
 
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -29182,29 +29170,29 @@
 	let ScrElm = __webpack_require__(54);
 	let TriodeElm = __webpack_require__(55);
 	
-	let DecadeElm = __webpack_require__(56);
-	let LatchElm = __webpack_require__(58);
-	let TimerElm = __webpack_require__(59);
-	let JKFlipFlopElm = __webpack_require__(60);
-	let DFlipFlopElm = __webpack_require__(61);
-	let CounterElm = __webpack_require__(62);
-	let DacElm = __webpack_require__(63);
-	let AdcElm = __webpack_require__(64);
-	let VcoElm = __webpack_require__(65);
-	let PhaseCompElm = __webpack_require__(66);
-	let SevenSegElm = __webpack_require__(67);
-	let CC2Elm = __webpack_require__(68);
+	let DecadeElm = __webpack_require__(57);
+	let LatchElm = __webpack_require__(59);
+	let TimerElm = __webpack_require__(60);
+	let JKFlipFlopElm = __webpack_require__(61);
+	let DFlipFlopElm = __webpack_require__(62);
+	let CounterElm = __webpack_require__(63);
+	let DacElm = __webpack_require__(64);
+	let AdcElm = __webpack_require__(65);
+	let VcoElm = __webpack_require__(66);
+	let PhaseCompElm = __webpack_require__(67);
+	let SevenSegElm = __webpack_require__(68);
+	let CC2Elm = __webpack_require__(69);
 	
-	let TransLineElm = __webpack_require__(69);
+	let TransLineElm = __webpack_require__(70);
 	
-	let TransformerElm = __webpack_require__(70);
-	let TappedTransformerElm = __webpack_require__(71);
+	let TransformerElm = __webpack_require__(71);
+	let TappedTransformerElm = __webpack_require__(72);
 	
-	let LedElm = __webpack_require__(72);
-	let PotElm = __webpack_require__(73);
-	let ClockElm = __webpack_require__(74);
+	let LedElm = __webpack_require__(73);
+	let PotElm = __webpack_require__(74);
+	let ClockElm = __webpack_require__(75);
 	
-	let Scope = __webpack_require__(75);
+	let Scope = __webpack_require__(76);
 	
 	//#
 	// ElementMap
@@ -29400,12 +29388,12 @@
 
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let Rectangle = __webpack_require__(3);
-	let CircuitCanvas = __webpack_require__(92);
-	let Observer = __webpack_require__(87);
+	let CircuitCanvas = __webpack_require__(93);
+	let Observer = __webpack_require__(88);
 	let Util = __webpack_require__(5);
 	
 	let AntennaElm = __webpack_require__(17);
@@ -29450,29 +29438,29 @@
 	let ScrElm = __webpack_require__(54);
 	let TriodeElm = __webpack_require__(55);
 	
-	let DecadeElm = __webpack_require__(56);
-	let LatchElm = __webpack_require__(58);
-	let TimerElm = __webpack_require__(59);
-	let JkFlipFlopElm = __webpack_require__(60);
-	let DFlipFlopElm = __webpack_require__(61);
-	let CounterElm = __webpack_require__(62);
-	let DacElm = __webpack_require__(63);
-	let AdcElm = __webpack_require__(64);
-	let VcoElm = __webpack_require__(65);
-	let PhaseCompElm = __webpack_require__(66);
-	let SevenSegElm = __webpack_require__(67);
-	let CC2Elm = __webpack_require__(68);
+	let DecadeElm = __webpack_require__(57);
+	let LatchElm = __webpack_require__(59);
+	let TimerElm = __webpack_require__(60);
+	let JkFlipFlopElm = __webpack_require__(61);
+	let DFlipFlopElm = __webpack_require__(62);
+	let CounterElm = __webpack_require__(63);
+	let DacElm = __webpack_require__(64);
+	let AdcElm = __webpack_require__(65);
+	let VcoElm = __webpack_require__(66);
+	let PhaseCompElm = __webpack_require__(67);
+	let SevenSegElm = __webpack_require__(68);
+	let CC2Elm = __webpack_require__(69);
 	
-	let TransLineElm = __webpack_require__(69);
+	let TransLineElm = __webpack_require__(70);
 	
-	let TransformerElm = __webpack_require__(70);
-	let TappedTransformerElm = __webpack_require__(71);
+	let TransformerElm = __webpack_require__(71);
+	let TappedTransformerElm = __webpack_require__(72);
 	
-	let LedElm = __webpack_require__(72);
-	let PotElm = __webpack_require__(73);
-	let ClockElm = __webpack_require__(74);
+	let LedElm = __webpack_require__(73);
+	let PotElm = __webpack_require__(74);
+	let ClockElm = __webpack_require__(75);
 	
-	let Scope = __webpack_require__(75);
+	let Scope = __webpack_require__(76);
 	
 	class SelectionMarquee extends Rectangle {
 	  constructor(x1, y1) {
@@ -29793,10 +29781,10 @@
 
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let Observer = __webpack_require__(87);
+	let Observer = __webpack_require__(88);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
 	let Settings = __webpack_require__(2);
@@ -29892,11 +29880,6 @@
 	      if (this.performanceMeter) {
 	        this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
 	      }
-	
-	      if (this.Circuit && this.Circuit.debugModeEnabled()) {
-	        this.drawDebugInfo();
-	        this.drawDebugOverlay();
-	      }
 	    }
 	
 	    if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
@@ -29948,6 +29931,11 @@
 	    // }
 	
 	    if (this.context) {
+	      if (this.Circuit && this.Circuit.debugModeEnabled()) {
+	        //this.drawDebugInfo();
+	        this.drawDebugOverlay();
+	      }
+	
 	      this.context.restore()
 	    }
 	  }
@@ -30074,10 +30062,11 @@
 	        this.drawComponent(component);
 	
 	      if (this.Circuit && this.Circuit.debugModeEnabled()) {
-	        for (let nodeIdx =0; this.Circuit.getNode(nodeIdx); ++nodeIdx) {
-	          voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx));
+	        for (let nodeIdx = 0; nodeIdx < this.Circuit.numNodes(); ++nodeIdx) {
+	          let voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx));
+	          let node = this.Circuit.getNode(nodeIdx);
 	
-	          this.context.fillText(`${nodeIdx}:${voltage}`, x + 10, y - 10, "#FF8C00");
+	          this.context.fillText(`${nodeIdx}:${voltage}`, node.x + 10, node.y - 10, "#FF8C00");
 	        }
 	      }
 	    }
@@ -30160,13 +30149,13 @@
 	    for (let node of this.Circuit.getNodes()) {
 	      this.context.beginPath();
 	      this.context.arc(node.x, node.y, 5, 0, 2 * Math.PI, true);
-	      this.context.strokeStyle = "#F0F";
+	      this.context.strokeStyle = "#003aff";
 	      this.context.stroke();
 	      this.context.fillText(nodeIdx, node.x + 5, node.y + 20);
 	
 	      let yOffset = 30;
 	      for (let link of node.links) {
-	        this.context.fillText(link.elm.getName(), node.x + 5, node.y + yOffset);
+	        //this.context.fillText(link.elm.getName(), node.x + 5, node.y + yOffset);
 	
 	        yOffset += 10;
 	      }
@@ -30439,10 +30428,10 @@
 
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let ScopeCanvas = __webpack_require__(94);
+	let ScopeCanvas = __webpack_require__(95);
 	let Util = __webpack_require__(5);
 	
 	class RickshawScopeCanvas extends ScopeCanvas {
@@ -30565,7 +30554,7 @@
 
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports) {
 
 	class ScopeCanvas {

@@ -44,13 +44,13 @@ class TransformerElm extends CircuitComponent {
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
 
-    this.width = Math.max(32, Math.abs(yb - ya));
-
+    // this.drawWidth = Math.max(32, Math.abs(yb - ya));
+    this.drawWidth = Math.max(32, this.dn());
     this.curcount = 0;
-
     this.current = [this.current0, this.current1];
-
     this.noDiagonal = true;
+
+    this.place()
   }
 
   getName() {
@@ -61,10 +61,10 @@ class TransformerElm extends CircuitComponent {
     return (this.flags & TransformerElm.FLAG_BACK_EULER) === 0;
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
+  place() {
+    // super.setPoints(...arguments);
 
-    this.point2.y = this.point1.y;
+    //this.point2.y = this.point1.y;
 
     this.ptEnds = Util.newPointArray(4);
     this.ptCoil = Util.newPointArray(4);
@@ -74,49 +74,31 @@ class TransformerElm extends CircuitComponent {
     this.ptEnds[1] = this.point2;
 
 //    console.log("SP: ", @point1, @point2, 0, -@dsign(), @width)
-    this.ptEnds[2] = Util.interpolate(this.point1, this.point2, 0, -this.dsign() * this.width);
-    this.ptEnds[3] = Util.interpolate(this.point1, this.point2, 1, -this.dsign() * this.width);
+    let hs = -this.dsign() * this.drawWidth;
+    hs = 32;
+    
+    this.ptEnds[2] = Util.interpolate(this.point1, this.point2, 0, -hs * 2);
+    this.ptEnds[3] = Util.interpolate(this.point1, this.point2, 1, -hs * 2);
 
     let ce = 0.5 - (12 / this.dn());
     let cd = 0.5 - (2 / this.dn());
 
     let i = 0;
-    return (() => {
-      let result = [];
-      while (i < 4) {
-        this.ptCoil[i]     = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], ce);
-        this.ptCoil[i + 1] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], 1 - ce);
-        this.ptCore[i]     = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], cd);
-        this.ptCore[i + 1] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], 1 - cd);
+    while (i < 4) {
+      this.ptCoil[i]     = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], ce);
+      this.ptCoil[i + 1] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], 1 - ce);
+      this.ptCore[i]     = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], cd);
+      this.ptCore[i + 1] = Util.interpolate(this.ptEnds[i], this.ptEnds[i + 1], 1 - cd);
 
-        result.push(i += 2);
-      }
-      return result;
-    })();
+      i+=2;
+    }
+
+    this.setBboxPt(this.point1, this.ptEnds[3]);
   }
 
   getPost(n) {
     return this.ptEnds[n];
   }
-
-
-  //CURRENT: 0.0 0.0 0.0 4.076513432371698E-11
-  //CURRENT: 3.8782799757450996E-4 0.0 0.0 4.076513432371698E-11
-  //CURRENT: 3.8782799757450996E-4 -4.5613036132278495 0.0 4.076513432371698E-11
-  //CURRENT: 3.8782799757450996E-4 -4.5613036132278495 0.0 4.076513432371698E-11
-
-  //CALC CURRENT: 0,0,0,4.967879427950679
-  //CALC CURRENT: 0.00038782799757450996,0,0,4.967879427950679
-  //CALC CURRENT: 0.00038782799757450996,0.4065758146820641,0,4.967879427950679
-  //CALC CURRENT: 0.00038782799757450996,0.4065758146820641,0,4.967879427950679
-
-//  getProperties: ->
-//    currentProperties = super()
-//    currentProperties['current'] = 0
-//    currentProperties
-
-//  getCurrent: ->
-//    0
 
   getPostCount() {
     return 4;
@@ -132,7 +114,7 @@ class TransformerElm extends CircuitComponent {
     this.volts[3] = 0;
 
     this.curcount[0] = 0;
-    return this.curcount[1] = 0;
+    this.curcount[1] = 0;
   }
 
   draw(renderContext) {
@@ -216,7 +198,7 @@ class TransformerElm extends CircuitComponent {
     stamper.stampRightSide(this.nodes[0]);
     stamper.stampRightSide(this.nodes[1]);
     stamper.stampRightSide(this.nodes[2]);
-    return stamper.stampRightSide(this.nodes[3]);
+    stamper.stampRightSide(this.nodes[3]);
   }
 
   calculateCurrent() {
@@ -225,7 +207,7 @@ class TransformerElm extends CircuitComponent {
     let voltdiff1 = this.volts[0] - this.volts[2];
     let voltdiff2 = this.volts[1] - this.volts[3];
     this.current[0] = (voltdiff1 * this.a1) + (voltdiff2 * this.a2) + this.curSourceValue1;
-    return this.current[1] = (voltdiff1 * this.a3) + (voltdiff2 * this.a4) + this.curSourceValue2;
+    this.current[1] = (voltdiff1 * this.a3) + (voltdiff2 * this.a4) + this.curSourceValue2;
   }
 
 //  setNode: (j, k) ->
@@ -238,7 +220,7 @@ class TransformerElm extends CircuitComponent {
 //    console.log("DO STEP", @curSourceValue1, @curSourceValue2, @isTrapezoidal())
 //    console.log(@nodes)
     stamper.stampCurrentSource(this.nodes[0], this.nodes[2], this.curSourceValue1);
-    return stamper.stampCurrentSource(this.nodes[1], this.nodes[3], this.curSourceValue2);
+    stamper.stampCurrentSource(this.nodes[1], this.nodes[3], this.curSourceValue2);
   }
 
 //    console.log(@Circuit.Solver.circuitRightSide)

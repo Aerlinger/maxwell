@@ -14,7 +14,7 @@ describe.only "CircuitUI", ->
       @canvas = new Canvas(600, 500)
       outpath = "test/fixtures/circuitRenders/" + basename + ".png"
 
-      if basename != "__index__"
+      if basename != "__index__" and basename != "all-components" and basename != "index"
         try
           jsonData = JSON.parse(fs.readFileSync(circuit_name))
 

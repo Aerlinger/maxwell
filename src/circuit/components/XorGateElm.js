@@ -7,9 +7,9 @@ class XorGateElm extends OrGateElm {
     super(xa, ya, xb, yb, params, f);
   }
 
-  setPoints() {
+  place() {
     let a, b;
-    super.setPoints(...arguments);
+    super.place();
 
     this.linePoints = Util.newPointArray(5);
 

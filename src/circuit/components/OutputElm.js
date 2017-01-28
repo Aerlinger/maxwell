@@ -14,6 +14,8 @@ class OutputElm extends CircuitComponent {
   constructor(xa, ya, xb, yb, params, f) {
     // st not used for OutputElm
     super(xa, ya, xb, yb, params, f);
+
+    this.place()
   }
 
   getPostCount() {
@@ -24,22 +26,17 @@ class OutputElm extends CircuitComponent {
     return "Output"
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
-    this.lead1 = new Point(0, 0);
+  place() {
+    this.s = ((this.flags & OutputElm.FLAG_VALUE) !== 0 ? Util.getUnitText(this.volts[0], "V") : "out");
+    this.lead1 = Util.interpolate(this.point1, this.point2, 1 - ((((3 * this.s.length) / 2) + 8) / this.dn()));
 
-    return this.setBboxPt(this.lead1, this.point1, 8);
+    this.setBboxPt(this.lead1, this.point1, 8);
   }
 
   draw(renderContext) {
-    let color = "#FFF";
-    let s = ((this.flags & OutputElm.FLAG_VALUE) !== 0 ? Util.getUnitText(this.volts[0], "V") : "out");
+    renderContext.drawValue(-13, 35, this, this.s, 1.5*Settings.TEXT_SIZE);
 
-    this.lead1 = Util.interpolate(this.point1, this.point2, 1 - ((((3 * s.length) / 2) + 8) / this.dn()));
-
-    renderContext.drawValue(-13, 35, this, s, 1.5*Settings.TEXT_SIZE);
-
-    color = renderContext.getVoltageColor(this.volts[0]);
+    let color = renderContext.getVoltageColor(this.volts[0]);
 
     renderContext.drawLinePt(this.point1, this.lead1, color);
     renderContext.fillCircle(this.lead1.x, this.lead1.y, 2*Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
@@ -49,7 +46,6 @@ class OutputElm extends CircuitComponent {
       return super.debugDraw(renderContext);
     }
   }
-
 
   getVoltageDiff() {
     return this.volts[0];

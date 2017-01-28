@@ -94,11 +94,6 @@ class CircuitCanvas extends Observer {
       if (this.performanceMeter) {
         this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
       }
-
-      if (this.Circuit && this.Circuit.debugModeEnabled()) {
-        this.drawDebugInfo();
-        this.drawDebugOverlay();
-      }
     }
 
     if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
@@ -150,6 +145,11 @@ class CircuitCanvas extends Observer {
     // }
 
     if (this.context) {
+      if (this.Circuit && this.Circuit.debugModeEnabled()) {
+        //this.drawDebugInfo();
+        this.drawDebugOverlay();
+      }
+
       this.context.restore()
     }
   }
@@ -276,10 +276,11 @@ class CircuitCanvas extends Observer {
         this.drawComponent(component);
 
       if (this.Circuit && this.Circuit.debugModeEnabled()) {
-        for (let nodeIdx =0; this.Circuit.getNode(nodeIdx); ++nodeIdx) {
-          voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx));
+        for (let nodeIdx = 0; nodeIdx < this.Circuit.numNodes(); ++nodeIdx) {
+          let voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx));
+          let node = this.Circuit.getNode(nodeIdx);
 
-          this.context.fillText(`${nodeIdx}:${voltage}`, x + 10, y - 10, "#FF8C00");
+          this.context.fillText(`${nodeIdx}:${voltage}`, node.x + 10, node.y - 10, "#FF8C00");
         }
       }
     }
@@ -362,13 +363,13 @@ class CircuitCanvas extends Observer {
     for (let node of this.Circuit.getNodes()) {
       this.context.beginPath();
       this.context.arc(node.x, node.y, 5, 0, 2 * Math.PI, true);
-      this.context.strokeStyle = "#F0F";
+      this.context.strokeStyle = "#003aff";
       this.context.stroke();
       this.context.fillText(nodeIdx, node.x + 5, node.y + 20);
 
       let yOffset = 30;
       for (let link of node.links) {
-        this.context.fillText(link.elm.getName(), node.x + 5, node.y + yOffset);
+        //this.context.fillText(link.elm.getName(), node.x + 5, node.y + yOffset);
 
         yOffset += 10;
       }

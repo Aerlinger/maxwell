@@ -39,7 +39,9 @@ class TextElm extends CircuitComponent {
     this.lines.push(this.text);
     // this.size = ;
 
-    this.setPoints(xa, ya, xb, yb)
+    this.place();
+
+    //this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
   }
 
   stamp() {}
@@ -59,16 +61,24 @@ class TextElm extends CircuitComponent {
     return "Text Label"
   }
 
+  place() {
+    //super.setPoints(x1, y1, x2 ,y2);
+
+    this.point2 =  new Point(this.point1.x + 5 * this.text.length, this.point1.y);
+
+    this.setBbox(this.point1.x, this.point1.y - this.size, this.point1.x + 5 * this.text.length, this.point1.y + this.size);
+  }
+
   draw(renderContext) {
     let color = Settings.LABEL_COLOR;
-    this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
+    //this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
 
     let mt = renderContext.fillText(this.text, this.x1(), this.y1(), color, (2/3) * this.size);
 
     this.point2.x = this.boundingBox.x1 + this.boundingBox.width;
     this.point2.y = this.boundingBox.y1 + this.boundingBox.height;
 
-    this.setBbox(this.x1(), this.y1() - this.size + 1, this.x1() + mt.width, this.y1());
+    //this.setBbox(this.x1(), this.y1() - this.size + 1, this.x1() + mt.width, this.y1());
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
       return super.debugDraw(renderContext);

@@ -6,7 +6,8 @@
     "currentSpeed": 56,
     "voltageRange": 2,
     "powerRange": 50,
-    "flags": 1
+    "flags": 1,
+    "debug": true
   },
   {
     "name": "RailElm",

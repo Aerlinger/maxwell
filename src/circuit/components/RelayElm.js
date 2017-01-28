@@ -61,7 +61,7 @@ class RelayElm extends CircuitComponent {
     this.curSourceValue = 0;
 
     this.setupPoles();
-    this.setPoints();
+    this.place();
 
     this.noDiagonal = true;
   }
@@ -81,9 +81,9 @@ class RelayElm extends CircuitComponent {
     return "Relay"
   }
 
-  setPoints() {
+  place() {
     let i, j;
-    super.setPoints(...arguments);
+    //super.setPoints(...arguments);
     this.setupPoles();
     this.allocNodes();
     this.openhs = -this.dsign() * 16;
@@ -237,7 +237,7 @@ class RelayElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-    this.setPoints();
+    //this.setPoints();
 
     let i;
     for (i = 0; i < 2; i++) {

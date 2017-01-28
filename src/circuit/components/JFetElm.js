@@ -12,6 +12,8 @@ class JfetElm extends MosfetElm {
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
     this.noDiagonal = true;
+
+    this.place()
   }
 
   getDefaultThreshold() {
@@ -26,8 +28,8 @@ class JfetElm extends MosfetElm {
     return "JFet"
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
+  place() {
+    super.place();
 
     let hs2 = this.hs * this.dsign();
 
@@ -53,9 +55,8 @@ class JfetElm extends MosfetElm {
       this.arrowPoly = Util.calcArrow(this.point1, this.gatePt, 8, 3);
     }
 
-    return this.setBboxPt(this.point1, this.point2, this.hs);
+    this.setBboxPt(this.point1, this.point2, this.hs);
   }
-
 
   draw(renderContext) {
     if (this.Circuit && this.Circuit.debugModeEnabled()) {

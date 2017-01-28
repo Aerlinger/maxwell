@@ -40,7 +40,7 @@ class GateElm extends CircuitComponent {
     this.noDiagonal = true;
     this.linePoints = null;
 
-    this.setPoints()
+    this.place()
   }
 
   isInverting() {
@@ -59,8 +59,8 @@ class GateElm extends CircuitComponent {
     }
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
+  place() {
+    //super.setPoints(...arguments);
 
 //    if @dn() > 150
 //      @setSize(2)
@@ -85,7 +85,7 @@ class GateElm extends CircuitComponent {
 
     let i0 = -Math.floor(this.inputCount / 2);
 
-    for (let i = 0, end = this.inputCount, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    for (let i = 0; i<this.inputCount; ++i) {
       if ((i0 === 0) && ((this.inputCount & 1) === 0)) {
         i0 += 1;
       }
@@ -103,7 +103,7 @@ class GateElm extends CircuitComponent {
     }
 
     this.hs2 = this.gwidth * (Math.floor(this.inputCount / 2) + 1);
-    this.setBboxPt(this.point1, this.point2, this.hs2);
+    this.setBboxPt(this.lead1, this.lead2, 2 * this.hs2);
   }
 
 
@@ -137,7 +137,7 @@ class GateElm extends CircuitComponent {
       renderContext.drawLinePt(this.inPosts[i], this.inGates[i], renderContext.getVoltageColor(this.volts[i]));
     }
 
-    this.setBboxPt(this.point1, this.point2, this.hs2)
+    //this.setBboxPt(this.point1, this.point2, this.hs2)
 
     renderContext.drawLinePt(this.lead2, this.point2, renderContext.getVoltageColor(this.volts[this.inputCount]));
 

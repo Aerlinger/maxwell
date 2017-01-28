@@ -40,6 +40,7 @@ class CapacitorElm extends CircuitComponent {
     this.curSourceValue = 0;
 
     // console.log("ca", xa);
+    this.place()
   }
 
   isTrapezoidal() {
@@ -63,10 +64,10 @@ class CapacitorElm extends CircuitComponent {
     return this.voltdiff = 1e-3;
   }
 
-  setPoints() {
+  place() {
     // console.log("capelm", arguments);
 //    super(arguments...)
-    super.setPoints(...arguments);
+    //super.setPoints(...arguments);
 
     let f = ((this.dn() / 2) - 4) / this.dn();
 

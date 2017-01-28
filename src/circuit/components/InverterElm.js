@@ -18,16 +18,14 @@ class InverterElm extends CircuitComponent {
 
     this.noDiagonal = true;
 
-    this.setPoints()
+    this.place()
   }
 
   getName() {
     return "Inverter"
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
-
+  place() {
     this.hs = 16;
     let ww = 16;
 
@@ -48,11 +46,11 @@ class InverterElm extends CircuitComponent {
 
     this.gatePoly = Util.createPolygonFromArray(triPoints);
 
-    this.setBboxPt(this.point1, this.point2, this.hs);
+    this.setBboxPt(this.lead1, this.lead2, 2*this.hs);
   }
 
   draw(renderContext) {
-    this.setBboxPt(this.point1, this.point2, this.hs);
+    //this.setBboxPt(this.point1, this.point2, this.hs);
 
     renderContext.drawLeads(this);
 

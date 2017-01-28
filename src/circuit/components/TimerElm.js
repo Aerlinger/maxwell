@@ -15,6 +15,7 @@ class TimerElm extends ChipElm {
     this.N_RST = 6;
   }
 
+  /*
   static get Fields() {
     return {
       "volts": {
@@ -28,6 +29,7 @@ class TimerElm extends ChipElm {
       }
     }
   }
+  */
 
   constructor(xa, xb, ya, yb, params = {volts: [0.0], bits: [0]}, f = "0") {
     super(xa, xb, ya, yb, params, f);
@@ -58,7 +60,7 @@ class TimerElm extends ChipElm {
   }
 
   draw(renderContext) {
-    this.setPoints();
+    //this.setPoints();
     this.drawChip(renderContext);
 
     let textSize = this.csize == 1 ? 8 : 11;

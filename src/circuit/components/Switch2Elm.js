@@ -34,15 +34,18 @@ class Switch2Elm extends SwitchElm {
 
     this.openhs = 16;
     this.noDiagonal = true;
+
+    this.place()
   }
 
   getName() {
     return "Two-way switch"
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
-//    @calcLeads(32);
+  place() {
+    super.place();
+    //super.setPoints(...arguments);
+    // @calcLeads(32);
 
     this.swposts = Util.newPointArray(2);
     this.swpoles = Util.newPointArray(3);
@@ -54,7 +57,7 @@ class Switch2Elm extends SwitchElm {
 
     this.posCount = this.hasCenterOff() ? 3 : 2;
 
-    this.setBboxPt(this.point1, this.point2, this.openhs);
+    this.setBboxPt(this.point1, this.point2, 2*this.openhs);
   }
 
   draw(renderContext) {
@@ -73,7 +76,7 @@ class Switch2Elm extends SwitchElm {
       this.posCount = 2;
     }
 
-    this.setBboxPt(this.point1, this.point2, this.openhs);
+    //this.setBboxPt(this.point1, this.point2, this.openhs);
 
     // draw first lead
     let color = renderContext.getVoltageColor(this.volts[0]);

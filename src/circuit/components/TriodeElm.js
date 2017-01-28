@@ -1,5 +1,6 @@
 let CircuitComponent = require("../circuitComponent.js");
 let Util = require('../../util/util.js');
+let Settings = require("../../settings/settings.js");
 
 class TriodeElm extends CircuitComponent {
   static get Fields() {
@@ -23,7 +24,7 @@ class TriodeElm extends CircuitComponent {
     this.gridCurrentR = 6000;
 
     this.setup();
-    this.setPoints();
+    this.place();
   }
 
   setup() {
@@ -58,11 +59,11 @@ class TriodeElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-    this.setBbox(this.point1, this.plate[0], 16);
+    //this.setBbox(this.point1, this.plate[0], 16);
 
-    renderContext.fillCircle(this.point2.x, this.point2.y, this.circler);
+    renderContext.fillCircle(this.point2.x, this.point2.y, this.circler, Settings.LINE_WIDTH, Settings.FG_COLOR, Settings.STROKE_COLOR);
 
-    this.setBbox(this.cath[0].x, this.cath[1].y, this.point2.x + this.circler, this.point2.y + this.circler);
+    //this.setBbox(this.cath[0].x, this.cath[1].y, this.point2.x + this.circler, this.point2.y + this.circler);
 
     //setPowerColor(g, true);
     // draw plate
@@ -117,9 +118,7 @@ class TriodeElm extends CircuitComponent {
     return (this.volts[0] - this.volts[2]) * this.current;
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
-
+  place() {
     this.plate = new Array(4);
     this.grid = new Array(8);
     this.cath = new Array(4);
@@ -135,7 +134,8 @@ class TriodeElm extends CircuitComponent {
     [this.plate[2], this.plate[3]] = Util.interpolateSymmetrical(this.point2, this.plate[1], 1, platew);
 
     let circler = 24;
-    this.grid[1] = Util.interpolate(this.point1, this.point2, (this.dn() - circler) / this.dn(), 0);
+    this.circler = circler;
+    this.grid[1] = Util.interpolate(this.point1, this.point2, (this.dn() - this.circler) / this.dn(), 0);
 
     for (let i = 0; i < 3; i++) {
       this.grid[2 + (i * 2)] = Util.interpolate(this.grid[1], this.point2, ((i * 3) + 1) / 4.5, 0);
@@ -149,7 +149,17 @@ class TriodeElm extends CircuitComponent {
 
     [this.cath[1], this.cath[2]] = Util.interpolateSymmetrical(this.point2, this.plate[1], -1, cathw);
     this.cath[3] = Util.interpolate(this.point2, this.plate[1], -1.2, -cathw);
-    return this.cath[0] = Util.interpolate(this.point2, this.plate[1], Math.floor(-farw / nearw), cathw);
+    this.cath[0] = Util.interpolate(this.point2, this.plate[1], Math.floor(-farw / nearw), cathw);
+
+    let yMin = this.plate[0].y;
+    let yMax = this.cath[0].y;
+    let xMin = this.grid[0].x;
+    let xMax = this.cath[0].x;
+    // this.setBbox(xMin, xMax, yMin, yMax);
+
+    // this.setBbox(this.point1.x, this.plate[0].y, this.point2.x + this.circler, this.point2.y + this.circler);
+    this.setBboxPt(this.point1, this.grid[this.grid.length - 1], 2*this.circler);
+    //this.setBbox(352, 232, 384, 248)
   }
 
   stamp(stamper) {

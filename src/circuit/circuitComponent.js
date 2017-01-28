@@ -174,18 +174,25 @@ class CircuitComponent {
 
   dsign() {
     if (this.dy() === 0)
-      return Math.sign(this.dx())
+      return Math.sign(this.dx());
     else
-      return Math.sign(this.dy())
+      return Math.sign(this.dy());
   }
 
   setPoints(x1, y1, x2, y2) {
-    if (!this.point1) {
+    /*
+    if (!x1 || !y1)
+      console.trace("No x1, y1 location for ", this.getName());
+
+    if (!x2 || !y2)
+      console.trace("No x2, y2 location for ", this.getName());
+      */
+
+    if (!this.point1)
       this.point1 = new Point(x1, y1);
-    }
-    if (!this.point2) {
+
+    if (!this.point2)
       this.point2 = new Point(x2, y2);
-    }
 
     this.recomputeBounds();
   }
@@ -350,13 +357,17 @@ class CircuitComponent {
     this.point2.x += deltaX;
     this.point2.y += deltaY;
 
-    this.recomputeBounds();
+    //this.recomputeBounds();
 
     if (this.getParentCircuit()) {
       this.getParentCircuit().invalidate();
     }
 
-    return this.setPoints();
+    this.setPoints(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
+
+    if (this.place) {
+      this.place()
+    }
   }
 
   moveTo(x, y) {
@@ -464,7 +475,15 @@ class CircuitComponent {
   }
 
   recomputeBounds() {
-    return this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
+    let center = this.getCenter();
+
+    let x = center.x;
+    let y = center.y;
+
+    let width = Math.max(this.width(), 5);
+    let height = Math.max(this.height(), 5);
+
+    this.setBbox(x-width/2, y-height/2, x + width/2, y+height/2);
   }
 
   getBoundingBox() {
@@ -472,33 +491,32 @@ class CircuitComponent {
   }
 
   isPlaced() {
-    return this.point1 && this.point2 && this.point1.x && this.point1.y && this.point2.x && this.point2.y
+    return this.point1 && this.point1.x && this.point1.y
   }
 
   setBbox(x1, y1, x2, y2) {
-    if (!(Util.isValue(x1) && Util.isValue(y1) && Util.isValue(x2) && Util.isValue(y2) && Util.isValue(this.dpx1()) && Util.isValue(this.dpy1()))) {
-      // console.trace("Invalid BBox value. isPlaced: ", this.isPlaced(), ":", x1, y1, x2, y2, this.dpx1(), this.dpy1()
-      // throw new Error(["Invalid BBox value. isPlaced: ", this.isPlaced(), ":", x1, y1, x2, y2, this.dpx1(), this.dpy1()].join(" "));
-    }
+    if (!(Util.isValue(x1) && Util.isValue(y1) && Util.isValue(x2) && Util.isValue(y2) && Util.isValue(this.dpx1()) && Util.isValue(this.dpy1())))
+      console.trace(`Invalid BBox value for ${this.constructor.name} isPlaced: ${this.isPlaced()} [${this.x1()} ${this.y1()} ${this.x2()} ${this.y2()}] -> bbox(${x1}, ${y1}, ${x2}, ${y2})`);
 
     let x = Math.min(x1, x2);
     let y = Math.min(y1, y2);
     let width = Math.max(Math.abs(x2 - x1), 3);
     let height = Math.max(Math.abs(y2 - y1), 3);
 
-    let horizontalMargin = Math.floor(Math.abs(this.dpx1())) || 0;
-    let verticalMargin = Math.floor(Math.abs(this.dpy1())) || 0;
-
-    // console.log(x1, y1, x2, y2, horizontalMargin, verticalMargin);
-
-    this.boundingBox = new Rectangle(x - horizontalMargin, y - verticalMargin, width + 2 * horizontalMargin, height + 2 * verticalMargin);
+    this.boundingBox = new Rectangle(x, y, width, height);
   }
 
-  setBboxPt(p1, p2, width) {
-    let deltaX = (this.dpx1() * width);
-    let deltaY = (this.dpy1() * width);
+  setBboxPt(p1, p2, width = 1) {
+    //let width = Math.max(Math.abs(x2 - x1), 3);
+    //let height = Math.max(Math.abs(y2 - y1), 3);
 
-    return this.setBbox(p1.x - deltaX, p1.y - deltaY, p2.x + deltaX, p2.y + deltaY);
+    let deltaX = (this.dy()/this.dn() * width);
+    let deltaY = (this.dx()/this.dn() * width);
+
+    //let deltaX = 0;
+    //let deltaY = 0;
+
+    this.setBbox(p1.x - deltaX/2, p1.y - deltaY/2, p2.x + deltaX/2, p2.y + deltaY/2);
   }
 
 // Extended by subclasses
@@ -615,7 +633,7 @@ class CircuitComponent {
     let post;
     let color = Util.getColorForId(this.component_id);
 
-    renderContext.drawRect(this.boundingBox.x - 2, this.boundingBox.y - 2, this.boundingBox.width + 2, this.boundingBox.height + 2, 0.5, "#F00");
+    renderContext.drawRect(this.boundingBox.x, this.boundingBox.y, this.boundingBox.width, this.boundingBox.height, 0, color);
 
     // renderContext.drawValue 10, -15, this, @constructor.name
     // renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
@@ -864,7 +882,13 @@ class CircuitComponent {
 
     let paramValue = this.params[fieldname];
 
-    return Util.getUnitText(paramValue, symbol, decimalPoints);
+    //console.log(fieldname, paramValue);
+
+    if (typeof paramValue == 'number') {
+      return Util.getUnitText(paramValue, symbol, decimalPoints);
+    } else {
+      return paramValue;
+    }
   };
 }
 

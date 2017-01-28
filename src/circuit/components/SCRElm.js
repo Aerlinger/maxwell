@@ -66,11 +66,10 @@ class ScrElm extends CircuitComponent {
 
     this.setup();
     //this.setPoints();
+    this.place()
   }
 
-  setPoints(x1, y1, x2, y2) {
-    super.setPoints(...arguments);
-
+  place() {
     let dir = 0;
     if (Math.abs(this.dx()) > Math.abs(this.dy())) {
       dir = -Math.sign(this.dx()) * Math.sign(this.dy());

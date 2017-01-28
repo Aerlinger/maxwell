@@ -4,6 +4,19 @@ describe "DFlipFlow Component", ->
 
   it "is valid", ->
     expect(@dff.getPostCount()).to.eql(4)
-    
+
+  it "has Fields", ->
+    expect(DFlipFlopElm.Fields).to.eql({
+      volts: {
+        name: "Volts",
+        dataType: "Array"
+      },
+      bits: {
+        name: "Bits",
+        dataType: "Array"
+      }
+    })
+
+
   it "can be initialized without voltage", ->
     

@@ -35,6 +35,8 @@ class InductorElm extends CircuitComponent {
     this.nodes = new Array(2);
     this.compResistance = 0;  //1e-3
     this.curSourceValue = 0;
+
+    this.place()
   }
 
   reset() {
@@ -44,9 +46,9 @@ class InductorElm extends CircuitComponent {
     return this.curcount = 0;
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
-    return this.calcLeads(32);
+  place() {
+    //super.setPoints(...arguments);
+    this.calcLeads(32);
   }
 
   stamp(stamper) {

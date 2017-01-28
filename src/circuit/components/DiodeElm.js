@@ -43,6 +43,8 @@ class DiodeElm extends CircuitComponent {
     this.crit = 0;
     this.leakage = 1e-14;
 
+    this.setBboxPt(this.point1, this.point2, this.hs);
+
     this.setup();
   }
 
@@ -96,7 +98,7 @@ class DiodeElm extends CircuitComponent {
   }
 
   drawDiode(renderContext) {
-    this.setBboxPt(this.point1, this.point2, this.hs);
+
     let v1 = this.volts[0];
     let v2 = this.volts[1];
 

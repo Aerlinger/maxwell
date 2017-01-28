@@ -438,7 +438,7 @@ class CircuitSolver
 
             if elt.type != RowInfo.ROW_NORMAL
               # We should follow the chain here, but this hardly ever happens so it's not worth worrying about
-              console.warn("elt.type != RowInfo.ROW_NORMAL", elt)
+              #console.warn("elt.type != RowInfo.ROW_NORMAL", elt)
               continue
 
           elt.type = RowInfo.ROW_EQUAL
@@ -583,8 +583,8 @@ class CircuitSolver
         ++j
 
       # Check for singular matrix:
-      if largest == 0
-        console.error("Singular matrix (#{i}, #{j}) -> #{largest}")
+      #if largest == 0
+      #  console.error("Singular matrix (#{i}, #{j}) -> #{largest}")
 
       @scaleFactors[i] = 1.0 / largest
       ++i

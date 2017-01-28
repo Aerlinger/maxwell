@@ -28,7 +28,7 @@ class RailElm extends VoltageElm {
   draw(renderContext) {
     this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (VoltageElm.circleSize / this.dn()));
 
-    this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
+    //this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
 
     renderContext.drawLinePt(this.point2, this.lead1, Settings.STROKE_COLOR, Settings.LINE_WIDTH+1);
     renderContext.drawLinePt(this.point2, this.point1, Settings.STROKE_COLOR);

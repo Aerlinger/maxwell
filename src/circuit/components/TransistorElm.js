@@ -73,7 +73,7 @@ class TransistorElm extends CircuitComponent {
     this.volts[2] = -this.lastvbc;
 
     this.setup();
-    this.setPoints();
+    this.place();
   }
 
   setup() {
@@ -221,8 +221,8 @@ class TransistorElm extends CircuitComponent {
     return ((this.volts[0] - this.volts[2]) * this.ib) + ((this.volts[1] - this.volts[2]) * this.ic);
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
+  place() {
+    // super.setPoints(...arguments);
 
     this.renderSize = 16;
 
@@ -248,7 +248,7 @@ class TransistorElm extends CircuitComponent {
 
     this.rectPoly = Util.createPolygonFromArray(this.rect);
 
-    this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
+    this.setBboxPt(this.point1, this.point2, this.renderSize);
 
     if (this.pnp === 1) {
       // console.log("PNP", "hs2", hs2, "Emit", this.emit[0], this.dsign(), this.dn(), this.pnp, this.point1, this.point2, "arrowPoly", Util.calcArrow(this.emit[1], this.emit[0], 8, 4))
@@ -287,7 +287,7 @@ class TransistorElm extends CircuitComponent {
   stamp(stamper) {
     stamper.stampNonLinear(this.nodes[0]);
     stamper.stampNonLinear(this.nodes[1]);
-    return stamper.stampNonLinear(this.nodes[2]);
+    stamper.stampNonLinear(this.nodes[2]);
   }
 
   // TODO: DI refactor by passing solver object

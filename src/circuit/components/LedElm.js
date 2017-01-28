@@ -61,16 +61,14 @@ class LedElm extends DiodeElm {
 
     this.setup();
 
-    this.setPoints();
+    this.place();
   }
 
   getName() {
     return "Light Emitting Diode";
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
-
+  place() {
     let cr = 12;
     this.ledLead1 = Util.interpolate(this.point1, this.point2, 0.5 - (cr / this.dn()));
     this.ledLead2 = Util.interpolate(this.point1, this.point2, 0.5 + (cr / this.dn()));

@@ -37,6 +37,8 @@ class TransLineElm extends CircuitComponent {
     // delete this.params['resistance'];
 
     this.ptr = 0;
+
+    this.place()
   }
 
   getName() {
@@ -66,9 +68,7 @@ class TransLineElm extends CircuitComponent {
     this.ptr = 0;
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
-
+  place() {
     let ds = (this.dy() === 0) ? Math.sign(this.dx()) : -Math.sign(this.dy());
 
     let p3 = Util.interpolate(this.point1, this.point2, 0, -Math.floor(this.channelWidth * ds));
@@ -81,7 +81,9 @@ class TransLineElm extends CircuitComponent {
     let p8 = Util.interpolate(this.point1, this.point2, 1, -Math.floor((this.channelWidth / 2) + sep) * ds);
 
     this.posts = [p3, p4, this.point1, this.point2];
-    return this.inner = [p7, p8, p5, p6];
+    this.inner = [p7, p8, p5, p6];
+
+    this.setBboxPt(this.posts[0], this.posts[3], 5);
   }
 
   getConnection(n1, n2) {
@@ -117,7 +119,7 @@ class TransLineElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-    this.setBboxPt(this.posts[0], this.posts[3], 5);
+    //this.setBboxPt(this.posts[0], this.posts[3], 5);
     let segments = Math.floor(this.dn() / 2);
 
     let ix0 = this.ptr - 1 + this.lenSteps;

@@ -12,9 +12,9 @@ class OrGateElm extends GateElm {
     return "OR Gate";
   }
 
-  setPoints() {
+  place() {
     let a, b, i;
-    super.setPoints(...arguments);
+    super.place();
 
     let triPoints = Util.newPointArray(38);
 

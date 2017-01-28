@@ -24,6 +24,8 @@ class LogicOutputElm extends CircuitComponent {
 
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
+
+    this.place()
   }
 
 
@@ -75,10 +77,8 @@ class LogicOutputElm extends CircuitComponent {
     }
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
-
-    return this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (12 / this.dn()));
+  place() {
+    this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (12 / this.dn()));
   }
 
 

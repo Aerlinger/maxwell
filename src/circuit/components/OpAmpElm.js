@@ -72,7 +72,7 @@ class OpAmpElm extends CircuitComponent {
     this.setSize((f & OpAmpElm.FLAG_SMALL) !== 0 ? 1 : 2);
     this.setGain();
 
-    this.setPoints();
+    this.place();
     this.allocNodes();
   }
 
@@ -88,7 +88,7 @@ class OpAmpElm extends CircuitComponent {
 
   draw(renderContext) {
     // this.setBbox(this.point1.x, this.in1p[0].y, this.point2.x, this.in2p[0].y);
-    this.setBboxPt(this.point1, this.point2, Math.floor(this.opheight * this.dsign()));
+    //this.setBboxPt(this.point1, this.point2, Math.floor(this.opheight * this.dsign()));
 
     // Terminal 1
     let color = renderContext.getVoltageColor(this.volts[0]);
@@ -133,9 +133,9 @@ class OpAmpElm extends CircuitComponent {
     return this.opwidth = 13 * s;
   }
 
-  setPoints() {
+  place() {
     let ww;
-    super.setPoints(...arguments);
+    //super.setPoints(...arguments);
 //    @setSize 2
 
     if (ww > (this.dn() / 2)) {
@@ -159,7 +159,7 @@ class OpAmpElm extends CircuitComponent {
     [tris[0], tris[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, hs * 2);
     this.triangle = Util.createPolygonFromArray([tris[0], tris[1], this.lead2]);
 
-    this.setBboxPt(this.point1, this.point2, hs)
+    this.setBboxPt(this.lead1, this.lead2, 2*hs)
   }
 
   getName() {

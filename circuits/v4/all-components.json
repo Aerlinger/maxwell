@@ -461,7 +461,7 @@
   },
   {
     "name": "TransformerElm",
-    "pos": [350, 1040, 350, 1040],
+    "pos": [350, 1040, 350, 1120],
     "flags": 0,
     "params": {
       "inductance": 0.001,

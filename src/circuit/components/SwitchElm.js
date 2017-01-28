@@ -43,10 +43,12 @@ class SwitchElm extends CircuitComponent {
 
     this.ps = new Point(0, 0);
     this.ps2 = new Point(0, 0);
+
+    this.place()
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
+  place() {
+    //super.setPoints(...arguments);
 
     this.calcLeads(32);
     this.ps = new Point(0, 0);
@@ -65,7 +67,7 @@ class SwitchElm extends CircuitComponent {
 
   draw(renderContext) {
     this.calcLeads(32);
-    this.setBboxPt(this.point1, this.point2, this.openhs/2);
+    //this.setBboxPt(this.point1, this.point2, this.openhs/2);
 
     this.ps = new Point(0, 0);
     this.ps2 = new Point(0, 0);

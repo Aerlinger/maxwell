@@ -70,9 +70,10 @@ class MosfetElm extends CircuitComponent {
 
     this.params['pnp'] = this.pnp;
 
-    this.setBboxPt(this.point1, this.point2, this.hs);
-  }
+    //this.setBboxPt(this.point1, this.point2, this.hs);
 
+    this.place()
+  }
 
   getDefaultThreshold() {
     return 1.5;
@@ -98,7 +99,7 @@ class MosfetElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-    this.setBboxPt(this.point1, this.point2, this.hs);
+    //this.setBboxPt(this.point1, this.point2, this.hs);
 
     let color = renderContext.getVoltageColor(this.volts[1]);
     renderContext.drawLinePt(this.src[0], this.src[1], color);
@@ -193,8 +194,8 @@ class MosfetElm extends CircuitComponent {
     return true;
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
+  place() {
+    //super.setPoints(...arguments);
     this.hs = 16;
 
     // find the coordinates of the various points we need to draw the MOSFET.
@@ -217,7 +218,7 @@ class MosfetElm extends CircuitComponent {
       this.arrowPoly = Util.calcArrow(this.drn[0], this.drn[1], 12, 5);
     }
 
-    this.setBboxPt(this.point1, this.point2, this.hs);
+    this.setBboxPt(this.point1, this.point2, 2*this.hs);
   }
 
 //    if @pnp is -1

@@ -47,6 +47,7 @@ class TappedTransformerElm extends CircuitComponent {
     // delete this.params['current2'];
 
     this.noDiagonal = true;
+    this.place()
   }
 
   draw(renderContext) {
@@ -95,16 +96,16 @@ class TappedTransformerElm extends CircuitComponent {
     */
 
     renderContext.drawPosts(this);
-    this.setBboxPt(this.ptEnds[0], this.ptEnds[4], 0);
+    
   }
 
   getName() {
     return "Tapped Transformer"
   }
 
-  setPoints() {
+  place() {
     let b;
-    super.setPoints(...arguments);
+    //super.setPoints(...arguments);
 
     let hs = 32;
 
@@ -128,7 +129,9 @@ class TappedTransformerElm extends CircuitComponent {
     this.ptCoil[3] = Util.interpolate(this.ptEnds[0], this.ptEnds[2], 1 - ce, -hs);
     this.ptCoil[4] = Util.interpolate(this.ptEnds[0], this.ptEnds[2], 1 - ce, -hs * 2);
 
-    return [0, 1].map((i) =>
+    this.setBboxPt(this.ptEnds[0], this.ptEnds[4], 0);
+    
+    [0, 1].map((i) =>
       (b = -hs * i * 2,
       this.ptCore[i] = Util.interpolate(this.ptEnds[0], this.ptEnds[2], cd, b),
       this.ptCore[i + 2] = Util.interpolate(this.ptEnds[0], this.ptEnds[2], 1 - cd, b)));

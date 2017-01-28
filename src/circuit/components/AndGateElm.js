@@ -7,8 +7,8 @@ class AndGateElm extends GateElm {
     super(xa, ya, xb, yb, params, f);
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
+  place() {
+    super.place();
 
     let triPoints = Util.newPointArray(23);
 

@@ -44,7 +44,6 @@ class GroundElm extends CircuitComponent {
     }
   }
 
-
   setCurrent(x, currentVal) {
     return this.current = -currentVal;
   }
