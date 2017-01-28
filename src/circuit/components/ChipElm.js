@@ -384,7 +384,7 @@ class ChipElm extends CircuitComponent {
       renderContext.drawPolyline(this.clockPointsX, this.clockPointsY, 3);
     }
 
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       return super.debugDraw(renderContext);
     }
 

@@ -39,7 +39,7 @@ class GroundElm extends CircuitComponent {
       renderContext.drawLinePt(pt1, pt2, color);
     }
 
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       return super.debugDraw(renderContext);
     }
   }
@@ -74,10 +74,6 @@ class GroundElm extends CircuitComponent {
 
   needsShortcut() {
     return true;
-  }
-
-  toString() {
-    return "GroundElm";
   }
 }
 

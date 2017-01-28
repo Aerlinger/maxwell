@@ -140,9 +140,11 @@ class Util {
     return a;
   }
 
+  /*
   static printArray(arr) {
     return Array.from(arr).map((subarr) => console.log(subarr));
   }
+  */
 
   static removeFromArray(arr, ...items) {
     for (let item of Array.from(items)) {

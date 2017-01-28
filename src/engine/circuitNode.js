@@ -1,9 +1,5 @@
 class CircuitNode {
-  constructor(solver, x, y, intern, links) {
-    if (x == null) { x = 0; }
-    if (y == null) { y = 0; }
-    if (intern == null) { intern = false; }
-    if (links == null) { links = []; }
+  constructor(solver, x = 0, y = 0, intern = false, links = []) {
     this.solver = solver;
     this.x = x;
     this.y = y;
@@ -21,7 +17,7 @@ class CircuitNode {
   }
 
   toString() {
-    return `CircuitNode: ${this.x} ${this.y} ${this.intern} [${this.links.toString()}]`;
+    return `Node: ${this.x} ${this.y} [${this.links}]`;
   }
 
   getVoltage() {

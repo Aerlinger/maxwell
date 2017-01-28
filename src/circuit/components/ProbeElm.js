@@ -15,10 +15,6 @@ class ProbeElm extends CircuitComponent {
     super(xa, ya, xb, yb, params, f);
   }
 
-  toString() {
-    return "ProbeElm";
-  }
-
   setPoints() {
     super.setPoints(...arguments);
 
@@ -37,7 +33,7 @@ class ProbeElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       super.debugDraw(renderContext);
     }
 

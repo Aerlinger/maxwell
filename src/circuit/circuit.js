@@ -94,7 +94,7 @@ class Circuit extends Observer {
 
 
   constructor(name){
-    super()
+    super();
 
     if (name == null) { name = "untitled"; }
     this.name = name;
@@ -108,15 +108,13 @@ class Circuit extends Observer {
     this.isStopped = false;
 
     this.clearAndReset();
-
   }
 
-  write(buffer) {}
-//    unless environment.isBrowser
-//      @ostream.write(buffer)
-
-  //# Removes all circuit elements and scopes from the workspace and resets time to zero.
-  //#   Called on initialization and reset.
+  /**
+   * Removes all circuit elements and scopes from the workspace and resets time to zero.
+   *
+   * Called on initialization and reset.
+   */
   clearAndReset() {
     for (let element of Array.from((this.elementList != null))) {
       element.destroy();
@@ -140,7 +138,9 @@ class Circuit extends Observer {
   }
 
 
-  // "Solders" a new element to this circuit (adds it to the element list array).
+  /**
+   * "Solders" a new element to this circuit (adds it to the element list array).
+   */
   solder(newElement) {
     if (Array.from(this.elementList).includes(newElement)) {
       this.halt(`Circuit component ${newElement} is already in element list`);
@@ -160,7 +160,9 @@ class Circuit extends Observer {
     this.recomputeBounds();
   }
 
-  // "Desolders" an existing element to this circuit (removes it to the element list array).
+  /**
+   * "Desolders" an existing element to this circuit (removes it to the element list array).
+   */
   desolder(component) {
     this.notifyObservers(this.ON_DESOLDER);
 
@@ -291,7 +293,10 @@ class Circuit extends Observer {
   /* Circuit Element Accessors:
    *///################################################################################################################
 
-  // TODO: Scopes aren't implemented yet
+  getIterationCount() {
+    return this.Solver.iterations;
+  }
+
   getScopes() {
     return this.scopes;
   }
@@ -390,9 +395,12 @@ class Circuit extends Observer {
     }
   }
 
-  //TODO: It may be worthwhile to return a defensive copy here
   getNodes() {
     return this.nodeList;
+  }
+
+  getRowInfo() {
+    return this.Solver.circuitRowInfo;
   }
 
   numNodes() {

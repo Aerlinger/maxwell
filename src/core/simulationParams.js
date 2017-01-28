@@ -8,7 +8,6 @@ class SimulationParams {
     this.description = params['description'] || "";
     this.flags = parseInt(params['flags'] || 1);
     this.id = params['id'] || null;
-    this.name = params['nameUnique'] || "default";
     this.powerRange = parseFloat(params['powerRange'] || 62.0);
     this.voltageRange = parseFloat(params['voltageRange'] || 10.0);
     this.simSpeed = parseFloat(params['simSpeed'] || 10);
@@ -27,7 +26,6 @@ class SimulationParams {
       description: this.description,
       flags: this.flags,
       id: this.id,
-      nameUnique: this.name,
       power_range: this.powerRange,
       voltage_range: this.voltageRange,
       simSpeed: this.simSpeed,
@@ -40,15 +38,12 @@ class SimulationParams {
 
   toString() {
     return [
-      `${this.name}`,
-      "================================================================",
       `\tFlags:       ${this.flags}`,
       `\tTimeStep:    ${this.timeStep.toFixed(7)}`,
       `\tSim Speed:   ${this.simSpeed}`,
       `\tCur Speed:   ${this.currentSpeed}`,
       `\tVolt. Range: ${this.voltageRange.toFixed(2)}`,
       `\tPwr Range:   ${this.powerRange}`,
-      "----------------------------------------------------------------",
       ""
     ].join("\n");
   }

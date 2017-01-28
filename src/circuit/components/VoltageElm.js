@@ -118,9 +118,7 @@ class VoltageElm extends CircuitComponent {
   }
 
   stamp(stamper) {
-//    console.log("\n::Stamping Voltage Elm #{@waveform}")
     if (this.waveform === VoltageElm.WF_DC) {
-//      console.log("Get voltage: #{@getVoltage()}")
       return stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
     } else {
       return stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource);
@@ -200,7 +198,7 @@ class VoltageElm extends CircuitComponent {
 
     renderContext.drawPosts(this);
 
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       super.debugDraw(renderContext);
     }
   }
@@ -355,10 +353,6 @@ class VoltageElm extends CircuitComponent {
       }
       return arr[i++] = `P = ${Util.getUnitText(this.getPower(), "W")}`;
     }
-  }
-
-  toString() {
-    return "VoltageElm";
   }
 }
 VoltageElm.initClass();

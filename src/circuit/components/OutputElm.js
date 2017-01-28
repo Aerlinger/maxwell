@@ -45,7 +45,7 @@ class OutputElm extends CircuitComponent {
     renderContext.fillCircle(this.lead1.x, this.lead1.y, 2*Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
     renderContext.drawPosts(this);
 
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       return super.debugDraw(renderContext);
     }
   }
@@ -61,10 +61,6 @@ class OutputElm extends CircuitComponent {
   }
 
   stamp(stamper) {}
-
-  toString() {
-    return "OutputElm";
-  }
 }
 OutputElm.initClass();
 

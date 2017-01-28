@@ -431,8 +431,6 @@ library = {
 };
 
 
-
-
 // var Maxwell = require("../src/Maxwell");
 
 app.set('views', __dirname);
@@ -440,6 +438,7 @@ app.set('view engine', 'jade');
 
 app.use(express.static(__dirname + '/css'));
 app.use(express.static(__dirname + '/js'));
+app.use(express.static(__dirname + '/img'));
 app.use("/vendor", express.static(path.join(__dirname, './vendor')));
 app.use("/foundation", express.static(path.join(__dirname, './vendor/foundation')));
 app.use("/bower_components", express.static(path.join(__dirname, '../bower_components')));

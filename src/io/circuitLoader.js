@@ -73,8 +73,17 @@ let fs = require('fs');
 let environment = require("../environment.js");
 
 class CircuitLoader {
+  static createEmptyCircuit() {
+    let circuit = new Circuit();
+
+    // Extract circuit simulation params
+    let circuitParams = jsonData.shift();
+    circuit.Params = new SimulationParams(circuitParams);
+    circuit.flags = parseInt(circuitParams['flags']);
+  }
+
   static createCircuitFromJsonData(jsonData) {
-    // Defensive copy
+    // Create a defensive copy of jsonData
     jsonData = JSON.parse(JSON.stringify(jsonData));
 
     let circuit = new Circuit();
@@ -115,27 +124,30 @@ class CircuitLoader {
     return circuit;
   }
 
-  /*
-  Retrieves string data from a circuit text file (via AJAX GET)
+  /**
+    Constructs a circuit from a reference to a circuit JSON file.
+
+   Example: CircuitLoader.createCircuitFromJsonFile("opint.json", function(circuit) { console.log(circuit); })
   */
-  static createCircuitFromJsonFile(circuitFileName, onComplete) {
-    if (onComplete == null) { onComplete = null; }
+  static createCircuitFromJsonFile(circuitFileName, onComplete=null) {
     if (environment.isBrowser) {
       return $.getJSON(circuitFileName, function(jsonData) {
         let circuit = CircuitLoader.createCircuitFromJsonData(jsonData);
 
-        return __guardFunc__(onComplete, f => f(circuit));
-      });
+        onComplete && onComplete(circuit);
+      }).fail(function(e) {
+        console.log( "Load error", e );
+
+        let circuit = new Circuit();
+
+        onComplete && onComplete(circuit);
+      })
     } else {
-     let jsonData = JSON.parse(fs.readFileSync(circuitFileName))
+     let jsonData = JSON.parse(fs.readFileSync(circuitFileName));
      return CircuitLoader.createCircuitFromJsonData(jsonData)
     }
   }
 }
 
-
 module.exports = CircuitLoader;
 
-function __guardFunc__(func, transform) {
-  return typeof func === 'function' ? transform(func) : undefined;
-}

@@ -502,7 +502,7 @@
 	
 	      } else {
 	        if ((default_value != null) && (default_value != undefined)) {
-	          if (this.Circuit && this.Circuit.debugModeEnabled()) {
+	          if (this.Circuit && this.Circuit && this.Circuit.debugModeEnabled()) {
 	            console.log(`INFO: Assigning default value of ${default_value} for ${param_name} in ${this.constructor.name} (was ${this[param_name]})`)
 	          }
 	        } else {
@@ -809,17 +809,18 @@
 	  }
 	
 	  toString() {
-	    //    "#{@constructor.name} #{@point1.x} #{@point1.y} #{@point2.x} #{@point2.y}"
-	    // return this.constructor.name;
-	    // if (this.params): ${JSON.stringify(this.params)}
+	    let paramStrs = [];
 	
-	    let paramStr = "";
+	    if (Object.keys(this.params).length !== 0) {
+	      for (let param in this.params) {
+	        paramStrs.push(`${param}: ${this.getFieldText(param, 1)}`);
+	      }
+	    }
 	
-	    if (Object.keys(this.params).length !== 0)
-	      paramStr = `: ${JSON.stringify(this.params)}`;
+	    let paramStr = `{${paramStrs.join(", ")}}`;
+	    let name = this.constructor.name.replace("Elm", "");
 	
-	
-	    return `${this.constructor.name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}]` + paramStr;
+	    return `${name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}]` + paramStr;
 	  }
 	
 	  getVoltageSourceCount() {
@@ -1271,20 +1272,23 @@
 	
 	  onclick() {
 	  }
+	
+	  getFieldText(fieldname, decimalPoints = 1) {
+	    let fields = this.constructor.Fields;
+	
+	    let field = fields[fieldname];
+	    let symbol = field["symbol"] || "";
+	
+	    let paramValue = this.params[fieldname];
+	
+	    return Util.getUnitText(paramValue, symbol, decimalPoints);
+	  };
+	
 	}
-	CircuitComponent.initClass();
+	
 	
 	module.exports = CircuitComponent;
-	
-	function __range__(left, right, inclusive) {
-	  let range = [];
-	  let ascending = left < right;
-	  let end = !inclusive ? right : ascending ? right + 1 : right - 1;
-	  for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-	    range.push(i);
-	  }
-	  return range;
-	}
+
 
 /***/ },
 /* 2 */
@@ -1765,9 +1769,11 @@
 	    return a;
 	  }
 	
+	  /*
 	  static printArray(arr) {
 	    return Array.from(arr).map((subarr) => console.log(subarr));
 	  }
+	  */
 	
 	  static removeFromArray(arr, ...items) {
 	    for (let item of Array.from(items)) {
@@ -17794,8 +17800,17 @@
 	let environment = __webpack_require__(10);
 	
 	class CircuitLoader {
+	  static createEmptyCircuit() {
+	    let circuit = new Circuit();
+	
+	    // Extract circuit simulation params
+	    let circuitParams = jsonData.shift();
+	    circuit.Params = new SimulationParams(circuitParams);
+	    circuit.flags = parseInt(circuitParams['flags']);
+	  }
+	
 	  static createCircuitFromJsonData(jsonData) {
-	    // Defensive copy
+	    // Create a defensive copy of jsonData
 	    jsonData = JSON.parse(JSON.stringify(jsonData));
 	
 	    let circuit = new Circuit();
@@ -17836,30 +17851,34 @@
 	    return circuit;
 	  }
 	
-	  /*
-	  Retrieves string data from a circuit text file (via AJAX GET)
+	  /**
+	    Constructs a circuit from a reference to a circuit JSON file.
+	
+	   Example: CircuitLoader.createCircuitFromJsonFile("opint.json", function(circuit) { console.log(circuit); })
 	  */
-	  static createCircuitFromJsonFile(circuitFileName, onComplete) {
-	    if (onComplete == null) { onComplete = null; }
+	  static createCircuitFromJsonFile(circuitFileName, onComplete=null) {
 	    if (environment.isBrowser) {
 	      return $.getJSON(circuitFileName, function(jsonData) {
 	        let circuit = CircuitLoader.createCircuitFromJsonData(jsonData);
 	
-	        return __guardFunc__(onComplete, f => f(circuit));
-	      });
+	        onComplete && onComplete(circuit);
+	      }).fail(function(e) {
+	        console.log( "Load error", e );
+	
+	        let circuit = new Circuit();
+	
+	        onComplete && onComplete(circuit);
+	      })
 	    } else {
-	     let jsonData = JSON.parse(fs.readFileSync(circuitFileName))
+	     let jsonData = JSON.parse(fs.readFileSync(circuitFileName));
 	     return CircuitLoader.createCircuitFromJsonData(jsonData)
 	    }
 	  }
 	}
 	
-	
 	module.exports = CircuitLoader;
 	
-	function __guardFunc__(func, transform) {
-	  return typeof func === 'function' ? transform(func) : undefined;
-	}
+
 
 /***/ },
 /* 17 */
@@ -17983,12 +18002,12 @@
 	    }
 	
 	    // super.debugDraw(renderContext);
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	  }
 	
-	//    if this.Circuit.debugModeEnabled()
+	//    if this.Circuit && this.Circuit.debugModeEnabled()
 	//      super(renderContext)
 	
 	
@@ -18160,9 +18179,7 @@
 	  }
 	
 	  stamp(stamper) {
-	//    console.log("\n::Stamping Voltage Elm #{@waveform}")
 	    if (this.waveform === VoltageElm.WF_DC) {
-	//      console.log("Get voltage: #{@getVoltage()}")
 	      return stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
 	    } else {
 	      return stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource);
@@ -18242,7 +18259,7 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	  }
@@ -18398,10 +18415,6 @@
 	      return arr[i++] = `P = ${Util.getUnitText(this.getPower(), "W")}`;
 	    }
 	  }
-	
-	  toString() {
-	    return "VoltageElm";
-	  }
 	}
 	VoltageElm.initClass();
 	
@@ -18452,14 +18465,13 @@
 	    if (Settings.WIRE_POSTS)
 	      renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
 	
 	
 	  stamp(stamper) {
-	//    console.log("\n::Stamping WireElm::")
 	    return stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, 0);
 	  }
 	
@@ -18673,7 +18685,7 @@
 	      renderContext.drawPost(post.x, post.y)
 	    }
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -18787,7 +18799,7 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -18875,7 +18887,7 @@
 	      renderContext.drawLinePt(pt1, pt2, color);
 	    }
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -18910,10 +18922,6 @@
 	
 	  needsShortcut() {
 	    return true;
-	  }
-	
-	  toString() {
-	    return "GroundElm";
 	  }
 	}
 	
@@ -19008,7 +19016,7 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -19115,10 +19123,6 @@
 	    arr[2] = `Vd = ${Util.getUnitText(this.getVoltageDiff(), "V")}`;
 	    arr[3] = `P = ${Util.getUnitText(this.getPower(), "W")}`;
 	    return arr[4] = `Vf = ${Util.getUnitText(this.fwdrop, "V")}`;
-	  }
-	
-	  toString() {
-	    return "DiodeElm";
 	  }
 	
 	  // TODO: fix
@@ -19240,7 +19244,7 @@
 	    renderContext.fillCircle(this.lead1.x, this.lead1.y, 2*Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -19256,10 +19260,6 @@
 	  }
 	
 	  stamp(stamper) {}
-	
-	  toString() {
-	    return "OutputElm";
-	  }
 	}
 	OutputElm.initClass();
 	
@@ -19363,7 +19363,7 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	  }
@@ -19525,7 +19525,7 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -19702,7 +19702,7 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -19857,7 +19857,7 @@
 	//      @arrow2 = DrawHelper.calcArrow(@point2, p1, alen, alen)
 	
 	  draw(renderContext) {
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	
@@ -19906,10 +19906,6 @@
 	    }
 	
 	    return stamper.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
-	  }
-	
-	  toString() {
-	    return "SparkGapElm";
 	  }
 	
 	  stamp(stamper) {
@@ -19966,7 +19962,7 @@
 	  }
 	
 	  draw(renderContext) {
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	
@@ -20194,7 +20190,7 @@
 	    renderContext.drawDots(this.drn[1], this.drn[0], this);
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -20430,7 +20426,7 @@
 	
 	
 	  draw(renderContext) {
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	
@@ -20568,7 +20564,7 @@
 	  }
 	
 	  draw(renderContext) {
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	
@@ -21099,7 +21095,7 @@
 	      renderContext.drawPosts(this);
 	    }
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -21266,7 +21262,7 @@
 	  }
 	
 	  draw(renderContext) {
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	
@@ -21440,13 +21436,13 @@
 	    renderContext.fillCircle(this.swpoles[1].x, this.swpoles[1].y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
 	
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	
 	  }
 	
-	//    if this.Circuit.debugModeEnabled()
+	//    if this.Circuit && this.Circuit.debugModeEnabled()
 	//      super(renderContext)
 	
 	  getPost(n) {
@@ -21585,7 +21581,7 @@
 	  }
 	
 	  draw(renderContext) {
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	
@@ -21814,7 +21810,7 @@
 	
 	    this.setBbox(this.x1(), this.y1() - this.size + 1, this.x1() + mt.width, this.y1());
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -21858,10 +21854,6 @@
 	    super(xa, ya, xb, yb, params, f);
 	  }
 	
-	  toString() {
-	    return "ProbeElm";
-	  }
-	
 	  setPoints() {
 	    super.setPoints(...arguments);
 	
@@ -21880,7 +21872,7 @@
 	  }
 	
 	  draw(renderContext) {
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	
@@ -22228,7 +22220,7 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -22347,7 +22339,7 @@
 	    renderContext.drawDots(this.point1, this.lead1, this);
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -22483,7 +22475,7 @@
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -22581,7 +22573,7 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -22722,7 +22714,7 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -22881,7 +22873,7 @@
 	    renderContext.drawDots(this.lead2, this.point2, this);
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -23224,7 +23216,7 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	  }
@@ -23363,7 +23355,7 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	  }
@@ -23642,7 +23634,7 @@
 	//    renderContext.drawDots(@gate[0], @lead2, @curcount_g + distance(@gate[1], @gate[0]))
 	
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	  }
@@ -23958,7 +23950,7 @@
 	    */
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	  }
@@ -24576,7 +24568,7 @@
 	      renderContext.drawPolyline(this.clockPointsX, this.clockPointsY, 3);
 	    }
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	
@@ -26031,7 +26023,7 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -26533,7 +26525,7 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
 	  }
@@ -26645,7 +26637,7 @@
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
 	  }
@@ -27018,7 +27010,6 @@
 	    this.description = params['description'] || "";
 	    this.flags = parseInt(params['flags'] || 1);
 	    this.id = params['id'] || null;
-	    this.name = params['nameUnique'] || "default";
 	    this.powerRange = parseFloat(params['powerRange'] || 62.0);
 	    this.voltageRange = parseFloat(params['voltageRange'] || 10.0);
 	    this.simSpeed = parseFloat(params['simSpeed'] || 10);
@@ -27037,7 +27028,6 @@
 	      description: this.description,
 	      flags: this.flags,
 	      id: this.id,
-	      nameUnique: this.name,
 	      power_range: this.powerRange,
 	      voltage_range: this.voltageRange,
 	      simSpeed: this.simSpeed,
@@ -27050,15 +27040,12 @@
 	
 	  toString() {
 	    return [
-	      `${this.name}`,
-	      "================================================================",
 	      `\tFlags:       ${this.flags}`,
 	      `\tTimeStep:    ${this.timeStep.toFixed(7)}`,
 	      `\tSim Speed:   ${this.simSpeed}`,
 	      `\tCur Speed:   ${this.currentSpeed}`,
 	      `\tVolt. Range: ${this.voltageRange.toFixed(2)}`,
 	      `\tPwr Range:   ${this.powerRange}`,
-	      "----------------------------------------------------------------",
 	      ""
 	    ].join("\n");
 	  }
@@ -27176,7 +27163,7 @@
 	
 	
 	  constructor(name){
-	    super()
+	    super();
 	
 	    if (name == null) { name = "untitled"; }
 	    this.name = name;
@@ -27190,15 +27177,13 @@
 	    this.isStopped = false;
 	
 	    this.clearAndReset();
-	
 	  }
 	
-	  write(buffer) {}
-	//    unless environment.isBrowser
-	//      @ostream.write(buffer)
-	
-	  //# Removes all circuit elements and scopes from the workspace and resets time to zero.
-	  //#   Called on initialization and reset.
+	  /**
+	   * Removes all circuit elements and scopes from the workspace and resets time to zero.
+	   *
+	   * Called on initialization and reset.
+	   */
 	  clearAndReset() {
 	    for (let element of Array.from((this.elementList != null))) {
 	      element.destroy();
@@ -27222,7 +27207,9 @@
 	  }
 	
 	
-	  // "Solders" a new element to this circuit (adds it to the element list array).
+	  /**
+	   * "Solders" a new element to this circuit (adds it to the element list array).
+	   */
 	  solder(newElement) {
 	    if (Array.from(this.elementList).includes(newElement)) {
 	      this.halt(`Circuit component ${newElement} is already in element list`);
@@ -27242,7 +27229,9 @@
 	    this.recomputeBounds();
 	  }
 	
-	  // "Desolders" an existing element to this circuit (removes it to the element list array).
+	  /**
+	   * "Desolders" an existing element to this circuit (removes it to the element list array).
+	   */
 	  desolder(component) {
 	    this.notifyObservers(this.ON_DESOLDER);
 	
@@ -27373,7 +27362,10 @@
 	  /* Circuit Element Accessors:
 	   *///################################################################################################################
 	
-	  // TODO: Scopes aren't implemented yet
+	  getIterationCount() {
+	    return this.Solver.iterations;
+	  }
+	
 	  getScopes() {
 	    return this.scopes;
 	  }
@@ -27472,9 +27464,12 @@
 	    }
 	  }
 	
-	  //TODO: It may be worthwhile to return a defensive copy here
 	  getNodes() {
 	    return this.nodeList;
+	  }
+	
+	  getRowInfo() {
+	    return this.Solver.circuitRowInfo;
 	  }
 	
 	  numNodes() {
@@ -27830,6 +27825,7 @@
 	
 	  CircuitSolver.prototype.reset = function() {
 	    this.Circuit.time = 0;
+	    this.iterations = 0;
 	    this.converged = true;
 	    this.subIterations = 5000;
 	    this.circuitMatrix = [];
@@ -27866,12 +27862,11 @@
 	
 	  CircuitSolver.prototype.solveCircuit = function() {
 	    var circuitElm, iter, j, lit, res, scope, stepRate, subiter, tm, _i, _j, _k, _l, _len, _len1, _len2, _m, _ref, _ref1, _ref2, _ref3, _ref4;
-	    this.sysTime = (new Date()).getTime();
 	    if ((this.circuitMatrix == null) || this.Circuit.numElements() === 0) {
 	      this.circuitMatrix = null;
-	      console.error("Called solve circuit when circuit Matrix not initialized");
 	      return;
 	    }
+	    this.sysTime = (new Date()).getTime();
 	    stepRate = Math.floor(160 * this.getIterCount());
 	    tm = (new Date()).getTime();
 	    lit = this.lastIterTime;
@@ -27959,7 +27954,8 @@
 	      this.secTime = sysTime;
 	    }
 	    this.lastTime = sysTime;
-	    return this.lastFrameTime = this.lastTime;
+	    this.lastFrameTime = this.lastTime;
+	    return this.iterations++;
 	  };
 	
 	  CircuitSolver.prototype.getStamper = function() {
@@ -28242,7 +28238,7 @@
 	            qp = qq;
 	            elt = this.circuitRowInfo[qp];
 	            if (elt.type !== RowInfo.ROW_NORMAL) {
-	              console.error("Swap failed!");
+	              console.warn("elt.type != RowInfo.ROW_NORMAL", elt);
 	              continue;
 	            }
 	          }
@@ -28545,30 +28541,54 @@
 	    return out + "\n";
 	  };
 	
+	  CircuitSolver.prototype.dumpOrigFrame = function() {
+	    var circuitMatrixDump, circuitRightSideDump, i, j, matrixRowCount, out, _i, _j;
+	    matrixRowCount = this.origRightSide.length;
+	    circuitMatrixDump = "";
+	    circuitRightSideDump = "  RS: [";
+	    for (i = _i = 0; 0 <= matrixRowCount ? _i < matrixRowCount : _i > matrixRowCount; i = 0 <= matrixRowCount ? ++_i : --_i) {
+	      circuitRightSideDump += Util.tidyFloat(this.origRightSide[i]);
+	      circuitMatrixDump += "  [";
+	      for (j = _j = 0; 0 <= matrixRowCount ? _j < matrixRowCount : _j > matrixRowCount; j = 0 <= matrixRowCount ? ++_j : --_j) {
+	        circuitMatrixDump += Util.tidyFloat(this.origMatrix[i][j]);
+	        if (j !== matrixRowCount - 1) {
+	          circuitMatrixDump += ", ";
+	        }
+	      }
+	      circuitMatrixDump += "]\n";
+	      if (i !== matrixRowCount - 1) {
+	        circuitRightSideDump += ", ";
+	      }
+	    }
+	    out = "";
+	    out += circuitMatrixDump + "\n";
+	    out += circuitRightSideDump + "]";
+	    return out;
+	  };
+	
 	  CircuitSolver.prototype.dumpFrame = function() {
 	    var circuitMatrixDump, circuitRightSideDump, i, j, matrixRowCount, out, _i, _j;
 	    matrixRowCount = this.circuitRightSide.length;
-	    out = "";
 	    circuitMatrixDump = "";
-	    circuitRightSideDump = "";
+	    circuitRightSideDump = "  RS: [";
 	    for (i = _i = 0; 0 <= matrixRowCount ? _i < matrixRowCount : _i > matrixRowCount; i = 0 <= matrixRowCount ? ++_i : --_i) {
 	      circuitRightSideDump += Util.tidyFloat(this.circuitRightSide[i]);
-	      circuitMatrixDump += "[";
+	      circuitMatrixDump += "  [";
 	      for (j = _j = 0; 0 <= matrixRowCount ? _j < matrixRowCount : _j > matrixRowCount; j = 0 <= matrixRowCount ? ++_j : --_j) {
 	        circuitMatrixDump += Util.tidyFloat(this.circuitMatrix[i][j]);
 	        if (j !== matrixRowCount - 1) {
 	          circuitMatrixDump += ", ";
 	        }
 	      }
-	      circuitMatrixDump += "]";
+	      circuitMatrixDump += "]\n";
 	      if (i !== matrixRowCount - 1) {
 	        circuitRightSideDump += ", ";
-	        circuitMatrixDump += ", ";
 	      }
 	    }
-	    out += sprintf("%d %.7f %d %d\n", this.Circuit.iterations, this.Circuit.time, this.subIterations, matrixRowCount);
+	    out = "";
+	    out += sprintf("  iter: %d, time: %.7f, subiter: %d rows: %d\n", this.Circuit.iterations, this.Circuit.time, this.subIterations, matrixRowCount);
 	    out += circuitMatrixDump + "\n";
-	    out += circuitRightSideDump;
+	    out += circuitRightSideDump + "]";
 	    return out;
 	  };
 	
@@ -28756,7 +28776,6 @@
 
 	class RowInfo {
 	  static initClass() {
-	  
 	    this.ROW_NORMAL = 0;
 	    this.ROW_CONST = 1;
 	    this.ROW_EQUAL = 2;
@@ -28788,8 +28807,19 @@
 	    };
 	  }
 	
+	  typeToStr(type) {
+	    if (type == 0)
+	      return "NORMAL";
+	
+	    if (type == 1)
+	      return "CONST";
+	
+	    if (type == 2)
+	      return "EQ";
+	  }
+	
 	  toString() {
-	    return `RowInfo: type: ${this.type}, nodeEq: ${this.nodeEq}, mapCol: ${this.mapCol}, mapRow: ${this.mapRow}, value: ${this.value}, rsChanges: ${this.rsChanges}, lsChanges: ${this.lsChanges}, dropRow: ${this.dropRow}`;
+	    return `RowInfo: ${this.typeToStr(this.type)}, nodeEq: ${this.nodeEq}, mapCol: ${this.mapCol}, mapRow: ${this.mapRow}, value: ${this.value}, rsChanges: ${this.rsChanges}, lsChanges: ${this.lsChanges}, dropRow: ${this.dropRow}`;
 	  }
 	}
 	RowInfo.initClass();
@@ -28923,11 +28953,7 @@
 /***/ function(module, exports) {
 
 	class CircuitNode {
-	  constructor(solver, x, y, intern, links) {
-	    if (x == null) { x = 0; }
-	    if (y == null) { y = 0; }
-	    if (intern == null) { intern = false; }
-	    if (links == null) { links = []; }
+	  constructor(solver, x = 0, y = 0, intern = false, links = []) {
 	    this.solver = solver;
 	    this.x = x;
 	    this.y = y;
@@ -28945,7 +28971,7 @@
 	  }
 	
 	  toString() {
-	    return `CircuitNode: ${this.x} ${this.y} ${this.intern} [${this.links.toString()}]`;
+	    return `Node: ${this.x} ${this.y} [${this.links}]`;
 	  }
 	
 	  getVoltage() {
@@ -28965,9 +28991,7 @@
 /***/ function(module, exports) {
 
 	class CircuitNodeLink {
-	  constructor(num, elm) {
-	    if (num == null) { num = 0; }
-	    if (elm == null) { elm = null; }
+	  constructor(num = 0, elm = null) {
 	    this.num = num;
 	    this.elm = elm;
 	  }
@@ -29515,10 +29539,6 @@
 	    this.ON_COMPONENTS_DESELECTED = "ON_COMPONENTS_DESELECTED";
 	    this.ON_COMPONENTS_MOVED = "ON_COMPONENTS_MOVED";
 	
-	    this.STATE_EDIT;
-	    this.STATE_PLACE;
-	    this.STATE_RUN;
-	
 	    this.MOUSEDOWN = 1;
 	  }
 	
@@ -29546,8 +29566,6 @@
 	    this.placeX = null;
 	    this.placeY = null;
 	
-	    this.state = this.STATE_RUN;
-	
 	    this.config = {
 	      keyboard: true
 	    };
@@ -29565,14 +29583,11 @@
 	    this.onComponentClick = this.noop;
 	    this.onComponentHover = this.noop;
 	    this.onNodeHover = this.noop;
-	    this.onNodeClick = this.noop;   // @onNodeClick(component)
-	    this.onUpdateComplete = this.noop;  // @onUpdateComplete(circuit)
-	
-	
+	    this.onNodeClick = this.noop;
+	    this.onUpdateComplete = this.noop;
 	  }
 	
-	  noop() {
-	  }
+	  noop() {}
 	
 	  mousemove(event) {
 	    let component;
@@ -29618,13 +29633,6 @@
 	            this.placeComponent.point2.x = this.snapX;
 	            this.placeComponent.point2.y = this.snapY;
 	          }
-	          // if (this.placeComponent.x1() && this.placeComponent.y1()) {
-	            // console.log(this.snapX, this.lastX," ", this.snapY, this.lastY);
-	            // console.log(this.snapX - this.lastX," ", this.snapY - this.lastY);
-	
-	            // this.placeComponent.point1.x = this.placeX;
-	            // this.placeComponent.point1.y = this.placeY;
-	          // }
 	        }
 	
 	        for (let component of this.Circuit.getElements()) {
@@ -29679,13 +29687,9 @@
 	    }
 	
 	    if (!this.marquee && !this.selectedNode && (this.selectedComponents && this.selectedComponents.length > 0) && (event.which === CircuitUI.MOUSEDOWN) && ((this.lastX !== this.snapX) || (this.lastY !== this.snapY))) {
-	      return (() => {
-	        let result = [];
-	        for (component of Array.from(this.selectedComponents)) {
-	          result.push(component.move(this.snapX - this.lastX, this.snapY - this.lastY));
-	        }
-	        return result;
-	      })();
+	      for (let component of Array.from(this.selectedComponents)) {
+	        component.move(this.snapX - this.lastX, this.snapY - this.lastY);
+	      }
 	    }
 	  }
 	
@@ -29695,9 +29699,13 @@
 	
 	    if (this.placeComponent) {
 	      if (!this.placeX && !this.placeY) {
+	
+	        // Place the first post
 	        this.placeX = this.snapX;
 	        this.placeY = this.snapY;
 	      } else {
+	
+	        // Place the component
 	        this.Circuit.solder(this.placeComponent);
 	        this.placeComponent = null;
 	        this.placeX = null;
@@ -29706,14 +29714,6 @@
 	    }
 	
 	    if (!this.highlightedComponent && !this.placeComponent && !this.highlightedNode) {
-	      /*
-	      if (this.selectedComponents && (this.selectedComponents.length > 0)) {
-	        this.onSelectionChanged([])
-	      }
-	      */
-	
-	      // this.selectedComponents = [];
-	
 	      this.marquee = new SelectionMarquee(x, y);
 	    }
 	
@@ -29731,7 +29731,7 @@
 	      this.onNodeClick(this.selectedNode);
 	    }
 	
-	    for (var component of this.Circuit.getElements()) {
+	    for (let component of this.Circuit.getElements()) {
 	      if (component.getBoundingBox().contains(x, y)) {
 	        this.notifyObservers(CircuitUI.ON_COMPONENT_CLICKED, component);
 	
@@ -29743,17 +29743,14 @@
 	          }
 	        }
 	
-	        if (component.toggle) {
+	        if (component.toggle)
 	          component.toggle();
-	        }
 	
-	        if (component.onclick) {
+	        if (component.onclick)
 	          component.onclick();
-	        }
 	
-	        if (component.onComponentClick) {
+	        if (component.onComponentClick)
 	          component.onComponentClick();
-	        }
 	      }
 	    }
 	  }
@@ -29763,16 +29760,15 @@
 	    this.selectedNode = null;
 	
 	    if (this.selectedComponents && this.selectedComponents.length > 0) {
-	      return this.notifyObservers(CircuitUI.ON_COMPONENTS_DESELECTED, this.selectedComponents);
+	      this.notifyObservers(CircuitUI.ON_COMPONENTS_DESELECTED, this.selectedComponents);
 	    }
 	  }
 	
 	  togglePause() {
-	    if (this.Circuit.isStopped) {
-	      this.Circuit.resume()
-	    } else {
-	      this.Circuit.pause()
-	    }
+	    if (this.Circuit.isStopped)
+	      this.Circuit.resume();
+	    else
+	      this.Circuit.pause();
 	  }
 	
 	  pause() {}
@@ -29786,18 +29782,14 @@
 	  }
 	
 	  resetSelection() {
-	    if (this.selectedComponents && (this.selectedComponents.length > 0)) {
-	      this.onSelectionChanged([])
-	    }
+	    if (this.selectedComponents && (this.selectedComponents.length > 0))
+	      this.onSelectionChanged([]);
+	
 	    this.selectedComponents = [];
 	  }
 	
 	  getSelectedComponents() {
 	    return this.selectedComponents;
-	  }
-	
-	  getPlaceComponent() {
-	    return this.placeComponent;
 	  }
 	
 	  setPlaceComponent(componentName) {
@@ -29861,12 +29853,12 @@
 	        //height: this.height
 	      });
 	
+	      this.setupScopes();
+	      this.renderPerformance();
+	
 	    } else {
 	      this.context = this.Canvas.getContext("2d");
 	    }
-	
-	    this.setupScopes();
-	    this.renderPerformance();
 	  }
 	
 	  setupScopes(){
@@ -29894,7 +29886,7 @@
 	  renderPerformance() {
 	    this.performanceMeter = new TimeSeries();
 	
-	    var chart = new SmoothieChart({
+	    let chart = new SmoothieChart({
 	      millisPerPixel: 35,
 	      grid: {fillStyle: 'transparent', strokeStyle: 'transparent'},
 	      labels: {fillStyle: '#000000', precision: 0}
@@ -29902,6 +29894,82 @@
 	
 	    chart.addTimeSeries(this.performanceMeter, {strokeStyle: 'rgba(255, 0, 200, 1)', lineWidth: 1});
 	    chart.streamTo(document.getElementById("performance_sparkline"), 500);
+	  }
+	
+	  draw() {
+	    if (this.context) {
+	      if (this.context.clear) {
+	        this.context.clear();
+	      }
+	      // this.drawGrid();
+	
+	      this.context.save();
+	      this.context.translate(this.xMargin, this.yMargin);
+	
+	      this.fillText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
+	      this.fillText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 785, 15, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
+	
+	      if (this.performanceMeter) {
+	        this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
+	      }
+	
+	      if (this.Circuit && this.Circuit.debugModeEnabled()) {
+	        this.drawDebugInfo();
+	        this.drawDebugOverlay();
+	      }
+	    }
+	
+	    if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
+	      this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
+	      this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
+	    }
+	
+	    this.drawInfoText();
+	
+	    if (this.circuitUI.marquee) {
+	      this.circuitUI.marquee.draw(this)
+	    }
+	
+	    // UPDATE FRAME ----------------------------------------------------------------
+	    this.Circuit.updateCircuit();
+	
+	    if (this.circuitUI.onUpdateComplete) {
+	      this.circuitUI.onUpdateComplete();
+	    }
+	    // -----------------------------------------------------------------------------
+	
+	    this.drawScopes();
+	    this.drawComponents();
+	
+	    if (this.context) {
+	      if (this.circuitUI.placeComponent) {
+	        this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
+	
+	        if (this.circuitUI.placeY && this.circuitUI.placeX && this.circuitUI.placeComponent.x2() && this.circuitUI.placeComponent.y2()) {
+	          this.drawComponent(this.circuitUI.placeComponent);
+	        }
+	      }
+	
+	      if (this.circuitUI.selectedNode) {
+	        this.drawCircle(this.circuitUI.selectedNode.x, this.circuitUI.selectedNode.y, Settings.POST_RADIUS + 3, 3, Settings.HIGHLIGHT_COLOR);
+	      }
+	
+	      if (this.circuitUI.highlightedComponent) {
+	        this.drawCircle(this.circuitUI.highlightedComponent.x1(), this.circuitUI.highlightedComponent.y1(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+	        this.drawCircle(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+	      }
+	
+	      // this.context.clear();
+	    }
+	
+	    // for (let nodeIdx=0; nodeIdx<this.Circuit.numNodes(); ++nodeIdx) {
+	    // let node = this.Circuit.getNode(nodeIdx);
+	    // this.fillText(`${nodeIdx} ${node.x},${node.y}`, node.x + 5, node.y - 5);
+	    // }
+	
+	    if (this.context) {
+	      this.context.restore()
+	    }
 	  }
 	
 	  renderScopeCanvas(elementName) {
@@ -30191,77 +30259,6 @@
 	    }
 	  }
 	
-	  draw() {
-	    if (this.context) {
-	      if (this.context.clear) {
-	        this.context.clear();
-	      }
-	      // this.drawGrid();
-	
-	      this.context.save();
-	      this.context.translate(this.xMargin, this.yMargin);
-	
-	      this.fillText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
-	      this.fillText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 785, 15, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
-	
-	      if (this.performanceMeter) {
-	        this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
-	      }
-	    }
-	
-	    if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
-	      this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
-	      this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
-	    }
-	
-	    this.drawInfoText();
-	
-	    if (this.circuitUI.marquee) {
-	      this.circuitUI.marquee.draw(this)
-	    }
-	
-	    // UPDATE FRAME ----------------------------------------------------------------
-	    this.Circuit.updateCircuit();
-	
-	    if (this.circuitUI.onUpdateComplete) {
-	      this.circuitUI.onUpdateComplete();
-	    }
-	    // -----------------------------------------------------------------------------
-	
-	    this.drawScopes();
-	    this.drawComponents();
-	
-	    if (this.context) {
-	      if (this.circuitUI.placeComponent) {
-	        this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
-	
-	        if (this.circuitUI.placeY && this.circuitUI.placeX && this.circuitUI.placeComponent.x2() && this.circuitUI.placeComponent.y2()) {
-	          this.drawComponent(this.circuitUI.placeComponent);
-	        }
-	      }
-	
-	      if (this.circuitUI.selectedNode) {
-	        this.drawCircle(this.circuitUI.selectedNode.x, this.circuitUI.selectedNode.y, Settings.POST_RADIUS + 3, 3, Settings.HIGHLIGHT_COLOR);
-	      }
-	
-	      if (this.circuitUI.highlightedComponent) {
-	        this.drawCircle(this.circuitUI.highlightedComponent.x1(), this.circuitUI.highlightedComponent.y1(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
-	        this.drawCircle(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
-	      }
-	
-	      // this.context.clear();
-	    }
-	
-	    // for (let nodeIdx=0; nodeIdx<this.Circuit.numNodes(); ++nodeIdx) {
-	    // let node = this.Circuit.getNode(nodeIdx);
-	    // this.fillText(`${nodeIdx} ${node.x},${node.y}`, node.x + 5, node.y - 5);
-	    // }
-	
-	    if (this.context) {
-	      this.context.restore()
-	    }
-	  }
-	
 	  drawScopes() {
 	    if (this.context) {
 	      for (let scopeElm of this.Circuit.getScopes()) {
@@ -30295,7 +30292,7 @@
 	        this.drawComponent(component);
 	      }
 	
-	      if (this.Circuit.debugModeEnabled()) {
+	      if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	        let voltage, x, y;
 	        let nodeIdx = 0;
 	        return Array.from(this.Circuit.getNodes()).map((node) =>
@@ -30411,6 +30408,90 @@
 	      }
 	      return result;
 	    })();
+	  }
+	
+	  drawDebugOverlay() {
+	    if (!this.Circuit || !this.context) {
+	      return;
+	    }
+	
+	    // Nodes
+	    let nodeIdx = 0;
+	    for (let node of this.Circuit.getNodes()) {
+	      this.context.beginPath();
+	      this.context.arc(node.x, node.y, 5, 0, 2 * Math.PI, true);
+	      this.context.strokeStyle = "#F0F";
+	      this.context.stroke();
+	      this.context.fillText(nodeIdx, node.x + 5, node.y + 20);
+	
+	      let yOffset = 30;
+	      for (let link of node.links) {
+	        this.context.fillText(link.elm.getName(), node.x + 5, node.y + yOffset);
+	
+	        yOffset += 10;
+	      }
+	
+	      nodeIdx++;
+	    }
+	
+	    // Nodes
+	  }
+	
+	  drawDebugInfo(x = 1100, y = 200) {
+	    if (!this.Circuit || !this.context) {
+	      return;
+	    }
+	
+	    let str = "";
+	
+	    // Name
+	    str += `Name: ${this.Circuit.name}\n`;
+	
+	    // Linear
+	    str += `Linear: ${!this.Circuit.Solver.circuitNonLinear}\n`;
+	
+	    // Linear
+	    str += `VS Count: ${this.Circuit.voltageSourceCount}\n`;
+	
+	    // Param
+	    str += `Params:\n ${this.Circuit.Params}\n`;
+	
+	    // Iterations
+	    str += `Frame #: ${this.Circuit.getIterationCount()}\n`;
+	
+	    // Elements
+	    str += `Elements: (${this.Circuit.getElements().length})\n `;
+	    for (let element of this.Circuit.getElements()) {
+	      str += "  " + element + "\n";
+	    }
+	
+	    str += `Nodes: (${this.Circuit.numNodes()})\n`;
+	    for (let node of this.Circuit.getNodes()) {
+	      str += "  " + node + "\n";
+	    }
+	
+	    // RowInfo
+	    str += `RowInfo: (${this.Circuit.getRowInfo().length})\n`;
+	    for (let rowInfo of this.Circuit.getRowInfo()) {
+	      str += "  " + rowInfo + "\n";
+	    }
+	
+	    str += "Circuit Matrix:\n";
+	    str += this.Circuit.Solver.dumpFrame() + "\n";
+	
+	    str += "Orig Matrix:\n";
+	    str += this.Circuit.Solver.dumpOrigFrame() + "\n";
+	
+	    // CircuitRightSide
+	    // CircuitLeftSide
+	
+	    let lineHeight = 10;
+	    let nLines = 0;
+	    for (let line of str.split("\n")) {
+	      this.context.fillText(line, x, y + nLines * lineHeight);
+	
+	      nLines++;
+	    }
 	  }
 	
 	  // TODO: Move to CircuitComponent

@@ -83,7 +83,7 @@ class CircuitComponent {
 
       } else {
         if ((default_value != null) && (default_value != undefined)) {
-          if (this.Circuit && this.Circuit.debugModeEnabled()) {
+          if (this.Circuit && this.Circuit && this.Circuit.debugModeEnabled()) {
             console.log(`INFO: Assigning default value of ${default_value} for ${param_name} in ${this.constructor.name} (was ${this[param_name]})`)
           }
         } else {
@@ -390,17 +390,18 @@ class CircuitComponent {
   }
 
   toString() {
-    //    "#{@constructor.name} #{@point1.x} #{@point1.y} #{@point2.x} #{@point2.y}"
-    // return this.constructor.name;
-    // if (this.params): ${JSON.stringify(this.params)}
+    let paramStrs = [];
 
-    let paramStr = "";
+    if (Object.keys(this.params).length !== 0) {
+      for (let param in this.params) {
+        paramStrs.push(`${param}: ${this.getFieldText(param, 1)}`);
+      }
+    }
 
-    if (Object.keys(this.params).length !== 0)
-      paramStr = `: ${JSON.stringify(this.params)}`;
+    let paramStr = `{${paramStrs.join(", ")}}`;
+    let name = this.constructor.name.replace("Elm", "");
 
-
-    return `${this.constructor.name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}]` + paramStr;
+    return `${name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}]` + paramStr;
   }
 
   getVoltageSourceCount() {
@@ -852,17 +853,19 @@ class CircuitComponent {
 
   onclick() {
   }
+
+  getFieldText(fieldname, decimalPoints = 1) {
+    let fields = this.constructor.Fields;
+
+    let field = fields[fieldname];
+    let symbol = field["symbol"] || "";
+
+    let paramValue = this.params[fieldname];
+
+    return Util.getUnitText(paramValue, symbol, decimalPoints);
+  };
+
 }
-CircuitComponent.initClass();
+
 
 module.exports = CircuitComponent;
-
-function __range__(left, right, inclusive) {
-  let range = [];
-  let ascending = left < right;
-  let end = !inclusive ? right : ascending ? right + 1 : right - 1;
-  for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-    range.push(i);
-  }
-  return range;
-}

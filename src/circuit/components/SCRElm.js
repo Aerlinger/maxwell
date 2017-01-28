@@ -193,7 +193,7 @@ class ScrElm extends CircuitComponent {
 //    renderContext.drawDots(@gate[0], @lead2, @curcount_g + distance(@gate[1], @gate[0]))
 
 
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       super.debugDraw(renderContext);
     }
   }

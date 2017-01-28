@@ -31,6 +31,7 @@ class CircuitSolver
 
   reset: ->
     @Circuit.time = 0
+    @iterations = 0
 
     @converged = true # true if numerical analysis has converged
     @subIterations = 5000
@@ -73,12 +74,12 @@ class CircuitSolver
       @luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
 
   solveCircuit: ->
-    @sysTime = (new Date()).getTime()
-
     if not @circuitMatrix? or @Circuit.numElements() is 0
       @circuitMatrix = null
-      console.error("Called solve circuit when circuit Matrix not initialized")
+      #console.error("Called solve circuit when circuit Matrix not initialized")
       return
+
+    @sysTime = (new Date()).getTime()
 
     stepRate = Math.floor(160 * @getIterCount())
     tm = (new Date()).getTime()
@@ -163,13 +164,14 @@ class CircuitSolver
       @Circuit.Params.setCurrentMult(1.7 * inc * currentSpeed)
 
     if (sysTime - @secTime) >= 1000
-#      console.log("Reset!")
+      # console.log("Reset!")
       @frames = 0
       @steps = 0
       @secTime = sysTime
 
     @lastTime = sysTime
     @lastFrameTime = @lastTime
+    @iterations++
 
 
   getStamper: ->
@@ -256,7 +258,7 @@ class CircuitSolver
 
 
   constructCircuitGraph: ->
-# Allocate nodes and voltage sources
+    # Allocate nodes and voltage sources
     @buildComponentNodes()
 
     @Circuit.voltageSources = new Array(voltageSourceCount)
@@ -306,7 +308,7 @@ class CircuitSolver
       changed = false
       for circuitElm in @Circuit.getElements()
 
-# Loop through all ce's nodes to see if they are connected to other nodes not in closure
+        # Loop through all ce's nodes to see if they are connected to other nodes not in closure
         for postIdx in [0...circuitElm.getPostCount()]
           unless closure[circuitElm.getNode(postIdx)]
             if circuitElm.hasGroundConnection(postIdx)
@@ -356,7 +358,7 @@ class CircuitSolver
 
         if pathfinder.findPath(ce.getNode(0))
           @Circuit.halt "Voltage source/wire loop with no resistance!", ce
-      #          return
+          # return
 
       # Look for shorted caps or caps with voltage but no resistance
       if ce instanceof CapacitorElm
@@ -376,7 +378,6 @@ class CircuitSolver
 
       re = @circuitRowInfo[row]
       if re.lsChanges or re.dropRow or re.rsChanges
-# console.log("CONT: " + re.toString())
         continue
 
       rsadd = 0
@@ -387,7 +388,7 @@ class CircuitSolver
       # look for rows that can be removed
       for col in [0...@matrixSize]
         if @circuitRowInfo[col].type is RowInfo.ROW_CONST
-# Keep a running total of const values that have been removed already
+          # Keep a running total of const values that have been removed already
           rsadd -= @circuitRowInfo[col].value * @circuitMatrix[row][col]
         else if @circuitMatrix[row][col] is 0
         else if qp is -1 # First col
@@ -409,13 +410,13 @@ class CircuitSolver
         if qm is -1
           k = 0
           while elt.type is RowInfo.ROW_EQUAL and k < CircuitSolver.SIZE_LIMIT
-# Follow the chain
+            # Follow the chain
             qp = elt.nodeEq
             elt = @circuitRowInfo[qp]
             ++k
 
           if elt.type is RowInfo.ROW_EQUAL
-# break equal chains
+            # break equal chains
             elt.type = RowInfo.ROW_NORMAL
 
           else if elt.type != RowInfo.ROW_NORMAL
@@ -427,7 +428,7 @@ class CircuitSolver
 
             row = -1 # start over from scratch
 
-# We found a row with only two nonzero entries, and one is the negative of the other -> the values are equal
+        # We found a row with only two nonzero entries, and one is the negative of the other -> the values are equal
         else if (@circuitRightSide[row] + rsadd) is 0
           if elt.type != RowInfo.ROW_NORMAL
             qq = qm
@@ -436,15 +437,17 @@ class CircuitSolver
             elt = @circuitRowInfo[qp]
 
             if elt.type != RowInfo.ROW_NORMAL
-# We should follow the chain here, but this hardly ever happens so it's not worth worrying about
-              console.error("Swap failed!")
+              # We should follow the chain here, but this hardly ever happens so it's not worth worrying about
+              console.warn("elt.type != RowInfo.ROW_NORMAL", elt)
               continue
 
           elt.type = RowInfo.ROW_EQUAL
           elt.nodeEq = qm
           @circuitRowInfo[row].dropRow = true
 
-    # find size of new matrix:
+    # END WHILE row < @matrixSize-1
+
+    # Find size of new matrix:
     newMatDim = 0
     for row in [0...@matrixSize]
       rowInfo = @circuitRowInfo[row]
@@ -454,7 +457,7 @@ class CircuitSolver
 
       else
         if rowInfo.type is RowInfo.ROW_EQUAL
-# resolve chains of equality; 100 max steps to avoid loops
+          # resolve chains of equality; 100 max steps to avoid loops
           for j in [0...CircuitSolver.SIZE_LIMIT]
             rowNodeEq = @circuitRowInfo[rowInfo.nodeEq]
 
@@ -471,7 +474,7 @@ class CircuitSolver
       if rowInfo.type is RowInfo.ROW_EQUAL
         rowNodeEq = @circuitRowInfo[rowInfo.nodeEq]
         if rowNodeEq.type is RowInfo.ROW_CONST
-# if something is equal to a const, it's a const
+          # if something is equal to a const, it's a const
           rowInfo.type = rowNodeEq.type
           rowInfo.value = rowNodeEq.value
           rowInfo.mapCol = -1
@@ -656,7 +659,7 @@ class CircuitSolver
     @param circuitRightSide Right-side (dependent) matrix
   ###
   luSolve: (circuitMatrix, numRows, pivotVector, circuitRightSide) ->
-# Find first nonzero element of circuitRightSide
+    # Find first nonzero element of circuitRightSide
     i = 0
     while i < numRows
       row = pivotVector[i]
@@ -706,34 +709,62 @@ class CircuitSolver
 
     out + "\n"
 
+  dumpOrigFrame: ->
+    matrixRowCount = @origRightSide.length
+
+    circuitMatrixDump = ""
+    circuitRightSideDump = "  RS: ["
+
+    for i in [0...matrixRowCount]
+      circuitRightSideDump += Util.tidyFloat(@origRightSide[i])
+      #      circuitMatrixDump += @tidyFloat(@circuitRightSide[i])
+
+      circuitMatrixDump += "  ["
+      for j in [0...matrixRowCount]
+        circuitMatrixDump += Util.tidyFloat(@origMatrix[i][j])
+
+        if(j != matrixRowCount - 1)
+          circuitMatrixDump += ", "
+
+      circuitMatrixDump += "]\n"
+
+      if(i != matrixRowCount - 1)
+        circuitRightSideDump += ", "
+    #circuitMatrixDump += ", "
+
+    out = ""
+    out += circuitMatrixDump + "\n"
+    out += circuitRightSideDump + "]"
+
+    out
+
   dumpFrame: ->
     matrixRowCount = @circuitRightSide.length
 
-    out = ""
-
     circuitMatrixDump = ""
-    circuitRightSideDump = ""
+    circuitRightSideDump = "  RS: ["
 
     for i in [0...matrixRowCount]
       circuitRightSideDump += Util.tidyFloat(@circuitRightSide[i])
       #      circuitMatrixDump += @tidyFloat(@circuitRightSide[i])
 
-      circuitMatrixDump += "["
+      circuitMatrixDump += "  ["
       for j in [0...matrixRowCount]
         circuitMatrixDump += Util.tidyFloat(@circuitMatrix[i][j])
 
         if(j != matrixRowCount - 1)
           circuitMatrixDump += ", "
 
-      circuitMatrixDump += "]"
+      circuitMatrixDump += "]\n"
 
       if(i != matrixRowCount - 1)
         circuitRightSideDump += ", "
-        circuitMatrixDump += ", "
+        #circuitMatrixDump += ", "
 
-    out += sprintf("%d %.7f %d %d\n", @Circuit.iterations, @Circuit.time, @subIterations, matrixRowCount)
+    out = ""
+    out += sprintf("  iter: %d, time: %.7f, subiter: %d rows: %d\n", @Circuit.iterations, @Circuit.time, @subIterations, matrixRowCount)
     out += circuitMatrixDump + "\n"
-    out += circuitRightSideDump
+    out += circuitRightSideDump + "]"
 
     out
 

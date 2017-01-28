@@ -65,12 +65,12 @@ class RailElm extends VoltageElm {
     }
 
     // super.debugDraw(renderContext);
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       super.debugDraw(renderContext);
     }
   }
 
-//    if this.Circuit.debugModeEnabled()
+//    if this.Circuit && this.Circuit.debugModeEnabled()
 //      super(renderContext)
 
 

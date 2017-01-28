@@ -1,1 +1,77 @@
-[{"type":"default","timeStep":0.000005,"simSpeed":172,"currentSpeed":50,"voltageRange":5,"powerRange":50,"flags":1},{"name":"ResistorElm","pos":[256,176,256,304],"flags":0,"params":{"resistance":100}},{"name":"VarRailElm","pos":[304,176,304,128],"flags":0,"params":{"waveform":6,"frequency":5,"maxVoltage":5,"bias":0,"phaseShift":0,"dutyCycle":0.5,"sliderText":"Voltage"}},{"name":"GroundElm","pos":[256,336,256,352],"flags":0,"params":{}},{"name":"WireElm","pos":[256,304,256,336],"flags":1,"params":{}},{"name":"ResistorElm","pos":[352,176,352,304],"flags":0,"params":{"resistance":1000}},{"name":"WireElm","pos":[352,304,352,336],"flags":1,"params":{}},{"name":"GroundElm","pos":[352,336,352,352],"flags":0,"params":{}},{"name":"WireElm","pos":[304,176,352,176],"flags":0,"params":{}},{"name":"WireElm","pos":[256,176,304,176],"flags":0,"params":{}}]
+[
+  {
+    "type": "default",
+    "timeStep": 0.000005,
+    "simSpeed": 172,
+    "currentSpeed": 50,
+    "voltageRange": 5,
+    "powerRange": 50,
+    "flags": 1
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [256, 176, 256, 304],
+    "flags": 0,
+    "params": {
+      "resistance": 100
+    }
+  },
+  {
+    "name": "VarRailElm",
+    "pos": [304, 176, 304, 128],
+    "flags": 0,
+    "params": {
+      "waveform": 6,
+      "frequency": 5,
+      "maxVoltage": 5,
+      "bias": 0,
+      "phaseShift": 0,
+      "dutyCycle": 0.5,
+      "sliderText": "Voltage"
+    }
+  },
+  {
+    "name": "GroundElm",
+    "pos": [256, 336, 256, 352],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [256, 304, 256, 336],
+    "flags": 1,
+    "params": {}
+  },
+  {
+    "name": "ResistorElm",
+    "pos": [352, 176, 352, 304],
+    "flags": 0,
+    "params": {
+      "resistance": 1000
+    }
+  },
+  {
+    "name": "WireElm",
+    "pos": [352, 304, 352, 336],
+    "flags": 1,
+    "params": {}
+  },
+  {
+    "name": "GroundElm",
+    "pos": [352, 336, 352, 352],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [304, 176, 352, 176],
+    "flags": 0,
+    "params": {}
+  },
+  {
+    "name": "WireElm",
+    "pos": [256, 176, 304, 176],
+    "flags": 0,
+    "params": {}
+  }
+]

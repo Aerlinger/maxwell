@@ -107,13 +107,13 @@ class Switch2Elm extends SwitchElm {
     renderContext.fillCircle(this.swpoles[1].x, this.swpoles[1].y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
 
 
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       return super.debugDraw(renderContext);
     }
 
   }
 
-//    if this.Circuit.debugModeEnabled()
+//    if this.Circuit && this.Circuit.debugModeEnabled()
 //      super(renderContext)
 
   getPost(n) {

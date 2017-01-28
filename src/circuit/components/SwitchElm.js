@@ -91,7 +91,7 @@ class SwitchElm extends CircuitComponent {
 
     renderContext.drawPosts(this);
 
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       super.debugDraw(renderContext);
     }
   }

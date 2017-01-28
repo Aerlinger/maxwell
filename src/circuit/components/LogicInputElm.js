@@ -71,7 +71,7 @@ class LogicInputElm extends SwitchElm {
     renderContext.drawDots(this.point1, this.lead1, this);
     renderContext.drawPosts(this);
 
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       return super.debugDraw(renderContext);
     }
   }

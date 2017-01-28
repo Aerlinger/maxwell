@@ -35,12 +35,12 @@ class CircuitCanvas extends Observer {
         //height: this.height
       });
 
+      this.setupScopes();
+      this.renderPerformance();
+
     } else {
       this.context = this.Canvas.getContext("2d");
     }
-
-    this.setupScopes();
-    this.renderPerformance();
   }
 
   setupScopes(){
@@ -68,7 +68,7 @@ class CircuitCanvas extends Observer {
   renderPerformance() {
     this.performanceMeter = new TimeSeries();
 
-    var chart = new SmoothieChart({
+    let chart = new SmoothieChart({
       millisPerPixel: 35,
       grid: {fillStyle: 'transparent', strokeStyle: 'transparent'},
       labels: {fillStyle: '#000000', precision: 0}
@@ -76,6 +76,82 @@ class CircuitCanvas extends Observer {
 
     chart.addTimeSeries(this.performanceMeter, {strokeStyle: 'rgba(255, 0, 200, 1)', lineWidth: 1});
     chart.streamTo(document.getElementById("performance_sparkline"), 500);
+  }
+
+  draw() {
+    if (this.context) {
+      if (this.context.clear) {
+        this.context.clear();
+      }
+      // this.drawGrid();
+
+      this.context.save();
+      this.context.translate(this.xMargin, this.yMargin);
+
+      this.fillText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
+      this.fillText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 785, 15, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
+
+      if (this.performanceMeter) {
+        this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
+      }
+
+      if (this.Circuit && this.Circuit.debugModeEnabled()) {
+        this.drawDebugInfo();
+        this.drawDebugOverlay();
+      }
+    }
+
+    if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
+      this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
+      this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
+    }
+
+    this.drawInfoText();
+
+    if (this.circuitUI.marquee) {
+      this.circuitUI.marquee.draw(this)
+    }
+
+    // UPDATE FRAME ----------------------------------------------------------------
+    this.Circuit.updateCircuit();
+
+    if (this.circuitUI.onUpdateComplete) {
+      this.circuitUI.onUpdateComplete();
+    }
+    // -----------------------------------------------------------------------------
+
+    this.drawScopes();
+    this.drawComponents();
+
+    if (this.context) {
+      if (this.circuitUI.placeComponent) {
+        this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
+
+        if (this.circuitUI.placeY && this.circuitUI.placeX && this.circuitUI.placeComponent.x2() && this.circuitUI.placeComponent.y2()) {
+          this.drawComponent(this.circuitUI.placeComponent);
+        }
+      }
+
+      if (this.circuitUI.selectedNode) {
+        this.drawCircle(this.circuitUI.selectedNode.x, this.circuitUI.selectedNode.y, Settings.POST_RADIUS + 3, 3, Settings.HIGHLIGHT_COLOR);
+      }
+
+      if (this.circuitUI.highlightedComponent) {
+        this.drawCircle(this.circuitUI.highlightedComponent.x1(), this.circuitUI.highlightedComponent.y1(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+        this.drawCircle(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+      }
+
+      // this.context.clear();
+    }
+
+    // for (let nodeIdx=0; nodeIdx<this.Circuit.numNodes(); ++nodeIdx) {
+    // let node = this.Circuit.getNode(nodeIdx);
+    // this.fillText(`${nodeIdx} ${node.x},${node.y}`, node.x + 5, node.y - 5);
+    // }
+
+    if (this.context) {
+      this.context.restore()
+    }
   }
 
   renderScopeCanvas(elementName) {
@@ -365,77 +441,6 @@ class CircuitCanvas extends Observer {
     }
   }
 
-  draw() {
-    if (this.context) {
-      if (this.context.clear) {
-        this.context.clear();
-      }
-      // this.drawGrid();
-
-      this.context.save();
-      this.context.translate(this.xMargin, this.yMargin);
-
-      this.fillText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
-      this.fillText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 785, 15, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
-
-      if (this.performanceMeter) {
-        this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
-      }
-    }
-
-    if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
-      this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
-      this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
-    }
-
-    this.drawInfoText();
-
-    if (this.circuitUI.marquee) {
-      this.circuitUI.marquee.draw(this)
-    }
-
-    // UPDATE FRAME ----------------------------------------------------------------
-    this.Circuit.updateCircuit();
-
-    if (this.circuitUI.onUpdateComplete) {
-      this.circuitUI.onUpdateComplete();
-    }
-    // -----------------------------------------------------------------------------
-
-    this.drawScopes();
-    this.drawComponents();
-
-    if (this.context) {
-      if (this.circuitUI.placeComponent) {
-        this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
-
-        if (this.circuitUI.placeY && this.circuitUI.placeX && this.circuitUI.placeComponent.x2() && this.circuitUI.placeComponent.y2()) {
-          this.drawComponent(this.circuitUI.placeComponent);
-        }
-      }
-
-      if (this.circuitUI.selectedNode) {
-        this.drawCircle(this.circuitUI.selectedNode.x, this.circuitUI.selectedNode.y, Settings.POST_RADIUS + 3, 3, Settings.HIGHLIGHT_COLOR);
-      }
-
-      if (this.circuitUI.highlightedComponent) {
-        this.drawCircle(this.circuitUI.highlightedComponent.x1(), this.circuitUI.highlightedComponent.y1(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
-        this.drawCircle(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
-      }
-
-      // this.context.clear();
-    }
-
-    // for (let nodeIdx=0; nodeIdx<this.Circuit.numNodes(); ++nodeIdx) {
-    // let node = this.Circuit.getNode(nodeIdx);
-    // this.fillText(`${nodeIdx} ${node.x},${node.y}`, node.x + 5, node.y - 5);
-    // }
-
-    if (this.context) {
-      this.context.restore()
-    }
-  }
-
   drawScopes() {
     if (this.context) {
       for (let scopeElm of this.Circuit.getScopes()) {
@@ -469,7 +474,7 @@ class CircuitCanvas extends Observer {
         this.drawComponent(component);
       }
 
-      if (this.Circuit.debugModeEnabled()) {
+      if (this.Circuit && this.Circuit.debugModeEnabled()) {
         let voltage, x, y;
         let nodeIdx = 0;
         return Array.from(this.Circuit.getNodes()).map((node) =>
@@ -585,6 +590,90 @@ class CircuitCanvas extends Observer {
       }
       return result;
     })();
+  }
+
+  drawDebugOverlay() {
+    if (!this.Circuit || !this.context) {
+      return;
+    }
+
+    // Nodes
+    let nodeIdx = 0;
+    for (let node of this.Circuit.getNodes()) {
+      this.context.beginPath();
+      this.context.arc(node.x, node.y, 5, 0, 2 * Math.PI, true);
+      this.context.strokeStyle = "#F0F";
+      this.context.stroke();
+      this.context.fillText(nodeIdx, node.x + 5, node.y + 20);
+
+      let yOffset = 30;
+      for (let link of node.links) {
+        this.context.fillText(link.elm.getName(), node.x + 5, node.y + yOffset);
+
+        yOffset += 10;
+      }
+
+      nodeIdx++;
+    }
+
+    // Nodes
+  }
+
+  drawDebugInfo(x = 1100, y = 200) {
+    if (!this.Circuit || !this.context) {
+      return;
+    }
+
+    let str = "";
+
+    // Name
+    str += `Name: ${this.Circuit.name}\n`;
+
+    // Linear
+    str += `Linear: ${!this.Circuit.Solver.circuitNonLinear}\n`;
+
+    // Linear
+    str += `VS Count: ${this.Circuit.voltageSourceCount}\n`;
+
+    // Param
+    str += `Params:\n ${this.Circuit.Params}\n`;
+
+    // Iterations
+    str += `Frame #: ${this.Circuit.getIterationCount()}\n`;
+
+    // Elements
+    str += `Elements: (${this.Circuit.getElements().length})\n `;
+    for (let element of this.Circuit.getElements()) {
+      str += "  " + element + "\n";
+    }
+
+    str += `Nodes: (${this.Circuit.numNodes()})\n`;
+    for (let node of this.Circuit.getNodes()) {
+      str += "  " + node + "\n";
+    }
+
+    // RowInfo
+    str += `RowInfo: (${this.Circuit.getRowInfo().length})\n`;
+    for (let rowInfo of this.Circuit.getRowInfo()) {
+      str += "  " + rowInfo + "\n";
+    }
+
+    str += "Circuit Matrix:\n";
+    str += this.Circuit.Solver.dumpFrame() + "\n";
+
+    str += "Orig Matrix:\n";
+    str += this.Circuit.Solver.dumpOrigFrame() + "\n";
+
+    // CircuitRightSide
+    // CircuitLeftSide
+
+    let lineHeight = 10;
+    let nLines = 0;
+    for (let line of str.split("\n")) {
+      this.context.fillText(line, x, y + nLines * lineHeight);
+
+      nLines++;
+    }
   }
 
   // TODO: Move to CircuitComponent

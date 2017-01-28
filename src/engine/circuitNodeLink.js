@@ -1,7 +1,5 @@
 class CircuitNodeLink {
-  constructor(num, elm) {
-    if (num == null) { num = 0; }
-    if (elm == null) { elm = null; }
+  constructor(num = 0, elm = null) {
     this.num = num;
     this.elm = elm;
   }

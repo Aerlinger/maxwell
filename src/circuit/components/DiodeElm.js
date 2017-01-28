@@ -81,7 +81,7 @@ class DiodeElm extends CircuitComponent {
 
     renderContext.drawPosts(this);
 
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       return super.debugDraw(renderContext);
     }
   }
@@ -188,10 +188,6 @@ class DiodeElm extends CircuitComponent {
     arr[2] = `Vd = ${Util.getUnitText(this.getVoltageDiff(), "V")}`;
     arr[3] = `P = ${Util.getUnitText(this.getPower(), "W")}`;
     return arr[4] = `Vf = ${Util.getUnitText(this.fwdrop, "V")}`;
-  }
-
-  toString() {
-    return "DiodeElm";
   }
 
   // TODO: fix

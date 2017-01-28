@@ -163,7 +163,7 @@ class MosfetElm extends CircuitComponent {
     renderContext.drawDots(this.drn[1], this.drn[0], this);
     renderContext.drawPosts(this);
 
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       return super.debugDraw(renderContext);
     }
   }

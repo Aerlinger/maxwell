@@ -37,14 +37,13 @@ class WireElm extends CircuitComponent {
     if (Settings.WIRE_POSTS)
       renderContext.drawPosts(this);
 
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       return super.debugDraw(renderContext);
     }
   }
 
 
   stamp(stamper) {
-//    console.log("\n::Stamping WireElm::")
     return stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, 0);
   }
 

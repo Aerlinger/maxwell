@@ -98,7 +98,7 @@ class SparkGapElm extends CircuitComponent {
 //      @arrow2 = DrawHelper.calcArrow(@point2, p1, alen, alen)
 
   draw(renderContext) {
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       super.debugDraw(renderContext);
     }
 
@@ -147,10 +147,6 @@ class SparkGapElm extends CircuitComponent {
     }
 
     return stamper.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
-  }
-
-  toString() {
-    return "SparkGapElm";
   }
 
   stamp(stamper) {

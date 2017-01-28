@@ -65,7 +65,7 @@ class SweepElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-    if (this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
       super.debugDraw(renderContext);
     }
 

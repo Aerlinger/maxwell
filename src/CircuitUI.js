@@ -114,10 +114,6 @@ class CircuitUI extends Observer {
     this.ON_COMPONENTS_DESELECTED = "ON_COMPONENTS_DESELECTED";
     this.ON_COMPONENTS_MOVED = "ON_COMPONENTS_MOVED";
 
-    this.STATE_EDIT;
-    this.STATE_PLACE;
-    this.STATE_RUN;
-
     this.MOUSEDOWN = 1;
   }
 
@@ -145,8 +141,6 @@ class CircuitUI extends Observer {
     this.placeX = null;
     this.placeY = null;
 
-    this.state = this.STATE_RUN;
-
     this.config = {
       keyboard: true
     };
@@ -164,14 +158,11 @@ class CircuitUI extends Observer {
     this.onComponentClick = this.noop;
     this.onComponentHover = this.noop;
     this.onNodeHover = this.noop;
-    this.onNodeClick = this.noop;   // @onNodeClick(component)
-    this.onUpdateComplete = this.noop;  // @onUpdateComplete(circuit)
-
-
+    this.onNodeClick = this.noop;
+    this.onUpdateComplete = this.noop;
   }
 
-  noop() {
-  }
+  noop() {}
 
   mousemove(event) {
     let component;
@@ -217,13 +208,6 @@ class CircuitUI extends Observer {
             this.placeComponent.point2.x = this.snapX;
             this.placeComponent.point2.y = this.snapY;
           }
-          // if (this.placeComponent.x1() && this.placeComponent.y1()) {
-            // console.log(this.snapX, this.lastX," ", this.snapY, this.lastY);
-            // console.log(this.snapX - this.lastX," ", this.snapY - this.lastY);
-
-            // this.placeComponent.point1.x = this.placeX;
-            // this.placeComponent.point1.y = this.placeY;
-          // }
         }
 
         for (let component of this.Circuit.getElements()) {
@@ -278,13 +262,9 @@ class CircuitUI extends Observer {
     }
 
     if (!this.marquee && !this.selectedNode && (this.selectedComponents && this.selectedComponents.length > 0) && (event.which === CircuitUI.MOUSEDOWN) && ((this.lastX !== this.snapX) || (this.lastY !== this.snapY))) {
-      return (() => {
-        let result = [];
-        for (component of Array.from(this.selectedComponents)) {
-          result.push(component.move(this.snapX - this.lastX, this.snapY - this.lastY));
-        }
-        return result;
-      })();
+      for (let component of Array.from(this.selectedComponents)) {
+        component.move(this.snapX - this.lastX, this.snapY - this.lastY);
+      }
     }
   }
 
@@ -294,9 +274,13 @@ class CircuitUI extends Observer {
 
     if (this.placeComponent) {
       if (!this.placeX && !this.placeY) {
+
+        // Place the first post
         this.placeX = this.snapX;
         this.placeY = this.snapY;
       } else {
+
+        // Place the component
         this.Circuit.solder(this.placeComponent);
         this.placeComponent = null;
         this.placeX = null;
@@ -305,14 +289,6 @@ class CircuitUI extends Observer {
     }
 
     if (!this.highlightedComponent && !this.placeComponent && !this.highlightedNode) {
-      /*
-      if (this.selectedComponents && (this.selectedComponents.length > 0)) {
-        this.onSelectionChanged([])
-      }
-      */
-
-      // this.selectedComponents = [];
-
       this.marquee = new SelectionMarquee(x, y);
     }
 
@@ -330,7 +306,7 @@ class CircuitUI extends Observer {
       this.onNodeClick(this.selectedNode);
     }
 
-    for (var component of this.Circuit.getElements()) {
+    for (let component of this.Circuit.getElements()) {
       if (component.getBoundingBox().contains(x, y)) {
         this.notifyObservers(CircuitUI.ON_COMPONENT_CLICKED, component);
 
@@ -342,17 +318,14 @@ class CircuitUI extends Observer {
           }
         }
 
-        if (component.toggle) {
+        if (component.toggle)
           component.toggle();
-        }
 
-        if (component.onclick) {
+        if (component.onclick)
           component.onclick();
-        }
 
-        if (component.onComponentClick) {
+        if (component.onComponentClick)
           component.onComponentClick();
-        }
       }
     }
   }
@@ -362,16 +335,15 @@ class CircuitUI extends Observer {
     this.selectedNode = null;
 
     if (this.selectedComponents && this.selectedComponents.length > 0) {
-      return this.notifyObservers(CircuitUI.ON_COMPONENTS_DESELECTED, this.selectedComponents);
+      this.notifyObservers(CircuitUI.ON_COMPONENTS_DESELECTED, this.selectedComponents);
     }
   }
 
   togglePause() {
-    if (this.Circuit.isStopped) {
-      this.Circuit.resume()
-    } else {
-      this.Circuit.pause()
-    }
+    if (this.Circuit.isStopped)
+      this.Circuit.resume();
+    else
+      this.Circuit.pause();
   }
 
   pause() {}
@@ -385,18 +357,14 @@ class CircuitUI extends Observer {
   }
 
   resetSelection() {
-    if (this.selectedComponents && (this.selectedComponents.length > 0)) {
-      this.onSelectionChanged([])
-    }
+    if (this.selectedComponents && (this.selectedComponents.length > 0))
+      this.onSelectionChanged([]);
+
     this.selectedComponents = [];
   }
 
   getSelectedComponents() {
     return this.selectedComponents;
-  }
-
-  getPlaceComponent() {
-    return this.placeComponent;
   }
 
   setPlaceComponent(componentName) {
