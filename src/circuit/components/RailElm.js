@@ -40,7 +40,6 @@ class RailElm extends VoltageElm {
 
     this.updateDots();
 
-//    renderContext.drawDots @point2, @point1, this
     renderContext.drawDots(this.lead1, this.point1, this);
     renderContext.drawPosts(this);
 
@@ -56,32 +55,20 @@ class RailElm extends VoltageElm {
 
       renderContext.fillText(s, this.point2.x+4, this.point2.y - 7, Settings.TEXT_COLOR, 1.3*Settings.TEXT_SIZE);
 
-//      s = "Ant" if this instanceof AntennaElm
       if (clock) { s = "CLK"; }
 
-      //renderContext.drawValue(0, 0, this, s);
     } else {
       this.drawWaveform(this.point2, renderContext);
     }
 
-    // super.debugDraw(renderContext);
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
       super.debugDraw(renderContext);
     }
   }
 
-//    if this.Circuit && this.Circuit.debugModeEnabled()
-//      super(renderContext)
-
-
-//    renderContext.drawDots @point1, @lead1, this # @curcount  unless Circuit.dragElm is this
-
   getVoltageDiff() {
     return this.volts[0];
   }
-
-//    getVoltage: ->
-//      super()
 
   setPoints() {
     super.setPoints(...arguments);
@@ -90,20 +77,14 @@ class RailElm extends VoltageElm {
   }
 
   stamp(stamper) {
-//    console.log("\n::Stamping RailElm:: " + @waveform)
     if (this.waveform === VoltageElm.WF_DC) {
       return stamper.stampVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
     } else {
       return stamper.stampVoltageSource(0, this.nodes[0], this.voltSource);
     }
   }
-//    stamper.stampVoltageSource 0, @nodes[0], @voltSource
 
   doStep(stamper) {
-//    e = new Error("DOSTEP")
-
-//    console.log(e.stack)
-//    console.log("WF", @waveform, @voltSource, @getVoltage())
     if (this.waveform !== VoltageElm.WF_DC) {
       return stamper.updateVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
     }

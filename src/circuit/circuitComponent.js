@@ -856,15 +856,16 @@ class CircuitComponent {
 
   getFieldText(fieldname, decimalPoints = 1) {
     let fields = this.constructor.Fields;
-
     let field = fields[fieldname];
-    let symbol = field["symbol"] || "";
+
+    let symbol = "";
+    if (field)
+      symbol = field["symbol"] || "";
 
     let paramValue = this.params[fieldname];
 
     return Util.getUnitText(paramValue, symbol, decimalPoints);
   };
-
 }
 
 

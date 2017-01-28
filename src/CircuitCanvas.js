@@ -189,99 +189,6 @@ class CircuitCanvas extends Observer {
     }
   }
 
-  fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size = Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
-    this.context.save();
-
-    let lineWidth = this.context.lineWidth;
-    let origFillStyle = this.context.fillStyle;
-    let origFillColor = this.context.fillColor;
-    let font = this.context.font;
-
-    this.context.fillStyle = fillColor;
-    this.context.strokeStyle = strokeColor;
-    this.context.font = `${Settings.TEXT_STYLE} ${size}pt ${Settings.FONT}`;
-    this.context.fillText(text, x, y);
-
-    this.context.lineWidth = 0;
-    this.context.strokeText(text, x, y);
-
-    let textMetrics = this.context.measureText(text);
-
-    this.context.fillStyle = origFillStyle;
-    this.context.fillColor = origFillColor;
-    this.context.lineWidth = lineWidth;
-    this.context.font = font;
-
-    this.context.restore();
-
-    return textMetrics;
-  }
-
-  fillCircle(x, y, radius, lineWidth, fillColor, lineColor) {
-    if (lineWidth == null) {
-      lineWidth = Settings.LINE_WIDTH;
-    }
-    if (fillColor == null) {
-      fillColor = '#FFFF00';
-    }
-    if (lineColor == null) {
-      lineColor = null;
-    }
-    this.context.save();
-
-    this.context.beginPath();
-    this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
-
-    if (lineColor) {
-      this.context.lineWidth = lineWidth;
-      this.context.strokeStyle = lineColor;
-      this.context.stroke();
-    }
-
-    this.context.fillStyle = fillColor;
-    this.context.fill();
-
-    this.context.closePath();
-
-    return this.context.restore();
-  }
-
-
-  drawCircle(x, y, radius, lineWidth, lineColor) {
-    if (lineWidth == null) {
-      lineWidth = Settings.LINE_WIDTH;
-    }
-    if (lineColor == null) {
-      lineColor = "#000000";
-    }
-    this.context.save();
-
-    this.context.strokeStyle = lineColor;
-    this.context.lineWidth = lineWidth;
-
-    this.context.beginPath();
-    this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
-    this.context.stroke();
-    this.context.closePath();
-
-    this.context.restore();
-  }
-
-  drawRect(x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR) {
-    this.context.strokeStyle = lineColor;
-    this.context.lineJoin = 'miter';
-    this.context.lineWidth = 0;
-    this.context.strokeRect(x, y, width, height);
-    this.context.stroke();
-  }
-
-  drawLinePt(pa, pb, color, lineWidth) {
-    if (color == null) {
-      color = Settings.STROKE_COLOR;
-    }
-    return this.drawLine(pa.x, pa.y, pb.x, pb.y, color, lineWidth);
-  }
-
   beginPath() {
     this.pathMode = true;
     this.context.beginPath();
@@ -292,87 +199,11 @@ class CircuitCanvas extends Observer {
     this.context.closePath();
   }
 
-  drawLine(x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
-
-    let origLineWidth = this.context.lineWidth;
-
-    if (!this.pathMode)
-      this.context.beginPath();
-
-    if (this.boldLines) {
-      this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
-      this.context.strokeStyle = Settings.SELECT_COLOR;
-      if (!this.pathMode)
-        this.context.moveTo(x, y);
-      this.context.lineTo(x2, y2);
-      this.context.stroke();
-
-    } else {
-      this.context.strokeStyle = color;
-      this.context.lineWidth = lineWidth;
-      if (!this.pathMode)
-        this.context.moveTo(x, y);
-      this.context.lineTo(x2, y2);
-      this.context.stroke();
-    }
-
-    if (!this.pathMode)
-      this.context.closePath();
-
-    this.context.lineWidth = origLineWidth;
-  }
-
-  drawThickPolygon(xlist, ylist, color, fill) {
-    if (color == null) {
-      color = Settings.STROKE_COLOR;
-    }
-    if (fill == null) {
-      fill = Settings.FILL_COLOR;
-    }
-    this.context.save();
-
-    this.context.fillStyle = fill;
-    this.context.strokeStyle = color;
-    this.context.beginPath();
-
-    this.context.moveTo(xlist[0], ylist[0]);
-    for (let i = 0; i < xlist.length; ++i) {
-      this.context.lineTo(xlist[i], ylist[i]);
-    }
-
-    this.context.closePath();
-    this.context.stroke();
-    if (color) {
-      this.context.fill();
-    }
-
-    return this.context.restore();
-  }
-
 
   getVoltageColor(volts) {
-    // TODO: Define voltage range
     let fullScaleVRange = this.Circuit.Params.voltageRange;
 
-    let RedGreen =
-        ["#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
-          "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
-          "#7f7f7f", "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747",
-          "#3fbf3f", "#37c737", "#2fcf2f", "#27d727", "#1fdf1f", "#17e717", "#0fef0f", "#07f707", "#00ff00"];
-
-    let scale =
-        ["#B81B00", "#B21F00", "#AC2301", "#A72801", "#A12C02", "#9C3002", "#963503", "#913903",
-          "#8B3E04", "#854205", "#804605", "#7A4B06", "#754F06", "#6F5307", "#6A5807", "#645C08",
-          "#5F6109", "#596509", "#53690A", "#4E6E0A", "#48720B", "#43760B", "#3D7B0C", "#387F0C",
-          "#32840D", "#2C880E", "#278C0E", "#21910F", "#1C950F", "#169910", "#119E10", "#0BA211", "#06A712"];
-
-    let blueScale =
-        ["#EB1416", "#E91330", "#E7134A", "#E51363", "#E3137C", "#E11394", "#E013AC", "#DE13C3",
-          "#DC13DA", "#C312DA", "#AA12D8", "#9012D7", "#7712D5", "#5F12D3", "#4612D1", "#2F12CF",
-          "#1712CE", "#1123CC", "#1139CA", "#114FC8", "#1164C6", "#1179C4", "#118EC3", "#11A2C1",
-          "#11B6BF", "#10BDB1", "#10BB9B", "#10BA84", "#10B86F", "#10B659", "#10B444", "#10B230", "#10B11C"];
-
-    scale = Color.Gradients.voltage_default;
+    let scale = Color.Gradients.voltage_default;
 
     let numColors = scale.length - 1;
 
@@ -386,39 +217,10 @@ class CircuitCanvas extends Observer {
     return scale[value];
   }
 
-
-  drawThickPolygonP(polygon, color, fill) {
-    if (color == null) {
-      color = Settings.STROKE_COLOR;
-    }
-    if (fill == null) {
-      fill = Settings.FILL_COLOR;
-    }
-    let numVertices = polygon.numPoints();
-
-    this.context.save();
-
-    this.context.fillStyle = fill;
-    this.context.strokeStyle = color;
-    this.context.beginPath();
-
-    this.context.moveTo(polygon.getX(0), polygon.getY(0));
-    for (let i = 0; i < numVertices; ++i) {
-      this.context.lineTo(polygon.getX(i), polygon.getY(i));
-    }
-
-    this.context.closePath();
-    this.context.fill();
-    this.context.stroke();
-    return this.context.restore();
-  }
-
   drawCoil(point1, point2, vStart, vEnd, hs) {
     let color, cx, hsx, voltageLevel;
-    if (hs == null) {
-      hs = null;
-    }
     hs = hs || 8;
+
     let segments = 40;
 
     let ps1 = new Point(0, 0);
@@ -470,28 +272,20 @@ class CircuitCanvas extends Observer {
 
   drawComponents() {
     if (this.context) {
-      for (var component of Array.from(this.Circuit.getElements())) {
+      for (var component of Array.from(this.Circuit.getElements()))
         this.drawComponent(component);
-      }
 
       if (this.Circuit && this.Circuit.debugModeEnabled()) {
-        let voltage, x, y;
-        let nodeIdx = 0;
-        return Array.from(this.Circuit.getNodes()).map((node) =>
-            (({
-              x,
-              y
-            } = node),
-                voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx)),
+        for (let nodeIdx =0; this.Circuit.getNode(nodeIdx); ++nodeIdx) {
+          voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx));
 
-                this.context.fillText(`${nodeIdx}:${voltage}`, x + 10, y - 10, "#FF8C00"),
-                nodeIdx++));
+          this.context.fillText(`${nodeIdx}:${voltage}`, x + 10, y - 10, "#FF8C00");
+        }
       }
     }
   }
 
   drawComponent(component) {
-
     if (component && Array.from(this.circuitUI.selectedComponents).includes(component)) {
       this.drawBoldLines();
       for (let i = 0; i < component.getPostCount(); ++i) {
@@ -504,36 +298,6 @@ class CircuitCanvas extends Observer {
 
     // Main entry point to draw component
     component.draw(this);
-  }
-
-  drawValue(perpindicularOffset, parallelOffset, component, text = null, text_size = Settings.TEXT_SIZE) {
-    let x, y;
-
-    this.context.save();
-    this.context.textAlign = "center";
-
-    this.context.font = "bold 7pt Courier";
-
-    let stringWidth = this.context.measureText(text).width;
-    let stringHeight = this.context.measureText(text).actualBoundingBoxAscent || 0;
-
-    this.context.fillStyle = Settings.TEXT_COLOR;
-    if (component.isVertical()) {
-
-      ({x} = component.getCenter()); //+ perpindicularOffset
-      ({y} = component.getCenter()); //+ parallelOffset - stringHeight / 2.0
-
-      this.context.translate(x, y);
-      this.context.rotate(Math.PI / 2);
-      this.fillText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
-    } else {
-      x = component.getCenter().x + parallelOffset;
-      y = component.getCenter().y + perpindicularOffset;
-
-      this.fillText(text, x, y, Settings.TEXT_COLOR, text_size);
-    }
-
-    this.context.restore();
   }
 
   // TODO: Move to CircuitComponent
@@ -560,36 +324,32 @@ class CircuitCanvas extends Observer {
       newPos = component.curcount;
     }
 
-    return (() => {
-      let result = [];
-      while (newPos < dn) {
-        let xOffset = ptA.x + ((newPos * dx) / dn);
-        let yOffset = ptA.y + ((newPos * dy) / dn);
+    while (newPos < dn) {
+      let xOffset = ptA.x + ((newPos * dx) / dn);
+      let yOffset = ptA.y + ((newPos * dy) / dn);
 
-        if (Settings.CURRENT_DISPLAY_TYPE === Settings.CURENT_TYPE_DOTS) {
-          this.fillCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR);
-        } else {
-          let xOffset0 = xOffset - ((3 * dx) / dn);
-          let yOffset0 = yOffset - ((3 * dy) / dn);
+      if (Settings.CURRENT_DISPLAY_TYPE === Settings.CURENT_TYPE_DOTS) {
+        this.fillCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR);
+      } else {
+        let xOffset0 = xOffset - ((3 * dx) / dn);
+        let yOffset0 = yOffset - ((3 * dy) / dn);
 
-          let xOffset1 = xOffset + ((3 * dx) / dn);
-          let yOffset1 = yOffset + ((3 * dy) / dn);
+        let xOffset1 = xOffset + ((3 * dx) / dn);
+        let yOffset1 = yOffset + ((3 * dy) / dn);
 
-          this.context.save();
-          this.context.strokeStyle = Settings.CURRENT_COLOR;
-          this.context.lineWidth = Settings.CURRENT_RADIUS;
-          this.context.beginPath();
-          this.context.moveTo(xOffset0, yOffset0);
-          this.context.lineTo(xOffset1, yOffset1);
-          this.context.stroke();
-          this.context.closePath();
-          this.context.restore();
-        }
-
-        result.push(newPos += ds);
+        this.context.save();
+        this.context.strokeStyle = Settings.CURRENT_COLOR;
+        this.context.lineWidth = Settings.CURRENT_RADIUS;
+        this.context.beginPath();
+        this.context.moveTo(xOffset0, yOffset0);
+        this.context.lineTo(xOffset1, yOffset1);
+        this.context.stroke();
+        this.context.closePath();
+        this.context.restore();
       }
-      return result;
-    })();
+
+      newPos += ds
+    }
   }
 
   drawDebugOverlay() {
@@ -696,14 +456,8 @@ class CircuitCanvas extends Observer {
     }
   }
 
-  drawPost(x0, y0, fillColor, strokeColor) {
-    if (fillColor == null) {
-      fillColor = Settings.POST_COLOR;
-    }
-    if (strokeColor == null) {
-      strokeColor = Settings.POST_COLOR;
-    }
-    return this.fillCircle(x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor);
+  drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_COLOR) {
+    this.fillCircle(x0, y0, Settings.POST_RADIUS, 1, fillColor, strokeColor);
   }
 
   drawBoldLines() {
@@ -713,6 +467,174 @@ class CircuitCanvas extends Observer {
   drawDefaultLines() {
     return this.boldLines = false;
   }
+
+  // Draw Primitives
+
+  fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size = Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
+    this.context.save();
+
+    this.context.fillStyle = fillColor;
+    this.context.strokeStyle = strokeColor;
+    this.context.font = `${Settings.TEXT_STYLE} ${size}pt ${Settings.FONT}`;
+    this.context.fillText(text, x, y);
+
+    this.context.lineWidth = 0;
+    this.context.strokeText(text, x, y);
+
+    let textMetrics = this.context.measureText(text);
+
+    this.context.restore();
+
+    return textMetrics;
+  }
+
+  fillCircle(x, y, radius, lineWidth = Settings.LINE_WIDTH, fillColor = '#FFFF00', lineColor = null) {
+    this.context.save();
+
+    this.context.beginPath();
+    this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
+
+    if (lineColor) {
+      this.context.lineWidth = lineWidth;
+      this.context.strokeStyle = lineColor;
+      this.context.stroke();
+    }
+
+    this.context.fillStyle = fillColor;
+    this.context.fill();
+
+    this.context.closePath();
+
+    this.context.restore();
+  }
+
+  drawCircle(x, y, radius, lineWidth = Settings.LINE_WIDTH, lineColor = "#000000") {
+    this.context.save();
+
+    this.context.strokeStyle = lineColor;
+    this.context.lineWidth = lineWidth;
+
+    this.context.beginPath();
+    this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
+    this.context.stroke();
+    this.context.closePath();
+
+    this.context.restore();
+  }
+
+  drawRect(x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR) {
+    this.context.save();
+
+    this.context.strokeStyle = lineColor;
+    this.context.lineJoin = 'miter';
+    this.context.lineWidth = 0;
+    this.context.strokeRect(x, y, width, height);
+    this.context.stroke();
+
+    this.context.restore();
+  }
+
+  drawLinePt(pa, pb, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
+    this.drawLine(pa.x, pa.y, pb.x, pb.y, color, lineWidth);
+  }
+
+  drawValue(perpindicularOffset, parallelOffset, component, text = null, text_size = Settings.TEXT_SIZE) {
+    let x, y;
+
+    this.context.save();
+    this.context.textAlign = "center";
+
+    this.context.font = "bold 7pt Courier";
+
+    let stringWidth = this.context.measureText(text).width;
+    let stringHeight = this.context.measureText(text).actualBoundingBoxAscent || 0;
+
+    this.context.fillStyle = Settings.TEXT_COLOR;
+    if (component.isVertical()) {
+
+      ({x} = component.getCenter()); //+ perpindicularOffset
+      ({y} = component.getCenter()); //+ parallelOffset - stringHeight / 2.0
+
+      this.context.translate(x, y);
+      this.context.rotate(Math.PI / 2);
+      this.fillText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
+    } else {
+      x = component.getCenter().x + parallelOffset;
+      y = component.getCenter().y + perpindicularOffset;
+
+      this.fillText(text, x, y, Settings.TEXT_COLOR, text_size);
+    }
+
+    this.context.restore();
+  }
+
+  drawLine(x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
+    this.context.save();
+
+    if (!this.pathMode)
+      this.context.beginPath();
+
+    if (this.boldLines) {
+      this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
+      this.context.strokeStyle = Settings.SELECT_COLOR;
+    } else {
+      this.context.lineWidth = lineWidth;
+      this.context.strokeStyle = color;
+    }
+
+    if (!this.pathMode)
+      this.context.moveTo(x, y);
+    this.context.lineTo(x2, y2);
+    this.context.stroke();
+
+    if (!this.pathMode)
+      this.context.closePath();
+
+    this.context.restore();
+  }
+
+  drawThickPolygon(xlist, ylist, color = Settings.STROKE_COLOR, fill = Settings.FILL_COLOR) {
+    this.context.save();
+
+    this.context.fillStyle = fill;
+    this.context.strokeStyle = color;
+    this.context.beginPath();
+
+    this.context.moveTo(xlist[0], ylist[0]);
+    for (let i = 0; i < xlist.length; ++i) {
+      this.context.lineTo(xlist[i], ylist[i]);
+    }
+
+    this.context.closePath();
+    this.context.stroke();
+    if (color) {
+      this.context.fill();
+    }
+
+    this.context.restore();
+  }
+
+  drawThickPolygonP(polygon, color = Settings.STROKE_COLOR, fill = Settings.FILL_COLOR) {
+    let numVertices = polygon.numPoints();
+
+    this.context.save();
+
+    this.context.fillStyle = fill;
+    this.context.strokeStyle = color;
+    this.context.beginPath();
+
+    this.context.moveTo(polygon.getX(0), polygon.getY(0));
+    for (let i = 0; i < numVertices; ++i) {
+      this.context.lineTo(polygon.getX(i), polygon.getY(i));
+    }
+
+    this.context.closePath();
+    this.context.fill();
+    this.context.stroke();
+
+    this.context.restore();
+  }
+
 }
 
 module.exports = CircuitCanvas;

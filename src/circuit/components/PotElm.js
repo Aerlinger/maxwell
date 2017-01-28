@@ -101,11 +101,13 @@ class PotElm extends CircuitComponent {
   }
 
   onToggle() {
+    /*
     console.log(this.post3);
     console.log(this.corner2);
     console.log(this.arrowPoint);
-    console.log(this.arrow1)
-    console.log(this.arrow2)
+    console.log(this.arrow1);
+    console.log(this.arrow2);
+    */
   }
 
   unitSymbol() {
@@ -161,9 +163,7 @@ class PotElm extends CircuitComponent {
     }
 
     //offset = this.dn();
-
-
-    console.log(this.point1, this.point2, this.dx(), this.dy());
+    //console.log(this.point1, this.point2, this.dx(), this.dy());
 
     if (offset === 0) {
       offset = 2 * Settings.GRID_SIZE;
@@ -189,7 +189,7 @@ class PotElm extends CircuitComponent {
     this.ps3 = new Point(0, 0);
     this.ps4 = new Point(0, 0);
 
-    console.log("POSTS", this.dir, "offset", offset, "dn", dn, clen, this.position, "post3", this.post3, "corner2", this.corner2, "arrowPoint", this.arrowPoint, this.arrow1, this.arrow2, this.midpoint, "p1", this.point1, "p2", this.p2);
+    //console.log("POSTS", this.dir, "offset", offset, "dn", dn, clen, this.position, "post3", this.post3, "corner2", this.corner2, "arrowPoint", this.arrowPoint, this.arrow1, this.arrow2, this.midpoint, "p1", this.point1, "p2", this.p2);
   }
 
   getPost(n) {

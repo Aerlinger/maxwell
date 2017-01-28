@@ -10,7 +10,6 @@ let { sprintf } = require("sprintf-js");
 let Util = require('../../util/util.js');
 
 class VarRailElm extends RailElm {
-
   static get Fields() {
     return Util.extend(RailElm.Fields, {
       "sliderText": {
@@ -32,22 +31,8 @@ class VarRailElm extends RailElm {
 
     this.waveform = VoltageElm.WF_VAR;
 
-//    console.log(@toJson())
-
     this.sliderValue = Math.floor(((this.frequency - this.bias) * 100) / (this.maxVoltage - this.bias));
   }
-
-//    console.log("value: #{@sliderValue}")
-
-//  setPoints: ->
-//    super
-//
-//    diameter = if (@waveform == VoltageElm.WF_DC || @waveform == VoltageElm.WF_VAR)
-//      8
-//    else
-//      @circleSize * 2
-//
-//    @calcLeads(diameter)
 
   createSlider() {}
 
@@ -55,17 +40,12 @@ class VarRailElm extends RailElm {
     return this.sliderValue;
   }
 
-//  getVoltageDiff: ->
-//    @volts[0]
-
     // Todo: implement
   getVoltage() {
     this.frequency = ((this.getSliderValue() * (this.maxVoltage - this.bias)) / 100.0) + this.bias;
 
-//    console.log("frequency: #{@frequency}")
     return this.frequency;
   }
 }
-// VarRailElm.initClass();
 
 module.exports = VarRailElm;

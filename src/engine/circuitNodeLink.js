@@ -12,7 +12,7 @@ class CircuitNodeLink {
   }
 
   toString() {
-    return `${this.num} ${this.elm.toString()}`;
+    return `${this.num} ${this.elm}`;
   }
 }
 
