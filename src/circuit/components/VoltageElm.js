@@ -160,7 +160,6 @@ class VoltageElm extends CircuitComponent {
     }
   }
 
-
   setPoints() {
     return super.setPoints(...arguments);
   }

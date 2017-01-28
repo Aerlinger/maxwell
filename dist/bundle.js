@@ -1631,7 +1631,7 @@
 	    this.TEXT_ERROR_COLOR = ColorPalette.red;
 	    this.TEXT_WARNING_COLOR = ColorPalette.yellow;
 	
-	    this.TEXT_SIZE = 7;
+	    this.TEXT_SIZE = 7.5;
 	    this.FONT = 'Monaco';
 	    this.TEXT_STYLE = 'bold';
 	    this.LABEL_COLOR = '#0000cd';
@@ -18304,7 +18304,6 @@
 	    }
 	  }
 	
-	
 	  setPoints() {
 	    return super.setPoints(...arguments);
 	  }
@@ -18870,7 +18869,7 @@
 	    context.beginPath();
 	
 	    context.moveTo(this.lead1.x, this.lead1.y);
-	    context.lineJoin = 'round';
+	    context.lineJoin = 'bevel';
 	
 	    let grad = context.createLinearGradient(this.lead1.x, this.lead1.y, this.lead2.x, this.lead2.y);
 	    let volt0Color = renderContext.getVoltageColor(this.volts[0]);
@@ -18887,7 +18886,7 @@
 	        context.lineWidth = Settings.BOLD_LINE_WIDTH;
 	        context.strokeStyle = Settings.SELECT_COLOR;
 	      } else {
-	        context.lineWidth = Settings.LINE_WIDTH;
+	        context.lineWidth = Settings.LINE_WIDTH + 1;
 	      }
 	
 	      let startPosition = Util.interpolate(this.lead1, this.lead2, n*parallelOffset, width*offsets[n % 4]);
@@ -19603,7 +19602,7 @@
 	    renderContext.drawLinePt(this.plate1[0], this.plate1[1], renderContext.getVoltageColor(this.volts[0]), Settings.LINE_WIDTH+1);
 	    renderContext.drawLinePt(this.plate2[0], this.plate2[1], renderContext.getVoltageColor(this.volts[1]), Settings.LINE_WIDTH+1);
 	
-	    renderContext.drawValue(20, 0, this, Util.getUnitText(this.capacitance, this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
+	    renderContext.drawValue(17, 0, this, Util.getUnitText(this.capacitance, this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
 	
 	    renderContext.drawPosts(this);
 	
@@ -21116,8 +21115,8 @@
 	    // Body
 	    renderContext.drawThickPolygonP(this.triangle, Settings.STROKE_COLOR, Settings.FG_COLOR);
 	
-	    renderContext.fillText("+", this.in1p[1].x + 5, this.in1p[1].y + 3, Settings.LABEL_COLOR);
-	    renderContext.fillText("-", this.in2p[1].x + 5, this.in2p[1].y + 3, Settings.LABEL_COLOR);
+	    renderContext.fillText("+", this.in1p[1].x + 5, this.in1p[1].y + 5, Settings.LABEL_COLOR);
+	    renderContext.fillText("-", this.in2p[1].x + 5, this.in2p[1].y + 5, Settings.LABEL_COLOR);
 	
 	    if (this.getParentCircuit() && this.getParentCircuit()) {
 	      this.updateDots();
@@ -27119,7 +27118,7 @@
 	
 	class Circuit extends Observer {
 	  static initClass() {
-	    this.DEBUG = true;
+	    this.DEBUG = false;
 	
 	    this.components = [
 	      // Working
@@ -30069,11 +30068,11 @@
 	    this.drawComponents();
 	
 	    if (this.context) {
-	      // if (this.circuitUI.highlightedNode)
-	      //   this.drawRect(this.circuitUI.highlightedNode.x - 10 + 0.5, this.circuitUI.highlightedNode.y - 10 + 0.5, 21, 21, 1, "#0F0");
+	      if (this.circuitUI.highlightedNode)
+	        this.drawCircle(this.circuitUI.highlightedNode.x + 0.5, this.circuitUI.highlightedNode.y + 0.5, 7, 3, "#0F0");
 	
-	      // if (this.circuitUI.selectedNode)
-	      //   this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
+	      if (this.circuitUI.selectedNode)
+	        this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
 	
 	      if (this.circuitUI.placeComponent) {
 	        this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);

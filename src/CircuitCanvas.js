@@ -123,11 +123,11 @@ class CircuitCanvas extends Observer {
     this.drawComponents();
 
     if (this.context) {
-      // if (this.circuitUI.highlightedNode)
-      //   this.drawRect(this.circuitUI.highlightedNode.x - 10 + 0.5, this.circuitUI.highlightedNode.y - 10 + 0.5, 21, 21, 1, "#0F0");
+      if (this.circuitUI.highlightedNode)
+        this.drawCircle(this.circuitUI.highlightedNode.x + 0.5, this.circuitUI.highlightedNode.y + 0.5, 7, 3, "#0F0");
 
-      // if (this.circuitUI.selectedNode)
-      //   this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
+      if (this.circuitUI.selectedNode)
+        this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
 
       if (this.circuitUI.placeComponent) {
         this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);

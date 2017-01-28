@@ -107,8 +107,8 @@ class OpAmpElm extends CircuitComponent {
     // Body
     renderContext.drawThickPolygonP(this.triangle, Settings.STROKE_COLOR, Settings.FG_COLOR);
 
-    renderContext.fillText("+", this.in1p[1].x + 5, this.in1p[1].y + 3, Settings.LABEL_COLOR);
-    renderContext.fillText("-", this.in2p[1].x + 5, this.in2p[1].y + 3, Settings.LABEL_COLOR);
+    renderContext.fillText("+", this.in1p[1].x + 5, this.in1p[1].y + 5, Settings.LABEL_COLOR);
+    renderContext.fillText("-", this.in2p[1].x + 5, this.in2p[1].y + 5, Settings.LABEL_COLOR);
 
     if (this.getParentCircuit() && this.getParentCircuit()) {
       this.updateDots();

@@ -217,7 +217,7 @@ class Settings {
     this.TEXT_ERROR_COLOR = ColorPalette.red;
     this.TEXT_WARNING_COLOR = ColorPalette.yellow;
 
-    this.TEXT_SIZE = 7;
+    this.TEXT_SIZE = 7.5;
     this.FONT = 'Monaco';
     this.TEXT_STYLE = 'bold';
     this.LABEL_COLOR = '#0000cd';

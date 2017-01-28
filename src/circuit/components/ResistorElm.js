@@ -55,7 +55,7 @@ class ResistorElm extends CircuitComponent {
     context.beginPath();
 
     context.moveTo(this.lead1.x, this.lead1.y);
-    context.lineJoin = 'round';
+    context.lineJoin = 'bevel';
 
     let grad = context.createLinearGradient(this.lead1.x, this.lead1.y, this.lead2.x, this.lead2.y);
     let volt0Color = renderContext.getVoltageColor(this.volts[0]);
@@ -72,7 +72,7 @@ class ResistorElm extends CircuitComponent {
         context.lineWidth = Settings.BOLD_LINE_WIDTH;
         context.strokeStyle = Settings.SELECT_COLOR;
       } else {
-        context.lineWidth = Settings.LINE_WIDTH;
+        context.lineWidth = Settings.LINE_WIDTH + 1;
       }
 
       let startPosition = Util.interpolate(this.lead1, this.lead2, n*parallelOffset, width*offsets[n % 4]);
