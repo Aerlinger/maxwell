@@ -419,7 +419,17 @@ class CircuitCanvas extends Observer {
       return;
     }
 
-    let str = "";
+    let str = `UI: ${this.circuitUI.width}x${this.circuitUI.height}\n`;
+    str += this.circuitUI.getMode() + "\n";
+
+    str += "Highlighted Node: :" + this.circuitUI.highlightedNode + "\n";
+    str += "Selected Node: :" + this.circuitUI.selectedNode + "\n";
+    str += "Highlighted Component: " + this.circuitUI.highlightedComponent + "\n";
+    str += `Selection [${this.circuitUI.marquee || ""}]\n  - `;
+    str += this.circuitUI.selectedComponents.join("\n  - ") + "\n";
+
+
+    str += "\nCircuit:\n";
 
     // Name
     str += `Name: ${this.Circuit.name}\n`;

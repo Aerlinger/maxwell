@@ -29510,6 +29510,10 @@
 	    this.y1 = y1;
 	  }
 	
+	  toString() {
+	    return `${this.x} ${this.y} ${this.x2} ${this.y2}`;
+	  }
+	
 	  reposition(x, y) {
 	    let _x1 = Math.min(x, this.x1);
 	    let _x2 = Math.max(x, this.x1);
@@ -29858,8 +29862,27 @@
 	  restart() {
 	  }
 	
+	  isSelecting() {
+	    return !!this.marquee;
+	  }
+	
 	  isPlacingComponent() {
 	    return !!this.placeComponent;
+	  }
+	
+	  getMode() {
+	    let mode = "";
+	
+	    if (this.isDragging)
+	      mode = "DRAGGING";
+	    else if(this.isPlacingComponent())
+	      mode = "PLACING";
+	    else if(this.isSelecting())
+	      mode = "SELECTING";
+	    else
+	      mode = "IDLE";
+	
+	    return mode
 	  }
 	
 	  clearPlaceComponent() {
@@ -30328,7 +30351,17 @@
 	      return;
 	    }
 	
-	    let str = "";
+	    let str = `UI: ${this.circuitUI.width}x${this.circuitUI.height}\n`;
+	    str += this.circuitUI.getMode() + "\n";
+	
+	    str += "Highlighted Node: :" + this.circuitUI.highlightedNode + "\n";
+	    str += "Selected Node: :" + this.circuitUI.selectedNode + "\n";
+	    str += "Highlighted Component: " + this.circuitUI.highlightedComponent + "\n";
+	    str += `Selection [${this.circuitUI.marquee || ""}]\n  - `;
+	    str += this.circuitUI.selectedComponents.join("\n  - ") + "\n";
+	
+	
+	    str += "\nCircuit:\n";
 	
 	    // Name
 	    str += `Name: ${this.Circuit.name}\n`;

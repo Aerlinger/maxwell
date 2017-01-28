@@ -77,6 +77,10 @@ class SelectionMarquee extends Rectangle {
     this.y1 = y1;
   }
 
+  toString() {
+    return `${this.x} ${this.y} ${this.x2} ${this.y2}`;
+  }
+
   reposition(x, y) {
     let _x1 = Math.min(x, this.x1);
     let _x2 = Math.max(x, this.x1);
@@ -425,8 +429,27 @@ class CircuitUI extends Observer {
   restart() {
   }
 
+  isSelecting() {
+    return !!this.marquee;
+  }
+
   isPlacingComponent() {
     return !!this.placeComponent;
+  }
+
+  getMode() {
+    let mode = "";
+
+    if (this.isDragging)
+      mode = "DRAGGING";
+    else if(this.isPlacingComponent())
+      mode = "PLACING";
+    else if(this.isSelecting())
+      mode = "SELECTING";
+    else
+      mode = "IDLE";
+
+    return mode
   }
 
   clearPlaceComponent() {
