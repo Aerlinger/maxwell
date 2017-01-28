@@ -37,7 +37,7 @@ fs = require('fs');
 
 class Circuit extends Observer {
   static initClass() {
-    this.DEBUG = false;
+    this.DEBUG = true;
 
     this.components = [
       // Working

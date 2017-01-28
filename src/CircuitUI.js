@@ -363,21 +363,6 @@ class CircuitUI extends Observer {
         this.marquee = new SelectionMarquee(x, y);
       }
 
-      if (this.highlightedComponent) {
-        if (this.selectedComponents.length > 1 || this.selectedComponents.indexOf(this.highlightedComponent) < 0) {
-          let added = (this.selectedComponents.indexOf(this.highlightedComponent) < 0) ? [this.highlightedComponent] : [];
-          let removed = (this.selectedComponents.indexOf(this.highlightedComponent) < 0) ? [] : [this.highlightedComponent];
-
-          this.onSelectionChanged({
-            selection: [this.highlightedComponent],
-            added: added,
-            removed: removed
-          });
-
-          this.selectedComponents = [this.highlightedComponent];
-        }
-      }
-
       this.selectedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
 
       if (this.selectedNode && this.onNodeClick)
@@ -406,6 +391,22 @@ class CircuitUI extends Observer {
   mouseup(event) {
     this.marquee = null;
     this.selectedNode = null;
+
+    if (this.highlightedComponent && !this.selectedNode && !this.isDragging) {
+      if (this.selectedComponents.length > 1 || this.selectedComponents.indexOf(this.highlightedComponent) < 0) {
+        let added = (this.selectedComponents.indexOf(this.highlightedComponent) < 0) ? [this.highlightedComponent] : [];
+        let removed = (this.selectedComponents.indexOf(this.highlightedComponent) < 0) ? [] : [this.highlightedComponent];
+
+        this.onSelectionChanged({
+          selection: [this.highlightedComponent],
+          added: added,
+          removed: removed
+        });
+
+        this.selectedComponents = [this.highlightedComponent];
+      }
+    }
+
     this.isDragging = false;
 
     if (this.selectedComponents && this.selectedComponents.length > 0) {

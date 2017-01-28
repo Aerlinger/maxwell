@@ -18331,15 +18331,16 @@
 	    if (this.waveform === VoltageElm.WF_DC) {
 	      let [ptA, ptB] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, Settings.GRID_SIZE);
 	      renderContext.drawLinePt(this.lead1, ptA, renderContext.getVoltageColor(this.volts[0]));
-	      renderContext.drawLinePt(ptA, ptB, renderContext.getVoltageColor(this.volts[0]));
 	
-	      this.setBboxPt(this.point1, this.point2, Settings.GRID_SIZE);
+	      renderContext.drawLinePt(ptA, ptB, renderContext.getVoltageColor(this.volts[0]), Settings.LINE_WIDTH + 1);
+	
+	      // this.setBboxPt(this.point1, this.point2, Settings.GRID_SIZE);
 	      [ptA, ptB] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, 2 * Settings.GRID_SIZE);
-	      renderContext.drawLinePt(ptA, ptB, renderContext.getVoltageColor(this.volts[1]));
+	      renderContext.drawLinePt(ptA, ptB, renderContext.getVoltageColor(this.volts[1]), Settings.LINE_WIDTH + 1);
 	
 	      renderContext.drawValue(-25, 0, this, Util.getUnitText(this.getVoltageDiff(), this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
 	    } else {
-	      this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
+	      // this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
 	      let ps1 = Util.interpolate(this.lead1, this.lead2, 0.5);
 	      this.drawWaveform(ps1, renderContext);
 	    }
@@ -27118,7 +27119,7 @@
 	
 	class Circuit extends Observer {
 	  static initClass() {
-	    this.DEBUG = false;
+	    this.DEBUG = true;
 	
 	    this.components = [
 	      // Working
@@ -29808,21 +29809,6 @@
 	        this.marquee = new SelectionMarquee(x, y);
 	      }
 	
-	      if (this.highlightedComponent) {
-	        if (this.selectedComponents.length > 1 || this.selectedComponents.indexOf(this.highlightedComponent) < 0) {
-	          let added = (this.selectedComponents.indexOf(this.highlightedComponent) < 0) ? [this.highlightedComponent] : [];
-	          let removed = (this.selectedComponents.indexOf(this.highlightedComponent) < 0) ? [] : [this.highlightedComponent];
-	
-	          this.onSelectionChanged({
-	            selection: [this.highlightedComponent],
-	            added: added,
-	            removed: removed
-	          });
-	
-	          this.selectedComponents = [this.highlightedComponent];
-	        }
-	      }
-	
 	      this.selectedNode = this.Circuit.getNodeAtCoordinates(this.snapX, this.snapY);
 	
 	      if (this.selectedNode && this.onNodeClick)
@@ -29851,6 +29837,22 @@
 	  mouseup(event) {
 	    this.marquee = null;
 	    this.selectedNode = null;
+	
+	    if (this.highlightedComponent && !this.selectedNode && !this.isDragging) {
+	      if (this.selectedComponents.length > 1 || this.selectedComponents.indexOf(this.highlightedComponent) < 0) {
+	        let added = (this.selectedComponents.indexOf(this.highlightedComponent) < 0) ? [this.highlightedComponent] : [];
+	        let removed = (this.selectedComponents.indexOf(this.highlightedComponent) < 0) ? [] : [this.highlightedComponent];
+	
+	        this.onSelectionChanged({
+	          selection: [this.highlightedComponent],
+	          added: added,
+	          removed: removed
+	        });
+	
+	        this.selectedComponents = [this.highlightedComponent];
+	      }
+	    }
+	
 	    this.isDragging = false;
 	
 	    if (this.selectedComponents && this.selectedComponents.length > 0) {
