@@ -18783,7 +18783,7 @@
 	      renderContext.drawLinePt(startPosition, endPosition, renderContext.getVoltageColor(resistorSegmentVoltage), Settings.LINE_WIDTH);
 	    }
 	
-	    renderContext.drawValue(14, 0, this, Util.getUnitText(this.resistance, this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
+	    renderContext.drawValue(10, 0, this, Util.getUnitText(this.resistance, this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
 	
 	    renderContext.drawPosts(this);
 	
@@ -30036,6 +30036,8 @@
 	
 	        if (scopeCanvas) {
 	
+	          this.context.save();
+	          
 	          var center = scopeElm.circuitElm.getCenter();
 	
 	          let strokeStyle = this.context.strokeStyle;
@@ -30051,6 +30053,8 @@
 	
 	          this.context.strokeStyle = strokeStyle;
 	          this.context.setLineDash(lineDash);
+	          
+	          this.context.restore();
 	        }
 	      }
 	    }
@@ -30096,6 +30100,8 @@
 	    }
 	     */
 	
+	    this.context.save();
+	
 	    let ds = Settings.CURRENT_SEGMENT_LENGTH;
 	
 	    let dx = ptB.x - ptA.x;
@@ -30124,7 +30130,7 @@
 	        let xOffset1 = xOffset + ((3 * dx) / dn);
 	        let yOffset1 = yOffset + ((3 * dy) / dn);
 	
-	        this.context.save();
+	        //this.context.save();
 	        this.context.strokeStyle = Settings.CURRENT_COLOR;
 	        this.context.lineWidth = Settings.CURRENT_RADIUS;
 	        this.context.beginPath();
@@ -30132,17 +30138,21 @@
 	        this.context.lineTo(xOffset1, yOffset1);
 	        this.context.stroke();
 	        this.context.closePath();
-	        this.context.restore();
+	        //this.context.restore();
 	      }
 	
 	      newPos += ds
 	    }
+	
+	    this.context.restore();
 	  }
 	
 	  drawDebugOverlay() {
 	    if (!this.Circuit || !this.context) {
 	      return;
 	    }
+	
+	    this.context.save();
 	
 	    // Nodes
 	    let nodeIdx = 0;
@@ -30162,6 +30172,7 @@
 	
 	      nodeIdx++;
 	    }
+	    this.context.restore();
 	
 	    // Nodes
 	  }
@@ -30333,24 +30344,34 @@
 	
 	    this.context.font = "bold 7pt Courier";
 	
+	    let theta = Math.atan(component.dy()/component.dx());
+	
 	    let stringWidth = this.context.measureText(text).width;
 	    let stringHeight = this.context.measureText(text).actualBoundingBoxAscent || 0;
 	
 	    this.context.fillStyle = Settings.TEXT_COLOR;
-	    if (component.isVertical()) {
+	    // if (component.isVertical()) {
 	
 	      ({x} = component.getCenter()); //+ perpindicularOffset
 	      ({y} = component.getCenter()); //+ parallelOffset - stringHeight / 2.0
 	
 	      this.context.translate(x, y);
-	      this.context.rotate(Math.PI / 2);
+	      this.context.rotate(theta);
 	      this.fillText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
+	      /*
 	    } else {
 	      x = component.getCenter().x + parallelOffset;
 	      y = component.getCenter().y + perpindicularOffset;
 	
+	      this.context.translate(x, y);
+	
+	      this.context.save();
+	      this.context.rotate(theta);
+	      this.context.restore();
+	
 	      this.fillText(text, x, y, Settings.TEXT_COLOR, text_size);
 	    }
+	    */
 	
 	    this.context.restore();
 	  }
