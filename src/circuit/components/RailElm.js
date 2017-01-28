@@ -30,7 +30,13 @@ class RailElm extends VoltageElm {
 
     //this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
 
-    renderContext.drawLinePt(this.point2, this.lead1, Settings.STROKE_COLOR, Settings.LINE_WIDTH+1);
+    //renderContext.drawLinePt(this.point2, this.lead1, Settings.STROKE_COLOR, Settings.LINE_WIDTH+1);
+
+    let pt1, pt2;
+    [pt1, pt2] = Util.interpolateSymmetrical(this.point2, this.lead1, 0, 8);
+
+    renderContext.drawLinePt(pt1, pt2, Settings.STROKE_COLOR, Settings.LINE_WIDTH);
+
     renderContext.drawLinePt(this.point2, this.point1, Settings.STROKE_COLOR);
 
     let color = renderContext.getVoltageColor(this.volts[0]);

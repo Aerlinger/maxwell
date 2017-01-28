@@ -277,22 +277,6 @@ class Util {
 
   static typeOf(obj, klassType) {
     return (obj.constructor === klassType) || (obj.constructor.prototype instanceof klassType);
-
-    // let klass = obj.constructor;
-
-    // if (klass === klassType) { return true; }
-
-    /*
-    while (klass.__super__ != null) {
-      if (klass.__super__ === klassType.prototype) {
-        return true;
-      }
-
-      klass = klass.__super__.constructor;
-    }
-    */
-
-    // return false;
   }
 
   static halt(message) {
@@ -315,26 +299,8 @@ class Util {
     return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
   }
 
-  static arrayDiff(a1, a2) {
-    var a = [], diff = [];
-
-    for (var i = 0; i < a1.length; i++) {
-      a[a1[i]] = true;
-    }
-
-    for (var i = 0; i < a2.length; i++) {
-      if (a[a2[i]]) {
-        delete a[a2[i]];
-      } else {
-        a[a2[i]] = true;
-      }
-    }
-
-    for (var k in a) {
-      diff.push(k);
-    }
-
-    return diff;
+  static diff(a, b) {
+    return a.filter(function(i) {return b.indexOf(i) < 0;});
   }
 }
 

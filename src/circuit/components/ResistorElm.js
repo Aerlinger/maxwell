@@ -49,16 +49,41 @@ class ResistorElm extends CircuitComponent {
 
     // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
     let offsets = [0, 1, 0, -1];
-    
+
+    let context = renderContext.context
+    context.save();
+    context.beginPath();
+
+    context.moveTo(this.lead1.x, this.lead1.y);
+    context.lineJoin = 'round';
+
+    let grad = context.createLinearGradient(this.lead1.x, this.lead1.y, this.lead2.x, this.lead2.y);
+    let volt0Color = renderContext.getVoltageColor(this.volts[0]);
+    let volt1Color = renderContext.getVoltageColor(this.volts[1]);
+
+    grad.addColorStop(0, volt0Color);
+    grad.addColorStop(1, volt1Color);
+
+    context.strokeStyle = grad;
+
     // Draw resistor "zig-zags"
-    for (let n = 0; n < numSegments; n++) {
-      let resistorSegmentVoltage = this.volts[0] + ((this.volts[1]-this.volts[0]) * (n / numSegments));
+    for (let n = 0; n < numSegments + 1; n++) {
+      if (renderContext.boldLines) {
+        context.lineWidth = Settings.BOLD_LINE_WIDTH;
+        context.strokeStyle = Settings.SELECT_COLOR;
+      } else {
+        context.lineWidth = Settings.LINE_WIDTH;
+      }
 
       let startPosition = Util.interpolate(this.lead1, this.lead2, n*parallelOffset, width*offsets[n % 4]);
-      let endPosition = Util.interpolate(this.lead1, this.lead2, (n+1)*parallelOffset, width*offsets[(n+1) % 4]);
 
-      renderContext.drawLinePt(startPosition, endPosition, renderContext.getVoltageColor(resistorSegmentVoltage), Settings.LINE_WIDTH);
+      context.lineTo(startPosition.x + renderContext.lineShift, startPosition.y + renderContext.lineShift);
     }
+
+    context.stroke();
+
+    context.closePath();
+    context.restore();
 
     renderContext.drawValue(10, 0, this, Util.getUnitText(this.resistance, this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
 

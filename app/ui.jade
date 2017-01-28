@@ -21,11 +21,11 @@ block header
         console.log("ON COMPONENT HOVER:", component.toString(), "V:", component.volts);
         var form = Maxwell.renderEdit(component);
 
-        //console.log("renderEdit\n", form);
+        console.log("renderEdit\n", form);
 
         window.editInfo = form;
 
-        // document.getElementById("edit_component").innerHTML = form;
+         document.getElementById("edit_component").innerHTML = form;
       };
 
       circuitContext.onComponentUnhover = function (component) {

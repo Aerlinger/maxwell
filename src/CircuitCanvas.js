@@ -234,12 +234,19 @@ class CircuitCanvas extends Observer {
     ps1.x = point1.x;
     ps1.y = point1.y;
 
-    this.context.save()
+    this.context.save();
 
     this.context.beginPath();
-    this.context.lineJoin = 'round';
+    this.context.lineJoin = 'bevel';
 
     this.context.moveTo(ps1.x + this.lineShift, ps1.y + this.lineShift);
+
+    let grad = this.context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
+
+    grad.addColorStop(0, this.getVoltageColor(vStart));
+    grad.addColorStop(1, this.getVoltageColor(vEnd));
+
+    this.context.strokeStyle = grad;
 
     for (let i = 0; i < segments; ++i) {
       cx = (((i + 1) * 8 / segments) % 2) - 1;
@@ -252,8 +259,8 @@ class CircuitCanvas extends Observer {
         this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
         this.context.strokeStyle = Settings.SELECT_COLOR;
       } else {
-        this.context.lineWidth = Settings.LINE_WIDTH;
-        this.context.strokeStyle = color;
+        this.context.lineWidth = Settings.LINE_WIDTH + 1;
+        //this.context.strokeStyle = color;
       }
 
       this.context.lineTo(ps2.x + this.lineShift, ps2.y + this.lineShift);
@@ -263,8 +270,8 @@ class CircuitCanvas extends Observer {
     }
 
     this.context.stroke();
-    this.context.closePath();
 
+    this.context.closePath();
     this.context.restore()
   }
 
@@ -502,15 +509,15 @@ class CircuitCanvas extends Observer {
   }
 
   drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_OUTLINE_COLOR) {
-    let outlineRadius = 2;
+    let oulineWidth = 1;
 
     if (this.boldLines) {
-      strokeColor = Settings.SELECT_COLOR;
+      strokeColor = Settings.POST_SELECT_OUTLINE_COLOR;
       fillColor = Settings.POST_SELECT_COLOR;
-      outlineRadius += 2;
+      oulineWidth += 3;
     }
 
-    this.fillCircle(x0, y0, Settings.POST_RADIUS, outlineRadius, fillColor, strokeColor);
+    this.fillCircle(x0, y0, Settings.POST_RADIUS, oulineWidth, fillColor, strokeColor);
   }
 
   drawBoldLines() {
@@ -547,7 +554,7 @@ class CircuitCanvas extends Observer {
     this.context.beginPath();
     this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
 
-    if (lineColor) {
+    if (lineColor && lineWidth > 0) {
       this.context.lineWidth = lineWidth;
       this.context.strokeStyle = lineColor;
       this.context.stroke();

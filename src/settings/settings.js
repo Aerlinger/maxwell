@@ -203,8 +203,9 @@ class Settings {
     this.SELECT_COLOR = "#573400";
     this.HIGHLIGHT_COLOR = ColorPalette.orangered;
     this.POST_COLOR = ColorPalette.black;
-    this.POST_OUTLINE_COLOR = ColorPalette.slateblue;
-    this.POST_SELECT_COLOR = ColorPalette.orange;
+    this.POST_OUTLINE_COLOR = "#666";
+    this.POST_SELECT_COLOR = '#ff8c00';
+    this.POST_SELECT_OUTLINE_COLOR = '#F0F';
     this.DOTS_COLOR = ColorPalette.yellow;
     this.DOTS_OUTLINE = ColorPalette.orange;
   

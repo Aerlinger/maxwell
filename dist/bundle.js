@@ -1530,8 +1530,9 @@
 	    this.SELECT_COLOR = "#573400";
 	    this.HIGHLIGHT_COLOR = ColorPalette.orangered;
 	    this.POST_COLOR = ColorPalette.black;
-	    this.POST_OUTLINE_COLOR = ColorPalette.slateblue;
-	    this.POST_SELECT_COLOR = ColorPalette.orange;
+	    this.POST_OUTLINE_COLOR = "#666";
+	    this.POST_SELECT_COLOR = '#ff8c00';
+	    this.POST_SELECT_OUTLINE_COLOR = '#F0F';
 	    this.DOTS_COLOR = ColorPalette.yellow;
 	    this.DOTS_OUTLINE = ColorPalette.orange;
 	  
@@ -1940,22 +1941,6 @@
 	
 	  static typeOf(obj, klassType) {
 	    return (obj.constructor === klassType) || (obj.constructor.prototype instanceof klassType);
-	
-	    // let klass = obj.constructor;
-	
-	    // if (klass === klassType) { return true; }
-	
-	    /*
-	    while (klass.__super__ != null) {
-	      if (klass.__super__ === klassType.prototype) {
-	        return true;
-	      }
-	
-	      klass = klass.__super__.constructor;
-	    }
-	    */
-	
-	    // return false;
 	  }
 	
 	  static halt(message) {
@@ -1978,26 +1963,8 @@
 	    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 	  }
 	
-	  static arrayDiff(a1, a2) {
-	    var a = [], diff = [];
-	
-	    for (var i = 0; i < a1.length; i++) {
-	      a[a1[i]] = true;
-	    }
-	
-	    for (var i = 0; i < a2.length; i++) {
-	      if (a[a2[i]]) {
-	        delete a[a2[i]];
-	      } else {
-	        a[a2[i]] = true;
-	      }
-	    }
-	
-	    for (var k in a) {
-	      diff.push(k);
-	    }
-	
-	    return diff;
+	  static diff(a, b) {
+	    return a.filter(function(i) {return b.indexOf(i) < 0;});
 	  }
 	}
 	
@@ -18005,7 +17972,13 @@
 	
 	    //this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
 	
-	    renderContext.drawLinePt(this.point2, this.lead1, Settings.STROKE_COLOR, Settings.LINE_WIDTH+1);
+	    //renderContext.drawLinePt(this.point2, this.lead1, Settings.STROKE_COLOR, Settings.LINE_WIDTH+1);
+	
+	    let pt1, pt2;
+	    [pt1, pt2] = Util.interpolateSymmetrical(this.point2, this.lead1, 0, 8);
+	
+	    renderContext.drawLinePt(pt1, pt2, Settings.STROKE_COLOR, Settings.LINE_WIDTH);
+	
 	    renderContext.drawLinePt(this.point2, this.point1, Settings.STROKE_COLOR);
 	
 	    let color = renderContext.getVoltageColor(this.volts[0]);
@@ -18808,16 +18781,41 @@
 	
 	    // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
 	    let offsets = [0, 1, 0, -1];
-	    
+	
+	    let context = renderContext.context
+	    context.save();
+	    context.beginPath();
+	
+	    context.moveTo(this.lead1.x, this.lead1.y);
+	    context.lineJoin = 'round';
+	
+	    let grad = context.createLinearGradient(this.lead1.x, this.lead1.y, this.lead2.x, this.lead2.y);
+	    let volt0Color = renderContext.getVoltageColor(this.volts[0]);
+	    let volt1Color = renderContext.getVoltageColor(this.volts[1]);
+	
+	    grad.addColorStop(0, volt0Color);
+	    grad.addColorStop(1, volt1Color);
+	
+	    context.strokeStyle = grad;
+	
 	    // Draw resistor "zig-zags"
-	    for (let n = 0; n < numSegments; n++) {
-	      let resistorSegmentVoltage = this.volts[0] + ((this.volts[1]-this.volts[0]) * (n / numSegments));
+	    for (let n = 0; n < numSegments + 1; n++) {
+	      if (renderContext.boldLines) {
+	        context.lineWidth = Settings.BOLD_LINE_WIDTH;
+	        context.strokeStyle = Settings.SELECT_COLOR;
+	      } else {
+	        context.lineWidth = Settings.LINE_WIDTH;
+	      }
 	
 	      let startPosition = Util.interpolate(this.lead1, this.lead2, n*parallelOffset, width*offsets[n % 4]);
-	      let endPosition = Util.interpolate(this.lead1, this.lead2, (n+1)*parallelOffset, width*offsets[(n+1) % 4]);
 	
-	      renderContext.drawLinePt(startPosition, endPosition, renderContext.getVoltageColor(resistorSegmentVoltage), Settings.LINE_WIDTH);
+	      context.lineTo(startPosition.x + renderContext.lineShift, startPosition.y + renderContext.lineShift);
 	    }
+	
+	    context.stroke();
+	
+	    context.closePath();
+	    context.restore();
 	
 	    renderContext.drawValue(10, 0, this, Util.getUnitText(this.resistance, this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
 	
@@ -19551,7 +19549,7 @@
 	    renderContext.drawPosts(this);
 	
 	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
-	      return super.debugDraw(renderContext);
+	      super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -19681,7 +19679,7 @@
 	
 	  place() {
 	    //super.setPoints(...arguments);
-	    this.calcLeads(32);
+	    this.calcLeads(40);
 	  }
 	
 	  stamp(stamper) {
@@ -22979,7 +22977,6 @@
 	    };
 	  }
 	
-	
 	  constructor(xa, ya, xb, yb, params, f) {
 	    super(xa, ya, xb, yb, params, f);
 	
@@ -23010,7 +23007,7 @@
 	
 	    if ((this.switchCurrent === null) || (this.switchCurrent == undefined) || (this.switchCurrent.length !== this.poleCount)) {
 	      this.switchCurrent = new Array(this.poleCount);
-	      return this.switchCurCount = new Array(this.poleCount);
+	      this.switchCurCount = new Array(this.poleCount);
 	    }
 	  }
 	
@@ -23057,8 +23054,7 @@
 	      return result2;
 	    })());
 	
-	    for (i = 0, end2 = this.poleCount, asc2 = 0 <= end2; asc2 ? i < end2 : i > end2; asc2 ? i++ : i--) {
-	      var asc2, end2;
+	    for (let i = 0; i < this.poleCount; ++i) {
 	      for (j = 0; j < 3; j++) {
 	        this.swposts[i][j] = new Point(0, 0);
 	        this.swpoles[i][j] = new Point(0, 0);
@@ -23088,9 +23084,9 @@
 	  }
 	
 	  getPost(n) {
-	    if (n < (3 * this.poleCount)) {
+	    if (n < (3 * this.poleCount))
 	      return this.swposts[Math.floor(n / 3)][n % 3];
-	    }
+	
 	
 	    return this.coilPosts[n - (3 * this.poleCount)];
 	  }
@@ -23115,7 +23111,7 @@
 	    this.coilCurrent = 0;
 	    this.coilCurCount = 0;
 	
-	    return __range__(0, this.poleCount, false).map((i) =>
+	    __range__(0, this.poleCount, false).map((i) =>
 	      this.switchCurrent[i] = this.switchCurCount[i] = 0);
 	  }
 	
@@ -23133,13 +23129,12 @@
 	
 	    stamper.stampResistor(this.nodes[this.nCoil3], this.nodes[this.nCoil2], this.coilR);
 	
-	    return __range__(0, (3 * this.poleCount), false).map((i) =>
+	    __range__(0, (3 * this.poleCount), false).map((i) =>
 	      //console.log("STAMP! #{@nodes[@nSwitch0 + i]} #{@nodes[@nCoil1]}, #{@nodes[@nCoil2]}, #{@nodes[@nCoil3]}, #{@coilR} -> #{@compResistance}")
 	
 	//      console.log(@nodes[@nSwitch0 + i])
 	      stamper.stampNonLinear(this.nodes[this.nSwitch0 + i]));
 	  }
-	
 	
 	  startIteration() {
 	    // ind.startIteration(@volts[@nCoil1] - @volts[@nCoil3])
@@ -23189,20 +23184,18 @@
 	    renderContext.drawCoil(this.coilLeads[x], this.coilLeads[1 - x], this.volts[this.nCoil1 + x], this.volts[this.nCoil2 - x], this.dsign() * 6);
 	
 	    // draw lines
-	    for (i = 0, end = this.poleCount, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-	      var asc, end;
-	      if (i === 0) {
+	    for (let i = 0; i < this.poleCount; ++i) {
+	      if (i === 0)
 	        this.lines[i * 2] = Util.interpolate(this.point1, this.point2, .5, ((this.openhs * 2) + (5 * this.dsign())) - (i * this.openhs * 3));
-	      } else {
+	      else
 	        this.lines[i * 2] = Util.interpolate(this.point1, this.point2, .5, Math.floor((this.openhs * ((((-i * 3) + 3) - 0.5) + this.d_position)) + (5 * this.dsign())));
-	      }
 	
 	      this.lines[(i * 2) + 1] = Util.interpolate(this.point1, this.point2, .5, Math.floor((this.openhs * (((-i * 3) - .5) + this.d_position)) - (5 * this.dsign())));
 	
 	      renderContext.drawLine(this.lines[i * 2].x, this.lines[i * 2].y, this.lines[(i * 2) + 1].x, this.lines[(i * 2) + 1].y, "#AAA");
 	    }
 	
-	    for (let p = 0, end1 = this.poleCount, asc1 = 0 <= end1; asc1 ? p < end1 : p > end1; asc1 ? p++ : p--) {
+	    for (let p = 0; p < this.poleCount; ++p) {
 	      let po = p * 3;
 	
 	      for (i = 0; i < 3; i++) {
@@ -30172,12 +30165,19 @@
 	    ps1.x = point1.x;
 	    ps1.y = point1.y;
 	
-	    this.context.save()
+	    this.context.save();
 	
 	    this.context.beginPath();
-	    this.context.lineJoin = 'round';
+	    this.context.lineJoin = 'bevel';
 	
 	    this.context.moveTo(ps1.x + this.lineShift, ps1.y + this.lineShift);
+	
+	    let grad = this.context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
+	
+	    grad.addColorStop(0, this.getVoltageColor(vStart));
+	    grad.addColorStop(1, this.getVoltageColor(vEnd));
+	
+	    this.context.strokeStyle = grad;
 	
 	    for (let i = 0; i < segments; ++i) {
 	      cx = (((i + 1) * 8 / segments) % 2) - 1;
@@ -30190,8 +30190,8 @@
 	        this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
 	        this.context.strokeStyle = Settings.SELECT_COLOR;
 	      } else {
-	        this.context.lineWidth = Settings.LINE_WIDTH;
-	        this.context.strokeStyle = color;
+	        this.context.lineWidth = Settings.LINE_WIDTH + 1;
+	        //this.context.strokeStyle = color;
 	      }
 	
 	      this.context.lineTo(ps2.x + this.lineShift, ps2.y + this.lineShift);
@@ -30201,8 +30201,8 @@
 	    }
 	
 	    this.context.stroke();
-	    this.context.closePath();
 	
+	    this.context.closePath();
 	    this.context.restore()
 	  }
 	
@@ -30440,15 +30440,15 @@
 	  }
 	
 	  drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_OUTLINE_COLOR) {
-	    let outlineRadius = 2;
+	    let oulineWidth = 1;
 	
 	    if (this.boldLines) {
-	      strokeColor = Settings.SELECT_COLOR;
+	      strokeColor = Settings.POST_SELECT_OUTLINE_COLOR;
 	      fillColor = Settings.POST_SELECT_COLOR;
-	      outlineRadius += 2;
+	      oulineWidth += 3;
 	    }
 	
-	    this.fillCircle(x0, y0, Settings.POST_RADIUS, outlineRadius, fillColor, strokeColor);
+	    this.fillCircle(x0, y0, Settings.POST_RADIUS, oulineWidth, fillColor, strokeColor);
 	  }
 	
 	  drawBoldLines() {
@@ -30485,7 +30485,7 @@
 	    this.context.beginPath();
 	    this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
 	
-	    if (lineColor) {
+	    if (lineColor && lineWidth > 0) {
 	      this.context.lineWidth = lineWidth;
 	      this.context.strokeStyle = lineColor;
 	      this.context.stroke();

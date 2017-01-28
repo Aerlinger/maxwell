@@ -48,7 +48,7 @@ class InductorElm extends CircuitComponent {
 
   place() {
     //super.setPoints(...arguments);
-    this.calcLeads(32);
+    this.calcLeads(40);
   }
 
   stamp(stamper) {
