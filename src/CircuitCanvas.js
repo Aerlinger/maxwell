@@ -235,6 +235,55 @@ class CircuitCanvas extends Observer {
     return scale[value];
   }
 
+  drawZigZag(point1, point2, vStart, vEnd) {
+    let context = this.context;
+    context.save();
+    context.beginPath();
+
+    context.moveTo(point1.x, point1.y);
+    context.lineJoin = 'bevel';
+
+    let grad = context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
+    let voltColor0 = this.getVoltageColor(vStart);
+    let voltColor1 = this.getVoltageColor(vEnd);
+
+    grad.addColorStop(0, voltColor0);
+    grad.addColorStop(1, voltColor1);
+
+    context.strokeStyle = grad;
+
+    if (this.boldLines) {
+      context.lineWidth = Settings.BOLD_LINE_WIDTH;
+      context.strokeStyle = Settings.SELECT_COLOR;
+    } else {
+      context.lineWidth = Settings.LINE_WIDTH + 1;
+    }
+
+    let numSegments = 8;
+    let width = 5;
+    let parallelOffset = 1 / numSegments;
+
+    // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
+    let offsets = [1, -1];
+
+    let startPosition = Util.interpolate(point1, point2, parallelOffset/2, width);
+    context.lineTo(startPosition.x + this.lineShift, startPosition.y + this.lineShift);
+
+    // Draw resistor "zig-zags"
+    for (let n = 1; n < numSegments; n++) {
+      startPosition = Util.interpolate(point1, point2, n*parallelOffset + parallelOffset/2, width*offsets[n % 2]);
+
+      context.lineTo(startPosition.x + this.lineShift, startPosition.y + this.lineShift);
+    }
+
+    context.lineTo(point2.x + this.lineShift, point2.y + this.lineShift);
+
+    context.stroke();
+
+    context.closePath();
+    context.restore();
+  }
+
   drawCoil(point1, point2, vStart, vEnd, hs) {
     let color, cx, hsx, voltageLevel;
     hs = hs || 8;

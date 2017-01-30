@@ -46,31 +46,15 @@ class PotElm extends CircuitComponent {
   draw(renderContext) {
     this.calcLeads(32);
 
-    let numSegments = 16;
-    let width = 5;
-
 //    @setBboxPt @point1, @point2, width
 
     renderContext.drawLeads(this);
-
-    let parallelOffset = 1 / numSegments;
 
     // this.updateDots();
     // renderContext.drawDots(this.point1, this.lead1, this);
     // renderContext.drawDots(this.lead2, this.point2, this);
 
-    // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
-    let offsets = [0, 1, 0, -1];
-
-    // Draw resistor "zig-zags"
-    for (let n = 0; n < numSegments; n++) {
-      let resistorSegmentVoltage = this.volts[0] + ((this.volts[1]-this.volts[0]) * (n / numSegments));
-
-      let startPosition = Util.interpolate(this.lead1, this.lead2, n*parallelOffset, width*offsets[n % 4]);
-      let endPosition = Util.interpolate(this.lead1, this.lead2, (n+1)*parallelOffset, width*offsets[(n+1) % 4]);
-
-      renderContext.drawLinePt(startPosition, endPosition, renderContext.getVoltageColor(resistorSegmentVoltage), Settings.LINE_WIDTH);
-    }
+    renderContext.drawZigZag(this.lead1, this.lead2, this.volts[0], this.volts[1])
 
     let voltColor = renderContext.getVoltageColor(this.volts[2]);
     // console.log("POSTS", this.post3, this.corner2, this.arrowPoint, this.arrow1, this.arrow2, this.midpoint);
