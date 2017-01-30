@@ -16,7 +16,7 @@ class SevenSegElm extends ChipElm {
     return 0;
   }
 
-  getName() {
+  static get NAME() {
     return "7 Segment Display";
   }
 

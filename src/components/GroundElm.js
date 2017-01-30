@@ -15,7 +15,7 @@ class GroundElm extends CircuitComponent {
     return 1;
   }
 
-  getName() {
+  static get NAME() {
     return "Ground"
   }
 

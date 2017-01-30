@@ -61,7 +61,7 @@ class CurrentElm extends CircuitComponent {
     return renderContext.drawPosts(this);
   }
 
-  getName() {
+  static get NAME() {
     return "Current Source"
   }
 

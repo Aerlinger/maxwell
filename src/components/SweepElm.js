@@ -52,7 +52,7 @@ class SweepElm extends CircuitComponent {
     this.dir = 1;
   }
 
-  getName() {
+  static get NAME() {
     return "Frequency Sweep"
   }
 

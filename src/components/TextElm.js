@@ -57,7 +57,7 @@ class TextElm extends CircuitComponent {
     return this.point2.y = yy;
   }
 
-  getName() {
+  static get NAME() {
     return "Text Label"
   }
 

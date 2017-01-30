@@ -8,7 +8,7 @@ class DecadeElm extends ChipElm {
     super(xa, xb, ya, yb, params, f);
   }
 
-  getName() {
+  static get NAME() {
     return "Decade counter";
   }
 

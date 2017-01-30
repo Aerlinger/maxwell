@@ -8,7 +8,7 @@ class OrGateElm extends GateElm {
     super(xa, ya, xb, yb, params, f);
   }
 
-  getName() {
+  static get NAME() {
     return "OR Gate";
   }
 

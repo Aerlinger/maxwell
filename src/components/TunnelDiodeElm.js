@@ -30,7 +30,7 @@ class TunnelDiodeElm extends CircuitComponent {
   setup() {
   }
 
-  getName() {
+  static get NAME() {
     return "Tunnel Diode"
   }
 

@@ -98,7 +98,7 @@ class SwitchElm extends CircuitComponent {
     }
   }
 
-  getName() {
+  static get NAME() {
     return "Basic Switch";
   }
 

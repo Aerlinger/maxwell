@@ -31,7 +31,7 @@ class AndGateElm extends GateElm {
     return this.gatePoly = Util.createPolygonFromArray(triPoints);
   }
 
-  getName() {
+  static get NAME() {
     return "AND Gate";
   }
 

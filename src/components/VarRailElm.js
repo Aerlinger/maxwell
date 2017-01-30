@@ -22,7 +22,7 @@ class VarRailElm extends RailElm {
     });
   }
 
-  getName() {
+  static get NAME() {
     return "Variable Voltage Rail"
   }
 

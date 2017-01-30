@@ -68,7 +68,7 @@ class AnalogSwitchElm extends CircuitComponent {
     }
   }
 
-  getName() {
+  static get NAME() {
     return "Analog Switch"
   }
 

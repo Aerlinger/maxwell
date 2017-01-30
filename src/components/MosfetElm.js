@@ -87,7 +87,7 @@ class MosfetElm extends CircuitComponent {
     return true;
   }
 
-  getName() {
+  static get NAME() {
     return "Mosfet";
   }
 

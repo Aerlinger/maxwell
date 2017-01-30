@@ -13,7 +13,7 @@ class LatchElm extends ChipElm {
     this.loadPin = 0;
   }
 
-  getName() {
+  static get NAME() {
     return "Latch";
   }
 

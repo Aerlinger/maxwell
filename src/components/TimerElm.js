@@ -35,7 +35,7 @@ class TimerElm extends ChipElm {
     super(xa, xb, ya, yb, params, f);
   }
 
-  getName() {
+  static get NAME() {
     return "555 Timer";
   }
 

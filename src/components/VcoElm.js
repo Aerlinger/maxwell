@@ -11,7 +11,7 @@ class VcoElm extends ChipElm {
     this.cResistance = 1e6;
   }
 
-  getName() {
+  static get NAME() {
     return "Voltage Controlled Oscillator";
   }
 

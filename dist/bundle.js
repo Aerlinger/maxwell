@@ -611,6 +611,9 @@
 	    }
 	  }
 	
+	  getName() {
+	    return this.constructor.NAME;
+	  }
 	
 	  getParentCircuit() {
 	    return this.Circuit;
@@ -948,7 +951,7 @@
 	    return 2;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    console.warn(`getName() was called by circuitComponent base class, but should be extended by subclasses (${this.constructor.name})`)
 	    // return `${this.constructor.name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}] : ${JSON.stringify(this.params)}`;
 	    return this.constructor.name
@@ -18024,7 +18027,7 @@
 	    return wave1 + wave2 + wave3;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Antenna Voltage Rail"
 	  }
 	}
@@ -18059,7 +18062,7 @@
 	    return 1;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Voltage Rail"
 	  }
 	
@@ -18357,7 +18360,7 @@
 	    }
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Voltage Source"
 	  }
 	
@@ -18537,7 +18540,7 @@
 	    super(xa, ya, xb, yb, params, f);
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Wire";
 	  }
 	
@@ -18562,7 +18565,6 @@
 	      return super.debugDraw(renderContext);
 	    }
 	  }
-	
 	
 	  stamp(stamper) {
 	    return stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, 0);
@@ -18874,7 +18876,7 @@
 	    return "Ω";
 	  }
 	  
-	  getName() {
+	  static get NAME() {
 	    return "Resistor"
 	  }
 	
@@ -18920,7 +18922,7 @@
 	    return 1;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Ground"
 	  }
 	
@@ -19073,7 +19075,7 @@
 	    }
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Diode"
 	  }
 	
@@ -19264,7 +19266,7 @@
 	    return 1;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Output"
 	  }
 	
@@ -19404,7 +19406,7 @@
 	    }
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Basic Switch";
 	  }
 	
@@ -19625,7 +19627,7 @@
 	    return true;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Capacitor";
 	  }
 	}
@@ -19770,7 +19772,7 @@
 	    return this.volts[0] - this.volts[1];
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Inductor";
 	  }
 	}
@@ -19833,7 +19835,7 @@
 	    };
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Spark Gap"
 	  }
 	
@@ -20012,7 +20014,7 @@
 	    return renderContext.drawPosts(this);
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Current Source"
 	  }
 	
@@ -20122,7 +20124,7 @@
 	    return true;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Mosfet";
 	  }
 	
@@ -20401,7 +20403,7 @@
 	    return .00125;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "JFet"
 	  }
 	
@@ -20567,7 +20569,7 @@
 	    return this.lastvbc = this.lastvbe = this.curcount_c = this.curcount_e = this.curcount_b = 0;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    let type = this.params.pnp == 1 ? "PNP" : "NPN";
 	
 	    return `Bipolar Junction Transistor`
@@ -20680,13 +20682,12 @@
 	  }
 	
 	  getPost(n) {
-	    if (n === 0) {
+	    if (n === 0)
 	      return this.point1;
-	    } else if (n === 1) {
+	    else if (n === 1)
 	      return this.coll[0];
-	    } else {
+	    else
 	      return this.emit[0];
-	    }
 	  }
 	
 	  numPosts() {
@@ -20698,23 +20699,17 @@
 	  }
 	
 	  place() {
-	    // super.setPoints(...arguments);
-	
 	    this.renderSize = 16;
 	
 	    let hs = this.renderSize;
-	
-	    //    if @flags & TransistorElm.FLAG_FLIP != 0
-	    //      @dsign() = -@dsign()
 	
 	    let hs2 = hs * this.dsign() * this.pnp;
 	
 	    this.coll = Util.newPointArray(2);
 	    this.emit = Util.newPointArray(2);
+	    this.rect = Util.newPointArray(4);
 	
 	    [this.coll[0], this.emit[0]] = Util.interpolateSymmetrical(this.point1, this.point2, 1, hs2);
-	
-	    this.rect = Util.newPointArray(4);
 	
 	    [this.rect[0], this.rect[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (16 / this.dn()), hs);
 	    [this.rect[2], this.rect[3]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - (13 / this.dn()), hs);
@@ -20727,15 +20722,11 @@
 	    this.setBboxPt(this.point1, this.point2, this.renderSize);
 	
 	    if (this.pnp === 1) {
-	      // console.log("PNP", "hs2", hs2, "Emit", this.emit[0], this.dsign(), this.dn(), this.pnp, this.point1, this.point2, "arrowPoly", Util.calcArrow(this.emit[1], this.emit[0], 8, 4))
-	
 	      this.arrowPoly = Util.calcArrow(this.emit[1], this.emit[0], 8, 4);
 	    } else {
 	      let pt = Util.interpolate(this.point1, this.point2, 1 - (11 / this.dn()), -5 * this.dsign() * this.pnp);
 	
 	      this.arrowPoly = Util.calcArrow(this.emit[0], pt, 8, 4);
-	
-	      // console.log("NPN", "hs2", hs2, "Emit", this.emit[0], this.dsign(), this.dn(), this.pnp, this.point1, this.point2, "pt", pt, "arrowPoly", this.arrowPoly)
 	    }
 	  }
 	
@@ -20848,10 +20839,10 @@
 	    let vbe = this.volts[0] - this.volts[2];
 	    let vce = this.volts[1] - this.volts[2];
 	
-	    if ((vbc * this.pnp) > .2) {
-	      arr[1] = ((vbe * this.pnp) > .2 ? "Saturation" : "Reverse active");
+	    if ((vbc * this.pnp) > 0.2) {
+	      arr[1] = ((vbe * this.pnp) > 0.2 ? "Saturation" : "Reverse active");
 	    } else {
-	      arr[1] = ((vbe * this.pnp) > .2 ? "Fwd active" : "Cutoff");
+	      arr[1] = ((vbe * this.pnp) > 0.2 ? "Fwd active" : "Cutoff");
 	    }
 	
 	    arr[2] = `Ic = ${Util.getUnitText(this.ic, "A")}`;
@@ -20902,7 +20893,6 @@
 	    return true;
 	  }
 	}
-	TransistorElm.initClass();
 	
 	module.exports = TransistorElm;
 
@@ -20935,7 +20925,7 @@
 	    });
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Variable Voltage Rail"
 	  }
 	
@@ -21132,7 +21122,7 @@
 	    this.setBboxPt(this.lead1, this.lead2, 2*hs)
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "OpAmp"
 	  }
 	
@@ -21299,7 +21289,7 @@
 	    return true;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Zener Diode"
 	  }
 	
@@ -21360,7 +21350,7 @@
 	    this.place()
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Two-way switch"
 	  }
 	
@@ -21558,7 +21548,7 @@
 	    this.dir = 1;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Frequency Sweep"
 	  }
 	
@@ -21787,7 +21777,7 @@
 	    return this.point2.y = yy;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Text Label"
 	  }
 	
@@ -21863,7 +21853,7 @@
 	    return this.center = this.getCenter();
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Scope Probe"
 	  }
 	
@@ -21963,7 +21953,7 @@
 	    return this.gatePoly = Util.createPolygonFromArray(triPoints);
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "AND Gate";
 	  }
 	
@@ -21999,7 +21989,7 @@
 	    return true;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "NAND Gate";
 	  }
 	}
@@ -22021,7 +22011,7 @@
 	    super(xa, ya, xb, yb, params, f);
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "OR Gate";
 	  }
 	
@@ -22083,7 +22073,7 @@
 	    super(xa, ya, xb, yb, params, f);
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "NOR Gate";
 	  }
 	
@@ -22123,7 +22113,7 @@
 	      this.linePoints[i] = Util.interpolate(this.lead1, this.lead2, (b - 5) / ww2, a * this.hs2)));
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "XOR Gate";
 	  }
 	
@@ -22168,7 +22158,7 @@
 	    this.place()
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Inverter"
 	  }
 	
@@ -22439,7 +22429,7 @@
 	    return 1;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Logic Output"
 	  }
 	
@@ -22567,7 +22557,7 @@
 	    }
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Analog Switch"
 	  }
 	
@@ -22716,7 +22706,7 @@
 	    }
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Analog Switch (2-way)"
 	  }
 	
@@ -22815,7 +22805,7 @@
 	    return this.ps4 = new Point(0, 0);
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Memristor"
 	  }
 	
@@ -22986,7 +22976,7 @@
 	    }
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Relay"
 	  }
 	
@@ -23306,7 +23296,7 @@
 	  setup() {
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Tunnel Diode"
 	  }
 	
@@ -23627,7 +23617,7 @@
 	    return this.triggerI = .01;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Silicon Controlled Rectifier";
 	  }
 	
@@ -23861,7 +23851,7 @@
 	    return this.noDiagonal = true;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Triode"
 	  }
 	
@@ -24097,7 +24087,7 @@
 	    super(xa, xb, ya, yb, params, f);
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Decade counter";
 	  }
 	
@@ -24247,7 +24237,7 @@
 	        return this.curcount;
 	      }
 	  
-	      getName() {
+	      static get NAME() {
 	        return self.getName();
 	      }
 	  
@@ -24532,7 +24522,9 @@
 	
 	        renderContext.drawLinePt(a, b, voltageColor);
 	
-	        p.updateDots(this.Circuit.Params.getCurrentMult());
+	        if (this.Circuit)
+	          p.updateDots(this.Circuit.Params.getCurrentMult());
+	
 	
 	        renderContext.drawDots(b, a, p);
 	
@@ -24560,7 +24552,6 @@
 	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      return super.debugDraw(renderContext);
 	    }
-	
 	
 	    for (let i = 0; i < this.numPosts(); ++i) {
 	      renderContext.drawPost(this.pins[i].post.x, this.pins[i].post.y, this.nodes[i]);
@@ -24651,7 +24642,7 @@
 	    this.loadPin = 0;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Latch";
 	  }
 	
@@ -24744,7 +24735,7 @@
 	    super(xa, xb, ya, yb, params, f);
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "555 Timer";
 	  }
 	
@@ -24866,7 +24857,7 @@
 	    this.pins[4].value = !this.pins[3].value;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "JK flip-flop";
 	  }
 	
@@ -24953,7 +24944,7 @@
 	    }
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "D Flip-Flop"
 	  }
 	
@@ -25034,7 +25025,7 @@
 	    return true;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Counter";
 	  }
 	
@@ -25135,7 +25126,7 @@
 	    return true;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "DAC";
 	  }
 	
@@ -25197,7 +25188,7 @@
 	    super(xa, xb, ya, yb, params, f);
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "ADC";
 	  }
 	
@@ -25271,7 +25262,7 @@
 	    this.cResistance = 1e6;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Voltage Controlled Oscillator";
 	  }
 	
@@ -25384,7 +25375,7 @@
 	    this.ff2 = false;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Phase Comparator";
 	  }
 	
@@ -25482,7 +25473,7 @@
 	    return 0;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "7 Segment Display";
 	  }
 	
@@ -25581,7 +25572,7 @@
 	    this.params['gain'] = this.gain;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "CC2 Chip";
 	  }
 	
@@ -25667,7 +25658,7 @@
 	    this.place()
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Transmission Line"
 	  }
 	
@@ -25911,7 +25902,7 @@
 	    this.place()
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Transformer"
 	  }
 	
@@ -26232,7 +26223,7 @@
 	    
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Tapped Transformer"
 	  }
 	
@@ -26455,7 +26446,7 @@
 	    this.place();
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Light Emitting Diode";
 	  }
 	
@@ -26626,7 +26617,7 @@
 	    return 3;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Potentiometer"
 	  }
 	
@@ -26746,7 +26737,7 @@
 	    this.flags |= RailElm.FLAG_CLOCK;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Clock Voltage Source"
 	  }
 	}
@@ -26837,8 +26828,12 @@
 	    }
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "Scope Output"
+	  }
+	
+	  static getName() {
+	    return this.constructor.NAME
 	  }
 	
 	  resetGraph() {
@@ -27816,7 +27811,6 @@
 	    }
 	    this.sysTime = (new Date()).getTime();
 	    stepRate = Math.floor(160 * this.getIterCount());
-	    console.log(stepRate);
 	    tm = (new Date()).getTime();
 	    lit = this.lastIterTime;
 	    if (1000 >= (stepRate * (tm - this.lastIterTime))) {
@@ -30975,7 +30969,7 @@
 	    this.waveform = VoltageElm.WF_AC;
 	  }
 	
-	  getName() {
+	  static get NAME() {
 	    return "AC Voltage Rail"
 	  }
 	}

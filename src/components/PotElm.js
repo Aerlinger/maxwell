@@ -107,7 +107,7 @@ class PotElm extends CircuitComponent {
     return 3;
   }
 
-  getName() {
+  static get NAME() {
     return "Potentiometer"
   }
 

@@ -8,7 +8,7 @@ class ACRailElm extends RailElm {
     this.waveform = VoltageElm.WF_AC;
   }
 
-  getName() {
+  static get NAME() {
     return "AC Voltage Rail"
   }
 }

@@ -158,7 +158,7 @@ class CapacitorElm extends CircuitComponent {
     return true;
   }
 
-  getName() {
+  static get NAME() {
     return "Capacitor";
   }
 }

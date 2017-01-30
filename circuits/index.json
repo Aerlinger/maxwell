@@ -140,10 +140,10 @@
     "howland": "Howland Current Source",
     "itov": "I-to-V Converter",
     "opamp-regulator": "Voltage Regulator",
-    "opint": "741 Internals",
-    "opint-invert-amp": "741 (inverting amplifier)",
-    "opint-slew": "741 Slew Rate",
-    "opint-current": "741 Current Limits"
+    "opint": "LM741 Internals",
+    "opint-invert-amp": "LM741 (inverting amplifier)",
+    "opint-slew": "LM741 Slew Rate",
+    "opint-current": "LM741 Current Limits"
   },
   "Transistors": {
     "npn": "NPN Transistor",
@@ -201,7 +201,7 @@
   },
   "555 Timer Chip": {
     "555square": "Square Wave Generator",
-    "555int": "Internals",
+    "555int": "555 Timer Internals",
     "555saw": "Sawtooth Oscillator",
     "555lowduty": "Low-duty-cycle Oscillator",
     "555monostable": "Monostable Multivibrator",

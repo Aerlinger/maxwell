@@ -99,7 +99,7 @@ class TappedTransformerElm extends CircuitComponent {
     
   }
 
-  getName() {
+  static get NAME() {
     return "Tapped Transformer"
   }
 

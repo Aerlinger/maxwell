@@ -28,7 +28,6 @@ class CircuitSolver
     @reset()
     @Stamper = new MatrixStamper(@Circuit)
 
-
   reset: ->
     @Circuit.time = 0
     @iterations = 0
@@ -82,7 +81,6 @@ class CircuitSolver
     @sysTime = (new Date()).getTime()
 
     stepRate = Math.floor(160 * @getIterCount())
-    console.log(stepRate);
 
     tm = (new Date()).getTime()
     lit = @lastIterTime

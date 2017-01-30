@@ -28,7 +28,7 @@ class ProbeElm extends CircuitComponent {
     return this.center = this.getCenter();
   }
 
-  getName() {
+  static get NAME() {
     return "Scope Probe"
   }
 

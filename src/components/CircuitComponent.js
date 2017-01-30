@@ -115,6 +115,9 @@ class CircuitComponent {
     }
   }
 
+  getName() {
+    return this.constructor.NAME;
+  }
 
   getParentCircuit() {
     return this.Circuit;
@@ -452,7 +455,7 @@ class CircuitComponent {
     return 2;
   }
 
-  getName() {
+  static get NAME() {
     console.warn(`getName() was called by circuitComponent base class, but should be extended by subclasses (${this.constructor.name})`)
     // return `${this.constructor.name}@[${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}] : ${JSON.stringify(this.params)}`;
     return this.constructor.name

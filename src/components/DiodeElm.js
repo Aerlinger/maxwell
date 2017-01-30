@@ -88,7 +88,7 @@ class DiodeElm extends CircuitComponent {
     }
   }
 
-  getName() {
+  static get NAME() {
     return "Diode"
   }
 

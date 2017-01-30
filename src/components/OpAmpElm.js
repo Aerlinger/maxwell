@@ -162,7 +162,7 @@ class OpAmpElm extends CircuitComponent {
     this.setBboxPt(this.lead1, this.lead2, 2*hs)
   }
 
-  getName() {
+  static get NAME() {
     return "OpAmp"
   }
 

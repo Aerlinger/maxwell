@@ -53,7 +53,7 @@ class TransformerElm extends CircuitComponent {
     this.place()
   }
 
-  getName() {
+  static get NAME() {
     return "Transformer"
   }
 

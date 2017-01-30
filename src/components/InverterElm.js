@@ -21,7 +21,7 @@ class InverterElm extends CircuitComponent {
     this.place()
   }
 
-  getName() {
+  static get NAME() {
     return "Inverter"
   }
 

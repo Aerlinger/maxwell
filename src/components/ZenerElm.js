@@ -70,7 +70,7 @@ class ZenerElm extends DiodeElm {
     return true;
   }
 
-  getName() {
+  static get NAME() {
     return "Zener Diode"
   }
 

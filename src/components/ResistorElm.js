@@ -54,7 +54,7 @@ class ResistorElm extends CircuitComponent {
     return "Ω";
   }
   
-  getName() {
+  static get NAME() {
     return "Resistor"
   }
 

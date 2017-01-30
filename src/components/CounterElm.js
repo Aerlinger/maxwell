@@ -19,7 +19,7 @@ class CounterElm extends ChipElm {
     return true;
   }
 
-  getName() {
+  static get NAME() {
     return "Counter";
   }
 

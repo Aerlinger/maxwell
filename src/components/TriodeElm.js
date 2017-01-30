@@ -31,7 +31,7 @@ class TriodeElm extends CircuitComponent {
     return this.noDiagonal = true;
   }
 
-  getName() {
+  static get NAME() {
     return "Triode"
   }
 

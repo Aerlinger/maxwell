@@ -26,7 +26,7 @@ class DFlipFlopElm extends ChipElm {
     }
   }
 
-  getName() {
+  static get NAME() {
     return "D Flip-Flop"
   }
 

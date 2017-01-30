@@ -24,7 +24,7 @@ class JfetElm extends MosfetElm {
     return .00125;
   }
 
-  getName() {
+  static get NAME() {
     return "JFet"
   }
 

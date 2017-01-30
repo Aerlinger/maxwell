@@ -205,7 +205,7 @@ class ScrElm extends CircuitComponent {
     return this.triggerI = .01;
   }
 
-  getName() {
+  static get NAME() {
     return "Silicon Controlled Rectifier";
   }
 

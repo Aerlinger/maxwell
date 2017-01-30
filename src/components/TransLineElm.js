@@ -41,7 +41,7 @@ class TransLineElm extends CircuitComponent {
     this.place()
   }
 
-  getName() {
+  static get NAME() {
     return "Transmission Line"
   }
 

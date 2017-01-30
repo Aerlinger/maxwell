@@ -76,7 +76,7 @@ class RelayElm extends CircuitComponent {
     }
   }
 
-  getName() {
+  static get NAME() {
     return "Relay"
   }
 

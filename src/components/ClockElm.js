@@ -16,7 +16,7 @@ class ClockElm extends RailElm {
     this.flags |= RailElm.FLAG_CLOCK;
   }
 
-  getName() {
+  static get NAME() {
     return "Clock Voltage Source"
   }
 }

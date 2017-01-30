@@ -85,7 +85,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
     }
   }
 
-  getName() {
+  static get NAME() {
     return "Analog Switch (2-way)"
   }
 

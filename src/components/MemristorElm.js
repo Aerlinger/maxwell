@@ -56,7 +56,7 @@ class MemristorElm extends CircuitComponent {
     return this.ps4 = new Point(0, 0);
   }
 
-  getName() {
+  static get NAME() {
     return "Memristor"
   }
 

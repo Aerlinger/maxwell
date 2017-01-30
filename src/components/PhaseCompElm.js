@@ -11,7 +11,7 @@ class PhaseCompElm extends ChipElm {
     this.ff2 = false;
   }
 
-  getName() {
+  static get NAME() {
     return "Phase Comparator";
   }
 

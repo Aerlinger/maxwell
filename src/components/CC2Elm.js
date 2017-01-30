@@ -28,7 +28,7 @@ class CC2Elm extends ChipElm {
     this.params['gain'] = this.gain;
   }
 
-  getName() {
+  static get NAME() {
     return "CC2 Chip";
   }
 

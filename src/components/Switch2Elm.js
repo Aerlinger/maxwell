@@ -38,7 +38,7 @@ class Switch2Elm extends SwitchElm {
     this.place()
   }
 
-  getName() {
+  static get NAME() {
     return "Two-way switch"
   }
 

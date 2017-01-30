@@ -77,8 +77,12 @@ class Scope {
     }
   }
 
-  getName() {
+  static get NAME() {
     return "Scope Output"
+  }
+
+  static getName() {
+    return this.constructor.NAME
   }
 
   resetGraph() {

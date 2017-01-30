@@ -16,7 +16,7 @@ class WireElm extends CircuitComponent {
     super(xa, ya, xb, yb, params, f);
   }
 
-  getName() {
+  static get NAME() {
     return "Wire";
   }
 
@@ -41,7 +41,6 @@ class WireElm extends CircuitComponent {
       return super.debugDraw(renderContext);
     }
   }
-
 
   stamp(stamper) {
     return stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, 0);

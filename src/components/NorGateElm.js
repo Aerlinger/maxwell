@@ -6,7 +6,7 @@ class NorGateElm extends OrGateElm {
     super(xa, ya, xb, yb, params, f);
   }
 
-  getName() {
+  static get NAME() {
     return "NOR Gate";
   }
 

@@ -14,7 +14,7 @@ class DacElm extends ChipElm {
     return true;
   }
 
-  getName() {
+  static get NAME() {
     return "DAC";
   }
 

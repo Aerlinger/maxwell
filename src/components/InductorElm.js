@@ -130,7 +130,7 @@ class InductorElm extends CircuitComponent {
     return this.volts[0] - this.volts[1];
   }
 
-  getName() {
+  static get NAME() {
     return "Inductor";
   }
 }

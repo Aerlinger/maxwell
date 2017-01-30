@@ -22,7 +22,7 @@ class OutputElm extends CircuitComponent {
     return 1;
   }
 
-  getName() {
+  static get NAME() {
     return "Output"
   }
 

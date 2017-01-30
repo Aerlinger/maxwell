@@ -22,7 +22,7 @@ class XorGateElm extends OrGateElm {
       this.linePoints[i] = Util.interpolate(this.lead1, this.lead2, (b - 5) / ww2, a * this.hs2)));
   }
 
-  getName() {
+  static get NAME() {
     return "XOR Gate";
   }
 

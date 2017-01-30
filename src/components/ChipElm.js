@@ -73,7 +73,7 @@ class ChipElm extends CircuitComponent {
         return this.curcount;
       }
   
-      getName() {
+      static get NAME() {
         return self.getName();
       }
   
@@ -358,7 +358,9 @@ class ChipElm extends CircuitComponent {
 
         renderContext.drawLinePt(a, b, voltageColor);
 
-        p.updateDots(this.Circuit.Params.getCurrentMult());
+        if (this.Circuit)
+          p.updateDots(this.Circuit.Params.getCurrentMult());
+
 
         renderContext.drawDots(b, a, p);
 
@@ -386,7 +388,6 @@ class ChipElm extends CircuitComponent {
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
       return super.debugDraw(renderContext);
     }
-
 
     for (let i = 0; i < this.numPosts(); ++i) {
       renderContext.drawPost(this.pins[i].post.x, this.pins[i].post.y, this.nodes[i]);
