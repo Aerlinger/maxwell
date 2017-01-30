@@ -20,7 +20,7 @@ class CounterElm extends ChipElm {
   }
 
   static get NAME() {
-    return "Counter";
+    return "Digital Counter";
   }
 
   numPosts() {

@@ -46,7 +46,7 @@ class LogicOutputElm extends CircuitComponent {
   }
 
   static get NAME() {
-    return "Logic Output"
+    return "Logic Output Terminal"
   }
 
   draw(renderContext) {

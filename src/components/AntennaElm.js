@@ -38,7 +38,7 @@ class AntennaElm extends RailElm {
   }
 
   static get NAME() {
-    return "Antenna Voltage Rail"
+    return "Antenna"
   }
 }
 

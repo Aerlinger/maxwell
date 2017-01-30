@@ -117,10 +117,7 @@ class AnalogSwitchElm extends CircuitComponent {
     return !((n1 === 2) || (n2 === 2));
   }
 }
+
 AnalogSwitchElm.initClass();
-
-
-
-
 
 module.exports = AnalogSwitchElm;

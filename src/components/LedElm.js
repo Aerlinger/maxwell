@@ -65,7 +65,7 @@ class LedElm extends DiodeElm {
   }
 
   static get NAME() {
-    return "Light Emitting Diode";
+    return "Light Emitting Diode (LED)";
   }
 
   place() {

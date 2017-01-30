@@ -63,7 +63,7 @@ app.get('/ui/:circuit_name', function (req, res) {
     examples: examples,
     circuit_name: req.params.circuit_name,
     circuit_names: circuit_names,
-    components: Object.keys(Components),
+    components: Components,
     library: Library
   });
 });

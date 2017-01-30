@@ -25,7 +25,7 @@ class JfetElm extends MosfetElm {
   }
 
   static get NAME() {
-    return "JFet"
+    return "JFET Transistor"
   }
 
   place() {

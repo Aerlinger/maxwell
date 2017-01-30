@@ -15,7 +15,7 @@ class JkFlipFlopElm extends ChipElm {
   }
 
   static get NAME() {
-    return "JK flip-flop";
+    return "JK Flip-Flop";
   }
 
   numPosts() {

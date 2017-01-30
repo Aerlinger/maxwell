@@ -9,7 +9,7 @@ class DecadeElm extends ChipElm {
   }
 
   static get NAME() {
-    return "Decade counter";
+    return "Decade Counter";
   }
 
   needsBits() {

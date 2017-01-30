@@ -88,7 +88,7 @@ class MosfetElm extends CircuitComponent {
   }
 
   static get NAME() {
-    return "Mosfet";
+    return "MOSFET Transistor";
   }
 
 //  drawDigital: ->

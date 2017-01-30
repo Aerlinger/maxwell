@@ -23,7 +23,7 @@ class OutputElm extends CircuitComponent {
   }
 
   static get NAME() {
-    return "Output"
+    return "Output Terminal"
   }
 
   place() {

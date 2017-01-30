@@ -39,7 +39,7 @@ class Switch2Elm extends SwitchElm {
   }
 
   static get NAME() {
-    return "Two-way switch"
+    return "2-way switch"
   }
 
   place() {

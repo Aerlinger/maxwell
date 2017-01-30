@@ -15,7 +15,7 @@ class DacElm extends ChipElm {
   }
 
   static get NAME() {
-    return "DAC";
+    return "Digital-To-Analog Converter (ADC)";
   }
 
   numVoltageSources() {

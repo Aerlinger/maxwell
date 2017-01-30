@@ -290,9 +290,10 @@ block content
     .tabs-content(data-tabs-content='deeplinked-tabs')
       #panel2d.tabs-panel
         ul#component_list.is-active.menu.vertical(data-accordion-menu)
-          - for (var component of components)
-            li
-              a.item.component-item(href="#" + subcircuit, data-name=component)= component.replace("Elm", "")
+          - for (var component_name in components)
+            - if(component_name && component_name[0] != "_")
+              li
+                a.item.component-item(href="#" + subcircuit, data-name=component_name)= components[component_name].NAME
 
       #panel1d.tabs-panel.is-active
         ul#circuit_list.is-active.menu.vertical(data-accordion-menu)

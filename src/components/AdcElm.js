@@ -11,7 +11,7 @@ class AdcElm extends ChipElm {
   }
 
   static get NAME() {
-    return "ADC";
+    return "Analog-To-Digital Converter (ADC)";
   }
 
   numVoltageSources() {

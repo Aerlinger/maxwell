@@ -119,7 +119,6 @@ class ScrElm extends CircuitComponent {
 
     this.setBboxPt(this.point1, this.point2, this.hs)
 
-
     /*
     let gatelen = Settings.GRID_SIZE;
     gatelen = gatelen + (leadlen % 2*Settings.GRID_SIZE);
@@ -206,7 +205,7 @@ class ScrElm extends CircuitComponent {
   }
 
   static get NAME() {
-    return "Silicon Controlled Rectifier";
+    return "Silicon Controlled Rectifier (SCR)";
   }
 
   setup() {

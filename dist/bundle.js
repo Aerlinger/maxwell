@@ -17734,7 +17734,7 @@
 	  }
 	
 	  static get NAME() {
-	    return "Antenna Voltage Rail"
+	    return "Antenna"
 	  }
 	}
 	
@@ -18972,7 +18972,7 @@
 	  }
 	
 	  static get NAME() {
-	    return "Output"
+	    return "Output Terminal"
 	  }
 	
 	  place() {
@@ -19832,7 +19832,7 @@
 	  }
 	
 	  static get NAME() {
-	    return "Mosfet";
+	    return "MOSFET Transistor";
 	  }
 	
 	//  drawDigital: ->
@@ -20111,7 +20111,7 @@
 	  }
 	
 	  static get NAME() {
-	    return "JFet"
+	    return "JFET Transistor"
 	  }
 	
 	  place() {
@@ -21056,7 +21056,7 @@
 	  }
 	
 	  static get NAME() {
-	    return "Two-way switch"
+	    return "2-way switch"
 	  }
 	
 	  place() {
@@ -22134,7 +22134,7 @@
 	  }
 	
 	  static get NAME() {
-	    return "Logic Output"
+	    return "Logic Output Terminal"
 	  }
 	
 	  draw(renderContext) {
@@ -22310,11 +22310,8 @@
 	    return !((n1 === 2) || (n2 === 2));
 	  }
 	}
+	
 	AnalogSwitchElm.initClass();
-	
-	
-	
-	
 	
 	module.exports = AnalogSwitchElm;
 
@@ -22411,13 +22408,13 @@
 	  }
 	
 	  static get NAME() {
-	    return "Analog Switch (2-way)"
+	    return "2-way Analog Switch"
 	  }
 	
 	  stamp(stamper) {
 	    stamper.stampNonLinear(this.nodes[0]);
 	    stamper.stampNonLinear(this.nodes[1]);
-	    return stamper.stampNonLinear(this.nodes[2]);
+	    stamper.stampNonLinear(this.nodes[2]);
 	  }
 	
 	  doStep(stamper) {
@@ -23235,7 +23232,6 @@
 	
 	    this.setBboxPt(this.point1, this.point2, this.hs)
 	
-	
 	    /*
 	    let gatelen = Settings.GRID_SIZE;
 	    gatelen = gatelen + (leadlen % 2*Settings.GRID_SIZE);
@@ -23322,7 +23318,7 @@
 	  }
 	
 	  static get NAME() {
-	    return "Silicon Controlled Rectifier";
+	    return "Silicon Controlled Rectifier (SCR)";
 	  }
 	
 	  setup() {
@@ -23792,7 +23788,7 @@
 	  }
 	
 	  static get NAME() {
-	    return "Decade counter";
+	    return "Decade Counter";
 	  }
 	
 	  needsBits() {
@@ -24562,7 +24558,7 @@
 	  }
 	
 	  static get NAME() {
-	    return "JK flip-flop";
+	    return "JK Flip-Flop";
 	  }
 	
 	  numPosts() {
@@ -24730,7 +24726,7 @@
 	  }
 	
 	  static get NAME() {
-	    return "Counter";
+	    return "Digital Counter";
 	  }
 	
 	  numPosts() {
@@ -24831,7 +24827,7 @@
 	  }
 	
 	  static get NAME() {
-	    return "DAC";
+	    return "Digital-To-Analog Converter (ADC)";
 	  }
 	
 	  numVoltageSources() {
@@ -24893,7 +24889,7 @@
 	  }
 	
 	  static get NAME() {
-	    return "ADC";
+	    return "Analog-To-Digital Converter (ADC)";
 	  }
 	
 	  numVoltageSources() {
@@ -26151,7 +26147,7 @@
 	  }
 	
 	  static get NAME() {
-	    return "Light Emitting Diode";
+	    return "Light Emitting Diode (LED)";
 	  }
 	
 	  place() {
@@ -27776,7 +27772,6 @@
 	        fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
 	        if (!fpi.findPath(ce.getNode(0))) {
 	          console.warn("No path for current source!", ce);
-	          return;
 	        }
 	      }
 	      if ((Util.typeOf(ce, VoltageElm) && ce.numPosts() === 2) || ce instanceof WireElm) {
@@ -30240,7 +30235,6 @@
 	  AntennaElm,
 	  CapacitorElm,
 	  CC2Elm,
-	  ChipElm,
 	  ClockElm,
 	  CounterElm,
 	  CurrentElm,
@@ -30248,7 +30242,6 @@
 	  DecadeElm,
 	  DFlipFlopElm,
 	  DiodeElm,
-	  GateElm,
 	  GroundElm,
 	  InductorElm,
 	  InverterElm,

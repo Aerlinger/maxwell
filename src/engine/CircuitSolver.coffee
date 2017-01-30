@@ -351,7 +351,7 @@ class CircuitSolver
         fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
         unless fpi.findPath(ce.getNode(0))
           console.warn "No path for current source!", ce
-          return
+          #return
 
       # Look for voltage source loops:
       if (Util.typeOf(ce, VoltageElm) and ce.numPosts() is 2) or ce instanceof WireElm
