@@ -34,9 +34,6 @@ block header
         console.log("ON COMPONENT UNHOVER:", component.toString());
       };
 
-      //circuitContext.onComponentClick = function (component) {
-        //console.log("ON COMPONENT CLICK:", component);
-      //};
       circuitContext.onComponentClick = function (component) {
         console.log("ON COMPONENT CLICK:", component);
 
@@ -51,12 +48,6 @@ block header
 
       circuitContext.onComponentsDrag = function (components) {
         console.log("ON COMPONENTS DRAG:", components);
-      };
-
-      circuitContext.onUpdateComplete = function (context) {
-        //if (context.highlightedComponent) {
-        //   plotter.addData(context.highlightedComponent.getVoltageDiff())
-        //}
       };
 
       circuitContext.onNodeHover = function (node) {
@@ -74,6 +65,10 @@ block header
       circuitContext.onNodeDrag = function (node) {
         console.log("NODE DRAG: ", node.x, node.y);
       };
+
+      circuitContext.onUpdateComplete = function (context) {
+
+      };
     }
 
     $(document).ready(function() {
@@ -82,14 +77,6 @@ block header
 
       Maxwell.createContext("ohms", "../circuits/v4/#{circuit_name}.json", canvas, function (circuitContext) {
         window.circuitContext = circuitContext;
-
-        /*
-        Maxwell.Components.map(function (component) {
-          $('#component_list').append(
-              '<li><a href="#" class="item component-item" data-name=' + component.name + '>' + (new component()).getName() + '</a></li>'
-          )
-        });
-        */
 
         $('.component-item').click(function (evt) {
           var componentName = $(this).data("name");
@@ -179,8 +166,6 @@ block header
 
           ctx.fillStyle = "#000";
         }
-
-        //ctx = Sketch.augment(ctx, {autoclear: false});
 
         // resize the canvas to fill browser window dynamically
         //window.addEventListener('resize', resizeCanvas, false);
@@ -303,8 +288,14 @@ block content
         a(href='#panel2d') Components
 
     .tabs-content(data-tabs-content='deeplinked-tabs')
-      #panel1d.tabs-panel.is-active
+      #panel2d.tabs-panel
         ul#component_list.is-active.menu.vertical(data-accordion-menu)
+          - for (var component of components)
+            li
+              a.item.component-item(href="#" + subcircuit, data-name=component)= component.replace("Elm", "")
+
+      #panel1d.tabs-panel.is-active
+        ul#circuit_list.is-active.menu.vertical(data-accordion-menu)
           - for (var category in library)
             li
               a.item(href="/ui/" + category)= category

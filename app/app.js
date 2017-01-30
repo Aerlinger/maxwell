@@ -5,6 +5,8 @@ var glob = require('glob');
 
 var app = express();
 
+var Components = require("../src/components");
+
 library = {
 
   "Basics": {
@@ -485,6 +487,7 @@ app.get('/ui/:circuit_name', function (req, res) {
     examples: examples,
     circuit_name: req.params.circuit_name,
     circuit_names: circuit_names,
+    components: Object.keys(Components),
     library: library
   });
 });
