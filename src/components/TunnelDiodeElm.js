@@ -16,8 +16,21 @@ class TunnelDiodeElm extends CircuitComponent {
 
     this.setup();
 
-    this.setPoints(xa, xb, ya, yb)
+    this.place()
   }
+
+  setPoints() {
+    this.calcLeads(16);
+    this.cathode = new Array(4);
+    let pa = new Array(2);
+
+    [pa[0], pa[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, this.hs);
+    [this.cathode[0], this.cathode[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, this.hs);
+    [this.cathode[2], this.cathode[3]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0.8, this.hs);
+
+    this.poly = Util.createPolygon(pa[0], pa[1], this.lead2);
+  }
+
 
   reset() {
     return this.lastvoltdiff = this.volts[0] = this.volts[1] = this.curcount = 0;
@@ -62,20 +75,6 @@ class TunnelDiodeElm extends CircuitComponent {
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
       super.debugDraw(renderContext);
     }
-  }
-
-  setPoints(x1, y1, x2, y2) {
-    super.setPoints(x1, y1, x2, y2);
-
-    this.calcLeads(16);
-    this.cathode = new Array(4);
-    let pa = new Array(2);
-
-    [pa[0], pa[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, this.hs);
-    [this.cathode[0], this.cathode[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, this.hs);
-    [this.cathode[2], this.cathode[3]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0.8, this.hs);
-
-    this.poly = Util.createPolygon(pa[0], pa[1], this.lead2);
   }
 
   limitStep(vnew, vold) {

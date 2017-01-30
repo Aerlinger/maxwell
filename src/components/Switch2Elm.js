@@ -111,7 +111,7 @@ class Switch2Elm extends SwitchElm {
 
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      super.debugDraw(renderContext);
     }
 
   }

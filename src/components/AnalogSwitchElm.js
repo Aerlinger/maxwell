@@ -27,11 +27,11 @@ class AnalogSwitchElm extends CircuitComponent {
 
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
+
+    this.place()
   }
 
-  setPoints() {
-    super.setPoints(...arguments);
-
+  place() {
     this.calcLeads(32);
     this.open = false;
 

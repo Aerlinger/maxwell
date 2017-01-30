@@ -47,13 +47,15 @@ class MemristorElm extends CircuitComponent {
 
   constructor(xa, xb, ya, yb, params, f) {
     super(xa, xb, ya, yb, params, f);
+
+    this.place()
   }
 
-  setPoints() {
+  place() {
     super.setPoints(...arguments);
     this.calcLeads(32);
     this.ps3 = new Point(0, 0);
-    return this.ps4 = new Point(0, 0);
+    this.ps4 = new Point(0, 0);
   }
 
   static get NAME() {

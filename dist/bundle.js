@@ -50,11 +50,11 @@
 	let Circuit = __webpack_require__(77);
 	let CircuitUI = __webpack_require__(89);
 	
-	let RickshawScopeCanvas = __webpack_require__(91);
+	let RickshawScopeCanvas = __webpack_require__(96);
 	
-	let Components = __webpack_require__(93);
+	let Components = __webpack_require__(97);
 	
-	let AcRailElm = __webpack_require__(99);
+	let AcRailElm = __webpack_require__(103);
 	let AntennaElm = __webpack_require__(17);
 	let WireElm = __webpack_require__(20);
 	let ResistorElm = __webpack_require__(22);
@@ -504,7 +504,7 @@
 	
 	 */
 	
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
 	let Util = __webpack_require__(5);
@@ -1348,7 +1348,256 @@
 
 
 /***/ },
-/* 2 */,
+/* 2 */
+/***/ function(module, exports) {
+
+	/*
+	Stores Environment-specific settings
+	
+	These are the global settings for Maxwell and should defined by the user.
+	Settings do not change by loading a new circuit.
+	*/
+	
+	
+	let ColorPalette = undefined;
+	class Settings {
+	  static initClass() {
+	    // Used from https://github.com/matthewbj/Colors/blob/master/colors.js:
+	    ColorPalette = {
+	  
+	    // Voltage scale goes from Red (low voltage) to Green (high volage)
+	      'voltageScale': [
+	        // Red color scale
+	        "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
+	        "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
+	  
+	        "#7f7f7f", // Grey
+	  
+	        // Green color scale
+	        "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747", "#3fbf3f",
+	        "#37c737", "#2fcf2f", "#27d727", "#1fdf1f", "#17e717", "#0fef0f", "#07f707", "#00ff00"
+	      ],
+	  
+	      'aliceblue': '#f0f8ff',
+	      'antiquewhite': '#faebd7',
+	      'aqua': '#00ffff',
+	      'aquamarine': '#7fffd4',
+	      'azure': '#f0ffff',
+	      'beige': '#f5f5dc',
+	      'bisque': '#ffe4c4',
+	      'black': '#000000',
+	      'blanchedalmond': '#ffebcd',
+	      'blue': '#0000ff',
+	      'blueviolet': '#8a2be2',
+	      'brown': '#a52a2a',
+	      'burlywood': '#deb887',
+	      'cadetblue': '#5f9ea0',
+	      'chartreuse': '#7fff00',
+	      'chocolate': '#d2691e',
+	      'coral': '#ff7f50',
+	      'cornflowerblue': '#6495ed',
+	      'cornsilk': '#fff8dc',
+	      'crimson': '#dc143c',
+	      'cyan': '#00ffff',
+	      'darkblue': '#00008b',
+	      'darkcyan': '#008b8b',
+	      'darkgoldenrod': '#b8860b',
+	      'darkgray': '#a9a9a9',
+	      'darkgrey': '#a9a9a9',
+	      'darkgreen': '#006400',
+	      'darkkhaki': '#bdb76b',
+	      'darkmagenta': '#8b008b',
+	      'darkolivegreen': '#556b2f',
+	      'darkorange': '#ff8c00',
+	      'darkorchid': '#9932cc',
+	      'darkred': '#8b0000',
+	      'darksalmon': '#e9967a',
+	      'darkseagreen': '#8fbc8f',
+	      'darkslateblue': '#483d8b',
+	      'darkslategray': '#2f4f4f',
+	      'darkslategrey': '#2f4f4f',
+	      'darkturquoise': '#00ced1',
+	      'darkviolet': '#9400d3',
+	      'deeppink': '#ff1493',
+	      'deepskyblue': '#00bfff',
+	      'dimgray': '#696969',
+	      'dimgrey': '#696969',
+	      'dodgerblue': '#1e90ff',
+	      'firebrick': '#b22222',
+	      'floralwhite': '#fffaf0',
+	      'forestgreen': '#228b22',
+	      'fuchsia': '#ff00ff',
+	      'gainsboro': '#dcdcdc',
+	      'ghostwhite': '#f8f8ff',
+	      'gold': '#ffd700',
+	      'goldenrod': '#daa520',
+	      'gray': '#808080',
+	      'grey': '#808080',
+	      'green': '#008000',
+	      'greenyellow': '#adff2f',
+	      'honeydew': '#f0fff0',
+	      'hotpink': '#ff69b4',
+	      'indianred': '#cd5c5c',
+	      'indigo': '#4b0082',
+	      'ivory': '#fffff0',
+	      'khaki': '#f0e68c',
+	      'lavender': '#e6e6fa',
+	      'lavenderblush': '#fff0f5',
+	      'lawngreen': '#7cfc00',
+	      'lemonchiffon': '#fffacd',
+	      'lightblue': '#add8e6',
+	      'lightcoral': '#f08080',
+	      'lightcyan': '#e0ffff',
+	      'lightgoldenrodyellow': '#fafad2',
+	      'lightgray': '#d3d3d3',
+	      'lightgrey': '#d3d3d3',
+	      'lightgreen': '#90ee90',
+	      'lightpink': '#ffb6c1',
+	      'lightsalmon': '#ffa07a',
+	      'lightseagreen': '#20b2aa',
+	      'lightskyblue': '#87cefa',
+	      'lightslategray': '#778899',
+	      'lightslategrey': '#778899',
+	      'lightsteelblue': '#b0c4de',
+	      'lightyellow': '#ffffe0',
+	      'lime': '#00ff00',
+	      'limegreen': '#32cd32',
+	      'linen': '#faf0e6',
+	      'magenta': '#ff00ff',
+	      'maroon': '#800000',
+	      'mediumaquamarine': '#66cdaa',
+	      'mediumblue': '#0000cd',
+	      'mediumorchid': '#ba55d3',
+	      'mediumpurple': '#9370d8',
+	      'mediumseagreen': '#3cb371',
+	      'mediumslateblue': '#7b68ee',
+	      'mediumspringgreen': '#00fa9a',
+	      'mediumturquoise': '#48d1cc',
+	      'mediumvioletred': '#c71585',
+	      'midnightblue': '#191970',
+	      'mintcream': '#f5fffa',
+	      'mistyrose': '#ffe4e1',
+	      'moccasin': '#ffe4b5',
+	      'navajowhite': '#ffdead',
+	      'navy': '#000080',
+	      'oldlace': '#fdf5e6',
+	      'olive': '#808000',
+	      'olivedrab': '#6b8e23',
+	      'orange': '#ffa500',
+	      'orangered': '#ff4500',
+	      'orchid': '#da70d6',
+	      'palegoldenrod': '#eee8aa',
+	      'palegreen': '#98fb98',
+	      'paleturquoise': '#afeeee',
+	      'palevioletred': '#d87093',
+	      'papayawhip': '#ffefd5',
+	      'peachpuff': '#ffdab9',
+	      'peru': '#cd853f',
+	      'pink': '#ffc0cb',
+	      'plum': '#dda0dd',
+	      'powderblue': '#b0e0e6',
+	      'purple': '#800080',
+	      'red': '#ff0000',
+	      'rosybrown': '#bc8f8f',
+	      'royalblue': '#4169e1',
+	      'saddlebrown': '#8b4513',
+	      'salmon': '#fa8072',
+	      'sandybrown': '#f4a460',
+	      'seagreen': '#2e8b57',
+	      'seashell': '#fff5ee',
+	      'sienna': '#a0522d',
+	      'silver': '#c0c0c0',
+	      'skyblue': '#87ceeb',
+	      'slateblue': '#6a5acd',
+	      'slategray': '#708090',
+	      'slategrey': '#708090',
+	      'snow': '#fffafa',
+	      'springgreen': '#00ff7f',
+	      'steelblue': '#4682b4',
+	      'tan': '#d2b48c',
+	      'teal': '#008080',
+	      'thistle': '#d8bfd8',
+	      'tomato': '#ff6347',
+	      'turquoise': '#40e0d0',
+	      'violet': '#ee82ee',
+	      'wheat': '#f5deb3',
+	      'white': '#ffffff',
+	      'whitesmoke': '#f5f5f5',
+	      'yellow': '#ffff00',
+	      'yellowgreen': '#9acd32'
+	    };
+	  
+	    this.CURENT_TYPE_DOTS = "DOTS";
+	    this.CURENT_TYPE_DASHES = "DASHES";
+	  
+	    this.FRACTIONAL_DIGITS = 2;
+	    this.CURRENT_SEGMENT_LENGTH = 16;
+	    this.WIRE_POSTS = true;
+	  
+	    // Line Widths:
+	    this.POST_RADIUS = 2;
+	    this.POST_OUTLINE_SIZE = 1;
+	    this.CURRENT_RADIUS = 2;
+	    this.CURRENT_COLOR = "rgba(255, 255, 255, 0.7)";
+	    this.LINE_WIDTH = 2;
+	    this.BOLD_LINE_WIDTH = 4;
+	
+	    // Grid
+	    this.GRID_SIZE = 8;
+	    this.SMALL_GRID = false;
+	  
+	    this.SHOW_VALUES = false;
+	
+	    this.TEXT_STROKE_COLOR = "#FFF";
+	  
+	    this.CURRENT_DISPLAY_TYPE = "DASHES";
+	  
+	    this.SELECT_COLOR = "#573400";
+	    this.HIGHLIGHT_COLOR = ColorPalette.orangered;
+	
+	    this.LIGHT_POST_COLOR = "#333";
+	    this.POST_COLOR = ColorPalette.black;
+	    this.POST_OUTLINE_COLOR = "#666";
+	    this.POST_SELECT_COLOR = '#ff8c00';
+	    this.POST_SELECT_OUTLINE_COLOR = '#F0F';
+	
+	    this.DOTS_COLOR = ColorPalette.yellow;
+	    this.DOTS_OUTLINE = ColorPalette.orange;
+	  
+	    this.TEXT_COLOR = ColorPalette.black;
+	    this.TEXT_ERROR_COLOR = ColorPalette.red;
+	    this.TEXT_WARNING_COLOR = ColorPalette.yellow;
+	
+	    this.TEXT_SIZE = 7.5;
+	    this.FONT = 'Monaco';
+	    this.TEXT_STYLE = 'bold';
+	    this.LABEL_COLOR = '#0000cd';
+	    this.PIN_LABEL_COLOR = '#444';
+	    this.SECONDARY_COLOR = '#777';
+	
+	    this.SELECTION_MARQUEE_COLOR = ColorPalette.orange;
+	  
+	    this.GREY = "#666";
+	    this.GRAY = "#666";
+	  
+	    this.COMPONENT_DECIMAL_PLACES = 1;
+	
+	    this.GRID_COLOR = ColorPalette.darkyellow;
+	    this.SWITCH_COLOR = "#666";
+	    this.FILL_COLOR = ColorPalette.white;
+	    this.BG_COLOR = ColorPalette.white;
+	    this.FG_COLOR = ColorPalette.white;
+	    this.STROKE_COLOR = ColorPalette.black;
+	    this.ERROR_COLOR = ColorPalette.darkred;
+	    this.WARNING_COLOR = ColorPalette.orange;
+	  }
+	}
+	Settings.initClass();
+	
+	module.exports = Settings;
+
+
+/***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -1446,7 +1695,7 @@
 
 	/* WEBPACK VAR INJECTION */(function(process) {let Point = __webpack_require__(4);
 	let Polygon = __webpack_require__(7);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Color = __webpack_require__(8);
 	let { sprintf } = __webpack_require__(9);
 	let environment = __webpack_require__(10);
@@ -17695,7 +17944,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -17746,7 +17995,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -17858,7 +18107,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Util = __webpack_require__(5);
 	
 	class VoltageElm extends CircuitComponent {
@@ -18228,7 +18477,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -18314,7 +18563,7 @@
 
 	let CircuitComponent = __webpack_require__(1);
 	let Util = __webpack_require__(5);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	
 	class GateElm extends CircuitComponent {
 	  static initClass() {
@@ -18526,7 +18775,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -18611,7 +18860,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -18691,7 +18940,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -18948,7 +19197,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -19012,7 +19261,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -19173,7 +19422,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -19346,7 +19595,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -19492,7 +19741,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -19657,7 +19906,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -19743,7 +19992,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -20085,7 +20334,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -20184,7 +20433,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -20607,7 +20856,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -20664,7 +20913,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -20923,7 +21172,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -21016,7 +21265,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -21128,7 +21377,7 @@
 	
 	
 	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
-	      return super.debugDraw(renderContext);
+	      super.debugDraw(renderContext);
 	    }
 	
 	  }
@@ -21200,7 +21449,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -21423,7 +21672,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -21528,7 +21777,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -21841,7 +22090,7 @@
 
 	let CircuitComponent = __webpack_require__(1);
 	let Util = __webpack_require__(5);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	
 	class InverterElm extends CircuitComponent {
 	  static get Fields() {
@@ -21952,7 +22201,7 @@
 	let CircuitComponent = __webpack_require__(1);
 	let SwitchElm = __webpack_require__(26);
 	let Util = __webpack_require__(5);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	
 	class LogicInputElm extends SwitchElm {
 	  static initClass() {
@@ -22087,7 +22336,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
@@ -22194,7 +22443,7 @@
 	let CircuitComponent = __webpack_require__(1);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	
 	class AnalogSwitchElm extends CircuitComponent {
 	  static initClass() {
@@ -22220,11 +22469,11 @@
 	
 	  constructor(xa, ya, xb, yb, params, f) {
 	    super(xa, ya, xb, yb, params, f);
+	
+	    this.place()
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
-	
+	  place() {
 	    this.calcLeads(32);
 	    this.open = false;
 	
@@ -22324,17 +22573,18 @@
 	let AnalogSwitchElm = __webpack_require__(49);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	
 	class AnalogSwitch2Elm extends AnalogSwitchElm {
 	
 	  constructor(xa, ya, xb, yb, params, f) {
 	    super(xa, ya, xb, yb, params, f);
 	    this.openhs = 16;
+	
+	    this.place()
 	  }
 	
-	  setPoints() {
-	    super.setPoints(...arguments);
+	  place() {
 	
 	    this.calcLeads(32);
 	
@@ -22380,7 +22630,8 @@
 	    renderContext.drawLinePt(this.swpoles[1], this.swposts[1], color);
 	
 	    let position = this.open ? 1 : 0;
-	    // draw switch
+	
+	    // draw switch Lever
 	    renderContext.drawLinePt(this.lead1, this.swpoles[position], Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
 	
 	    this.updateDots();
@@ -22388,14 +22639,14 @@
 	    renderContext.drawDots(this.point1, this.lead1, this);
 	    renderContext.drawDots(this.swpoles[position], this.swposts[position], this);
 	
-	    renderContext.drawCircle(this.lead1.x, this.lead1.y, 3, 0, Settings.LIGHT_POST_COLOR);
-	    renderContext.drawCircle(this.swpoles[1].x, this.swpoles[1].y, 3, 0, Settings.LIGHT_POST_COLOR);
-	    renderContext.drawCircle(this.swpoles[0].x, this.swpoles[0].y, 3, 0, Settings.LIGHT_POST_COLOR);
+	    renderContext.drawCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.LIGHT_POST_COLOR);
+	    renderContext.drawCircle(this.swpoles[1].x, this.swpoles[1].y, Settings.POST_RADIUS, 1, Settings.LIGHT_POST_COLOR);
+	    renderContext.drawCircle(this.swpoles[0].x, this.swpoles[0].y, Settings.POST_RADIUS, 1, Settings.LIGHT_POST_COLOR);
 	
 	    renderContext.drawPosts(this);
 	
 	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
-	      return super.debugDraw(renderContext);
+	      super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -22497,13 +22748,15 @@
 	
 	  constructor(xa, xb, ya, yb, params, f) {
 	    super(xa, xb, ya, yb, params, f);
+	
+	    this.place()
 	  }
 	
-	  setPoints() {
+	  place() {
 	    super.setPoints(...arguments);
 	    this.calcLeads(32);
 	    this.ps3 = new Point(0, 0);
-	    return this.ps4 = new Point(0, 0);
+	    this.ps4 = new Point(0, 0);
 	  }
 	
 	  static get NAME() {
@@ -22602,7 +22855,7 @@
 	let CircuitComponent = __webpack_require__(1);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	
 	class RelayElm extends CircuitComponent {
 	  static initClass() {
@@ -22983,8 +23236,21 @@
 	
 	    this.setup();
 	
-	    this.setPoints(xa, xb, ya, yb)
+	    this.place()
 	  }
+	
+	  setPoints() {
+	    this.calcLeads(16);
+	    this.cathode = new Array(4);
+	    let pa = new Array(2);
+	
+	    [pa[0], pa[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, this.hs);
+	    [this.cathode[0], this.cathode[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, this.hs);
+	    [this.cathode[2], this.cathode[3]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0.8, this.hs);
+	
+	    this.poly = Util.createPolygon(pa[0], pa[1], this.lead2);
+	  }
+	
 	
 	  reset() {
 	    return this.lastvoltdiff = this.volts[0] = this.volts[1] = this.curcount = 0;
@@ -23029,20 +23295,6 @@
 	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
 	      super.debugDraw(renderContext);
 	    }
-	  }
-	
-	  setPoints(x1, y1, x2, y2) {
-	    super.setPoints(x1, y1, x2, y2);
-	
-	    this.calcLeads(16);
-	    this.cathode = new Array(4);
-	    let pa = new Array(2);
-	
-	    [pa[0], pa[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, this.hs);
-	    [this.cathode[0], this.cathode[1]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, this.hs);
-	    [this.cathode[2], this.cathode[3]] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0.8, this.hs);
-	
-	    this.poly = Util.createPolygon(pa[0], pa[1], this.lead2);
 	  }
 	
 	  limitStep(vnew, vold) {
@@ -23112,7 +23364,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Point = __webpack_require__(4);
 	let Util = __webpack_require__(5);
 	
@@ -23520,7 +23772,7 @@
 
 	let CircuitComponent = __webpack_require__(1);
 	let Util = __webpack_require__(5);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	
 	class TriodeElm extends CircuitComponent {
 	  static get Fields() {
@@ -23866,7 +24118,7 @@
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
 	let Polygon = __webpack_require__(7);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	
 	let self = undefined;
 	let Pin = undefined;
@@ -24401,7 +24653,7 @@
 	let CircuitComponent = __webpack_require__(1);
 	let ChipElm = __webpack_require__(57);
 	let Util = __webpack_require__(5);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	
 	class TimerElm extends ChipElm {
 	  static initClass() {
@@ -25156,7 +25408,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let ChipElm = __webpack_require__(57);
 	
 	class SevenSegElm extends ChipElm {
@@ -25317,7 +25569,7 @@
 
 	let CircuitComponent = __webpack_require__(1);
 	let Util = __webpack_require__(5);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	
 	class TransLineElm extends CircuitComponent {
 	  static get Fields() {
@@ -26083,7 +26335,7 @@
 	let CircuitComponent = __webpack_require__(1);
 	let DiodeElm = __webpack_require__(24);
 	let Util = __webpack_require__(5);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	
 	class LedElm extends DiodeElm {
 	  static get Fields() {
@@ -26210,7 +26462,7 @@
 
 	let CircuitComponent = __webpack_require__(1);
 	let Util = __webpack_require__(5);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	
 	let Point = __webpack_require__(4);
 	
@@ -27401,7 +27653,7 @@
 	
 	RowInfo = __webpack_require__(82);
 	
-	Setting = __webpack_require__(105);
+	Setting = __webpack_require__(2);
 	
 	Util = __webpack_require__(5);
 	
@@ -28843,10 +29095,10 @@
 
 	let Rectangle = __webpack_require__(3);
 	let CircuitCanvas = __webpack_require__(90);
-	let SvgRenderer = __webpack_require__(103);
+	let SvgRenderer = __webpack_require__(93);
 	let Observer = __webpack_require__(86);
 	let Util = __webpack_require__(5);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	
 	let AntennaElm = __webpack_require__(17);
 	let WireElm = __webpack_require__(20);
@@ -29346,13 +29598,13 @@
 	let Observer = __webpack_require__(86);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Color = __webpack_require__(8);
 	
 	let CircuitComponent = __webpack_require__(1);
 	let environment = __webpack_require__(10);
 	
-	let d3 = __webpack_require__(101);
+	let d3 = __webpack_require__(91);
 	
 	class CircuitCanvas extends Observer {
 	  constructor(Circuit, circuitUI) {
@@ -29988,588 +30240,9 @@
 /* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let ScopeCanvas = __webpack_require__(92);
-	let Util = __webpack_require__(5);
-	
-	class RickshawScopeCanvas extends ScopeCanvas {
-	  constructor(parentUI, scopeDiv, x=800, y=700) {
-	    super(parentUI, scopeDiv, x, y);
-	
-	    var plotContext = scopeDiv.getElementsByClassName("plot-context")[0];
-	    var leftAxisDiv = scopeDiv.getElementsByClassName("left-axis")[0];
-	
-	    this.graph = new Rickshaw.Graph({
-	      element: plotContext,
-	      width: plotContext.offsetWidth ,
-	      height: plotContext.offsetHeight,
-	      interpolation: 'linear',
-	      renderer: 'line',
-	      stroke: false,
-	      strokeWidth: 1,
-	      min: 'auto',
-	      padding: {
-	        top: 0.08,
-	        botom: 0.09,
-	      },
-	      series: [
-	        {
-	          color: "#F00",
-	          data: [],
-	          name: 'Voltage'
-	        },
-	        {
-	          color: "#00F",
-	          data: [],
-	          name: 'Current'
-	        }
-	      ]
-	    });
-	
-	    var ticksTreatment = 'glow';
-	
-	    this.xAxis = new Rickshaw.Graph.Axis.X({
-	      graph: this.graph,
-	      //element: leftAxisDiv,
-	      ticksTreatment: ticksTreatment,
-	      timeFixture: new Rickshaw.Fixtures.Time.Local(),
-	      tickFormat: function(d) { return Util.getUnitText(d, "s", 0) }
-	    });
-	
-	    //this.xAxis.render();
-	    new Rickshaw.Graph.Axis.Y({
-	      graph: this.graph,
-	      tickFormat: function(d) { return Util.getUnitText(d, "V", 0) },
-	      pixelsPerTick: 30,
-	      tickSize: 4,
-	      tickTransformation: function(svg) {
-	        svg.style("text-anchor", "end").attr("dx", "-0.8em").attr("dy", "-0.3em").attr("transform", 'rotate(-90)');
-	      }
-	    });
-	
-	    new Rickshaw.Graph.Axis.Y({
-	      graph: this.graph,
-	      tickFormat: function(d) { return Util.getUnitText(d, "V", 0) },
-	      pixelsPerTick: 30,
-	      tickSize: 4,
-	      tickTransformation: function(svg) {
-	        svg.style("text-anchor", "end").attr("dx", "-0.8em").attr("dy", "-0.3em").attr("transform", 'rotate(-90)');
-	      }
-	    });
-	
-	    this.highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
-	      graph: this.graph,
-	      // legend: legend
-	    });
-	
-	    new Rickshaw.Graph.HoverDetail({
-	      graph: this.graph,
-	      xFormatter: function (x) {
-	        return x + "s";
-	      }
-	    });
-	
-	    this.resize(plotContext.offsetWidth, plotContext.offsetHeight - 5);
-	  }
-	
-	  resize(width, height) {
-	    this.graph.configure({
-	      width: width,
-	      height: height
-	
-	
-	    });
-	
-	    this.graph.render();
-	  }
-	
-	  addVoltage(time, value) {
-	    this.graph.series[0].data.push({x: time, y: value});
-	
-	    if (this.graph.series[0].data.length > this.dataPoints) {
-	      this.graph.series[0].data.shift();
-	    }
-	
-	    // this.graph.update();
-	  };
-	
-	  addCurrent(time, value) {
-	    this.graph.series[1].data.push({x: time, y: value});
-	
-	    if (this.graph.series[1].data.length > this.dataPoints) {
-	      this.graph.series[1].data.shift();
-	    }
-	
-	    //this.graph.update();
-	  };
-	
-	  redraw() {
-	    this.graph.update();
-	  }
-	}
-	
-	module.exports = RickshawScopeCanvas;
-
-
-/***/ },
-/* 92 */
-/***/ function(module, exports) {
-
-	class ScopeCanvas {
-	  constructor(parentUI, scopeDiv, x=800, y=700) {
-	    this.dataPoints = 800;
-	
-	    this.parentUI = parentUI;
-	    this.scopeDiv = scopeDiv;
-	  }
-	
-	  x() {
-	    return this.scopeDiv.offsetLeft - this.parentUI.xMargin;
-	  }
-	
-	  y() {
-	    return this.scopeDiv.offsetTop - this.parentUI.yMargin;
-	  }
-	
-	  height() {
-	    return this.scopeDiv.offsetHeight;
-	  }
-	
-	  width() {
-	    return this.scopeDiv.offsetWidth;
-	  }
-	
-	  resize(width, height) {
-	  }
-	
-	  addVoltage(value) {
-	  };
-	
-	  addCurrent(value) {
-	  };
-	}
-	
-	module.exports = ScopeCanvas;
-
-
-/***/ },
-/* 93 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let _DiacElm = __webpack_require__(94);
-	let _LampElm = __webpack_require__(95);
-	let _PhotoResistorElm = __webpack_require__(96);
-	let _ThermistorElm = __webpack_require__(97);
-	let _TriacElm = __webpack_require__(98);
-	let ACRailElm = __webpack_require__(99);
-	let AdcElm = __webpack_require__(64);
-	let AnalogSwitch2Elm = __webpack_require__(50);
-	let AnalogSwitchElm = __webpack_require__(49);
-	let AndGateElm = __webpack_require__(41);
-	let AntennaElm = __webpack_require__(17);
-	let CapacitorElm = __webpack_require__(27);
-	let CC2Elm = __webpack_require__(68);
-	let ChipElm = __webpack_require__(57);
-	let ClockElm = __webpack_require__(74);
-	let CounterElm = __webpack_require__(62);
-	let CurrentElm = __webpack_require__(30);
-	let DacElm = __webpack_require__(63);
-	let DecadeElm = __webpack_require__(56);
-	let DFlipFlopElm = __webpack_require__(61);
-	let DiodeElm = __webpack_require__(24);
-	let GateElm = __webpack_require__(21);
-	let GroundElm = __webpack_require__(23);
-	let InductorElm = __webpack_require__(28);
-	let InverterElm = __webpack_require__(46);
-	let JFetElm = __webpack_require__(32);
-	let JkFlipFlopElm = __webpack_require__(60);
-	let LatchElm = __webpack_require__(58);
-	let LedElm = __webpack_require__(72);
-	let LogicInputElm = __webpack_require__(47);
-	let LogicOutputElm = __webpack_require__(48);
-	let MemristorElm = __webpack_require__(51);
-	let MosfetElm = __webpack_require__(31);
-	let NandGateElm = __webpack_require__(42);
-	let NorGateElm = __webpack_require__(44);
-	let OpAmpElm = __webpack_require__(35);
-	let OrGateElm = __webpack_require__(43);
-	let OutputElm = __webpack_require__(25);
-	let PhaseCompElm = __webpack_require__(66);
-	let PotElm = __webpack_require__(73);
-	let ProbeElm = __webpack_require__(40);
-	let PushSwitchElm = __webpack_require__(100);
-	let RailElm = __webpack_require__(18);
-	let RelayElm = __webpack_require__(52);
-	let ResistorElm = __webpack_require__(22);
-	let SCRElm = __webpack_require__(54);
-	let SevenSegElm = __webpack_require__(67);
-	let SparkGapElm = __webpack_require__(29);
-	let SweepElm = __webpack_require__(38);
-	let Switch2Elm = __webpack_require__(37);
-	let SwitchElm = __webpack_require__(26);
-	let TappedTransformerElm = __webpack_require__(71);
-	let TextElm = __webpack_require__(39);
-	let TimerElm = __webpack_require__(59);
-	let TransformerElm = __webpack_require__(70);
-	let TransistorElm = __webpack_require__(33);
-	let TransLineElm = __webpack_require__(69);
-	let TriodeElm = __webpack_require__(55);
-	let TunnelDiodeElm = __webpack_require__(53);
-	let VarRailElm = __webpack_require__(34);
-	let VcoElm = __webpack_require__(65);
-	let VoltageElm = __webpack_require__(19);
-	let WireElm = __webpack_require__(20);
-	let XorGateElm = __webpack_require__(45);
-	let ZenerElm = __webpack_require__(36);
-	
-	module.exports = {
-	  _DiacElm,
-	  _LampElm,
-	  _PhotoResistorElm,
-	  _ThermistorElm,
-	  _TriacElm,
-	  ACRailElm,
-	  AdcElm,
-	  AnalogSwitch2Elm,
-	  AnalogSwitchElm,
-	  AndGateElm,
-	  AntennaElm,
-	  CapacitorElm,
-	  CC2Elm,
-	  ClockElm,
-	  CounterElm,
-	  CurrentElm,
-	  DacElm,
-	  DecadeElm,
-	  DFlipFlopElm,
-	  DiodeElm,
-	  GroundElm,
-	  InductorElm,
-	  InverterElm,
-	  JFetElm,
-	  JkFlipFlopElm,
-	  LatchElm,
-	  LedElm,
-	  LogicInputElm,
-	  LogicOutputElm,
-	  MemristorElm,
-	  MosfetElm,
-	  NandGateElm,
-	  NorGateElm,
-	  OpAmpElm,
-	  OrGateElm,
-	  OutputElm,
-	  PhaseCompElm,
-	  PotElm,
-	  ProbeElm,
-	  PushSwitchElm,
-	  RailElm,
-	  RelayElm,
-	  ResistorElm,
-	  SCRElm,
-	  SevenSegElm,
-	  SparkGapElm,
-	  SweepElm,
-	  Switch2Elm,
-	  SwitchElm,
-	  TappedTransformerElm,
-	  TextElm,
-	  TimerElm,
-	  TransformerElm,
-	  TransistorElm,
-	  TransLineElm,
-	  TriodeElm,
-	  TunnelDiodeElm,
-	  VarRailElm,
-	  VcoElm,
-	  VoltageElm,
-	  WireElm,
-	  XorGateElm,
-	  ZenerElm
-	};
-
-
-/***/ },
-/* 94 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let CircuitComponent = __webpack_require__(1);
-	let Util = __webpack_require__(5);
-	
-	class DiacElm extends CircuitComponent {
-	  static get Fields() {
-	    return {
-	      onresistance: {
-	        name: "On Resistance",
-	        data_type: parseFloat
-	      },
-	      offresistance: {
-	        name: "Off Resistance",
-	        data_type: parseFloat
-	      },
-	      breakdown: {
-	        name: "Breakdown Voltage",
-	        data_type: parseFloat
-	      },
-	      holdCurrent: {
-	        name: "Hold Current",
-	        data_type: parseFloat
-	      }
-	    };
-	  }
-	
-	  constructor(xa, xb, ya, yb, params, f) {
-	    super(xa, xb, ya, yb, params, f);
-	  }
-	
-	  nonLinear() {
-	    return true;
-	  }
-	
-	  setPoints() {
-	    super.setPoints(...arguments);
-	    this.calcLeads(32);
-	    this.ps3 = new Point(0, 0);
-	    return this.ps4 = new Point(0, 0);
-	  }
-	
-	  calculateCurrent() {
-	    let vd = this.volts[0] - this.volts[1];
-	
-	    if (state) {
-	      return this.current = vd / this.onresistance;
-	    } else {
-	      return this.current = vd / this.offresistance;
-	    }
-	  }
-	
-	  draw(renderContext) {
-	    let v1 = this.volts[0];
-	    let v2 = this.volts[1];
-	
-	    this.setBbox(this.point1, this.point2, 6);
-	    this.draw2Leads(g);
-	
-	    renderContext.drawLeads(this);
-	    renderContext.drawPosts(this);
-	
-	    return this.updateDots();
-	  }
-	
-	
-	  startIteration() {
-	    let vd = this.volts[0] - this.volts[1];
-	
-	    if (Math.abs(this.current) < this.holdcurrent) { this.state = false; }
-	    if (Math.abs(vd) > this.breakdown) { return this.state = true; }
-	  }
-	
-	
-	  doStep(stamper) {
-	    if (this.state) {
-	      return stamper.stampResistor(this.nodes[0], this.nodes[1], this.onResistance);
-	    } else {
-	      return stamper.stampResistor(this.nodes[0], this.nodes[1], this.offResistance);
-	    }
-	  }
-	
-	  stamp(stamper) {
-	    stamper.stampNonLinear(this.nodes[0]);
-	    return stamper.stampNonLinear(this.nodes[1]);
-	  }
-	
-	  needsShortcut() {
-	    return false;
-	  }
-	}
-	
-	
-	module.exports = DiacElm;
-
-
-/***/ },
-/* 95 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let CircuitComponent = __webpack_require__(1);
-	let Util = __webpack_require__(5);
-	
-	class LampElm extends CircuitComponent {
-	  static get Fields() {
-	    return {
-	      temp: {
-	        name: "Temperature",
-	        data_type: parseFloat
-	      },
-	      nom_pow: {
-	        name: "Nominal power",
-	        data_type: parseFloat
-	      },
-	      nom_v: {
-	        name: "Nominal voltage",
-	        data_type: parseFloat
-	      },
-	      warmTime: {
-	        name: "Warm time",
-	        dataType: parseFloat
-	      },
-	      coolTime: {
-	        name: "Cool time",
-	        dataType: parseFloat
-	      }
-	    };
-	  }
-	
-	  constructor(xa, xb, ya, yb, params, f) {
-	    super(xa, xb, ya, yb, params, f);
-	  }
-	}
-	
-	module.exports = LampElm;
-
-
-/***/ },
-/* 96 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let CircuitComponent = __webpack_require__(1);
-	let Util = __webpack_require__(5);
-	
-	class PhotoResistorElm extends CircuitComponent {
-	  static get Fields() {
-	    return {
-	      maxresistance: {
-	        name: "Max. Resistance",
-	        data_type: parseFloat
-	      },
-	      minresistance: {
-	        name: "Min. Resistance",
-	        data_type: parseFloat
-	      }
-	    };
-	  }
-	
-	  constructor(xa, xb, ya, yb, params, f) {
-	    super(xa, xb, ya, yb, params, f);
-	  }
-	}
-	
-	module.exports = PhotoResistorElm;
-
-
-/***/ },
-/* 97 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let CircuitComponent = __webpack_require__(1);
-	let Util = __webpack_require__(5);
-	
-	class ThermistorElm extends CircuitComponent {
-	  static get Fields() {
-	    return {
-	      maxresistance: {
-	        name: "Max. Resistance",
-	        data_type: parseFloat
-	      },
-	      minresistance: {
-	        name: "Min. Resistance",
-	        data_type: parseFloat
-	      }
-	    };
-	  }
-	
-	
-	  constructor(xa, xb, ya, yb, params, f) {
-	    super(xa, xb, ya, yb, params, f);
-	  }
-	}
-	
-	module.exports = ThermistorElm;
-
-
-/***/ },
-/* 98 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let CircuitComponent = __webpack_require__(1);
-	let Util = __webpack_require__(5);
-	
-	class TriacElm extends CircuitComponent {
-	  static get Fields() {
-	    return {
-	      volts: {
-	        name: "Volts",
-	        data_type: parseFloat
-	      },
-	      triggerI: {
-	        name: "Trigger current",
-	        data_type: parseFloat
-	      },
-	      holdingI: {
-	        name: "Holding current",
-	        data_type: parseFloat
-	      },
-	      cresistance: {
-	        name: "Collector resistance",
-	        data_type: parseFloat
-	      }
-	    };
-	  }
-	
-	  constructor(xa, xb, ya, yb, params, f) {
-	    super(xa, xb, ya, yb, params, f);
-	  }
-	}
-	
-	module.exports = TriacElm;
-
-
-/***/ },
-/* 99 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let RailElm = __webpack_require__(18);
-	let VoltageElm = __webpack_require__(19);
-	
-	class ACRailElm extends RailElm {
-	  constructor(xa, ya, xb, yb, params, f) {
-	    super(xa, ya, xa, ya, params, f);
-	
-	    this.waveform = VoltageElm.WF_AC;
-	  }
-	
-	  static get NAME() {
-	    return "AC Voltage Rail"
-	  }
-	}
-	
-	module.exports = ACRailElm;
-
-
-/***/ },
-/* 100 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let CircuitComponent = __webpack_require__(1);
-	let SwitchElm = __webpack_require__(26);
-	let Util = __webpack_require__(5);
-	
-	class PushSwitchElm extends SwitchElm {
-	
-	  constructor(xa, xb) {
-	    super(xa, xb, true);
-	  }
-	}
-	
-	module.exports = PushSwitchElm;
-
-
-/***/ },
-/* 101 */
-/***/ function(module, exports, __webpack_require__) {
-
 	// https://d3js.org/d3-shape/ Version 1.0.4. Copyright 2016 Mike Bostock.
 	(function (global, factory) {
-	   true ? factory(exports, __webpack_require__(102)) :
+	   true ? factory(exports, __webpack_require__(92)) :
 	  typeof define === 'function' && define.amd ? define(['exports', 'd3-path'], factory) :
 	  (factory((global.d3 = global.d3 || {}),global.d3));
 	}(this, (function (exports,d3Path) { 'use strict';
@@ -32388,7 +32061,7 @@
 
 
 /***/ },
-/* 102 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-path/ Version 1.0.3. Copyright 2016 Mike Bostock.
@@ -32533,20 +32206,20 @@
 
 
 /***/ },
-/* 103 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let Observer = __webpack_require__(86);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
-	let Settings = __webpack_require__(105);
+	let Settings = __webpack_require__(2);
 	let Color = __webpack_require__(8);
 	
 	let CircuitComponent = __webpack_require__(1);
 	let environment = __webpack_require__(10);
-	let ScopeCanvas = __webpack_require__(92);
+	let ScopeCanvas = __webpack_require__(94);
 	
-	let d3 = __webpack_require__(104);
+	let d3 = __webpack_require__(95);
 	
 	class SvgRenderer extends Observer {
 	
@@ -33477,7 +33150,48 @@
 
 
 /***/ },
-/* 104 */
+/* 94 */
+/***/ function(module, exports) {
+
+	class ScopeCanvas {
+	  constructor(parentUI, scopeDiv, x=800, y=700) {
+	    this.dataPoints = 800;
+	
+	    this.parentUI = parentUI;
+	    this.scopeDiv = scopeDiv;
+	  }
+	
+	  x() {
+	    return this.scopeDiv.offsetLeft - this.parentUI.xMargin;
+	  }
+	
+	  y() {
+	    return this.scopeDiv.offsetTop - this.parentUI.yMargin;
+	  }
+	
+	  height() {
+	    return this.scopeDiv.offsetHeight;
+	  }
+	
+	  width() {
+	    return this.scopeDiv.offsetWidth;
+	  }
+	
+	  resize(width, height) {
+	  }
+	
+	  addVoltage(value) {
+	  };
+	
+	  addCurrent(value) {
+	  };
+	}
+	
+	module.exports = ScopeCanvas;
+
+
+/***/ },
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org Version 4.5.0. Copyright 2017 Mike Bostock.
@@ -49888,253 +49602,541 @@
 
 
 /***/ },
-/* 105 */
-/***/ function(module, exports) {
+/* 96 */
+/***/ function(module, exports, __webpack_require__) {
 
-	/*
-	Stores Environment-specific settings
+	let ScopeCanvas = __webpack_require__(94);
+	let Util = __webpack_require__(5);
 	
-	These are the global settings for Maxwell and should defined by the user.
-	Settings do not change by loading a new circuit.
-	*/
+	class RickshawScopeCanvas extends ScopeCanvas {
+	  constructor(parentUI, scopeDiv, x=800, y=700) {
+	    super(parentUI, scopeDiv, x, y);
+	
+	    var plotContext = scopeDiv.getElementsByClassName("plot-context")[0];
+	    var leftAxisDiv = scopeDiv.getElementsByClassName("left-axis")[0];
+	
+	    this.graph = new Rickshaw.Graph({
+	      element: plotContext,
+	      width: plotContext.offsetWidth ,
+	      height: plotContext.offsetHeight,
+	      interpolation: 'linear',
+	      renderer: 'line',
+	      stroke: false,
+	      strokeWidth: 1,
+	      min: 'auto',
+	      padding: {
+	        top: 0.08,
+	        botom: 0.09,
+	      },
+	      series: [
+	        {
+	          color: "#F00",
+	          data: [],
+	          name: 'Voltage'
+	        },
+	        {
+	          color: "#00F",
+	          data: [],
+	          name: 'Current'
+	        }
+	      ]
+	    });
+	
+	    var ticksTreatment = 'glow';
+	
+	    this.xAxis = new Rickshaw.Graph.Axis.X({
+	      graph: this.graph,
+	      //element: leftAxisDiv,
+	      ticksTreatment: ticksTreatment,
+	      timeFixture: new Rickshaw.Fixtures.Time.Local(),
+	      tickFormat: function(d) { return Util.getUnitText(d, "s", 0) }
+	    });
+	
+	    //this.xAxis.render();
+	    new Rickshaw.Graph.Axis.Y({
+	      graph: this.graph,
+	      tickFormat: function(d) { return Util.getUnitText(d, "V", 0) },
+	      pixelsPerTick: 30,
+	      tickSize: 4,
+	      tickTransformation: function(svg) {
+	        svg.style("text-anchor", "end").attr("dx", "-0.8em").attr("dy", "-0.3em").attr("transform", 'rotate(-90)');
+	      }
+	    });
+	
+	    new Rickshaw.Graph.Axis.Y({
+	      graph: this.graph,
+	      tickFormat: function(d) { return Util.getUnitText(d, "V", 0) },
+	      pixelsPerTick: 30,
+	      tickSize: 4,
+	      tickTransformation: function(svg) {
+	        svg.style("text-anchor", "end").attr("dx", "-0.8em").attr("dy", "-0.3em").attr("transform", 'rotate(-90)');
+	      }
+	    });
+	
+	    this.highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
+	      graph: this.graph,
+	      // legend: legend
+	    });
+	
+	    new Rickshaw.Graph.HoverDetail({
+	      graph: this.graph,
+	      xFormatter: function (x) {
+	        return x + "s";
+	      }
+	    });
+	
+	    this.resize(plotContext.offsetWidth, plotContext.offsetHeight - 5);
+	  }
+	
+	  resize(width, height) {
+	    this.graph.configure({
+	      width: width,
+	      height: height
 	
 	
-	let ColorPalette = undefined;
-	class Settings {
-	  static initClass() {
-	    // Used from https://github.com/matthewbj/Colors/blob/master/colors.js:
-	    ColorPalette = {
-	  
-	    // Voltage scale goes from Red (low voltage) to Green (high volage)
-	      'voltageScale': [
-	        // Red color scale
-	        "#ff0000", "#f70707", "#ef0f0f", "#e71717", "#df1f1f", "#d72727", "#cf2f2f", "#c73737",
-	        "#bf3f3f", "#b74747", "#af4f4f", "#a75757", "#9f5f5f", "#976767", "#8f6f6f", "#877777",
-	  
-	        "#7f7f7f", // Grey
-	  
-	        // Green color scale
-	        "#778777", "#6f8f6f", "#679767", "#5f9f5f", "#57a757", "#4faf4f", "#47b747", "#3fbf3f",
-	        "#37c737", "#2fcf2f", "#27d727", "#1fdf1f", "#17e717", "#0fef0f", "#07f707", "#00ff00"
-	      ],
-	  
-	      'aliceblue': '#f0f8ff',
-	      'antiquewhite': '#faebd7',
-	      'aqua': '#00ffff',
-	      'aquamarine': '#7fffd4',
-	      'azure': '#f0ffff',
-	      'beige': '#f5f5dc',
-	      'bisque': '#ffe4c4',
-	      'black': '#000000',
-	      'blanchedalmond': '#ffebcd',
-	      'blue': '#0000ff',
-	      'blueviolet': '#8a2be2',
-	      'brown': '#a52a2a',
-	      'burlywood': '#deb887',
-	      'cadetblue': '#5f9ea0',
-	      'chartreuse': '#7fff00',
-	      'chocolate': '#d2691e',
-	      'coral': '#ff7f50',
-	      'cornflowerblue': '#6495ed',
-	      'cornsilk': '#fff8dc',
-	      'crimson': '#dc143c',
-	      'cyan': '#00ffff',
-	      'darkblue': '#00008b',
-	      'darkcyan': '#008b8b',
-	      'darkgoldenrod': '#b8860b',
-	      'darkgray': '#a9a9a9',
-	      'darkgrey': '#a9a9a9',
-	      'darkgreen': '#006400',
-	      'darkkhaki': '#bdb76b',
-	      'darkmagenta': '#8b008b',
-	      'darkolivegreen': '#556b2f',
-	      'darkorange': '#ff8c00',
-	      'darkorchid': '#9932cc',
-	      'darkred': '#8b0000',
-	      'darksalmon': '#e9967a',
-	      'darkseagreen': '#8fbc8f',
-	      'darkslateblue': '#483d8b',
-	      'darkslategray': '#2f4f4f',
-	      'darkslategrey': '#2f4f4f',
-	      'darkturquoise': '#00ced1',
-	      'darkviolet': '#9400d3',
-	      'deeppink': '#ff1493',
-	      'deepskyblue': '#00bfff',
-	      'dimgray': '#696969',
-	      'dimgrey': '#696969',
-	      'dodgerblue': '#1e90ff',
-	      'firebrick': '#b22222',
-	      'floralwhite': '#fffaf0',
-	      'forestgreen': '#228b22',
-	      'fuchsia': '#ff00ff',
-	      'gainsboro': '#dcdcdc',
-	      'ghostwhite': '#f8f8ff',
-	      'gold': '#ffd700',
-	      'goldenrod': '#daa520',
-	      'gray': '#808080',
-	      'grey': '#808080',
-	      'green': '#008000',
-	      'greenyellow': '#adff2f',
-	      'honeydew': '#f0fff0',
-	      'hotpink': '#ff69b4',
-	      'indianred': '#cd5c5c',
-	      'indigo': '#4b0082',
-	      'ivory': '#fffff0',
-	      'khaki': '#f0e68c',
-	      'lavender': '#e6e6fa',
-	      'lavenderblush': '#fff0f5',
-	      'lawngreen': '#7cfc00',
-	      'lemonchiffon': '#fffacd',
-	      'lightblue': '#add8e6',
-	      'lightcoral': '#f08080',
-	      'lightcyan': '#e0ffff',
-	      'lightgoldenrodyellow': '#fafad2',
-	      'lightgray': '#d3d3d3',
-	      'lightgrey': '#d3d3d3',
-	      'lightgreen': '#90ee90',
-	      'lightpink': '#ffb6c1',
-	      'lightsalmon': '#ffa07a',
-	      'lightseagreen': '#20b2aa',
-	      'lightskyblue': '#87cefa',
-	      'lightslategray': '#778899',
-	      'lightslategrey': '#778899',
-	      'lightsteelblue': '#b0c4de',
-	      'lightyellow': '#ffffe0',
-	      'lime': '#00ff00',
-	      'limegreen': '#32cd32',
-	      'linen': '#faf0e6',
-	      'magenta': '#ff00ff',
-	      'maroon': '#800000',
-	      'mediumaquamarine': '#66cdaa',
-	      'mediumblue': '#0000cd',
-	      'mediumorchid': '#ba55d3',
-	      'mediumpurple': '#9370d8',
-	      'mediumseagreen': '#3cb371',
-	      'mediumslateblue': '#7b68ee',
-	      'mediumspringgreen': '#00fa9a',
-	      'mediumturquoise': '#48d1cc',
-	      'mediumvioletred': '#c71585',
-	      'midnightblue': '#191970',
-	      'mintcream': '#f5fffa',
-	      'mistyrose': '#ffe4e1',
-	      'moccasin': '#ffe4b5',
-	      'navajowhite': '#ffdead',
-	      'navy': '#000080',
-	      'oldlace': '#fdf5e6',
-	      'olive': '#808000',
-	      'olivedrab': '#6b8e23',
-	      'orange': '#ffa500',
-	      'orangered': '#ff4500',
-	      'orchid': '#da70d6',
-	      'palegoldenrod': '#eee8aa',
-	      'palegreen': '#98fb98',
-	      'paleturquoise': '#afeeee',
-	      'palevioletred': '#d87093',
-	      'papayawhip': '#ffefd5',
-	      'peachpuff': '#ffdab9',
-	      'peru': '#cd853f',
-	      'pink': '#ffc0cb',
-	      'plum': '#dda0dd',
-	      'powderblue': '#b0e0e6',
-	      'purple': '#800080',
-	      'red': '#ff0000',
-	      'rosybrown': '#bc8f8f',
-	      'royalblue': '#4169e1',
-	      'saddlebrown': '#8b4513',
-	      'salmon': '#fa8072',
-	      'sandybrown': '#f4a460',
-	      'seagreen': '#2e8b57',
-	      'seashell': '#fff5ee',
-	      'sienna': '#a0522d',
-	      'silver': '#c0c0c0',
-	      'skyblue': '#87ceeb',
-	      'slateblue': '#6a5acd',
-	      'slategray': '#708090',
-	      'slategrey': '#708090',
-	      'snow': '#fffafa',
-	      'springgreen': '#00ff7f',
-	      'steelblue': '#4682b4',
-	      'tan': '#d2b48c',
-	      'teal': '#008080',
-	      'thistle': '#d8bfd8',
-	      'tomato': '#ff6347',
-	      'turquoise': '#40e0d0',
-	      'violet': '#ee82ee',
-	      'wheat': '#f5deb3',
-	      'white': '#ffffff',
-	      'whitesmoke': '#f5f5f5',
-	      'yellow': '#ffff00',
-	      'yellowgreen': '#9acd32'
-	    };
-	  
-	    this.CURENT_TYPE_DOTS = "DOTS";
-	    this.CURENT_TYPE_DASHES = "DASHES";
-	  
-	    this.FRACTIONAL_DIGITS = 2;
-	    this.CURRENT_SEGMENT_LENGTH = 16;
-	    this.WIRE_POSTS = true;
-	  
-	    // Line Widths:
-	    this.POST_RADIUS = 2;
-	    this.POST_OUTLINE_SIZE = 1;
-	    this.CURRENT_RADIUS = 2;
-	    this.CURRENT_COLOR = "rgba(255, 255, 255, 0.7)";
-	    this.LINE_WIDTH = 2;
-	    this.BOLD_LINE_WIDTH = 4;
+	    });
 	
-	    // Grid
-	    this.GRID_SIZE = 8;
-	    this.SMALL_GRID = false;
-	  
-	    this.SHOW_VALUES = false;
+	    this.graph.render();
+	  }
 	
-	    this.TEXT_STROKE_COLOR = "#FFF";
-	  
-	    this.CURRENT_DISPLAY_TYPE = "DASHES";
-	  
-	    this.SELECT_COLOR = "#573400";
-	    this.HIGHLIGHT_COLOR = ColorPalette.orangered;
+	  addVoltage(time, value) {
+	    this.graph.series[0].data.push({x: time, y: value});
 	
-	    this.LIGHT_POST_COLOR = "#333";
-	    this.POST_COLOR = ColorPalette.black;
-	    this.POST_OUTLINE_COLOR = "#666";
-	    this.POST_SELECT_COLOR = '#ff8c00';
-	    this.POST_SELECT_OUTLINE_COLOR = '#F0F';
+	    if (this.graph.series[0].data.length > this.dataPoints) {
+	      this.graph.series[0].data.shift();
+	    }
 	
-	    this.DOTS_COLOR = ColorPalette.yellow;
-	    this.DOTS_OUTLINE = ColorPalette.orange;
-	  
-	    this.TEXT_COLOR = ColorPalette.black;
-	    this.TEXT_ERROR_COLOR = ColorPalette.red;
-	    this.TEXT_WARNING_COLOR = ColorPalette.yellow;
+	    // this.graph.update();
+	  };
 	
-	    this.TEXT_SIZE = 7.5;
-	    this.FONT = 'Monaco';
-	    this.TEXT_STYLE = 'bold';
-	    this.LABEL_COLOR = '#0000cd';
-	    this.PIN_LABEL_COLOR = '#444';
-	    this.SECONDARY_COLOR = '#777';
+	  addCurrent(time, value) {
+	    this.graph.series[1].data.push({x: time, y: value});
 	
-	    this.SELECTION_MARQUEE_COLOR = ColorPalette.orange;
-	  
-	    this.GREY = "#666";
-	    this.GRAY = "#666";
-	  
-	    this.COMPONENT_DECIMAL_PLACES = 1;
+	    if (this.graph.series[1].data.length > this.dataPoints) {
+	      this.graph.series[1].data.shift();
+	    }
 	
-	    this.GRID_COLOR = ColorPalette.darkyellow;
-	    this.SWITCH_COLOR = "#666";
-	    this.FILL_COLOR = ColorPalette.white;
-	    this.BG_COLOR = ColorPalette.white;
-	    this.FG_COLOR = ColorPalette.white;
-	    this.STROKE_COLOR = ColorPalette.black;
-	    this.ERROR_COLOR = ColorPalette.darkred;
-	    this.WARNING_COLOR = ColorPalette.orange;
+	    //this.graph.update();
+	  };
+	
+	  redraw() {
+	    this.graph.update();
 	  }
 	}
-	Settings.initClass();
 	
-	module.exports = Settings;
+	module.exports = RickshawScopeCanvas;
+
+
+/***/ },
+/* 97 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let _DiacElm = __webpack_require__(98);
+	let _LampElm = __webpack_require__(99);
+	let _PhotoResistorElm = __webpack_require__(100);
+	let _ThermistorElm = __webpack_require__(101);
+	let _TriacElm = __webpack_require__(102);
+	let ACRailElm = __webpack_require__(103);
+	let AdcElm = __webpack_require__(64);
+	let AnalogSwitch2Elm = __webpack_require__(50);
+	let AnalogSwitchElm = __webpack_require__(49);
+	let AndGateElm = __webpack_require__(41);
+	let AntennaElm = __webpack_require__(17);
+	let CapacitorElm = __webpack_require__(27);
+	let CC2Elm = __webpack_require__(68);
+	let ChipElm = __webpack_require__(57);
+	let ClockElm = __webpack_require__(74);
+	let CounterElm = __webpack_require__(62);
+	let CurrentElm = __webpack_require__(30);
+	let DacElm = __webpack_require__(63);
+	let DecadeElm = __webpack_require__(56);
+	let DFlipFlopElm = __webpack_require__(61);
+	let DiodeElm = __webpack_require__(24);
+	let GateElm = __webpack_require__(21);
+	let GroundElm = __webpack_require__(23);
+	let InductorElm = __webpack_require__(28);
+	let InverterElm = __webpack_require__(46);
+	let JFetElm = __webpack_require__(32);
+	let JkFlipFlopElm = __webpack_require__(60);
+	let LatchElm = __webpack_require__(58);
+	let LedElm = __webpack_require__(72);
+	let LogicInputElm = __webpack_require__(47);
+	let LogicOutputElm = __webpack_require__(48);
+	let MemristorElm = __webpack_require__(51);
+	let MosfetElm = __webpack_require__(31);
+	let NandGateElm = __webpack_require__(42);
+	let NorGateElm = __webpack_require__(44);
+	let OpAmpElm = __webpack_require__(35);
+	let OrGateElm = __webpack_require__(43);
+	let OutputElm = __webpack_require__(25);
+	let PhaseCompElm = __webpack_require__(66);
+	let PotElm = __webpack_require__(73);
+	let ProbeElm = __webpack_require__(40);
+	let PushSwitchElm = __webpack_require__(104);
+	let RailElm = __webpack_require__(18);
+	let RelayElm = __webpack_require__(52);
+	let ResistorElm = __webpack_require__(22);
+	let SCRElm = __webpack_require__(54);
+	let SevenSegElm = __webpack_require__(67);
+	let SparkGapElm = __webpack_require__(29);
+	let SweepElm = __webpack_require__(38);
+	let Switch2Elm = __webpack_require__(37);
+	let SwitchElm = __webpack_require__(26);
+	let TappedTransformerElm = __webpack_require__(71);
+	let TextElm = __webpack_require__(39);
+	let TimerElm = __webpack_require__(59);
+	let TransformerElm = __webpack_require__(70);
+	let TransistorElm = __webpack_require__(33);
+	let TransLineElm = __webpack_require__(69);
+	let TriodeElm = __webpack_require__(55);
+	let TunnelDiodeElm = __webpack_require__(53);
+	let VarRailElm = __webpack_require__(34);
+	let VcoElm = __webpack_require__(65);
+	let VoltageElm = __webpack_require__(19);
+	let WireElm = __webpack_require__(20);
+	let XorGateElm = __webpack_require__(45);
+	let ZenerElm = __webpack_require__(36);
+	
+	module.exports = {
+	  _DiacElm,
+	  _LampElm,
+	  _PhotoResistorElm,
+	  _ThermistorElm,
+	  _TriacElm,
+	  ACRailElm,
+	  AdcElm,
+	  AnalogSwitch2Elm,
+	  AnalogSwitchElm,
+	  AndGateElm,
+	  AntennaElm,
+	  CapacitorElm,
+	  CC2Elm,
+	  ClockElm,
+	  CounterElm,
+	  CurrentElm,
+	  DacElm,
+	  DecadeElm,
+	  DFlipFlopElm,
+	  DiodeElm,
+	  GroundElm,
+	  InductorElm,
+	  InverterElm,
+	  JFetElm,
+	  JkFlipFlopElm,
+	  LatchElm,
+	  LedElm,
+	  LogicInputElm,
+	  LogicOutputElm,
+	  MemristorElm,
+	  MosfetElm,
+	  NandGateElm,
+	  NorGateElm,
+	  OpAmpElm,
+	  OrGateElm,
+	  OutputElm,
+	  PhaseCompElm,
+	  PotElm,
+	  ProbeElm,
+	  PushSwitchElm,
+	  RailElm,
+	  RelayElm,
+	  ResistorElm,
+	  SCRElm,
+	  SevenSegElm,
+	  SparkGapElm,
+	  SweepElm,
+	  Switch2Elm,
+	  SwitchElm,
+	  TappedTransformerElm,
+	  TextElm,
+	  TimerElm,
+	  TransformerElm,
+	  TransistorElm,
+	  TransLineElm,
+	  TriodeElm,
+	  TunnelDiodeElm,
+	  VarRailElm,
+	  VcoElm,
+	  VoltageElm,
+	  WireElm,
+	  XorGateElm,
+	  ZenerElm
+	};
+
+
+/***/ },
+/* 98 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let CircuitComponent = __webpack_require__(1);
+	let Util = __webpack_require__(5);
+	
+	class DiacElm extends CircuitComponent {
+	  static get Fields() {
+	    return {
+	      onresistance: {
+	        name: "On Resistance",
+	        data_type: parseFloat
+	      },
+	      offresistance: {
+	        name: "Off Resistance",
+	        data_type: parseFloat
+	      },
+	      breakdown: {
+	        name: "Breakdown Voltage",
+	        data_type: parseFloat
+	      },
+	      holdCurrent: {
+	        name: "Hold Current",
+	        data_type: parseFloat
+	      }
+	    };
+	  }
+	
+	  constructor(xa, xb, ya, yb, params, f) {
+	    super(xa, xb, ya, yb, params, f);
+	  }
+	
+	  nonLinear() {
+	    return true;
+	  }
+	
+	  setPoints() {
+	    super.setPoints(...arguments);
+	    this.calcLeads(32);
+	    this.ps3 = new Point(0, 0);
+	    return this.ps4 = new Point(0, 0);
+	  }
+	
+	  calculateCurrent() {
+	    let vd = this.volts[0] - this.volts[1];
+	
+	    if (state) {
+	      return this.current = vd / this.onresistance;
+	    } else {
+	      return this.current = vd / this.offresistance;
+	    }
+	  }
+	
+	  draw(renderContext) {
+	    let v1 = this.volts[0];
+	    let v2 = this.volts[1];
+	
+	    this.setBbox(this.point1, this.point2, 6);
+	    this.draw2Leads(g);
+	
+	    renderContext.drawLeads(this);
+	    renderContext.drawPosts(this);
+	
+	    return this.updateDots();
+	  }
+	
+	
+	  startIteration() {
+	    let vd = this.volts[0] - this.volts[1];
+	
+	    if (Math.abs(this.current) < this.holdcurrent) { this.state = false; }
+	    if (Math.abs(vd) > this.breakdown) { return this.state = true; }
+	  }
+	
+	
+	  doStep(stamper) {
+	    if (this.state) {
+	      return stamper.stampResistor(this.nodes[0], this.nodes[1], this.onResistance);
+	    } else {
+	      return stamper.stampResistor(this.nodes[0], this.nodes[1], this.offResistance);
+	    }
+	  }
+	
+	  stamp(stamper) {
+	    stamper.stampNonLinear(this.nodes[0]);
+	    return stamper.stampNonLinear(this.nodes[1]);
+	  }
+	
+	  needsShortcut() {
+	    return false;
+	  }
+	}
+	
+	
+	module.exports = DiacElm;
+
+
+/***/ },
+/* 99 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let CircuitComponent = __webpack_require__(1);
+	let Util = __webpack_require__(5);
+	
+	class LampElm extends CircuitComponent {
+	  static get Fields() {
+	    return {
+	      temp: {
+	        name: "Temperature",
+	        data_type: parseFloat
+	      },
+	      nom_pow: {
+	        name: "Nominal power",
+	        data_type: parseFloat
+	      },
+	      nom_v: {
+	        name: "Nominal voltage",
+	        data_type: parseFloat
+	      },
+	      warmTime: {
+	        name: "Warm time",
+	        dataType: parseFloat
+	      },
+	      coolTime: {
+	        name: "Cool time",
+	        dataType: parseFloat
+	      }
+	    };
+	  }
+	
+	  constructor(xa, xb, ya, yb, params, f) {
+	    super(xa, xb, ya, yb, params, f);
+	  }
+	}
+	
+	module.exports = LampElm;
+
+
+/***/ },
+/* 100 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let CircuitComponent = __webpack_require__(1);
+	let Util = __webpack_require__(5);
+	
+	class PhotoResistorElm extends CircuitComponent {
+	  static get Fields() {
+	    return {
+	      maxresistance: {
+	        name: "Max. Resistance",
+	        data_type: parseFloat
+	      },
+	      minresistance: {
+	        name: "Min. Resistance",
+	        data_type: parseFloat
+	      }
+	    };
+	  }
+	
+	  constructor(xa, xb, ya, yb, params, f) {
+	    super(xa, xb, ya, yb, params, f);
+	  }
+	}
+	
+	module.exports = PhotoResistorElm;
+
+
+/***/ },
+/* 101 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let CircuitComponent = __webpack_require__(1);
+	let Util = __webpack_require__(5);
+	
+	class ThermistorElm extends CircuitComponent {
+	  static get Fields() {
+	    return {
+	      maxresistance: {
+	        name: "Max. Resistance",
+	        data_type: parseFloat
+	      },
+	      minresistance: {
+	        name: "Min. Resistance",
+	        data_type: parseFloat
+	      }
+	    };
+	  }
+	
+	
+	  constructor(xa, xb, ya, yb, params, f) {
+	    super(xa, xb, ya, yb, params, f);
+	  }
+	}
+	
+	module.exports = ThermistorElm;
+
+
+/***/ },
+/* 102 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let CircuitComponent = __webpack_require__(1);
+	let Util = __webpack_require__(5);
+	
+	class TriacElm extends CircuitComponent {
+	  static get Fields() {
+	    return {
+	      volts: {
+	        name: "Volts",
+	        data_type: parseFloat
+	      },
+	      triggerI: {
+	        name: "Trigger current",
+	        data_type: parseFloat
+	      },
+	      holdingI: {
+	        name: "Holding current",
+	        data_type: parseFloat
+	      },
+	      cresistance: {
+	        name: "Collector resistance",
+	        data_type: parseFloat
+	      }
+	    };
+	  }
+	
+	  constructor(xa, xb, ya, yb, params, f) {
+	    super(xa, xb, ya, yb, params, f);
+	  }
+	}
+	
+	module.exports = TriacElm;
+
+
+/***/ },
+/* 103 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let RailElm = __webpack_require__(18);
+	let VoltageElm = __webpack_require__(19);
+	
+	class ACRailElm extends RailElm {
+	  constructor(xa, ya, xb, yb, params, f) {
+	    super(xa, ya, xa, ya, params, f);
+	
+	    this.waveform = VoltageElm.WF_AC;
+	  }
+	
+	  static get NAME() {
+	    return "AC Voltage Rail"
+	  }
+	}
+	
+	module.exports = ACRailElm;
+
+
+/***/ },
+/* 104 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let CircuitComponent = __webpack_require__(1);
+	let SwitchElm = __webpack_require__(26);
+	let Util = __webpack_require__(5);
+	
+	class PushSwitchElm extends SwitchElm {
+	
+	  constructor(xa, xb) {
+	    super(xa, xb, true);
+	  }
+	}
+	
+	module.exports = PushSwitchElm;
 
 
 /***/ }
