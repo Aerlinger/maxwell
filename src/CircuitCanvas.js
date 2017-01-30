@@ -436,9 +436,8 @@ class CircuitCanvas extends Observer {
   }
 
   drawDebugInfo(x = 1100, y = 50) {
-    if (!this.Circuit || !this.context) {
+    if (!this.Circuit || !this.context)
       return;
-    }
 
     let str = `UI: ${this.circuitUI.width}x${this.circuitUI.height}\n`;
     str += this.circuitUI.getMode() + "\n";
@@ -449,14 +448,10 @@ class CircuitCanvas extends Observer {
     str += `Selection [${this.circuitUI.marquee || ""}]\n  - `;
     str += this.circuitUI.selectedComponents.join("\n  - ") + "\n";
 
-
     str += "\nCircuit:\n";
 
     // Name
     str += this.Circuit.toString();
-
-    // CircuitRightSide
-    // CircuitLeftSide
 
     let lineHeight = 10;
     let nLines = 0;

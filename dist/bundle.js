@@ -18853,7 +18853,7 @@
 	  draw(renderContext) {
 	    this.calcLeads(32);
 	
-	    let numSegments = 16;
+	    let numSegments = 8;
 	    let width = 5;
 	
 	//    @setBboxPt @point1, @point2, width
@@ -18868,7 +18868,7 @@
 	    renderContext.drawDots(this.lead2, this.point2, this);
 	
 	    // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
-	    let offsets = [0, 1, 0, -1];
+	    let offsets = [-1, 1];
 	
 	    let context = renderContext.context
 	    context.save();
@@ -18886,19 +18886,34 @@
 	
 	    context.strokeStyle = grad;
 	
-	    // Draw resistor "zig-zags"
-	    for (let n = 0; n < numSegments + 1; n++) {
-	      if (renderContext.boldLines) {
-	        context.lineWidth = Settings.BOLD_LINE_WIDTH;
-	        context.strokeStyle = Settings.SELECT_COLOR;
-	      } else {
-	        context.lineWidth = Settings.LINE_WIDTH + 1;
-	      }
+	    if (renderContext.boldLines) {
+	      context.lineWidth = Settings.BOLD_LINE_WIDTH;
+	      context.strokeStyle = Settings.SELECT_COLOR;
+	    } else {
+	      context.lineWidth = Settings.LINE_WIDTH + 1;
+	    }
 	
-	      let startPosition = Util.interpolate(this.lead1, this.lead2, n*parallelOffset, width*offsets[n % 4]);
+	    let startZigZag = Util.interpolate(this.lead1, this.lead2, parallelOffset/2, width);
+	    let endZigZag = Util.interpolate(this.lead2, this.lead1, parallelOffset/2, width);
+	
+	    // context.lineTo(startPosition.x + renderContext.lineShift, startPosition.y + renderContext.lineShift);
+	
+	
+	    context.lineTo(startZigZag.x + renderContext.lineShift, startZigZag.y + renderContext.lineShift);
+	
+	    // Draw resistor "zig-zags"
+	    for (let n = 1; n < numSegments + 1; n++) {
+	      let startPosition = Util.interpolate(this.lead1, this.lead2, n*parallelOffset - (n/(numSegments + 1)) * parallelOffset, width*offsets[n % 2]);
+	
+	      // renderContext.drawCircle(startPosition.x, startPosition.y, 1, 1, "#F0F");
 	
 	      context.lineTo(startPosition.x + renderContext.lineShift, startPosition.y + renderContext.lineShift);
 	    }
+	
+	    // startPosition = this.lead2;
+	
+	    // context.lineTo(endZigZag.x + renderContext.lineShift, endZigZag.y + renderContext.lineShift);
+	    context.lineTo(this.lead2.x + renderContext.lineShift, this.lead2.y + renderContext.lineShift);
 	
 	    context.stroke();
 	
@@ -30099,9 +30114,8 @@
 	  }
 	
 	  drawDebugInfo(x = 1100, y = 50) {
-	    if (!this.Circuit || !this.context) {
+	    if (!this.Circuit || !this.context)
 	      return;
-	    }
 	
 	    let str = `UI: ${this.circuitUI.width}x${this.circuitUI.height}\n`;
 	    str += this.circuitUI.getMode() + "\n";
@@ -30112,14 +30126,10 @@
 	    str += `Selection [${this.circuitUI.marquee || ""}]\n  - `;
 	    str += this.circuitUI.selectedComponents.join("\n  - ") + "\n";
 	
-	
 	    str += "\nCircuit:\n";
 	
 	    // Name
 	    str += this.Circuit.toString();
-	
-	    // CircuitRightSide
-	    // CircuitLeftSide
 	
 	    let lineHeight = 10;
 	    let nLines = 0;

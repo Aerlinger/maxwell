@@ -59,7 +59,7 @@ fieldset.fieldset .slider {
 }
 
 .param-control {
-  margin-bottom: 15px;
+  margin-bottom: 7px;
 }
 
 #component_sidebar {
@@ -200,6 +200,10 @@ fieldset.fieldset .slider {
 
 .slider-container input {
   margin-top: 12px;
+}
+
+.input-group-label {
+  width: 60px !important;
 }
 
 .off-canvas {
