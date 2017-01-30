@@ -8,6 +8,8 @@
 html, body {
   width: 100%;
   height: 100%;
+
+  background-color: #fff7d7 !important;
 }
 
 /* just to be sure these are full screen*/

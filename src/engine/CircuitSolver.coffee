@@ -82,11 +82,13 @@ class CircuitSolver
     @sysTime = (new Date()).getTime()
 
     stepRate = Math.floor(160 * @getIterCount())
+    console.log(stepRate);
+
     tm = (new Date()).getTime()
     lit = @lastIterTime
 
-    # if 1000 >= stepRate * (tm - @lastIterTime)
-    #   return
+    if 1000 >= (stepRate * (tm - @lastIterTime))
+      return
 
     iter = 1
     loop
@@ -107,7 +109,7 @@ class CircuitSolver
 
         if @circuitNonLinear
           break if @converged and subiter > 0
-          @luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
+          @sub_luFactor(@circuitMatrix, @circuitMatrixSize, @circuitPermute)
 
         @luSolve @circuitMatrix, @circuitMatrixSize, @circuitPermute, @circuitRightSide
 
@@ -133,11 +135,12 @@ class CircuitSolver
       tm = (new Date()).getTime()
       lit = tm
 
-      if (tm - @lastFrameTime) > 300
-        #console.log("force break", iter)
+      if (tm - @lastFrameTime) > 250
+#        console.log("force break", iter)
         break
 
-      if (iter * 1000 >= stepRate * (tm - @lastIterTime))
+      if ((iter * 1000) >= (stepRate * (tm - @lastIterTime)))
+#        console.log("Break", iter)
         break
 
       ++iter
@@ -557,6 +560,81 @@ class CircuitSolver
       ji = nodeIdx - (@Circuit.numNodes() - 1)
       @Circuit.voltageSources[ji].setCurrent ji, value
 
+    true
+
+  sub_luFactor: (circuitMatrix, matrixSize, pivotArray) ->
+# Divide each row by largest element in that row and remember scale factors
+    i = 0
+    while i < matrixSize
+      largest = 0
+      j = 0
+      while j < matrixSize
+        x = Math.abs(circuitMatrix[i][j])
+        largest = x if x > largest
+        ++j
+
+      # Check for singular matrix:
+      #if largest == 0
+      #  console.error("Singular matrix (#{i}, #{j}) -> #{largest}")
+
+      @scaleFactors[i] = 1.0 / largest
+      ++i
+
+    # Crout's method: Loop through columns first
+    j = 0
+    while j < matrixSize
+
+# Calculate upper trangular elements for this column:
+      i = 0
+      while i < j
+        matrix_ij = circuitMatrix[i][j]
+        k = 0
+        while k isnt i
+          matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j]
+          ++k
+        circuitMatrix[i][j] = matrix_ij
+        ++i
+
+      # Calculate lower triangular elements for this column
+      largest = 0
+      largestRow = -1
+      i = j
+      while i < matrixSize
+        matrix_ij = circuitMatrix[i][j]
+        k = 0
+        while k < j
+          matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j]
+          ++k
+
+        circuitMatrix[i][j] = matrix_ij
+        x = Math.abs(matrix_ij)
+        if x >= largest
+          largest = x
+          largestRow = i
+        ++i
+
+      # Pivot
+      unless j is largestRow
+        k = 0
+        while k < matrixSize
+          x = circuitMatrix[largestRow][k]
+          circuitMatrix[largestRow][k] = circuitMatrix[j][k]
+          circuitMatrix[j][k] = x
+          ++k
+        @scaleFactors[largestRow] = @scaleFactors[j]
+
+      # keep track of row interchanges
+      pivotArray[j] = largestRow
+
+      # avoid zeros
+      circuitMatrix[j][j] = 1e-18 if circuitMatrix[j][j] is 0
+      unless j is matrixSize - 1
+        mult = 1 / circuitMatrix[j][j]
+        i = j + 1
+        while i isnt matrixSize
+          circuitMatrix[i][j] *= mult
+          ++i
+      ++j
     true
 
 

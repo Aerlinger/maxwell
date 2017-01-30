@@ -8,7 +8,6 @@ let CircuitComponent = require('./components/CircuitComponent');
 let environment = require('./Environment.js');
 
 class CircuitCanvas extends Observer {
-
   constructor(Circuit, circuitUI) {
     super();
 
@@ -26,23 +25,24 @@ class CircuitCanvas extends Observer {
     this.drawDots = this.drawDots.bind(this);
 
     if (environment.isBrowser) {
-      this.context = Sketch.augment(this.Canvas.getContext("2d", {alpha: false}), {
-        autoclear: false,
-        draw: this.draw
-        //mousemove: this.mousemove,
-        //mousedown: this.mousedown,
-        //mouseup: this.mouseup
-        //fullscreen: false,
-        //width: this.width,
-        //height: this.height
-      });
-
       this.setupScopes();
       this.renderPerformance();
-
-    } else {
-      this.context = this.Canvas.getContext("2d");
     }
+
+    this.context = this.Canvas.getContext("2d");
+
+    window.CircuitUI = this.circuitUI;
+
+    this.rafDraw();
+  }
+
+  rafDraw() {
+    window.requestAnimationFrame(this.rafDraw.bind(this));
+
+    // Drawing code goes here
+    // this.draw()
+
+    this.draw()
   }
 
   setupScopes(){
@@ -72,7 +72,7 @@ class CircuitCanvas extends Observer {
 
     let chart = new SmoothieChart({
       millisPerPixel: 35,
-      grid: {fillStyle: 'transparent', strokeStyle: 'transparent'},
+      grid: {fillStyle: 'transparent', millisPerLine: 1000, lineWidth: 0.5, verticalSections: 0},
       labels: {fillStyle: '#000000', precision: 0}
     });
 
@@ -80,11 +80,13 @@ class CircuitCanvas extends Observer {
     chart.streamTo(document.getElementById("performance_sparkline"), 500);
   }
 
+  clear() {
+    this.context.clearRect( 0, 0, this.Canvas.clientWidth, this.Canvas.clientHeight )
+  }
+
   draw() {
     if (this.context) {
-      if (this.context.clear) {
-        this.context.clear();
-      }
+      this.clear();
       // this.drawGrid();
 
       this.context.save();

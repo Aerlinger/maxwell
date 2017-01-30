@@ -27816,8 +27816,12 @@
 	    }
 	    this.sysTime = (new Date()).getTime();
 	    stepRate = Math.floor(160 * this.getIterCount());
+	    console.log(stepRate);
 	    tm = (new Date()).getTime();
 	    lit = this.lastIterTime;
+	    if (1000 >= (stepRate * (tm - this.lastIterTime))) {
+	      return;
+	    }
 	    iter = 1;
 	    while (true) {
 	      ++this.steps;
@@ -27839,7 +27843,7 @@
 	          if (this.converged && subiter > 0) {
 	            break;
 	          }
-	          this.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute);
+	          this.sub_luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute);
 	        }
 	        this.luSolve(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute, this.circuitRightSide);
 	        for (j = _l = 0, _ref3 = this.circuitMatrixFullSize; 0 <= _ref3 ? _l < _ref3 : _l > _ref3; j = 0 <= _ref3 ? ++_l : --_l) {
@@ -27869,10 +27873,10 @@
 	      }
 	      tm = (new Date()).getTime();
 	      lit = tm;
-	      if ((tm - this.lastFrameTime) > 300) {
+	      if ((tm - this.lastFrameTime) > 250) {
 	        break;
 	      }
-	      if (iter * 1000 >= stepRate * (tm - this.lastIterTime)) {
+	      if ((iter * 1000) >= (stepRate * (tm - this.lastIterTime))) {
 	        break;
 	      }
 	      ++iter;
@@ -28327,6 +28331,80 @@
 	    } else {
 	      ji = nodeIdx - (this.Circuit.numNodes() - 1);
 	      this.Circuit.voltageSources[ji].setCurrent(ji, value);
+	    }
+	    return true;
+	  };
+	
+	  CircuitSolver.prototype.sub_luFactor = function(circuitMatrix, matrixSize, pivotArray) {
+	    var i, j, k, largest, largestRow, matrix_ij, mult, x;
+	    i = 0;
+	    while (i < matrixSize) {
+	      largest = 0;
+	      j = 0;
+	      while (j < matrixSize) {
+	        x = Math.abs(circuitMatrix[i][j]);
+	        if (x > largest) {
+	          largest = x;
+	        }
+	        ++j;
+	      }
+	      this.scaleFactors[i] = 1.0 / largest;
+	      ++i;
+	    }
+	    j = 0;
+	    while (j < matrixSize) {
+	      i = 0;
+	      while (i < j) {
+	        matrix_ij = circuitMatrix[i][j];
+	        k = 0;
+	        while (k !== i) {
+	          matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
+	          ++k;
+	        }
+	        circuitMatrix[i][j] = matrix_ij;
+	        ++i;
+	      }
+	      largest = 0;
+	      largestRow = -1;
+	      i = j;
+	      while (i < matrixSize) {
+	        matrix_ij = circuitMatrix[i][j];
+	        k = 0;
+	        while (k < j) {
+	          matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
+	          ++k;
+	        }
+	        circuitMatrix[i][j] = matrix_ij;
+	        x = Math.abs(matrix_ij);
+	        if (x >= largest) {
+	          largest = x;
+	          largestRow = i;
+	        }
+	        ++i;
+	      }
+	      if (j !== largestRow) {
+	        k = 0;
+	        while (k < matrixSize) {
+	          x = circuitMatrix[largestRow][k];
+	          circuitMatrix[largestRow][k] = circuitMatrix[j][k];
+	          circuitMatrix[j][k] = x;
+	          ++k;
+	        }
+	        this.scaleFactors[largestRow] = this.scaleFactors[j];
+	      }
+	      pivotArray[j] = largestRow;
+	      if (circuitMatrix[j][j] === 0) {
+	        circuitMatrix[j][j] = 1e-18;
+	      }
+	      if (j !== matrixSize - 1) {
+	        mult = 1 / circuitMatrix[j][j];
+	        i = j + 1;
+	        while (i !== matrixSize) {
+	          circuitMatrix[i][j] *= mult;
+	          ++i;
+	        }
+	      }
+	      ++j;
 	    }
 	    return true;
 	  };
@@ -29611,7 +29689,6 @@
 	let environment = __webpack_require__(10);
 	
 	class CircuitCanvas extends Observer {
-	
 	  constructor(Circuit, circuitUI) {
 	    super();
 	
@@ -29629,23 +29706,24 @@
 	    this.drawDots = this.drawDots.bind(this);
 	
 	    if (environment.isBrowser) {
-	      this.context = Sketch.augment(this.Canvas.getContext("2d", {alpha: false}), {
-	        autoclear: false,
-	        draw: this.draw
-	        //mousemove: this.mousemove,
-	        //mousedown: this.mousedown,
-	        //mouseup: this.mouseup
-	        //fullscreen: false,
-	        //width: this.width,
-	        //height: this.height
-	      });
-	
 	      this.setupScopes();
 	      this.renderPerformance();
-	
-	    } else {
-	      this.context = this.Canvas.getContext("2d");
 	    }
+	
+	    this.context = this.Canvas.getContext("2d");
+	
+	    window.CircuitUI = this.circuitUI;
+	
+	    this.rafDraw();
+	  }
+	
+	  rafDraw() {
+	    window.requestAnimationFrame(this.rafDraw.bind(this));
+	
+	    // Drawing code goes here
+	    // this.draw()
+	
+	    this.draw()
 	  }
 	
 	  setupScopes(){
@@ -29675,7 +29753,7 @@
 	
 	    let chart = new SmoothieChart({
 	      millisPerPixel: 35,
-	      grid: {fillStyle: 'transparent', strokeStyle: 'transparent'},
+	      grid: {fillStyle: 'transparent', millisPerLine: 1000, lineWidth: 0.5, verticalSections: 0},
 	      labels: {fillStyle: '#000000', precision: 0}
 	    });
 	
@@ -29683,11 +29761,13 @@
 	    chart.streamTo(document.getElementById("performance_sparkline"), 500);
 	  }
 	
+	  clear() {
+	    this.context.clearRect( 0, 0, this.Canvas.clientWidth, this.Canvas.clientHeight )
+	  }
+	
 	  draw() {
 	    if (this.context) {
-	      if (this.context.clear) {
-	        this.context.clear();
-	      }
+	      this.clear();
 	      // this.drawGrid();
 	
 	      this.context.save();
