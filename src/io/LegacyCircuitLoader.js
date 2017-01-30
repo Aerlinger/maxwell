@@ -1,16 +1,16 @@
-let ComponentRegistry = require('../circuit/componentRegistry.js');
-let SimulationParams = require('../circuit/simulationParams.js');
+let ComponentRegistry = require('../circuit/ComponentRegistry.js');
+let SimulationParams = require('../circuit/SimulationParams.js');
 
-let Circuit = require('../circuit/circuit.js');
-let CircuitComponent = require('../components/circuitComponent.js');
-let Hint = require('../engine/hint.js');
+let Circuit = require('../circuit/Circuit.js');
+let CircuitComponent = require('../components/CircuitComponent.js');
+let Hint = require('../engine/Hint.js');
 fs = require('fs')
 
 let VoltageElm = require('./VoltageElm.js');
 
 let Scope = require('../circuit/Scope.js');
 
-let environment = require("../environment.js");
+let environment = require("../Environment.js");
 
 class CircuitLoader {
   static createCircuitFromJsonData(jsonData) {

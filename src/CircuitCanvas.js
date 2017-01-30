@@ -1,11 +1,11 @@
-let Observer = require('./util/observer');
-let Util = require('./util/util');
-let Point = require('./geom/point.js');
-let Settings = require('./settings/settings.js');
-let Color = require('./util/color.js');
+let Observer = require('./util/Observer');
+let Util = require('./util/Util');
+let Point = require('./geom/Point.js');
+let Settings = require('./settings/Settings.js');
+let Color = require('./util/Color.js');
 
-let CircuitComponent = require('./components/circuitComponent');
-let environment = require('./environment.js');
+let CircuitComponent = require('./components/CircuitComponent');
+let environment = require('./Environment.js');
 
 class CircuitCanvas extends Observer {
 

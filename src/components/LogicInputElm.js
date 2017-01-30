@@ -1,7 +1,7 @@
-let CircuitComponent = require('./circuitComponent.js');
+let CircuitComponent = require('./CircuitComponent.js');
 let SwitchElm = require("./SwitchElm.js");
-let Util = require('../util/util.js');
-let Settings = require('../settings/settings.js');
+let Util = require('../util/Util.js');
+let Settings = require('../settings/Settings.js');
 
 class LogicInputElm extends SwitchElm {
   static initClass() {

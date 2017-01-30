@@ -22,14 +22,14 @@
 //
 //###################################################################################################################
 
-let Logger = require('../io/logger.js');
-let SimulationParams = require('./simulationParams.js');
-let SimulationFrame = require('./simulationFrame.js');
-let CircuitSolver = require('../engine/circuitSolver.coffee');
-let Observer = require('../util/observer.js');
-let Rectangle = require('../geom/rectangle.js');
-let Util = require('../util/util.js');
-let environment = require("../environment.js");
+let Logger = require('../io/Logger.js');
+let SimulationParams = require('./SimulationParams.js');
+let SimulationFrame = require('./SimulationFrame.js');
+let CircuitSolver = require('../engine/CircuitSolver.coffee');
+let Observer = require('../util/Observer.js');
+let Rectangle = require('../geom/Rectangle.js');
+let Util = require('../util/Util.js');
+let environment = require("../Environment.js");
 
 fs = require('fs');
 
@@ -177,7 +177,7 @@ class Circuit extends Observer {
       let node = this.getNode(nodeIdx);
 
       if (!node)
-        console.warning(`Error deleting nodes for ${component} No node found at ${nodeIdx}!`);
+        console.warn(`Error deleting nodes for ${component} No node found at ${nodeIdx}!`);
 
       if (node && node.getNeighboringElements() == [this]) {
         console.log("Orphaned node: ", nodeIdx)

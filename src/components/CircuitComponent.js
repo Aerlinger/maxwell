@@ -14,10 +14,10 @@
 
  */
 
-let Settings = require('../settings/settings.js');
-let Rectangle = require('../geom/rectangle.js');
-let Point = require('../geom/point.js');
-let Util = require('../util/util.js');
+let Settings = require('../settings/Settings.js');
+let Rectangle = require('../geom/Rectangle.js');
+let Point = require('../geom/Point.js');
+let Util = require('../util/Util.js');
 let debug = require('debug')('circuitComponent');
 
 let _ = require("lodash");

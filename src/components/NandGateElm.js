@@ -1,4 +1,4 @@
-let Util = require('../util/util.js');
+let Util = require('../util/Util.js');
 let AndGateElm = require("./AndGateElm.js");
 
 class NandGateElm extends AndGateElm {

@@ -1,8 +1,8 @@
-let CircuitComponent = require('./components/circuitComponent.js');
-let CircuitLoader = require('./io/circuitLoader.js');
-let ComponentRegistry = require('./circuit/componentRegistry.js');
+let CircuitComponent = require('./components/CircuitComponent.js');
+let CircuitLoader = require('./io/CircuitLoader.js');
+let ComponentRegistry = require('./circuit/ComponentRegistry.js');
 
-let Circuit = require('./circuit/circuit.js');
+let Circuit = require('./circuit/Circuit.js');
 let CircuitUI = require('./CircuitUI.js');
 
 let RickshawScopeCanvas = require("./render/RickshawScopeCanvas");
@@ -74,7 +74,7 @@ let ClockElm = require('./components/ClockElm.js');
 
 
 
-let environment = require("./environment.js");
+let environment = require("./Environment.js");
 
 // let Maxwell = require("./Maxwell.js");
 

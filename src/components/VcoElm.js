@@ -1,6 +1,6 @@
-let CircuitComponent = require("./circuitComponent.js");
+let CircuitComponent = require("./CircuitComponent.js");
 let ChipElm = require("./ChipElm.js");
-let Util = require('../util/util.js');
+let Util = require('../util/Util.js');
 
 // TODO Fails on this line: stamper.updateVoltageSource(0, this.nodes[1], this.pins[1].voltSource, vo);
 class VcoElm extends ChipElm {

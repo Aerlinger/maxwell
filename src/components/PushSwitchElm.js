@@ -1,6 +1,6 @@
-let CircuitComponent = require("./circuitComponent.js");
+let CircuitComponent = require("./CircuitComponent.js");
 let SwitchElm = require("./SwitchElm.js");
-let Util = require('../util/util.js');
+let Util = require('../util/Util.js');
 
 class PushSwitchElm extends SwitchElm {
 

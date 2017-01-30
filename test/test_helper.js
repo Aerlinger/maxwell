@@ -35,25 +35,25 @@ Canvas.prototype.addEventListener = function() {
 
 };
 
-Circuit = require('../src/circuit/circuit.js');
+Circuit = require('../src/circuit/Circuit.js');
 
-CircuitNode = require('../src/engine/circuitNode');
+CircuitNode = require('../src/engine/CircuitNode');
 Hint = require('../src/engine/Hint.js');
-CircuitNodeLink = require('../src/engine/circuitNodeLink');
-SimulationParams = require('../src/circuit/simulationParams.js');
-MatrixStamper = require('../src/engine/matrixStamper.js');
+CircuitNodeLink = require('../src/engine/CircuitNodeLink');
+SimulationParams = require('../src/circuit/SimulationParams.js');
+MatrixStamper = require('../src/engine/MatrixStamper.js');
 
 ComponentRegistry = require('../src/circuit/ComponentRegistry.js');
-CircuitLoader = require("../src/io/circuitLoader");
+CircuitLoader = require("../src/io/CircuitLoader");
 
 // Renderer = require("../src/render/renderer.js");
 CircuitUI = require("../src/CircuitUI.js");
 CircuitCanvas = require("../src/CircuitCanvas.js");
-MatrixStamper = require('../src/engine/matrixStamper.js');
+MatrixStamper = require('../src/engine/MatrixStamper.js');
 
-CircuitComponent = require('../src/components/circuitComponent.js');
-CircuitSolver = require('../src/engine/circuitSolver.coffee');
-MatrixStamper = require('../src/engine/matrixStamper.js');
+CircuitComponent = require('../src/components/CircuitComponent.js');
+CircuitSolver = require('../src/engine/CircuitSolver.coffee');
+MatrixStamper = require('../src/engine/MatrixStamper.js');
 
 ACRailElm = require('../src/components/ACRailElm.js');
 ADCElm = require('../src/components/ADCElm.js');
@@ -106,12 +106,12 @@ LogicOutputElm = require('../src/components/LogicOutputElm.js');
 AnalogSwitchElm = require('../src/components/AnalogSwitchElm.js');
 AnalogSwitch2Elm = require('../src/components/AnalogSwitch2Elm.js');
 
-Util = require('../src/util/util');
+Util = require('../src/util/Util');
 
 Scope = require('../src/circuit/Scope.js');
-Point = require('../src/geom/point.js');
-Polygon = require('../src/geom/polygon.js');
-Rectangle = require('../src/geom/rectangle.js');
+Point = require('../src/geom/Point.js');
+Polygon = require('../src/geom/Polygon.js');
+Rectangle = require('../src/geom/Rectangle.js');
 
 require('coffee-script/register');
 

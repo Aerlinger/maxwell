@@ -1,4 +1,4 @@
-let Point = require("./point.js");
+let Point = require("./Point.js");
 
 class Rectangle {
   constructor(x, y, width, height) {

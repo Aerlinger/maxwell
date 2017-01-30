@@ -3,7 +3,7 @@ let CurrentElm = require('../components/CurrentElm.js');
 let ResistorElm = require('../components/ResistorElm.js');
 let InductorElm = require('../components/InductorElm.js');
 let CapacitorElm = require('../components/CapacitorElm.js');
-let Util = require('../util/util.js');
+let Util = require('../util/Util.js');
 
 class Pathfinder {
   static initClass() {

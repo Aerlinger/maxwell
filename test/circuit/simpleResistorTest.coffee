@@ -1,4 +1,4 @@
-Circuit = require('../../src/circuit/circuit.js')
+Circuit = require('../../src/circuit/Circuit.js')
 CircuitLoader = require('../../src/io/CircuitLoader.js')
 
 chai = require('chai');

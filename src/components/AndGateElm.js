@@ -1,6 +1,6 @@
 let GateElm = require("./GateElm.js");
-let Util = require('../util/util.js');
-let Point = require('../geom/point.js');
+let Util = require('../util/Util.js');
+let Point = require('../geom/Point.js');
 
 class AndGateElm extends GateElm {
   constructor(xa, ya, xb, yb, params, f) {

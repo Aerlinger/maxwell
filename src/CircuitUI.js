@@ -1,7 +1,7 @@
-let Rectangle = require('./geom/rectangle.js');
+let Rectangle = require('./geom/Rectangle.js');
 let CircuitCanvas = require('./CircuitCanvas.js');
-let Observer = require('./util/observer');
-let Util = require('./util/util');
+let Observer = require('./util/Observer');
+let Util = require('./util/Util');
 
 let AntennaElm = require('./components/AntennaElm.js');
 let WireElm = require('./components/WireElm.js');

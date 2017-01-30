@@ -1,4 +1,4 @@
-Circuit = require('../../src/circuit/circuit.js')
+Circuit = require('../../src/circuit/Circuit.js')
 ResistorElm = require('../../src/components/ResistorElm.js')
 
 describe "Circuit", ->

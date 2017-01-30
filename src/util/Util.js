@@ -1,9 +1,9 @@
-let Point = require('../geom/point.js');
-let Polygon = require('../geom/polygon.js');
-let Settings = require('../settings/settings.js');
-let Color = require('./color.js');
+let Point = require('../geom/Point.js');
+let Polygon = require('../geom/Polygon.js');
+let Settings = require('../settings/Settings.js');
+let Color = require('./Color.js');
 let { sprintf } = require("sprintf-js");
-let environment = require("../environment.js");
+let environment = require("../Environment.js");
 
 class Util {
 

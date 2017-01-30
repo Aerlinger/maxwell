@@ -1,8 +1,8 @@
-let CircuitComponent = require('./circuitComponent.js');
-let Settings = require('../settings/settings.js');
-let Polygon = require('../geom/polygon.js');
-let Rectangle = require('../geom/rectangle.js');
-let Point = require('../geom/point.js');
+let CircuitComponent = require('./CircuitComponent.js');
+let Settings = require('../settings/Settings.js');
+let Polygon = require('../geom/Polygon.js');
+let Rectangle = require('../geom/Rectangle.js');
+let Point = require('../geom/Point.js');
 
 class TextElm extends CircuitComponent {
   static initClass() {

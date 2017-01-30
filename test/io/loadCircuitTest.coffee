@@ -1,4 +1,4 @@
-CircuitLoader = require("../../src/io/circuitLoader.js")
+CircuitLoader = require("../../src/io/CircuitLoader.js")
 fs = require 'fs'
 
 describe "CircuitLoader", ->

@@ -1,8 +1,8 @@
-let CircuitComponent = require("./circuitComponent.js");
+let CircuitComponent = require("./CircuitComponent.js");
 let AnalogSwitchElm = require("./AnalogSwitchElm.js");
-let Util = require('../util/util.js');
-let Point = require('../geom/point.js');
-let Settings = require('../settings/settings.js');
+let Util = require('../util/Util.js');
+let Point = require('../geom/Point.js');
+let Settings = require('../settings/Settings.js');
 
 class AnalogSwitch2Elm extends AnalogSwitchElm {
 

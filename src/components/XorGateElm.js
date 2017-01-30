@@ -1,5 +1,5 @@
 let OrGateElm = require("./OrGateElm.js");
-let Util = require('../util/util.js');
+let Util = require('../util/Util.js');
 
 class XorGateElm extends OrGateElm {
 

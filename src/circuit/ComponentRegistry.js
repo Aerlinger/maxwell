@@ -1,4 +1,4 @@
-let CircuitComponent = require('./../components/circuitComponent.js');
+let CircuitComponent = require('./../components/CircuitComponent.js');
 
 let AntennaElm = require('../components/AntennaElm.js');
 let WireElm = require('../components/WireElm.js');

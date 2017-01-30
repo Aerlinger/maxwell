@@ -29032,7 +29032,6 @@
 
 	class Hint {
 	  static initClass() {
-	  
 	    this.HINT_LC = "@HINT_LC";
 	    this.HINT_RC = "@HINT_RC";
 	    this.HINT_3DB_C = "@HINT_3DB_C";
@@ -29044,11 +29043,9 @@
 	    this.hintItem2 = -1;
 	  }
 	
-	
 	  constructor(Circuit) {
 	    this.Circuit = Circuit;
 	  }
-	
 	
 	  readHint(st) {
 	    if (typeof st === 'string') {
@@ -29059,7 +29056,6 @@
 	    this.hintItem1 = st[1];
 	    return this.hintItem2 = st[2];
 	  }
-	
 	
 	  getHint() {
 	    let ce, ie, re;

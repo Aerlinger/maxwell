@@ -1,5 +1,5 @@
 let ScopeCanvas = require("./ScopeCanvas.js");
-let Util = require("../util/util.js");
+let Util = require("../util/Util.js");
 
 class RickshawScopeCanvas extends ScopeCanvas {
   constructor(parentUI, scopeDiv, x=800, y=700) {

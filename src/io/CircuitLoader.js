@@ -64,13 +64,13 @@ let ClockElm = require('../components/ClockElm.js');
 
 let Scope = require('../circuit/Scope.js');
 
-let SimulationParams = require('../circuit/simulationParams.js');
+let SimulationParams = require('../circuit/SimulationParams.js');
 
-let Circuit = require('../circuit/circuit.js');
-let Hint = require('../engine/hint.js');
+let Circuit = require('../circuit/Circuit.js');
+let Hint = require('../engine/Hint.js');
 let fs = require('fs');
 
-let environment = require("../environment.js");
+let environment = require("../Environment.js");
 
 class CircuitLoader {
   static createEmptyCircuit() {
@@ -118,7 +118,8 @@ class CircuitLoader {
       }
     }
 
-    console.log(circuitParams);
+    if (environment.isBrowser)
+      console.log(circuitParams);
 
     if (circuit.getElements().length === 0)
       console.error("No elements loaded. JSON most likely malformed");

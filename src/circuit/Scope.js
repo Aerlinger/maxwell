@@ -1,5 +1,5 @@
-let Rectangle = require("../geom/rectangle.js");
-let Util = require("../util/util.js");
+let Rectangle = require("../geom/Rectangle.js");
+let Util = require("../util/Util.js");
 
 class Scope {
   static initClass() {

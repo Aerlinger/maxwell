@@ -1,5 +1,5 @@
-let CircuitComponent = require("./circuitComponent.js");
-let Util = require('../util/util.js');
+let CircuitComponent = require("./CircuitComponent.js");
+let Util = require('../util/Util.js');
 
 class PhotoResistorElm extends CircuitComponent {
   static get Fields() {

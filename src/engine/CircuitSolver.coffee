@@ -1,13 +1,13 @@
-MatrixStamper = require('./matrixStamper.js')
+MatrixStamper = require('./MatrixStamper.js')
 
-Pathfinder = require('./pathfinder.js')
-CircuitNode = require('./circuitNode.js')
-CircuitNodeLink = require('./circuitNodeLink.js')
-RowInfo = require('./rowInfo.js')
-Setting = require('../settings/settings.js')
-Util = require('../util/util.js')
+Pathfinder = require('./Pathfinder.js')
+CircuitNode = require('./CircuitNode.js')
+CircuitNodeLink = require('./CircuitNodeLink.js')
+RowInfo = require('./RowInfo.js')
+Setting = require('../settings/Settings.js')
+Util = require('../util/Util.js')
 
-SimulationFrame = require('../circuit/simulationFrame.js')
+SimulationFrame = require('../circuit/SimulationFrame.js')
 
 GroundElm = require('../components/GroundElm.js')
 RailElm = require('../components/RailElm.js')

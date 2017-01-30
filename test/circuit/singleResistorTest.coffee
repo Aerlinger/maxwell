@@ -1,4 +1,4 @@
-Circuit = require('../../src/circuit/circuit.js')
+Circuit = require('../../src/circuit/Circuit.js')
 GroundElm = require('../../src/components/GroundElm.js')
 WireElm = require('../../src/components/WireElm.js')
 VoltageElm = require('../../src/components/VoltageElm.js')

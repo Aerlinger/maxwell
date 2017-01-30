@@ -1,6 +1,6 @@
-let CircuitComponent = require("./circuitComponent.js");
+let CircuitComponent = require("./CircuitComponent.js");
 let ChipElm = require("./ChipElm.js");
-let Util = require('../util/util.js');
+let Util = require('../util/Util.js');
 
 class CounterElm extends ChipElm {
   static get FLAG_ENABLE() {

@@ -1,6 +1,6 @@
-let CircuitComponent = require("./circuitComponent.js");
-let Util = require('../util/util.js');
-let Settings = require("../settings/settings.js");
+let CircuitComponent = require("./CircuitComponent.js");
+let Util = require('../util/Util.js');
+let Settings = require("../settings/Settings.js");
 
 class TriodeElm extends CircuitComponent {
   static get Fields() {

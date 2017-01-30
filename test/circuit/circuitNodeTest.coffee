@@ -1,4 +1,4 @@
-CircuitNode = require('../../src/engine/circuitNode.js')
+CircuitNode = require('../../src/engine/CircuitNode.js')
 
 describe "Circuit Node", ->
   beforeEach ->
