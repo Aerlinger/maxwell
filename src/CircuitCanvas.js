@@ -254,8 +254,6 @@ class CircuitCanvas extends Observer {
     this.context.beginPath();
     this.context.lineJoin = 'bevel';
 
-    this.context.moveTo(ps1.x + this.lineShift - dn.x/10, ps1.y + this.lineShift - dn.y/10);
-
     let grad = this.context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
     grad.addColorStop(0, this.getVoltageColor(vStart));
     grad.addColorStop(1, this.getVoltageColor(vEnd));
@@ -299,8 +297,6 @@ class CircuitCanvas extends Observer {
         let scopeCanvas = scopeElm.getCanvas();
 
         if (scopeCanvas) {
-
-
           var center = scopeElm.circuitElm.getCenter();
           this.context.save();
 

@@ -63,6 +63,7 @@
   "scripts": {
     "test": "mocha -w --compilers coffee:coffee-script/register",
     "start": "node app/app.js",
+    "mongoimport": "node scripts/importCircuitsIntoMongo.js",
     "postinstall": "npm rebuild gulp-cli"
   },
   "babel": {
