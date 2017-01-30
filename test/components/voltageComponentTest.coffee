@@ -20,11 +20,11 @@ describe "Voltage Component", ->
     @voltageElm.dutyCycle.should.equal 0.75
 
   it "has correct number of posts", ->
-    @voltageElm.getPostCount().should.equal 2
-    @voltageElm.getInternalNodeCount().should.equal 0
+    @voltageElm.numPosts().should.equal 2
+    @voltageElm.numInternalNodes().should.equal 0
 
   it "is not have any internal voltage sources", ->
-    @voltageElm.getVoltageSourceCount().should.equal 1
+    @voltageElm.numVoltageSources().should.equal 1
 
   it "has correct toString()", ->
     @voltageElm.toString().should.equal "VoltageElm"

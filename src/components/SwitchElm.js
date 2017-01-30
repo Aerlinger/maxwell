@@ -106,7 +106,7 @@ class SwitchElm extends CircuitComponent {
     if (this.position === 1) { return this.current = 0; }
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     if (this.position === 1) { return 0; } else { return 1; }
   }
 

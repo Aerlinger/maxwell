@@ -7,11 +7,11 @@ describe "Capacitor Component", ->
     @capacitor.voltdiff.should.equal 1.1
 
   it "has correct number of posts", ->
-    @capacitor.getPostCount().should.equal 2
-    @capacitor.getInternalNodeCount().should.equal 0
+    @capacitor.numPosts().should.equal 2
+    @capacitor.numInternalNodes().should.equal 0
 
   it "is not have any internal voltage sources", ->
-    @capacitor.getVoltageSourceCount().should.equal 0
+    @capacitor.numVoltageSources().should.equal 0
 
   it "has correct toString()", ->
     expect(@capacitor.toString()).to.equal """Capacitor@[100 100 100 200] {capacitance: 1.0 nF, voltdiff: 1.1 V}"""

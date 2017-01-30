@@ -11,7 +11,7 @@ class GroundElm extends CircuitComponent {
     super(xa, ya, xb, yb, params, f);
   }
 
-  getPostCount() {
+  numPosts() {
     return 1;
   }
 
@@ -57,7 +57,7 @@ class GroundElm extends CircuitComponent {
     return 0;
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 1;
   }
 

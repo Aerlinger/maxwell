@@ -8,11 +8,11 @@ class SevenSegElm extends ChipElm {
     super(xa, xb, ya, yb, params, f);
   }
 
-  getPostCount() {
+  numPosts() {
     return 7;
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 0;
   }
 

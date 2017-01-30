@@ -119,7 +119,7 @@ class PotElm extends CircuitComponent {
     this.setPoints();
   }
 
-  getPostCount() {
+  numPosts() {
     return 3;
   }
 

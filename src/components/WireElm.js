@@ -55,7 +55,7 @@ class WireElm extends CircuitComponent {
     return (this.flags & WireElm.FLAG_SHOWVOLTAGE) !== 0;
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 1;
   }
 

@@ -141,7 +141,7 @@ class TappedTransformerElm extends CircuitComponent {
     return this.ptEnds[n];
   }
 
-  getPostCount() {
+  numPosts() {
     return 5;
   }
 

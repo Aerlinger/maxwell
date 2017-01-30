@@ -106,7 +106,7 @@ class TriodeElm extends CircuitComponent {
     }
   }
 
-  getPostCount() {
+  numPosts() {
     return 3;
   }
 

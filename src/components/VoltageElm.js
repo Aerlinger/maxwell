@@ -304,7 +304,7 @@ class VoltageElm extends CircuitComponent {
     }
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 1;
   }
 

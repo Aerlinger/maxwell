@@ -18,18 +18,18 @@ class DacElm extends ChipElm {
     return "DAC";
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 1;
   }
 
-  getPostCount() {
+  numPosts() {
     return this.bits + 2;
   }
 
   setupPins() {
     this.sizeX = 2;
     this.sizeY = this.bits > 2 ? this.bits : 2;
-    this.pins = new Array(this.getPostCount());
+    this.pins = new Array(this.numPosts());
 
     for (let i = 0, end = this.bits, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
       this.pins[i] = new ChipElm.Pin(this.bits - 1 - i, ChipElm.SIDE_W, `D${i}`);

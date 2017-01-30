@@ -94,11 +94,11 @@ class TransLineElm extends CircuitComponent {
     return false;
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 2;
   }
 
-  getInternalNodeCount() {
+  numInternalNodes() {
     return 2;
   }
 
@@ -106,7 +106,7 @@ class TransLineElm extends CircuitComponent {
     return this.posts[n];
   }
 
-  getPostCount() {
+  numPosts() {
     return 4;
   }
 

@@ -18,7 +18,7 @@ class DFlipFlopElm extends ChipElm {
     this.pins[2].value = !this.pins[1].value;
   }
 
-  getPostCount() {
+  numPosts() {
     if (this.hasReset()) {
       return 5;
     } else {
@@ -30,7 +30,7 @@ class DFlipFlopElm extends ChipElm {
     return "D Flip-Flop"
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 2;
   }
 
@@ -42,7 +42,7 @@ class DFlipFlopElm extends ChipElm {
     this.sizeX = 2;
     this.sizeY = 3;
 
-    this.pins = new Array(this.getPostCount());
+    this.pins = new Array(this.numPosts());
 
     this.pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "D");
 

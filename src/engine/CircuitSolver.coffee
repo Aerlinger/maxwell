@@ -212,9 +212,9 @@ class CircuitSolver
     voltageSourceCount = 0
 
     for circuitElm in @Circuit.getElements()
-      internalNodeCount = circuitElm.getInternalNodeCount()
-      internalVSCount = circuitElm.getVoltageSourceCount()
-      postCount = circuitElm.getPostCount()
+      internalNodeCount = circuitElm.numInternalNodes()
+      internalVSCount = circuitElm.numVoltageSources()
+      postCount = circuitElm.numPosts()
 
       # allocate a node for each post and match postCount to nodes
       for postIdx in [0...postCount]
@@ -271,7 +271,7 @@ class CircuitSolver
       if circuitElement.nonLinear()
         @circuitNonLinear = true
 
-      for voltSourceIdx in [0...circuitElement.getVoltageSourceCount()]
+      for voltSourceIdx in [0...circuitElement.numVoltageSources()]
         @Circuit.voltageSources[voltageSourceCount] = circuitElement
         circuitElement.setVoltageSource voltSourceIdx, voltageSourceCount++
 
@@ -309,14 +309,14 @@ class CircuitSolver
       for circuitElm in @Circuit.getElements()
 
         # Loop through all ce's nodes to see if they are connected to other nodes not in closure
-        for postIdx in [0...circuitElm.getPostCount()]
+        for postIdx in [0...circuitElm.numPosts()]
           unless closure[circuitElm.getNode(postIdx)]
             if circuitElm.hasGroundConnection(postIdx)
               changed = true
               closure[circuitElm.getNode(postIdx)] = true
             continue
 
-          for siblingPostIdx in [0...circuitElm.getPostCount()]
+          for siblingPostIdx in [0...circuitElm.numPosts()]
             if postIdx is siblingPostIdx
               continue
 
@@ -353,7 +353,7 @@ class CircuitSolver
           return
 
       # Look for voltage source loops:
-      if (Util.typeOf(ce, VoltageElm) and ce.getPostCount() is 2) or ce instanceof WireElm
+      if (Util.typeOf(ce, VoltageElm) and ce.numPosts() is 2) or ce instanceof WireElm
         pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
 
         if pathfinder.findPath(ce.getNode(0))

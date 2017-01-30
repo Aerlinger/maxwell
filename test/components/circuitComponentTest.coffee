@@ -30,7 +30,7 @@ describe "Base Circuit Component", ->
       @circuitElement.noDiagonal.should.equal false
 
     it "default method return values", ->
-      @circuitElement.getPostCount().should.equal 2
+      @circuitElement.numPosts().should.equal 2
       @circuitElement.isWire().should.equal false
       @circuitElement.hasGroundConnection().should.equal false
       @circuitElement.needsShortcut().should.equal false
@@ -72,10 +72,10 @@ describe "Base Circuit Component", ->
       @circuitElement.getPower().should.equal 0
 
     it "Has the correct number of posts", ->
-      @circuitElement.getPostCount().should.equal 2
+      @circuitElement.numPosts().should.equal 2
 
     it "Has no internal nodes", ->
-      expect(@circuitElement.getInternalNodeCount()).to.equal 0
+      expect(@circuitElement.numInternalNodes()).to.equal 0
 
 #    it "has correct dump type", ->
 #      @circuitElement.dump().should.equal '0 10 10 13 14 0'

@@ -166,7 +166,7 @@ class OpAmpElm extends CircuitComponent {
     return "OpAmp"
   }
 
-  getPostCount() {
+  numPosts() {
     return 3;
   }
 
@@ -174,7 +174,7 @@ class OpAmpElm extends CircuitComponent {
     return ((n === 0) ? this.in1p[0] : ((n === 1) ? this.in2p[0] : this.point2));
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 1;
   }
 

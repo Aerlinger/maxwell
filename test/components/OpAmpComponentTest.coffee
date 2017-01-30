@@ -24,12 +24,12 @@ describe "OpAmp Component", ->
       expect(@transistorElm.volts).to.eql([0, 0, 0])
 
     it "has default method return values", ->
-      expect(@transistorElm.getPostCount()).to.equal 3
+      expect(@transistorElm.numPosts()).to.equal 3
       expect(@transistorElm.isWire()).to.equal false
       expect(@transistorElm.hasGroundConnection()).to.equal false
       expect(@transistorElm.needsShortcut()).to.equal false
       expect(@transistorElm.canViewInScope()).to.equal false
-      expect(@transistorElm.getInternalNodeCount()).to.equal 0
+      expect(@transistorElm.numInternalNodes()).to.equal 0
       expect(@transistorElm.orphaned()).to.equal true
 
     it "has correct initial state", ->

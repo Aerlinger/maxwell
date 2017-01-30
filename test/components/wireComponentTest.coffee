@@ -12,11 +12,11 @@ describe "Wire Component", ->
     @wireElm.flags = 0
 
   it "has correct number of posts", ->
-    expect(@wireElm.getPostCount()).to.equal 2
-    expect(@wireElm.getInternalNodeCount()).to.equal 0
+    expect(@wireElm.numPosts()).to.equal 2
+    expect(@wireElm.numInternalNodes()).to.equal 0
 
   it "is not have any internal voltage sources", ->
-    expect(@wireElm.getVoltageSourceCount()).to.equal 1
+    expect(@wireElm.numVoltageSources()).to.equal 1
 
   it "has correct toString()", ->
     expect(@wireElm.toString()).to.equal "Wire@[100 100 100 200]"

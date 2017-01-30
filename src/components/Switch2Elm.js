@@ -127,7 +127,7 @@ class Switch2Elm extends SwitchElm {
     }
   }
 
-  getPostCount() {
+  numPosts() {
     return 3;
   }
 
@@ -143,7 +143,7 @@ class Switch2Elm extends SwitchElm {
     return stamper.stampVoltageSource(this.nodes[0], this.nodes[this.position + 1], this.voltSource, 0);
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     if (this.position === 2) { return 0; } else { return 1; }
   }
 

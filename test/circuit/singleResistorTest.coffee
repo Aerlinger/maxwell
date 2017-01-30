@@ -17,8 +17,8 @@ describe "1V grounded DC Source with 1 ohm grounded resistor", ->
     @resistor.resistance.should.equal 50
 
   it "calculates current when voltage is applied", ->
-    @resistor.getPostCount().should.equal 2
-    @resistor.getInternalNodeCount().should.equal 0
+    @resistor.numPosts().should.equal 2
+    @resistor.numInternalNodes().should.equal 0
 
   it "needs a remap", ->
     @Circuit.Solver.analyzeFlag.should.equal true

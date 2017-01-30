@@ -19,11 +19,11 @@ class VcoElm extends ChipElm {
     return true;
   }
 
-  getPostCount() {
+  numPosts() {
     return 6;
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 3;
   }
 

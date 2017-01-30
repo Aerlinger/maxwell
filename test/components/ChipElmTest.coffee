@@ -108,12 +108,12 @@ describe "CC2 Component", ->
       expect(@transistorElm.volts).to.eql([0, -0, -0])
 
     it "has default method return values", ->
-      @transistorElm.getPostCount().should.equal 3
+      @transistorElm.numPosts().should.equal 3
       @transistorElm.isWire().should.equal false
       @transistorElm.hasGroundConnection().should.equal false
       @transistorElm.needsShortcut().should.equal false
       @transistorElm.canViewInScope().should.equal true
-      @transistorElm.getInternalNodeCount().should.equal 0
+      @transistorElm.numInternalNodes().should.equal 0
       @transistorElm.orphaned().should.equal true
 
     it "has correct initial state", ->

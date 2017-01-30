@@ -11,11 +11,11 @@ describe "Ground Component", ->
     @groundElm.flags = 0
 
   it "has correct number of posts", ->
-    @groundElm.getPostCount().should.equal 1
-    @groundElm.getInternalNodeCount().should.equal 0
+    @groundElm.numPosts().should.equal 1
+    @groundElm.numInternalNodes().should.equal 0
 
   it "is not have any internal voltage sources", ->
-    @groundElm.getVoltageSourceCount().should.equal 1
+    @groundElm.numVoltageSources().should.equal 1
 
   it "has correct toString()", ->
     @groundElm.toString().should.equal "Ground@[50 50 50 150] {}"

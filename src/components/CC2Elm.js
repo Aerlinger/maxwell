@@ -55,11 +55,11 @@ class CC2Elm extends ChipElm {
     return this.drawChip(renderContext);
   }
 
-  getPostCount() {
+  numPosts() {
     return 3;
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 1;
   }
 }

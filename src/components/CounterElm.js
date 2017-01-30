@@ -23,7 +23,7 @@ class CounterElm extends ChipElm {
     return "Counter";
   }
 
-  getPostCount() {
+  numPosts() {
     if (this.hasEnable()) {
       return this.bits + 3;
     }
@@ -35,7 +35,7 @@ class CounterElm extends ChipElm {
     return (this.flags & CounterElm.FLAG_ENABLE) != 0;
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return this.bits;
   }
 
@@ -43,7 +43,7 @@ class CounterElm extends ChipElm {
     this.sizeX = 2;
     this.sizeY = (this.bits > 2) ? this.bits : 2;
 
-    this.pins = new Array(this.getPostCount());
+    this.pins = new Array(this.numPosts());
 
     this.pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "");
     this.pins[0].clock = true;

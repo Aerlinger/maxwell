@@ -60,7 +60,7 @@ class SweepElm extends CircuitComponent {
     return this.reset();
   }
 
-  getPostCount() {
+  numPosts() {
     return 1;
   }
 
@@ -196,7 +196,7 @@ class SweepElm extends CircuitComponent {
     return this.volts[0];
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 1;
   }
 

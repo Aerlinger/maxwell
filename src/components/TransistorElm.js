@@ -213,7 +213,7 @@ class TransistorElm extends CircuitComponent {
     }
   }
 
-  getPostCount() {
+  numPosts() {
     return 3;
   }
 

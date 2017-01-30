@@ -52,8 +52,8 @@ class CircuitComponent {
   }
 
   allocNodes() {
-    this.nodes = Util.zeroArray(this.getPostCount() + this.getInternalNodeCount());
-    this.volts = Util.zeroArray(this.getPostCount() + this.getInternalNodeCount());
+    this.nodes = Util.zeroArray(this.numPosts() + this.numInternalNodes());
+    this.volts = Util.zeroArray(this.numPosts() + this.numInternalNodes());
   }
 
   setParameters(component_params) {
@@ -282,7 +282,7 @@ class CircuitComponent {
   // Called on reactive elements such as inductors and capacitors.
 
   getPostAt(x, y) {
-    for (let postIdx = 0, end = this.getPostCount(), asc = 0 <= end; asc ? postIdx < end : postIdx > end; asc ? postIdx++ : postIdx--) {
+    for (let postIdx = 0, end = this.numPosts(), asc = 0 <= end; asc ? postIdx < end : postIdx > end; asc ? postIdx++ : postIdx--) {
       let post = this.getPost(postIdx);
 
       if ((post.x === x) && (post.y === y)) {
@@ -423,11 +423,11 @@ class CircuitComponent {
     return this.simpleString() + paramStr;
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 0;
   }
 
-  getInternalNodeCount() {
+  numInternalNodes() {
     return 0;
   }
 
@@ -448,7 +448,7 @@ class CircuitComponent {
   }
 
   // Two terminals by default, but likely to be overidden by subclasses
-  getPostCount() {
+  numPosts() {
     return 2;
   }
 
@@ -571,7 +571,7 @@ class CircuitComponent {
   }
 
   canViewInScope() {
-    return this.getPostCount() <= 2;
+    return this.numPosts() <= 2;
   }
 
   needsShortcut() {
@@ -637,7 +637,7 @@ class CircuitComponent {
      */
 
     /*
-     for (let i=0; i<this.getPostCount(); ++i) {
+     for (let i=0; i<this.numPosts(); ++i) {
      let post = this.getPost(i);
      renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
      }
@@ -702,7 +702,7 @@ class CircuitComponent {
 
 
     /*
-    for (let i = 0; i < this.getPostCount(); ++i) {
+    for (let i = 0; i < this.numPosts(); ++i) {
       let post = this.getPost(i);
       renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
     }
@@ -772,7 +772,7 @@ class CircuitComponent {
       voltSource: this.getVoltageSource(),
       needsShortcut: this.needsShortcut(),
       name: this.constructor.name,
-      postCount: this.getPostCount(),
+      postCount: this.numPosts(),
       nonLinear: this.nonLinear()
     };
   }

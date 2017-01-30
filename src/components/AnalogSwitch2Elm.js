@@ -27,7 +27,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
     this.setBboxPt(this.point1, this.point2, this.openhs);
   }
 
-  getPostCount() {
+  numPosts() {
     return 4;
   }
 

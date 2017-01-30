@@ -14,11 +14,11 @@ class AdcElm extends ChipElm {
     return "ADC";
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return this.bits;
   }
 
-  getPostCount() {
+  numPosts() {
     return this.bits + 2;
   }
 
@@ -29,7 +29,7 @@ class AdcElm extends ChipElm {
   setupPins() {
     this.sizeX = 2;
     this.sizeY = (this.bits > 2) ? this.bits : 2;
-    this.pins = new Array(this.getPostCount());
+    this.pins = new Array(this.numPosts());
 
     for (let i = 0, end = this.bits, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
       this.pins[i] = new ChipElm.Pin(this.bits - 1 - i, ChipElm.SIDE_E, `D${i}`);

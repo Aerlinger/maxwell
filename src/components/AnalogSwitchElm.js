@@ -97,7 +97,7 @@ class AnalogSwitchElm extends CircuitComponent {
     return stamper.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
   }
 
-  getPostCount() {
+  numPosts() {
     return 3;
   }
 

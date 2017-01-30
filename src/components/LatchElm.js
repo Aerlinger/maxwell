@@ -21,11 +21,11 @@ class LatchElm extends ChipElm {
     return true;
   }
 
-  getPostCount() {
+  numPosts() {
     return (this.bits * 2) + 1;
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return this.bits;
   }
 
@@ -33,7 +33,7 @@ class LatchElm extends ChipElm {
     let i;
     this.sizeX = 2;
     this.sizeY = this.bits + 1;
-    this.pins = new Array(this.getPostCount());
+    this.pins = new Array(this.numPosts());
 
     for (i = 0; i < this.bits; i++) {
       this.pins[i] = new ChipElm.Pin(this.bits - 1 - i, ChipElm.SIDE_W, `I${i}`);

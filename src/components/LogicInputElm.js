@@ -88,7 +88,7 @@ class LogicInputElm extends SwitchElm {
     return this.flags & ((LogicInputElm.FLAG_TERNARY | LogicInputElm.FLAG_NUMERIC) !== 0);
   }
 
-  getPostCount() {
+  numPosts() {
     return 1;
   }
 
@@ -113,7 +113,7 @@ class LogicInputElm extends SwitchElm {
     return stamper.stampVoltageSource(0, this.nodes[0], this.voltSource, v);
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 1;
   }
 

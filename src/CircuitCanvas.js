@@ -143,7 +143,7 @@ class CircuitCanvas extends Observer {
         this.context.save();
         this.context.fillStyle = Settings.POST_COLOR;
 
-        for (let i=0; i<this.circuitUI.highlightedComponent.getPostCount(); ++i) {
+        for (let i=0; i<this.circuitUI.highlightedComponent.numPosts(); ++i) {
           let post = this.circuitUI.highlightedComponent.getPost(i);
 
           this.context.fillRect(post.x - Settings.POST_RADIUS - 1, post.y - Settings.POST_RADIUS - 1, 2 * Settings.POST_RADIUS + 2, 2 * Settings.POST_RADIUS + 2);
@@ -335,7 +335,7 @@ class CircuitCanvas extends Observer {
       this.drawBoldLines();
       component.draw(this);
       /*
-       for (let i = 0; i < component.getPostCount(); ++i) {
+       for (let i = 0; i < component.numPosts(); ++i) {
        let post = component.getPost(i);
        this.drawCircle(post.x, post.y, Settings.POST_RADIUS + 2, 2, Settings.SELECT_COLOR);
        }
@@ -516,7 +516,7 @@ class CircuitCanvas extends Observer {
   drawPosts(component, color = Settings.POST_COLOR) {
     let post;
 
-    for (let i = 0; i < component.getPostCount(); ++i) {
+    for (let i = 0; i < component.numPosts(); ++i) {
       post = component.getPost(i);
       this.drawPost(post.x, post.y, color);
     }

@@ -158,7 +158,7 @@ class GateElm extends CircuitComponent {
     renderContext.drawPosts(this);
     // renderContext.drawPosts(this);
 
-    for (let i = 0; i < this.getPostCount(); i++) {
+    for (let i = 0; i < this.numPosts(); i++) {
       let post = this.getPost(i);
       renderContext.drawPost(post.x, post.y)
     }
@@ -168,11 +168,11 @@ class GateElm extends CircuitComponent {
     }
   }
 
-  getPostCount() {
+  numPosts() {
     return this.inputCount + 1;
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 1;
   }
 

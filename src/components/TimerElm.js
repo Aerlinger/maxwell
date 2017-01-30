@@ -39,7 +39,7 @@ class TimerElm extends ChipElm {
     return "555 Timer";
   }
 
-  getPostCount() {
+  numPosts() {
     if (this.hasReset()) {
       return 7;
     } else {
@@ -47,7 +47,7 @@ class TimerElm extends ChipElm {
     }
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 1;
   }
 

@@ -178,7 +178,7 @@ class ChipElm extends CircuitComponent {
     this.setupPins();
     this._setPoints();
 
-    for (let i=0; i<this.getPostCount(); ++i) {
+    for (let i=0; i<this.numPosts(); ++i) {
       if (this.pins[i].state) {
         this.volts[i] = parseFloat(params['volts'].shift());
         this.pins[i].value = (this.volts[i] > 2.5);
@@ -241,8 +241,8 @@ class ChipElm extends CircuitComponent {
     // return console.trace("execute() to be called from subclasses of ChipElm");
   }
 
-  getVoltageSourceCount() {
-    return console.warn("getVoltageSourceCount() to be called from subclasses of ChipElm");
+  numVoltageSources() {
+    return console.warn("numVoltageSources() to be called from subclasses of ChipElm");
   }
 
   getChipName() {
@@ -258,7 +258,7 @@ class ChipElm extends CircuitComponent {
   }
 
   reset() {
-    for (let i = 0; i < this.getPostCount(); i++) {
+    for (let i = 0; i < this.numPosts(); i++) {
       this.pins[i].value = false;
       this.pins[i].curcount = 0;
       this.volts[i] = 0;
@@ -284,7 +284,7 @@ class ChipElm extends CircuitComponent {
   }
 
   setCurrent(x, c) {
-    for (let i = 0; i < this.getPostCount(); ++i) {
+    for (let i = 0; i < this.numPosts(); ++i) {
       let pin = this.pins[i];
 
       if (pin.output && (pin.voltSource === x)) {
@@ -294,7 +294,7 @@ class ChipElm extends CircuitComponent {
   }
 
   setVoltageSource(j, vs) {
-    for (let i = 0; i < this.getPostCount(); ++i) {
+    for (let i = 0; i < this.numPosts(); ++i) {
       let p = this.pins[i];
       if ((p.output && j--) === 0) {
         p.voltSource = vs;
@@ -307,7 +307,7 @@ class ChipElm extends CircuitComponent {
 
   doStep(stamper) {
     let i, p;
-    for (let i = 0; i < this.getPostCount(); ++i) {
+    for (let i = 0; i < this.numPosts(); ++i) {
       p = this.pins[i];
       if (!p.output) {
         p.value = this.volts[i] > 2.5;
@@ -317,7 +317,7 @@ class ChipElm extends CircuitComponent {
     this.execute();
 
     let result = [];
-    for (let i = 0; i < this.getPostCount(); ++i) {
+    for (let i = 0; i < this.numPosts(); ++i) {
       p = this.pins[i];
       if (p.output) {
         stamper.updateVoltageSource(0, this.nodes[i], p.voltSource, p.value ? 5 : 0);
@@ -328,7 +328,7 @@ class ChipElm extends CircuitComponent {
   stamp(stamper) {
     // this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
 
-    for (let i = 0; i < this.getPostCount(); ++i) {
+    for (let i = 0; i < this.numPosts(); ++i) {
       let p = this.pins[i];
 
       if (p.output) {
@@ -346,7 +346,7 @@ class ChipElm extends CircuitComponent {
     // this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
     renderContext.drawThickPolygon(this.rectPointsX, this.rectPointsY, Settings.STROKE_COLOR);
 
-    for (let i = 0; i < this.getPostCount(); i++) {
+    for (let i = 0; i < this.numPosts(); i++) {
 
       if (this.pins[i]) {
         let p = this.pins[i];
@@ -388,7 +388,7 @@ class ChipElm extends CircuitComponent {
     }
 
 
-    for (let i = 0; i < this.getPostCount(); ++i) {
+    for (let i = 0; i < this.numPosts(); ++i) {
       renderContext.drawPost(this.pins[i].post.x, this.pins[i].post.y, this.nodes[i]);
     }
   }
@@ -417,7 +417,7 @@ class ChipElm extends CircuitComponent {
 
     this.setBbox(xr, yr, this.rectPointsX[2], this.rectPointsY[2]);
 
-    for (let i = 0; i < this.getPostCount(); i++) {
+    for (let i = 0; i < this.numPosts(); i++) {
       let p = this.pins[i];
 
       if (!p) {
@@ -426,7 +426,7 @@ class ChipElm extends CircuitComponent {
       }
 
       if (i >= this.pins.length) {
-        console.error(`Pin index out of bounds: ${i}. @pins is length ${this.pins.length} but there are ${this.getPostCount()} posts`);
+        console.error(`Pin index out of bounds: ${i}. @pins is length ${this.pins.length} but there are ${this.numPosts()} posts`);
         return;
       }
 

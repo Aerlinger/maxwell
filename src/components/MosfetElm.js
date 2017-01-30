@@ -186,7 +186,7 @@ class MosfetElm extends CircuitComponent {
     return this.ids * (this.volts[2] - this.volts[1]);
   }
 
-  getPostCount() {
+  numPosts() {
     return 3;
   }
 

@@ -28,11 +28,11 @@ describe "Resistor Component", ->
       @resistor.resistance.should.equal 50
 
     it "is not have any internal voltage sources", ->
-      @resistor.getVoltageSourceCount().should.equal 0
+      @resistor.numVoltageSources().should.equal 0
 
     it "calculates current when voltage is applied", ->
-      @resistor.getPostCount().should.equal 2
-      @resistor.getInternalNodeCount().should.equal 0
+      @resistor.numPosts().should.equal 2
+      @resistor.numInternalNodes().should.equal 0
 
     it "is orphaned", ->
       expect(@resistor.orphaned()).to.equal true
@@ -89,10 +89,10 @@ describe "Resistor Component", ->
       @resistor.getPower().should.equal 0
 
     it "Has the correct number of posts", ->
-      @resistor.getPostCount().should.equal 2
+      @resistor.numPosts().should.equal 2
 
     it "Has no internal nodes", ->
-      @resistor.getInternalNodeCount().should.equal 0
+      @resistor.numInternalNodes().should.equal 0
 
 
     describe "after soldering to circuit", ->

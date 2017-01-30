@@ -18,11 +18,11 @@ class JkFlipFlopElm extends ChipElm {
     return "JK flip-flop";
   }
 
-  getPostCount() {
+  numPosts() {
     return 5;
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 2;
   }
 

@@ -156,11 +156,11 @@ class RelayElm extends CircuitComponent {
     return this.coilPosts[n - (3 * this.poleCount)];
   }
 
-  getPostCount() {
+  numPosts() {
     return 2 + (3 * this.poleCount);
   }
 
-  getInternalNodeCount() {
+  numInternalNodes() {
     return 1;
   }
 

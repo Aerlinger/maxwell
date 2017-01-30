@@ -17,7 +17,7 @@ class RailElm extends VoltageElm {
     super(xa, ya, xb, yb, params, f);
   }
 
-  getPostCount() {
+  numPosts() {
     return 1;
   }
 

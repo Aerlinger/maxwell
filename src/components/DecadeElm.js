@@ -16,11 +16,11 @@ class DecadeElm extends ChipElm {
     return true;
   }
 
-  getPostCount() {
+  numPosts() {
     return this.bits + 2;
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return this.bits;
   }
 
@@ -28,7 +28,7 @@ class DecadeElm extends ChipElm {
     this.sizeX = this.bits > 2 ? this.bits : 2;
     this.sizeY = 2;
 
-    this.pins = new Array(this.getPostCount());
+    this.pins = new Array(this.numPosts());
 
     this.pins[0] = new ChipElm.Pin(1, ChipElm.SIDE_W, "");
     this.pins[0].clock = true;

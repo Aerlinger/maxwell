@@ -100,7 +100,7 @@ class TransformerElm extends CircuitComponent {
     return this.ptEnds[n];
   }
 
-  getPostCount() {
+  numPosts() {
     return 4;
   }
 

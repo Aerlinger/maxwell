@@ -18,7 +18,7 @@ class OutputElm extends CircuitComponent {
     this.place()
   }
 
-  getPostCount() {
+  numPosts() {
     return 1;
   }
 

@@ -247,11 +247,11 @@ class ScrElm extends CircuitComponent {
     }
   }
 
-  getPostCount() {
+  numPosts() {
     return 3;
   }
 
-  getInternalNodeCount() {
+  numInternalNodes() {
     return 1;
   }
 

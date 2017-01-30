@@ -27,11 +27,11 @@ class PhaseCompElm extends ChipElm {
     return this.pins[2].output = true;
   }
 
-  getPostCount() {
+  numPosts() {
     return 3;
   }
 
-  getVoltageSourceCount() {
+  numVoltageSources() {
     return 1;
   }
 
