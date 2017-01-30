@@ -377,10 +377,14 @@ ${circuitData}\
         }
 
         inputElm.addEventListener("change", function(evt) {
-          let updateObj = {}
+        //  TODO: Push change event on history
+        });
+
+        inputElm.addEventListener("input", function(evt) {
+          let updateObj = {};
           updateObj[fieldName] = evt.target.value;
 
-          console.log("CHANGE", `circuitComponent.update(${JSON.stringify(updateObj)})`);
+          console.log("INPUT", `circuitComponent.update(${JSON.stringify(updateObj)})`);
 
           circuitComponent.update(updateObj);
         });

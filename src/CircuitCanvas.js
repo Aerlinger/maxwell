@@ -244,6 +244,8 @@ class CircuitCanvas extends Observer {
     let ps1 = new Point(0, 0);
     let ps2 = new Point(0, 0);
 
+    let dn = point2.diff(point1);
+
     ps1.x = point1.x;
     ps1.y = point1.y;
 
@@ -252,35 +254,38 @@ class CircuitCanvas extends Observer {
     this.context.beginPath();
     this.context.lineJoin = 'bevel';
 
-    this.context.moveTo(ps1.x + this.lineShift, ps1.y + this.lineShift);
+    this.context.moveTo(ps1.x + this.lineShift - dn.x/10, ps1.y + this.lineShift - dn.y/10);
 
     let grad = this.context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
-
     grad.addColorStop(0, this.getVoltageColor(vStart));
     grad.addColorStop(1, this.getVoltageColor(vEnd));
 
     this.context.strokeStyle = grad;
 
+    this.context.moveTo(ps1.x + this.lineShift, ps1.y + this.lineShift);
+
+    if (this.boldLines) {
+      this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
+      this.context.strokeStyle = Settings.SELECT_COLOR;
+    } else {
+      this.context.lineWidth = Settings.LINE_WIDTH + 1;
+    }
+
     for (let i = 0; i < segments; ++i) {
       cx = (((i + 1) * 8 / segments) % 2) - 1;
       hsx = Math.sqrt(1 - cx * cx);
+
       ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs);
       voltageLevel = vStart + (vEnd - vStart) * i / segments;
       color = this.getVoltageColor(voltageLevel);
-
-      if (this.boldLines) {
-        this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
-        this.context.strokeStyle = Settings.SELECT_COLOR;
-      } else {
-        this.context.lineWidth = Settings.LINE_WIDTH + 1;
-        //this.context.strokeStyle = color;
-      }
 
       this.context.lineTo(ps2.x + this.lineShift, ps2.y + this.lineShift);
 
       ps1.x = ps2.x;
       ps1.y = ps2.y;
     }
+
+    // this.context.lineTo(ps1.x + this.lineShift + dn.x/10, ps1.y + this.lineShift + dn.y/10);
 
     this.context.stroke();
 
@@ -655,6 +660,8 @@ class CircuitCanvas extends Observer {
 
   drawLine(x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
     this.context.save();
+
+    this.context.lineCap = "round";
 
     if (!this.pathMode)
       this.context.beginPath();

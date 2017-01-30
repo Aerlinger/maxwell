@@ -13,10 +13,21 @@ block header
     }
 
     function bindCircuitEvents(circuitContext) {
+      circuitContext.onSelectionChanged = function (changeObj) {
+        console.log("SELECTION CHANGED:", changeObj);
 
+        if (changeObj.selection.length == 0) {
+          $("#edit_component_pane").foundation('close');
+        }
+      };
 
       circuitContext.onComponentHover = function (component) {
         console.log("ON COMPONENT HOVER:", component.toString(), "V:", component.volts);
+        var form = Maxwell.renderEdit(component);
+
+        console.log("renderEdit\n", form);
+
+        window.editInfo = form;
       };
 
       circuitContext.onComponentUnhover = function (component) {
@@ -26,6 +37,17 @@ block header
       //circuitContext.onComponentClick = function (component) {
         //console.log("ON COMPONENT CLICK:", component);
       //};
+      circuitContext.onComponentClick = function (component) {
+        console.log("ON COMPONENT CLICK:", component);
+
+        var form = Maxwell.renderEdit(component);
+        console.log("renderEdit\n", form);
+
+        document.getElementById("edit_component_pane").innerHTML = "";
+        document.getElementById("edit_component_pane").append(form);
+
+        $("#edit_component_pane").foundation('open');
+      };
 
       circuitContext.onComponentsDrag = function (components) {
         console.log("ON COMPONENTS DRAG:", components);
@@ -60,17 +82,6 @@ block header
 
       Maxwell.createContext("ohms", "../circuits/v4/#{circuit_name}.json", canvas, function (circuitContext) {
         window.circuitContext = circuitContext;
-
-        circuitContext.onComponentClick = function (component) {
-          console.log("CLICK", component);
-
-          $("#edit_component_pane").foundation('open');
-
-          var form = Maxwell.renderEdit(component);
-
-          document.getElementById("edit_component_pane").innerHTML = "";
-          document.getElementById("edit_component_pane").append(form);
-        };
 
         /*
         Maxwell.Components.map(function (component) {
@@ -141,7 +152,9 @@ block header
 
             // Backspace
             case 8:
-              circuitContext.remove(circuitContext.getSelectedComponents());
+              if (document.activeElement && document.activeElement.constructor.name != "HTMLInputElement") {
+                circuitContext.remove(circuitContext.getSelectedComponents());
+              }
               break;
 
             // Space
@@ -149,14 +162,10 @@ block header
               circuitContext.togglePause();
               break;
           }
-
-
         })
       });
 
       if (grid) {
-
-
         var ctx = grid.getContext('2d');
 
         function drawGrid() {

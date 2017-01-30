@@ -46,6 +46,7 @@
     "jade": "~0.26.3",
     "jsondiffpatch": "0.1.38",
     "mocha": "^3.2.0",
+    "mongodb": "^2.2.22",
     "node-resemble-js": "^0.2.0",
     "node-sass-middleware": "^0.11.0",
     "resemblejs": "^2.2.3",

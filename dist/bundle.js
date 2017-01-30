@@ -423,10 +423,14 @@
 	        }
 	
 	        inputElm.addEventListener("change", function(evt) {
-	          let updateObj = {}
+	        //  TODO: Push change event on history
+	        });
+	
+	        inputElm.addEventListener("input", function(evt) {
+	          let updateObj = {};
 	          updateObj[fieldName] = evt.target.value;
 	
-	          console.log("CHANGE", `circuitComponent.update(${JSON.stringify(updateObj)})`);
+	          console.log("INPUT", `circuitComponent.update(${JSON.stringify(updateObj)})`);
 	
 	          circuitComponent.update(updateObj);
 	        });
@@ -1731,6 +1735,10 @@
 	
 	  equals(otherPoint) {
 	    return ((this.x === otherPoint.x) && (this.y === otherPoint.y));
+	  }
+	
+	  diff(otherPoint) {
+	    return new Point(this.x - otherPoint.x, this.y - otherPoint.y);
 	  }
 	
 	  static distanceSq(x1, y1, x2, y2) {
@@ -17943,6 +17951,8 @@
 	      }
 	    }
 	
+	    console.log(circuitParams);
+	
 	    if (circuit.getElements().length === 0)
 	      console.error("No elements loaded. JSON most likely malformed");
 	
@@ -27020,14 +27030,14 @@
 	  constructor(params = {}) {
 	    this.completionStatus = params['completion_status'] || "in development";
 	    this.createdAt = params['created_at'] || "?";
-	    this.currentSpeed = parseFloat(params['currentSpeed'] || 63);
+	    this.currentSpeed = parseFloat(params['currentSpeed'] || 50);
 	    this.updatedAt = params['updated_at'] || "?";
 	    this.description = params['description'] || "";
 	    this.flags = parseInt(params['flags'] || 1);
 	    this.id = params['id'] || null;
 	    this.powerRange = parseFloat(params['powerRange'] || 62.0);
 	    this.voltageRange = parseFloat(params['voltageRange'] || 10.0);
-	    this.simSpeed = parseFloat(params['simSpeed'] || 10);
+	    this.simSpeed = parseFloat(params['simSpeed'] || 172);
 	    this.timeStep = parseFloat(params['timeStep'] || 5.0e-06);
 	    this.title = params['title'] || "Default";
 	    this.topic = params['topic'] || null;
@@ -30192,6 +30202,8 @@
 	    let ps1 = new Point(0, 0);
 	    let ps2 = new Point(0, 0);
 	
+	    let dn = point2.diff(point1);
+	
 	    ps1.x = point1.x;
 	    ps1.y = point1.y;
 	
@@ -30200,35 +30212,38 @@
 	    this.context.beginPath();
 	    this.context.lineJoin = 'bevel';
 	
-	    this.context.moveTo(ps1.x + this.lineShift, ps1.y + this.lineShift);
+	    this.context.moveTo(ps1.x + this.lineShift - dn.x/10, ps1.y + this.lineShift - dn.y/10);
 	
 	    let grad = this.context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
-	
 	    grad.addColorStop(0, this.getVoltageColor(vStart));
 	    grad.addColorStop(1, this.getVoltageColor(vEnd));
 	
 	    this.context.strokeStyle = grad;
 	
+	    this.context.moveTo(ps1.x + this.lineShift, ps1.y + this.lineShift);
+	
+	    if (this.boldLines) {
+	      this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
+	      this.context.strokeStyle = Settings.SELECT_COLOR;
+	    } else {
+	      this.context.lineWidth = Settings.LINE_WIDTH + 1;
+	    }
+	
 	    for (let i = 0; i < segments; ++i) {
 	      cx = (((i + 1) * 8 / segments) % 2) - 1;
 	      hsx = Math.sqrt(1 - cx * cx);
+	
 	      ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs);
 	      voltageLevel = vStart + (vEnd - vStart) * i / segments;
 	      color = this.getVoltageColor(voltageLevel);
-	
-	      if (this.boldLines) {
-	        this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
-	        this.context.strokeStyle = Settings.SELECT_COLOR;
-	      } else {
-	        this.context.lineWidth = Settings.LINE_WIDTH + 1;
-	        //this.context.strokeStyle = color;
-	      }
 	
 	      this.context.lineTo(ps2.x + this.lineShift, ps2.y + this.lineShift);
 	
 	      ps1.x = ps2.x;
 	      ps1.y = ps2.y;
 	    }
+	
+	    // this.context.lineTo(ps1.x + this.lineShift + dn.x/10, ps1.y + this.lineShift + dn.y/10);
 	
 	    this.context.stroke();
 	
@@ -30603,6 +30618,8 @@
 	
 	  drawLine(x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
 	    this.context.save();
+	
+	    this.context.lineCap = "round";
 	
 	    if (!this.pathMode)
 	      this.context.beginPath();

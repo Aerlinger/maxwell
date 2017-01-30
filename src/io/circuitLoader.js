@@ -118,6 +118,8 @@ class CircuitLoader {
       }
     }
 
+    console.log(circuitParams);
+
     if (circuit.getElements().length === 0)
       console.error("No elements loaded. JSON most likely malformed");
 

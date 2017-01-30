@@ -3,14 +3,14 @@ class SimulationParams {
   constructor(params = {}) {
     this.completionStatus = params['completion_status'] || "in development";
     this.createdAt = params['created_at'] || "?";
-    this.currentSpeed = parseFloat(params['currentSpeed'] || 63);
+    this.currentSpeed = parseFloat(params['currentSpeed'] || 50);
     this.updatedAt = params['updated_at'] || "?";
     this.description = params['description'] || "";
     this.flags = parseInt(params['flags'] || 1);
     this.id = params['id'] || null;
     this.powerRange = parseFloat(params['powerRange'] || 62.0);
     this.voltageRange = parseFloat(params['voltageRange'] || 10.0);
-    this.simSpeed = parseFloat(params['simSpeed'] || 10);
+    this.simSpeed = parseFloat(params['simSpeed'] || 172);
     this.timeStep = parseFloat(params['timeStep'] || 5.0e-06);
     this.title = params['title'] || "Default";
     this.topic = params['topic'] || null;
