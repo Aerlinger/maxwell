@@ -531,7 +531,7 @@ class CircuitComponent {
   getSummary(additonalInfo = []) {
     let summary = [
       `${this.constructor.name} (${this.getName()})`,
-      this.simpleString(),
+      `[${this.x1()} ${this.y1()} ${this.x2()} ${this.y2()}]`,
       `V: ${Util.getUnitText(this.getVoltageDiff(), "V")}`,
       `I = ${Util.getUnitText(this.getCurrent(), "A")}`,
       `P = ${Util.getUnitText(this.getCurrent(), "W")}`

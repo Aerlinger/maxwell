@@ -391,6 +391,7 @@
 	
 	    container.append(form);
 	
+	
 	    for (let fieldName in fields) {
 	      if (fieldName) {
 	
@@ -486,6 +487,8 @@
 	};
 	
 	module.exports = Maxwell;
+	
+	
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
@@ -1026,7 +1029,7 @@
 	  getSummary(additonalInfo = []) {
 	    let summary = [
 	      `${this.constructor.name} (${this.getName()})`,
-	      this.simpleString(),
+	      `[${this.x1()} ${this.y1()} ${this.x2()} ${this.y2()}]`,
 	      `V: ${Util.getUnitText(this.getVoltageDiff(), "V")}`,
 	      `I = ${Util.getUnitText(this.getCurrent(), "A")}`,
 	      `P = ${Util.getUnitText(this.getCurrent(), "W")}`
@@ -30087,7 +30090,12 @@
 	
 	        this.context.save();
 	        this.context.fillStyle = Settings.POST_COLOR;
-	        this.context.fillRect(this.circuitUI.highlightedComponent.x1()-2*Settings.POST_RADIUS, this.circuitUI.highlightedComponent.y1()-2*Settings.POST_RADIUS, 4*Settings.POST_RADIUS, 4*Settings.POST_RADIUS);
+	
+	        for (let i=0; i<this.circuitUI.highlightedComponent.getPostCount(); ++i) {
+	          let post = this.circuitUI.highlightedComponent.getPost(i);
+	
+	          this.context.fillRect(post.x - Settings.POST_RADIUS - 1, post.y - Settings.POST_RADIUS - 1, 2 * Settings.POST_RADIUS + 2, 2 * Settings.POST_RADIUS + 2);
+	        }
 	
 	        if (this.circuitUI.highlightedComponent.x2())
 	          this.context.fillRect(this.circuitUI.highlightedComponent.x2()-2*Settings.POST_RADIUS, this.circuitUI.highlightedComponent.y2()-2*Settings.POST_RADIUS, 4*Settings.POST_RADIUS, 4*Settings.POST_RADIUS);

@@ -13,28 +13,19 @@ block header
     }
 
     function bindCircuitEvents(circuitContext) {
-      circuitContext.onSelectionChanged = function (components) {
-        console.log("SELECTION CHANGED:", components);
-      };
+
 
       circuitContext.onComponentHover = function (component) {
         console.log("ON COMPONENT HOVER:", component.toString(), "V:", component.volts);
-        var form = Maxwell.renderEdit(component);
-
-        console.log("renderEdit\n", form);
-
-        window.editInfo = form;
-
-         //document.getElementById("edit_component").innerHTML = form;
       };
 
       circuitContext.onComponentUnhover = function (component) {
         console.log("ON COMPONENT UNHOVER:", component.toString());
       };
 
-      circuitContext.onComponentClick = function (component) {
+      //circuitContext.onComponentClick = function (component) {
         //console.log("ON COMPONENT CLICK:", component);
-      };
+      //};
 
       circuitContext.onComponentsDrag = function (components) {
         console.log("ON COMPONENTS DRAG:", components);
@@ -70,22 +61,15 @@ block header
       Maxwell.createContext("ohms", "../circuits/v4/#{circuit_name}.json", canvas, function (circuitContext) {
         window.circuitContext = circuitContext;
 
-        circuitContext.onSelectionChanged = function (changeObj) {
-          console.log("SELECTED COMPONENTS", changeObj);
+        circuitContext.onComponentClick = function (component) {
+          console.log("CLICK", component);
 
-          if (selectedComponents.length > 0) {
-            $("#edit_component_pane").foundation('open');
-          } else {
-            $("#edit_component_pane").foundation('close');
-          }
-        };
+          $("#edit_component_pane").foundation('open');
 
-        circuitContext.onComponentHover = function (component) {
           var form = Maxwell.renderEdit(component);
-          //var edit_pane = document.getElementById("edit_component_pane");
 
-          //edit_pane.innerHTML = "";
-          //edit_pane.append(form);
+          document.getElementById("edit_component_pane").innerHTML = "";
+          document.getElementById("edit_component_pane").append(form);
         };
 
         /*
@@ -330,13 +314,11 @@ block content
                       a.item(href="/ui/" + circuit)= library[category][circuit]
 
 
-
-
   #edit_component_pane.off-canvas.edit-form.position-right(data-off-canvas='')
     //div#edit_pane.edit-form
 
   //.off-canvas-content
-    button.button.float-right(type='button', data-toggle='edit_component_pane') Open
+    //button.button.float-right(type='button', data-toggle='edit_component_pane') Open
 
   script.
     $(document).foundation();
