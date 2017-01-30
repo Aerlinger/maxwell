@@ -27,6 +27,8 @@
     "coffee-script": "~1.8.0",
     "colors": "*",
     "connect": "^3.4.0",
+    "d3": "^4.5.0",
+    "d3-shape": "^1.0.4",
     "debug": "^2.2.0",
     "deep-diff": "0.3.3",
     "destroy": "^1.0.3",

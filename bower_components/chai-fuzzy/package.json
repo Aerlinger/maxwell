@@ -3,6 +3,9 @@
   "version": "1.6.0",
   "keywords": [
     "chai",
+    "chai-plugin",
+    "browser",
+    "array",
     "testing",
     "jasmine"
   ],

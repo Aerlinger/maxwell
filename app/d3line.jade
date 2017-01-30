@@ -1,0 +1,149 @@
+extends ./layout
+
+block header
+  style.
+    body {
+      font: 10px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    .area {
+      fill: lightsteelblue;
+    }
+
+    .line {
+      fill: none;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+    }
+
+    .dot {
+      fill: white;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+    }
+
+  script.
+    var data = d3.range(40).map(function(i) {
+      return i % 5 ? {x: i / 39, y: (Math.sin(i / 3) + 2) / 4} : null;
+    });
+
+    var margin = {top: 40, right: 40, bottom: 40, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+    var x = d3.scaleLinear()
+      .range([0, width]);
+
+      var y = d3.scaleLinear()
+      .range([height, 0]);
+
+      var line = d3.line()
+      .defined(function(d) { return d; })
+      .x(function(d) { return x(d.x); })
+      .y(function(d) { return y(d.y); });
+
+    var svg = d3.select("body").append("svg")
+      .datum(data)
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    //.append("g")
+      //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+    svg.append("line")
+        .style("stroke", "black")
+        .attr("x1", 100)
+        .attr("y1", 50)
+        .attr("x2", 300)
+        .attr("y2", 200)
+
+    svg.append("circle")
+        .style("stroke-width", 2)
+        .style("stroke", "black")
+        .style("fill", "red")
+        .attr("cx", 600)
+        .attr("cy", 75)
+        .attr("r", 50)
+
+    /*
+    svg.append("polyline")
+        .attr("points", [[5,30] [15,10] [25,30]])
+        .attr("stroke-width", "2px")
+        .attr("stroke", "black");
+        */
+
+    svg.append("text")
+        .attr("x", "50px")
+        .attr("y", "50px")
+        .attr("class", "text")
+        .text("This is a sample text.");
+
+    svg.append("rect")
+        .attr("x", "10px")
+        .attr("y", "300px")
+        .attr("width", "50px")
+        .attr("height", "100px");
+
+    var poly = [{"x": 0.0, "y": 25.0},
+      {"x": 8.5, "y": 23.4},
+      {"x": 13.0, "y": 21.0},
+      {"x": 19.0, "y": 15.5}];
+
+    svg.append("polyline")
+        .data([poly])
+        .attr("points", function (d) {
+          return d.map(function (d) {
+            return [d.x, d.y].join(",");
+          }).join(" ");
+        })
+        .attr("stroke-width", "2px")
+        .attr("stroke", "black");
+
+
+
+    /*
+    vis.selectAll("polygon")
+        .data([poly])
+        .enter().append("polygon")
+        .attr("points", function (d) {
+          return d.map(function (d) {
+            return [scaleX(d.x), scaleY(d.y)].join(",");
+          }).join(" ");
+        })
+        .attr("stroke", "black")
+        .attr("stroke-width", 2);
+        */
+
+    /*
+    svg.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom().scale(x));
+
+    svg.append("g")
+      .attr("class", "axis axis--y")
+      .call(d3.axisLeft().scale(y));
+
+
+    svg.append("path")
+      .attr("class", "line")
+      .attr("d", line);
+
+    svg.selectAll(".dot")
+      .data(data.filter(function(d) { return d; }))
+    .enter().append("circle")
+      .attr("class", "dot")
+      .attr("cx", line.x())
+      .attr("cy", line.y())
+      .attr("r", 3.5);
+    */
+
+
+block content

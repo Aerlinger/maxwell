@@ -72,6 +72,14 @@ app.get('/theme', function (req, res) {
   res.render('theme-test.html');
 });
 
+app.get('/d3', function (req, res) {
+  res.render('d3');
+});
+
+app.get('/d3line', function (req, res) {
+  res.render('d3line');
+});
+
 app.get('/circuits/:circuit_name', function (req, res) {
   // console.log(__dirname + "../circuits/v3/*.json")
   console.log(circuit_names);

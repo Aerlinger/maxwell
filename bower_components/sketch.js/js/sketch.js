@@ -2,619 +2,630 @@
 /* Copyright (C) 2013 Justin Windle, http://soulwire.co.uk */
 
 (function ( root, factory ) {
-    
-    if ( typeof exports === 'object' ) {
 
-        // CommonJS like
-        module.exports = factory(root, root.document);
+  if ( typeof exports === 'object' ) {
 
-    } else if ( typeof define === 'function' && define.amd ) {
+    // CommonJS like
+    module.exports = factory(root, root.document);
 
-        // AMD
-        define( function() { return factory( root, root.document ); });
+  } else if ( typeof define === 'function' && define.amd ) {
 
-    } else {
+    // AMD
+    define( function() { return factory( root, root.document ); });
 
-        // Browser global
-        root.Sketch = factory( root, root.document );
+  } else {
+
+    // Browser global
+    root.Sketch = factory( root, root.document );
+  }
+
+}( typeof window !== "undefined" ? window : this, function ( window, document ) {
+
+
+  "use strict";
+
+  /*
+  ----------------------------------------------------------------------
+
+    Config
+
+  ----------------------------------------------------------------------
+  */
+
+  var MATH_PROPS = 'E LN10 LN2 LOG2E LOG10E PI SQRT1_2 SQRT2 abs acos asin atan ceil cos exp floor log round sin sqrt tan atan2 pow max min'.split( ' ' );
+  var HAS_SKETCH = '__hasSketch';
+  var M = Math;
+
+  var CANVAS = 'canvas';
+  var WEBGL = 'webgl';
+  var DOM = 'dom';
+
+  var doc = document;
+  var win = window;
+
+  var instances = [];
+
+  var defaults = {
+
+    fullscreen: true,
+    autostart: true,
+    autoclear: true,
+    autopause: true,
+    container: doc.body,
+    interval: 1,
+    globals: true,
+    retina: false,
+    type: CANVAS
+  };
+
+  var keyMap = {
+
+     8: 'BACKSPACE',
+     9: 'TAB',
+    13: 'ENTER',
+    16: 'SHIFT',
+    27: 'ESCAPE',
+    32: 'SPACE',
+    37: 'LEFT',
+    38: 'UP',
+    39: 'RIGHT',
+    40: 'DOWN'
+  };
+
+  /*
+  ----------------------------------------------------------------------
+
+    Utilities
+
+  ----------------------------------------------------------------------
+  */
+
+  function isArray( object ) {
+
+    return Object.prototype.toString.call( object ) == '[object Array]';
+  }
+
+  function isFunction( object ) {
+
+    return typeof object == 'function';
+  }
+
+  function isNumber( object ) {
+
+    return typeof object == 'number';
+  }
+
+  function isString( object ) {
+
+    return typeof object == 'string';
+  }
+
+  function keyName( code ) {
+
+    return keyMap[ code ] || String.fromCharCode( code );
+  }
+
+  function extend( target, source, overwrite ) {
+
+    for ( var key in source )
+
+      if ( overwrite || !( key in target ) )
+
+        target[ key ] = source[ key ];
+
+    return target;
+  }
+
+  function proxy( method, context ) {
+
+    return function() {
+
+      method.apply( context, arguments );
+    };
+  }
+
+  function clone( target ) {
+
+    var object = {};
+
+    for ( var key in target ) {
+      
+      if ( key === 'webkitMovementX' || key === 'webkitMovementY' )
+        continue;
+
+      if ( isFunction( target[ key ] ) )
+
+        object[ key ] = proxy( target[ key ], target );
+
+      else
+
+        object[ key ] = target[ key ];
     }
 
-}( this, function ( window, document ) {
+    return object;
+  }
 
-    "use strict";
+  /*
+  ----------------------------------------------------------------------
 
-    /*
-    ----------------------------------------------------------------------
+    Constructor
 
-        Config
+  ----------------------------------------------------------------------
+  */
 
-    ----------------------------------------------------------------------
-    */
+  function constructor( context ) {
 
-    var MATH_PROPS = 'E LN10 LN2 LOG2E LOG10E PI SQRT1_2 SQRT2 abs acos asin atan ceil cos exp floor log round sin sqrt tan atan2 pow max min'.split( ' ' );
-    var HAS_SKETCH = '__hasSketch';
-    var M = Math;
+    var request, handler, target, parent, bounds, index, suffix, clock, node, copy, type, key, val, min, max, w, h;
 
-    var CANVAS = 'canvas';
-    var WEBGL = 'webgl';
-    var DOM = 'dom';
+    var counter = 0;
+    var touches = [];
+    var resized = false;
+    var setup = false;
+    var ratio = win.devicePixelRatio || 1;
+    var isDiv = context.type == DOM;
+    var is2D = context.type == CANVAS;
 
-    var doc = document;
-    var win = window;
-
-    var instances = [];
-
-    var defaults = {
-
-        fullscreen: true,
-        autostart: true,
-        autoclear: true,
-        autopause: true,
-        container: doc.body,
-        interval: 1,
-        globals: true,
-        retina: false,
-        type: CANVAS
+    var mouse = {
+      x:  0.0, y:  0.0,
+      ox: 0.0, oy: 0.0,
+      dx: 0.0, dy: 0.0
     };
 
-    var keyMap = {
+    var eventMap = [
 
-         8: 'BACKSPACE',
-         9: 'TAB',
-        13: 'ENTER',
-        16: 'SHIFT',
-        27: 'ESCAPE',
-        32: 'SPACE',
-        37: 'LEFT',
-        38: 'UP',
-        39: 'RIGHT',
-        40: 'DOWN'
-    };
+      context.eventTarget || context.element,
 
-    /*
-    ----------------------------------------------------------------------
+        pointer, 'mousedown', 'touchstart',
+        pointer, 'mousemove', 'touchmove',
+        pointer, 'mouseup', 'touchend',
+        pointer, 'click',
+        pointer, 'mouseout',
+        pointer, 'mouseover',
 
-        Utilities
+      doc,
 
-    ----------------------------------------------------------------------
-    */
+        keypress, 'keydown', 'keyup',
 
-    function isArray( object ) {
+      win,
 
-        return Object.prototype.toString.call( object ) == '[object Array]';
+        active, 'focus', 'blur',
+        resize, 'resize'
+    ];
+
+    var keys = {}; for ( key in keyMap ) keys[ keyMap[ key ] ] = false;
+
+    function trigger( method ) {
+
+      if ( isFunction( method ) )
+
+        method.apply( context, [].splice.call( arguments, 1 ) );
     }
 
-    function isFunction( object ) {
+    function bind( on ) {
 
-        return typeof object == 'function';
+      for ( index = 0; index < eventMap.length; index++ ) {
+
+        node = eventMap[ index ];
+
+        if ( isString( node ) )
+
+          target[ ( on ? 'add' : 'remove' ) + 'EventListener' ].call( target, node, handler, false );
+
+        else if ( isFunction( node ) )
+
+          handler = node;
+
+        else target = node;
+      }
     }
 
-    function isNumber( object ) {
+    function update() {
 
-        return typeof object == 'number';
-    }
+      cAF( request );
+      request = rAF( update );
 
-    function isString( object ) {
+      if ( !setup ) {
 
-        return typeof object == 'string';
-    }
+        trigger( context.setup );
+        setup = isFunction( context.setup );
+      }
 
-    function keyName( code ) {
+      if ( !resized ) {
+        trigger( context.resize );
+        resized = isFunction( context.resize );
+      }
 
-        return keyMap[ code ] || String.fromCharCode( code );
-    }
+      if ( context.running && !counter ) {
 
-    function extend( target, source, overwrite ) {
+        context.dt = ( clock = +new Date() ) - context.now;
+        context.millis += context.dt;
+        context.now = clock;
 
-        for ( var key in source )
+        trigger( context.update );
 
-            if ( overwrite || !( key in target ) )
+        // Pre draw
 
-                target[ key ] = source[ key ];
+        if ( is2D ) {
 
-        return target;
-    }
+          if ( context.retina ) {
 
-    function proxy( method, context ) {
-
-        return function() {
-
-            method.apply( context, arguments );
-        };
-    }
-
-    function clone( target ) {
-
-        var object = {};
-
-        for ( var key in target ) {
-
-            if ( isFunction( target[ key ] ) )
-
-                object[ key ] = proxy( target[ key ], target );
-
-            else
-
-                object[ key ] = target[ key ];
-        }
-
-        return object;
-    }
-
-    /*
-    ----------------------------------------------------------------------
-
-        Constructor
-
-    ----------------------------------------------------------------------
-    */
-
-    function constructor( context ) {
-
-        var request, handler, target, parent, bounds, index, suffix, clock, node, copy, type, key, val, min, max, w, h;
-
-        var counter = 0;
-        var touches = [];
-        var resized = false;
-        var setup = false;
-        var ratio = win.devicePixelRatio || 1;
-        var isDiv = context.type == DOM;
-        var is2D = context.type == CANVAS;
-
-        var mouse = {
-            x:  0.0, y:  0.0,
-            ox: 0.0, oy: 0.0,
-            dx: 0.0, dy: 0.0
-        };
-
-        var eventMap = [
-
-            context.element,
-
-                pointer, 'mousedown', 'touchstart',
-                pointer, 'mousemove', 'touchmove',
-                pointer, 'mouseup', 'touchend',
-                pointer, 'click',
-                pointer, 'mouseout',
-                pointer, 'mouseover',
-
-            doc,
-
-                keypress, 'keydown', 'keyup',
-
-            win,
-
-                active, 'focus', 'blur',
-                resize, 'resize'
-        ];
-
-        var keys = {}; for ( key in keyMap ) keys[ keyMap[ key ] ] = false;
-
-        function trigger( method ) {
-
-            if ( isFunction( method ) )
-
-                method.apply( context, [].splice.call( arguments, 1 ) );
-        }
-
-        function bind( on ) {
-
-            for ( index = 0; index < eventMap.length; index++ ) {
-
-                node = eventMap[ index ];
-
-                if ( isString( node ) )
-
-                    target[ ( on ? 'add' : 'remove' ) + 'EventListener' ].call( target, node, handler, false );
-
-                else if ( isFunction( node ) )
-
-                    handler = node;
-
-                else target = node;
+            context.save();
+            
+            if (context.autoclear) {
+              context.scale( ratio, ratio );
             }
+          }
+
+          if ( context.autoclear )
+
+            context.clear();
         }
 
-        function update() {
+        // Draw
 
-            cAF( request );
-            request = rAF( update );
+        trigger( context.draw );
 
-            if ( !setup ) {
+        // Post draw
 
-                trigger( context.setup );
-                setup = isFunction( context.setup );
-            }
+        if ( is2D && context.retina )
 
-            if ( !resized ) {
-                trigger( context.resize );
-                resized = isFunction( context.resize );
-            }
+          context.restore();
+      }
 
-            if ( context.running && !counter ) {
+      counter = ++counter % context.interval;
+    }
 
-                context.dt = ( clock = +new Date() ) - context.now;
-                context.millis += context.dt;
-                context.now = clock;
+    function resize() {
 
-                trigger( context.update );
+      target = isDiv ? context.style : context.canvas;
+      suffix = isDiv ? 'px' : '';
 
-                // Pre draw
+      w = context.width;
+      h = context.height;
 
-                if ( is2D ) {
+      if ( context.fullscreen ) {
 
-                    if ( context.retina ) {
+        h = context.height = win.innerHeight;
+        w = context.width = win.innerWidth;
+      }
 
-                        context.save();
-                        context.scale( ratio, ratio );
-                    }
+      if ( context.retina && is2D && ratio ) {
 
-                    if ( context.autoclear )
+        target.style.height = h + 'px';
+        target.style.width = w + 'px';
 
-                        context.clear();
-                }
+        w *= ratio;
+        h *= ratio;
+      }
 
-                // Draw
+      if ( target.height !== h )
 
-                trigger( context.draw );
-                
-                // Post draw
+        target.height = h + suffix;
 
-                if ( is2D && context.retina )
+      if ( target.width !== w )
 
-                    context.restore();
-            }
+        target.width = w + suffix;
 
-            counter = ++counter % context.interval;
-        }
+      if ( is2D && !context.autoclear && context.retina )
 
-        function resize() {
+        context.scale( ratio, ratio );
 
-            target = isDiv ? context.style : context.canvas;
-            suffix = isDiv ? 'px' : '';
+      if ( setup ) trigger( context.resize );
+    }
 
-            w = context.width;
-            h = context.height;
+    function align( touch, target ) {
 
-            if ( context.fullscreen ) {
+      bounds = target.getBoundingClientRect();
 
-                h = context.height = win.innerHeight;
-                w = context.width = win.innerWidth;
-            }
+      touch.x = touch.pageX - bounds.left - (win.scrollX || win.pageXOffset);
+      touch.y = touch.pageY - bounds.top - (win.scrollY || win.pageYOffset);
 
-            if ( context.retina && is2D && ratio ) {
+      return touch;
+    }
 
-                target.style.height = h + 'px';
-                target.style.width = w + 'px';
+    function augment( touch, target ) {
 
-                w *= ratio;
-                h *= ratio;
-            }
+      align( touch, context.element );
 
-            if ( target.height !== h )
+      target = target || {};
 
-                target.height = h + suffix;
+      target.ox = target.x || touch.x;
+      target.oy = target.y || touch.y;
 
-            if ( target.width !== w )
+      target.x = touch.x;
+      target.y = touch.y;
 
-                target.width = w + suffix;
+      target.dx = target.x - target.ox;
+      target.dy = target.y - target.oy;
 
-            if ( setup ) trigger( context.resize );
-        }
+      return target;
+    }
 
-        function align( touch, target ) {
+    function process( event ) {
 
-            bounds = target.getBoundingClientRect();
+      event.preventDefault();
 
-            touch.x = touch.pageX - bounds.left - (win.scrollX || win.pageXOffset);
-            touch.y = touch.pageY - bounds.top - (win.scrollY || win.pageYOffset);
+      copy = clone( event );
+      copy.originalEvent = event;
 
-            return touch;
-        }
+      if ( copy.touches ) {
 
-        function augment( touch, target ) {
+        touches.length = copy.touches.length;
 
-            align( touch, context.element );
+        for ( index = 0; index < copy.touches.length; index++ )
 
-            target = target || {};
+          touches[ index ] = augment( copy.touches[ index ], touches[ index ] );
 
-            target.ox = target.x || touch.x;
-            target.oy = target.y || touch.y;
+      } else {
 
-            target.x = touch.x;
-            target.y = touch.y;
+        touches.length = 0;
+        touches[0] = augment( copy, mouse );
+      }
 
-            target.dx = target.x - target.ox;
-            target.dy = target.y - target.oy;
+      extend( mouse, touches[0], true );
 
-            return target;
-        }
+      return copy;
+    }
 
-        function process( event ) {
+    function pointer( event ) {
 
-            event.preventDefault();
+      event = process( event );
 
-            copy = clone( event );
-            copy.originalEvent = event;
+      min = ( max = eventMap.indexOf( type = event.type ) ) - 1;
 
-            if ( copy.touches ) {
+      context.dragging =
 
-                touches.length = copy.touches.length;
+        /down|start/.test( type ) ? true :
 
-                for ( index = 0; index < copy.touches.length; index++ )
+        /up|end/.test( type ) ? false :
 
-                    touches[ index ] = augment( copy.touches[ index ], touches[ index ] );
+        context.dragging;
 
-            } else {
+      while( min )
 
-                touches.length = 0;
-                touches[0] = augment( copy, mouse );
-            }
+        isString( eventMap[ min ] ) ?
 
-            extend( mouse, touches[0], true );
+          trigger( context[ eventMap[ min-- ] ], event ) :
 
-            return copy;
-        }
+        isString( eventMap[ max ] ) ?
 
-        function pointer( event ) {
+          trigger( context[ eventMap[ max++ ] ], event ) :
 
-            event = process( event );
+        min = 0;
+    }
 
-            min = ( max = eventMap.indexOf( type = event.type ) ) - 1;
+    function keypress( event ) {
 
-            context.dragging =
+      key = event.keyCode;
+      val = event.type == 'keyup';
+      keys[ key ] = keys[ keyName( key ) ] = !val;
 
-                /down|start/.test( type ) ? true :
+      trigger( context[ event.type ], event );
+    }
 
-                /up|end/.test( type ) ? false :
+    function active( event ) {
 
-                context.dragging;
+      if ( context.autopause )
 
-            while( min )
+        ( event.type == 'blur' ? stop : start )();
 
-                isString( eventMap[ min ] ) ?
+      trigger( context[ event.type ], event );
+    }
 
-                    trigger( context[ eventMap[ min-- ] ], event ) :
+    // Public API
 
-                isString( eventMap[ max ] ) ?
+    function start() {
 
-                    trigger( context[ eventMap[ max++ ] ], event ) :
+      context.now = +new Date();
+      context.running = true;
+    }
 
-                min = 0;
-        }
+    function stop() {
 
-        function keypress( event ) {
+      context.running = false;
+    }
 
-            key = event.keyCode;
-            val = event.type == 'keyup';
-            keys[ key ] = keys[ keyName( key ) ] = !val;
+    function toggle() {
 
-            trigger( context[ event.type ], event );
-        }
+      ( context.running ? stop : start )();
+    }
 
-        function active( event ) {
+    function clear() {
 
-            if ( context.autopause )
+      if ( is2D )
 
-                ( event.type == 'blur' ? stop : start )();
+        context.clearRect( 0, 0, context.width * ratio, context.height * ratio );
+    }
 
-            trigger( context[ event.type ], event );
-        }
+    function destroy() {
 
-        // Public API
+      parent = context.element.parentNode;
+      index = instances.indexOf( context );
 
-        function start() {
+      if ( parent ) parent.removeChild( context.element );
+      if ( ~index ) instances.splice( index, 1 );
 
-            context.now = +new Date();
-            context.running = true;
-        }
+      bind( false );
+      stop();
+    }
 
-        function stop() {
+    extend( context, {
 
-            context.running = false;
-        }
+      touches: touches,
+      mouse: mouse,
+      keys: keys,
 
-        function toggle() {
+      dragging: false,
+      running: false,
+      millis: 0,
+      now: NaN,
+      dt: NaN,
 
-            ( context.running ? stop : start )();
-        }
+      destroy: destroy,
+      toggle: toggle,
+      clear: clear,
+      start: start,
+      stop: stop
+    });
 
-        function clear() {
+    instances.push( context );
 
-            if ( is2D )
+    return ( context.autostart && start(), bind( true ), resize(), update(), context );
+  }
 
-                context.clearRect( 0, 0, context.width, context.height );
-        }
+  /*
+  ----------------------------------------------------------------------
 
-        function destroy() {
+    Global API
 
-            parent = context.element.parentNode;
-            index = instances.indexOf( context );
+  ----------------------------------------------------------------------
+  */
 
-            if ( parent ) parent.removeChild( context.element );
-            if ( ~index ) instances.splice( index, 1 );
+  var element, context, Sketch = {
 
-            bind( false );
-            stop();
-        }
+    CANVAS: CANVAS,
+    WEB_GL: WEBGL,
+    WEBGL: WEBGL,
+    DOM: DOM,
+
+    instances: instances,
+
+    install: function( context ) {
+
+      if ( !context[ HAS_SKETCH ] ) {
+
+        for ( var i = 0; i < MATH_PROPS.length; i++ )
+
+          context[ MATH_PROPS[i] ] = M[ MATH_PROPS[i] ];
 
         extend( context, {
 
-            touches: touches,
-            mouse: mouse,
-            keys: keys,
+          TWO_PI: M.PI * 2,
+          HALF_PI: M.PI / 2,
+          QUARTER_PI: M.PI / 4,
 
-            dragging: false,
-            running: false,
-            millis: 0,
-            now: NaN,
-            dt: NaN,
+          random: function( min, max ) {
 
-            destroy: destroy,
-            toggle: toggle,
-            clear: clear,
-            start: start,
-            stop: stop
+            if ( isArray( min ) )
+
+              return min[ ~~( M.random() * min.length ) ];
+
+            if ( !isNumber( max ) )
+
+              max = min || 1, min = 0;
+
+            return min + M.random() * ( max - min );
+          },
+
+          lerp: function( min, max, amount ) {
+
+            return min + amount * ( max - min );
+          },
+
+          map: function( num, minA, maxA, minB, maxB ) {
+
+            return ( num - minA ) / ( maxA - minA ) * ( maxB - minB ) + minB;
+          }
         });
 
-        instances.push( context );
+        context[ HAS_SKETCH ] = true;
+      }
+    },
 
-        return ( context.autostart && start(), bind( true ), resize(), update(), context );
-    }
+    create: function( options ) {
 
-    /*
-    ----------------------------------------------------------------------
+      options = extend( options || {}, defaults );
 
-        Global API
+      if ( options.globals ) Sketch.install( self );
 
-    ----------------------------------------------------------------------
-    */
+      element = options.element = options.element || doc.createElement( options.type === DOM ? 'div' : 'canvas' );
 
-    var element, context, Sketch = {
+      context = options.context = options.context || (function() {
 
-        CANVAS: CANVAS,
-        WEB_GL: WEBGL,
-        WEBGL: WEBGL,
-        DOM: DOM,
+        switch( options.type ) {
 
-        instances: instances,
+          case CANVAS:
 
-        install: function( context ) {
+            return element.getContext( '2d', options );
 
-            if ( !context[ HAS_SKETCH ] ) {
+          case WEBGL:
 
-                for ( var i = 0; i < MATH_PROPS.length; i++ )
+            return element.getContext( 'webgl', options ) || element.getContext( 'experimental-webgl', options );
 
-                    context[ MATH_PROPS[i] ] = M[ MATH_PROPS[i] ];
+          case DOM:
 
-                extend( context, {
-
-                    TWO_PI: M.PI * 2,
-                    HALF_PI: M.PI / 2,
-                    QUATER_PI: M.PI / 4,
-
-                    random: function( min, max ) {
-
-                        if ( isArray( min ) )
-
-                            return min[ ~~( M.random() * min.length ) ];
-
-                        if ( !isNumber( max ) )
-
-                            max = min || 1, min = 0;
-
-                        return min + M.random() * ( max - min );
-                    },
-
-                    lerp: function( min, max, amount ) {
-
-                        return min + amount * ( max - min );
-                    },
-
-                    map: function( num, minA, maxA, minB, maxB ) {
-
-                        return ( num - minA ) / ( maxA - minA ) * ( maxB - minB ) + minB;
-                    }
-                });
-
-                context[ HAS_SKETCH ] = true;
-            }
-        },
-
-        create: function( options ) {
-
-            options = extend( options || {}, defaults );
-
-            if ( options.globals ) Sketch.install( self );
-
-            element = options.element = options.element || doc.createElement( options.type === DOM ? 'div' : 'canvas' );
-
-            context = options.context = options.context || (function() {
-
-                switch( options.type ) {
-
-                    case CANVAS:
-
-                        return element.getContext( '2d', options );
-
-                    case WEBGL:
-
-                        return element.getContext( 'webgl', options ) || element.getContext( 'experimental-webgl', options );
-
-                    case DOM:
-
-                        return element.canvas = element;
-                }
-
-            })();
-
-            ( options.container || doc.body ).appendChild( element );
-
-            return Sketch.augment( context, options );
-        },
-
-        augment: function( context, options ) {
-
-            options = extend( options || {}, defaults );
-
-            options.element = context.canvas || context;
-            options.element.className += ' sketch';
-
-            extend( context, options, true );
-
-            return constructor( context );
+            return element.canvas = element;
         }
-    };
 
-    /*
-    ----------------------------------------------------------------------
+      })();
 
-        Shims
+      ( options.container || doc.body ).appendChild( element );
 
-    ----------------------------------------------------------------------
-    */
+      return Sketch.augment( context, options );
+    },
 
-    var vendors = [ 'ms', 'moz', 'webkit', 'o' ];
-    var scope = self;
-    var then = 0;
+    augment: function( context, options ) {
 
-    var a = 'AnimationFrame';
-    var b = 'request' + a;
-    var c = 'cancel' + a;
+      options = extend( options || {}, defaults );
 
-    var rAF = scope[ b ];
-    var cAF = scope[ c ];
+      options.element = context.canvas || context;
+      options.element.className += ' sketch';
 
-    for ( var i = 0; i < vendors.length && !rAF; i++ ) {
+      extend( context, options, true );
 
-        rAF = scope[ vendors[ i ] + 'Request' + a ];
-        cAF = scope[ vendors[ i ] + 'Cancel' + a ];
+      return constructor( context );
     }
+  };
 
-    scope[ b ] = rAF = rAF || function( callback ) {
+  /*
+  ----------------------------------------------------------------------
 
-        var now = +new Date();
-        var dt = M.max( 0, 16 - ( now - then ) );
-        var id = setTimeout( function() {
-            callback( now + dt );
-        }, dt );
+    Shims
 
-        then = now + dt;
-        return id;
-    };
+  ----------------------------------------------------------------------
+  */
 
-    scope[ c ] = cAF = cAF || function( id ) {
-        clearTimeout( id );
-    };
+  var vendors = [ 'ms', 'moz', 'webkit', 'o' ];
+  var scope = self;
+  var then = 0;
 
-    /*
-    ----------------------------------------------------------------------
+  var a = 'AnimationFrame';
+  var b = 'request' + a;
+  var c = 'cancel' + a;
 
-        Output
+  var rAF = scope[ b ];
+  var cAF = scope[ c ];
 
-    ----------------------------------------------------------------------
-    */
+  for ( var i = 0; i < vendors.length && !rAF; i++ ) {
 
-    return Sketch;
+    rAF = scope[ vendors[ i ] + 'Request' + a ];
+    cAF = scope[ vendors[ i ] + 'Cancel' + a ];
+  }
+
+  scope[ b ] = rAF = rAF || function( callback ) {
+
+    var now = +new Date();
+    var dt = M.max( 0, 16 - ( now - then ) );
+    var id = setTimeout( function() {
+      callback( now + dt );
+    }, dt );
+
+    then = now + dt;
+    return id;
+  };
+
+  scope[ c ] = cAF = cAF || function( id ) {
+    clearTimeout( id );
+  };
+
+  /*
+  ----------------------------------------------------------------------
+
+    Output
+
+  ----------------------------------------------------------------------
+  */
+
+  return Sketch;
 
 }));

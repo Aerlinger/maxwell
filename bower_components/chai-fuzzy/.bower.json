@@ -1,13 +1,14 @@
 {
   "name": "chai-fuzzy",
   "homepage": "https://github.com/elliotf/chai-fuzzy",
-  "_release": "269c01e904",
+  "version": "1.6.1",
+  "_release": "1.6.1",
   "_resolution": {
-    "type": "branch",
-    "branch": "master",
-    "commit": "269c01e9047494dc3f2aaef32dd15b49fb78cc75"
+    "type": "version",
+    "tag": "v1.6.1",
+    "commit": "523955093d5dce8cd1dc228539b0f86220f3bbb6"
   },
-  "_source": "git://github.com/elliotf/chai-fuzzy.git",
+  "_source": "https://github.com/elliotf/chai-fuzzy.git",
   "_target": "*",
   "_originalSource": "chai-fuzzy"
 }

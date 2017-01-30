@@ -7,6 +7,8 @@ let Color = require('./util/Color.js');
 let CircuitComponent = require('./components/CircuitComponent');
 let environment = require('./Environment.js');
 
+let d3 = require("d3-shape");
+
 class CircuitCanvas extends Observer {
   constructor(Circuit, circuitUI) {
     super();
@@ -38,6 +40,8 @@ class CircuitCanvas extends Observer {
 
   rafDraw() {
     window.requestAnimationFrame(this.rafDraw.bind(this));
+
+    d3.line()
 
     // Drawing code goes here
     // this.draw()

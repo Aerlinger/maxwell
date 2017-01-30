@@ -14,7 +14,7 @@
     "tests"
   ],
   "dependencies": {
-    "d3": "^3.5.15",
+    "d3": "^4.5",
     "lodash": "*",
     "rickshaw": "1.6.0",
     "sketch.js": "*",
@@ -37,6 +37,7 @@
     "c3": "^0.4.11",
     "moment": "^2.17.1",
     "dygraphs": "^2.0.0",
-    "smoothie": "^1.27.0"
+    "smoothie": "^1.27.0",
+    "d3-shape": "^1.0.4"
   }
 }
