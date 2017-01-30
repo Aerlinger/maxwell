@@ -2,9 +2,8 @@ let CircuitComponent = require("../circuitComponent.js");
 let Util = require('../../util/util.js');
 
 class PhotoResistorElm extends CircuitComponent {
-  static initClass() {
-  
-    this.Fields = {
+  static get Fields() {
+    return {
       maxresistance: {
         name: "Max. Resistance",
         data_type: parseFloat
@@ -20,7 +19,5 @@ class PhotoResistorElm extends CircuitComponent {
     super(xa, xb, ya, yb, params, f);
   }
 }
-
-PhotoResistorElm.initClass();
 
 module.exports = PhotoResistorElm;

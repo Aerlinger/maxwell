@@ -2,9 +2,8 @@ let CircuitComponent = require("../circuitComponent.js");
 let Util = require('../../util/util.js');
 
 class ThermistorElm extends CircuitComponent {
-  static initClass() {
-  
-    this.Fields = {
+  static get Fields() {
+    return {
       maxresistance: {
         name: "Max. Resistance",
         data_type: parseFloat
@@ -21,6 +20,5 @@ class ThermistorElm extends CircuitComponent {
     super(xa, xb, ya, yb, params, f);
   }
 }
-ThermistorElm.initClass();
 
 module.exports = ThermistorElm;

@@ -2,8 +2,8 @@ let CircuitComponent = require("../circuitComponent.js");
 let Util = require('../../util/util.js');
 
 class TriacElm extends CircuitComponent {
-  static initClass() {
-    this.Fields = {
+  static get Fields() {
+    return {
       volts: {
         name: "Volts",
         data_type: parseFloat
@@ -27,7 +27,5 @@ class TriacElm extends CircuitComponent {
     super(xa, xb, ya, yb, params, f);
   }
 }
-TriacElm.initClass();
-
 
 module.exports = TriacElm;

@@ -2,9 +2,8 @@ let CircuitComponent = require("../circuitComponent.js");
 let Util = require('../../util/util.js');
 
 class LampElm extends CircuitComponent {
-  static initClass() {
-  
-    this.Fields = {
+  static get Fields() {
+    return {
       temp: {
         name: "Temperature",
         data_type: parseFloat
@@ -32,6 +31,5 @@ class LampElm extends CircuitComponent {
     super(xa, xb, ya, yb, params, f);
   }
 }
-LampElm.initClass();
 
 module.exports = LampElm;

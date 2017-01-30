@@ -2,9 +2,8 @@ let CircuitComponent = require("../circuitComponent.js");
 let Util = require('../../util/util.js');
 
 class DiacElm extends CircuitComponent {
-  static initClass() {
-  
-    this.Fields = {
+  static get Fields() {
+    return {
       onresistance: {
         name: "On Resistance",
         data_type: parseFloat
@@ -88,7 +87,6 @@ class DiacElm extends CircuitComponent {
     return false;
   }
 }
-DiacElm.initClass();
 
 
 module.exports = DiacElm;

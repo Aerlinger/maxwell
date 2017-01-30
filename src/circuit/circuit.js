@@ -266,21 +266,6 @@ class Circuit extends Observer {
 //    @write(@dump() + "\n")
   }
 
-  setSelected(component) {
-    return (() => {
-      let result = [];
-      for (let elm of Array.from(this.elementList)) {
-        let item;
-        if (elm === component) {
-          this.selectedElm = component;
-          item = component.setSelected(true);
-        }
-        result.push(item);
-      }
-      return result;
-    })();
-  }
-
   warn(message) {
     Logger.warn(message);
     return this.warnMessage = message;

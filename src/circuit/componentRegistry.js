@@ -254,6 +254,4 @@ class ComponentRegistry {
 ComponentRegistry.initClass();
 
 
-
-
 module.exports = ComponentRegistry;
