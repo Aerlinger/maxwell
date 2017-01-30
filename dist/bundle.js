@@ -18853,24 +18853,13 @@
 	  draw(renderContext) {
 	    this.calcLeads(32);
 	
-	    let numSegments = 8;
-	    let width = 5;
-	
-	//    @setBboxPt @point1, @point2, width
-	
 	    renderContext.drawLeads(this);
 	
-	    let parallelOffset = 1 / numSegments;
-	
 	    this.updateDots();
-	
 	    renderContext.drawDots(this.point1, this.lead1, this);
 	    renderContext.drawDots(this.lead2, this.point2, this);
 	
-	    // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
-	    let offsets = [-1, 1];
-	
-	    let context = renderContext.context
+	    let context = renderContext.context;
 	    context.save();
 	    context.beginPath();
 	
@@ -18878,11 +18867,11 @@
 	    context.lineJoin = 'bevel';
 	
 	    let grad = context.createLinearGradient(this.lead1.x, this.lead1.y, this.lead2.x, this.lead2.y);
-	    let volt0Color = renderContext.getVoltageColor(this.volts[0]);
-	    let volt1Color = renderContext.getVoltageColor(this.volts[1]);
+	    let voltColor0 = renderContext.getVoltageColor(this.volts[0]);
+	    let voltColor1 = renderContext.getVoltageColor(this.volts[1]);
 	
-	    grad.addColorStop(0, volt0Color);
-	    grad.addColorStop(1, volt1Color);
+	    grad.addColorStop(0, voltColor0);
+	    grad.addColorStop(1, voltColor1);
 	
 	    context.strokeStyle = grad;
 	
@@ -18893,26 +18882,23 @@
 	      context.lineWidth = Settings.LINE_WIDTH + 1;
 	    }
 	
-	    let startZigZag = Util.interpolate(this.lead1, this.lead2, parallelOffset/2, width);
-	    let endZigZag = Util.interpolate(this.lead2, this.lead1, parallelOffset/2, width);
+	    let numSegments = 8;
+	    let width = 5;
+	    let parallelOffset = 1 / numSegments;
 	
-	    // context.lineTo(startPosition.x + renderContext.lineShift, startPosition.y + renderContext.lineShift);
+	    // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
+	    let offsets = [1, -1];
 	
-	
-	    context.lineTo(startZigZag.x + renderContext.lineShift, startZigZag.y + renderContext.lineShift);
+	    let startPosition = Util.interpolate(this.lead1, this.lead2, parallelOffset/2, width);
+	    context.lineTo(startPosition.x + renderContext.lineShift, startPosition.y + renderContext.lineShift);
 	
 	    // Draw resistor "zig-zags"
-	    for (let n = 1; n < numSegments + 1; n++) {
-	      let startPosition = Util.interpolate(this.lead1, this.lead2, n*parallelOffset - (n/(numSegments + 1)) * parallelOffset, width*offsets[n % 2]);
-	
-	      // renderContext.drawCircle(startPosition.x, startPosition.y, 1, 1, "#F0F");
+	    for (let n = 1; n < numSegments; n++) {
+	      startPosition = Util.interpolate(this.lead1, this.lead2, n*parallelOffset + parallelOffset/2, width*offsets[n % 2]);
 	
 	      context.lineTo(startPosition.x + renderContext.lineShift, startPosition.y + renderContext.lineShift);
 	    }
 	
-	    // startPosition = this.lead2;
-	
-	    // context.lineTo(endZigZag.x + renderContext.lineShift, endZigZag.y + renderContext.lineShift);
 	    context.lineTo(this.lead2.x + renderContext.lineShift, this.lead2.y + renderContext.lineShift);
 	
 	    context.stroke();
