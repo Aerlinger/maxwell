@@ -1,7 +1,7 @@
 let CircuitComponent = require("./CircuitComponent.js");
 let DiodeElm = require("./DiodeElm.js");
 let Util = require('../util/Util.js');
-let Settings = require('../settings/Settings.js');
+let Settings = require('../Settings.js');
 
 class LedElm extends DiodeElm {
   static get Fields() {

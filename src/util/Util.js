@@ -1,6 +1,6 @@
 let Point = require('../geom/Point.js');
 let Polygon = require('../geom/Polygon.js');
-let Settings = require('../settings/Settings.js');
+let Settings = require('../Settings.js');
 let Color = require('./Color.js');
 let { sprintf } = require("sprintf-js");
 let environment = require("../Environment.js");

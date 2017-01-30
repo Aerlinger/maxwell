@@ -73,11 +73,8 @@ let LedElm = require('./components/LedElm.js');
 let PotElm = require('./components/PotElm.js');
 let ClockElm = require('./components/ClockElm.js');
 
-
-
 let environment = require("./Environment.js");
 
-// let Maxwell = require("./Maxwell.js");
 
 //unless environment.isBrowser
 //  Winston = require('winston')
@@ -321,8 +318,6 @@ ${circuitData}\
   static renderEdit(circuitComponent) {
     let fields = circuitComponent.constructor.Fields;
 
-    let result = [];
-
     let container = document.createElement("div");
     container.className = "container";
 
@@ -338,7 +333,6 @@ ${circuitData}\
     let form = document.createElement("form");
 
     container.append(form);
-
 
     for (let fieldName in fields) {
       if (fieldName) {

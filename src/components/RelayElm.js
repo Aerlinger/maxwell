@@ -1,7 +1,7 @@
 let CircuitComponent = require('./CircuitComponent.js');
 let Util = require('../util/Util.js');
 let Point = require('../geom/Point.js');
-let Settings = require('../settings/Settings.js');
+let Settings = require('../Settings.js');
 
 class RelayElm extends CircuitComponent {
   static initClass() {

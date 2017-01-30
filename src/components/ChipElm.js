@@ -2,7 +2,7 @@ let CircuitComponent = require("./CircuitComponent.js");
 let Util = require('../util/Util.js');
 let Point = require('../geom/Point.js');
 let Polygon = require('../geom/Polygon.js');
-let Settings = require('../settings/Settings.js');
+let Settings = require('../Settings.js');
 
 let self = undefined;
 let Pin = undefined;

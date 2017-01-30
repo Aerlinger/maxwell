@@ -3,6 +3,7 @@ let CircuitCanvas = require('./CircuitCanvas.js');
 let SvgRenderer = require('./render/circuit/SvgRenderer');
 let Observer = require('./util/Observer');
 let Util = require('./util/Util');
+let Settings = require('./Settings.js');
 
 let AntennaElm = require('./components/AntennaElm.js');
 let WireElm = require('./components/WireElm.js');
@@ -104,11 +105,11 @@ class SelectionMarquee extends Rectangle {
     let lineShift = 0.5;
 
     if ((this.x1 != null) && (this.x2 != null) && (this.y1 != null) && (this.y2 != null)) {
-      renderContext.drawLine(this.x1 + lineShift, this.y1 + lineShift, this.x2 + lineShift, this.y1 + lineShift, "#FFFF00", 0);
-      renderContext.drawLine(this.x1 + lineShift, this.y2 + lineShift, this.x2 + lineShift, this.y2 + lineShift, "#FFFF00", 1);
+      renderContext.drawLine(this.x1 + lineShift, this.y1 + lineShift, this.x2 + lineShift, this.y1 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 0);
+      renderContext.drawLine(this.x1 + lineShift, this.y2 + lineShift, this.x2 + lineShift, this.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
 
-      renderContext.drawLine(this.x1 + lineShift, this.y1 + lineShift, this.x1 + lineShift, this.y2 + lineShift, "#FFFF00", 1);
-      renderContext.drawLine(this.x2 + lineShift, this.y1 + lineShift, this.x2 + lineShift, this.y2 + lineShift, "#FFFF00", 1);
+      renderContext.drawLine(this.x1 + lineShift, this.y1 + lineShift, this.x1 + lineShift, this.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
+      renderContext.drawLine(this.x2 + lineShift, this.y1 + lineShift, this.x2 + lineShift, this.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
     }
   }
 }

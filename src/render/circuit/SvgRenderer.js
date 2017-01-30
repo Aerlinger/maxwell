@@ -1,7 +1,7 @@
 let Observer = require('../../util/Observer');
 let Util = require('../../util/Util');
 let Point = require('../../geom/Point.js');
-let Settings = require('../../settings/Settings.js');
+let Settings = require('../../Settings.js');
 let Color = require('../../util/Color.js');
 
 let CircuitComponent = require('../../components/CircuitComponent');

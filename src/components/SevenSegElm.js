@@ -1,5 +1,5 @@
 let CircuitComponent = require("./CircuitComponent.js");
-let Settings = require('../settings/Settings.js');
+let Settings = require('../Settings.js');
 let ChipElm = require("./ChipElm.js");
 
 class SevenSegElm extends ChipElm {

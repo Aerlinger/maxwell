@@ -29,7 +29,7 @@ class CC2Elm extends ChipElm {
   }
 
   static get NAME() {
-    return "CC2 Chip";
+    return "Current Conveyor";
   }
 
   setupPins() {

@@ -14,7 +14,7 @@
 
  */
 
-let Settings = require('../settings/Settings.js');
+let Settings = require('../Settings.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
 let Util = require('../util/Util.js');
@@ -204,20 +204,12 @@ class CircuitComponent {
     this.recomputeBounds();
   }
 
-  unitText() {
-    return "?";
-  }
-
   height() {
     return Math.abs(this.point2.y - this.point1.y);
   }
 
   width() {
     return Math.abs(this.point2.x - this.point1.x);
-  }
-
-  axisAligned() {
-    return (this.height() === 0) || (this.width() === 0);
   }
 
   setPowerColor(color) {
@@ -581,44 +573,13 @@ class CircuitComponent {
     return false;
   }
 
-  //
-  // RENDERING METHODS
-  //
-
   draw(renderContext) {
     let post;
     let color = Util.getColorForId(this.component_id);
 
     renderContext.drawRect(this.boundingBox.x - 2, this.boundingBox.y - 2, this.boundingBox.width + 2, this.boundingBox.height + 2, 0.5, color);
 
-    // renderContext.drawValue 10, -15, this, @constructor.name
-    // renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
-
-    /*
-     renderContext.drawValue(-14, 0, this, this.toString());
-
-     if (this.params) {
-     let height = 8;
-     let i = 0;
-     for (let value = 0; value < this.params.length; value++) {
-     let name = this.params[value];
-     console.log(name, value);
-     renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);
-     i += 1;
-     }
-     }
-     */
-
     let outlineRadius = 7;
-
-    /*
-     // Draw node values
-     nodeIdx = 0
-     for node in @nodes
-     if @point1 && @point2
-     renderContext.drawValue 25+10*nodeIdx, -10*nodeIdx, this, "#{node}-#{@getVoltageForNode(node)}"
-     nodeIdx += 1
-     */
 
 
     if (this.point1) {
@@ -628,23 +589,6 @@ class CircuitComponent {
     if (this.point2) {
       renderContext.drawRect(this.point2.x - (outlineRadius / 2), this.point2.y - (outlineRadius / 2), outlineRadius - 1, outlineRadius - 1, 2, color);
     }
-
-    /*
-     if (this.lead1) {
-     renderContext.drawRect(this.lead1.x - (outlineRadius / 2), this.lead1.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
-     }
-
-     if (this.lead2) {
-     renderContext.drawRect(this.lead2.x - (outlineRadius / 2), this.lead2.y - (outlineRadius / 2), outlineRadius, outlineRadius, 2, 'rgba(0,255,0,0.7)');
-     }
-     */
-
-    /*
-     for (let i=0; i<this.numPosts(); ++i) {
-     let post = this.getPost(i);
-     renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
-     }
-     */
   }
 
   debugDraw(renderContext) {
@@ -909,6 +853,5 @@ class CircuitComponent {
     }
   };
 }
-
 
 module.exports = CircuitComponent;

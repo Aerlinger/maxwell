@@ -199,8 +199,6 @@ class Settings {
   
     this.CURRENT_DISPLAY_TYPE = "DASHES";
   
-    // ColorPalettes:
-    // this.SELECT_COLOR = ColorPalette.ivory;
     this.SELECT_COLOR = "#573400";
     this.HIGHLIGHT_COLOR = ColorPalette.orangered;
 

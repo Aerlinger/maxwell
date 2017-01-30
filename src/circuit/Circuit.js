@@ -66,7 +66,6 @@ class Circuit extends Observer {
     ];
 
     // Messages Dispatched to listeners:
-    //###################################################################################################################
 
     this.ON_START_UPDATE = "ON_START_UPDATE";
     this.ON_COMPLETE_UPDATE = "ON_END_UPDATE";
@@ -91,7 +90,6 @@ class Circuit extends Observer {
       5: "HINT_3DB_L"
     }
   }
-
 
   constructor(name) {
     super();
@@ -195,19 +193,10 @@ class Circuit extends Observer {
   toString() {
     let str = "";
 
-    // Name
     str += `Name: ${this.name}\n`;
-
-    // Linear
     str += `Linear: ${!this.Solver.circuitNonLinear}\n`;
-
-    // Linear
     str += `VS Count: ${this.voltageSourceCount}\n`;
-
-    // Param
     str += `Params:\n ${this.Params}\n`;
-
-    // Iterations
     str += `Frame #: ${this.getIterationCount()}\n`;
 
     // Elements
@@ -263,7 +252,7 @@ class Circuit extends Observer {
   /* Simulation Frame Computation
    *///################################################################################################################
 
-  /*
+  /**
    UpdateCircuit: Updates the circuit each frame.
    1. ) Reconstruct Circuit:
    Rebuilds a data representation of the circuit (only applied when circuit changes)
@@ -336,15 +325,6 @@ class Circuit extends Observer {
     return this.scopes;
   }
 
-  findElm(searchElm) {
-    for (let circuitElm of Array.from(this.elementList)) {
-      if (searchElm === circuitElm) {
-        return circuitElm;
-      }
-    }
-    return false;
-  }
-
   //TODO: It may be worthwhile to return a defensive copy here
   getElements() {
     return this.elementList;
@@ -397,14 +377,9 @@ class Circuit extends Observer {
     return this.boundingBox = new Rectangle(minX, minY, maxX - minX, maxY - minY);
   }
 
-
   getBoundingBox() {
     return this.boundingBox;
   }
-
-  //###################################################################################################################
-  /* Nodes
-   *///################################################################################################################
 
   resetNodes() {
     return this.nodeList = [];
@@ -483,11 +458,6 @@ class Circuit extends Observer {
   resume() {
     this.isStopped = false;
   }
-
-
-  //###################################################################################################################
-  /* Simulation Accessor Methods
-   *///################################################################################################################
 
   subIterations() {
     return this.Solver.subIterations;
@@ -621,6 +591,5 @@ class Circuit extends Observer {
 }
 
 Circuit.initClass();
-
 
 module.exports = Circuit;

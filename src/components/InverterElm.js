@@ -1,6 +1,6 @@
 let CircuitComponent = require("./CircuitComponent.js");
 let Util = require('../util/Util.js');
-let Settings = require('../settings/Settings.js');
+let Settings = require('../Settings.js');
 
 class InverterElm extends CircuitComponent {
   static get Fields() {

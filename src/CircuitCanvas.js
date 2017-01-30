@@ -1,7 +1,7 @@
 let Observer = require('./util/Observer');
 let Util = require('./util/Util');
 let Point = require('./geom/Point.js');
-let Settings = require('./settings/Settings.js');
+let Settings = require('./Settings.js');
 let Color = require('./util/Color.js');
 
 let CircuitComponent = require('./components/CircuitComponent');
@@ -61,7 +61,6 @@ class CircuitCanvas extends Observer {
 
         sc.resize(innerElm.width(), innerElm.height() - 5);
       });
-
     }
   }
 
@@ -105,14 +104,10 @@ class CircuitCanvas extends Observer {
       this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
     }
 
-    this.drawInfoText();
-
-    if (this.circuitUI.marquee) {
-      this.circuitUI.marquee.draw(this)
-    }
-
     this.drawScopes();
     this.drawComponents();
+
+    this.drawInfoText();
 
     if (this.circuitUI.highlightedNode)
       this.drawCircle(this.circuitUI.highlightedNode.x + 0.5, this.circuitUI.highlightedNode.y + 0.5, 7, 3, "#0F0");
@@ -149,6 +144,10 @@ class CircuitCanvas extends Observer {
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
       this.drawDebugInfo();
       this.drawDebugOverlay();
+    }
+
+    if (this.circuitUI.marquee) {
+      this.circuitUI.marquee.draw(this)
     }
 
     this.context.restore()
@@ -225,7 +224,6 @@ class CircuitCanvas extends Observer {
     component.draw(this);
   }
 
-  // TODO: Move to CircuitComponent
   drawDots(ptA, ptB, component) {
     /**
      * Previous behavior was for current to not display when paused
@@ -285,10 +283,10 @@ class CircuitCanvas extends Observer {
     let fullScaleVRange = this.Circuit.Params.voltageRange;
 
     let scale = Color.Gradients.voltage_default;
-
     let numColors = scale.length - 1;
 
     let value = Math.floor(((volts + fullScaleVRange) * numColors) / (2 * fullScaleVRange));
+
     if (value < 0) {
       value = 0;
     } else if (value >= numColors) {
@@ -297,7 +295,6 @@ class CircuitCanvas extends Observer {
 
     return scale[value];
   }
-
 
   drawInfoText() {
     if (this.circuitUI.highlightedComponent != null) {
@@ -312,9 +309,8 @@ class CircuitCanvas extends Observer {
   }
 
   drawDebugOverlay() {
-    if (!this.Circuit || !this.context) {
+    if (!this.Circuit || !this.context)
       return;
-    }
 
     this.context.save();
 
@@ -337,9 +333,8 @@ class CircuitCanvas extends Observer {
 
       nodeIdx++;
     }
-    this.context.restore();
 
-    // Nodes
+    this.context.restore();
   }
 
   drawDebugInfo(x = 1100, y = 50) {
@@ -367,37 +362,6 @@ class CircuitCanvas extends Observer {
 
       nLines++;
     }
-  }
-
-  // TODO: Move to CircuitComponent
-  drawLeads(component) {
-    if ((component.point1 != null) && (component.lead1 != null))
-      this.drawLinePt(component.point1, component.lead1, this.getVoltageColor(component.volts[0]));
-
-    if ((component.point2 != null) && (component.lead2 != null))
-      this.drawLinePt(component.lead2, component.point2, this.getVoltageColor(component.volts[1]));
-  }
-
-  // TODO: Move to CircuitComponent
-  drawPosts(component, color = Settings.POST_COLOR) {
-    let post;
-
-    for (let i = 0; i < component.numPosts(); ++i) {
-      post = component.getPost(i);
-      this.drawPost(post.x, post.y, color);
-    }
-  }
-
-  drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_OUTLINE_COLOR) {
-    let oulineWidth = Settings.POST_OUTLINE_SIZE;
-
-    if (this.boldLines) {
-      strokeColor = Settings.POST_SELECT_OUTLINE_COLOR;
-      fillColor = Settings.POST_SELECT_COLOR;
-      oulineWidth += 3;
-    }
-
-    this.drawCircle(x0, y0, Settings.POST_RADIUS, oulineWidth, strokeColor, fillColor);
   }
 
   drawBoldLines() {
@@ -509,6 +473,35 @@ class CircuitCanvas extends Observer {
 
     this.context.closePath();
     this.context.restore()
+  }
+
+  drawLeads(component) {
+    if ((component.point1 != null) && (component.lead1 != null))
+      this.drawLinePt(component.point1, component.lead1, this.getVoltageColor(component.volts[0]));
+
+    if ((component.point2 != null) && (component.lead2 != null))
+      this.drawLinePt(component.lead2, component.point2, this.getVoltageColor(component.volts[1]));
+  }
+
+  drawPosts(component, color = Settings.POST_COLOR) {
+    let post;
+
+    for (let i = 0; i < component.numPosts(); ++i) {
+      post = component.getPost(i);
+      this.drawPost(post.x, post.y, color);
+    }
+  }
+
+  drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_OUTLINE_COLOR) {
+    let oulineWidth = Settings.POST_OUTLINE_SIZE;
+
+    if (this.boldLines) {
+      strokeColor = Settings.POST_SELECT_OUTLINE_COLOR;
+      fillColor = Settings.POST_SELECT_COLOR;
+      oulineWidth += 3;
+    }
+
+    this.drawCircle(x0, y0, Settings.POST_RADIUS, oulineWidth, strokeColor, fillColor);
   }
 
   drawText(text, x, y, fillColor = Settings.TEXT_COLOR, size = Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
