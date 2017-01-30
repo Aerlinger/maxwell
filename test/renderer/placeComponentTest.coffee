@@ -5,8 +5,8 @@ describe "CircuitUI", ->
 
     @Renderer = new CircuitUI(@Circuit, @Canvas)
 
-    for sym, component of ComponentRegistry.ComponentDefs
-      @placeComponent = @Renderer.setPlaceComponent(component.name)
+    for component_name, Component in Components
+      @placeComponent = @Renderer.setPlaceComponent(component_name)
 
       expect(@placeComponent.getName()).to.be
       expect(@placeComponent.getName()).to.not.eql ""

@@ -316,7 +316,7 @@ class CircuitCanvas extends Observer {
 
   drawComponents() {
     if (this.context) {
-      for (var component of Array.from(this.Circuit.getElements()))
+      for (var component of this.Circuit.getElements())
         this.drawComponent(component);
 
       if (this.Circuit && this.Circuit.debugModeEnabled()) {

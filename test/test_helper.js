@@ -43,7 +43,7 @@ CircuitNodeLink = require('../src/engine/CircuitNodeLink');
 SimulationParams = require('../src/circuit/SimulationParams.js');
 MatrixStamper = require('../src/engine/MatrixStamper.js');
 
-ComponentRegistry = require('../src/circuit/ComponentRegistry.js');
+Components = require('../src/components');
 CircuitLoader = require("../src/io/CircuitLoader");
 
 // Renderer = require("../src/render/renderer.js");

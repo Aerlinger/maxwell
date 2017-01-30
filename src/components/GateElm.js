@@ -140,8 +140,8 @@ class GateElm extends CircuitComponent {
     //this.setBboxPt(this.point1, this.point2, this.hs2)
 
     renderContext.drawLinePt(this.lead2, this.point2, renderContext.getVoltageColor(this.volts[this.inputCount]));
-
     renderContext.drawThickPolygonP(this.gatePoly, Settings.STROKE_COLOR);
+
     if (this.linePoints !== null) {
       for (let i = 0; i< this.linePoints.length - 1; i++) {
         renderContext.drawLinePt(this.linePoints[i], this.linePoints[i + 1]);

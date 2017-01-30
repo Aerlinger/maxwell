@@ -1,8 +1,8 @@
-describe "Render all components", ->
+describe.only "Render all components", ->
   it "can render all components", ->
     this.timeout(5000)
 
-    nComponents = Object.keys(ComponentRegistry.ComponentDefs).length
+    nComponents = Object.keys(Components).length
 
     col = 0
     height = 80
@@ -21,14 +21,17 @@ describe "Render all components", ->
     ctx.imageSmoothingEnabled = true
     @renderer.context = ctx
 
-    for sym, Component of ComponentRegistry.ComponentDefs
-      if sym not in ['170', 'A', 'o', '$', '%', '?', 'B']
+    for component_name of Components
+      console.log(component_name)
+      Component = Components[component_name]
 
+      if (component_name not in ['ChipElm', 'GateElm', '170', 'A', 'o', '$', '%', '?', 'B'] && component_name[0] != "_")
         x = col % (nCols * offsetX) + offsetX/2
         y = 2 * Math.floor(col / (offsetX * nCols)) * height + height
 
         @component = new Component(x, y, x, y + height)
         @Circuit.solder(@component)
+        @component.setPoints()
 
         origfont = ctx.font
         ctx.font = "bold 12px Arial";
@@ -38,6 +41,8 @@ describe "Render all components", ->
         ctx.font = origfont
 
         col += offsetX
+
+        # Render individual circuit component
 
         @singleComponent = new Component(50, 50, 50, 125);
         @ComponentCircuit = new Circuit(@singleComponent.getName());
@@ -56,5 +61,5 @@ describe "Render all components", ->
     fs.writeFileSync("test/fixtures/componentRenders/all_components.png", @canvas.toBuffer())
     fs.writeFileSync("test/fixtures/circuitDumps/allComponents.json", JSON.stringify(@Circuit.serialize()))
 
-    console.log(@Circuit.serialize())
+    #console.log(@Circuit.serialize())
 

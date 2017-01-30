@@ -1,11 +1,12 @@
 let CircuitComponent = require('./components/CircuitComponent.js');
 let CircuitLoader = require('./io/CircuitLoader.js');
-let ComponentRegistry = require('./circuit/ComponentRegistry.js');
 
 let Circuit = require('./circuit/Circuit.js');
 let CircuitUI = require('./CircuitUI.js');
 
 let RickshawScopeCanvas = require("./render/RickshawScopeCanvas");
+
+let Components = require("./components");
 
 let AcRailElm = require('./components/AcRailElm.js');
 let AntennaElm = require('./components/AntennaElm.js');
@@ -88,14 +89,7 @@ class Maxwell {
   
     this.Circuits = {};
   
-    this.Components = ((() => {
-      let result = [];
-      for (let k in ComponentRegistry.ComponentDefs) {
-        let v = ComponentRegistry.ComponentDefs[k];
-        result.push(v);
-      }
-      return result;
-    })());
+    this.Components = Components;
   }
 
   static loadCircuitFromFile(circuitFileName, onComplete) {

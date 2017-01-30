@@ -189,11 +189,14 @@ class ChipElm extends CircuitComponent {
   }
 
   setPoints(x1, y1, x2, y2) {
-    if (!x1 || !y1)
-      console.trace("No x1, y1 location for ", this.getName());
 
-    if (!x2 || !y2)
-      console.trace("No x2, y2 location for ", this.getName());
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
+      if (!x1 || !y1)
+        console.trace("No x1, y1 location for ", this.getName());
+
+      if (!x2 || !y2)
+        console.trace("No x2, y2 location for ", this.getName());
+    }
 
     if (!this.point1)
       this.point1 = new Point(x1, y1);
