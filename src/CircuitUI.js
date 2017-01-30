@@ -154,7 +154,7 @@ class CircuitUI extends Observer {
       keyboard: true
     };
 
-    this.CircuitCanvas = new SvgRenderer(Circuit, this);
+    this.CircuitCanvas = new CircuitCanvas(Circuit, this);
 
     this.context = this.CircuitCanvas.context;
     this.isDragging = false;

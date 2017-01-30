@@ -61,7 +61,7 @@ class TriodeElm extends CircuitComponent {
   draw(renderContext) {
     //this.setBbox(this.point1, this.plate[0], 16);
 
-    renderContext.fillCircle(this.point2.x, this.point2.y, this.circler, Settings.LINE_WIDTH, Settings.FG_COLOR, Settings.STROKE_COLOR);
+    renderContext.drawCircle(this.point2.x, this.point2.y, this.circler, Settings.LINE_WIDTH, Settings.STROKE_COLOR, Settings.FG_COLOR);
 
     //this.setBbox(this.cath[0].x, this.cath[1].y, this.point2.x + this.circler, this.point2.y + this.circler);
 

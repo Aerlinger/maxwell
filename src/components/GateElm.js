@@ -140,7 +140,7 @@ class GateElm extends CircuitComponent {
     //this.setBboxPt(this.point1, this.point2, this.hs2)
 
     renderContext.drawLinePt(this.lead2, this.point2, renderContext.getVoltageColor(this.volts[this.inputCount]));
-    renderContext.drawThickPolygonP(this.gatePoly, Settings.STROKE_COLOR);
+    renderContext.drawPolygon(this.gatePoly, Settings.STROKE_COLOR);
 
     if (this.linePoints !== null) {
       for (let i = 0; i< this.linePoints.length - 1; i++) {
@@ -149,7 +149,7 @@ class GateElm extends CircuitComponent {
     }
 
     if (this.isInverting()) {
-      renderContext.fillCircle(this.pcircle.x, this.pcircle.y, Settings.POST_RADIUS + 2, 2, "#FFFFFF", Settings.STROKE_COLOR);
+      renderContext.drawCircle(this.pcircle.x, this.pcircle.y, Settings.POST_RADIUS + 2, 2, Settings.STROKE_COLOR, "#FFFFFF");
     }
 
     this.updateDots();

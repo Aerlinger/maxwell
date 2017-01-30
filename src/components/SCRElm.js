@@ -162,12 +162,12 @@ class ScrElm extends CircuitComponent {
     renderContext.drawLeads(this);
 
     let color = renderContext.getVoltageColor(v1);
-    renderContext.drawThickPolygonP(this.poly, color);
+    renderContext.drawPolygon(this.poly, color);
 
-    renderContext.fillCircle(this.gate[0].x, this.gate[0].y, 4, 2, "#00F");
-    renderContext.fillCircle(this.gate[1].x, this.gate[1].y, 4, 2, "#F00");
-    // renderContext.fillCircle(this.lead2.x, this.lead2.y, 4, 2, "#F0F");
-    // renderContext.fillCircle(this.point2.x, this.point2.y, 4, 2, "#FF0");
+    renderContext.drawCircle(this.gate[0].x, this.gate[0].y, 4, 2, "#00F");
+    renderContext.drawCircle(this.gate[1].x, this.gate[1].y, 4, 2, "#F00");
+    // renderContext.drawCircle(this.lead2.x, this.lead2.y, 4, 2, "#F0F");
+    // renderContext.drawCircle(this.point2.x, this.point2.y, 4, 2, "#FF0");
 
     // draw thing arrow is pointing to
     color = renderContext.getVoltageColor(v2);

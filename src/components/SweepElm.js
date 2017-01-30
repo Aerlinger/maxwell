@@ -83,8 +83,7 @@ class SweepElm extends CircuitComponent {
     let xc = this.point2.x;
     let yc = this.point2.y;
 
-    renderContext.fillCircle(xc, yc, SweepElm.circleSize, 2, Settings.FG_COLOR);
-    renderContext.drawCircle(xc, yc, SweepElm.circleSize, 2, "#000000");
+    renderContext.drawCircle(xc, yc, SweepElm.circleSize, 2);
 
     let wl = 8;
 

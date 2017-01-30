@@ -60,7 +60,7 @@ class RailElm extends VoltageElm {
       if (Math.abs(v) < 1) { s = v + "V"; } //showFormat.format(v)
       if (this.getVoltage() > 0) { s = `+${s}`; }
 
-      renderContext.fillText(s, this.point2.x+4, this.point2.y - 7, Settings.TEXT_COLOR, 1.3*Settings.TEXT_SIZE);
+      renderContext.drawText(s, this.point2.x+4, this.point2.y - 7, Settings.TEXT_COLOR, 1.3*Settings.TEXT_SIZE);
 
       if (clock) { s = "CLK"; }
 

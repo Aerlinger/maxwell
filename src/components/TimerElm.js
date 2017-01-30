@@ -65,7 +65,7 @@ class TimerElm extends ChipElm {
 
     let textSize = this.csize == 1 ? 8 : 11;
 
-    renderContext.fillText("555", this.getCenter().x - 14, this.getCenter().y, Settings.LABEL_COLOR, textSize)
+    renderContext.drawText("555", this.getCenter().x - 14, this.getCenter().y, Settings.LABEL_COLOR, textSize)
   }
 
   setupPins() {

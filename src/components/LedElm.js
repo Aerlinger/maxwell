@@ -92,7 +92,7 @@ class LedElm extends DiodeElm {
     voltageColor = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.ledLead2, this.point2, voltageColor);
 
-    renderContext.drawCircle(this.ledCenter.x, this.ledCenter.y, cr, 2, Settings.PostColor);
+    renderContext.drawCircle(this.ledCenter.x, this.ledCenter.y, cr);
 
     cr -= 4;
 
@@ -103,7 +103,7 @@ class LedElm extends DiodeElm {
     //console.log("RBG: #{w * @colorR} #{w * @colorG} #{w * @colorB}")
     let hexcolor = Util.rgb2hex(w * this.colorR, w * this.colorG, w * this.colorB);
 
-    renderContext.fillCircle(this.ledCenter.x, this.ledCenter.y, cr, 2, hexcolor);
+    renderContext.drawCircle(this.ledCenter.x, this.ledCenter.y, cr, Settings.LINE_WIDTH, Settings.STROKE_COLOR, hexcolor);
 
     this.updateDots();
     renderContext.drawDots(this.point1, this.ledLead1, this.curcount);

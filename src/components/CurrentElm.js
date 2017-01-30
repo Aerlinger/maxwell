@@ -25,9 +25,6 @@ class CurrentElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-    if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
-    }
 
     this.calcLeads(26);
 
@@ -47,10 +44,10 @@ class CurrentElm extends CircuitComponent {
     let cr = 12;
     let color = renderContext.getVoltageColor((this.volts[0] + this.volts[1]) / 2);
 //      @setPowerColor false
-    renderContext.drawCircle(this.center.x, this.center.y, cr);
-    renderContext.fillCircle(this.center.x, this.center.y, cr, Settings.LINE_WIDTH, Settings.FG_COLOR);
+//     renderContext.drawCircle(this.center.x, this.center.y, cr);
+    renderContext.drawCircle(this.center.x, this.center.y, cr, 2*Settings.LINE_WIDTH);
     renderContext.drawLinePt(this.ashaft1, this.ashaft2);
-    renderContext.drawThickPolygonP(this.arrow, Settings.STROKE_COLOR, Settings.STROKE_COLOR);
+    renderContext.drawPolygon(this.arrow, Settings.STROKE_COLOR, Settings.STROKE_COLOR);
 
 //      if Circuit.showValuesCheckItem
 //        s = DrawHelper.getShortUnitText(@currentValue, "A")
@@ -58,7 +55,12 @@ class CurrentElm extends CircuitComponent {
 
     renderContext.drawValue(20, 0, this, this.params.currentValue + "A");
 
-    return renderContext.drawPosts(this);
+    renderContext.drawPosts(this);
+
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
+      super.debugDraw(renderContext);
+    }
+
   }
 
   static get NAME() {

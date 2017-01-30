@@ -62,7 +62,7 @@ class LogicInputElm extends SwitchElm {
       s = `${this.position}`;
     }
 
-    renderContext.fillText(s, this.point2.x - 5, this.point2.y + 6, Settings.TEXT_COLOR, 1.5*Settings.TEXT_SIZE);
+    renderContext.drawText(s, this.point2.x - 5, this.point2.y + 6, Settings.TEXT_COLOR, 1.5*Settings.TEXT_SIZE);
 
     let color = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.lead1, color);

@@ -157,7 +157,7 @@ class SvgRenderer extends Observer {
     /*
      if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
      this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
-     this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
+     this.drawText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
      }
      */
 
@@ -189,7 +189,7 @@ class SvgRenderer extends Observer {
       this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
 
     if (this.circuitUI.placeComponent) {
-      this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
+      this.context.drawText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
 
       if (this.circuitUI.placeY && this.circuitUI.placeX && this.circuitUI.placeComponent.x2() && this.circuitUI.placeComponent.y2()) {
         this.drawComponent(this.circuitUI.placeComponent);
@@ -559,7 +559,7 @@ class SvgRenderer extends Observer {
       let yOffset = ptA.y + ((newPos * dy) / dn);
 
       if (Settings.CURRENT_DISPLAY_TYPE === Settings.CURENT_TYPE_DOTS) {
-        this.fillCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR);
+        this.drawCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR);
       } else {
         let xOffset0 = xOffset - ((3 * dx) / dn);
         let yOffset0 = yOffset - ((3 * dy) / dn);
@@ -600,11 +600,11 @@ class SvgRenderer extends Observer {
       this.context.arc(node.x, node.y, 1, 0, 2 * Math.PI, true);
       this.context.strokeStyle = "#ff00ab";
       this.context.stroke();
-      this.context.fillText(nodeIdx, node.x + 5, node.y + 20);
+      this.context.drawText(nodeIdx, node.x + 5, node.y + 20);
 
       let yOffset = 30;
       for (let link of node.links) {
-        //this.context.fillText(link.elm.getName(), node.x + 5, node.y + yOffset);
+        //this.context.drawText(link.elm.getName(), node.x + 5, node.y + yOffset);
 
         yOffset += 10;
       }
@@ -637,7 +637,7 @@ class SvgRenderer extends Observer {
     let lineHeight = 10;
     let nLines = 0;
     for (let line of str.split("\n")) {
-      this.context.fillText(line, x, y + nLines * lineHeight);
+      this.context.drawText(line, x, y + nLines * lineHeight);
 
       nLines++;
     }
@@ -692,7 +692,7 @@ class SvgRenderer extends Observer {
     this.context.fillStyle = fillColor;
     this.context.strokeStyle = strokeColor;
     this.context.font = `${Settings.TEXT_STYLE} ${size}pt ${Settings.FONT}`;
-    this.context.fillText(text, x, y);
+    this.context.drawText(text, x, y);
 
     this.context.lineWidth = 0;
     this.context.strokeText(text, x, y);
@@ -812,7 +812,7 @@ class SvgRenderer extends Observer {
 
     this.context.translate(x, y);
     this.context.rotate(theta);
-    this.fillText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
+    this.drawText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
 
     this.context.restore();
     */

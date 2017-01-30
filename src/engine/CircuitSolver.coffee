@@ -350,7 +350,7 @@ class CircuitSolver
       if ce instanceof CurrentElm
         fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
         unless fpi.findPath(ce.getNode(0))
-          @Circuit.halt "No path for current source!", ce
+          console.warn "No path for current source!", ce
           return
 
       # Look for voltage source loops:
@@ -369,7 +369,7 @@ class CircuitSolver
         else
           fpi = new Pathfinder(Pathfinder.CAP_V, ce, ce.getNode(1), @Circuit.getElements(), @Circuit.numNodes())
           if fpi.findPath(ce.getNode(0))
-            @Circuit.halt "Capacitor loop with no resistance!", ce
+            console.warn "Capacitor loop with no resistance!", ce
             return
 
   optimize: ->

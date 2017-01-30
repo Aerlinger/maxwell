@@ -39,7 +39,7 @@ class OutputElm extends CircuitComponent {
     let color = renderContext.getVoltageColor(this.volts[0]);
 
     renderContext.drawLinePt(this.point1, this.lead1, color);
-    renderContext.fillCircle(this.lead1.x, this.lead1.y, 2*Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+    renderContext.drawCircle(this.lead1.x, this.lead1.y, 2 * Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {

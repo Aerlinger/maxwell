@@ -74,8 +74,8 @@ class JfetElm extends MosfetElm {
     color = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.gatePt, color);
 
-    renderContext.drawThickPolygonP(this.arrowPoly);
-    renderContext.drawThickPolygonP(this.gatePoly);
+    renderContext.drawPolygon(this.arrowPoly);
+    renderContext.drawPolygon(this.gatePoly);
 
     if (this.curcount !== 0) {
       renderContext.drawDots(this.src[0], this.src[1], this);

@@ -66,9 +66,9 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
     renderContext.drawDots(this.point1, this.lead1, this);
     renderContext.drawDots(this.swpoles[position], this.swposts[position], this);
 
-    renderContext.fillCircle(this.lead1.x, this.lead1.y, 3, 0, Settings.LIGHT_POST_COLOR);
-    renderContext.fillCircle(this.swpoles[1].x, this.swpoles[1].y, 3, 0, Settings.LIGHT_POST_COLOR);
-    renderContext.fillCircle(this.swpoles[0].x, this.swpoles[0].y, 3, 0, Settings.LIGHT_POST_COLOR);
+    renderContext.drawCircle(this.lead1.x, this.lead1.y, 3, 0, Settings.LIGHT_POST_COLOR);
+    renderContext.drawCircle(this.swpoles[1].x, this.swpoles[1].y, 3, 0, Settings.LIGHT_POST_COLOR);
+    renderContext.drawCircle(this.swpoles[0].x, this.swpoles[0].y, 3, 0, Settings.LIGHT_POST_COLOR);
 
     renderContext.drawPosts(this);
 

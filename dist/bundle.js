@@ -2262,6 +2262,16 @@
 	let Point = __webpack_require__(4);
 	
 	class Polygon {
+	  static fromCoordinates(xList, yList) {
+	    let vertices = [];
+	
+	    for (let i=0; i<xList.length; ++i) {
+	      vertices = vertices.concat([xList[i], yList[i]]);
+	    }
+	
+	    return new Polygon(vertices)
+	  }
+	
 	  constructor(vertices) {
 	    this.vertices = [];
 	    if (vertices && ((vertices.length % 2) === 0)) {
@@ -18111,7 +18121,7 @@
 	      if (Math.abs(v) < 1) { s = v + "V"; } //showFormat.format(v)
 	      if (this.getVoltage() > 0) { s = `+${s}`; }
 	
-	      renderContext.fillText(s, this.point2.x+4, this.point2.y - 7, Settings.TEXT_COLOR, 1.3*Settings.TEXT_SIZE);
+	      renderContext.drawText(s, this.point2.x+4, this.point2.y - 7, Settings.TEXT_COLOR, 1.3*Settings.TEXT_SIZE);
 	
 	      if (clock) { s = "CLK"; }
 	
@@ -18378,7 +18388,7 @@
 	    let xc = center.x;
 	    let yc = center.y;
 	
-	    renderContext.fillCircle(xc, yc, VoltageElm.circleSize, 2, Settings.FILL_COLOR);
+	    renderContext.drawCircle(xc, yc, VoltageElm.circleSize, 2, Settings.FILL_COLOR);
 	
 	    let color = Settings.SECONDARY_COLOR;
 	
@@ -18386,6 +18396,7 @@
 	    let xl = 5;
 	    this.setBbox(xc - VoltageElm.circleSize, yc - VoltageElm.circleSize, xc + VoltageElm.circleSize, yc + VoltageElm.circleSize);
 	    let xc2 = undefined;
+	    renderContext.drawCircle(xc, yc, VoltageElm.circleSize, 4);
 	
 	    switch (this.waveform) {
 	      case VoltageElm.WF_DC:
@@ -18458,8 +18469,6 @@
 	        renderContext.drawValue(25, 0, this, this.params.maxVoltage + "V @ " + this.params.frequency + "Hz");
 	        break;
 	    }
-	
-	    renderContext.drawCircle(xc, yc, VoltageElm.circleSize, 2, "#000000");
 	
 	    if (Settings.SHOW_VALUES) {
 	      let valueString;
@@ -18759,7 +18768,7 @@
 	    //this.setBboxPt(this.point1, this.point2, this.hs2)
 	
 	    renderContext.drawLinePt(this.lead2, this.point2, renderContext.getVoltageColor(this.volts[this.inputCount]));
-	    renderContext.drawThickPolygonP(this.gatePoly, Settings.STROKE_COLOR);
+	    renderContext.drawPolygon(this.gatePoly, Settings.STROKE_COLOR);
 	
 	    if (this.linePoints !== null) {
 	      for (let i = 0; i< this.linePoints.length - 1; i++) {
@@ -18768,7 +18777,7 @@
 	    }
 	
 	    if (this.isInverting()) {
-	      renderContext.fillCircle(this.pcircle.x, this.pcircle.y, Settings.POST_RADIUS + 2, 2, "#FFFFFF", Settings.STROKE_COLOR);
+	      renderContext.drawCircle(this.pcircle.x, this.pcircle.y, Settings.POST_RADIUS + 2, 2, Settings.STROKE_COLOR, "#FFFFFF");
 	    }
 	
 	    this.updateDots();
@@ -19106,7 +19115,7 @@
 	    // draw arrow
 	    //this.setPowerColor(true);
 	    let color = renderContext.getVoltageColor(v1);
-	    renderContext.drawThickPolygonP(this.poly, color);
+	    renderContext.drawPolygon(this.poly, color);
 	
 	    //g.fillPolygon(poly);
 	
@@ -19293,7 +19302,7 @@
 	    let color = renderContext.getVoltageColor(this.volts[0]);
 	
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
-	    renderContext.fillCircle(this.lead1.x, this.lead1.y, 2*Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+	    renderContext.drawCircle(this.lead1.x, this.lead1.y, 2 * Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
 	    renderContext.drawPosts(this);
 	
 	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
@@ -19406,8 +19415,8 @@
 	    // Draw switch "Lever"
 	    renderContext.drawLinePt(this.ps, this.ps2, Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
 	
-	    renderContext.fillCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
-	    renderContext.fillCircle(this.lead2.x, this.lead2.y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+	    renderContext.drawCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
+	    renderContext.drawCircle(this.lead2.x, this.lead2.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
 	
 	    renderContext.drawPosts(this);
 	
@@ -19898,10 +19907,10 @@
 	    renderContext.drawLeads(this);
 	
 	    let color = renderContext.getVoltageColor(this.volts[0]);
-	    renderContext.drawThickPolygonP(this.arrow1, color, color);
+	    renderContext.drawPolygon(this.arrow1, color, color);
 	
 	    color = renderContext.getVoltageColor(this.volts[1]);
-	    renderContext.drawThickPolygonP(this.arrow2, color, color);
+	    renderContext.drawPolygon(this.arrow2, color, color);
 	
 	    if (this.state) { renderContext.drawDots(this.point1, this.point2, this); }
 	
@@ -19988,9 +19997,6 @@
 	  }
 	
 	  draw(renderContext) {
-	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
-	      super.debugDraw(renderContext);
-	    }
 	
 	    this.calcLeads(26);
 	
@@ -20010,10 +20016,10 @@
 	    let cr = 12;
 	    let color = renderContext.getVoltageColor((this.volts[0] + this.volts[1]) / 2);
 	//      @setPowerColor false
-	    renderContext.drawCircle(this.center.x, this.center.y, cr);
-	    renderContext.fillCircle(this.center.x, this.center.y, cr, Settings.LINE_WIDTH, Settings.FG_COLOR);
+	//     renderContext.drawCircle(this.center.x, this.center.y, cr);
+	    renderContext.drawCircle(this.center.x, this.center.y, cr, 2*Settings.LINE_WIDTH);
 	    renderContext.drawLinePt(this.ashaft1, this.ashaft2);
-	    renderContext.drawThickPolygonP(this.arrow, Settings.STROKE_COLOR, Settings.STROKE_COLOR);
+	    renderContext.drawPolygon(this.arrow, Settings.STROKE_COLOR, Settings.STROKE_COLOR);
 	
 	//      if Circuit.showValuesCheckItem
 	//        s = DrawHelper.getShortUnitText(@currentValue, "A")
@@ -20021,7 +20027,12 @@
 	
 	    renderContext.drawValue(20, 0, this, this.params.currentValue + "A");
 	
-	    return renderContext.drawPosts(this);
+	    renderContext.drawPosts(this);
+	
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
+	      super.debugDraw(renderContext);
+	    }
+	
 	  }
 	
 	  static get NAME() {
@@ -20173,10 +20184,10 @@
 	
 	    if (!this.drawDigital()) {
 	      color = renderContext.getVoltageColor((this.pnp === 1 ? this.volts[1] : this.volts[2]));
-	      renderContext.drawThickPolygonP(this.arrowPoly, color);
+	      renderContext.drawPolygon(this.arrowPoly, color);
 	    }
 	
-	    renderContext.drawThickPolygonP(this.arrowPoly);
+	    renderContext.drawPolygon(this.arrowPoly);
 	//      Circuit.powerCheckItem
 	
 	    //g.setColor(Color.gray);
@@ -20463,8 +20474,8 @@
 	    color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.gatePt, color);
 	
-	    renderContext.drawThickPolygonP(this.arrowPoly);
-	    renderContext.drawThickPolygonP(this.gatePoly);
+	    renderContext.drawPolygon(this.arrowPoly);
+	    renderContext.drawPolygon(this.gatePoly);
 	
 	    if (this.curcount !== 0) {
 	      renderContext.drawDots(this.src[0], this.src[1], this);
@@ -20636,7 +20647,7 @@
 	    // TODO: add arrow poly
 	    if(this.arrowPoly && this.arrowPoly.numPoints() > 0) {
 	      try {
-	        renderContext.drawThickPolygonP(this.arrowPoly, Settings.STROKE_COLOR);
+	        renderContext.drawPolygon(this.arrowPoly, Settings.STROKE_COLOR);
 	      } catch(e) {
 	        console.log(this.pnp);
 	        console.log(this.arrowPoly);
@@ -20665,7 +20676,7 @@
 	//      @setPowerColor true
 	
 	    //g.fillPolygon(rectPoly);
-	    renderContext.drawThickPolygonP(this.rectPoly, color);
+	    renderContext.drawPolygon(this.rectPoly, color);
 	
 	//      if (@needsHighlight() or Circuit.dragElm is this) and @dy() is 0
 	//        g.setColor(Color.white);
@@ -20678,12 +20689,12 @@
 	//        @drawCenteredText "E", @emit[0].x1 - 3 + 9 * ds, @emit[0].y + 4, Color.WHITE
 	
 	    if (this.emit[0] && this.emit[1]) {
-	      renderContext.fillCircle(this.emit[0].x, this.emit[0].y, 0, 0, "#F00", "#F00");
-	      renderContext.fillCircle(this.emit[1].x, this.emit[1].y, 0, 0, "#0F0", "#0F0");
+	      renderContext.drawCircle(this.emit[0].x, this.emit[0].y, 0, 0, "#F00", "#F00");
+	      renderContext.drawCircle(this.emit[1].x, this.emit[1].y, 0, 0, "#0F0", "#0F0");
 	    }
 	
 	    if (this.emit[2]) {
-	      renderContext.fillCircle(this.emit[2].x, this.emit[2].y, 0, 0, "#00F", "#00F");
+	      renderContext.drawCircle(this.emit[2].x, this.emit[2].y, 0, 0, "#00F", "#00F");
 	    }
 	
 	    renderContext.drawPosts(this);
@@ -21073,10 +21084,10 @@
 	    renderContext.drawLinePt(this.lead2, this.point2, color);
 	
 	    // Body
-	    renderContext.drawThickPolygonP(this.triangle, Settings.STROKE_COLOR, Settings.FG_COLOR);
+	    renderContext.drawPolygon(this.triangle, Settings.STROKE_COLOR, Settings.FG_COLOR);
 	
-	    renderContext.fillText("+", this.in1p[1].x + 5, this.in1p[1].y + 5, Settings.LABEL_COLOR);
-	    renderContext.fillText("-", this.in2p[1].x + 5, this.in2p[1].y + 5, Settings.LABEL_COLOR);
+	    renderContext.drawText("+", this.in1p[1].x + 5, this.in1p[1].y + 5, Settings.LABEL_COLOR);
+	    renderContext.drawText("-", this.in2p[1].x + 5, this.in2p[1].y + 5, Settings.LABEL_COLOR);
 	
 	    if (this.getParentCircuit() && this.getParentCircuit()) {
 	      this.updateDots();
@@ -21277,7 +21288,7 @@
 	    // draw arrow vector
 	    // setPowerColor(g, true)
 	    let color = renderContext.getVoltageColor(v1);
-	    renderContext.drawThickPolygonP(this.poly, color);
+	    renderContext.drawPolygon(this.poly, color);
 	
 	    // PLATE:
 	    // setVoltageColor(g, v2)
@@ -21423,11 +21434,11 @@
 	    renderContext.drawLinePt(this.lead1, this.swpoles[this.position], Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
 	
 	
-	    renderContext.fillCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+	    renderContext.drawCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
 	
-	    renderContext.fillCircle(this.swpoles[0].x, this.swpoles[0].y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
-	    renderContext.fillCircle(this.swpoles[2].x, this.swpoles[2].y, Settings.POST_RADIUS, 1, Settings.POST_COLOR);
-	    renderContext.fillCircle(this.swpoles[1].x, this.swpoles[1].y, Settings.POST_RADIUS, 1, Settings.FILL_COLOR, Settings.STROKE_COLOR);
+	    renderContext.drawCircle(this.swpoles[0].x, this.swpoles[0].y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
+	    renderContext.drawCircle(this.swpoles[2].x, this.swpoles[2].y, Settings.POST_RADIUS, 1, Settings.POST_COLOR);
+	    renderContext.drawCircle(this.swpoles[1].x, this.swpoles[1].y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
 	
 	
 	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
@@ -21587,8 +21598,7 @@
 	    let xc = this.point2.x;
 	    let yc = this.point2.y;
 	
-	    renderContext.fillCircle(xc, yc, SweepElm.circleSize, 2, Settings.FG_COLOR);
-	    renderContext.drawCircle(xc, yc, SweepElm.circleSize, 2, "#000000");
+	    renderContext.drawCircle(xc, yc, SweepElm.circleSize, 2);
 	
 	    let wl = 8;
 	
@@ -21801,7 +21811,7 @@
 	    let color = Settings.LABEL_COLOR;
 	    //this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
 	
-	    let mt = renderContext.fillText(this.text, this.x1(), this.y1(), color, (2/3) * this.size);
+	    let mt = renderContext.drawText(this.text, this.x1(), this.y1(), color, (2/3) * this.size);
 	
 	    this.point2.x = this.boundingBox.x1 + this.boundingBox.width;
 	    this.point2.y = this.boundingBox.y1 + this.boundingBox.height;
@@ -22199,8 +22209,8 @@
 	
 	    renderContext.drawLeads(this);
 	
-	    renderContext.drawThickPolygonP(this.gatePoly, Settings.STROKE_COLOR, Settings.FILL_COLOR);
-	    renderContext.fillCircle(this.pcircle.x, this.pcircle.y, Settings.POST_RADIUS + 2, 2, "#FFFFFF", Settings.STROKE_COLOR);
+	    renderContext.drawPolygon(this.gatePoly, Settings.STROKE_COLOR, Settings.FILL_COLOR);
+	    renderContext.drawCircle(this.pcircle.x, this.pcircle.y, Settings.POST_RADIUS + 2, 2, Settings.STROKE_COLOR, "#FFFFFF");
 	
 	    this.updateDots();
 	    renderContext.drawDots(this.point1, this.point2, this);
@@ -22317,7 +22327,7 @@
 	      s = `${this.position}`;
 	    }
 	
-	    renderContext.fillText(s, this.point2.x - 5, this.point2.y + 6, Settings.TEXT_COLOR, 1.5*Settings.TEXT_SIZE);
+	    renderContext.drawText(s, this.point2.x - 5, this.point2.y + 6, Settings.TEXT_COLOR, 1.5*Settings.TEXT_SIZE);
 	
 	    let color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
@@ -22458,7 +22468,7 @@
 	
 	    this.value = s;
 	
-	    renderContext.fillText(s, this.point2.x - 1, this.point2.y + 6, Settings.TEXT_COLOR, 1.5*Settings.TEXT_SIZE);
+	    renderContext.drawText(s, this.point2.x - 1, this.point2.y + 6, Settings.TEXT_COLOR, 1.5*Settings.TEXT_SIZE);
 	
 	    let color = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.point1, this.lead1, color);
@@ -22695,9 +22705,9 @@
 	    renderContext.drawDots(this.point1, this.lead1, this);
 	    renderContext.drawDots(this.swpoles[position], this.swposts[position], this);
 	
-	    renderContext.fillCircle(this.lead1.x, this.lead1.y, 3, 0, Settings.LIGHT_POST_COLOR);
-	    renderContext.fillCircle(this.swpoles[1].x, this.swpoles[1].y, 3, 0, Settings.LIGHT_POST_COLOR);
-	    renderContext.fillCircle(this.swpoles[0].x, this.swpoles[0].y, 3, 0, Settings.LIGHT_POST_COLOR);
+	    renderContext.drawCircle(this.lead1.x, this.lead1.y, 3, 0, Settings.LIGHT_POST_COLOR);
+	    renderContext.drawCircle(this.swpoles[1].x, this.swpoles[1].y, 3, 0, Settings.LIGHT_POST_COLOR);
+	    renderContext.drawCircle(this.swpoles[0].x, this.swpoles[0].y, 3, 0, Settings.LIGHT_POST_COLOR);
 	
 	    renderContext.drawPosts(this);
 	
@@ -23322,7 +23332,7 @@
 	
 	    let color = renderContext.getVoltageColor(v1);
 	
-	    renderContext.drawThickPolygonP(this.poly);
+	    renderContext.drawPolygon(this.poly);
 	
 	    // draw thing arrow is pointing to
 	    color = renderContext.getVoltageColor(v2);
@@ -23582,12 +23592,12 @@
 	    renderContext.drawLeads(this);
 	
 	    let color = renderContext.getVoltageColor(v1);
-	    renderContext.drawThickPolygonP(this.poly, color);
+	    renderContext.drawPolygon(this.poly, color);
 	
-	    renderContext.fillCircle(this.gate[0].x, this.gate[0].y, 4, 2, "#00F");
-	    renderContext.fillCircle(this.gate[1].x, this.gate[1].y, 4, 2, "#F00");
-	    // renderContext.fillCircle(this.lead2.x, this.lead2.y, 4, 2, "#F0F");
-	    // renderContext.fillCircle(this.point2.x, this.point2.y, 4, 2, "#FF0");
+	    renderContext.drawCircle(this.gate[0].x, this.gate[0].y, 4, 2, "#00F");
+	    renderContext.drawCircle(this.gate[1].x, this.gate[1].y, 4, 2, "#F00");
+	    // renderContext.drawCircle(this.lead2.x, this.lead2.y, 4, 2, "#F0F");
+	    // renderContext.drawCircle(this.point2.x, this.point2.y, 4, 2, "#FF0");
 	
 	    // draw thing arrow is pointing to
 	    color = renderContext.getVoltageColor(v2);
@@ -23889,7 +23899,7 @@
 	  draw(renderContext) {
 	    //this.setBbox(this.point1, this.plate[0], 16);
 	
-	    renderContext.fillCircle(this.point2.x, this.point2.y, this.circler, Settings.LINE_WIDTH, Settings.FG_COLOR, Settings.STROKE_COLOR);
+	    renderContext.drawCircle(this.point2.x, this.point2.y, this.circler, Settings.LINE_WIDTH, Settings.STROKE_COLOR, Settings.FG_COLOR);
 	
 	    //this.setBbox(this.cath[0].x, this.cath[1].y, this.point2.x + this.circler, this.point2.y + this.circler);
 	
@@ -24173,6 +24183,7 @@
 	let CircuitComponent = __webpack_require__(1);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
+	let Polygon = __webpack_require__(7);
 	let Settings = __webpack_require__(2);
 	
 	let self = undefined;
@@ -24516,10 +24527,9 @@
 	  drawChip(renderContext) {
 	    //let i;
 	    // this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
-	    renderContext.drawThickPolygon(this.rectPointsX, this.rectPointsY, Settings.STROKE_COLOR);
+	    renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), Settings.STROKE_COLOR);
 	
 	    for (let i = 0; i < this.numPosts(); i++) {
-	
 	      if (this.pins[i]) {
 	        let p = this.pins[i];
 	
@@ -24537,13 +24547,13 @@
 	        renderContext.drawDots(b, a, p);
 	
 	        if (p.bubble) {
-	          renderContext.fillCircle(p.bubbleX, p.bubbleY, 1, Settings.FILL_COLOR);
+	          renderContext.drawCircle(p.bubbleX, p.bubbleY, 1, Settings.FILL_COLOR);
 	        }
 	
 	        let textSize = this.csize == 1 ? 6 : 8;
 	
 	        let mt = renderContext.context.measureText(p.text);
-	        renderContext.fillText(p.text, p.textloc.x-mt.width/2, p.textloc.y+3, Settings.PIN_LABEL_COLOR, textSize);
+	        renderContext.drawText(p.text, p.textloc.x-mt.width/2, p.textloc.y+3, Settings.PIN_LABEL_COLOR, textSize);
 	
 	        if (p.lineOver) {
 	          let ya = p.textloc.y - renderContext.context.measureText(p.text).height;
@@ -24558,7 +24568,7 @@
 	    }
 	
 	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
-	      return super.debugDraw(renderContext);
+	      super.debugDraw(renderContext);
 	    }
 	
 	    for (let i = 0; i < this.numPosts(); ++i) {
@@ -24773,7 +24783,7 @@
 	
 	    let textSize = this.csize == 1 ? 8 : 11;
 	
-	    renderContext.fillText("555", this.getCenter().x - 14, this.getCenter().y, Settings.LABEL_COLOR, textSize)
+	    renderContext.drawText("555", this.getCenter().x - 14, this.getCenter().y, Settings.LABEL_COLOR, textSize)
 	  }
 	
 	  setupPins() {
@@ -26482,7 +26492,7 @@
 	    voltageColor = renderContext.getVoltageColor(this.volts[0]);
 	    renderContext.drawLinePt(this.ledLead2, this.point2, voltageColor);
 	
-	    renderContext.drawCircle(this.ledCenter.x, this.ledCenter.y, cr, 2, Settings.PostColor);
+	    renderContext.drawCircle(this.ledCenter.x, this.ledCenter.y, cr);
 	
 	    cr -= 4;
 	
@@ -26493,7 +26503,7 @@
 	    //console.log("RBG: #{w * @colorR} #{w * @colorG} #{w * @colorB}")
 	    let hexcolor = Util.rgb2hex(w * this.colorR, w * this.colorG, w * this.colorB);
 	
-	    renderContext.fillCircle(this.ledCenter.x, this.ledCenter.y, cr, 2, hexcolor);
+	    renderContext.drawCircle(this.ledCenter.x, this.ledCenter.y, cr, Settings.LINE_WIDTH, Settings.STROKE_COLOR, hexcolor);
 	
 	    this.updateDots();
 	    renderContext.drawDots(this.point1, this.ledLead1, this.curcount);
@@ -28110,7 +28120,7 @@
 	      if (ce instanceof CurrentElm) {
 	        fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
 	        if (!fpi.findPath(ce.getNode(0))) {
-	          this.Circuit.halt("No path for current source!", ce);
+	          console.warn("No path for current source!", ce);
 	          return;
 	        }
 	      }
@@ -28127,7 +28137,7 @@
 	        } else {
 	          fpi = new Pathfinder(Pathfinder.CAP_V, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
 	          if (fpi.findPath(ce.getNode(0))) {
-	            this.Circuit.halt("Capacitor loop with no resistance!", ce);
+	            console.warn("Capacitor loop with no resistance!", ce);
 	            return;
 	          }
 	        }
@@ -29337,7 +29347,7 @@
 	      keyboard: true
 	    };
 	
-	    this.CircuitCanvas = new SvgRenderer(Circuit, this);
+	    this.CircuitCanvas = new CircuitCanvas(Circuit, this);
 	
 	    this.context = this.CircuitCanvas.context;
 	    this.isDragging = false;
@@ -29725,13 +29735,10 @@
 	  rafDraw() {
 	    window.requestAnimationFrame(this.rafDraw.bind(this));
 	
-	    // Drawing code goes here
-	    // this.draw()
-	
 	    this.draw()
 	  }
 	
-	  setupScopes(){
+	  setupScopes() {
 	    for (let scopeElm of this.Circuit.getScopes()) {
 	
 	      let scElm = this.renderScopeCanvas(scopeElm.circuitElm.getName());
@@ -29749,7 +29756,6 @@
 	        sc.resize(innerElm.width(), innerElm.height() - 5);
 	      });
 	
-	      // this.scopeCanvases.push(sc);
 	    }
 	  }
 	
@@ -29767,39 +29773,12 @@
 	  }
 	
 	  clear() {
-	    this.context.clearRect( 0, 0, this.Canvas.clientWidth, this.Canvas.clientHeight )
+	    this.context.clearRect(0, 0, this.Canvas.clientWidth, this.Canvas.clientHeight)
 	  }
 	
 	  draw() {
-	    if (this.context) {
-	      this.clear();
-	      // this.drawGrid();
-	
-	      this.context.save();
-	      this.context.translate(this.xMargin, this.yMargin);
-	
-	      this.fillText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
-	      this.fillText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 785, 15, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
-	
-	      if (this.performanceMeter) {
-	        this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
-	      }
-	    }
-	
-	    /*
-	    if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
-	      this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
-	      this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
-	    }
-	    */
-	
-	    this.drawInfoText();
-	
-	    if (this.circuitUI.marquee) {
-	      this.circuitUI.marquee.draw(this)
-	    }
-	
 	    // UPDATE FRAME ----------------------------------------------------------------
+	    // TODO: Move out of draw
 	    this.Circuit.updateCircuit();
 	
 	    if (this.circuitUI.onUpdateComplete) {
@@ -29807,57 +29786,66 @@
 	    }
 	    // -----------------------------------------------------------------------------
 	
+	    this.clear();
+	    // this.drawGrid();
+	
+	    this.context.save();
+	    this.context.translate(this.xMargin, this.yMargin);
+	
+	    this.drawText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, Settings.TEXT_COLOR, 1.2 * Settings.TEXT_SIZE);
+	    this.drawText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 785, 15, Settings.TEXT_COLOR, 1.2 * Settings.TEXT_SIZE);
+	
+	    if (this.performanceMeter) {
+	      this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
+	    }
+	
+	    this.drawInfoText();
+	
+	    if (this.circuitUI.marquee) {
+	      this.circuitUI.marquee.draw(this)
+	    }
+	
 	    this.drawScopes();
 	    this.drawComponents();
 	
-	    if (this.context) {
-	      if (this.circuitUI.highlightedNode)
-	        this.drawCircle(this.circuitUI.highlightedNode.x + 0.5, this.circuitUI.highlightedNode.y + 0.5, 7, 3, "#0F0");
+	    if (this.circuitUI.highlightedNode)
+	      this.drawCircle(this.circuitUI.highlightedNode.x + 0.5, this.circuitUI.highlightedNode.y + 0.5, 7, 3, "#0F0");
 	
-	      if (this.circuitUI.selectedNode)
-	        this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
+	    if (this.circuitUI.selectedNode)
+	      this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
 	
-	      if (this.circuitUI.placeComponent) {
-	        this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
+	    if (this.circuitUI.placeComponent) {
+	      this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
 	
-	        if (this.circuitUI.placeY && this.circuitUI.placeX && this.circuitUI.placeComponent.x2() && this.circuitUI.placeComponent.y2()) {
-	          this.drawComponent(this.circuitUI.placeComponent);
-	        }
-	      }
-	
-	      if (this.circuitUI.highlightedComponent) {
-	        this.circuitUI.highlightedComponent.draw(this);
-	
-	        this.context.save();
-	        this.context.fillStyle = Settings.POST_COLOR;
-	
-	        for (let i=0; i<this.circuitUI.highlightedComponent.numPosts(); ++i) {
-	          let post = this.circuitUI.highlightedComponent.getPost(i);
-	
-	          this.context.fillRect(post.x - Settings.POST_RADIUS - 1, post.y - Settings.POST_RADIUS - 1, 2 * Settings.POST_RADIUS + 2, 2 * Settings.POST_RADIUS + 2);
-	        }
-	
-	        if (this.circuitUI.highlightedComponent.x2())
-	          this.context.fillRect(this.circuitUI.highlightedComponent.x2()-2*Settings.POST_RADIUS, this.circuitUI.highlightedComponent.y2()-2*Settings.POST_RADIUS, 4*Settings.POST_RADIUS, 4*Settings.POST_RADIUS);
-	        this.context.restore();
-	        // this.drawRect(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+	      if (this.circuitUI.placeY && this.circuitUI.placeX && this.circuitUI.placeComponent.x2() && this.circuitUI.placeComponent.y2()) {
+	        this.drawComponent(this.circuitUI.placeComponent);
 	      }
 	    }
 	
-	    if (this.context) {
-	      if (this.Circuit && this.Circuit.debugModeEnabled()) {
-	        this.drawDebugInfo();
-	        this.drawDebugOverlay();
+	    if (this.circuitUI.highlightedComponent) {
+	      this.circuitUI.highlightedComponent.draw(this);
+	
+	      this.context.save();
+	      this.context.fillStyle = Settings.POST_COLOR;
+	
+	      for (let i = 0; i < this.circuitUI.highlightedComponent.numPosts(); ++i) {
+	        let post = this.circuitUI.highlightedComponent.getPost(i);
+	
+	        this.context.fillRect(post.x - Settings.POST_RADIUS - 1, post.y - Settings.POST_RADIUS - 1, 2 * Settings.POST_RADIUS + 2, 2 * Settings.POST_RADIUS + 2);
 	      }
 	
-	      this.context.restore()
+	      if (this.circuitUI.highlightedComponent.x2())
+	        this.context.fillRect(this.circuitUI.highlightedComponent.x2() - 2 * Settings.POST_RADIUS, this.circuitUI.highlightedComponent.y2() - 2 * Settings.POST_RADIUS, 4 * Settings.POST_RADIUS, 4 * Settings.POST_RADIUS);
+	      this.context.restore();
+	      // this.drawRect(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
 	    }
-	  }
 	
-	  withSelection(func) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
+	      this.drawDebugInfo();
+	      this.drawDebugOverlay();
+	    }
 	
-	
-	    func(this)
+	    this.context.restore()
 	  }
 	
 	  renderScopeCanvas(elementName) {
@@ -29884,199 +29872,45 @@
 	    return scopeWrapper;
 	  }
 	
-	  drawInfoText() {
-	    if (this.circuitUI.highlightedComponent != null) {
-	      let summaryArr = this.circuitUI.highlightedComponent.getSummary();
-	
-	      if (summaryArr) {
-	        for (let idx = 0; idx < summaryArr.length; ++idx) {
-	          this.fillText(summaryArr[idx], 500, (idx * 11) + 5, "#1b4e24");
-	        }
-	      }
-	    }
-	  }
-	
-	  beginPath() {
-	    this.pathMode = true;
-	    this.context.beginPath();
-	  }
-	
-	  closePath() {
-	    this.pathMode = false;
-	    this.context.closePath();
-	  }
-	
-	  getVoltageColor(volts) {
-	    let fullScaleVRange = this.Circuit.Params.voltageRange;
-	
-	    let scale = Color.Gradients.voltage_default;
-	
-	    let numColors = scale.length - 1;
-	
-	    let value = Math.floor(((volts + fullScaleVRange) * numColors) / (2 * fullScaleVRange));
-	    if (value < 0) {
-	      value = 0;
-	    } else if (value >= numColors) {
-	      value = numColors - 1;
-	    }
-	
-	    return scale[value];
-	  }
-	
-	  drawZigZag(point1, point2, vStart, vEnd) {
-	    let context = this.context;
-	    context.save();
-	    context.beginPath();
-	
-	    context.moveTo(point1.x, point1.y);
-	    context.lineJoin = 'bevel';
-	
-	    let grad = context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
-	    let voltColor0 = this.getVoltageColor(vStart);
-	    let voltColor1 = this.getVoltageColor(vEnd);
-	
-	    grad.addColorStop(0, voltColor0);
-	    grad.addColorStop(1, voltColor1);
-	
-	    context.strokeStyle = grad;
-	
-	    if (this.boldLines) {
-	      context.lineWidth = Settings.BOLD_LINE_WIDTH;
-	      context.strokeStyle = Settings.SELECT_COLOR;
-	    } else {
-	      context.lineWidth = Settings.LINE_WIDTH + 1;
-	    }
-	
-	    let numSegments = 8;
-	    let width = 5;
-	    let parallelOffset = 1 / numSegments;
-	
-	    // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
-	    let offsets = [1, -1];
-	
-	    let startPosition = Util.interpolate(point1, point2, parallelOffset/2, width);
-	    context.lineTo(startPosition.x + this.lineShift, startPosition.y + this.lineShift);
-	
-	    // Draw resistor "zig-zags"
-	    for (let n = 1; n < numSegments; n++) {
-	      startPosition = Util.interpolate(point1, point2, n*parallelOffset + parallelOffset/2, width*offsets[n % 2]);
-	
-	      context.lineTo(startPosition.x + this.lineShift, startPosition.y + this.lineShift);
-	    }
-	
-	    context.lineTo(point2.x + this.lineShift, point2.y + this.lineShift);
-	
-	    context.stroke();
-	
-	    context.closePath();
-	    context.restore();
-	  }
-	
-	  drawCoil(point1, point2, vStart, vEnd, hs) {
-	    let color, cx, hsx, voltageLevel;
-	    hs = hs || 8;
-	
-	    let segments = 40;
-	
-	    let ps1 = new Point(0, 0);
-	    let ps2 = new Point(0, 0);
-	
-	    let dn = point2.diff(point1);
-	
-	    ps1.x = point1.x;
-	    ps1.y = point1.y;
-	
-	    this.context.save();
-	
-	    this.context.beginPath();
-	    this.context.lineJoin = 'bevel';
-	
-	    let grad = this.context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
-	    grad.addColorStop(0, this.getVoltageColor(vStart));
-	    grad.addColorStop(1, this.getVoltageColor(vEnd));
-	
-	    this.context.strokeStyle = grad;
-	
-	    this.context.moveTo(ps1.x + this.lineShift, ps1.y + this.lineShift);
-	
-	    if (this.boldLines) {
-	      this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
-	      this.context.strokeStyle = Settings.SELECT_COLOR;
-	    } else {
-	      this.context.lineWidth = Settings.LINE_WIDTH + 1;
-	    }
-	
-	    for (let i = 0; i < segments; ++i) {
-	      cx = (((i + 1) * 8 / segments) % 2) - 1;
-	      hsx = Math.sqrt(1 - cx * cx);
-	
-	      ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs);
-	      voltageLevel = vStart + (vEnd - vStart) * i / segments;
-	      color = this.getVoltageColor(voltageLevel);
-	
-	      this.context.lineTo(ps2.x + this.lineShift, ps2.y + this.lineShift);
-	
-	      ps1.x = ps2.x;
-	      ps1.y = ps2.y;
-	    }
-	
-	    // this.context.lineTo(ps1.x + this.lineShift + dn.x/10, ps1.y + this.lineShift + dn.y/10);
-	
-	    this.context.stroke();
-	
-	    this.context.closePath();
-	    this.context.restore()
-	  }
-	
 	  drawScopes() {
-	    if (this.context) {
-	      for (let scopeElm of this.Circuit.getScopes()) {
-	        let scopeCanvas = scopeElm.getCanvas();
+	    for (let scopeElm of this.Circuit.getScopes()) {
+	      let scopeCanvas = scopeElm.getCanvas();
 	
-	        if (scopeCanvas) {
-	          var center = scopeElm.circuitElm.getCenter();
-	          this.context.save();
+	      if (scopeCanvas) {
+	        var center = scopeElm.circuitElm.getCenter();
+	        this.context.save();
 	
-	          this.context.setLineDash([5, 5]);
-	          this.context.strokeStyle = "#FFA500";
-	          this.context.lineWidth = 1;
-	          this.context.moveTo(center.x, center.y);
-	          this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height() / 2);
+	        this.context.setLineDash([5, 5]);
+	        this.context.strokeStyle = "#FFA500";
+	        this.context.lineWidth = 1;
+	        this.context.moveTo(center.x, center.y);
+	        this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height() / 2);
 	
-	          this.context.stroke();
+	        this.context.stroke();
 	
-	          this.context.restore();
-	        }
+	        this.context.restore();
 	      }
 	    }
 	  }
 	
 	  drawComponents() {
-	    if (this.context) {
-	      for (var component of this.Circuit.getElements())
-	        this.drawComponent(component);
+	    for (var component of this.Circuit.getElements())
+	      this.drawComponent(component);
 	
-	      if (this.Circuit && this.Circuit.debugModeEnabled()) {
-	        for (let nodeIdx = 0; nodeIdx < this.Circuit.numNodes(); ++nodeIdx) {
-	          let voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx));
-	          let node = this.Circuit.getNode(nodeIdx);
+	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
+	      for (let nodeIdx = 0; nodeIdx < this.Circuit.numNodes(); ++nodeIdx) {
+	        let voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx));
+	        let node = this.Circuit.getNode(nodeIdx);
 	
-	          this.context.fillText(`${nodeIdx}:${voltage}`, node.x + 10, node.y - 10, "#FF8C00");
-	        }
+	        this.context.fillText(`${nodeIdx}:${voltage}`, node.x + 10, node.y - 10, "#FF8C00");
 	      }
 	    }
 	  }
 	
 	  drawComponent(component) {
-	    if (component && Array.from(this.circuitUI.selectedComponents).includes(component)) {
+	    if (component && this.circuitUI.selectedComponents.includes(component)) {
 	      this.drawBoldLines();
 	      component.draw(this);
-	      /*
-	       for (let i = 0; i < component.numPosts(); ++i) {
-	       let post = component.getPost(i);
-	       this.drawCircle(post.x, post.y, Settings.POST_RADIUS + 2, 2, Settings.SELECT_COLOR);
-	       }
-	       */
 	    }
 	
 	    this.drawDefaultLines();
@@ -30116,7 +29950,7 @@
 	      let yOffset = ptA.y + ((newPos * dy) / dn);
 	
 	      if (Settings.CURRENT_DISPLAY_TYPE === Settings.CURENT_TYPE_DOTS) {
-	        this.fillCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR);
+	        this.drawCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR);
 	      } else {
 	        let xOffset0 = xOffset - ((3 * dx) / dn);
 	        let yOffset0 = yOffset - ((3 * dy) / dn);
@@ -30141,6 +29975,36 @@
 	    this.context.restore();
 	  }
 	
+	  getVoltageColor(volts) {
+	    let fullScaleVRange = this.Circuit.Params.voltageRange;
+	
+	    let scale = Color.Gradients.voltage_default;
+	
+	    let numColors = scale.length - 1;
+	
+	    let value = Math.floor(((volts + fullScaleVRange) * numColors) / (2 * fullScaleVRange));
+	    if (value < 0) {
+	      value = 0;
+	    } else if (value >= numColors) {
+	      value = numColors - 1;
+	    }
+	
+	    return scale[value];
+	  }
+	
+	
+	  drawInfoText() {
+	    if (this.circuitUI.highlightedComponent != null) {
+	      let summaryArr = this.circuitUI.highlightedComponent.getSummary();
+	
+	      if (summaryArr) {
+	        for (let idx = 0; idx < summaryArr.length; ++idx) {
+	          this.drawText(summaryArr[idx], 500, (idx * 11) + 5, "#1b4e24");
+	        }
+	      }
+	    }
+	  }
+	
 	  drawDebugOverlay() {
 	    if (!this.Circuit || !this.context) {
 	      return;
@@ -30160,7 +30024,7 @@
 	
 	      let yOffset = 30;
 	      for (let link of node.links) {
-	        //this.context.fillText(link.elm.getName(), node.x + 5, node.y + yOffset);
+	        //this.context.drawText(link.elm.getName(), node.x + 5, node.y + yOffset);
 	
 	        yOffset += 10;
 	      }
@@ -30201,12 +30065,11 @@
 	
 	  // TODO: Move to CircuitComponent
 	  drawLeads(component) {
-	    if ((component.point1 != null) && (component.lead1 != null)) {
+	    if ((component.point1 != null) && (component.lead1 != null))
 	      this.drawLinePt(component.point1, component.lead1, this.getVoltageColor(component.volts[0]));
-	    }
-	    if ((component.point2 != null) && (component.lead2 != null)) {
-	      return this.drawLinePt(component.lead2, component.point2, this.getVoltageColor(component.volts[1]));
-	    }
+	
+	    if ((component.point2 != null) && (component.lead2 != null))
+	      this.drawLinePt(component.lead2, component.point2, this.getVoltageColor(component.volts[1]));
 	  }
 	
 	  // TODO: Move to CircuitComponent
@@ -30228,7 +30091,7 @@
 	      oulineWidth += 3;
 	    }
 	
-	    this.fillCircle(x0, y0, Settings.POST_RADIUS, oulineWidth, fillColor, strokeColor);
+	    this.drawCircle(x0, y0, Settings.POST_RADIUS, oulineWidth, strokeColor, fillColor);
 	  }
 	
 	  drawBoldLines() {
@@ -30241,7 +30104,108 @@
 	
 	  // Draw Primitives
 	
-	  fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size = Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
+	  drawZigZag(point1, point2, vStart, vEnd) {
+	    let context = this.context;
+	    context.save();
+	    context.beginPath();
+	
+	    context.moveTo(point1.x, point1.y);
+	    context.lineJoin = 'bevel';
+	
+	    let grad = context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
+	    let voltColor0 = this.getVoltageColor(vStart);
+	    let voltColor1 = this.getVoltageColor(vEnd);
+	
+	    grad.addColorStop(0, voltColor0);
+	    grad.addColorStop(1, voltColor1);
+	
+	    context.strokeStyle = grad;
+	
+	    if (this.boldLines) {
+	      context.lineWidth = Settings.BOLD_LINE_WIDTH;
+	      context.strokeStyle = Settings.SELECT_COLOR;
+	    } else {
+	      context.lineWidth = Settings.LINE_WIDTH + 1;
+	    }
+	
+	    let numSegments = 8;
+	    let width = 5;
+	    let parallelOffset = 1 / numSegments;
+	
+	    // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
+	    let offsets = [1, -1];
+	
+	    let startPosition = Util.interpolate(point1, point2, parallelOffset / 2, width);
+	    context.lineTo(startPosition.x + this.lineShift, startPosition.y + this.lineShift);
+	
+	    // Draw resistor "zig-zags"
+	    for (let n = 1; n < numSegments; n++) {
+	      startPosition = Util.interpolate(point1, point2, n * parallelOffset + parallelOffset / 2, width * offsets[n % 2]);
+	
+	      context.lineTo(startPosition.x + this.lineShift, startPosition.y + this.lineShift);
+	    }
+	
+	    context.lineTo(point2.x + this.lineShift, point2.y + this.lineShift);
+	
+	    context.stroke();
+	
+	    context.closePath();
+	    context.restore();
+	  }
+	
+	  drawCoil(point1, point2, vStart, vEnd, hs) {
+	    let color, cx, hsx, voltageLevel;
+	    hs = hs || 8;
+	
+	    let segments = 40;
+	
+	    let ps1 = new Point(0, 0);
+	    let ps2 = new Point(0, 0);
+	
+	    ps1.x = point1.x;
+	    ps1.y = point1.y;
+	
+	    this.context.save();
+	
+	    this.context.beginPath();
+	    this.context.lineJoin = 'bevel';
+	
+	    let grad = this.context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
+	    grad.addColorStop(0, this.getVoltageColor(vStart));
+	    grad.addColorStop(1, this.getVoltageColor(vEnd));
+	
+	    this.context.strokeStyle = grad;
+	
+	    this.context.moveTo(ps1.x + this.lineShift, ps1.y + this.lineShift);
+	
+	    if (this.boldLines) {
+	      this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
+	      this.context.strokeStyle = Settings.SELECT_COLOR;
+	    } else {
+	      this.context.lineWidth = Settings.LINE_WIDTH + 1;
+	    }
+	
+	    for (let i = 0; i < segments; ++i) {
+	      cx = (((i + 1) * 8 / segments) % 2) - 1;
+	      hsx = Math.sqrt(1 - cx * cx);
+	
+	      ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs);
+	      voltageLevel = vStart + (vEnd - vStart) * i / segments;
+	      color = this.getVoltageColor(voltageLevel);
+	
+	      this.context.lineTo(ps2.x + this.lineShift, ps2.y + this.lineShift);
+	
+	      ps1.x = ps2.x;
+	      ps1.y = ps2.y;
+	    }
+	
+	    this.context.stroke();
+	
+	    this.context.closePath();
+	    this.context.restore()
+	  }
+	
+	  drawText(text, x, y, fillColor = Settings.TEXT_COLOR, size = Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
 	    this.context.save();
 	
 	    this.context.fillStyle = fillColor;
@@ -30259,7 +30223,32 @@
 	    return textMetrics;
 	  }
 	
-	  fillCircle(x, y, radius, lineWidth = Settings.LINE_WIDTH, fillColor = '#FFFF00', lineColor = null) {
+	  drawValue(perpindicularOffset, parallelOffset, component, text = null, text_size = Settings.TEXT_SIZE) {
+	    let x, y;
+	
+	    this.context.save();
+	    this.context.textAlign = "center";
+	
+	    this.context.font = "bold 7pt Courier";
+	
+	    let theta = Math.atan(component.dy() / component.dx());
+	
+	    let stringWidth = this.context.measureText(text).width;
+	    let stringHeight = this.context.measureText(text).actualBoundingBoxAscent || 0;
+	
+	    this.context.fillStyle = Settings.TEXT_COLOR;
+	
+	    ({x} = component.getCenter()); //+ perpindicularOffset
+	    ({y} = component.getCenter()); //+ parallelOffset - stringHeight / 2.0
+	
+	    this.context.translate(x, y);
+	    this.context.rotate(theta);
+	    this.drawText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
+	
+	    this.context.restore();
+	  }
+	
+	  drawCircle(x, y, radius, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR, fillColor = Settings.FG_COLOR) {
 	    this.context.save();
 	
 	    this.context.beginPath();
@@ -30271,25 +30260,12 @@
 	      this.context.stroke();
 	    }
 	
-	    this.context.fillStyle = fillColor;
-	    this.context.fill();
+	    if (fillColor) {
+	      this.context.fillStyle = fillColor;
+	      this.context.fill();
+	    }
 	
 	    this.context.closePath();
-	
-	    this.context.restore();
-	  }
-	
-	  drawCircle(x, y, radius, lineWidth = Settings.LINE_WIDTH, lineColor = "#000000") {
-	    this.context.save();
-	
-	    this.context.strokeStyle = lineColor;
-	    this.context.lineWidth = lineWidth;
-	
-	    this.context.beginPath();
-	    this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
-	    this.context.stroke();
-	    this.context.closePath();
-	
 	    this.context.restore();
 	  }
 	
@@ -30308,48 +30284,6 @@
 	  drawLinePt(pa, pb, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
 	    this.drawLine(pa.x, pa.y, pb.x, pb.y, color, lineWidth);
 	  }
-	
-	  drawValue(perpindicularOffset, parallelOffset, component, text = null, text_size = Settings.TEXT_SIZE) {
-	    let x, y;
-	
-	    this.context.save();
-	    this.context.textAlign = "center";
-	
-	    this.context.font = "bold 7pt Courier";
-	
-	    let theta = Math.atan(component.dy()/component.dx());
-	
-	    let stringWidth = this.context.measureText(text).width;
-	    let stringHeight = this.context.measureText(text).actualBoundingBoxAscent || 0;
-	
-	    this.context.fillStyle = Settings.TEXT_COLOR;
-	    // if (component.isVertical()) {
-	
-	      ({x} = component.getCenter()); //+ perpindicularOffset
-	      ({y} = component.getCenter()); //+ parallelOffset - stringHeight / 2.0
-	
-	      this.context.translate(x, y);
-	      this.context.rotate(theta);
-	      this.fillText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
-	      /*
-	    } else {
-	      x = component.getCenter().x + parallelOffset;
-	      y = component.getCenter().y + perpindicularOffset;
-	
-	      this.context.translate(x, y);
-	
-	      this.context.save();
-	      this.context.rotate(theta);
-	      this.context.restore();
-	
-	      this.fillText(text, x, y, Settings.TEXT_COLOR, text_size);
-	    }
-	    */
-	
-	    this.context.restore();
-	  }
-	
-	
 	
 	  drawLine(x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
 	    this.context.save();
@@ -30378,34 +30312,14 @@
 	    this.context.restore();
 	  }
 	
-	  drawThickPolygon(xlist, ylist, color = Settings.STROKE_COLOR, fill = Settings.FILL_COLOR) {
-	    this.context.save();
-	
-	    this.context.fillStyle = fill;
-	    this.context.strokeStyle = color;
-	    this.context.beginPath();
-	
-	    this.context.moveTo(xlist[0], ylist[0]);
-	    for (let i = 0; i < xlist.length; ++i) {
-	      this.context.lineTo(xlist[i], ylist[i]);
-	    }
-	
-	    this.context.closePath();
-	    this.context.stroke();
-	    if (color) {
-	      this.context.fill();
-	    }
-	
-	    this.context.restore();
-	  }
-	
-	  drawThickPolygonP(polygon, color = Settings.STROKE_COLOR, fill = Settings.FILL_COLOR) {
+	  drawPolygon(polygon, color = Settings.STROKE_COLOR, fill = Settings.FILL_COLOR) {
 	    let numVertices = polygon.numPoints();
 	
 	    this.context.save();
 	
 	    this.context.fillStyle = fill;
 	    this.context.strokeStyle = color;
+	    this.context.lineWidth = 0;
 	    this.context.beginPath();
 	
 	    this.context.moveTo(polygon.getX(0), polygon.getY(0));
@@ -30414,12 +30328,13 @@
 	    }
 	
 	    this.context.closePath();
-	    this.context.fill();
+	    if (fill) {
+	      this.context.fill();
+	    }
 	    this.context.stroke();
 	
 	    this.context.restore();
 	  }
-	
 	}
 	
 	module.exports = CircuitCanvas;
@@ -33138,7 +33053,7 @@
 	    /*
 	     if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
 	     this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
-	     this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
+	     this.drawText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
 	     }
 	     */
 	
@@ -33170,7 +33085,7 @@
 	      this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
 	
 	    if (this.circuitUI.placeComponent) {
-	      this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
+	      this.context.drawText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
 	
 	      if (this.circuitUI.placeY && this.circuitUI.placeX && this.circuitUI.placeComponent.x2() && this.circuitUI.placeComponent.y2()) {
 	        this.drawComponent(this.circuitUI.placeComponent);
@@ -33540,7 +33455,7 @@
 	      let yOffset = ptA.y + ((newPos * dy) / dn);
 	
 	      if (Settings.CURRENT_DISPLAY_TYPE === Settings.CURENT_TYPE_DOTS) {
-	        this.fillCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR);
+	        this.drawCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR);
 	      } else {
 	        let xOffset0 = xOffset - ((3 * dx) / dn);
 	        let yOffset0 = yOffset - ((3 * dy) / dn);
@@ -33581,11 +33496,11 @@
 	      this.context.arc(node.x, node.y, 1, 0, 2 * Math.PI, true);
 	      this.context.strokeStyle = "#ff00ab";
 	      this.context.stroke();
-	      this.context.fillText(nodeIdx, node.x + 5, node.y + 20);
+	      this.context.drawText(nodeIdx, node.x + 5, node.y + 20);
 	
 	      let yOffset = 30;
 	      for (let link of node.links) {
-	        //this.context.fillText(link.elm.getName(), node.x + 5, node.y + yOffset);
+	        //this.context.drawText(link.elm.getName(), node.x + 5, node.y + yOffset);
 	
 	        yOffset += 10;
 	      }
@@ -33618,7 +33533,7 @@
 	    let lineHeight = 10;
 	    let nLines = 0;
 	    for (let line of str.split("\n")) {
-	      this.context.fillText(line, x, y + nLines * lineHeight);
+	      this.context.drawText(line, x, y + nLines * lineHeight);
 	
 	      nLines++;
 	    }
@@ -33673,7 +33588,7 @@
 	    this.context.fillStyle = fillColor;
 	    this.context.strokeStyle = strokeColor;
 	    this.context.font = `${Settings.TEXT_STYLE} ${size}pt ${Settings.FONT}`;
-	    this.context.fillText(text, x, y);
+	    this.context.drawText(text, x, y);
 	
 	    this.context.lineWidth = 0;
 	    this.context.strokeText(text, x, y);
@@ -33793,7 +33708,7 @@
 	
 	    this.context.translate(x, y);
 	    this.context.rotate(theta);
-	    this.fillText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
+	    this.drawText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
 	
 	    this.context.restore();
 	    */

@@ -1,6 +1,16 @@
 let Point = require('./Point.js');
 
 class Polygon {
+  static fromCoordinates(xList, yList) {
+    let vertices = [];
+
+    for (let i=0; i<xList.length; ++i) {
+      vertices = vertices.concat([xList[i], yList[i]]);
+    }
+
+    return new Polygon(vertices)
+  }
+
   constructor(vertices) {
     this.vertices = [];
     if (vertices && ((vertices.length % 2) === 0)) {

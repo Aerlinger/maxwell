@@ -48,7 +48,7 @@ class TunnelDiodeElm extends CircuitComponent {
 
     let color = renderContext.getVoltageColor(v1);
 
-    renderContext.drawThickPolygonP(this.poly);
+    renderContext.drawPolygon(this.poly);
 
     // draw thing arrow is pointing to
     color = renderContext.getVoltageColor(v2);

@@ -148,7 +148,7 @@ class TransistorElm extends CircuitComponent {
     // TODO: add arrow poly
     if(this.arrowPoly && this.arrowPoly.numPoints() > 0) {
       try {
-        renderContext.drawThickPolygonP(this.arrowPoly, Settings.STROKE_COLOR);
+        renderContext.drawPolygon(this.arrowPoly, Settings.STROKE_COLOR);
       } catch(e) {
         console.log(this.pnp);
         console.log(this.arrowPoly);
@@ -177,7 +177,7 @@ class TransistorElm extends CircuitComponent {
 //      @setPowerColor true
 
     //g.fillPolygon(rectPoly);
-    renderContext.drawThickPolygonP(this.rectPoly, color);
+    renderContext.drawPolygon(this.rectPoly, color);
 
 //      if (@needsHighlight() or Circuit.dragElm is this) and @dy() is 0
 //        g.setColor(Color.white);
@@ -190,12 +190,12 @@ class TransistorElm extends CircuitComponent {
 //        @drawCenteredText "E", @emit[0].x1 - 3 + 9 * ds, @emit[0].y + 4, Color.WHITE
 
     if (this.emit[0] && this.emit[1]) {
-      renderContext.fillCircle(this.emit[0].x, this.emit[0].y, 0, 0, "#F00", "#F00");
-      renderContext.fillCircle(this.emit[1].x, this.emit[1].y, 0, 0, "#0F0", "#0F0");
+      renderContext.drawCircle(this.emit[0].x, this.emit[0].y, 0, 0, "#F00", "#F00");
+      renderContext.drawCircle(this.emit[1].x, this.emit[1].y, 0, 0, "#0F0", "#0F0");
     }
 
     if (this.emit[2]) {
-      renderContext.fillCircle(this.emit[2].x, this.emit[2].y, 0, 0, "#00F", "#00F");
+      renderContext.drawCircle(this.emit[2].x, this.emit[2].y, 0, 0, "#00F", "#00F");
     }
 
     renderContext.drawPosts(this);

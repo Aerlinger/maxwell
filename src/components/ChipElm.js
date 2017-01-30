@@ -1,6 +1,7 @@
 let CircuitComponent = require("./CircuitComponent.js");
 let Util = require('../util/Util.js');
 let Point = require('../geom/Point.js');
+let Polygon = require('../geom/Polygon.js');
 let Settings = require('../settings/Settings.js');
 
 let self = undefined;
@@ -344,10 +345,9 @@ class ChipElm extends CircuitComponent {
   drawChip(renderContext) {
     //let i;
     // this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
-    renderContext.drawThickPolygon(this.rectPointsX, this.rectPointsY, Settings.STROKE_COLOR);
+    renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), Settings.STROKE_COLOR);
 
     for (let i = 0; i < this.numPosts(); i++) {
-
       if (this.pins[i]) {
         let p = this.pins[i];
 
@@ -365,13 +365,13 @@ class ChipElm extends CircuitComponent {
         renderContext.drawDots(b, a, p);
 
         if (p.bubble) {
-          renderContext.fillCircle(p.bubbleX, p.bubbleY, 1, Settings.FILL_COLOR);
+          renderContext.drawCircle(p.bubbleX, p.bubbleY, 1, Settings.FILL_COLOR);
         }
 
         let textSize = this.csize == 1 ? 6 : 8;
 
         let mt = renderContext.context.measureText(p.text);
-        renderContext.fillText(p.text, p.textloc.x-mt.width/2, p.textloc.y+3, Settings.PIN_LABEL_COLOR, textSize);
+        renderContext.drawText(p.text, p.textloc.x-mt.width/2, p.textloc.y+3, Settings.PIN_LABEL_COLOR, textSize);
 
         if (p.lineOver) {
           let ya = p.textloc.y - renderContext.context.measureText(p.text).height;
@@ -386,7 +386,7 @@ class ChipElm extends CircuitComponent {
     }
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      super.debugDraw(renderContext);
     }
 
     for (let i = 0; i < this.numPosts(); ++i) {

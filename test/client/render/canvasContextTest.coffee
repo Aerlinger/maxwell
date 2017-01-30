@@ -5,7 +5,7 @@ describe.skip "Canvas Context", ->
     done()
 
   it "renders (46, 32):   10px radius red circle  3px border  fill: #F38   stroke: #0F0601", (done) ->
-    @renderer.fillCircle(46, 32, 10, 3, '#F38', '#0F0601')
+    @renderer.drawCircle(46, 32, 10, 3, '#0F0601', '#F38')
     @renderer.getCanvas().toBuffer (err, buf) ->
       throw err if err
       fs.writeFile(__dirname + '/primitives/circle.png', buf)
@@ -21,7 +21,7 @@ describe.skip "Canvas Context", ->
 
 
   it "renders polygon:  [46, 32, 100, 150], [150, 46, 32, 100] #0CA", (done) ->
-    @renderer.CircuitCanvas.drawThickPolygon([46, 32, 100, 150], [150, 46, 32, 100], '#0CA')
+    @renderer.CircuitCanvas.drawPolygon(Polygon.fromCoordinates([46, 32, 100, 150], [150, 46, 32, 100]), '#0CA')
     @renderer.getCanvas().toBuffer (err, buf) ->
       throw err if err
       fs.writeFile(__dirname + '/primitives/poly.png', buf)

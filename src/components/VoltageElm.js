@@ -215,7 +215,7 @@ class VoltageElm extends CircuitComponent {
     let xc = center.x;
     let yc = center.y;
 
-    renderContext.fillCircle(xc, yc, VoltageElm.circleSize, 2, Settings.FILL_COLOR);
+    renderContext.drawCircle(xc, yc, VoltageElm.circleSize, 2, Settings.FILL_COLOR);
 
     let color = Settings.SECONDARY_COLOR;
 
@@ -223,6 +223,7 @@ class VoltageElm extends CircuitComponent {
     let xl = 5;
     this.setBbox(xc - VoltageElm.circleSize, yc - VoltageElm.circleSize, xc + VoltageElm.circleSize, yc + VoltageElm.circleSize);
     let xc2 = undefined;
+    renderContext.drawCircle(xc, yc, VoltageElm.circleSize, 4);
 
     switch (this.waveform) {
       case VoltageElm.WF_DC:
@@ -295,8 +296,6 @@ class VoltageElm extends CircuitComponent {
         renderContext.drawValue(25, 0, this, this.params.maxVoltage + "V @ " + this.params.frequency + "Hz");
         break;
     }
-
-    renderContext.drawCircle(xc, yc, VoltageElm.circleSize, 2, "#000000");
 
     if (Settings.SHOW_VALUES) {
       let valueString;
