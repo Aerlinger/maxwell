@@ -24,6 +24,16 @@ class Polygon {
     return this.vertices[n].y;
   }
 
+  getVertices() {
+    let poly = [];
+
+    for (let i=0; i<this.vertices.length; ++i) {
+      poly.push({x: this.vertices[i].x, y: this.vertices[i].y});
+    }
+
+    return poly;
+  }
+
   numPoints() {
     return this.vertices.length;
   }

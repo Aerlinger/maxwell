@@ -30,31 +30,37 @@ block header
     }
 
   script.
-    var data = d3.range(40).map(function(i) {
+    var data = d3.range(40).map(function (i) {
       return i % 5 ? {x: i / 39, y: (Math.sin(i / 3) + 2) / 4} : null;
     });
 
     var margin = {top: 40, right: 40, bottom: 40, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
 
     var x = d3.scaleLinear()
-      .range([0, width]);
+        .range([0, width]);
 
-      var y = d3.scaleLinear()
-      .range([height, 0]);
+    var y = d3.scaleLinear()
+        .range([height, 0]);
 
-      var line = d3.line()
-      .defined(function(d) { return d; })
-      .x(function(d) { return x(d.x); })
-      .y(function(d) { return y(d.y); });
+    var line = d3.line()
+        .defined(function (d) {
+          return d;
+        })
+        .x(function (d) {
+          return x(d.x);
+        })
+        .y(function (d) {
+          return y(d.y);
+        });
 
     var svg = d3.select("body").append("svg")
-      .datum(data)
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+        .datum(data)
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
     //.append("g")
-      //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
     svg.append("line")
@@ -72,12 +78,33 @@ block header
         .attr("cy", 75)
         .attr("r", 50)
 
+    var lineData = [
+      {"x": 1, "y": 5},
+      {"x": 20, "y": 20},
+      {"x": 75, "y": 200},
+      {"x": 175, "y": 300}
+    ];
+
+    var lineFunction = d3.line()
+        .x(function (d) {
+          return d.x;
+        })
+        .y(function (d) {
+          return d.y;
+        })
+
+    svg.append("path")
+        .attr("d", lineFunction(lineData))
+        .attr("stroke", "blue")
+        .attr("stroke-width", 2)
+        .attr("fill", "none");
+
     /*
-    svg.append("polyline")
-        .attr("points", [[5,30] [15,10] [25,30]])
-        .attr("stroke-width", "2px")
-        .attr("stroke", "black");
-        */
+     svg.append("polyline")
+     .attr("points", [[5,30] [15,10] [25,30]])
+     .attr("stroke-width", "2px")
+     .attr("stroke", "black");
+     */
 
     svg.append("text")
         .attr("x", "50px")
@@ -109,41 +136,41 @@ block header
 
 
     /*
-    vis.selectAll("polygon")
-        .data([poly])
-        .enter().append("polygon")
-        .attr("points", function (d) {
-          return d.map(function (d) {
-            return [scaleX(d.x), scaleY(d.y)].join(",");
-          }).join(" ");
-        })
-        .attr("stroke", "black")
-        .attr("stroke-width", 2);
-        */
+     vis.selectAll("polygon")
+     .data([poly])
+     .enter().append("polygon")
+     .attr("points", function (d) {
+     return d.map(function (d) {
+     return [scaleX(d.x), scaleY(d.y)].join(",");
+     }).join(" ");
+     })
+     .attr("stroke", "black")
+     .attr("stroke-width", 2);
+     */
 
     /*
-    svg.append("g")
-      .attr("class", "axis axis--x")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom().scale(x));
+     svg.append("g")
+     .attr("class", "axis axis--x")
+     .attr("transform", "translate(0," + height + ")")
+     .call(d3.axisBottom().scale(x));
 
-    svg.append("g")
-      .attr("class", "axis axis--y")
-      .call(d3.axisLeft().scale(y));
+     svg.append("g")
+     .attr("class", "axis axis--y")
+     .call(d3.axisLeft().scale(y));
 
 
-    svg.append("path")
-      .attr("class", "line")
-      .attr("d", line);
+     svg.append("path")
+     .attr("class", "line")
+     .attr("d", line);
 
-    svg.selectAll(".dot")
-      .data(data.filter(function(d) { return d; }))
-    .enter().append("circle")
-      .attr("class", "dot")
-      .attr("cx", line.x())
-      .attr("cy", line.y())
-      .attr("r", 3.5);
-    */
+     svg.selectAll(".dot")
+     .data(data.filter(function(d) { return d; }))
+     .enter().append("circle")
+     .attr("class", "dot")
+     .attr("cx", line.x())
+     .attr("cy", line.y())
+     .attr("r", 3.5);
+     */
 
 
 block content

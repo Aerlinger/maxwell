@@ -92,8 +92,6 @@ class TransistorElm extends CircuitComponent {
   }
 
   static get NAME() {
-    let type = this.params.pnp == 1 ? "PNP" : "NPN";
-
     return `Bipolar Junction Transistor`
   }
 

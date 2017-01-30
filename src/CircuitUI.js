@@ -1,5 +1,6 @@
 let Rectangle = require('./geom/Rectangle.js');
 let CircuitCanvas = require('./CircuitCanvas.js');
+let SvgRenderer = require('./render/circuit/SvgRenderer');
 let Observer = require('./util/Observer');
 let Util = require('./util/Util');
 
@@ -153,7 +154,7 @@ class CircuitUI extends Observer {
       keyboard: true
     };
 
-    this.CircuitCanvas = new CircuitCanvas(Circuit, this);
+    this.CircuitCanvas = new SvgRenderer(Circuit, this);
 
     this.context = this.CircuitCanvas.context;
     this.isDragging = false;

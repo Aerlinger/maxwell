@@ -1,15 +1,17 @@
-let Observer = require('./util/Observer');
-let Util = require('./util/Util');
-let Point = require('./geom/Point.js');
-let Settings = require('./settings/Settings.js');
-let Color = require('./util/Color.js');
+let Observer = require('../../util/Observer');
+let Util = require('../../util/Util');
+let Point = require('../../geom/Point.js');
+let Settings = require('../../settings/Settings.js');
+let Color = require('../../util/Color.js');
 
-let CircuitComponent = require('./components/CircuitComponent');
-let environment = require('./Environment.js');
+let CircuitComponent = require('../../components/CircuitComponent');
+let environment = require('../../Environment.js');
+let ScopeCanvas = require('../ScopeCanvas');
 
-let d3 = require("d3-shape");
+let d3 = require("d3");
 
-class CircuitCanvas extends Observer {
+class SvgRenderer extends Observer {
+
   constructor(Circuit, circuitUI) {
     super();
 
@@ -23,19 +25,21 @@ class CircuitCanvas extends Observer {
 
     this.lineShift = 0;
 
-    this.draw = this.draw.bind(this);
     this.drawDots = this.drawDots.bind(this);
 
-    if (environment.isBrowser) {
-      this.setupScopes();
-      this.renderPerformance();
-    }
+    this.svg = d3.select("body").append("svg")
+        .attr("width", this.Canvas.width + this.xMargin)
+        .attr("height", this.Canvas.height + this.yMargin)
+        .append("g")
+        .attr("transform", "translate(" + this.xMargin + "," + this.yMargin + ")")
 
-    this.context = this.Canvas.getContext("2d");
 
-    window.CircuitUI = this.circuitUI;
+    // this.svg = svg_root.append("g").attr(`transform(${this.xMargin}, ${this.yMargin})`);
 
-    this.rafDraw();
+
+    // this.rafDraw();
+
+    this.draw()
   }
 
   rafDraw() {
@@ -47,6 +51,51 @@ class CircuitCanvas extends Observer {
     this.draw()
   }
 
+  testDraw() {
+
+    this.svg.append("circle")
+        .style("stroke-width", 2)
+        .style("stroke", "black")
+        .style("fill", "red")
+        .attr("cx", 600)
+        .attr("cy", 75)
+        .attr("r", 50)
+
+    /*
+     this.svg.append("polyline")
+     .attr("points", [[5,30] [15,10] [25,30]])
+     .attr("stroke-width", "2px")
+     .attr("stroke", "black");
+     */
+
+    this.svg.append("text")
+        .attr("x", "50px")
+        .attr("y", "50px")
+        .attr("class", "text")
+        .text("This is a sample text.");
+
+    this.svg.append("rect")
+        .attr("x", "10px")
+        .attr("y", "300px")
+        .attr("width", "50px")
+        .attr("height", "100px");
+
+    var poly = [{"x": 0.0, "y": 25.0},
+      {"x": 8.5, "y": 23.4},
+      {"x": 13.0, "y": 21.0},
+      {"x": 19.0, "y": 15.5}];
+
+    this.svg.append("polyline")
+        .data([poly])
+        .attr("points", function (d) {
+          return d.map(function (d) {
+            return [d.x, d.y].join(",");
+          }).join(" ");
+        })
+        .attr("stroke-width", "2px")
+        .attr("stroke", "black");
+  }
+
   setupScopes(){
     for (let scopeElm of this.Circuit.getScopes()) {
 
@@ -56,7 +105,7 @@ class CircuitCanvas extends Observer {
 
       this.Canvas.parentNode.append(scElm);
 
-      let sc = new Maxwell.ScopeCanvas(this, scElm);
+      let sc = new ScopeCanvas(this, scElm);
       scopeElm.setCanvas(sc);
 
       $(scElm).on("resize", function (evt) {
@@ -74,7 +123,7 @@ class CircuitCanvas extends Observer {
 
     let chart = new SmoothieChart({
       millisPerPixel: 35,
-      grid: {fillStyle: 'transparent', millisPerLine: 1000, lineWidth: 0.5, verticalSections: 0},
+      grid: {fillStyle: 'transparent', strokeStyle: 'transparent'},
       labels: {fillStyle: '#000000', precision: 0}
     });
 
@@ -82,17 +131,20 @@ class CircuitCanvas extends Observer {
     chart.streamTo(document.getElementById("performance_sparkline"), 500);
   }
 
-  clear() {
-    this.context.clearRect( 0, 0, this.Canvas.clientWidth, this.Canvas.clientHeight )
-  }
-
   draw() {
-    if (this.context) {
-      this.clear();
+    if (this.svg) {
+
+
+      /*
+      if (this.context.clear) {
+        this.context.clear();
+      }
+
       // this.drawGrid();
 
       this.context.save();
       this.context.translate(this.xMargin, this.yMargin);
+      */
 
       this.fillText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
       this.fillText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 785, 15, Settings.TEXT_COLOR, 1.2*Settings.TEXT_SIZE);
@@ -103,17 +155,19 @@ class CircuitCanvas extends Observer {
     }
 
     /*
-    if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
-      this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
-      this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
-    }
-    */
+     if ((this.circuitUI.snapX != null) && (this.circuitUI.snapY != null)) {
+     this.drawCircle(this.circuitUI.snapX, this.circuitUI.snapY, 1, "#F00");
+     this.fillText(`${this.circuitUI.snapX}, ${this.circuitUI.snapY}`, this.circuitUI.snapX + 10, this.circuitUI.snapY - 10);
+     }
+     */
 
-    this.drawInfoText();
+    // this.drawInfoText();
 
+    /*
     if (this.circuitUI.marquee) {
       this.circuitUI.marquee.draw(this)
     }
+    */
 
     // UPDATE FRAME ----------------------------------------------------------------
     this.Circuit.updateCircuit();
@@ -123,51 +177,51 @@ class CircuitCanvas extends Observer {
     }
     // -----------------------------------------------------------------------------
 
-    this.drawScopes();
+    // this.drawScopes();
     this.drawComponents();
 
-    if (this.context) {
-      if (this.circuitUI.highlightedNode)
-        this.drawCircle(this.circuitUI.highlightedNode.x + 0.5, this.circuitUI.highlightedNode.y + 0.5, 7, 3, "#0F0");
 
-      if (this.circuitUI.selectedNode)
-        this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
+    /*
+    if (this.circuitUI.highlightedNode)
+      this.drawCircle(this.circuitUI.highlightedNode.x + 0.5, this.circuitUI.highlightedNode.y + 0.5, 7, 3, "#0F0");
 
-      if (this.circuitUI.placeComponent) {
-        this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
+    if (this.circuitUI.selectedNode)
+      this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
 
-        if (this.circuitUI.placeY && this.circuitUI.placeX && this.circuitUI.placeComponent.x2() && this.circuitUI.placeComponent.y2()) {
-          this.drawComponent(this.circuitUI.placeComponent);
-        }
-      }
+    if (this.circuitUI.placeComponent) {
+      this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
 
-      if (this.circuitUI.highlightedComponent) {
-        this.circuitUI.highlightedComponent.draw(this);
-
-        this.context.save();
-        this.context.fillStyle = Settings.POST_COLOR;
-
-        for (let i=0; i<this.circuitUI.highlightedComponent.numPosts(); ++i) {
-          let post = this.circuitUI.highlightedComponent.getPost(i);
-
-          this.context.fillRect(post.x - Settings.POST_RADIUS - 1, post.y - Settings.POST_RADIUS - 1, 2 * Settings.POST_RADIUS + 2, 2 * Settings.POST_RADIUS + 2);
-        }
-
-        if (this.circuitUI.highlightedComponent.x2())
-          this.context.fillRect(this.circuitUI.highlightedComponent.x2()-2*Settings.POST_RADIUS, this.circuitUI.highlightedComponent.y2()-2*Settings.POST_RADIUS, 4*Settings.POST_RADIUS, 4*Settings.POST_RADIUS);
-        this.context.restore();
-        // this.drawRect(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
+      if (this.circuitUI.placeY && this.circuitUI.placeX && this.circuitUI.placeComponent.x2() && this.circuitUI.placeComponent.y2()) {
+        this.drawComponent(this.circuitUI.placeComponent);
       }
     }
 
-    if (this.context) {
-      if (this.Circuit && this.Circuit.debugModeEnabled()) {
-        this.drawDebugInfo();
-        this.drawDebugOverlay();
+
+    if (this.circuitUI.highlightedComponent) {
+      this.circuitUI.highlightedComponent.draw(this);
+
+      this.context.save();
+      this.context.fillStyle = Settings.POST_COLOR;
+
+      for (let i=0; i<this.circuitUI.highlightedComponent.numPosts(); ++i) {
+        let post = this.circuitUI.highlightedComponent.getPost(i);
+
+        this.context.fillRect(post.x - Settings.POST_RADIUS - 1, post.y - Settings.POST_RADIUS - 1, 2 * Settings.POST_RADIUS + 2, 2 * Settings.POST_RADIUS + 2);
       }
 
-      this.context.restore()
+      if (this.circuitUI.highlightedComponent.x2())
+        this.context.fillRect(this.circuitUI.highlightedComponent.x2()-2*Settings.POST_RADIUS, this.circuitUI.highlightedComponent.y2()-2*Settings.POST_RADIUS, 4*Settings.POST_RADIUS, 4*Settings.POST_RADIUS);
+      this.context.restore();
+      // this.drawRect(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
     }
+
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
+      this.drawDebugInfo();
+      this.drawDebugOverlay();
+    }
+    */
+
+      // this.context.restore()
   }
 
   withSelection(func) {
@@ -213,13 +267,17 @@ class CircuitCanvas extends Observer {
   }
 
   beginPath() {
+    /*
     this.pathMode = true;
     this.context.beginPath();
+    */
   }
 
   closePath() {
+    /*
     this.pathMode = false;
     this.context.closePath();
+    */
   }
 
   getVoltageColor(volts) {
@@ -240,6 +298,47 @@ class CircuitCanvas extends Observer {
   }
 
   drawZigZag(point1, point2, vStart, vEnd) {
+    let positions = [];
+
+    let lineFunction = d3.line()
+        .x(function (d) {
+          return d.x;
+        })
+        .y(function (d) {
+          return d.y;
+        });
+
+    let numSegments = 8;
+    let width = 5;
+    let parallelOffset = 1 / numSegments;
+
+    let voltColor0 = this.getVoltageColor(vStart);
+    let voltColor1 = this.getVoltageColor(vEnd);
+
+    // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
+    let offsets = [1, -1];
+
+    positions.push(point1);
+
+    let startPosition = Util.interpolate(point1, point2, parallelOffset/2, width);
+    positions.push(startPosition);
+
+    // Draw resistor "zig-zags"
+    for (let n = 1; n < numSegments; n++) {
+      startPosition = Util.interpolate(point1, point2, n*parallelOffset + parallelOffset/2, width*offsets[n % 2]);
+
+      positions.push(startPosition);
+    }
+
+    positions.push(point2);
+
+    this.svg.append("path")
+        .attr("d", lineFunction(positions))
+        .attr("stroke", "blue")
+        .attr("stroke-width", 2)
+        .attr("fill", "none");
+
+    /*
     let context = this.context;
     context.save();
     context.beginPath();
@@ -286,9 +385,66 @@ class CircuitCanvas extends Observer {
 
     context.closePath();
     context.restore();
+    */
   }
 
   drawCoil(point1, point2, vStart, vEnd, hs) {
+    let positions = [];
+
+    let lineFunction = d3.line()
+        .x(function (d) {
+          return d.x;
+        })
+        .y(function (d) {
+          return d.y;
+        });
+
+    let color, cx, hsx, voltageLevel;
+    hs = hs || 8;
+
+    let segments = 40;
+
+    let ps1 = new Point(0, 0);
+    let ps2 = new Point(0, 0);
+
+    let dn = point2.diff(point1);
+
+    ps1.x = point1.x;
+    ps1.y = point1.y;
+
+    let voltColor0 = this.getVoltageColor(vStart);
+    let voltColor1 = this.getVoltageColor(vEnd);
+
+    positions.push(point1);
+
+    for (let i = 0; i < segments; ++i) {
+      cx = (((i + 1) * 8 / segments) % 2) - 1;
+      hsx = Math.sqrt(1 - cx * cx);
+
+      ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs);
+      voltageLevel = vStart + (vEnd - vStart) * i / segments;
+      color = this.getVoltageColor(voltageLevel);
+
+      // this.context.lineTo(ps2.x + this.lineShift, ps2.y + this.lineShift);
+
+      positions.push(ps2);
+
+      ps1.x = ps2.x;
+      ps1.y = ps2.y;
+    }
+
+    // positions.push(ps1);
+
+    // this.context.lineTo(ps1.x + this.lineShift + dn.x/10, ps1.y + this.lineShift + dn.y/10);
+
+
+    this.svg.append("path")
+        .attr("d", lineFunction(positions))
+        .attr("stroke", "blue")
+        .attr("stroke-width", 2)
+        .attr("fill", "none");
+
+    /*
     let color, cx, hsx, voltageLevel;
     hs = hs || 8;
 
@@ -342,45 +498,15 @@ class CircuitCanvas extends Observer {
 
     this.context.closePath();
     this.context.restore()
+    */
   }
 
   drawScopes() {
-    if (this.context) {
-      for (let scopeElm of this.Circuit.getScopes()) {
-        let scopeCanvas = scopeElm.getCanvas();
-
-        if (scopeCanvas) {
-          var center = scopeElm.circuitElm.getCenter();
-          this.context.save();
-
-          this.context.setLineDash([5, 5]);
-          this.context.strokeStyle = "#FFA500";
-          this.context.lineWidth = 1;
-          this.context.moveTo(center.x, center.y);
-          this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height() / 2);
-
-          this.context.stroke();
-
-          this.context.restore();
-        }
-      }
-    }
   }
 
   drawComponents() {
-    if (this.context) {
-      for (var component of this.Circuit.getElements())
-        this.drawComponent(component);
-
-      if (this.Circuit && this.Circuit.debugModeEnabled()) {
-        for (let nodeIdx = 0; nodeIdx < this.Circuit.numNodes(); ++nodeIdx) {
-          let voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx));
-          let node = this.Circuit.getNode(nodeIdx);
-
-          this.context.fillText(`${nodeIdx}:${voltage}`, node.x + 10, node.y - 10, "#FF8C00");
-        }
-      }
-    }
+    for (var component of this.Circuit.getElements())
+      this.drawComponent(component);
   }
 
   drawComponent(component) {
@@ -410,6 +536,7 @@ class CircuitCanvas extends Observer {
     }
      */
 
+    /*
     this.context.save();
 
     let ds = Settings.CURRENT_SEGMENT_LENGTH;
@@ -455,6 +582,7 @@ class CircuitCanvas extends Observer {
     }
 
     this.context.restore();
+    */
   }
 
   drawDebugOverlay() {
@@ -558,6 +686,7 @@ class CircuitCanvas extends Observer {
   // Draw Primitives
 
   fillText(text, x, y, fillColor = Settings.TEXT_COLOR, size = Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
+    /*
     this.context.save();
 
     this.context.fillStyle = fillColor;
@@ -572,10 +701,17 @@ class CircuitCanvas extends Observer {
 
     this.context.restore();
 
+
     return textMetrics;
+    */
+
+    return {
+      width: 10
+    }
   }
 
   fillCircle(x, y, radius, lineWidth = Settings.LINE_WIDTH, fillColor = '#FFFF00', lineColor = null) {
+    /*
     this.context.save();
 
     this.context.beginPath();
@@ -593,9 +729,19 @@ class CircuitCanvas extends Observer {
     this.context.closePath();
 
     this.context.restore();
+    */
+
+    this.svg.append("circle")
+        .style("stroke-width", lineWidth)
+        .style("stroke", "black")
+        .style("fill", fillColor)
+        .attr("cx", x)
+        .attr("cy", y)
+        .attr("r", radius)
   }
 
   drawCircle(x, y, radius, lineWidth = Settings.LINE_WIDTH, lineColor = "#000000") {
+    /*
     this.context.save();
 
     this.context.strokeStyle = lineColor;
@@ -607,9 +753,19 @@ class CircuitCanvas extends Observer {
     this.context.closePath();
 
     this.context.restore();
+    */
+
+    this.svg.append("circle")
+        .attr("stroke-width", lineWidth)
+        .attr("stroke", lineColor)
+        .attr("fill", "#F0F")
+        .attr("cx", x)
+        .attr("cy", y)
+        .attr("r", radius)
   }
 
   drawRect(x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR) {
+    /*
     this.context.save();
 
     this.context.strokeStyle = lineColor;
@@ -619,6 +775,15 @@ class CircuitCanvas extends Observer {
     this.context.stroke();
 
     this.context.restore();
+    */
+
+    this.svg.append("rect")
+        .attr("x", x)
+        .attr("y", y)
+        .attr("stroke-width", lineWidth)
+        .attr("stroke", lineColor)
+        .attr("width", width)
+        .attr("height", height);
   }
 
   drawLinePt(pa, pb, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
@@ -626,6 +791,7 @@ class CircuitCanvas extends Observer {
   }
 
   drawValue(perpindicularOffset, parallelOffset, component, text = null, text_size = Settings.TEXT_SIZE) {
+    /*
     let x, y;
 
     this.context.save();
@@ -641,33 +807,22 @@ class CircuitCanvas extends Observer {
     this.context.fillStyle = Settings.TEXT_COLOR;
     // if (component.isVertical()) {
 
-      ({x} = component.getCenter()); //+ perpindicularOffset
-      ({y} = component.getCenter()); //+ parallelOffset - stringHeight / 2.0
+    ({x} = component.getCenter()); //+ perpindicularOffset
+    ({y} = component.getCenter()); //+ parallelOffset - stringHeight / 2.0
 
-      this.context.translate(x, y);
-      this.context.rotate(theta);
-      this.fillText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
-      /*
-    } else {
-      x = component.getCenter().x + parallelOffset;
-      y = component.getCenter().y + perpindicularOffset;
-
-      this.context.translate(x, y);
-
-      this.context.save();
-      this.context.rotate(theta);
-      this.context.restore();
-
-      this.fillText(text, x, y, Settings.TEXT_COLOR, text_size);
-    }
-    */
+    this.context.translate(x, y);
+    this.context.rotate(theta);
+    this.fillText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
 
     this.context.restore();
+    */
   }
 
 
 
-  drawLine(x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
+  drawLine(x1, y1, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
+
+    /*
     this.context.save();
 
     this.context.lineCap = "round";
@@ -692,9 +847,19 @@ class CircuitCanvas extends Observer {
       this.context.closePath();
 
     this.context.restore();
+    */
+
+    this.svg.append("line")
+        .style("stroke", "black")
+        .attr("x1", x1)
+        .attr("y1", y1)
+        .attr("x2", x2)
+        .attr("y2", y2)
+
   }
 
   drawThickPolygon(xlist, ylist, color = Settings.STROKE_COLOR, fill = Settings.FILL_COLOR) {
+    /*
     this.context.save();
 
     this.context.fillStyle = fill;
@@ -713,9 +878,27 @@ class CircuitCanvas extends Observer {
     }
 
     this.context.restore();
+    */
+
+    let poly = [];
+
+    for (let i =0; i<xlist.length; ++i) {
+      poly.push({x: xlist[i], y: ylist[i]});
+    }
+
+    this.svg.append("polyline")
+        .data([poly])
+        .attr("points", function (d) {
+          return d.map(function (d) {
+            return [d.x, d.y].join(",");
+          }).join(" ");
+        })
+        .attr("stroke-width", 1)
+        .attr("stroke", color);
   }
 
   drawThickPolygonP(polygon, color = Settings.STROKE_COLOR, fill = Settings.FILL_COLOR) {
+    /*
     let numVertices = polygon.numPoints();
 
     this.context.save();
@@ -734,8 +917,22 @@ class CircuitCanvas extends Observer {
     this.context.stroke();
 
     this.context.restore();
+    */
+
+    let poly = polygon.getVertices();
+
+    this.svg.append("polyline")
+        .data([poly])
+        .attr("points", function (d) {
+          return d.map(function (d) {
+            return [d.x, d.y].join(",");
+          }).join(" ");
+        })
+        .attr("stroke-width", 1)
+        .attr("stroke", "black")
+        .attr("fill", "white");
   }
 
 }
 
-module.exports = CircuitCanvas;
+module.exports = SvgRenderer;
