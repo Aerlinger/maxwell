@@ -193,7 +193,46 @@ class Circuit extends Observer {
   }
 
   toString() {
-    return this.Params;
+    let str = "";
+
+    // Name
+    str += `Name: ${this.name}\n`;
+
+    // Linear
+    str += `Linear: ${!this.Solver.circuitNonLinear}\n`;
+
+    // Linear
+    str += `VS Count: ${this.voltageSourceCount}\n`;
+
+    // Param
+    str += `Params:\n ${this.Params}\n`;
+
+    // Iterations
+    str += `Frame #: ${this.getIterationCount()}\n`;
+
+    // Elements
+    str += `Elements: (${this.getElements().length})\n `;
+    for (let element of this.getElements()) {
+      str += "  " + element + "\n";
+    }
+
+    str += `Nodes: (${this.numNodes()})\n`;
+    for (let node of this.getNodes()) {
+      str += "  " + node + "\n";
+    }
+
+    // RowInfo
+    str += `RowInfo: (${this.getRowInfo().length})\n`;
+    for (let rowInfo of this.getRowInfo())
+      str += "  " + rowInfo + "\n";
+
+    str += "Circuit Matrix:\n";
+    str += this.Solver.dumpFrame() + "\n";
+
+    str += "Orig Matrix:\n";
+    str += this.Solver.dumpOrigFrame() + "\n";
+
+    return str;
   }
 
   inspect() {
@@ -387,9 +426,8 @@ class Circuit extends Observer {
 
   getNodeAtCoordinates(x, y) {
     for (let node of Array.from(this.nodeList)) {
-      if ((node.x === x) && (node.y === y)) {
+      if ((node.x === x) && (node.y === y))
         return node;
-      }
     }
   }
 
@@ -437,7 +475,6 @@ class Circuit extends Observer {
       }
     }
   }
-
 
   pause() {
     this.isStopped = true;
@@ -494,7 +531,6 @@ class Circuit extends Observer {
   }
 
   setHint(type, item1, item2) {
-
     if (typeof type == "string") {
       if (parseInt(type)) {
         this.hintType = Circuit.hintMap[parseInt(type)];
@@ -504,6 +540,7 @@ class Circuit extends Observer {
     } else {
       this.hintType = Circuit.hintMap[parseInt(type)];
     }
+
     this.hintItem1 = parseInt(item1);
     this.hintItem2 = parseInt(item2);
   }

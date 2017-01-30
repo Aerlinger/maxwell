@@ -548,8 +548,8 @@
 	  }
 	
 	  allocNodes() {
-	    this.nodes = Util.zeroArray(this.getPostCount() + this.getInternalNodeCount());
-	    this.volts = Util.zeroArray(this.getPostCount() + this.getInternalNodeCount());
+	    this.nodes = Util.zeroArray(this.numPosts() + this.numInternalNodes());
+	    this.volts = Util.zeroArray(this.numPosts() + this.numInternalNodes());
 	  }
 	
 	  setParameters(component_params) {
@@ -778,7 +778,7 @@
 	  // Called on reactive elements such as inductors and capacitors.
 	
 	  getPostAt(x, y) {
-	    for (let postIdx = 0, end = this.getPostCount(), asc = 0 <= end; asc ? postIdx < end : postIdx > end; asc ? postIdx++ : postIdx--) {
+	    for (let postIdx = 0, end = this.numPosts(), asc = 0 <= end; asc ? postIdx < end : postIdx > end; asc ? postIdx++ : postIdx--) {
 	      let post = this.getPost(postIdx);
 	
 	      if ((post.x === x) && (post.y === y)) {
@@ -919,11 +919,11 @@
 	    return this.simpleString() + paramStr;
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 0;
 	  }
 	
-	  getInternalNodeCount() {
+	  numInternalNodes() {
 	    return 0;
 	  }
 	
@@ -944,7 +944,7 @@
 	  }
 	
 	  // Two terminals by default, but likely to be overidden by subclasses
-	  getPostCount() {
+	  numPosts() {
 	    return 2;
 	  }
 	
@@ -1067,7 +1067,7 @@
 	  }
 	
 	  canViewInScope() {
-	    return this.getPostCount() <= 2;
+	    return this.numPosts() <= 2;
 	  }
 	
 	  needsShortcut() {
@@ -1133,7 +1133,7 @@
 	     */
 	
 	    /*
-	     for (let i=0; i<this.getPostCount(); ++i) {
+	     for (let i=0; i<this.numPosts(); ++i) {
 	     let post = this.getPost(i);
 	     renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
 	     }
@@ -1198,7 +1198,7 @@
 	
 	
 	    /*
-	    for (let i = 0; i < this.getPostCount(); ++i) {
+	    for (let i = 0; i < this.numPosts(); ++i) {
 	      let post = this.getPost(i);
 	      renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
 	    }
@@ -1268,7 +1268,7 @@
 	      voltSource: this.getVoltageSource(),
 	      needsShortcut: this.needsShortcut(),
 	      name: this.constructor.name,
-	      postCount: this.getPostCount(),
+	      postCount: this.numPosts(),
 	      nonLinear: this.nonLinear()
 	    };
 	  }
@@ -18055,7 +18055,7 @@
 	    super(xa, ya, xb, yb, params, f);
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 1;
 	  }
 	
@@ -18454,7 +18454,7 @@
 	    }
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 1;
 	  }
 	
@@ -18576,7 +18576,7 @@
 	    return (this.flags & WireElm.FLAG_SHOWVOLTAGE) !== 0;
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 1;
 	  }
 	
@@ -18765,7 +18765,7 @@
 	    renderContext.drawPosts(this);
 	    // renderContext.drawPosts(this);
 	
-	    for (let i = 0; i < this.getPostCount(); i++) {
+	    for (let i = 0; i < this.numPosts(); i++) {
 	      let post = this.getPost(i);
 	      renderContext.drawPost(post.x, post.y)
 	    }
@@ -18775,11 +18775,11 @@
 	    }
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return this.inputCount + 1;
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 1;
 	  }
 	
@@ -18960,7 +18960,7 @@
 	    super(xa, ya, xb, yb, params, f);
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 1;
 	  }
 	
@@ -19006,7 +19006,7 @@
 	    return 0;
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 1;
 	  }
 	
@@ -19304,7 +19304,7 @@
 	    this.place()
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 1;
 	  }
 	
@@ -19456,7 +19456,7 @@
 	    if (this.position === 1) { return this.current = 0; }
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    if (this.position === 1) { return 0; } else { return 1; }
 	  }
 	
@@ -20265,7 +20265,7 @@
 	    return this.ids * (this.volts[2] - this.volts[1]);
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 3;
 	  }
 	
@@ -20733,7 +20733,7 @@
 	    }
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 3;
 	  }
 	
@@ -21180,7 +21180,7 @@
 	    return "OpAmp"
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 3;
 	  }
 	
@@ -21188,7 +21188,7 @@
 	    return ((n === 0) ? this.in1p[0] : ((n === 1) ? this.in2p[0] : this.point2));
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 1;
 	  }
 	
@@ -21493,7 +21493,7 @@
 	    }
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 3;
 	  }
 	
@@ -21509,7 +21509,7 @@
 	    return stamper.stampVoltageSource(this.nodes[0], this.nodes[this.position + 1], this.voltSource, 0);
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    if (this.position === 2) { return 0; } else { return 1; }
 	  }
 	
@@ -21610,7 +21610,7 @@
 	    return this.reset();
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 1;
 	  }
 	
@@ -21746,7 +21746,7 @@
 	    return this.volts[0];
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 1;
 	  }
 	
@@ -21863,7 +21863,7 @@
 	    return (this.flags & TextElm.FLAG_CENTER) !== 0;
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 0;
 	  }
 	}
@@ -22258,7 +22258,7 @@
 	    }
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 1;
 	  }
 	
@@ -22389,7 +22389,7 @@
 	    return this.flags & ((LogicInputElm.FLAG_TERNARY | LogicInputElm.FLAG_NUMERIC) !== 0);
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 1;
 	  }
 	
@@ -22414,7 +22414,7 @@
 	    return stamper.stampVoltageSource(0, this.nodes[0], this.voltSource, v);
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 1;
 	  }
 	
@@ -22479,7 +22479,7 @@
 	    return (this.flags & LogicOutputElm.FLAG_PULLDOWN) !== 0;
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 1;
 	  }
 	
@@ -22640,7 +22640,7 @@
 	    return stamper.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 3;
 	  }
 	
@@ -22702,7 +22702,7 @@
 	    this.setBboxPt(this.point1, this.point2, this.openhs);
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 4;
 	  }
 	
@@ -23110,11 +23110,11 @@
 	    return this.coilPosts[n - (3 * this.poleCount)];
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 2 + (3 * this.poleCount);
 	  }
 	
-	  getInternalNodeCount() {
+	  numInternalNodes() {
 	    return 1;
 	  }
 	
@@ -23713,11 +23713,11 @@
 	    }
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 3;
 	  }
 	
-	  getInternalNodeCount() {
+	  numInternalNodes() {
 	    return 1;
 	  }
 	
@@ -23980,7 +23980,7 @@
 	    }
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 3;
 	  }
 	
@@ -24149,11 +24149,11 @@
 	    return true;
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return this.bits + 2;
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return this.bits;
 	  }
 	
@@ -24161,7 +24161,7 @@
 	    this.sizeX = this.bits > 2 ? this.bits : 2;
 	    this.sizeY = 2;
 	
-	    this.pins = new Array(this.getPostCount());
+	    this.pins = new Array(this.numPosts());
 	
 	    this.pins[0] = new ChipElm.Pin(1, ChipElm.SIDE_W, "");
 	    this.pins[0].clock = true;
@@ -24396,7 +24396,7 @@
 	    this.setupPins();
 	    this._setPoints();
 	
-	    for (let i=0; i<this.getPostCount(); ++i) {
+	    for (let i=0; i<this.numPosts(); ++i) {
 	      if (this.pins[i].state) {
 	        this.volts[i] = parseFloat(params['volts'].shift());
 	        this.pins[i].value = (this.volts[i] > 2.5);
@@ -24459,8 +24459,8 @@
 	    // return console.trace("execute() to be called from subclasses of ChipElm");
 	  }
 	
-	  getVoltageSourceCount() {
-	    return console.warn("getVoltageSourceCount() to be called from subclasses of ChipElm");
+	  numVoltageSources() {
+	    return console.warn("numVoltageSources() to be called from subclasses of ChipElm");
 	  }
 	
 	  getChipName() {
@@ -24476,7 +24476,7 @@
 	  }
 	
 	  reset() {
-	    for (let i = 0; i < this.getPostCount(); i++) {
+	    for (let i = 0; i < this.numPosts(); i++) {
 	      this.pins[i].value = false;
 	      this.pins[i].curcount = 0;
 	      this.volts[i] = 0;
@@ -24502,7 +24502,7 @@
 	  }
 	
 	  setCurrent(x, c) {
-	    for (let i = 0; i < this.getPostCount(); ++i) {
+	    for (let i = 0; i < this.numPosts(); ++i) {
 	      let pin = this.pins[i];
 	
 	      if (pin.output && (pin.voltSource === x)) {
@@ -24512,7 +24512,7 @@
 	  }
 	
 	  setVoltageSource(j, vs) {
-	    for (let i = 0; i < this.getPostCount(); ++i) {
+	    for (let i = 0; i < this.numPosts(); ++i) {
 	      let p = this.pins[i];
 	      if ((p.output && j--) === 0) {
 	        p.voltSource = vs;
@@ -24525,7 +24525,7 @@
 	
 	  doStep(stamper) {
 	    let i, p;
-	    for (let i = 0; i < this.getPostCount(); ++i) {
+	    for (let i = 0; i < this.numPosts(); ++i) {
 	      p = this.pins[i];
 	      if (!p.output) {
 	        p.value = this.volts[i] > 2.5;
@@ -24535,7 +24535,7 @@
 	    this.execute();
 	
 	    let result = [];
-	    for (let i = 0; i < this.getPostCount(); ++i) {
+	    for (let i = 0; i < this.numPosts(); ++i) {
 	      p = this.pins[i];
 	      if (p.output) {
 	        stamper.updateVoltageSource(0, this.nodes[i], p.voltSource, p.value ? 5 : 0);
@@ -24546,7 +24546,7 @@
 	  stamp(stamper) {
 	    // this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
 	
-	    for (let i = 0; i < this.getPostCount(); ++i) {
+	    for (let i = 0; i < this.numPosts(); ++i) {
 	      let p = this.pins[i];
 	
 	      if (p.output) {
@@ -24564,7 +24564,7 @@
 	    // this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
 	    renderContext.drawThickPolygon(this.rectPointsX, this.rectPointsY, Settings.STROKE_COLOR);
 	
-	    for (let i = 0; i < this.getPostCount(); i++) {
+	    for (let i = 0; i < this.numPosts(); i++) {
 	
 	      if (this.pins[i]) {
 	        let p = this.pins[i];
@@ -24606,7 +24606,7 @@
 	    }
 	
 	
-	    for (let i = 0; i < this.getPostCount(); ++i) {
+	    for (let i = 0; i < this.numPosts(); ++i) {
 	      renderContext.drawPost(this.pins[i].post.x, this.pins[i].post.y, this.nodes[i]);
 	    }
 	  }
@@ -24635,7 +24635,7 @@
 	
 	    this.setBbox(xr, yr, this.rectPointsX[2], this.rectPointsY[2]);
 	
-	    for (let i = 0; i < this.getPostCount(); i++) {
+	    for (let i = 0; i < this.numPosts(); i++) {
 	      let p = this.pins[i];
 	
 	      if (!p) {
@@ -24644,7 +24644,7 @@
 	      }
 	
 	      if (i >= this.pins.length) {
-	        console.error(`Pin index out of bounds: ${i}. @pins is length ${this.pins.length} but there are ${this.getPostCount()} posts`);
+	        console.error(`Pin index out of bounds: ${i}. @pins is length ${this.pins.length} but there are ${this.numPosts()} posts`);
 	        return;
 	      }
 	
@@ -24703,11 +24703,11 @@
 	    return true;
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return (this.bits * 2) + 1;
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return this.bits;
 	  }
 	
@@ -24715,7 +24715,7 @@
 	    let i;
 	    this.sizeX = 2;
 	    this.sizeY = this.bits + 1;
-	    this.pins = new Array(this.getPostCount());
+	    this.pins = new Array(this.numPosts());
 	
 	    for (i = 0; i < this.bits; i++) {
 	      this.pins[i] = new ChipElm.Pin(this.bits - 1 - i, ChipElm.SIDE_W, `I${i}`);
@@ -24792,7 +24792,7 @@
 	    return "555 Timer";
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    if (this.hasReset()) {
 	      return 7;
 	    } else {
@@ -24800,7 +24800,7 @@
 	    }
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 1;
 	  }
 	
@@ -24914,11 +24914,11 @@
 	    return "JK flip-flop";
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 5;
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 2;
 	  }
 	
@@ -24989,7 +24989,7 @@
 	    this.pins[2].value = !this.pins[1].value;
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    if (this.hasReset()) {
 	      return 5;
 	    } else {
@@ -25001,7 +25001,7 @@
 	    return "D Flip-Flop"
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 2;
 	  }
 	
@@ -25013,7 +25013,7 @@
 	    this.sizeX = 2;
 	    this.sizeY = 3;
 	
-	    this.pins = new Array(this.getPostCount());
+	    this.pins = new Array(this.numPosts());
 	
 	    this.pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "D");
 	
@@ -25082,7 +25082,7 @@
 	    return "Counter";
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    if (this.hasEnable()) {
 	      return this.bits + 3;
 	    }
@@ -25094,7 +25094,7 @@
 	    return (this.flags & CounterElm.FLAG_ENABLE) != 0;
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return this.bits;
 	  }
 	
@@ -25102,7 +25102,7 @@
 	    this.sizeX = 2;
 	    this.sizeY = (this.bits > 2) ? this.bits : 2;
 	
-	    this.pins = new Array(this.getPostCount());
+	    this.pins = new Array(this.numPosts());
 	
 	    this.pins[0] = new ChipElm.Pin(0, ChipElm.SIDE_W, "");
 	    this.pins[0].clock = true;
@@ -25183,18 +25183,18 @@
 	    return "DAC";
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 1;
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return this.bits + 2;
 	  }
 	
 	  setupPins() {
 	    this.sizeX = 2;
 	    this.sizeY = this.bits > 2 ? this.bits : 2;
-	    this.pins = new Array(this.getPostCount());
+	    this.pins = new Array(this.numPosts());
 	
 	    for (let i = 0, end = this.bits, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
 	      this.pins[i] = new ChipElm.Pin(this.bits - 1 - i, ChipElm.SIDE_W, `D${i}`);
@@ -25245,11 +25245,11 @@
 	    return "ADC";
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return this.bits;
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return this.bits + 2;
 	  }
 	
@@ -25260,7 +25260,7 @@
 	  setupPins() {
 	    this.sizeX = 2;
 	    this.sizeY = (this.bits > 2) ? this.bits : 2;
-	    this.pins = new Array(this.getPostCount());
+	    this.pins = new Array(this.numPosts());
 	
 	    for (let i = 0, end = this.bits, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
 	      this.pins[i] = new ChipElm.Pin(this.bits - 1 - i, ChipElm.SIDE_E, `D${i}`);
@@ -25323,11 +25323,11 @@
 	    return true;
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 6;
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 3;
 	  }
 	
@@ -25444,11 +25444,11 @@
 	    return this.pins[2].output = true;
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 3;
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 1;
 	  }
 	
@@ -25518,11 +25518,11 @@
 	    super(xa, xb, ya, yb, params, f);
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 7;
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 0;
 	  }
 	
@@ -25652,11 +25652,11 @@
 	    return this.drawChip(renderContext);
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 3;
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 1;
 	  }
 	}
@@ -25764,11 +25764,11 @@
 	    return false;
 	  }
 	
-	  getVoltageSourceCount() {
+	  numVoltageSources() {
 	    return 2;
 	  }
 	
-	  getInternalNodeCount() {
+	  numInternalNodes() {
 	    return 2;
 	  }
 	
@@ -25776,7 +25776,7 @@
 	    return this.posts[n];
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 4;
 	  }
 	
@@ -26002,7 +26002,7 @@
 	    return this.ptEnds[n];
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 4;
 	  }
 	
@@ -26318,7 +26318,7 @@
 	    return this.ptEnds[n];
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 5;
 	  }
 	
@@ -26682,7 +26682,7 @@
 	    this.setPoints();
 	  }
 	
-	  getPostCount() {
+	  numPosts() {
 	    return 3;
 	  }
 	
@@ -27283,7 +27283,46 @@
 	  }
 	
 	  toString() {
-	    return this.Params;
+	    let str = "";
+	
+	    // Name
+	    str += `Name: ${this.name}\n`;
+	
+	    // Linear
+	    str += `Linear: ${!this.Solver.circuitNonLinear}\n`;
+	
+	    // Linear
+	    str += `VS Count: ${this.voltageSourceCount}\n`;
+	
+	    // Param
+	    str += `Params:\n ${this.Params}\n`;
+	
+	    // Iterations
+	    str += `Frame #: ${this.getIterationCount()}\n`;
+	
+	    // Elements
+	    str += `Elements: (${this.getElements().length})\n `;
+	    for (let element of this.getElements()) {
+	      str += "  " + element + "\n";
+	    }
+	
+	    str += `Nodes: (${this.numNodes()})\n`;
+	    for (let node of this.getNodes()) {
+	      str += "  " + node + "\n";
+	    }
+	
+	    // RowInfo
+	    str += `RowInfo: (${this.getRowInfo().length})\n`;
+	    for (let rowInfo of this.getRowInfo())
+	      str += "  " + rowInfo + "\n";
+	
+	    str += "Circuit Matrix:\n";
+	    str += this.Solver.dumpFrame() + "\n";
+	
+	    str += "Orig Matrix:\n";
+	    str += this.Solver.dumpOrigFrame() + "\n";
+	
+	    return str;
 	  }
 	
 	  inspect() {
@@ -27477,9 +27516,8 @@
 	
 	  getNodeAtCoordinates(x, y) {
 	    for (let node of Array.from(this.nodeList)) {
-	      if ((node.x === x) && (node.y === y)) {
+	      if ((node.x === x) && (node.y === y))
 	        return node;
-	      }
 	    }
 	  }
 	
@@ -27527,7 +27565,6 @@
 	      }
 	    }
 	  }
-	
 	
 	  pause() {
 	    this.isStopped = true;
@@ -27584,7 +27621,6 @@
 	  }
 	
 	  setHint(type, item1, item2) {
-	
 	    if (typeof type == "string") {
 	      if (parseInt(type)) {
 	        this.hintType = Circuit.hintMap[parseInt(type)];
@@ -27594,6 +27630,7 @@
 	    } else {
 	      this.hintType = Circuit.hintMap[parseInt(type)];
 	    }
+	
 	    this.hintItem1 = parseInt(item1);
 	    this.hintItem2 = parseInt(item2);
 	  }
@@ -27975,9 +28012,9 @@
 	    _results = [];
 	    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
 	      circuitElm = _ref[_i];
-	      internalNodeCount = circuitElm.getInternalNodeCount();
-	      internalVSCount = circuitElm.getVoltageSourceCount();
-	      postCount = circuitElm.getPostCount();
+	      internalNodeCount = circuitElm.numInternalNodes();
+	      internalVSCount = circuitElm.numVoltageSources();
+	      postCount = circuitElm.numPosts();
 	      for (postIdx = _j = 0; 0 <= postCount ? _j < postCount : _j > postCount; postIdx = 0 <= postCount ? ++_j : --_j) {
 	        postPt = circuitElm.getPost(postIdx);
 	        for (nodeIdx = _k = 0, _ref1 = this.Circuit.numNodes(); 0 <= _ref1 ? _k < _ref1 : _k > _ref1; nodeIdx = 0 <= _ref1 ? ++_k : --_k) {
@@ -28028,7 +28065,7 @@
 	      if (circuitElement.nonLinear()) {
 	        this.circuitNonLinear = true;
 	      }
-	      for (voltSourceIdx = _j = 0, _ref1 = circuitElement.getVoltageSourceCount(); 0 <= _ref1 ? _j < _ref1 : _j > _ref1; voltSourceIdx = 0 <= _ref1 ? ++_j : --_j) {
+	      for (voltSourceIdx = _j = 0, _ref1 = circuitElement.numVoltageSources(); 0 <= _ref1 ? _j < _ref1 : _j > _ref1; voltSourceIdx = 0 <= _ref1 ? ++_j : --_j) {
 	        this.Circuit.voltageSources[voltageSourceCount] = circuitElement;
 	        circuitElement.setVoltageSource(voltSourceIdx, voltageSourceCount++);
 	      }
@@ -28070,7 +28107,7 @@
 	      _ref = this.Circuit.getElements();
 	      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
 	        circuitElm = _ref[_i];
-	        for (postIdx = _j = 0, _ref1 = circuitElm.getPostCount(); 0 <= _ref1 ? _j < _ref1 : _j > _ref1; postIdx = 0 <= _ref1 ? ++_j : --_j) {
+	        for (postIdx = _j = 0, _ref1 = circuitElm.numPosts(); 0 <= _ref1 ? _j < _ref1 : _j > _ref1; postIdx = 0 <= _ref1 ? ++_j : --_j) {
 	          if (!closure[circuitElm.getNode(postIdx)]) {
 	            if (circuitElm.hasGroundConnection(postIdx)) {
 	              changed = true;
@@ -28078,7 +28115,7 @@
 	            }
 	            continue;
 	          }
-	          for (siblingPostIdx = _k = 0, _ref2 = circuitElm.getPostCount(); 0 <= _ref2 ? _k < _ref2 : _k > _ref2; siblingPostIdx = 0 <= _ref2 ? ++_k : --_k) {
+	          for (siblingPostIdx = _k = 0, _ref2 = circuitElm.numPosts(); 0 <= _ref2 ? _k < _ref2 : _k > _ref2; siblingPostIdx = 0 <= _ref2 ? ++_k : --_k) {
 	            if (postIdx === siblingPostIdx) {
 	              continue;
 	            }
@@ -28131,7 +28168,7 @@
 	          return;
 	        }
 	      }
-	      if ((Util.typeOf(ce, VoltageElm) && ce.getPostCount() === 2) || ce instanceof WireElm) {
+	      if ((Util.typeOf(ce, VoltageElm) && ce.numPosts() === 2) || ce instanceof WireElm) {
 	        pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
 	        if (pathfinder.findPath(ce.getNode(0))) {
 	          this.Circuit.halt("Voltage source/wire loop with no resistance!", ce);
@@ -28854,7 +28891,7 @@
 	
 	      if (n1 === 0) {
 	        // Look for posts which have a ground connection. Our path can go through ground!
-	        for (j = 0, end = ce.getPostCount(), asc = 0 <= end; asc ? j < end : j > end; asc ? j++ : j--) {
+	        for (j = 0, end = ce.numPosts(), asc = 0 <= end; asc ? j < end : j > end; asc ? j++ : j--) {
 	          var asc, end;
 	          if (ce.hasGroundConnection(j) && this.findPath(ce.getNode(j), depth)) {
 	//            console.log(ce + " has ground (n1 is 0)")
@@ -28864,7 +28901,7 @@
 	        }
 	      }
 	
-	      for (j = 0, end1 = ce.getPostCount(), asc1 = 0 <= end1; asc1 ? j < end1 : j > end1; asc1 ? j++ : j--) {
+	      for (j = 0, end1 = ce.numPosts(), asc1 = 0 <= end1; asc1 ? j < end1 : j > end1; asc1 ? j++ : j--) {
 	//        console.log("get post " + ce.dump() + " " + ce.getNode(j))
 	        var asc1, end1;
 	        if (ce.getNode(j) === n1) {
@@ -28873,7 +28910,7 @@
 	      }
 	
 	      // TODO: ENSURE EQUALITY HERE
-	      if (j === ce.getPostCount()) {
+	      if (j === ce.numPosts()) {
 	        continue;
 	      }
 	
@@ -28895,7 +28932,7 @@
 	        }
 	      }
 	
-	      for (let k = 0, end2 = ce.getPostCount(), asc2 = 0 <= end2; asc2 ? k < end2 : k > end2; asc2 ? k++ : k--) {
+	      for (let k = 0, end2 = ce.numPosts(), asc2 = 0 <= end2; asc2 ? k < end2 : k > end2; asc2 ? k++ : k--) {
 	        if (j === k) { continue; }
 	
 	//        console.log(ce + " " + ce.getNode(j) + " - " + ce.getNode(k))
@@ -29769,7 +29806,7 @@
 	        this.context.save();
 	        this.context.fillStyle = Settings.POST_COLOR;
 	
-	        for (let i=0; i<this.circuitUI.highlightedComponent.getPostCount(); ++i) {
+	        for (let i=0; i<this.circuitUI.highlightedComponent.numPosts(); ++i) {
 	          let post = this.circuitUI.highlightedComponent.getPost(i);
 	
 	          this.context.fillRect(post.x - Settings.POST_RADIUS - 1, post.y - Settings.POST_RADIUS - 1, 2 * Settings.POST_RADIUS + 2, 2 * Settings.POST_RADIUS + 2);
@@ -29961,7 +29998,7 @@
 	      this.drawBoldLines();
 	      component.draw(this);
 	      /*
-	       for (let i = 0; i < component.getPostCount(); ++i) {
+	       for (let i = 0; i < component.numPosts(); ++i) {
 	       let post = component.getPost(i);
 	       this.drawCircle(post.x, post.y, Settings.POST_RADIUS + 2, 2, Settings.SELECT_COLOR);
 	       }
@@ -30079,42 +30116,7 @@
 	    str += "\nCircuit:\n";
 	
 	    // Name
-	    str += `Name: ${this.Circuit.name}\n`;
-	
-	    // Linear
-	    str += `Linear: ${!this.Circuit.Solver.circuitNonLinear}\n`;
-	
-	    // Linear
-	    str += `VS Count: ${this.Circuit.voltageSourceCount}\n`;
-	
-	    // Param
-	    str += `Params:\n ${this.Circuit.Params}\n`;
-	
-	    // Iterations
-	    str += `Frame #: ${this.Circuit.getIterationCount()}\n`;
-	
-	    // Elements
-	    str += `Elements: (${this.Circuit.getElements().length})\n `;
-	    for (let element of this.Circuit.getElements()) {
-	      str += "  " + element + "\n";
-	    }
-	
-	    str += `Nodes: (${this.Circuit.numNodes()})\n`;
-	    for (let node of this.Circuit.getNodes()) {
-	      str += "  " + node + "\n";
-	    }
-	
-	    // RowInfo
-	    str += `RowInfo: (${this.Circuit.getRowInfo().length})\n`;
-	    for (let rowInfo of this.Circuit.getRowInfo()) {
-	      str += "  " + rowInfo + "\n";
-	    }
-	
-	    str += "Circuit Matrix:\n";
-	    str += this.Circuit.Solver.dumpFrame() + "\n";
-	
-	    str += "Orig Matrix:\n";
-	    str += this.Circuit.Solver.dumpOrigFrame() + "\n";
+	    str += this.Circuit.toString();
 	
 	    // CircuitRightSide
 	    // CircuitLeftSide
@@ -30142,7 +30144,7 @@
 	  drawPosts(component, color = Settings.POST_COLOR) {
 	    let post;
 	
-	    for (let i = 0; i < component.getPostCount(); ++i) {
+	    for (let i = 0; i < component.numPosts(); ++i) {
 	      post = component.getPost(i);
 	      this.drawPost(post.x, post.y, color);
 	    }

@@ -453,42 +453,7 @@ class CircuitCanvas extends Observer {
     str += "\nCircuit:\n";
 
     // Name
-    str += `Name: ${this.Circuit.name}\n`;
-
-    // Linear
-    str += `Linear: ${!this.Circuit.Solver.circuitNonLinear}\n`;
-
-    // Linear
-    str += `VS Count: ${this.Circuit.voltageSourceCount}\n`;
-
-    // Param
-    str += `Params:\n ${this.Circuit.Params}\n`;
-
-    // Iterations
-    str += `Frame #: ${this.Circuit.getIterationCount()}\n`;
-
-    // Elements
-    str += `Elements: (${this.Circuit.getElements().length})\n `;
-    for (let element of this.Circuit.getElements()) {
-      str += "  " + element + "\n";
-    }
-
-    str += `Nodes: (${this.Circuit.numNodes()})\n`;
-    for (let node of this.Circuit.getNodes()) {
-      str += "  " + node + "\n";
-    }
-
-    // RowInfo
-    str += `RowInfo: (${this.Circuit.getRowInfo().length})\n`;
-    for (let rowInfo of this.Circuit.getRowInfo()) {
-      str += "  " + rowInfo + "\n";
-    }
-
-    str += "Circuit Matrix:\n";
-    str += this.Circuit.Solver.dumpFrame() + "\n";
-
-    str += "Orig Matrix:\n";
-    str += this.Circuit.Solver.dumpOrigFrame() + "\n";
+    str += this.Circuit.toString();
 
     // CircuitRightSide
     // CircuitLeftSide
