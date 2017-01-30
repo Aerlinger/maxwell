@@ -14,7 +14,7 @@ describe "Capacitor Component", ->
     @capacitor.getVoltageSourceCount().should.equal 0
 
   it "has correct toString()", ->
-    expect(@capacitor.toString()).to.equal """CapacitorElm@[100 100 100 200]: {"capacitance":1e-9,"voltdiff":1.1}"""
+    expect(@capacitor.toString()).to.equal """Capacitor@[100 100 100 200] {capacitance: 1.0 nF, voltdiff: 1.1 V}"""
 
   it "is orphaned", ->
     @capacitor.orphaned().should.equal true

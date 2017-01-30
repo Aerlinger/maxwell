@@ -1,7 +1,7 @@
 Maxwell = require("../../src/Maxwell.js");
 Library = Maxwell.ComponentLibrary;
 
-describe.only "VoltageSources", ->
+describe "VoltageSources", ->
   it "renders", ->
     waveforms = [0, 1, 2, 3, 4, 5, 6];
     voltageElms = [Library.VoltageElm, Library.RailElm, Library.VarRailElm, Library.ClockElm]

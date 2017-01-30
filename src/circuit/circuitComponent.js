@@ -899,8 +899,6 @@ class CircuitComponent {
 
     let paramValue = this.params[fieldname];
 
-    //console.log(fieldname, paramValue);
-
     if (typeof paramValue == 'number') {
       return Util.getUnitText(paramValue, symbol, decimalPoints);
     } else {

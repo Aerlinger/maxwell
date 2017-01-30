@@ -1,5 +1,3 @@
-Oscilloscope = require('../../src/scope/Oscilloscope.js')
-
 describe "Simple Voltage Divider", ->
   before (done) ->
     voltdividesimple = JSON.parse(fs.readFileSync("./circuits/v4/voltdividesimple.json"))

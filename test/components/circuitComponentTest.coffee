@@ -114,13 +114,13 @@ describe "Base Circuit Component", ->
           @Circuit.desolder(@circuitElement)
 
         it.skip "is orphaned", ->
-          @circuitElement.orphaned().should.equal true
+          expect(@circuitElement.orphaned()).to.equal true
 
         it "no longer belongs to @Circuit", ->
           @Circuit.getElmByIdx(0) == null
 
         it.skip "belongs to @Circuit", ->
-          @Circuit.numElements().should.equal 0
+          expect(@Circuit.numElements()).to.equal 0
 
 
   describe "Rendering", ->

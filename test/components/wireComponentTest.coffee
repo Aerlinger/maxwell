@@ -19,7 +19,7 @@ describe "Wire Component", ->
     expect(@wireElm.getVoltageSourceCount()).to.equal 1
 
   it "has correct toString()", ->
-    expect(@wireElm.toString()).to.equal "WireElm@[100 100 100 200]"
+    expect(@wireElm.toString()).to.equal "Wire@[100 100 100 200]"
 
   it "is orphaned", ->
     expect(@wireElm.orphaned()).to.equal true

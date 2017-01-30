@@ -18,7 +18,7 @@ describe "Ground Component", ->
     @groundElm.getVoltageSourceCount().should.equal 1
 
   it "has correct toString()", ->
-    @groundElm.toString().should.equal "GroundElm"
+    @groundElm.toString().should.equal "Ground@[50 50 50 150] {}"
 
   it "is orphaned", ->
     @groundElm.orphaned().should.equal true

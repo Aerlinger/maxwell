@@ -1,9 +1,8 @@
 let ComponentRegistry = require('../circuit/componentRegistry.js');
-let SimulationParams = require('../core/simulationParams.js');
+let SimulationParams = require('../circuit/simulationParams.js');
 
 let Circuit = require('../circuit/circuit.js');
 let CircuitComponent = require('../circuit/circuitComponent.js');
-let Oscilloscope = require('../scope/oscilloscope.js');
 let Hint = require('../engine/hint.js');
 fs = require('fs')
 

@@ -64,7 +64,7 @@ let ClockElm = require('../circuit/components/ClockElm.js');
 
 let Scope = require('../circuit/Scope.js');
 
-let SimulationParams = require('../core/simulationParams.js');
+let SimulationParams = require('../circuit/simulationParams.js');
 
 let Circuit = require('../circuit/circuit.js');
 let Hint = require('../engine/hint.js');

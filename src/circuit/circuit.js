@@ -22,9 +22,8 @@
 //
 //###################################################################################################################
 
-let Oscilloscope = require('../scope/oscilloscope.js');
 let Logger = require('../io/logger.js');
-let SimulationParams = require('../core/simulationParams.js');
+let SimulationParams = require('./simulationParams.js');
 let SimulationFrame = require('./simulationFrame.js');
 let CircuitSolver = require('../engine/circuitSolver.coffee');
 let Observer = require('../util/observer.js');
@@ -33,7 +32,6 @@ let Util = require('../util/util.js');
 let environment = require("../environment.js");
 
 fs = require('fs');
-
 
 class Circuit extends Observer {
   static initClass() {
@@ -178,9 +176,10 @@ class Circuit extends Observer {
     for (let nodeIdx of component.nodes) {
       let node = this.getNode(nodeIdx);
 
-      console.log("DE", node.getNeighboringElements());
+      if (!node)
+        console.warning(`Error deleting nodes for ${component} No node found at ${nodeIdx}!`);
 
-      if (node.getNeighboringElements() == [this]) {
+      if (node && node.getNeighboringElements() == [this]) {
         console.log("Orphaned node: ", nodeIdx)
       }
     }
