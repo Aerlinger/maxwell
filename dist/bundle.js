@@ -54,7 +54,7 @@
 	
 	let Components = __webpack_require__(93);
 	
-	let AcRailElm = __webpack_require__(101);
+	let AcRailElm = __webpack_require__(99);
 	let AntennaElm = __webpack_require__(17);
 	let WireElm = __webpack_require__(20);
 	let ResistorElm = __webpack_require__(22);
@@ -29942,7 +29942,7 @@
 	
 	  drawComponents() {
 	    if (this.context) {
-	      for (var component of Array.from(this.Circuit.getElements()))
+	      for (var component of this.Circuit.getElements())
 	        this.drawComponent(component);
 	
 	      if (this.Circuit && this.Circuit.debugModeEnabled()) {
@@ -30933,28 +30933,6 @@
 	}
 	
 	module.exports = PushSwitchElm;
-
-
-/***/ },
-/* 101 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let RailElm = __webpack_require__(18);
-	let VoltageElm = __webpack_require__(19);
-	
-	class ACRailElm extends RailElm {
-	  constructor(xa, ya, xb, yb, params, f) {
-	    super(xa, ya, xa, ya, params, f);
-	
-	    this.waveform = VoltageElm.WF_AC;
-	  }
-	
-	  getName() {
-	    return "AC Voltage Rail"
-	  }
-	}
-	
-	module.exports = ACRailElm;
 
 
 /***/ }

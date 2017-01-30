@@ -8,7 +8,7 @@ let RickshawScopeCanvas = require("./render/RickshawScopeCanvas");
 
 let Components = require("./components");
 
-let AcRailElm = require('./components/AcRailElm.js');
+let AcRailElm = require('./components/ACRailElm.js');
 let AntennaElm = require('./components/AntennaElm.js');
 let WireElm = require('./components/WireElm.js');
 let ResistorElm = require('./components/ResistorElm.js');
