@@ -1,5 +1,5 @@
 Circuit = require('../../src/circuit/circuit.js')
-ResistorElm = require('../../src/circuit/components/ResistorElm.js')
+ResistorElm = require('../../src/components/ResistorElm.js')
 
 describe "Circuit", ->
   beforeEach (done)->

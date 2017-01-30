@@ -1,0 +1,51 @@
+let CircuitComponent = require('./circuitComponent.js');
+let Settings = require('../settings/settings.js');
+let Polygon = require('../geom/polygon.js');
+let Rectangle = require('../geom/rectangle.js');
+let Point = require('../geom/point.js');
+let RailElm = require('./RailElm.js');
+let VoltageElm = require('./VoltageElm.js');
+
+let { sprintf } = require("sprintf-js");
+let Util = require('../util/util.js');
+
+class VarRailElm extends RailElm {
+  static get Fields() {
+    return Util.extend(RailElm.Fields, {
+      "sliderText": {
+        name: "sliderText",
+        unit: "",
+        default_value: "Voltage",
+        symbol: "%",
+        data_type(x) { return x; }
+      }
+    });
+  }
+
+  getName() {
+    return "Variable Voltage Rail"
+  }
+
+  constructor(xa, ya, xb, yb, params, f) {
+    super(xa, ya, xb, yb, params, f);
+
+    this.waveform = VoltageElm.WF_VAR;
+
+    this.sliderValue = Math.floor(((this.frequency - this.bias) * 100) / (this.maxVoltage - this.bias));
+  }
+
+  createSlider() {}
+
+  getSliderValue() {
+    return this.sliderValue;
+  }
+
+    // Todo: implement
+  getVoltage() {
+    this.frequency = ((this.getSliderValue() * (this.maxVoltage - this.bias)) / 100.0) + this.bias;
+
+    return this.frequency;
+  }
+}
+
+module.exports = VarRailElm;

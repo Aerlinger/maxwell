@@ -1,8 +1,8 @@
-let VoltageElm = require('../circuit/components/VoltageElm.js');
-let CurrentElm = require('../circuit/components/CurrentElm.js');
-let ResistorElm = require('../circuit/components/ResistorElm.js');
-let InductorElm = require('../circuit/components/InductorElm.js');
-let CapacitorElm = require('../circuit/components/CapacitorElm.js');
+let VoltageElm = require('../components/VoltageElm.js');
+let CurrentElm = require('../components/CurrentElm.js');
+let ResistorElm = require('../components/ResistorElm.js');
+let InductorElm = require('../components/InductorElm.js');
+let CapacitorElm = require('../components/CapacitorElm.js');
 let Util = require('../util/util.js');
 
 class Pathfinder {

@@ -1,8 +1,8 @@
 Circuit = require('../../src/circuit/circuit.js')
-GroundElm = require('../../src/circuit/components/GroundElm.js')
-WireElm = require('../../src/circuit/components/WireElm.js')
-VoltageElm = require('../../src/circuit/components/VoltageElm.js')
-ResistorElm = require('../../src/circuit/components/ResistorElm.js')
+GroundElm = require('../../src/components/GroundElm.js')
+WireElm = require('../../src/components/WireElm.js')
+VoltageElm = require('../../src/components/VoltageElm.js')
+ResistorElm = require('../../src/components/ResistorElm.js')
 
 describe "1V grounded DC Source with 1 ohm grounded resistor", ->
   beforeEach ->

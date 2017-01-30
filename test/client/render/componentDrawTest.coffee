@@ -1,8 +1,8 @@
 fs = require('fs')
-Wire = require('../../../src/circuit/components/WireElm.js')
-GroundElm = require('../../../src/circuit/components/GroundElm.js')
-ResistorElm = require('../../../src/circuit/components/ResistorElm.js')
-VoltageElm = require('../../../src/circuit/components/VoltageElm.js')
+Wire = require('../../../src/components/WireElm.js')
+GroundElm = require('../../../src/components/GroundElm.js')
+ResistorElm = require('../../../src/components/ResistorElm.js')
+VoltageElm = require('../../../src/components/VoltageElm.js')
 #Renderer = require('../../../src/render/renderer.js')
 Maxwell = require('../../../src/Maxwell.js')
 

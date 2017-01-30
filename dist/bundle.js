@@ -46,14 +46,14 @@
 
 	/* WEBPACK VAR INJECTION */(function(global) {let CircuitComponent = __webpack_require__(1);
 	let CircuitLoader = __webpack_require__(16);
-	let ComponentRegistry = __webpack_require__(90);
+	let ComponentRegistry = __webpack_require__(89);
 	
 	let Circuit = __webpack_require__(77);
-	let CircuitUI = __webpack_require__(91);
+	let CircuitUI = __webpack_require__(90);
 	
-	let RickshawScopeCanvas = __webpack_require__(93);
+	let RickshawScopeCanvas = __webpack_require__(92);
 	
-	let AcRailElm = __webpack_require__(95);
+	let AcRailElm = __webpack_require__(94);
 	let AntennaElm = __webpack_require__(17);
 	let WireElm = __webpack_require__(20);
 	let ResistorElm = __webpack_require__(22);
@@ -1400,8 +1400,6 @@
 	      symbol = field["symbol"] || "";
 	
 	    let paramValue = this.params[fieldname];
-	
-	    //console.log(fieldname, paramValue);
 	
 	    if (typeof paramValue == 'number') {
 	      return Util.getUnitText(paramValue, symbol, decimalPoints);
@@ -17900,8 +17898,8 @@
 	let SimulationParams = __webpack_require__(76);
 	
 	let Circuit = __webpack_require__(77);
-	let Hint = __webpack_require__(89);
-	let fs = __webpack_require__(88);
+	let Hint = __webpack_require__(88);
+	let fs = __webpack_require__(87);
 	
 	let environment = __webpack_require__(10);
 	
@@ -18831,7 +18829,7 @@
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
 	let Util = __webpack_require__(5);
-	//Maxwell = require('../../Maxwell.js')
+	//Maxwell = require('../Maxwell.js')
 	
 	class ResistorElm extends CircuitComponent {
 	  static get Fields() {
@@ -27116,18 +27114,16 @@
 	//
 	//###################################################################################################################
 	
-	let Oscilloscope = __webpack_require__(78);
-	let Logger = __webpack_require__(79);
+	let Logger = __webpack_require__(78);
 	let SimulationParams = __webpack_require__(76);
-	let SimulationFrame = __webpack_require__(80);
-	let CircuitSolver = __webpack_require__(81);
-	let Observer = __webpack_require__(87);
+	let SimulationFrame = __webpack_require__(79);
+	let CircuitSolver = __webpack_require__(80);
+	let Observer = __webpack_require__(86);
 	let Rectangle = __webpack_require__(3);
 	let Util = __webpack_require__(5);
 	let environment = __webpack_require__(10);
 	
-	fs = __webpack_require__(88);
-	
+	fs = __webpack_require__(87);
 	
 	class Circuit extends Observer {
 	  static initClass() {
@@ -27272,9 +27268,10 @@
 	    for (let nodeIdx of component.nodes) {
 	      let node = this.getNode(nodeIdx);
 	
-	      console.log("DE", node.getNeighboringElements());
+	      if (!node)
+	        console.warning(`Error deleting nodes for ${component} No node found at ${nodeIdx}!`);
 	
-	      if (node.getNeighboringElements() == [this]) {
+	      if (node && node.getNeighboringElements() == [this]) {
 	        console.log("Orphaned node: ", nodeIdx)
 	      }
 	    }
@@ -27358,21 +27355,6 @@
 	
 	//    @write(@Solver.dumpFrame() + "\n")
 	//    @write(@dump() + "\n")
-	  }
-	
-	  setSelected(component) {
-	    return (() => {
-	      let result = [];
-	      for (let elm of Array.from(this.elementList)) {
-	        let item;
-	        if (elm === component) {
-	          this.selectedElm = component;
-	          item = component.setSelected(true);
-	        }
-	        result.push(item);
-	      }
-	      return result;
-	    })();
 	  }
 	
 	  warn(message) {
@@ -27703,49 +27685,6 @@
 /* 78 */
 /***/ function(module, exports) {
 
-	class Oscilloscope {
-	  constructor() {
-	    this.voltageBuffer = [];
-	    this.currentBuffer = [];
-	    this.onUpdate = null;
-	  }
-	
-	  setOutputNode(n) {
-	    return this.nodeOutput = n;
-	  }
-	
-	  setReferenceNode(n) {
-	    return this.nodeRef = n;
-	  }
-	
-	  setComponent(component) {
-	    return this.component = component;
-	  }
-	
-	  sampleVoltage() {
-	    if (!this.nodeOutput || !this.nodeRef) {
-	      console.error("Node output and reference not set for oscilloscope!");
-	    }
-	
-	    return voltageBuffer.add();
-	  }
-	
-	  sampleCurrent() {
-	    return currentBuffer.add();
-	  }
-	}
-	
-	
-	
-	
-	
-	module.exports = Oscilloscope;
-
-
-/***/ },
-/* 79 */
-/***/ function(module, exports) {
-
 	let errorStack = undefined;
 	let warningStack = undefined;
 	class Logger {
@@ -27772,7 +27711,7 @@
 
 
 /***/ },
-/* 80 */
+/* 79 */
 /***/ function(module, exports) {
 
 	class SimulationFrame {
@@ -27808,26 +27747,26 @@
 
 
 /***/ },
-/* 81 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var CapacitorElm, CircuitNode, CircuitNodeLink, CircuitSolver, CurrentElm, GroundElm, InductorElm, MatrixStamper, Pathfinder, RailElm, RowInfo, Setting, SimulationFrame, Util, VoltageElm, WireElm, sprintf;
 	
-	MatrixStamper = __webpack_require__(82);
+	MatrixStamper = __webpack_require__(81);
 	
-	Pathfinder = __webpack_require__(84);
+	Pathfinder = __webpack_require__(83);
 	
-	CircuitNode = __webpack_require__(85);
+	CircuitNode = __webpack_require__(84);
 	
-	CircuitNodeLink = __webpack_require__(86);
+	CircuitNodeLink = __webpack_require__(85);
 	
-	RowInfo = __webpack_require__(83);
+	RowInfo = __webpack_require__(82);
 	
 	Setting = __webpack_require__(2);
 	
 	Util = __webpack_require__(5);
 	
-	SimulationFrame = __webpack_require__(80);
+	SimulationFrame = __webpack_require__(79);
 	
 	GroundElm = __webpack_require__(23);
 	
@@ -28633,10 +28572,10 @@
 
 
 /***/ },
-/* 82 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let RowInfo = __webpack_require__(83);
+	let RowInfo = __webpack_require__(82);
 	let Util = __webpack_require__(5);
 	
 	class MatrixStamper {
@@ -28804,7 +28743,7 @@
 
 
 /***/ },
-/* 83 */
+/* 82 */
 /***/ function(module, exports) {
 
 	class RowInfo {
@@ -28861,7 +28800,7 @@
 
 
 /***/ },
-/* 84 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let VoltageElm = __webpack_require__(19);
@@ -28982,7 +28921,7 @@
 
 
 /***/ },
-/* 85 */
+/* 84 */
 /***/ function(module, exports) {
 
 	class CircuitNode {
@@ -29020,7 +28959,7 @@
 
 
 /***/ },
-/* 86 */
+/* 85 */
 /***/ function(module, exports) {
 
 	class CircuitNodeLink {
@@ -29045,7 +28984,7 @@
 
 
 /***/ },
-/* 87 */
+/* 86 */
 /***/ function(module, exports) {
 
 	class Observer {
@@ -29082,13 +29021,13 @@
 
 
 /***/ },
-/* 88 */
+/* 87 */
 /***/ function(module, exports) {
 
 
 
 /***/ },
-/* 89 */
+/* 88 */
 /***/ function(module, exports) {
 
 	class Hint {
@@ -29188,7 +29127,7 @@
 
 
 /***/ },
-/* 90 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -29447,18 +29386,16 @@
 	ComponentRegistry.initClass();
 	
 	
-	
-	
 	module.exports = ComponentRegistry;
 
 
 /***/ },
-/* 91 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let Rectangle = __webpack_require__(3);
-	let CircuitCanvas = __webpack_require__(92);
-	let Observer = __webpack_require__(87);
+	let CircuitCanvas = __webpack_require__(91);
+	let Observer = __webpack_require__(86);
 	let Util = __webpack_require__(5);
 	
 	let AntennaElm = __webpack_require__(17);
@@ -29953,10 +29890,10 @@
 
 
 /***/ },
-/* 92 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let Observer = __webpack_require__(87);
+	let Observer = __webpack_require__(86);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
 	let Settings = __webpack_require__(2);
@@ -30687,10 +30624,10 @@
 
 
 /***/ },
-/* 93 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let ScopeCanvas = __webpack_require__(94);
+	let ScopeCanvas = __webpack_require__(93);
 	let Util = __webpack_require__(5);
 	
 	class RickshawScopeCanvas extends ScopeCanvas {
@@ -30813,7 +30750,7 @@
 
 
 /***/ },
-/* 94 */
+/* 93 */
 /***/ function(module, exports) {
 
 	class ScopeCanvas {
@@ -30854,7 +30791,7 @@
 
 
 /***/ },
-/* 95 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let RailElm = __webpack_require__(18);

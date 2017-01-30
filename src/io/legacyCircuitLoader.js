@@ -2,11 +2,11 @@ let ComponentRegistry = require('../circuit/componentRegistry.js');
 let SimulationParams = require('../circuit/simulationParams.js');
 
 let Circuit = require('../circuit/circuit.js');
-let CircuitComponent = require('../circuit/circuitComponent.js');
+let CircuitComponent = require('../components/circuitComponent.js');
 let Hint = require('../engine/hint.js');
 fs = require('fs')
 
-let VoltageElm = require('../circuit/components/VoltageElm.js');
+let VoltageElm = require('./VoltageElm.js');
 
 let Scope = require('../circuit/Scope.js');
 

@@ -9,13 +9,13 @@ Util = require('../util/util.js')
 
 SimulationFrame = require('../circuit/simulationFrame.js')
 
-GroundElm = require('../circuit/components/GroundElm.js')
-RailElm = require('../circuit/components/RailElm.js')
-VoltageElm = require('../circuit/components/VoltageElm.js')
-WireElm = require('../circuit/components/WireElm.js')
-CapacitorElm = require('../circuit/components/CapacitorElm.js')
-InductorElm = require('../circuit/components/InductorElm.js')
-CurrentElm = require('../circuit/components/CurrentElm.js')
+GroundElm = require('../components/GroundElm.js')
+RailElm = require('../components/RailElm.js')
+VoltageElm = require('../components/VoltageElm.js')
+WireElm = require('../components/WireElm.js')
+CapacitorElm = require('../components/CapacitorElm.js')
+InductorElm = require('../components/InductorElm.js')
+CurrentElm = require('../components/CurrentElm.js')
 
 sprintf = require("sprintf-js").sprintf
 
