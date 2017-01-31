@@ -839,7 +839,7 @@ class CircuitSolver
         #circuitMatrixDump += ", "
 
     out = ""
-    out += "  iter: #{@Circuit.iterations}, time: #{(@Circuit.time).toFixed(7}, subiter: #{@subIterations} rows: #{matrixRowCount}\n"
+    out += "  iter: #{@Circuit.iterations}, time: #{(@Circuit.time).toFixed(7)}, subiter: #{@subIterations} rows: #{matrixRowCount}\n"
     out += circuitMatrixDump + "\n"
     out += circuitRightSideDump + "]"
 

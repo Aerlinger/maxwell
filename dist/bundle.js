@@ -45,81 +45,81 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {let CircuitComponent = __webpack_require__(1);
-	let CircuitLoader = __webpack_require__(16);
+	let CircuitLoader = __webpack_require__(15);
 	
-	let Circuit = __webpack_require__(77);
-	let CircuitUI = __webpack_require__(89);
+	let Circuit = __webpack_require__(76);
+	let CircuitUI = __webpack_require__(88);
 	
-	let RickshawScopeCanvas = __webpack_require__(96);
+	let RickshawScopeCanvas = __webpack_require__(95);
 	
-	let Components = __webpack_require__(97);
+	let Components = __webpack_require__(96);
 	
-	let AcRailElm = __webpack_require__(103);
-	let AntennaElm = __webpack_require__(17);
-	let WireElm = __webpack_require__(20);
-	let ResistorElm = __webpack_require__(22);
-	let GroundElm = __webpack_require__(23);
-	let VoltageElm = __webpack_require__(19);
-	let DiodeElm = __webpack_require__(24);
-	let OutputElm = __webpack_require__(25);
-	let SwitchElm = __webpack_require__(26);
-	let CapacitorElm = __webpack_require__(27);
-	let InductorElm = __webpack_require__(28);
-	let SparkGapElm = __webpack_require__(29);
-	let CurrentElm = __webpack_require__(30);
-	let RailElm = __webpack_require__(18);
-	let MosfetElm = __webpack_require__(31);
-	let JfetElm = __webpack_require__(32);
-	let TransistorElm = __webpack_require__(33);
-	let VarRailElm = __webpack_require__(34);
-	let OpAmpElm = __webpack_require__(35);
-	let ZenerElm = __webpack_require__(36);
-	let Switch2Elm = __webpack_require__(37);
-	let SweepElm = __webpack_require__(38);
-	let TextElm = __webpack_require__(39);
-	let ProbeElm = __webpack_require__(40);
+	let AcRailElm = __webpack_require__(102);
+	let AntennaElm = __webpack_require__(16);
+	let WireElm = __webpack_require__(19);
+	let ResistorElm = __webpack_require__(21);
+	let GroundElm = __webpack_require__(22);
+	let VoltageElm = __webpack_require__(18);
+	let DiodeElm = __webpack_require__(23);
+	let OutputElm = __webpack_require__(24);
+	let SwitchElm = __webpack_require__(25);
+	let CapacitorElm = __webpack_require__(26);
+	let InductorElm = __webpack_require__(27);
+	let SparkGapElm = __webpack_require__(28);
+	let CurrentElm = __webpack_require__(29);
+	let RailElm = __webpack_require__(17);
+	let MosfetElm = __webpack_require__(30);
+	let JfetElm = __webpack_require__(31);
+	let TransistorElm = __webpack_require__(32);
+	let VarRailElm = __webpack_require__(33);
+	let OpAmpElm = __webpack_require__(34);
+	let ZenerElm = __webpack_require__(35);
+	let Switch2Elm = __webpack_require__(36);
+	let SweepElm = __webpack_require__(37);
+	let TextElm = __webpack_require__(38);
+	let ProbeElm = __webpack_require__(39);
 	
-	let AndGateElm = __webpack_require__(41);
-	let NandGateElm = __webpack_require__(42);
-	let OrGateElm = __webpack_require__(43);
-	let NorGateElm = __webpack_require__(44);
-	let XorGateElm = __webpack_require__(45);
-	let InverterElm = __webpack_require__(46);
+	let AndGateElm = __webpack_require__(40);
+	let NandGateElm = __webpack_require__(41);
+	let OrGateElm = __webpack_require__(42);
+	let NorGateElm = __webpack_require__(43);
+	let XorGateElm = __webpack_require__(44);
+	let InverterElm = __webpack_require__(45);
 	
-	let LogicInputElm = __webpack_require__(47);
-	let LogicOutputElm = __webpack_require__(48);
-	let AnalogSwitchElm = __webpack_require__(49);
-	let AnalogSwitch2Elm = __webpack_require__(50);
-	let MemristorElm = __webpack_require__(51);
-	let RelayElm = __webpack_require__(52);
-	let TunnelDiodeElm = __webpack_require__(53);
+	let LogicInputElm = __webpack_require__(46);
+	let LogicOutputElm = __webpack_require__(47);
+	let AnalogSwitchElm = __webpack_require__(48);
+	let AnalogSwitch2Elm = __webpack_require__(49);
+	let MemristorElm = __webpack_require__(50);
+	let RelayElm = __webpack_require__(51);
+	let TunnelDiodeElm = __webpack_require__(52);
 	
-	let ScrElm = __webpack_require__(54);
-	let TriodeElm = __webpack_require__(55);
+	let ScrElm = __webpack_require__(53);
+	let TriodeElm = __webpack_require__(54);
 	
-	let DecadeElm = __webpack_require__(56);
-	let LatchElm = __webpack_require__(58);
-	let TimerElm = __webpack_require__(59);
-	let JkFlipFlopElm = __webpack_require__(60);
-	let DFlipFlopElm = __webpack_require__(61);
-	let CounterElm = __webpack_require__(62);
-	let DacElm = __webpack_require__(63);
-	let AdcElm = __webpack_require__(64);
-	let VcoElm = __webpack_require__(65);
-	let PhaseCompElm = __webpack_require__(66);
-	let SevenSegElm = __webpack_require__(67);
-	let CC2Elm = __webpack_require__(68);
+	let DecadeElm = __webpack_require__(55);
+	let LatchElm = __webpack_require__(57);
+	let TimerElm = __webpack_require__(58);
+	let JkFlipFlopElm = __webpack_require__(59);
+	let DFlipFlopElm = __webpack_require__(60);
+	let CounterElm = __webpack_require__(61);
+	let DacElm = __webpack_require__(62);
+	let AdcElm = __webpack_require__(63);
+	let VcoElm = __webpack_require__(64);
+	let PhaseCompElm = __webpack_require__(65);
+	let SevenSegElm = __webpack_require__(66);
+	let CC2Elm = __webpack_require__(67);
 	
-	let TransLineElm = __webpack_require__(69);
+	let TransLineElm = __webpack_require__(68);
 	
-	let TransformerElm = __webpack_require__(70);
-	let TappedTransformerElm = __webpack_require__(71);
+	let TransformerElm = __webpack_require__(69);
+	let TappedTransformerElm = __webpack_require__(70);
 	
-	let LedElm = __webpack_require__(72);
-	let PotElm = __webpack_require__(73);
-	let ClockElm = __webpack_require__(74);
+	let LedElm = __webpack_require__(71);
+	let PotElm = __webpack_require__(72);
+	let ClockElm = __webpack_require__(73);
 	
-	let environment = __webpack_require__(10);
+	let environment = __webpack_require__(9);
 	
 	
 	//unless environment.isBrowser
@@ -508,9 +508,9 @@
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
 	let Util = __webpack_require__(5);
-	let debug = __webpack_require__(11)('circuitComponent');
+	let debug = __webpack_require__(10)('circuitComponent');
 	
-	let _ = __webpack_require__(14);
+	let _ = __webpack_require__(13);
 	
 	class CircuitComponent {
 	
@@ -1697,7 +1697,7 @@
 	let Polygon = __webpack_require__(7);
 	let Settings = __webpack_require__(2);
 	let Color = __webpack_require__(8);
-	let environment = __webpack_require__(10);
+	let environment = __webpack_require__(9);
 	
 	class Util {
 	
@@ -2433,15 +2433,14 @@
 
 
 /***/ },
-/* 9 */,
-/* 10 */
+/* 9 */
 /***/ function(module, exports) {
 
 	exports.isBrowser = typeof window !== 'undefined';
 
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -2450,7 +2449,7 @@
 	 * Expose `debug()` as the module.
 	 */
 	
-	exports = module.exports = __webpack_require__(12);
+	exports = module.exports = __webpack_require__(11);
 	exports.log = log;
 	exports.formatArgs = formatArgs;
 	exports.save = save;
@@ -2630,7 +2629,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -2646,7 +2645,7 @@
 	exports.disable = disable;
 	exports.enable = enable;
 	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(13);
+	exports.humanize = __webpack_require__(12);
 	
 	/**
 	 * The currently active debug mode names, and names to skip.
@@ -2835,7 +2834,7 @@
 
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports) {
 
 	/**
@@ -2990,7 +2989,7 @@
 
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -17545,10 +17544,10 @@
 	  }
 	}.call(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)(module), (function() { return this; }())))
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -17564,82 +17563,82 @@
 
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let AntennaElm = __webpack_require__(17);
-	let WireElm = __webpack_require__(20);
-	let ResistorElm = __webpack_require__(22);
-	let GroundElm = __webpack_require__(23);
-	let VoltageElm = __webpack_require__(19);
-	let DiodeElm = __webpack_require__(24);
-	let OutputElm = __webpack_require__(25);
-	let SwitchElm = __webpack_require__(26);
-	let CapacitorElm = __webpack_require__(27);
-	let InductorElm = __webpack_require__(28);
-	let SparkGapElm = __webpack_require__(29);
-	let CurrentElm = __webpack_require__(30);
-	let RailElm = __webpack_require__(18);
-	let MosfetElm = __webpack_require__(31);
-	let JfetElm = __webpack_require__(32);
-	let TransistorElm = __webpack_require__(33);
-	let VarRailElm = __webpack_require__(34);
-	let OpAmpElm = __webpack_require__(35);
-	let ZenerElm = __webpack_require__(36);
-	let Switch2Elm = __webpack_require__(37);
-	let SweepElm = __webpack_require__(38);
-	let TextElm = __webpack_require__(39);
-	let ProbeElm = __webpack_require__(40);
+	let AntennaElm = __webpack_require__(16);
+	let WireElm = __webpack_require__(19);
+	let ResistorElm = __webpack_require__(21);
+	let GroundElm = __webpack_require__(22);
+	let VoltageElm = __webpack_require__(18);
+	let DiodeElm = __webpack_require__(23);
+	let OutputElm = __webpack_require__(24);
+	let SwitchElm = __webpack_require__(25);
+	let CapacitorElm = __webpack_require__(26);
+	let InductorElm = __webpack_require__(27);
+	let SparkGapElm = __webpack_require__(28);
+	let CurrentElm = __webpack_require__(29);
+	let RailElm = __webpack_require__(17);
+	let MosfetElm = __webpack_require__(30);
+	let JfetElm = __webpack_require__(31);
+	let TransistorElm = __webpack_require__(32);
+	let VarRailElm = __webpack_require__(33);
+	let OpAmpElm = __webpack_require__(34);
+	let ZenerElm = __webpack_require__(35);
+	let Switch2Elm = __webpack_require__(36);
+	let SweepElm = __webpack_require__(37);
+	let TextElm = __webpack_require__(38);
+	let ProbeElm = __webpack_require__(39);
 	
-	let AndGateElm = __webpack_require__(41);
-	let NandGateElm = __webpack_require__(42);
-	let OrGateElm = __webpack_require__(43);
-	let NorGateElm = __webpack_require__(44);
-	let XorGateElm = __webpack_require__(45);
-	let InverterElm = __webpack_require__(46);
+	let AndGateElm = __webpack_require__(40);
+	let NandGateElm = __webpack_require__(41);
+	let OrGateElm = __webpack_require__(42);
+	let NorGateElm = __webpack_require__(43);
+	let XorGateElm = __webpack_require__(44);
+	let InverterElm = __webpack_require__(45);
 	
-	let LogicInputElm = __webpack_require__(47);
-	let LogicOutputElm = __webpack_require__(48);
-	let AnalogSwitchElm = __webpack_require__(49);
-	let AnalogSwitch2Elm = __webpack_require__(50);
-	let MemristorElm = __webpack_require__(51);
-	let RelayElm = __webpack_require__(52);
-	let TunnelDiodeElm = __webpack_require__(53);
+	let LogicInputElm = __webpack_require__(46);
+	let LogicOutputElm = __webpack_require__(47);
+	let AnalogSwitchElm = __webpack_require__(48);
+	let AnalogSwitch2Elm = __webpack_require__(49);
+	let MemristorElm = __webpack_require__(50);
+	let RelayElm = __webpack_require__(51);
+	let TunnelDiodeElm = __webpack_require__(52);
 	
-	let ScrElm = __webpack_require__(54);
-	let TriodeElm = __webpack_require__(55);
+	let ScrElm = __webpack_require__(53);
+	let TriodeElm = __webpack_require__(54);
 	
-	let DecadeElm = __webpack_require__(56);
-	let LatchElm = __webpack_require__(58);
-	let TimerElm = __webpack_require__(59);
-	let JkFlipFlopElm = __webpack_require__(60);
-	let DFlipFlopElm = __webpack_require__(61);
-	let CounterElm = __webpack_require__(62);
-	let DacElm = __webpack_require__(63);
-	let AdcElm = __webpack_require__(64);
-	let VcoElm = __webpack_require__(65);
-	let PhaseCompElm = __webpack_require__(66);
-	let SevenSegElm = __webpack_require__(67);
-	let CC2Elm = __webpack_require__(68);
+	let DecadeElm = __webpack_require__(55);
+	let LatchElm = __webpack_require__(57);
+	let TimerElm = __webpack_require__(58);
+	let JkFlipFlopElm = __webpack_require__(59);
+	let DFlipFlopElm = __webpack_require__(60);
+	let CounterElm = __webpack_require__(61);
+	let DacElm = __webpack_require__(62);
+	let AdcElm = __webpack_require__(63);
+	let VcoElm = __webpack_require__(64);
+	let PhaseCompElm = __webpack_require__(65);
+	let SevenSegElm = __webpack_require__(66);
+	let CC2Elm = __webpack_require__(67);
 	
-	let TransLineElm = __webpack_require__(69);
+	let TransLineElm = __webpack_require__(68);
 	
-	let TransformerElm = __webpack_require__(70);
-	let TappedTransformerElm = __webpack_require__(71);
+	let TransformerElm = __webpack_require__(69);
+	let TappedTransformerElm = __webpack_require__(70);
 	
-	let LedElm = __webpack_require__(72);
-	let PotElm = __webpack_require__(73);
-	let ClockElm = __webpack_require__(74);
+	let LedElm = __webpack_require__(71);
+	let PotElm = __webpack_require__(72);
+	let ClockElm = __webpack_require__(73);
 	
-	let Scope = __webpack_require__(75);
+	let Scope = __webpack_require__(74);
 	
-	let SimulationParams = __webpack_require__(76);
+	let SimulationParams = __webpack_require__(75);
 	
-	let Circuit = __webpack_require__(77);
-	let Hint = __webpack_require__(88);
-	let fs = __webpack_require__(87);
+	let Circuit = __webpack_require__(76);
+	let Hint = __webpack_require__(87);
+	let fs = __webpack_require__(86);
 	
-	let environment = __webpack_require__(10);
+	let environment = __webpack_require__(9);
 	
 	class CircuitLoader {
 	  static createEmptyCircuit() {
@@ -17726,7 +17725,7 @@
 
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -17734,7 +17733,7 @@
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
-	let RailElm = __webpack_require__(18);
+	let RailElm = __webpack_require__(17);
 	
 	class AntennaElm extends RailElm {
 	
@@ -17777,7 +17776,7 @@
 
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -17787,7 +17786,7 @@
 	let Point = __webpack_require__(4);
 	let Util = __webpack_require__(5);
 	
-	let VoltageElm = __webpack_require__(19);
+	let VoltageElm = __webpack_require__(18);
 	
 	
 	class RailElm extends VoltageElm {
@@ -17889,7 +17888,7 @@
 
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -18259,7 +18258,7 @@
 
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -18268,7 +18267,7 @@
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
 	let Util = __webpack_require__(5);
-	let GateElm = __webpack_require__(21);
+	let GateElm = __webpack_require__(20);
 	
 	class WireElm extends CircuitComponent {
 	  static initClass() {
@@ -18344,7 +18343,7 @@
 
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -18557,7 +18556,7 @@
 
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -18642,7 +18641,7 @@
 
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -18722,7 +18721,7 @@
 
 
 /***/ },
-/* 24 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -18979,7 +18978,7 @@
 
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -19043,7 +19042,7 @@
 
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -19204,7 +19203,7 @@
 
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -19377,7 +19376,7 @@
 
 
 /***/ },
-/* 28 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -19523,7 +19522,7 @@
 
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -19688,7 +19687,7 @@
 
 
 /***/ },
-/* 30 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -19774,7 +19773,7 @@
 
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -20113,7 +20112,7 @@
 
 
 /***/ },
-/* 32 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -20123,7 +20122,7 @@
 	let Point = __webpack_require__(4);
 	let Util = __webpack_require__(5);
 	
-	let MosfetElm = __webpack_require__(31);
+	let MosfetElm = __webpack_require__(30);
 	
 	class JfetElm extends MosfetElm {
 	
@@ -20212,7 +20211,7 @@
 
 
 /***/ },
-/* 33 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -20635,7 +20634,7 @@
 
 
 /***/ },
-/* 34 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -20643,8 +20642,8 @@
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
-	let RailElm = __webpack_require__(18);
-	let VoltageElm = __webpack_require__(19);
+	let RailElm = __webpack_require__(17);
+	let VoltageElm = __webpack_require__(18);
 	
 	let Util = __webpack_require__(5);
 	
@@ -20691,7 +20690,7 @@
 
 
 /***/ },
-/* 35 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -20950,7 +20949,7 @@
 
 
 /***/ },
-/* 36 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -20958,7 +20957,7 @@
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
-	let DiodeElm = __webpack_require__(24);
+	let DiodeElm = __webpack_require__(23);
 	let Util = __webpack_require__(5);
 	
 	class ZenerElm extends DiodeElm {
@@ -21043,7 +21042,7 @@
 
 
 /***/ },
-/* 37 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -21051,10 +21050,10 @@
 	let Polygon = __webpack_require__(7);
 	let Rectangle = __webpack_require__(3);
 	let Point = __webpack_require__(4);
-	let SwitchElm = __webpack_require__(26);
+	let SwitchElm = __webpack_require__(25);
 	let Util = __webpack_require__(5);
 	
-	let _ = __webpack_require__(14);
+	let _ = __webpack_require__(13);
 	
 	
 	// Broken
@@ -21227,7 +21226,7 @@
 
 
 /***/ },
-/* 38 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -21450,7 +21449,7 @@
 
 
 /***/ },
-/* 39 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -21555,7 +21554,7 @@
 
 
 /***/ },
-/* 40 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -21652,10 +21651,10 @@
 
 
 /***/ },
-/* 41 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let GateElm = __webpack_require__(21);
+	let GateElm = __webpack_require__(20);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
 	
@@ -21709,11 +21708,11 @@
 
 
 /***/ },
-/* 42 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let Util = __webpack_require__(5);
-	let AndGateElm = __webpack_require__(41);
+	let AndGateElm = __webpack_require__(40);
 	
 	class NandGateElm extends AndGateElm {
 	  constructor(xa, ya, xb, yb, params, f){
@@ -21733,10 +21732,10 @@
 
 
 /***/ },
-/* 43 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let GateElm = __webpack_require__(21);
+	let GateElm = __webpack_require__(20);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
 	
@@ -21797,10 +21796,10 @@
 
 
 /***/ },
-/* 44 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let OrGateElm = __webpack_require__(43);
+	let OrGateElm = __webpack_require__(42);
 	
 	class NorGateElm extends OrGateElm {
 	
@@ -21821,10 +21820,10 @@
 
 
 /***/ },
-/* 45 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let OrGateElm = __webpack_require__(43);
+	let OrGateElm = __webpack_require__(42);
 	let Util = __webpack_require__(5);
 	
 	class XorGateElm extends OrGateElm {
@@ -21867,7 +21866,7 @@
 
 
 /***/ },
-/* 46 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -21977,11 +21976,11 @@
 
 
 /***/ },
-/* 47 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let SwitchElm = __webpack_require__(26);
+	let SwitchElm = __webpack_require__(25);
 	let Util = __webpack_require__(5);
 	let Settings = __webpack_require__(2);
 	
@@ -22114,7 +22113,7 @@
 
 
 /***/ },
-/* 48 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -22219,7 +22218,7 @@
 
 
 /***/ },
-/* 49 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -22348,11 +22347,11 @@
 
 
 /***/ },
-/* 50 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let AnalogSwitchElm = __webpack_require__(49);
+	let AnalogSwitchElm = __webpack_require__(48);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
 	let Settings = __webpack_require__(2);
@@ -22478,7 +22477,7 @@
 
 
 /***/ },
-/* 51 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -22631,7 +22630,7 @@
 
 
 /***/ },
-/* 52 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -22997,7 +22996,7 @@
 	}
 
 /***/ },
-/* 53 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -23142,7 +23141,7 @@
 
 
 /***/ },
-/* 54 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -23549,7 +23548,7 @@
 	module.exports = ScrElm;
 
 /***/ },
-/* 55 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -23808,10 +23807,10 @@
 
 
 /***/ },
-/* 56 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(56);
 	
 	class DecadeElm extends ChipElm {
 	
@@ -23893,7 +23892,7 @@
 
 
 /***/ },
-/* 57 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -24363,11 +24362,11 @@
 
 
 /***/ },
-/* 58 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(56);
 	let Util = __webpack_require__(5);
 	
 	class LatchElm extends ChipElm {
@@ -24432,11 +24431,11 @@
 
 
 /***/ },
-/* 59 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(56);
 	let Util = __webpack_require__(5);
 	let Settings = __webpack_require__(2);
 	
@@ -24575,11 +24574,11 @@
 
 
 /***/ },
-/* 60 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(56);
 	let Util = __webpack_require__(5);
 	
 	class JkFlipFlopElm extends ChipElm {
@@ -24650,11 +24649,11 @@
 
 
 /***/ },
-/* 61 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(56);
 	let Util = __webpack_require__(5);
 	
 	class DFlipFlopElm extends ChipElm {
@@ -24738,11 +24737,11 @@
 
 
 /***/ },
-/* 62 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(56);
 	let Util = __webpack_require__(5);
 	
 	class CounterElm extends ChipElm {
@@ -24844,11 +24843,11 @@
 
 
 /***/ },
-/* 63 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(56);
 	let Util = __webpack_require__(5);
 	
 	class DacElm extends ChipElm {
@@ -24910,11 +24909,11 @@
 
 
 /***/ },
-/* 64 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(56);
 	let Util = __webpack_require__(5);
 	
 	class AdcElm extends ChipElm {
@@ -24983,11 +24982,11 @@
 	}
 
 /***/ },
-/* 65 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(56);
 	let Util = __webpack_require__(5);
 	
 	// TODO Fails on this line: stamper.updateVoltageSource(0, this.nodes[1], this.pins[1].voltSource, vo);
@@ -25096,11 +25095,11 @@
 
 
 /***/ },
-/* 66 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(56);
 	let Util = __webpack_require__(5);
 	
 	class PhaseCompElm extends ChipElm {
@@ -25189,12 +25188,12 @@
 
 
 /***/ },
-/* 67 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
 	let Settings = __webpack_require__(2);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(56);
 	
 	class SevenSegElm extends ChipElm {
 	
@@ -25276,11 +25275,11 @@
 
 
 /***/ },
-/* 68 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let ChipElm = __webpack_require__(57);
+	let ChipElm = __webpack_require__(56);
 	let Util = __webpack_require__(5);
 	
 	class CC2Elm extends ChipElm {
@@ -25349,7 +25348,7 @@
 
 
 /***/ },
-/* 69 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -25581,7 +25580,7 @@
 
 
 /***/ },
-/* 70 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -25856,7 +25855,7 @@
 
 
 /***/ },
-/* 71 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -26114,11 +26113,11 @@
 
 
 /***/ },
-/* 72 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let DiodeElm = __webpack_require__(24);
+	let DiodeElm = __webpack_require__(23);
 	let Util = __webpack_require__(5);
 	let Settings = __webpack_require__(2);
 	
@@ -26242,7 +26241,7 @@
 
 
 /***/ },
-/* 73 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -26453,11 +26452,11 @@
 
 
 /***/ },
-/* 74 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let RailElm = __webpack_require__(18);
-	let VoltageElm = __webpack_require__(19);
+	let RailElm = __webpack_require__(17);
+	let VoltageElm = __webpack_require__(18);
 	
 	class ClockElm extends RailElm {
 	  // TODO: Needs params!!
@@ -26483,7 +26482,7 @@
 
 
 /***/ },
-/* 75 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let Rectangle = __webpack_require__(3);
@@ -26690,7 +26689,7 @@
 
 
 /***/ },
-/* 76 */
+/* 75 */
 /***/ function(module, exports) {
 
 	class SimulationParams {
@@ -26757,7 +26756,7 @@
 
 
 /***/ },
-/* 77 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//###################################################################################################################
@@ -26784,16 +26783,16 @@
 	//
 	//###################################################################################################################
 	
-	let Logger = __webpack_require__(78);
-	let SimulationParams = __webpack_require__(76);
-	let SimulationFrame = __webpack_require__(79);
-	let CircuitSolver = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../engine/CircuitSolver.coffee\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-	let Observer = __webpack_require__(86);
+	let Logger = __webpack_require__(77);
+	let SimulationParams = __webpack_require__(75);
+	let SimulationFrame = __webpack_require__(78);
+	let CircuitSolver = __webpack_require__(79);
+	let Observer = __webpack_require__(85);
 	let Rectangle = __webpack_require__(3);
 	let Util = __webpack_require__(5);
-	let environment = __webpack_require__(10);
+	let environment = __webpack_require__(9);
 	
-	fs = __webpack_require__(87);
+	fs = __webpack_require__(86);
 	
 	class Circuit extends Observer {
 	  static initClass() {
@@ -27358,7 +27357,7 @@
 
 
 /***/ },
-/* 78 */
+/* 77 */
 /***/ function(module, exports) {
 
 	let errorStack = undefined;
@@ -27387,7 +27386,7 @@
 
 
 /***/ },
-/* 79 */
+/* 78 */
 /***/ function(module, exports) {
 
 	class SimulationFrame {
@@ -27423,13 +27422,1318 @@
 
 
 /***/ },
-/* 80 */,
-/* 81 */,
-/* 82 */,
-/* 83 */,
-/* 84 */,
-/* 85 */,
-/* 86 */
+/* 79 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var CapacitorElm, CircuitNode, CircuitNodeLink, CircuitSolver, CurrentElm, GroundElm, InductorElm, MatrixStamper, Pathfinder, RailElm, RowInfo, Setting, SimulationFrame, Util, VoltageElm, WireElm;
+	
+	MatrixStamper = __webpack_require__(80);
+	
+	Pathfinder = __webpack_require__(82);
+	
+	CircuitNode = __webpack_require__(83);
+	
+	CircuitNodeLink = __webpack_require__(84);
+	
+	RowInfo = __webpack_require__(81);
+	
+	Setting = __webpack_require__(2);
+	
+	Util = __webpack_require__(5);
+	
+	SimulationFrame = __webpack_require__(78);
+	
+	GroundElm = __webpack_require__(22);
+	
+	RailElm = __webpack_require__(17);
+	
+	VoltageElm = __webpack_require__(18);
+	
+	WireElm = __webpack_require__(19);
+	
+	CapacitorElm = __webpack_require__(26);
+	
+	InductorElm = __webpack_require__(27);
+	
+	CurrentElm = __webpack_require__(29);
+	
+	CircuitSolver = (function() {
+	  CircuitSolver.SIZE_LIMIT = 100;
+	
+	  CircuitSolver.MAXIMUM_SUBITERATIONS = 5000;
+	
+	  function CircuitSolver(Circuit) {
+	    this.Circuit = Circuit;
+	    this.scaleFactors = Util.zeroArray(400);
+	    this.reset();
+	    this.Stamper = new MatrixStamper(this.Circuit);
+	  }
+	
+	  CircuitSolver.prototype.reset = function() {
+	    this.Circuit.time = 0;
+	    this.iterations = 0;
+	    this.converged = true;
+	    this.subIterations = 5000;
+	    this.circuitMatrix = [];
+	    this.circuitRightSide = [];
+	    this.origMatrix = [];
+	    this.origRightSide = [];
+	    this.circuitRowInfo = [];
+	    this.circuitPermute = [];
+	    this.circuitNonLinear = false;
+	    this.lastTime = 0;
+	    this.secTime = 0;
+	    this.lastFrameTime = 0;
+	    this.lastIterTime = 0;
+	    this.analyzeFlag = true;
+	    return this.simulationFrames = [];
+	  };
+	
+	  CircuitSolver.prototype.reconstruct = function() {
+	    if (!this.analyzeFlag || (this.Circuit.numElements() === 0)) {
+	      return;
+	    }
+	    this.Circuit.clearErrors();
+	    this.Circuit.resetNodes();
+	    this.discoverGroundReference();
+	    this.constructCircuitGraph();
+	    this.constructMatrixEquations();
+	    this.checkConnectivity();
+	    this.findInvalidPaths();
+	    this.optimize();
+	    if (this.circuitLinear()) {
+	      return this.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute);
+	    }
+	  };
+	
+	  CircuitSolver.prototype.solveCircuit = function() {
+	    var circuitElm, iter, j, lit, res, scope, stepRate, subiter, tm, _i, _j, _k, _l, _len, _len1, _len2, _m, _ref, _ref1, _ref2, _ref3, _ref4;
+	    if ((this.circuitMatrix == null) || this.Circuit.numElements() === 0) {
+	      this.circuitMatrix = null;
+	      return;
+	    }
+	    this.sysTime = (new Date()).getTime();
+	    stepRate = Math.floor(160 * this.getIterCount());
+	    tm = (new Date()).getTime();
+	    lit = this.lastIterTime;
+	    if (1000 >= (stepRate * (tm - this.lastIterTime))) {
+	      return;
+	    }
+	    iter = 1;
+	    while (true) {
+	      ++this.steps;
+	      _ref = this.Circuit.getElements();
+	      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+	        circuitElm = _ref[_i];
+	        circuitElm.startIteration();
+	      }
+	      for (subiter = _j = 0, _ref1 = CircuitSolver.MAXIMUM_SUBITERATIONS; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; subiter = 0 <= _ref1 ? ++_j : --_j) {
+	        this.converged = true;
+	        this.subIterations = subiter;
+	        this.restoreOriginalMatrixState();
+	        _ref2 = this.Circuit.getElements();
+	        for (_k = 0, _len1 = _ref2.length; _k < _len1; _k++) {
+	          circuitElm = _ref2[_k];
+	          circuitElm.doStep(this.Stamper);
+	        }
+	        if (this.circuitNonLinear) {
+	          if (this.converged && subiter > 0) {
+	            break;
+	          }
+	          this.sub_luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute);
+	        }
+	        this.luSolve(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute, this.circuitRightSide);
+	        for (j = _l = 0, _ref3 = this.circuitMatrixFullSize; 0 <= _ref3 ? _l < _ref3 : _l > _ref3; j = 0 <= _ref3 ? ++_l : --_l) {
+	          res = this.getValueFromNode(j);
+	          if (!this.updateComponent(j, res)) {
+	            break;
+	          }
+	        }
+	        if (this.circuitLinear()) {
+	          break;
+	        }
+	      }
+	      if (subiter >= CircuitSolver.MAXIMUM_SUBITERATIONS) {
+	        this.halt("Convergence failed: " + subiter, null);
+	        break;
+	      }
+	      this.Circuit.time += this.Circuit.timeStep();
+	      if ((iter + 20) % 21 === 0) {
+	        _ref4 = this.Circuit.scopes;
+	        for (_m = 0, _len2 = _ref4.length; _m < _len2; _m++) {
+	          scope = _ref4[_m];
+	          if (scope.circuitElm) {
+	            scope.sampleVoltage(this.Circuit.time, scope.circuitElm.getVoltageDiff());
+	            scope.sampleCurrent(this.Circuit.time, scope.circuitElm.getCurrent());
+	          }
+	        }
+	      }
+	      tm = (new Date()).getTime();
+	      lit = tm;
+	      if ((tm - this.lastFrameTime) > 250) {
+	        break;
+	      }
+	      if ((iter * 1000) >= (stepRate * (tm - this.lastIterTime))) {
+	        break;
+	      }
+	      ++iter;
+	    }
+	    this.frames++;
+	    this.Circuit.iterations++;
+	    this.simulationFrames.push(new SimulationFrame(this.Circuit));
+	    return this._updateTimings(lit);
+	  };
+	
+	  CircuitSolver.prototype.circuitLinear = function() {
+	    return !this.circuitNonLinear;
+	  };
+	
+	  CircuitSolver.prototype._updateTimings = function(lastIterationTime) {
+	    var currentSpeed, inc, sysTime;
+	    this.lastIterTime = lastIterationTime;
+	    sysTime = (new Date()).getTime();
+	    if (this.lastTime !== 0) {
+	      inc = Math.floor(sysTime - this.lastTime);
+	      currentSpeed = Math.exp(this.Circuit.currentSpeed() / 3.5 - 14.2);
+	      this.Circuit.Params.setCurrentMult(1.7 * inc * currentSpeed);
+	    }
+	    if ((sysTime - this.secTime) >= 1000) {
+	      this.frames = 0;
+	      this.steps = 0;
+	      this.secTime = sysTime;
+	    }
+	    this.lastTime = sysTime;
+	    this.lastFrameTime = this.lastTime;
+	    return this.iterations++;
+	  };
+	
+	  CircuitSolver.prototype.getStamper = function() {
+	    return this.Stamper;
+	  };
+	
+	  CircuitSolver.prototype.getIterCount = function() {
+	    var sim_speed;
+	    sim_speed = this.Circuit.simSpeed();
+	    return 0.1 * Math.exp((sim_speed - 61.0) / 24.0);
+	  };
+	
+	  CircuitSolver.prototype.discoverGroundReference = function() {
+	    var ce, circuitNode, gotGround, gotRail, pt, volt, _i, _len, _ref;
+	    gotGround = false;
+	    gotRail = false;
+	    volt = null;
+	    _ref = this.Circuit.getElements();
+	    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+	      ce = _ref[_i];
+	      if (ce instanceof GroundElm) {
+	        gotGround = true;
+	        break;
+	      }
+	      if (Util.typeOf(ce, RailElm)) {
+	        gotRail = true;
+	      }
+	      if ((volt == null) && Util.typeOf(ce, VoltageElm)) {
+	        volt = ce;
+	      }
+	    }
+	    circuitNode = new CircuitNode(this);
+	    circuitNode.x = circuitNode.y = -1;
+	    if (!gotGround && !gotRail && (volt != null)) {
+	      pt = volt.getPost(0);
+	      circuitNode.x = pt.x;
+	      circuitNode.y = pt.y;
+	    }
+	    return this.Circuit.addCircuitNode(circuitNode);
+	  };
+	
+	  CircuitSolver.prototype.buildComponentNodes = function() {
+	    var circuitElm, circuitNode, internalLink, internalNode, internalNodeCount, internalNodeIdx, internalVSCount, nodeIdx, nodeLink, postCount, postIdx, postPt, voltageSourceCount, _i, _j, _k, _l, _len, _ref, _ref1, _results;
+	    voltageSourceCount = 0;
+	    _ref = this.Circuit.getElements();
+	    _results = [];
+	    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+	      circuitElm = _ref[_i];
+	      internalNodeCount = circuitElm.numInternalNodes();
+	      internalVSCount = circuitElm.numVoltageSources();
+	      postCount = circuitElm.numPosts();
+	      for (postIdx = _j = 0; 0 <= postCount ? _j < postCount : _j > postCount; postIdx = 0 <= postCount ? ++_j : --_j) {
+	        postPt = circuitElm.getPost(postIdx);
+	        for (nodeIdx = _k = 0, _ref1 = this.Circuit.numNodes(); 0 <= _ref1 ? _k < _ref1 : _k > _ref1; nodeIdx = 0 <= _ref1 ? ++_k : --_k) {
+	          circuitNode = this.Circuit.getNode(nodeIdx);
+	          if (Util.overlappingPoints(postPt, circuitNode)) {
+	            break;
+	          }
+	        }
+	        nodeLink = new CircuitNodeLink();
+	        nodeLink.num = postIdx;
+	        nodeLink.elm = circuitElm;
+	        if (nodeIdx === this.Circuit.numNodes()) {
+	          circuitNode = new CircuitNode(this, postPt.x, postPt.y);
+	          circuitNode.links.push(nodeLink);
+	          circuitElm.setNode(postIdx, this.Circuit.numNodes());
+	          this.Circuit.addCircuitNode(circuitNode);
+	        } else {
+	          this.Circuit.getNode(nodeIdx).links.push(nodeLink);
+	          circuitElm.setNode(postIdx, nodeIdx);
+	          if (nodeIdx === 0) {
+	            circuitElm.setNodeVoltage(postIdx, 0);
+	          }
+	        }
+	      }
+	      for (internalNodeIdx = _l = 0; 0 <= internalNodeCount ? _l < internalNodeCount : _l > internalNodeCount; internalNodeIdx = 0 <= internalNodeCount ? ++_l : --_l) {
+	        internalLink = new CircuitNodeLink();
+	        internalLink.num = internalNodeIdx + postCount;
+	        internalLink.elm = circuitElm;
+	        internalNode = new CircuitNode(this, -1, -1, true);
+	        internalNode.links.push(internalLink);
+	        circuitElm.setNode(internalLink.num, this.Circuit.numNodes());
+	        this.Circuit.addCircuitNode(internalNode);
+	      }
+	      _results.push(voltageSourceCount += internalVSCount);
+	    }
+	    return _results;
+	  };
+	
+	  CircuitSolver.prototype.constructCircuitGraph = function() {
+	    var circuitElement, voltSourceIdx, voltageSourceCount, _i, _j, _len, _ref, _ref1;
+	    this.buildComponentNodes();
+	    this.Circuit.voltageSources = new Array(voltageSourceCount);
+	    voltageSourceCount = 0;
+	    this.circuitNonLinear = false;
+	    _ref = this.Circuit.getElements();
+	    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+	      circuitElement = _ref[_i];
+	      if (circuitElement.nonLinear()) {
+	        this.circuitNonLinear = true;
+	      }
+	      for (voltSourceIdx = _j = 0, _ref1 = circuitElement.numVoltageSources(); 0 <= _ref1 ? _j < _ref1 : _j > _ref1; voltSourceIdx = 0 <= _ref1 ? ++_j : --_j) {
+	        this.Circuit.voltageSources[voltageSourceCount] = circuitElement;
+	        circuitElement.setVoltageSource(voltSourceIdx, voltageSourceCount++);
+	      }
+	    }
+	    this.Circuit.voltageSourceCount = voltageSourceCount;
+	    return this.matrixSize = this.Circuit.numNodes() + voltageSourceCount - 1;
+	  };
+	
+	  CircuitSolver.prototype.constructMatrixEquations = function() {
+	    var circuitElm, rowIdx, _i, _j, _len, _ref, _ref1, _results;
+	    this.circuitMatrixSize = this.circuitMatrixFullSize = this.matrixSize;
+	    this.circuitMatrix = Util.zeroArray2(this.matrixSize, this.matrixSize);
+	    this.origMatrix = Util.zeroArray2(this.matrixSize, this.matrixSize);
+	    this.circuitRightSide = Util.zeroArray(this.matrixSize);
+	    this.origRightSide = Util.zeroArray(this.matrixSize);
+	    this.circuitRowInfo = Util.zeroArray(this.matrixSize);
+	    this.circuitPermute = Util.zeroArray(this.matrixSize);
+	    for (rowIdx = _i = 0, _ref = this.matrixSize; 0 <= _ref ? _i < _ref : _i > _ref; rowIdx = 0 <= _ref ? ++_i : --_i) {
+	      this.circuitRowInfo[rowIdx] = new RowInfo();
+	    }
+	    this.circuitNeedsMap = false;
+	    _ref1 = this.Circuit.getElements();
+	    _results = [];
+	    for (_j = 0, _len = _ref1.length; _j < _len; _j++) {
+	      circuitElm = _ref1[_j];
+	      _results.push(circuitElm.stamp(this.Stamper));
+	    }
+	    return _results;
+	  };
+	
+	  CircuitSolver.prototype.checkConnectivity = function() {
+	    var changed, circuitElm, closure, nodeIdx, postIdx, siblingNode, siblingPostIdx, _i, _j, _k, _len, _ref, _ref1, _ref2, _results;
+	    closure = new Array(this.Circuit.numNodes());
+	    closure[0] = true;
+	    changed = true;
+	    _results = [];
+	    while (changed) {
+	      changed = false;
+	      _ref = this.Circuit.getElements();
+	      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+	        circuitElm = _ref[_i];
+	        for (postIdx = _j = 0, _ref1 = circuitElm.numPosts(); 0 <= _ref1 ? _j < _ref1 : _j > _ref1; postIdx = 0 <= _ref1 ? ++_j : --_j) {
+	          if (!closure[circuitElm.getNode(postIdx)]) {
+	            if (circuitElm.hasGroundConnection(postIdx)) {
+	              changed = true;
+	              closure[circuitElm.getNode(postIdx)] = true;
+	            }
+	            continue;
+	          }
+	          for (siblingPostIdx = _k = 0, _ref2 = circuitElm.numPosts(); 0 <= _ref2 ? _k < _ref2 : _k > _ref2; siblingPostIdx = 0 <= _ref2 ? ++_k : --_k) {
+	            if (postIdx === siblingPostIdx) {
+	              continue;
+	            }
+	            siblingNode = circuitElm.getNode(siblingPostIdx);
+	            if (circuitElm.getConnection(postIdx, siblingPostIdx) && !closure[siblingNode]) {
+	              closure[siblingNode] = true;
+	              changed = true;
+	            }
+	          }
+	        }
+	      }
+	      if (changed) {
+	        continue;
+	      }
+	      _results.push((function() {
+	        var _l, _ref3, _results1;
+	        _results1 = [];
+	        for (nodeIdx = _l = 0, _ref3 = this.Circuit.numNodes(); 0 <= _ref3 ? _l < _ref3 : _l > _ref3; nodeIdx = 0 <= _ref3 ? ++_l : --_l) {
+	          if (!closure[nodeIdx] && !this.Circuit.nodeList[nodeIdx].intern) {
+	            console.warn("Node " + nodeIdx + " unconnected! -> " + (this.Circuit.nodeList[nodeIdx].toString()));
+	            this.Stamper.stampResistor(0, nodeIdx, 1e8);
+	            closure[nodeIdx] = true;
+	            changed = true;
+	            break;
+	          } else {
+	            _results1.push(void 0);
+	          }
+	        }
+	        return _results1;
+	      }).call(this));
+	    }
+	    return _results;
+	  };
+	
+	  CircuitSolver.prototype.findInvalidPaths = function() {
+	    var ce, fpi, pathfinder, _i, _len, _ref;
+	    _ref = this.Circuit.getElements();
+	    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+	      ce = _ref[_i];
+	      if (ce instanceof InductorElm) {
+	        fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
+	        if (!fpi.findPath(ce.getNode(0), 5) && !fpi.findPath(ce.getNode(0))) {
+	          ce.reset();
+	        }
+	      }
+	      if (ce instanceof CurrentElm) {
+	        fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
+	        if (!fpi.findPath(ce.getNode(0))) {
+	          console.warn("No path for current source!", ce);
+	        }
+	      }
+	      if ((Util.typeOf(ce, VoltageElm) && ce.numPosts() === 2) || ce instanceof WireElm) {
+	        pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
+	        if (pathfinder.findPath(ce.getNode(0))) {
+	          this.Circuit.halt("Voltage source/wire loop with no resistance!", ce);
+	        }
+	      }
+	      if (ce instanceof CapacitorElm) {
+	        fpi = new Pathfinder(Pathfinder.SHORT, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
+	        if (fpi.findPath(ce.getNode(0))) {
+	          ce.reset();
+	        } else {
+	          fpi = new Pathfinder(Pathfinder.CAP_V, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
+	          if (fpi.findPath(ce.getNode(0))) {
+	            console.warn("Capacitor loop with no resistance!", ce);
+	            return;
+	          }
+	        }
+	      }
+	    }
+	  };
+	
+	  CircuitSolver.prototype.optimize = function() {
+	    var circuitRowInfo, col, elt, j, k, lastVal, newIdx, newMatDim, newMatx, newRS, newSize, qm, qp, qq, re, row, rowInfo, rowNodeEq, rsadd, _i, _j, _k, _l, _m, _n, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+	    row = -1;
+	    while (row < this.matrixSize - 1) {
+	      row += 1;
+	      re = this.circuitRowInfo[row];
+	      if (re.lsChanges || re.dropRow || re.rsChanges) {
+	        continue;
+	      }
+	      rsadd = 0;
+	      qm = -1;
+	      qp = -1;
+	      lastVal = 0;
+	      for (col = _i = 0, _ref = this.matrixSize; 0 <= _ref ? _i < _ref : _i > _ref; col = 0 <= _ref ? ++_i : --_i) {
+	        if (this.circuitRowInfo[col].type === RowInfo.ROW_CONST) {
+	          rsadd -= this.circuitRowInfo[col].value * this.circuitMatrix[row][col];
+	        } else if (this.circuitMatrix[row][col] === 0) {
+	
+	        } else if (qp === -1) {
+	          qp = col;
+	          lastVal = this.circuitMatrix[row][col];
+	        } else if (qm === -1 && (this.circuitMatrix[row][col] === -lastVal)) {
+	          qm = col;
+	        } else {
+	          break;
+	        }
+	      }
+	      if (col === this.matrixSize) {
+	        if (qp === -1) {
+	          this.Circuit.halt("Matrix error qp (row with all zeros) (rsadd = " + rsadd + ")", null);
+	          return;
+	        }
+	        elt = this.circuitRowInfo[qp];
+	        if (qm === -1) {
+	          k = 0;
+	          while (elt.type === RowInfo.ROW_EQUAL && k < CircuitSolver.SIZE_LIMIT) {
+	            qp = elt.nodeEq;
+	            elt = this.circuitRowInfo[qp];
+	            ++k;
+	          }
+	          if (elt.type === RowInfo.ROW_EQUAL) {
+	            elt.type = RowInfo.ROW_NORMAL;
+	          } else if (elt.type !== RowInfo.ROW_NORMAL) {
+	
+	          } else {
+	            elt.type = RowInfo.ROW_CONST;
+	            elt.value = (this.circuitRightSide[row] + rsadd) / lastVal;
+	            this.circuitRowInfo[row].dropRow = true;
+	            row = -1;
+	          }
+	        } else if ((this.circuitRightSide[row] + rsadd) === 0) {
+	          if (elt.type !== RowInfo.ROW_NORMAL) {
+	            qq = qm;
+	            qm = qp;
+	            qp = qq;
+	            elt = this.circuitRowInfo[qp];
+	            if (elt.type !== RowInfo.ROW_NORMAL) {
+	              continue;
+	            }
+	          }
+	          elt.type = RowInfo.ROW_EQUAL;
+	          elt.nodeEq = qm;
+	          this.circuitRowInfo[row].dropRow = true;
+	        }
+	      }
+	    }
+	    newMatDim = 0;
+	    for (row = _j = 0, _ref1 = this.matrixSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; row = 0 <= _ref1 ? ++_j : --_j) {
+	      rowInfo = this.circuitRowInfo[row];
+	      if (rowInfo.type === RowInfo.ROW_NORMAL) {
+	        rowInfo.mapCol = newMatDim++;
+	      } else {
+	        if (rowInfo.type === RowInfo.ROW_EQUAL) {
+	          for (j = _k = 0, _ref2 = CircuitSolver.SIZE_LIMIT; 0 <= _ref2 ? _k < _ref2 : _k > _ref2; j = 0 <= _ref2 ? ++_k : --_k) {
+	            rowNodeEq = this.circuitRowInfo[rowInfo.nodeEq];
+	            if ((rowNodeEq.type !== RowInfo.ROW_EQUAL) || (row === rowNodeEq.nodeEq)) {
+	              break;
+	            }
+	            rowInfo.nodeEq = rowNodeEq.nodeEq;
+	          }
+	        }
+	        if (rowInfo.type === RowInfo.ROW_CONST) {
+	          rowInfo.mapCol = -1;
+	        }
+	      }
+	    }
+	    for (row = _l = 0, _ref3 = this.matrixSize; 0 <= _ref3 ? _l < _ref3 : _l > _ref3; row = 0 <= _ref3 ? ++_l : --_l) {
+	      rowInfo = this.circuitRowInfo[row];
+	      if (rowInfo.type === RowInfo.ROW_EQUAL) {
+	        rowNodeEq = this.circuitRowInfo[rowInfo.nodeEq];
+	        if (rowNodeEq.type === RowInfo.ROW_CONST) {
+	          rowInfo.type = rowNodeEq.type;
+	          rowInfo.value = rowNodeEq.value;
+	          rowInfo.mapCol = -1;
+	        } else {
+	          rowInfo.mapCol = rowNodeEq.mapCol;
+	        }
+	      }
+	    }
+	    newSize = newMatDim;
+	    newMatx = Util.zeroArray2(newSize, newSize);
+	    newRS = new Array(newSize);
+	    Util.zeroArray(newRS);
+	    newIdx = 0;
+	    for (row = _m = 0, _ref4 = this.matrixSize; 0 <= _ref4 ? _m < _ref4 : _m > _ref4; row = 0 <= _ref4 ? ++_m : --_m) {
+	      circuitRowInfo = this.circuitRowInfo[row];
+	      if (circuitRowInfo.dropRow) {
+	        circuitRowInfo.mapRow = -1;
+	      } else {
+	        newRS[newIdx] = this.circuitRightSide[row];
+	        circuitRowInfo.mapRow = newIdx;
+	        for (col = _n = 0, _ref5 = this.matrixSize; 0 <= _ref5 ? _n < _ref5 : _n > _ref5; col = 0 <= _ref5 ? ++_n : --_n) {
+	          rowInfo = this.circuitRowInfo[col];
+	          if (rowInfo.type === RowInfo.ROW_CONST) {
+	            newRS[newIdx] -= rowInfo.value * this.circuitMatrix[row][col];
+	          } else {
+	            newMatx[newIdx][rowInfo.mapCol] += this.circuitMatrix[row][col];
+	          }
+	        }
+	        newIdx++;
+	      }
+	    }
+	    this.circuitMatrix = newMatx;
+	    this.circuitRightSide = newRS;
+	    this.matrixSize = this.circuitMatrixSize = newSize;
+	    this.saveOriginalMatrixState();
+	    this.circuitNeedsMap = true;
+	    return this.analyzeFlag = false;
+	  };
+	
+	  CircuitSolver.prototype.saveOriginalMatrixState = function() {
+	    var col, row, _i, _j, _ref, _ref1, _results;
+	    for (row = _i = 0, _ref = this.matrixSize; 0 <= _ref ? _i < _ref : _i > _ref; row = 0 <= _ref ? ++_i : --_i) {
+	      this.origRightSide[row] = this.circuitRightSide[row];
+	    }
+	    if (this.circuitNonLinear) {
+	      _results = [];
+	      for (row = _j = 0, _ref1 = this.matrixSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; row = 0 <= _ref1 ? ++_j : --_j) {
+	        _results.push((function() {
+	          var _k, _ref2, _results1;
+	          _results1 = [];
+	          for (col = _k = 0, _ref2 = this.matrixSize; 0 <= _ref2 ? _k < _ref2 : _k > _ref2; col = 0 <= _ref2 ? ++_k : --_k) {
+	            _results1.push(this.origMatrix[row][col] = this.circuitMatrix[row][col]);
+	          }
+	          return _results1;
+	        }).call(this));
+	      }
+	      return _results;
+	    }
+	  };
+	
+	  CircuitSolver.prototype.restoreOriginalMatrixState = function() {
+	    var col, row, _i, _j, _ref, _ref1, _results;
+	    for (row = _i = 0, _ref = this.circuitMatrixSize; 0 <= _ref ? _i < _ref : _i > _ref; row = 0 <= _ref ? ++_i : --_i) {
+	      this.circuitRightSide[row] = this.origRightSide[row];
+	    }
+	    if (this.circuitNonLinear) {
+	      _results = [];
+	      for (row = _j = 0, _ref1 = this.circuitMatrixSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; row = 0 <= _ref1 ? ++_j : --_j) {
+	        _results.push((function() {
+	          var _k, _ref2, _results1;
+	          _results1 = [];
+	          for (col = _k = 0, _ref2 = this.circuitMatrixSize; 0 <= _ref2 ? _k < _ref2 : _k > _ref2; col = 0 <= _ref2 ? ++_k : --_k) {
+	            _results1.push(this.circuitMatrix[row][col] = this.origMatrix[row][col]);
+	          }
+	          return _results1;
+	        }).call(this));
+	      }
+	      return _results;
+	    }
+	  };
+	
+	  CircuitSolver.prototype.getValueFromNode = function(idx) {
+	    var rowInfo;
+	    rowInfo = this.circuitRowInfo[idx];
+	    if (rowInfo.type === RowInfo.ROW_CONST) {
+	      return rowInfo.value;
+	    } else {
+	      return this.circuitRightSide[rowInfo.mapCol];
+	    }
+	  };
+	
+	  CircuitSolver.prototype.updateComponent = function(nodeIdx, value) {
+	    var circuitNode, circuitNodeLink, ji, _i, _len, _ref;
+	    if (isNaN(value)) {
+	      this.converged = false;
+	      return false;
+	    }
+	    if (nodeIdx < (this.Circuit.numNodes() - 1)) {
+	      circuitNode = this.Circuit.nodeList[nodeIdx + 1];
+	      _ref = circuitNode.links;
+	      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+	        circuitNodeLink = _ref[_i];
+	        circuitNodeLink.elm.setNodeVoltage(circuitNodeLink.num, value);
+	      }
+	    } else {
+	      ji = nodeIdx - (this.Circuit.numNodes() - 1);
+	      this.Circuit.voltageSources[ji].setCurrent(ji, value);
+	    }
+	    return true;
+	  };
+	
+	  CircuitSolver.prototype.sub_luFactor = function(circuitMatrix, matrixSize, pivotArray) {
+	    var i, j, k, largest, largestRow, matrix_ij, mult, x;
+	    i = 0;
+	    while (i < matrixSize) {
+	      largest = 0;
+	      j = 0;
+	      while (j < matrixSize) {
+	        x = Math.abs(circuitMatrix[i][j]);
+	        if (x > largest) {
+	          largest = x;
+	        }
+	        ++j;
+	      }
+	      this.scaleFactors[i] = 1.0 / largest;
+	      ++i;
+	    }
+	    j = 0;
+	    while (j < matrixSize) {
+	      i = 0;
+	      while (i < j) {
+	        matrix_ij = circuitMatrix[i][j];
+	        k = 0;
+	        while (k !== i) {
+	          matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
+	          ++k;
+	        }
+	        circuitMatrix[i][j] = matrix_ij;
+	        ++i;
+	      }
+	      largest = 0;
+	      largestRow = -1;
+	      i = j;
+	      while (i < matrixSize) {
+	        matrix_ij = circuitMatrix[i][j];
+	        k = 0;
+	        while (k < j) {
+	          matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
+	          ++k;
+	        }
+	        circuitMatrix[i][j] = matrix_ij;
+	        x = Math.abs(matrix_ij);
+	        if (x >= largest) {
+	          largest = x;
+	          largestRow = i;
+	        }
+	        ++i;
+	      }
+	      if (j !== largestRow) {
+	        k = 0;
+	        while (k < matrixSize) {
+	          x = circuitMatrix[largestRow][k];
+	          circuitMatrix[largestRow][k] = circuitMatrix[j][k];
+	          circuitMatrix[j][k] = x;
+	          ++k;
+	        }
+	        this.scaleFactors[largestRow] = this.scaleFactors[j];
+	      }
+	      pivotArray[j] = largestRow;
+	      if (circuitMatrix[j][j] === 0) {
+	        circuitMatrix[j][j] = 1e-18;
+	      }
+	      if (j !== matrixSize - 1) {
+	        mult = 1 / circuitMatrix[j][j];
+	        i = j + 1;
+	        while (i !== matrixSize) {
+	          circuitMatrix[i][j] *= mult;
+	          ++i;
+	        }
+	      }
+	      ++j;
+	    }
+	    return true;
+	  };
+	
+	
+	  /*
+	    luFactor: finds a solution to a factored matrix through LU (Lower-Upper) factorization
+	  
+	    Called once each frame for resistive circuits, otherwise called many times each frame
+	  
+	    returns a falsy value if the provided circuitMatrix can't be factored
+	  
+	    @param (input/output) circuitMatrix 2D matrix to be solved
+	    @param (input) matrixSize number or rows/columns in the matrix
+	    @param (output) pivotArray pivot index
+	   */
+	
+	  CircuitSolver.prototype.luFactor = function(circuitMatrix, matrixSize, pivotArray) {
+	    var i, j, k, largest, largestRow, matrix_ij, mult, x;
+	    i = 0;
+	    while (i < matrixSize) {
+	      largest = 0;
+	      j = 0;
+	      while (j < matrixSize) {
+	        x = Math.abs(circuitMatrix[i][j]);
+	        if (x > largest) {
+	          largest = x;
+	        }
+	        ++j;
+	      }
+	      this.scaleFactors[i] = 1.0 / largest;
+	      ++i;
+	    }
+	    j = 0;
+	    while (j < matrixSize) {
+	      i = 0;
+	      while (i < j) {
+	        matrix_ij = circuitMatrix[i][j];
+	        k = 0;
+	        while (k !== i) {
+	          matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
+	          ++k;
+	        }
+	        circuitMatrix[i][j] = matrix_ij;
+	        ++i;
+	      }
+	      largest = 0;
+	      largestRow = -1;
+	      i = j;
+	      while (i < matrixSize) {
+	        matrix_ij = circuitMatrix[i][j];
+	        k = 0;
+	        while (k < j) {
+	          matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
+	          ++k;
+	        }
+	        circuitMatrix[i][j] = matrix_ij;
+	        x = Math.abs(matrix_ij);
+	        if (x >= largest) {
+	          largest = x;
+	          largestRow = i;
+	        }
+	        ++i;
+	      }
+	      if (j !== largestRow) {
+	        k = 0;
+	        while (k < matrixSize) {
+	          x = circuitMatrix[largestRow][k];
+	          circuitMatrix[largestRow][k] = circuitMatrix[j][k];
+	          circuitMatrix[j][k] = x;
+	          ++k;
+	        }
+	        this.scaleFactors[largestRow] = this.scaleFactors[j];
+	      }
+	      pivotArray[j] = largestRow;
+	      if (circuitMatrix[j][j] === 0) {
+	        circuitMatrix[j][j] = 1e-18;
+	      }
+	      if (j !== matrixSize - 1) {
+	        mult = 1 / circuitMatrix[j][j];
+	        i = j + 1;
+	        while (i !== matrixSize) {
+	          circuitMatrix[i][j] *= mult;
+	          ++i;
+	        }
+	      }
+	      ++j;
+	    }
+	    return true;
+	  };
+	
+	
+	  /*
+	    Step 2: `lu_solve`: (Called by lu_factor)
+	    finds a solution to a factored matrix through LU (Lower-Upper) factorization
+	  
+	    Called once each frame for resistive circuits, otherwise called many times each frame
+	  
+	    @param circuitMatrix matrix to be solved
+	    @param numRows dimension
+	    @param pivotVector pivot index
+	    @param circuitRightSide Right-side (dependent) matrix
+	   */
+	
+	  CircuitSolver.prototype.luSolve = function(circuitMatrix, numRows, pivotVector, circuitRightSide) {
+	    var bi, i, j, row, swap, tot, total, _results;
+	    i = 0;
+	    while (i < numRows) {
+	      row = pivotVector[i];
+	      swap = circuitRightSide[row];
+	      circuitRightSide[row] = circuitRightSide[i];
+	      circuitRightSide[i] = swap;
+	      if (swap !== 0) {
+	        break;
+	      }
+	      ++i;
+	    }
+	    bi = i++;
+	    while (i < numRows) {
+	      row = pivotVector[i];
+	      tot = circuitRightSide[row];
+	      circuitRightSide[row] = circuitRightSide[i];
+	      j = bi;
+	      while (j < i) {
+	        tot -= circuitMatrix[i][j] * circuitRightSide[j];
+	        ++j;
+	      }
+	      circuitRightSide[i] = tot;
+	      ++i;
+	    }
+	    i = numRows - 1;
+	    _results = [];
+	    while (i >= 0) {
+	      total = circuitRightSide[i];
+	      j = i + 1;
+	      while (j !== numRows) {
+	        total -= circuitMatrix[i][j] * circuitRightSide[j];
+	        ++j;
+	      }
+	      circuitRightSide[i] = total / circuitMatrix[i][i];
+	      _results.push(i--);
+	    }
+	    return _results;
+	  };
+	
+	  CircuitSolver.prototype.dump = function() {
+	    var out, rowInfo, _i, _len, _ref;
+	    out = "";
+	    out += this.Circuit.Params.toString() + "\n";
+	    _ref = this.circuitRowInfo;
+	    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+	      rowInfo = _ref[_i];
+	      out += rowInfo.toString() + "\n";
+	    }
+	    out += "\nCircuit permute: " + Util.printArray(this.circuitPermute);
+	    return out + "\n";
+	  };
+	
+	  CircuitSolver.prototype.dumpOrigFrame = function() {
+	    var circuitMatrixDump, circuitRightSideDump, i, j, matrixRowCount, out, _i, _j;
+	    matrixRowCount = this.origRightSide.length;
+	    circuitMatrixDump = "";
+	    circuitRightSideDump = "  RS: [";
+	    for (i = _i = 0; 0 <= matrixRowCount ? _i < matrixRowCount : _i > matrixRowCount; i = 0 <= matrixRowCount ? ++_i : --_i) {
+	      circuitRightSideDump += Util.tidyFloat(this.origRightSide[i]);
+	      circuitMatrixDump += "  [";
+	      for (j = _j = 0; 0 <= matrixRowCount ? _j < matrixRowCount : _j > matrixRowCount; j = 0 <= matrixRowCount ? ++_j : --_j) {
+	        circuitMatrixDump += Util.tidyFloat(this.origMatrix[i][j]);
+	        if (j !== matrixRowCount - 1) {
+	          circuitMatrixDump += ", ";
+	        }
+	      }
+	      circuitMatrixDump += "]\n";
+	      if (i !== matrixRowCount - 1) {
+	        circuitRightSideDump += ", ";
+	      }
+	    }
+	    out = "";
+	    out += circuitMatrixDump + "\n";
+	    out += circuitRightSideDump + "]";
+	    return out;
+	  };
+	
+	  CircuitSolver.prototype.dumpFrame = function() {
+	    var circuitMatrixDump, circuitRightSideDump, i, j, matrixRowCount, out, _i, _j;
+	    matrixRowCount = this.circuitRightSide.length;
+	    if (!this.circuitMatrix || !!this.circuitMatrix[0]) {
+	      return "";
+	    }
+	    circuitMatrixDump = "";
+	    circuitRightSideDump = "  RS: [";
+	    for (i = _i = 0; 0 <= matrixRowCount ? _i < matrixRowCount : _i > matrixRowCount; i = 0 <= matrixRowCount ? ++_i : --_i) {
+	      circuitRightSideDump += Util.tidyFloat(this.circuitRightSide[i]);
+	      circuitMatrixDump += "  [";
+	      for (j = _j = 0; 0 <= matrixRowCount ? _j < matrixRowCount : _j > matrixRowCount; j = 0 <= matrixRowCount ? ++_j : --_j) {
+	        circuitMatrixDump += Util.tidyFloat(this.circuitMatrix[i][j]);
+	        if (j !== matrixRowCount - 1) {
+	          circuitMatrixDump += ", ";
+	        }
+	      }
+	      circuitMatrixDump += "]\n";
+	      if (i !== matrixRowCount - 1) {
+	        circuitRightSideDump += ", ";
+	      }
+	    }
+	    out = "";
+	    out += "  iter: " + this.Circuit.iterations + ", time: " + (this.Circuit.time.toFixed(7)) + ", subiter: " + this.subIterations + " rows: " + matrixRowCount + "\n";
+	    out += circuitMatrixDump + "\n";
+	    out += circuitRightSideDump + "]";
+	    return out;
+	  };
+	
+	  return CircuitSolver;
+	
+	})();
+	
+	module.exports = CircuitSolver;
+
+
+/***/ },
+/* 80 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let RowInfo = __webpack_require__(81);
+	let Util = __webpack_require__(5);
+	
+	class MatrixStamper {
+	
+	  constructor(Circuit) {
+	    this.Circuit = Circuit;
+	  }
+	
+	  /**
+	  control voltage source vs with voltage from n1 to n2 (must also call stampVoltageSource())
+	  */
+	  stampVCVS(n1, n2, coef, vs) {
+	    if (isNaN(vs) || isNaN(coef)) {
+	      console.warn("NaN in stampVCVS");
+	    }
+	
+	    let vn = this.Circuit.numNodes() + vs;
+	
+	    this.stampMatrix(vn, n1, coef);
+	    return this.stampMatrix(vn, n2, -coef);
+	  }
+	
+	
+	  // stamp independent voltage source #vs, from n1 to n2, amount v
+	  stampVoltageSource(n1, n2, vs, v) {
+	    if (v == null) { v = null; }
+	    let vn = this.Circuit.numNodes() + vs;
+	
+	    this.stampMatrix(vn, n1, -1);
+	    this.stampMatrix(vn, n2, 1);
+	    this.stampRightSide(vn, v);
+	    this.stampMatrix(n1, vn, 1);
+	    return this.stampMatrix(n2, vn, -1);
+	  }
+	
+	
+	  updateVoltageSource(n1, n2, vs, voltage) {
+	    if (isNaN(voltage) || Util.isInfinite(voltage)) {
+	      this.Circuit.halt(`updateVoltageSource: bad voltage ${voltage} at ${n1} ${n2} ${vs}`);
+	    }
+	
+	    let vn = this.Circuit.numNodes() + vs;
+	    return this.stampRightSide(vn, voltage);
+	  }
+	
+	
+	  stampResistor(n1, n2, r) {
+	    return this.stampConductance(n1, n2, 1 / r);
+	  }
+	
+	
+	  stampConductance(n1, n2, g) {
+	    if (isNaN(g) || Util.isInfinite(g)) {
+	      this.Circuit.halt(`bad conductance at ${n1} ${n2}`);
+	    }
+	
+	    this.stampMatrix(n1, n1, g);
+	    this.stampMatrix(n2, n2, g);
+	    this.stampMatrix(n1, n2, -g);
+	    return this.stampMatrix(n2, n1, -g);
+	  }
+	
+	
+	  /**
+	  current from cn1 to cn2 is equal to voltage from vn1 to 2, divided by g
+	  */
+	  stampVCCurrentSource(cn1, cn2, vn1, vn2, value) {
+	    if (isNaN(value) || Util.isInfinite(value)) {
+	      this.Circuit.halt(`Invalid gain ${value} on voltage controlled current source`);
+	    }
+	
+	    this.stampMatrix(cn1, vn1, value);
+	    this.stampMatrix(cn2, vn2, value);
+	    this.stampMatrix(cn1, vn2, -value);
+	
+	    return this.stampMatrix(cn2, vn1, -value);
+	  }
+	
+	
+	  stampCurrentSource(n1, n2, value) {
+	    this.stampRightSide(n1, -value);
+	    return this.stampRightSide(n2, value);
+	  }
+	
+	
+	  /**
+	  stamp a current source from n1 to n2 depending on current through vs
+	  */
+	  stampCCCS(n1, n2, vs, gain) {
+	    if (isNaN(gain) || Util.isInfinite(gain)) {
+	      this.Circuit.halt(`Invalid gain on current source: (was ${gain})`);
+	    }
+	
+	    let vn = this.Circuit.numNodes() + vs;
+	    this.stampMatrix(n1, vn, gain);
+	    return this.stampMatrix(n2, vn, -gain);
+	  }
+	
+	
+	  /**
+	  stamp value x in row i, column j, meaning that a voltage change
+	  of dv in node j will increase the current into node i by x dv.
+	  (Unless i or j is a voltage source node.)
+	  */
+	  stampMatrix(row, col, value) {
+	    if (isNaN(value) || Util.isInfinite(value) || value == null || value == undefined) {
+	      this.Circuit.halt(`attempted to stamp Matrix with invalid value (${value}) at ${row} ${col}`);
+	    }
+	
+	    if ((row > 0) && (col > 0)) {
+	      if (this.Circuit.Solver.circuitNeedsMap) {
+	        row = this.Circuit.Solver.circuitRowInfo[row - 1].mapRow;
+	        let rowInfo = this.Circuit.Solver.circuitRowInfo[col - 1];
+	        if (rowInfo.type === RowInfo.ROW_CONST) {
+	          this.Circuit.Solver.circuitRightSide[row] -= value * rowInfo.value;
+	          return;
+	        }
+	        col = rowInfo.mapCol;
+	      } else {
+	        row--;
+	        col--;
+	      }
+	
+	      return this.Circuit.Solver.circuitMatrix[row][col] += value;
+	    }
+	  }
+	
+	
+	  /**
+	  Stamp value x on the right side of row i, representing an
+	  independent current source flowing into node i
+	  */
+	  stampRightSide(row, value) {
+	    if (isNaN(value) || (value === null)) {
+	      if (row > 0) {
+	        return this.Circuit.Solver.circuitRowInfo[row - 1].rsChanges = true;
+	      }
+	    } else {
+	      if (row > 0) {
+	        if (this.Circuit.Solver.circuitNeedsMap) {
+	          row = this.Circuit.Solver.circuitRowInfo[row - 1].mapRow;
+	        } else {
+	          row--;
+	        }
+	
+	        return this.Circuit.Solver.circuitRightSide[row] += value;
+	      }
+	    }
+	  }
+	
+	
+	  /**
+	  Indicate that the values on the left side of row i change in doStep()
+	  */
+	  stampNonLinear(row) {
+	    if (isNaN(row) || (row === null)) {
+	      console.error("null/NaN in stampNonlinear");
+	    }
+	    if (row > 0) { return this.Circuit.Solver.circuitRowInfo[row - 1].lsChanges = true; }
+	  }
+	}
+	
+	
+	module.exports = MatrixStamper;
+
+
+/***/ },
+/* 81 */
+/***/ function(module, exports) {
+
+	class RowInfo {
+	  static initClass() {
+	    this.ROW_NORMAL = 0;
+	    this.ROW_CONST = 1;
+	    this.ROW_EQUAL = 2;
+	  }
+	
+	  constructor() {
+	    this.type = RowInfo.ROW_NORMAL;
+	
+	    this.nodeEq = 0;
+	    this.mapCol = 0;
+	    this.mapRow = 0;
+	
+	    this.value = 0;
+	    this.rsChanges = false;
+	    this.lsChanges = false;
+	    this.dropRow = false;
+	  }
+	
+	  toJson() {
+	    return {
+	      nodeEq: this.nodeEq,
+	      mapCol: this.mapCol,
+	      mapRow: this.mapRow,
+	      value: this.value,
+	      rsChanges: this.rsChanges,
+	      lsChanges: this.lsChanges,
+	      dropRow: this.dropRow,
+	      type: this.type
+	    };
+	  }
+	
+	  typeToStr(type) {
+	    if (type == 0)
+	      return "NORMAL";
+	
+	    if (type == 1)
+	      return "CONST";
+	
+	    if (type == 2)
+	      return "EQ";
+	  }
+	
+	  toString() {
+	    return `RowInfo: ${this.typeToStr(this.type)}, nodeEq: ${this.nodeEq}, mapCol: ${this.mapCol}, mapRow: ${this.mapRow}, value: ${this.value}, rsChanges: ${this.rsChanges}, lsChanges: ${this.lsChanges}, dropRow: ${this.dropRow}`;
+	  }
+	}
+	RowInfo.initClass();
+	
+	module.exports = RowInfo;
+
+
+/***/ },
+/* 82 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let VoltageElm = __webpack_require__(18);
+	let CurrentElm = __webpack_require__(29);
+	let ResistorElm = __webpack_require__(21);
+	let InductorElm = __webpack_require__(27);
+	let CapacitorElm = __webpack_require__(26);
+	let Util = __webpack_require__(5);
+	
+	class Pathfinder {
+	  static initClass() {
+	    this.INDUCT = 1;
+	    this.VOLTAGE = 2;
+	    this.SHORT = 3;
+	    this.CAP_V = 4;
+	  }
+	
+	  constructor(type, firstElm, dest, elementList, numNodes) {
+	    this.type = type;
+	    this.firstElm = firstElm;
+	    this.dest = dest;
+	    this.elementList = elementList;
+	    this.used = new Array(numNodes);
+	  }
+	
+	  validElm(ce) {
+	    return (ce === this.firstElm) ||
+	    ((ce instanceof CurrentElm) && (this.type === Pathfinder.INDUCT)) ||
+	    ((this.type === Pathfinder.VOLTAGE) && !(ce.isWire() || Util.typeOf(ce, VoltageElm))) ||
+	    ((this.type === Pathfinder.SHORT) && !ce.isWire()) ||
+	    ((this.type === Pathfinder.CAP_V) && !(ce.isWire() || ce instanceof CapacitorElm || Util.typeOf(ce, VoltageElm)));
+	  }
+	
+	  findPath(n1, depth) {
+	    if (n1 === this.dest) {
+	//      console.log("n1 is @dest")
+	      return true;
+	    }
+	    if (depth-- === 0) {
+	      return false;
+	    }
+	
+	    if (this.used[n1]) {
+	//      console.log("used " + n1)
+	      return false;
+	    }
+	
+	    this.used[n1] = true;
+	
+	    for (let ce of Array.from(this.elementList)) {
+	      var j;
+	      if (this.validElm(ce)) { continue; }
+	
+	      if (n1 === 0) {
+	        // Look for posts which have a ground connection. Our path can go through ground!
+	        for (j = 0, end = ce.numPosts(), asc = 0 <= end; asc ? j < end : j > end; asc ? j++ : j--) {
+	          var asc, end;
+	          if (ce.hasGroundConnection(j) && this.findPath(ce.getNode(j), depth)) {
+	//            console.log(ce + " has ground (n1 is 0)")
+	            this.used[0] = false;
+	            return true;
+	          }
+	        }
+	      }
+	
+	      for (j = 0, end1 = ce.numPosts(), asc1 = 0 <= end1; asc1 ? j < end1 : j > end1; asc1 ? j++ : j--) {
+	//        console.log("get post " + ce.dump() + " " + ce.getNode(j))
+	        var asc1, end1;
+	        if (ce.getNode(j) === n1) {
+	          break;
+	        }
+	      }
+	
+	      // TODO: ENSURE EQUALITY HERE
+	      if (j === ce.numPosts()) {
+	        continue;
+	      }
+	
+	      if (ce.hasGroundConnection(j) && this.findPath(0, depth)) {
+	//        console.log(ce + " has ground")
+	        this.used[n1] = false;
+	        return true;
+	      }
+	
+	      if ((this.type === Pathfinder.INDUCT) && ce instanceof InductorElm) {
+	        let current = ce.getCurrent();
+	        if (j === 0) {
+	          current = -current;
+	        }
+	
+	//        console.log(ce + " > " + @firstElm + " >> matching " + ce + " to " + @firstElm.getCurrent())
+	        if (Math.abs(current - this.firstElm.getCurrent()) > 1e-10) {
+	          continue;
+	        }
+	      }
+	
+	      for (let k = 0, end2 = ce.numPosts(), asc2 = 0 <= end2; asc2 ? k < end2 : k > end2; asc2 ? k++ : k--) {
+	        if (j === k) { continue; }
+	
+	//        console.log(ce + " " + ce.getNode(j) + " - " + ce.getNode(k))
+	        if (ce.getConnection(j, k) && this.findPath(ce.getNode(k), depth)) {
+	//          console.log("got findpath #{n1}")
+	          //            console.log("got findpath j: #{ce.getNode(j).toString()}, k: #{ce.getNode(k).toString()} on element " + ce)
+	          this.used[n1] = false;
+	          return true;
+	        }
+	      }
+	    }
+	
+	    //      console.log(n1 + " failed")
+	    this.used[n1] = false;
+	    return false;
+	  }
+	}
+	Pathfinder.initClass();
+	
+	module.exports = Pathfinder;
+
+
+/***/ },
+/* 83 */
+/***/ function(module, exports) {
+
+	class CircuitNode {
+	  constructor(solver, x = 0, y = 0, intern = false, links = []) {
+	    this.solver = solver;
+	    this.x = x;
+	    this.y = y;
+	    this.intern = intern;
+	    this.links = links;
+	  }
+	
+	  toJson() {
+	    return {
+	      x: this.x,
+	      y: this.y,
+	      internal: this.intern,
+	      links: this.links.map(link => link.toJson())
+	    };
+	  }
+	
+	  toString() {
+	    return `Node: ${this.x} ${this.y} [${this.links}]`;
+	  }
+	
+	  getVoltage() {
+	    return this.links.map(link => link.elm.nodes);
+	  }
+	      
+	  getNeighboringElements() {
+	    return this.links.map(link => link.elm);
+	  }
+	}
+	
+	module.exports = CircuitNode;
+
+
+/***/ },
+/* 84 */
+/***/ function(module, exports) {
+
+	class CircuitNodeLink {
+	  constructor(num = 0, elm = null) {
+	    this.num = num;
+	    this.elm = elm;
+	  }
+	
+	  toJson() {
+	    return {
+	      num: this.num,
+	      elm: this.elm.toJson()
+	    };
+	  }
+	
+	  toString() {
+	    return `${this.num} ${this.elm}`;
+	  }
+	}
+	
+	module.exports = CircuitNodeLink;
+
+
+/***/ },
+/* 85 */
 /***/ function(module, exports) {
 
 	class Observer {
@@ -27466,13 +28770,13 @@
 
 
 /***/ },
-/* 87 */
+/* 86 */
 /***/ function(module, exports) {
 
 
 
 /***/ },
-/* 88 */
+/* 87 */
 /***/ function(module, exports) {
 
 	class Hint {
@@ -27568,81 +28872,81 @@
 
 
 /***/ },
-/* 89 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let Rectangle = __webpack_require__(3);
-	let CircuitCanvas = __webpack_require__(90);
-	let SvgRenderer = __webpack_require__(93);
-	let Observer = __webpack_require__(86);
+	let CircuitCanvas = __webpack_require__(89);
+	let SvgRenderer = __webpack_require__(92);
+	let Observer = __webpack_require__(85);
 	let Util = __webpack_require__(5);
 	let Settings = __webpack_require__(2);
 	
-	let AntennaElm = __webpack_require__(17);
-	let WireElm = __webpack_require__(20);
-	let ResistorElm = __webpack_require__(22);
-	let GroundElm = __webpack_require__(23);
-	let VoltageElm = __webpack_require__(19);
-	let DiodeElm = __webpack_require__(24);
-	let OutputElm = __webpack_require__(25);
-	let SwitchElm = __webpack_require__(26);
-	let CapacitorElm = __webpack_require__(27);
-	let InductorElm = __webpack_require__(28);
-	let SparkGapElm = __webpack_require__(29);
-	let CurrentElm = __webpack_require__(30);
-	let RailElm = __webpack_require__(18);
-	let MosfetElm = __webpack_require__(31);
-	let JfetElm = __webpack_require__(32);
-	let TransistorElm = __webpack_require__(33);
-	let VarRailElm = __webpack_require__(34);
-	let OpAmpElm = __webpack_require__(35);
-	let ZenerElm = __webpack_require__(36);
-	let Switch2Elm = __webpack_require__(37);
-	let SweepElm = __webpack_require__(38);
-	let TextElm = __webpack_require__(39);
-	let ProbeElm = __webpack_require__(40);
+	let AntennaElm = __webpack_require__(16);
+	let WireElm = __webpack_require__(19);
+	let ResistorElm = __webpack_require__(21);
+	let GroundElm = __webpack_require__(22);
+	let VoltageElm = __webpack_require__(18);
+	let DiodeElm = __webpack_require__(23);
+	let OutputElm = __webpack_require__(24);
+	let SwitchElm = __webpack_require__(25);
+	let CapacitorElm = __webpack_require__(26);
+	let InductorElm = __webpack_require__(27);
+	let SparkGapElm = __webpack_require__(28);
+	let CurrentElm = __webpack_require__(29);
+	let RailElm = __webpack_require__(17);
+	let MosfetElm = __webpack_require__(30);
+	let JfetElm = __webpack_require__(31);
+	let TransistorElm = __webpack_require__(32);
+	let VarRailElm = __webpack_require__(33);
+	let OpAmpElm = __webpack_require__(34);
+	let ZenerElm = __webpack_require__(35);
+	let Switch2Elm = __webpack_require__(36);
+	let SweepElm = __webpack_require__(37);
+	let TextElm = __webpack_require__(38);
+	let ProbeElm = __webpack_require__(39);
 	
-	let AndGateElm = __webpack_require__(41);
-	let NandGateElm = __webpack_require__(42);
-	let OrGateElm = __webpack_require__(43);
-	let NorGateElm = __webpack_require__(44);
-	let XorGateElm = __webpack_require__(45);
-	let InverterElm = __webpack_require__(46);
+	let AndGateElm = __webpack_require__(40);
+	let NandGateElm = __webpack_require__(41);
+	let OrGateElm = __webpack_require__(42);
+	let NorGateElm = __webpack_require__(43);
+	let XorGateElm = __webpack_require__(44);
+	let InverterElm = __webpack_require__(45);
 	
-	let LogicInputElm = __webpack_require__(47);
-	let LogicOutputElm = __webpack_require__(48);
-	let AnalogSwitchElm = __webpack_require__(49);
-	let AnalogSwitch2Elm = __webpack_require__(50);
-	let MemristorElm = __webpack_require__(51);
-	let RelayElm = __webpack_require__(52);
-	let TunnelDiodeElm = __webpack_require__(53);
+	let LogicInputElm = __webpack_require__(46);
+	let LogicOutputElm = __webpack_require__(47);
+	let AnalogSwitchElm = __webpack_require__(48);
+	let AnalogSwitch2Elm = __webpack_require__(49);
+	let MemristorElm = __webpack_require__(50);
+	let RelayElm = __webpack_require__(51);
+	let TunnelDiodeElm = __webpack_require__(52);
 	
-	let ScrElm = __webpack_require__(54);
-	let TriodeElm = __webpack_require__(55);
+	let ScrElm = __webpack_require__(53);
+	let TriodeElm = __webpack_require__(54);
 	
-	let DecadeElm = __webpack_require__(56);
-	let LatchElm = __webpack_require__(58);
-	let TimerElm = __webpack_require__(59);
-	let JkFlipFlopElm = __webpack_require__(60);
-	let DFlipFlopElm = __webpack_require__(61);
-	let CounterElm = __webpack_require__(62);
-	let DacElm = __webpack_require__(63);
-	let AdcElm = __webpack_require__(64);
-	let VcoElm = __webpack_require__(65);
-	let PhaseCompElm = __webpack_require__(66);
-	let SevenSegElm = __webpack_require__(67);
-	let CC2Elm = __webpack_require__(68);
+	let DecadeElm = __webpack_require__(55);
+	let LatchElm = __webpack_require__(57);
+	let TimerElm = __webpack_require__(58);
+	let JkFlipFlopElm = __webpack_require__(59);
+	let DFlipFlopElm = __webpack_require__(60);
+	let CounterElm = __webpack_require__(61);
+	let DacElm = __webpack_require__(62);
+	let AdcElm = __webpack_require__(63);
+	let VcoElm = __webpack_require__(64);
+	let PhaseCompElm = __webpack_require__(65);
+	let SevenSegElm = __webpack_require__(66);
+	let CC2Elm = __webpack_require__(67);
 	
-	let TransLineElm = __webpack_require__(69);
+	let TransLineElm = __webpack_require__(68);
 	
-	let TransformerElm = __webpack_require__(70);
-	let TappedTransformerElm = __webpack_require__(71);
+	let TransformerElm = __webpack_require__(69);
+	let TappedTransformerElm = __webpack_require__(70);
 	
-	let LedElm = __webpack_require__(72);
-	let PotElm = __webpack_require__(73);
-	let ClockElm = __webpack_require__(74);
+	let LedElm = __webpack_require__(71);
+	let PotElm = __webpack_require__(72);
+	let ClockElm = __webpack_require__(73);
 	
-	let Scope = __webpack_require__(75);
+	let Scope = __webpack_require__(74);
 	
 	class SelectionMarquee extends Rectangle {
 	  constructor(x1, y1) {
@@ -28070,19 +29374,19 @@
 
 
 /***/ },
-/* 90 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let Observer = __webpack_require__(86);
+	let Observer = __webpack_require__(85);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
 	let Settings = __webpack_require__(2);
 	let Color = __webpack_require__(8);
 	
 	let CircuitComponent = __webpack_require__(1);
-	let environment = __webpack_require__(10);
+	let environment = __webpack_require__(9);
 	
-	let d3 = __webpack_require__(91);
+	let d3 = __webpack_require__(90);
 	
 	class CircuitCanvas extends Observer {
 	  constructor(Circuit, circuitUI) {
@@ -28715,12 +30019,12 @@
 
 
 /***/ },
-/* 91 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-shape/ Version 1.0.4. Copyright 2016 Mike Bostock.
 	(function (global, factory) {
-	   true ? factory(exports, __webpack_require__(92)) :
+	   true ? factory(exports, __webpack_require__(91)) :
 	  typeof define === 'function' && define.amd ? define(['exports', 'd3-path'], factory) :
 	  (factory((global.d3 = global.d3 || {}),global.d3));
 	}(this, (function (exports,d3Path) { 'use strict';
@@ -30539,7 +31843,7 @@
 
 
 /***/ },
-/* 92 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-path/ Version 1.0.3. Copyright 2016 Mike Bostock.
@@ -30684,20 +31988,20 @@
 
 
 /***/ },
-/* 93 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let Observer = __webpack_require__(86);
+	let Observer = __webpack_require__(85);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
 	let Settings = __webpack_require__(2);
 	let Color = __webpack_require__(8);
 	
 	let CircuitComponent = __webpack_require__(1);
-	let environment = __webpack_require__(10);
-	let ScopeCanvas = __webpack_require__(94);
+	let environment = __webpack_require__(9);
+	let ScopeCanvas = __webpack_require__(93);
 	
-	let d3 = __webpack_require__(95);
+	let d3 = __webpack_require__(94);
 	
 	class SvgRenderer extends Observer {
 	
@@ -31628,7 +32932,7 @@
 
 
 /***/ },
-/* 94 */
+/* 93 */
 /***/ function(module, exports) {
 
 	class ScopeCanvas {
@@ -31669,7 +32973,7 @@
 
 
 /***/ },
-/* 95 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org Version 4.5.0. Copyright 2017 Mike Bostock.
@@ -48080,10 +49384,10 @@
 
 
 /***/ },
-/* 96 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let ScopeCanvas = __webpack_require__(94);
+	let ScopeCanvas = __webpack_require__(93);
 	let Util = __webpack_require__(5);
 	
 	class RickshawScopeCanvas extends ScopeCanvas {
@@ -48206,74 +49510,74 @@
 
 
 /***/ },
-/* 97 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let _DiacElm = __webpack_require__(98);
-	let _LampElm = __webpack_require__(99);
-	let _PhotoResistorElm = __webpack_require__(100);
-	let _ThermistorElm = __webpack_require__(101);
-	let _TriacElm = __webpack_require__(102);
-	let ACRailElm = __webpack_require__(103);
-	let AdcElm = __webpack_require__(64);
-	let AnalogSwitch2Elm = __webpack_require__(50);
-	let AnalogSwitchElm = __webpack_require__(49);
-	let AndGateElm = __webpack_require__(41);
-	let AntennaElm = __webpack_require__(17);
-	let CapacitorElm = __webpack_require__(27);
-	let CC2Elm = __webpack_require__(68);
-	let ChipElm = __webpack_require__(57);
-	let ClockElm = __webpack_require__(74);
-	let CounterElm = __webpack_require__(62);
-	let CurrentElm = __webpack_require__(30);
-	let DacElm = __webpack_require__(63);
-	let DecadeElm = __webpack_require__(56);
-	let DFlipFlopElm = __webpack_require__(61);
-	let DiodeElm = __webpack_require__(24);
-	let GateElm = __webpack_require__(21);
-	let GroundElm = __webpack_require__(23);
-	let InductorElm = __webpack_require__(28);
-	let InverterElm = __webpack_require__(46);
-	let JFetElm = __webpack_require__(32);
-	let JkFlipFlopElm = __webpack_require__(60);
-	let LatchElm = __webpack_require__(58);
-	let LedElm = __webpack_require__(72);
-	let LogicInputElm = __webpack_require__(47);
-	let LogicOutputElm = __webpack_require__(48);
-	let MemristorElm = __webpack_require__(51);
-	let MosfetElm = __webpack_require__(31);
-	let NandGateElm = __webpack_require__(42);
-	let NorGateElm = __webpack_require__(44);
-	let OpAmpElm = __webpack_require__(35);
-	let OrGateElm = __webpack_require__(43);
-	let OutputElm = __webpack_require__(25);
-	let PhaseCompElm = __webpack_require__(66);
-	let PotElm = __webpack_require__(73);
-	let ProbeElm = __webpack_require__(40);
-	let PushSwitchElm = __webpack_require__(104);
-	let RailElm = __webpack_require__(18);
-	let RelayElm = __webpack_require__(52);
-	let ResistorElm = __webpack_require__(22);
-	let SCRElm = __webpack_require__(54);
-	let SevenSegElm = __webpack_require__(67);
-	let SparkGapElm = __webpack_require__(29);
-	let SweepElm = __webpack_require__(38);
-	let Switch2Elm = __webpack_require__(37);
-	let SwitchElm = __webpack_require__(26);
-	let TappedTransformerElm = __webpack_require__(71);
-	let TextElm = __webpack_require__(39);
-	let TimerElm = __webpack_require__(59);
-	let TransformerElm = __webpack_require__(70);
-	let TransistorElm = __webpack_require__(33);
-	let TransLineElm = __webpack_require__(69);
-	let TriodeElm = __webpack_require__(55);
-	let TunnelDiodeElm = __webpack_require__(53);
-	let VarRailElm = __webpack_require__(34);
-	let VcoElm = __webpack_require__(65);
-	let VoltageElm = __webpack_require__(19);
-	let WireElm = __webpack_require__(20);
-	let XorGateElm = __webpack_require__(45);
-	let ZenerElm = __webpack_require__(36);
+	let _DiacElm = __webpack_require__(97);
+	let _LampElm = __webpack_require__(98);
+	let _PhotoResistorElm = __webpack_require__(99);
+	let _ThermistorElm = __webpack_require__(100);
+	let _TriacElm = __webpack_require__(101);
+	let ACRailElm = __webpack_require__(102);
+	let AdcElm = __webpack_require__(63);
+	let AnalogSwitch2Elm = __webpack_require__(49);
+	let AnalogSwitchElm = __webpack_require__(48);
+	let AndGateElm = __webpack_require__(40);
+	let AntennaElm = __webpack_require__(16);
+	let CapacitorElm = __webpack_require__(26);
+	let CC2Elm = __webpack_require__(67);
+	let ChipElm = __webpack_require__(56);
+	let ClockElm = __webpack_require__(73);
+	let CounterElm = __webpack_require__(61);
+	let CurrentElm = __webpack_require__(29);
+	let DacElm = __webpack_require__(62);
+	let DecadeElm = __webpack_require__(55);
+	let DFlipFlopElm = __webpack_require__(60);
+	let DiodeElm = __webpack_require__(23);
+	let GateElm = __webpack_require__(20);
+	let GroundElm = __webpack_require__(22);
+	let InductorElm = __webpack_require__(27);
+	let InverterElm = __webpack_require__(45);
+	let JFetElm = __webpack_require__(31);
+	let JkFlipFlopElm = __webpack_require__(59);
+	let LatchElm = __webpack_require__(57);
+	let LedElm = __webpack_require__(71);
+	let LogicInputElm = __webpack_require__(46);
+	let LogicOutputElm = __webpack_require__(47);
+	let MemristorElm = __webpack_require__(50);
+	let MosfetElm = __webpack_require__(30);
+	let NandGateElm = __webpack_require__(41);
+	let NorGateElm = __webpack_require__(43);
+	let OpAmpElm = __webpack_require__(34);
+	let OrGateElm = __webpack_require__(42);
+	let OutputElm = __webpack_require__(24);
+	let PhaseCompElm = __webpack_require__(65);
+	let PotElm = __webpack_require__(72);
+	let ProbeElm = __webpack_require__(39);
+	let PushSwitchElm = __webpack_require__(103);
+	let RailElm = __webpack_require__(17);
+	let RelayElm = __webpack_require__(51);
+	let ResistorElm = __webpack_require__(21);
+	let SCRElm = __webpack_require__(53);
+	let SevenSegElm = __webpack_require__(66);
+	let SparkGapElm = __webpack_require__(28);
+	let SweepElm = __webpack_require__(37);
+	let Switch2Elm = __webpack_require__(36);
+	let SwitchElm = __webpack_require__(25);
+	let TappedTransformerElm = __webpack_require__(70);
+	let TextElm = __webpack_require__(38);
+	let TimerElm = __webpack_require__(58);
+	let TransformerElm = __webpack_require__(69);
+	let TransistorElm = __webpack_require__(32);
+	let TransLineElm = __webpack_require__(68);
+	let TriodeElm = __webpack_require__(54);
+	let TunnelDiodeElm = __webpack_require__(52);
+	let VarRailElm = __webpack_require__(33);
+	let VcoElm = __webpack_require__(64);
+	let VoltageElm = __webpack_require__(18);
+	let WireElm = __webpack_require__(19);
+	let XorGateElm = __webpack_require__(44);
+	let ZenerElm = __webpack_require__(35);
 	
 	module.exports = {
 	  _DiacElm,
@@ -48343,7 +49647,7 @@
 
 
 /***/ },
-/* 98 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -48441,7 +49745,7 @@
 
 
 /***/ },
-/* 99 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -48482,7 +49786,7 @@
 
 
 /***/ },
-/* 100 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -48511,7 +49815,7 @@
 
 
 /***/ },
-/* 101 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -48541,7 +49845,7 @@
 
 
 /***/ },
-/* 102 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -48578,11 +49882,11 @@
 
 
 /***/ },
-/* 103 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let RailElm = __webpack_require__(18);
-	let VoltageElm = __webpack_require__(19);
+	let RailElm = __webpack_require__(17);
+	let VoltageElm = __webpack_require__(18);
 	
 	class ACRailElm extends RailElm {
 	  constructor(xa, ya, xb, yb, params, f) {
@@ -48600,11 +49904,11 @@
 
 
 /***/ },
-/* 104 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
-	let SwitchElm = __webpack_require__(26);
+	let SwitchElm = __webpack_require__(25);
 	let Util = __webpack_require__(5);
 	
 	class PushSwitchElm extends SwitchElm {
