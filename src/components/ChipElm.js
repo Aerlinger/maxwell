@@ -345,7 +345,7 @@ class ChipElm extends CircuitComponent {
   drawChip(renderContext) {
     //let i;
     // this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
-    renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), Settings.STROKE_COLOR);
+    renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), null, Settings.FILL_COLOR);
 
     for (let i = 0; i < this.numPosts(); i++) {
       if (this.pins[i]) {
@@ -358,15 +358,14 @@ class ChipElm extends CircuitComponent {
 
         renderContext.drawLinePt(a, b, voltageColor);
 
+        if (p.bubble) {
+          renderContext.drawCircle(p.bubbleX, p.bubbleY, this.csize * Settings.POST_RADIUS , this.csize + 1, Settings.STROKE_COLOR);
+        }
+
         if (this.Circuit)
           p.updateDots(this.Circuit.Params.getCurrentMult());
 
-
         renderContext.drawDots(b, a, p);
-
-        if (p.bubble) {
-          renderContext.drawCircle(p.bubbleX, p.bubbleY, 1, Settings.FILL_COLOR);
-        }
 
         let textSize = this.csize == 1 ? 6 : 8;
 
@@ -374,9 +373,12 @@ class ChipElm extends CircuitComponent {
         renderContext.drawText(p.text, p.textloc.x-mt.width/2, p.textloc.y+3, Settings.PIN_LABEL_COLOR, textSize);
 
         if (p.lineOver) {
-          let ya = p.textloc.y - renderContext.context.measureText(p.text).height;
-          let textWidth = renderContext.context.measureText(p.text).width + 2;
-          renderContext.drawLine(p.textloc.x, ya, p.textloc.x + textWidth, ya);
+          // let ya = p.textloc.y - renderContext.context.measureText(p.text).height;
+          let ya = p.textloc.y - textSize;
+          let lshift = mt.width/2 + 1;
+          let textWidth = textSize;//renderContext.context.measureText(p.text).width + 2;
+
+          renderContext.drawLine(p.textloc.x - lshift, ya, p.textloc.x + textWidth - lshift, ya, Settings.TEXT_COLOR, Settings.LINE_WIDTH - 1);
         }
       }
     }
@@ -392,6 +394,8 @@ class ChipElm extends CircuitComponent {
     for (let i = 0; i < this.numPosts(); ++i) {
       renderContext.drawPost(this.pins[i].post.x, this.pins[i].post.y, this.nodes[i]);
     }
+
+    renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), Settings.STROKE_COLOR, null);
   }
 
   recomputeBounds() {

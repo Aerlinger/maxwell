@@ -621,9 +621,9 @@ class CircuitCanvas extends Observer {
     this.context.lineWidth = 0;
     this.context.beginPath();
 
-    this.context.moveTo(polygon.getX(0), polygon.getY(0));
+    this.context.moveTo(polygon.getX(0) + 0.5, polygon.getY(0) + 0.5);
     for (let i = 0; i < numVertices; ++i) {
-      this.context.lineTo(polygon.getX(i), polygon.getY(i));
+      this.context.lineTo(polygon.getX(i) + 0.5, polygon.getY(i) + 0.5);
     }
 
     this.context.closePath();

@@ -40,7 +40,7 @@ class JkFlipFlopElm extends ChipElm {
     this.pins[3].output = this.pins[3].state = true;
     this.pins[4] = new ChipElm.Pin(2, ChipElm.SIDE_E, "Q");
     this.pins[4].output = true;
-    return this.pins[4].lineOver = true;
+    this.pins[4].lineOver = true;
   }
 
   execute() {
