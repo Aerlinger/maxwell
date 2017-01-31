@@ -3,14 +3,10 @@ let ChipElm = require("./ChipElm.js");
 let Util = require('../util/Util.js');
 
 class LatchElm extends ChipElm {
-
   constructor(xa, xb, ya, yb, params, f) {
     params = params || {"bits": 2, "volts": [0, 0, 0, 0, 0]};
 
     super(xa, xb, ya, yb, params, f);
-    
-    this.lastLoad = false;
-    this.loadPin = 0;
   }
 
   static get NAME() {
@@ -30,6 +26,9 @@ class LatchElm extends ChipElm {
   }
 
   setupPins() {
+    this.lastLoad = false;
+    this.loadPin = 0;
+
     let i;
     this.sizeX = 2;
     this.sizeY = this.bits + 1;
@@ -47,7 +46,7 @@ class LatchElm extends ChipElm {
     this.loadPin = this.bits * 2;
     this.pins[this.loadPin] = new ChipElm.Pin(this.bits, ChipElm.SIDE_W, "Ld");
 
-    return this.allocNodes();
+    this.allocNodes();
   }
 
   execute() {
@@ -57,9 +56,8 @@ class LatchElm extends ChipElm {
       }
     }
 
-    return this.lastLoad = this.pins[this.loadPin].value;
+    this.lastLoad = this.pins[this.loadPin].value;
   }
 }
-
 
 module.exports = LatchElm;
