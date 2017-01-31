@@ -19998,8 +19998,6 @@
 	let Point = __webpack_require__(4);
 	let Util = __webpack_require__(5);
 	
-	let { sprintf } = __webpack_require__(9);
-	
 	
 	class MosfetElm extends CircuitComponent {
 	  static get PNP() {
@@ -20020,8 +20018,7 @@
 	        units: "Volts",
 	        symbol: "V",
 	        default_value: 1.5,
-	        range: [-Infinity, Infinity],
-	        type: sprintf
+	        range: [-Infinity, Infinity]
 	      },
 	      "pnp": {
 	        name: "Polarity",
@@ -20863,7 +20860,6 @@
 	let RailElm = __webpack_require__(18);
 	let VoltageElm = __webpack_require__(19);
 	
-	let { sprintf } = __webpack_require__(9);
 	let Util = __webpack_require__(5);
 	
 	class VarRailElm extends RailElm {

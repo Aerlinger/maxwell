@@ -5,8 +5,6 @@ let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
 let Util = require('../util/Util.js');
 
-let { sprintf } = require("sprintf-js");
-
 
 class MosfetElm extends CircuitComponent {
   static get PNP() {
@@ -27,8 +25,7 @@ class MosfetElm extends CircuitComponent {
         units: "Volts",
         symbol: "V",
         default_value: 1.5,
-        range: [-Infinity, Infinity],
-        type: sprintf
+        range: [-Infinity, Infinity]
       },
       "pnp": {
         name: "Polarity",

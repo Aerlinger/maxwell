@@ -6,7 +6,6 @@ let Point = require('../geom/Point.js');
 let RailElm = require('./RailElm.js');
 let VoltageElm = require('./VoltageElm.js');
 
-let { sprintf } = require("sprintf-js");
 let Util = require('../util/Util.js');
 
 class VarRailElm extends RailElm {
