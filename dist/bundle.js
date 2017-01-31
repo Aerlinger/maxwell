@@ -24221,17 +24221,17 @@
 	          this.bubbleX = xa + (dax * 10 * self.csize);
 	          this.bubbleY = ya + (day * 10 * self.csize);
 	        }
-	  
+	
 	        if (this.clock) {
-	          let clockPointsX = new Array(3);
-	          let clockPointsY = new Array(3);
+	          this.clockPointsX = new Array(3);
+	          this.clockPointsY = new Array(3);
 	  
-	          clockPointsX[0] = (xa + (dax * self.cspc)) - ((dx * self.cspc) / 2);
-	          clockPointsY[0] = (ya + (day * self.cspc)) - ((dy * self.cspc) / 2);
-	          clockPointsX[1] = xa;
-	          clockPointsY[1] = ya;
-	          clockPointsX[2] = xa + (dax * self.cspc) + ((dx * self.cspc) / 2);
-	          return clockPointsY[2] = ya + (day * self.cspc) + ((dy * self.cspc) / 2);
+	          this.clockPointsX[0] = (xa + (dax * self.cspc)) - ((dx * self.cspc) / 2);
+	          this.clockPointsY[0] = (ya + (day * self.cspc)) - ((dy * self.cspc) / 2);
+	          this.clockPointsX[1] = xa;
+	          this.clockPointsY[1] = ya;
+	          this.clockPointsX[2] = xa + (dax * self.cspc) + ((dx * self.cspc) / 2);
+	          this.clockPointsY[2] = ya + (day * self.cspc) + ((dy * self.cspc) / 2);
 	        }
 	      }
 	  
@@ -24292,6 +24292,7 @@
 	    }
 	
 	    self = this;
+	
 	    this.setupPins();
 	    this._setPoints();
 	
