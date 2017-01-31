@@ -2,7 +2,6 @@ let Point = require('../geom/Point.js');
 let Polygon = require('../geom/Polygon.js');
 let Settings = require('../Settings.js');
 let Color = require('./Color.js');
-let { sprintf } = require("sprintf-js");
 let environment = require("../Environment.js");
 
 class Util {
@@ -195,7 +194,7 @@ class Util {
     if (f === undefined) {
       return "undef";
     } else {
-      return sprintf("%0.1f", f);
+      return (f).toFixed(1)
     }
   }
 
@@ -203,12 +202,12 @@ class Util {
     if (f === undefined) {
       return "undef";
     } else {
-      return sprintf("%0.2f", f);
+      return (f).toFixed(2)
     }
   }
 
   static floatToPercent(f, digits = 1) {
-    return sprintf("%0.0f", f * 100) + "%";
+    return (f * 100).toFixed(2) + "%";
   }
 
   static isFunction(v) {

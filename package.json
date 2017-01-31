@@ -55,7 +55,6 @@
     "sass-loader": "^4.1.1",
     "should": "^7.1.1",
     "sinon": "~1.6.0",
-    "sprintf-js": "*",
     "time-grunt": "^1.4.0",
     "tiny-lr": "^0.2.1",
     "watchify": "^3.6.1",

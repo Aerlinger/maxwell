@@ -17,8 +17,6 @@ CapacitorElm = require('../components/CapacitorElm.js')
 InductorElm = require('../components/InductorElm.js')
 CurrentElm = require('../components/CurrentElm.js')
 
-sprintf = require("sprintf-js").sprintf
-
 class CircuitSolver
   @SIZE_LIMIT = 100
   @MAXIMUM_SUBITERATIONS = 5000
@@ -841,7 +839,7 @@ class CircuitSolver
         #circuitMatrixDump += ", "
 
     out = ""
-    out += sprintf("  iter: %d, time: %.7f, subiter: %d rows: %d\n", @Circuit.iterations, @Circuit.time, @subIterations, matrixRowCount)
+    out += "  iter: #{@Circuit.iterations}, time: #{(@Circuit.time).toFixed(7}, subiter: #{@subIterations} rows: #{matrixRowCount}\n"
     out += circuitMatrixDump + "\n"
     out += circuitRightSideDump + "]"
 
