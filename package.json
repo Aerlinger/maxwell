@@ -12,7 +12,8 @@
     "dotenv": "^2.0.0",
     "express": "4.13.3",
     "glob": "*",
-    "lodash": "4.1.0"
+    "lodash": "4.1.0",
+    "jade": "~0.26.3"
   },
   "devDependencies": {
     "babel-core": "^6.22.1",
@@ -45,7 +46,6 @@
     "grunt-mocha": "^0.4.11",
     "grunt-mocha-test": "*",
     "http-errors": "^1.3.1",
-    "jade": "~0.26.3",
     "jsondiffpatch": "0.1.38",
     "mocha": "^3.2.0",
     "mongodb": "^2.2.22",
