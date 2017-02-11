@@ -28,7 +28,7 @@ class AndGateElm extends GateElm {
       this.lead2 = Util.interpolate(this.point1, this.point2, 0.5 + ((this.ww + 8) / this.dn()));
     }
 
-    return this.gatePoly = Util.createPolygonFromArray(triPoints);
+    this.gatePoly = Util.createPolygonFromArray(triPoints);
   }
 
   static get NAME() {
@@ -41,8 +41,6 @@ class AndGateElm extends GateElm {
     for (let i = 0; i < this.inputCount; ++i) {
       f = f & this.getInput(i);
     }
-
-    // console.log(f)
 
     return f;
   }

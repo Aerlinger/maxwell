@@ -254,7 +254,7 @@ class TransistorElm extends CircuitComponent {
   limitStep(vnew, vold) {
     let arg = 0;  // TODO
 
-    if ((vnew > this.vcrit) && (Math.abs(vnew - vold) > (this.vt + this.vt))) {
+    if ((vnew > this.vcrit) && (Math.abs(vnew - vold) > (2*this.vt))) {
       if (vold > 0) {
         arg = 1 + ((vnew - vold) / this.vt);
         if (arg > 0) {
@@ -289,6 +289,7 @@ class TransistorElm extends CircuitComponent {
       this.getParentCircuit().Solver.converged = false;
     }
 
+    // "Damping" method (Najm p. 182)
     this.gmin = 0;
     if (subIterations > 100) {
       // TODO: Check validity here

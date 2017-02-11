@@ -29,6 +29,13 @@ class Pathfinder {
     ((this.type === Pathfinder.CAP_V) && !(ce.isWire() || ce instanceof CapacitorElm || Util.typeOf(ce, VoltageElm)));
   }
 
+  // TODO: Spanning tree?
+
+  /**
+   * Find an Eulerian path from node n1 to this.dest no longer than depth.
+   *
+   * Cycle Space/Bond space
+   */
   findPath(n1, depth) {
     if (n1 === this.dest) {
 //      console.log("n1 is @dest")

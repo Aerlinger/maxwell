@@ -57,7 +57,7 @@ class DFlipFlopElm extends ChipElm {
     this.pins[3].clock = true;
 
     if (this.hasReset()) {
-      return this.pins[4] = new ChipElm.Pin(2, ChipElm.SIDE_W, "R");
+      this.pins[4] = new ChipElm.Pin(2, ChipElm.SIDE_W, "R");
     }
   }
 

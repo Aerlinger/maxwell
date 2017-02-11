@@ -218,7 +218,7 @@ class CircuitComponent {
 
   reset() {
     this.volts = Util.zeroArray(this.volts.length);
-    return this.curcount = 0;
+    this.curcount = 0;
   }
 
   setCurrent(x, current) {

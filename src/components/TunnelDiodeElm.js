@@ -19,7 +19,7 @@ class TunnelDiodeElm extends CircuitComponent {
     this.place()
   }
 
-  setPoints() {
+  place() {
     this.calcLeads(16);
     this.cathode = new Array(4);
     let pa = new Array(2);
@@ -30,7 +30,6 @@ class TunnelDiodeElm extends CircuitComponent {
 
     this.poly = Util.createPolygon(pa[0], pa[1], this.lead2);
   }
-
 
   reset() {
     return this.lastvoltdiff = this.volts[0] = this.volts[1] = this.curcount = 0;

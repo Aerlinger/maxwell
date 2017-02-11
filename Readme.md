@@ -131,6 +131,11 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
     <canvas id="circuitboard"></canvas>
   ```
 
+##### Debug options
+
+- Show element bounding boxes
+- Show element terminals
+
 #####Configuration and initialization:
   **Javascript:**
   ```javascript

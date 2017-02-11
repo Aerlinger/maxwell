@@ -43,7 +43,8 @@ class InductorElm extends CircuitComponent {
     this.current = 0;
     this.volts[0] = 0;
     this.volts[1] = 0;
-    return this.curcount = 0;
+    this.curcount = 0;
+    this.curSourceValue = 0;
   }
 
   place() {

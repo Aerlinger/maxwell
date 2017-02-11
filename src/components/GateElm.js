@@ -164,7 +164,7 @@ class GateElm extends CircuitComponent {
     }
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      super.debugDraw(renderContext);
     }
   }
 

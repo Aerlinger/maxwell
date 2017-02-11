@@ -94,6 +94,7 @@ class CircuitSolver
         circuitElm.startIteration()
 
       # Sub iteration
+      # TODO: Quantify convergence rate for diagnostic purposes
       for subiter in [0...CircuitSolver.MAXIMUM_SUBITERATIONS]
         @converged = true
         @subIterations = subiter
@@ -256,6 +257,7 @@ class CircuitSolver
       voltageSourceCount += internalVSCount
 
 
+  # Circuit nodal analysis
   constructCircuitGraph: ->
     # Allocate nodes and voltage sources
     @buildComponentNodes()
@@ -370,6 +372,10 @@ class CircuitSolver
             console.warn "Capacitor loop with no resistance!", ce
             return
 
+
+  ###
+  Apply Sparse Tableau Analysis to reduce dimensionality of circuit equations.
+  ###
   optimize: ->
     row = -1
     while row < @matrixSize-1

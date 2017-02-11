@@ -182,11 +182,11 @@ class Settings {
     this.WIRE_POSTS = true;
   
     // Line Widths:
-    this.POST_RADIUS = 2;
+    this.POST_RADIUS = 5;
     this.POST_OUTLINE_SIZE = 1;
     this.CURRENT_RADIUS = 2;
     this.CURRENT_COLOR = "rgba(255, 255, 255, 0.7)";
-    this.LINE_WIDTH = 2;
+    this.LINE_WIDTH = 3;
     this.BOLD_LINE_WIDTH = 4;
 
     // Grid

@@ -1,4 +1,6 @@
-describe "Render all components", ->
+gm = require("gm")
+
+describe.only "Render all components", ->
   it "can render all components", ->
     this.timeout(5000)
 
@@ -54,9 +56,15 @@ describe "Render all components", ->
         componentUI = new CircuitUI(@ComponentCircuit, @ComponentCanvas);
         componentUI.CircuitCanvas.drawComponents();
 
+        gm(@ComponentCanvas.toBuffer()).trim().write "test/fixtures/componentRenders/#{@component.getName()}_thumb.png", (err) ->
+          console.log(err)
+
+
         fs.writeFileSync("test/fixtures/componentRenders/" + @component.getName() + ".png", @ComponentCanvas.toBuffer())
 
     @renderer.CircuitCanvas.drawComponents()
+
+    #
 
     fs.writeFileSync("test/fixtures/componentRenders/all_components.png", @canvas.toBuffer())
     fs.writeFileSync("test/fixtures/circuitDumps/allComponents.json", JSON.stringify(@Circuit.serialize()))

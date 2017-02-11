@@ -58,10 +58,12 @@ class CapacitorElm extends CircuitComponent {
   }
 
   reset() {
-    this.current = this.curcount = 0;
+    this.current = 0;
+    this.curcount = 0;
+    this.curSourceValue = 0;
 
     // put small charge on caps when reset to start oscillators
-    return this.voltdiff = 1e-3;
+    this.voltdiff = 1e-3;
   }
 
   place() {

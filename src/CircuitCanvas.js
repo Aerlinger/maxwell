@@ -26,16 +26,15 @@ class CircuitCanvas extends Observer {
     this.draw = this.draw.bind(this);
     this.drawDots = this.drawDots.bind(this);
 
+    this.context = this.Canvas.getContext("2d");
+
     if (environment.isBrowser) {
       this.setupScopes();
       this.renderPerformance();
+      window.CircuitUI = this.circuitUI;
+
+      this.rafDraw();
     }
-
-    this.context = this.Canvas.getContext("2d");
-
-    window.CircuitUI = this.circuitUI;
-
-    this.rafDraw();
   }
 
   rafDraw() {
@@ -505,6 +504,7 @@ class CircuitCanvas extends Observer {
   }
 
   drawText(text, x, y, fillColor = Settings.TEXT_COLOR, size = Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
+    /*
     this.context.save();
 
     this.context.fillStyle = fillColor;
@@ -520,6 +520,10 @@ class CircuitCanvas extends Observer {
     this.context.restore();
 
     return textMetrics;
+    */
+    return {
+      width: 0
+    }
   }
 
   drawValue(perpindicularOffset, parallelOffset, component, text = null, text_size = Settings.TEXT_SIZE) {
@@ -618,7 +622,7 @@ class CircuitCanvas extends Observer {
 
     this.context.fillStyle = fill;
     this.context.strokeStyle = color;
-    this.context.lineWidth = 0;
+    this.context.lineWidth = Settings.LINE_WIDTH;
     this.context.beginPath();
 
     this.context.moveTo(polygon.getX(0) + 0.5, polygon.getY(0) + 0.5);

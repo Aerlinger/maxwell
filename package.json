@@ -35,6 +35,7 @@
     "destroy": "^1.0.3",
     "foundation-sites": "^6.3.0",
     "globby": "^6.1.0",
+    "gm": "^1.23.0",
     "grunt": "^0.4.5",
     "grunt-cli": "~0.1.7",
     "grunt-coffeelint": "*",
