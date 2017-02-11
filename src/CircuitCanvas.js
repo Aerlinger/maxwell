@@ -504,7 +504,6 @@ class CircuitCanvas extends Observer {
   }
 
   drawText(text, x, y, fillColor = Settings.TEXT_COLOR, size = Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
-    /*
     this.context.save();
 
     this.context.fillStyle = fillColor;
@@ -520,10 +519,6 @@ class CircuitCanvas extends Observer {
     this.context.restore();
 
     return textMetrics;
-    */
-    return {
-      width: 0
-    }
   }
 
   drawValue(perpindicularOffset, parallelOffset, component, text = null, text_size = Settings.TEXT_SIZE) {

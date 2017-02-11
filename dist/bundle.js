@@ -708,7 +708,7 @@
 	
 	  reset() {
 	    this.volts = Util.zeroArray(this.volts.length);
-	    return this.curcount = 0;
+	    this.curcount = 0;
 	  }
 	
 	  setCurrent(x, current) {
@@ -18512,7 +18512,7 @@
 	    }
 	
 	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
-	      return super.debugDraw(renderContext);
+	      super.debugDraw(renderContext);
 	    }
 	  }
 	
@@ -19266,10 +19266,12 @@
 	  }
 	
 	  reset() {
-	    this.current = this.curcount = 0;
+	    this.current = 0;
+	    this.curcount = 0;
+	    this.curSourceValue = 0;
 	
 	    // put small charge on caps when reset to start oscillators
-	    return this.voltdiff = 1e-3;
+	    this.voltdiff = 1e-3;
 	  }
 	
 	  place() {
@@ -19424,7 +19426,8 @@
 	    this.current = 0;
 	    this.volts[0] = 0;
 	    this.volts[1] = 0;
-	    return this.curcount = 0;
+	    this.curcount = 0;
+	    this.curSourceValue = 0;
 	  }
 	
 	  place() {
@@ -20470,7 +20473,7 @@
 	  limitStep(vnew, vold) {
 	    let arg = 0;  // TODO
 	
-	    if ((vnew > this.vcrit) && (Math.abs(vnew - vold) > (this.vt + this.vt))) {
+	    if ((vnew > this.vcrit) && (Math.abs(vnew - vold) > (2*this.vt))) {
 	      if (vold > 0) {
 	        arg = 1 + ((vnew - vold) / this.vt);
 	        if (arg > 0) {
@@ -20505,6 +20508,7 @@
 	      this.getParentCircuit().Solver.converged = false;
 	    }
 	
+	    // "Damping" method (Najm p. 182)
 	    this.gmin = 0;
 	    if (subIterations > 100) {
 	      // TODO: Check validity here
@@ -21684,7 +21688,7 @@
 	      this.lead2 = Util.interpolate(this.point1, this.point2, 0.5 + ((this.ww + 8) / this.dn()));
 	    }
 	
-	    return this.gatePoly = Util.createPolygonFromArray(triPoints);
+	    this.gatePoly = Util.createPolygonFromArray(triPoints);
 	  }
 	
 	  static get NAME() {
@@ -21697,8 +21701,6 @@
 	    for (let i = 0; i < this.inputCount; ++i) {
 	      f = f & this.getInput(i);
 	    }
-	
-	    // console.log(f)
 	
 	    return f;
 	  }
@@ -23020,7 +23022,7 @@
 	    this.place()
 	  }
 	
-	  setPoints() {
+	  place() {
 	    this.calcLeads(16);
 	    this.cathode = new Array(4);
 	    let pa = new Array(2);
@@ -23031,7 +23033,6 @@
 	
 	    this.poly = Util.createPolygon(pa[0], pa[1], this.lead2);
 	  }
-	
 	
 	  reset() {
 	    return this.lastvoltdiff = this.volts[0] = this.volts[1] = this.curcount = 0;
@@ -24711,7 +24712,7 @@
 	    this.pins[3].clock = true;
 	
 	    if (this.hasReset()) {
-	      return this.pins[4] = new ChipElm.Pin(2, ChipElm.SIDE_W, "R");
+	      this.pins[4] = new ChipElm.Pin(2, ChipElm.SIDE_W, "R");
 	    }
 	  }
 	
@@ -27570,7 +27571,7 @@
 	      }
 	      tm = (new Date()).getTime();
 	      lit = tm;
-	      if ((tm - this.lastFrameTime) > 250) {
+	      if ((tm - this.lastFrameTime) > 2000) {
 	        break;
 	      }
 	      if ((iter * 1000) >= (stepRate * (tm - this.lastIterTime))) {
@@ -27828,6 +27829,11 @@
 	      }
 	    }
 	  };
+	
+	
+	  /*
+	  Apply Sparse Tableau Analysis to reduce dimensionality of circuit equations.
+	   */
 	
 	  CircuitSolver.prototype.optimize = function() {
 	    var circuitRowInfo, col, elt, j, k, lastVal, newIdx, newMatDim, newMatx, newRS, newSize, qm, qp, qq, re, row, rowInfo, rowNodeEq, rsadd, _i, _j, _k, _l, _m, _n, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
@@ -28583,6 +28589,13 @@
 	    ((this.type === Pathfinder.CAP_V) && !(ce.isWire() || ce instanceof CapacitorElm || Util.typeOf(ce, VoltageElm)));
 	  }
 	
+	  // TODO: Spanning tree?
+	
+	  /**
+	   * Find an Eulerian path from node n1 to this.dest no longer than depth.
+	   *
+	   * Cycle Space/Bond space
+	   */
 	  findPath(n1, depth) {
 	    if (n1 === this.dest) {
 	//      console.log("n1 is @dest")
@@ -29405,16 +29418,15 @@
 	    this.draw = this.draw.bind(this);
 	    this.drawDots = this.drawDots.bind(this);
 	
+	    this.context = this.Canvas.getContext("2d");
+	
 	    if (environment.isBrowser) {
 	      this.setupScopes();
 	      this.renderPerformance();
+	      window.CircuitUI = this.circuitUI;
+	
+	      this.rafDraw();
 	    }
-	
-	    this.context = this.Canvas.getContext("2d");
-	
-	    window.CircuitUI = this.circuitUI;
-	
-	    this.rafDraw();
 	  }
 	
 	  rafDraw() {
@@ -29997,7 +30009,7 @@
 	
 	    this.context.fillStyle = fill;
 	    this.context.strokeStyle = color;
-	    this.context.lineWidth = 0;
+	    this.context.lineWidth = Settings.LINE_WIDTH;
 	    this.context.beginPath();
 	
 	    this.context.moveTo(polygon.getX(0) + 0.5, polygon.getY(0) + 0.5);

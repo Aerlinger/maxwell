@@ -132,7 +132,7 @@ class CircuitSolver
       tm = (new Date()).getTime()
       lit = tm
 
-      if (tm - @lastFrameTime) > 250
+      if (tm - @lastFrameTime) > 2000
 #        console.log("force break", iter)
         break
 
