@@ -49185,7 +49185,7 @@
 	            if (this.converged && subiter > 0) {
 	              break;
 	            }
-	            this.sub_luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute);
+	            this.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute);
 	          }
 	          this.luSolve(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute, this.circuitRightSide);
 	          for (j = o = 0, ref3 = this.circuitMatrixFullSize; 0 <= ref3 ? o < ref3 : o > ref3; j = 0 <= ref3 ? ++o : --o) {
@@ -49680,81 +49680,6 @@
 	      }
 	      return true;
 	    };
-	
-	    CircuitSolver.prototype.sub_luFactor = function(circuitMatrix, matrixSize, pivotArray) {
-	      var i, j, k, largest, largestRow, matrix_ij, mult, x;
-	      i = 0;
-	      while (i < matrixSize) {
-	        largest = 0;
-	        j = 0;
-	        while (j < matrixSize) {
-	          x = Math.abs(circuitMatrix[i][j]);
-	          if (x > largest) {
-	            largest = x;
-	          }
-	          ++j;
-	        }
-	        this.scaleFactors[i] = 1.0 / largest;
-	        ++i;
-	      }
-	      j = 0;
-	      while (j < matrixSize) {
-	        i = 0;
-	        while (i < j) {
-	          matrix_ij = circuitMatrix[i][j];
-	          k = 0;
-	          while (k !== i) {
-	            matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
-	            ++k;
-	          }
-	          circuitMatrix[i][j] = matrix_ij;
-	          ++i;
-	        }
-	        largest = 0;
-	        largestRow = -1;
-	        i = j;
-	        while (i < matrixSize) {
-	          matrix_ij = circuitMatrix[i][j];
-	          k = 0;
-	          while (k < j) {
-	            matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
-	            ++k;
-	          }
-	          circuitMatrix[i][j] = matrix_ij;
-	          x = Math.abs(matrix_ij);
-	          if (x >= largest) {
-	            largest = x;
-	            largestRow = i;
-	          }
-	          ++i;
-	        }
-	        if (j !== largestRow) {
-	          k = 0;
-	          while (k < matrixSize) {
-	            x = circuitMatrix[largestRow][k];
-	            circuitMatrix[largestRow][k] = circuitMatrix[j][k];
-	            circuitMatrix[j][k] = x;
-	            ++k;
-	          }
-	          this.scaleFactors[largestRow] = this.scaleFactors[j];
-	        }
-	        pivotArray[j] = largestRow;
-	        if (circuitMatrix[j][j] === 0) {
-	          circuitMatrix[j][j] = 1e-18;
-	        }
-	        if (j !== matrixSize - 1) {
-	          mult = 1 / circuitMatrix[j][j];
-	          i = j + 1;
-	          while (i !== matrixSize) {
-	            circuitMatrix[i][j] *= mult;
-	            ++i;
-	          }
-	        }
-	        ++j;
-	      }
-	      return true;
-	    };
-	
 	
 	    /*
 	      luFactor: finds a solution to a factored matrix through LU (Lower-Upper) factorization
