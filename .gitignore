@@ -17,3 +17,4 @@ circuits/v2/
 .env
 **/*.map
 *.graffle
+benchmark_reports

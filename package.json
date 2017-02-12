@@ -52,6 +52,7 @@
     "mongodb": "^2.2.22",
     "node-resemble-js": "^0.2.0",
     "node-sass-middleware": "^0.11.0",
+    "performance-now": "^2.0.0",
     "resemblejs": "^2.2.3",
     "sass-loader": "^4.1.1",
     "should": "^7.1.1",
@@ -65,8 +66,7 @@
   "scripts": {
     "test": "mocha -w --compilers coffee:coffee-script/register",
     "start": "node app/app.js",
-    "mongoimport": "node scripts/importCircuitsIntoMongo.js",
-    "postinstall": "npm rebuild gulp-cli"
+    "benchmark": "node scripts/benchmark.js"
   },
   "babel": {
     "presets": [
