@@ -25,7 +25,7 @@
 let Logger = require('../io/Logger.js');
 let SimulationParams = require('./SimulationParams.js');
 let SimulationFrame = require('./SimulationFrame.js');
-let CircuitSolver = require('../engine/CircuitSolver.coffee');
+let CircuitSolver = require('../engine/CircuitSolver.js');
 let Observer = require('../util/Observer.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Util = require('../util/Util.js');
@@ -218,8 +218,8 @@ class Circuit extends Observer {
     str += "Circuit Matrix:\n";
     str += this.Solver.dumpFrame() + "\n";
 
-    str += "Orig Matrix:\n";
-    str += this.Solver.dumpOrigFrame() + "\n";
+    // str += "Orig Matrix:\n";
+    // str += this.Solver.dumpOrigFrame() + "\n";
 
     return str;
   }

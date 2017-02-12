@@ -52,7 +52,7 @@ CircuitCanvas = require("../src/CircuitCanvas.js");
 MatrixStamper = require('../src/engine/MatrixStamper.js');
 
 CircuitComponent = require('../src/components/CircuitComponent.js');
-CircuitSolver = require('../src/engine/CircuitSolver.coffee');
+CircuitSolver = require('../src/engine/CircuitSolver.js');
 MatrixStamper = require('../src/engine/MatrixStamper.js');
 
 ACRailElm = require('../src/components/ACRailElm.js');

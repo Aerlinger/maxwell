@@ -60,13 +60,14 @@
     "time-grunt": "^1.4.0",
     "tiny-lr": "^0.2.1",
     "watchify": "^3.6.1",
+    "webdriverio": "^4.6.2",
     "webpack": "^1.14.0",
     "winston": "2.1.1"
   },
   "scripts": {
     "test": "mocha -w --compilers coffee:coffee-script/register",
     "start": "node app/app.js",
-    "benchmark": "node scripts/benchmark.js"
+    "benchmark": "node --prof scripts/node-benchmark.js"
   },
   "babel": {
     "presets": [
