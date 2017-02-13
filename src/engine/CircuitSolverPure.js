@@ -1,21 +1,21 @@
-const MatrixStamper = require('./MatrixStamper.js');
+var MatrixStamper = require('./MatrixStamper.js');
 
-const Pathfinder = require('./Pathfinder.js');
-const CircuitNode = require('./CircuitNode.js');
-const CircuitNodeLink = require('./CircuitNodeLink.js');
-const RowInfo = require('./RowInfo.js');
-const Setting = require('../Settings.js');
-const Util = require('../util/Util.js');
+var Pathfinder = require('./Pathfinder.js');
+var CircuitNode = require('./CircuitNode.js');
+var CircuitNodeLink = require('./CircuitNodeLink.js');
+var RowInfo = require('./RowInfo.js');
+var Setting = require('../Settings.js');
+var Util = require('../util/Util.js');
 
-const SimulationFrame = require('../circuit/SimulationFrame.js');
+var SimulationFrame = require('../circuit/SimulationFrame.js');
 
-const GroundElm = require('../components/GroundElm.js');
-const RailElm = require('../components/RailElm.js');
-const VoltageElm = require('../components/VoltageElm.js');
-const WireElm = require('../components/WireElm.js');
-const CapacitorElm = require('../components/CapacitorElm.js');
-const InductorElm = require('../components/InductorElm.js');
-const CurrentElm = require('../components/CurrentElm.js');
+var GroundElm = require('../components/GroundElm.js');
+var RailElm = require('../components/RailElm.js');
+var VoltageElm = require('../components/VoltageElm.js');
+var WireElm = require('../components/WireElm.js');
+var CapacitorElm = require('../components/CapacitorElm.js');
+var InductorElm = require('../components/InductorElm.js');
+var CurrentElm = require('../components/CurrentElm.js');
 
 class CircuitSolver {
   static initClass() {
@@ -88,16 +88,16 @@ class CircuitSolver {
 
     this.sysTime = (new Date()).getTime();
 
-    const stepRate = Math.floor(160 * this.getIterCount());
+    var stepRate = Math.floor(160 * this.getIterCount());
 
-    let tm = (new Date()).getTime();
-    let lit = this.lastIterTime;
+    var tm = (new Date()).getTime();
+    var lit = this.lastIterTime;
 
     if (1000 >= (stepRate * (tm - this.lastIterTime))) {
       return;
     }
 
-    let iter = 1;
+    var iter = 1;
     while (true) {
       var subiter;
       ++this.steps;
@@ -128,8 +128,8 @@ class CircuitSolver {
         this.luSolve(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute, this.circuitRightSide);
 
         // backsolve and update each component current/voltage...
-        for (let j = 0; j < this.circuitMatrixFullSize; ++j) {
-          const res = this.getValueFromNode(j);
+        for (var j = 0; j < this.circuitMatrixFullSize; ++j) {
+          var res = this.getValueFromNode(j);
           if (!this.updateComponent(j, res)) {
             break;
           }
@@ -148,7 +148,7 @@ class CircuitSolver {
       this.Circuit.time += this.Circuit.timeStep();
 
       if (((iter + 20) % 21) === 0) {
-        for (let scope of this.Circuit.scopes) {
+        for (var scope of this.Circuit.scopes) {
           if (scope.circuitElm) {
             scope.sampleVoltage(this.Circuit.time, scope.circuitElm.getVoltageDiff());
             scope.sampleCurrent(this.Circuit.time, scope.circuitElm.getCurrent());
@@ -187,11 +187,11 @@ class CircuitSolver {
   _updateTimings(lastIterationTime) {
     this.lastIterTime = lastIterationTime;
 
-    const sysTime = (new Date()).getTime();
+    var sysTime = (new Date()).getTime();
 
     if (this.lastTime !== 0) {
-      const inc = Math.floor(sysTime - this.lastTime);
-      const currentSpeed = Math.exp((this.Circuit.currentSpeed() / 3.5) - 14.2);
+      var inc = Math.floor(sysTime - this.lastTime);
+      var currentSpeed = Math.exp((this.Circuit.currentSpeed() / 3.5) - 14.2);
 
       this.Circuit.Params.setCurrentMult(1.7 * inc * currentSpeed);
     }
@@ -214,17 +214,17 @@ class CircuitSolver {
   }
 
   getIterCount() {
-    const sim_speed = this.Circuit.simSpeed();
+    var sim_speed = this.Circuit.simSpeed();
     return 0.1 * Math.exp((sim_speed - 61.0) / 24.0);
   }
 
   discoverGroundReference() {
-    let gotGround = false;
-    let gotRail = false;
-    let volt = null;
+    var gotGround = false;
+    var gotRail = false;
+    var volt = null;
 
     // Check if this circuit has a voltage rail and if it has a voltage element.
-    for (let ce of this.Circuit.getElements()) {
+    for (var ce of this.Circuit.getElements()) {
       if (ce instanceof GroundElm) {
         gotGround = true;
         break;
@@ -237,12 +237,12 @@ class CircuitSolver {
       }
     }
 
-    const circuitNode = new CircuitNode(this);
+    var circuitNode = new CircuitNode(this);
     circuitNode.x = circuitNode.y = -1;
 
     // If no ground and no rails then voltage element's first terminal is referenced to ground:
     if (!gotGround && !gotRail && (volt != null)) {
-      const pt = volt.getPost(0);
+      var pt = volt.getPost(0);
 
       circuitNode.x = pt.x;
       circuitNode.y = pt.y;
@@ -252,9 +252,9 @@ class CircuitSolver {
   }
 
   buildComponentNodes() {
-    let internalNodeCount, internalVSCount, postCount;
-    let internalLink, internalNode;
-    let voltageSourceCount = 0;
+    var internalNodeCount, internalVSCount, postCount;
+    var internalLink, internalNode;
+    var voltageSourceCount = 0;
 
     return this.Circuit.getElements().map((circuitElm) =>
         (internalNodeCount = circuitElm.numInternalNodes(),
@@ -263,11 +263,11 @@ class CircuitSolver {
 
             // allocate a node for each post and match postCount to nodes
             (() => {
-              const result = [];
-              for (let postIdx = 0, end = postCount, asc = 0 <= end; asc ? postIdx < end : postIdx > end; asc ? postIdx++ : postIdx--) {
+              var result = [];
+              for (var postIdx = 0, end = postCount, asc = 0 <= end; asc ? postIdx < end : postIdx > end; asc ? postIdx++ : postIdx--) {
                 var circuitNode, nodeIdx;
-                let item;
-                const postPt = circuitElm.getPost(postIdx);
+                var item;
+                var postPt = circuitElm.getPost(postIdx);
 
                 for (nodeIdx = 0, end1 = this.Circuit.numNodes(), asc1 = 0 <= end1; asc1 ? nodeIdx < end1 : nodeIdx > end1; asc1 ? nodeIdx++ : nodeIdx--) {
                   var asc1, end1;
@@ -277,7 +277,7 @@ class CircuitSolver {
                   }
                 }
 
-                const nodeLink = new CircuitNodeLink();
+                var nodeLink = new CircuitNodeLink();
                 nodeLink.num = postIdx;
                 nodeLink.elm = circuitElm;
 
@@ -327,12 +327,12 @@ class CircuitSolver {
     this.circuitNonLinear = false;
 
     // Determine if circuit is nonlinear
-    for (let circuitElement of this.Circuit.getElements()) {
+    for (var circuitElement of this.Circuit.getElements()) {
       if (circuitElement.nonLinear()) {
         this.circuitNonLinear = true;
       }
 
-      for (let voltSourceIdx = 0; voltSourceIdx < circuitElement.numVoltageSources(); ++voltSourceIdx) {
+      for (var voltSourceIdx = 0; voltSourceIdx < circuitElement.numVoltageSources(); ++voltSourceIdx) {
         this.Circuit.voltageSources[voltageSourceCount] = circuitElement;
         circuitElement.setVoltageSource(voltSourceIdx, voltageSourceCount++);
       }
@@ -354,7 +354,7 @@ class CircuitSolver {
     this.circuitRowInfo = Util.zeroArray(this.matrixSize);
     this.circuitPermute = Util.zeroArray(this.matrixSize);
 
-    for (let rowIdx = 0; rowIdx < this.matrixSize; ++rowIdx) {
+    for (var rowIdx = 0; rowIdx < this.matrixSize; ++rowIdx) {
       this.circuitRowInfo[rowIdx] = new RowInfo();
     }
 
@@ -366,18 +366,18 @@ class CircuitSolver {
   }
 
   checkConnectivity() {// Determine nodes that are unconnected
-    const closure = new Array(this.Circuit.numNodes());
+    var closure = new Array(this.Circuit.numNodes());
     closure[0] = true;
-    let changed = true;
+    var changed = true;
 
     return (() => {
-      const result = [];
+      var result = [];
       while (changed) {
         changed = false;
-        for (let circuitElm of this.Circuit.getElements()) {
+        for (var circuitElm of this.Circuit.getElements()) {
 
           // Loop through all ce's nodes to see if they are connected to other nodes not in closure
-          for (let postIdx = 0; postIdx < circuitElm.numPosts(); ++postIdx) {
+          for (var postIdx = 0; postIdx < circuitElm.numPosts(); ++postIdx) {
             if (!closure[circuitElm.getNode(postIdx)]) {
               if (circuitElm.hasGroundConnection(postIdx)) {
                 changed = true;
@@ -386,12 +386,12 @@ class CircuitSolver {
               continue;
             }
 
-            for (let siblingPostIdx = 0, end1 = circuitElm.numPosts(), asc1 = 0 <= end1; asc1 ? siblingPostIdx < end1 : siblingPostIdx > end1; asc1 ? siblingPostIdx++ : siblingPostIdx--) {
+            for (var siblingPostIdx = 0, end1 = circuitElm.numPosts(), asc1 = 0 <= end1; asc1 ? siblingPostIdx < end1 : siblingPostIdx > end1; asc1 ? siblingPostIdx++ : siblingPostIdx--) {
               if (postIdx === siblingPostIdx) {
                 continue;
               }
 
-              const siblingNode = circuitElm.getNode(siblingPostIdx);
+              var siblingNode = circuitElm.getNode(siblingPostIdx);
               if (circuitElm.getConnection(postIdx, siblingPostIdx) && !closure[siblingNode]) {
                 closure[siblingNode] = true;
                 changed = true;
@@ -406,9 +406,9 @@ class CircuitSolver {
 
         // connect unconnected nodes
         result.push((() => {
-          const result1 = [];
-          for (let nodeIdx = 0, end2 = this.Circuit.numNodes(), asc2 = 0 <= end2; asc2 ? nodeIdx < end2 : nodeIdx > end2; asc2 ? nodeIdx++ : nodeIdx--) {
-            let item;
+          var result1 = [];
+          for (var nodeIdx = 0, end2 = this.Circuit.numNodes(), asc2 = 0 <= end2; asc2 ? nodeIdx < end2 : nodeIdx > end2; asc2 ? nodeIdx++ : nodeIdx--) {
+            var item;
             if (!closure[nodeIdx] && !this.Circuit.nodeList[nodeIdx].intern) {
               console.warn(`Node ${nodeIdx} unconnected! -> ${this.Circuit.nodeList[nodeIdx].toString()}`);
               this.Stamper.stampResistor(0, nodeIdx, 1e8);
@@ -427,7 +427,7 @@ class CircuitSolver {
 
 
   findInvalidPaths() {
-    for (let ce of this.Circuit.getElements()) {
+    for (var ce of this.Circuit.getElements()) {
       var fpi;
       if (ce instanceof InductorElm) {
         fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
@@ -448,7 +448,7 @@ class CircuitSolver {
 
       // Look for voltage source loops:
       if ((Util.typeOf(ce, VoltageElm) && (ce.numPosts() === 2)) || ce instanceof WireElm) {
-        const pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
+        var pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
 
         if (pathfinder.findPath(ce.getNode(0))) {
           this.Circuit.halt("Voltage source/wire loop with no resistance!", ce);
@@ -477,25 +477,25 @@ class CircuitSolver {
    Apply Sparse Tableau Analysis to reduce dimensionality of circuit equations.
    */
   optimize() {
-    let col, rowInfo, rowNodeEq;
-    let row = -1;
+    var col, rowInfo, rowNodeEq;
+    var row = -1;
     while (row < (this.matrixSize - 1)) {
       row += 1;
 
-      const re = this.circuitRowInfo[row];
+      var re = this.circuitRowInfo[row];
       if (re.lsChanges || re.dropRow || re.rsChanges) {
         continue;
       }
 
-      let rsadd = 0;
-      let qm = -1;
-      let qp = -1;
-      let lastVal = 0;
+      var rsadd = 0;
+      var qm = -1;
+      var qp = -1;
+      var lastVal = 0;
 
       // look for rows that can be removed
       for (col = 0; col < this.matrixSize; ++col) {
         if (this.circuitRowInfo[col].type === RowInfo.ROW_CONST) {
-          // Keep a running total of const values that have been removed already
+          // Keep a running total of var values that have been removed already
           rsadd -= this.circuitRowInfo[col].value * this.circuitMatrix[row][col];
         } else if (this.circuitMatrix[row][col] === 0) {
         } else if (qp === -1) { // First col
@@ -514,11 +514,11 @@ class CircuitSolver {
           return;
         }
 
-        let elt = this.circuitRowInfo[qp];
+        var elt = this.circuitRowInfo[qp];
 
         // We found a row with only one nonzero entry, that value is constant
         if (qm === -1) {
-          let k = 0;
+          var k = 0;
           while ((elt.type === RowInfo.ROW_EQUAL) && (k < CircuitSolver.SIZE_LIMIT)) {
             // Follow the chain
             qp = elt.nodeEq;
@@ -543,7 +543,7 @@ class CircuitSolver {
           // We found a row with only two nonzero entries, and one is the negative of the other -> the values are equal
         } else if ((this.circuitRightSide[row] + rsadd) === 0) {
           if (elt.type !== RowInfo.ROW_NORMAL) {
-            const qq = qm;
+            var qq = qm;
             qm = qp;
             qp = qq;
             elt = this.circuitRowInfo[qp];
@@ -565,8 +565,8 @@ class CircuitSolver {
     // END WHILE row < @matrixSize-1
 
     // Find size of new matrix:
-    let newMatDim = 0;
-    for (let row = 0; row < this.matrixSize; ++row) {
+    var newMatDim = 0;
+    for (var row = 0; row < this.matrixSize; ++row) {
       rowInfo = this.circuitRowInfo[row];
 
       if (rowInfo.type === RowInfo.ROW_NORMAL) {
@@ -575,7 +575,7 @@ class CircuitSolver {
       } else {
         if (rowInfo.type === RowInfo.ROW_EQUAL) {
           // resolve chains of equality; 100 max steps to avoid loops
-          for (let j = 0; j < CircuitSolver.SIZE_LIMIT; ++j) {
+          for (var j = 0; j < CircuitSolver.SIZE_LIMIT; ++j) {
             rowNodeEq = this.circuitRowInfo[rowInfo.nodeEq];
 
             if ((rowNodeEq.type !== RowInfo.ROW_EQUAL) || (row === rowNodeEq.nodeEq)) {
@@ -592,7 +592,7 @@ class CircuitSolver {
       }
     }
 
-    for (let row = 0; row < this.matrixSize; ++row) {
+    for (var row = 0; row < this.matrixSize; ++row) {
       rowInfo = this.circuitRowInfo[row];
       if (rowInfo.type === RowInfo.ROW_EQUAL) {
         rowNodeEq = this.circuitRowInfo[rowInfo.nodeEq];
@@ -608,15 +608,15 @@ class CircuitSolver {
     }
 
     // make the new, simplified matrix
-    const newSize = newMatDim;
-    const newMatx = Util.zeroArray2(newSize, newSize);
-    const newRS = new Array(newSize);
+    var newSize = newMatDim;
+    var newMatx = Util.zeroArray2(newSize, newSize);
+    var newRS = new Array(newSize);
 
     Util.zeroArray(newRS);
 
-    let newIdx = 0;
-    for (let row = 0; row < this.matrixSize; ++row) {
-      const circuitRowInfo = this.circuitRowInfo[row];
+    var newIdx = 0;
+    for (var row = 0; row < this.matrixSize; ++row) {
+      var circuitRowInfo = this.circuitRowInfo[row];
 
       if (circuitRowInfo.dropRow) {
         circuitRowInfo.mapRow = -1;
@@ -649,12 +649,12 @@ class CircuitSolver {
 
 
   saveOriginalMatrixState() {
-    for (let row = 0; row < this.matrixSize; ++row)
+    for (var row = 0; row < this.matrixSize; ++row)
       this.origRightSide[row] = this.circuitRightSide[row];
 
     if (this.circuitNonLinear) {
-      for (let row = 0; row < this.matrixSize; ++row) {
-        for (let col = 0; col < this.matrixSize; ++col) {
+      for (var row = 0; row < this.matrixSize; ++row) {
+        for (var col = 0; col < this.matrixSize; ++col) {
           this.origMatrix[row][col] = this.circuitMatrix[row][col];
         }
       }
@@ -662,18 +662,18 @@ class CircuitSolver {
   }
 
   restoreOriginalMatrixState() {
-    for (let row = 0; row < this.circuitMatrixSize; ++row)
+    for (var row = 0; row < this.circuitMatrixSize; ++row)
       this.circuitRightSide[row] = this.origRightSide[row];
 
     if (this.circuitNonLinear) {
-      for (let row = 0; row < this.circuitMatrixSize; ++row)
-        for (let col = 0; col < this.circuitMatrixSize; ++col)
+      for (var row = 0; row < this.circuitMatrixSize; ++row)
+        for (var col = 0; col < this.circuitMatrixSize; ++col)
           this.circuitMatrix[row][col] = this.origMatrix[row][col];
     }
   }
 
   getValueFromNode(idx) {
-    const rowInfo = this.circuitRowInfo[idx];
+    var rowInfo = this.circuitRowInfo[idx];
 
     if (rowInfo.type === RowInfo.ROW_CONST) {
       return rowInfo.value;
@@ -689,13 +689,13 @@ class CircuitSolver {
     }
 
     if (nodeIdx < (this.Circuit.numNodes() - 1)) {
-      const circuitNode = this.Circuit.nodeList[nodeIdx + 1];
-      for (let circuitNodeLink of circuitNode.links) {
+      var circuitNode = this.Circuit.nodeList[nodeIdx + 1];
+      for (var circuitNodeLink of circuitNode.links) {
         circuitNodeLink.elm.setNodeVoltage(circuitNodeLink.num, value);
       }
 
     } else {
-      const ji = nodeIdx - (this.Circuit.numNodes() - 1);
+      var ji = nodeIdx - (this.Circuit.numNodes() - 1);
       this.Circuit.voltageSources[ji].setCurrent(ji, value);
     }
 
@@ -714,9 +714,9 @@ class CircuitSolver {
    @param (output) pivotArray pivot index
    */
   luFactor(circuitMatrix, matrixSize, pivotArray) {
-// Divide each row by largest element in that row and remember scale factors
-    let j, largest, x;
-    let i = 0;
+    var i, j, k, largest, largestRow, matrix_ij, mult, x;
+
+    i = 0;
     while (i < matrixSize) {
       largest = 0;
       j = 0;
@@ -727,21 +727,12 @@ class CircuitSolver {
         }
         ++j;
       }
-
-      // Check for singular matrix:
-      //if largest == 0
-      //  console.error("Singular matrix (#{i}, #{j}) -> #{largest}")
-
       this.scaleFactors[i] = 1.0 / largest;
       ++i;
     }
 
-    // Crout's method: Loop through columns first
     j = 0;
     while (j < matrixSize) {
-
-// Calculate upper trangular elements for this column:
-      var k, matrix_ij;
       i = 0;
       while (i < j) {
         matrix_ij = circuitMatrix[i][j];
@@ -753,10 +744,9 @@ class CircuitSolver {
         circuitMatrix[i][j] = matrix_ij;
         ++i;
       }
-
-      // Calculate lower triangular elements for this column
       largest = 0;
-      let largestRow = -1;
+      largestRow = -1;
+
       i = j;
       while (i < matrixSize) {
         matrix_ij = circuitMatrix[i][j];
@@ -765,7 +755,6 @@ class CircuitSolver {
           matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
           ++k;
         }
-
         circuitMatrix[i][j] = matrix_ij;
         x = Math.abs(matrix_ij);
         if (x >= largest) {
@@ -775,7 +764,6 @@ class CircuitSolver {
         ++i;
       }
 
-      // Pivot
       if (j !== largestRow) {
         k = 0;
         while (k < matrixSize) {
@@ -787,24 +775,22 @@ class CircuitSolver {
         this.scaleFactors[largestRow] = this.scaleFactors[j];
       }
 
-      // keep track of row interchanges
       pivotArray[j] = largestRow;
-
-      // avoid zeros
       if (circuitMatrix[j][j] === 0) {
         circuitMatrix[j][j] = 1e-18;
       }
-      if (j !== (matrixSize - 1)) {
-        const mult = 1 / circuitMatrix[j][j];
+
+      if (j !== matrixSize - 1) {
+        mult = 1 / circuitMatrix[j][j];
         i = j + 1;
         while (i !== matrixSize) {
           circuitMatrix[i][j] *= mult;
           ++i;
         }
       }
+
       ++j;
     }
-    return true;
   }
 
 
@@ -821,11 +807,11 @@ class CircuitSolver {
    */
   luSolve(circuitMatrix, numRows, pivotVector, circuitRightSide) {
     // Find first nonzero element of circuitRightSide
-    let j, row;
-    let i = 0;
+    var j, row;
+    var i = 0;
     while (i < numRows) {
       row = pivotVector[i];
-      const swap = circuitRightSide[row];
+      var swap = circuitRightSide[row];
       circuitRightSide[row] = circuitRightSide[i];
       circuitRightSide[i] = swap;
       if (swap !== 0) {
@@ -834,10 +820,10 @@ class CircuitSolver {
       ++i;
     }
 
-    const bi = i++;
+    var bi = i++;
     while (i < numRows) {
       row = pivotVector[i];
-      let tot = circuitRightSide[row];
+      var tot = circuitRightSide[row];
       circuitRightSide[row] = circuitRightSide[i];
 
       // Forward substitution by using the lower triangular matrix
@@ -853,7 +839,7 @@ class CircuitSolver {
     i = numRows - 1;
 
     while (i >= 0) {
-      let total = circuitRightSide[i];
+      var total = circuitRightSide[i];
 
       // back-substitution using the upper triangular matrix
       j = i + 1;
@@ -869,11 +855,11 @@ class CircuitSolver {
   }
 
   dump() {
-    let out = "";
+    var out = "";
 
     out += this.Circuit.Params.toString() + "\n";
 
-    for (let rowInfo of this.circuitRowInfo) {
+    for (var rowInfo of this.circuitRowInfo) {
       out += rowInfo.toString() + "\n";
     }
 
@@ -890,10 +876,10 @@ CircuitSolver.initClass();
 module.exports = CircuitSolver;
 
 function __range__(left, right, inclusive) {
-  let range = [];
-  let ascending = left < right;
-  let end = !inclusive ? right : ascending ? right + 1 : right - 1;
-  for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
+  var range = [];
+  var ascending = left < right;
+  var end = !inclusive ? right : ascending ? right + 1 : right - 1;
+  for (var i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
     range.push(i);
   }
   return range;

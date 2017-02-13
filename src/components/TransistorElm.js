@@ -279,12 +279,12 @@ class TransistorElm extends CircuitComponent {
 
   // TODO: DI refactor by passing solver object
   doStep(stamper) {
-    let {subIterations} = this.getParentCircuit().Solver;
+    var {subIterations} = this.getParentCircuit().Solver;
 
-    let vbc = this.volts[0] - this.volts[1]; // typically negative
-    let vbe = this.volts[0] - this.volts[2]; // typically positive
+    var vbc = this.volts[0] - this.volts[1]; // typically negative
+    var vbe = this.volts[0] - this.volts[2]; // typically positive
 
-    let convergenceEpsilon = 0.01;
+    var convergenceEpsilon = 0.01;
     if ((Math.abs(vbc - this.lastvbc) > convergenceEpsilon) || (Math.abs(vbe - this.lastvbe) > convergenceEpsilon)) {
       this.getParentCircuit().Solver.converged = false;
     }
@@ -305,12 +305,12 @@ class TransistorElm extends CircuitComponent {
     vbe = this.pnp * this.limitStep(this.pnp * vbe, this.pnp * this.lastvbe);
     this.lastvbc = vbc;
     this.lastvbe = vbe;
-    let pcoef = this.vdcoef * this.pnp;
-    let expbc = Math.exp(vbc * pcoef);
+    var pcoef = this.vdcoef * this.pnp;
+    var expbc = Math.exp(vbc * pcoef);
 
     //if (expbc > 1e13 || Double.isInfinite(expbc))
     //     expbc = 1e13;
-    let expbe = Math.exp(vbe * pcoef);
+    var expbe = Math.exp(vbe * pcoef);
     if (expbe < 1) {
       expbe = 1;
     }
@@ -321,10 +321,10 @@ class TransistorElm extends CircuitComponent {
     this.ic = this.pnp * this.leakage * ((this.fgain * (expbe - 1)) - (expbc - 1));
     this.ib = -(this.ie + this.ic);
 
-    let gee = -this.leakage * this.vdcoef * expbe;
-    let gec = this.rgain * this.leakage * this.vdcoef * expbc;
-    let gce = -gee * this.fgain;
-    let gcc = -gec * (1 / this.rgain);
+    var gee = -this.leakage * this.vdcoef * expbe;
+    var gec = this.rgain * this.leakage * this.vdcoef * expbc;
+    var gce = -gee * this.fgain;
+    var gcc = -gec * (1 / this.rgain);
 
     // stamps from page 302 of Pillage.  Node 0 is the base, node 1 the collector, node 2 the emitter.  Also stamp
     // minimum conductance (gmin) between b,e and b,c
@@ -348,17 +348,18 @@ class TransistorElm extends CircuitComponent {
     // 10.5.13, multiplying J by v(k)
     stamper.stampRightSide(this.nodes[0], -this.ib - ((gec + gcc) * vbc) - ((gee + gce) * vbe));
     stamper.stampRightSide(this.nodes[1], -this.ic + (gce * vbe) + (gcc * vbc));
-    return stamper.stampRightSide(this.nodes[2], -this.ie + (gee * vbe) + (gec * vbc));
+
+    stamper.stampRightSide(this.nodes[2], -this.ie + (gee * vbe) + (gec * vbc));
   }
 
   getSummary() {
-    let arr = [];
+    var arr = [];
 
     arr[0] = `(${(this.pnp === -1) ? "PNP)" : "NPN)"}`;
 
-    let vbc = this.volts[0] - this.volts[1];
-    let vbe = this.volts[0] - this.volts[2];
-    let vce = this.volts[1] - this.volts[2];
+    var vbc = this.volts[0] - this.volts[1];
+    var vbe = this.volts[0] - this.volts[2];
+    var vce = this.volts[1] - this.volts[2];
 
     if ((vbc * this.pnp) > 0.2) {
       arr[1] = ((vbe * this.pnp) > 0.2 ? "Saturation" : "Reverse active");

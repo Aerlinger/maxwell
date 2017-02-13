@@ -1,5 +1,5 @@
 let BaseCircuitSolver;
 
-BaseCircuitSolver = require("./CircuitSolverCompiled.js");
+BaseCircuitSolver = require("./CircuitSolverPure.js");
 
 module.exports = BaseCircuitSolver;
