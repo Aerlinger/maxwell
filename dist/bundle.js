@@ -48,13 +48,13 @@
 	let CircuitLoader = __webpack_require__(15);
 	
 	let Circuit = __webpack_require__(76);
-	let CircuitUI = __webpack_require__(88);
+	let CircuitUI = __webpack_require__(83);
 	
-	let RickshawScopeCanvas = __webpack_require__(95);
+	let RickshawScopeCanvas = __webpack_require__(90);
 	
-	let Components = __webpack_require__(96);
+	let Components = __webpack_require__(91);
 	
-	let AcRailElm = __webpack_require__(102);
+	let AcRailElm = __webpack_require__(97);
 	let AntennaElm = __webpack_require__(16);
 	let WireElm = __webpack_require__(19);
 	let ResistorElm = __webpack_require__(21);
@@ -17661,8 +17661,8 @@
 	let SimulationParams = __webpack_require__(75);
 	
 	let Circuit = __webpack_require__(76);
-	let Hint = __webpack_require__(87);
-	let fs = __webpack_require__(86);
+	let Hint = __webpack_require__(82);
+	let fs = __webpack_require__(81);
 	
 	let environment = __webpack_require__(9);
 	
@@ -26808,12 +26808,12 @@
 	let SimulationParams = __webpack_require__(75);
 	let SimulationFrame = __webpack_require__(78);
 	let CircuitSolver = __webpack_require__(79);
-	let Observer = __webpack_require__(85);
+	let Observer = __webpack_require__(80);
 	let Rectangle = __webpack_require__(3);
 	let Util = __webpack_require__(5);
 	let environment = __webpack_require__(9);
 	
-	fs = __webpack_require__(86);
+	fs = __webpack_require__(81);
 	
 	class Circuit extends Observer {
 	  static initClass() {
@@ -27446,12 +27446,12 @@
 /* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var MatrixStamper = __webpack_require__(80);
+	var MatrixStamper = __webpack_require__(99);
 	
-	var Pathfinder = __webpack_require__(82);
-	var CircuitNode = __webpack_require__(83);
-	var CircuitNodeLink = __webpack_require__(84);
-	var RowInfo = __webpack_require__(81);
+	var Pathfinder = __webpack_require__(101);
+	var CircuitNode = __webpack_require__(102);
+	var CircuitNodeLink = __webpack_require__(103);
+	var RowInfo = __webpack_require__(100);
 	var Setting = __webpack_require__(2);
 	var Util = __webpack_require__(5);
 	
@@ -27521,9 +27521,8 @@
 	    this.optimize();
 	
 	    // if a matrix is linear, we can do the lu_factor here instead of needing to do it every frame
-	    if (this.circuitLinear()) {
+	    if (this.circuitLinear())
 	      return this.luFactor(this.circuitMatrix, this.circuitPermute);
-	    }
 	  }
 	
 	  solveCircuit() {
@@ -27549,9 +27548,8 @@
 	      var subiter;
 	      ++this.steps;
 	
-	      for (var circuitElm of this.Circuit.getElements()) {
+	      for (var circuitElm of this.Circuit.getElements())
 	        circuitElm.startIteration();
-	      }
 	
 	      // Sub iteration
 	      // TODO: Quantify convergence rate for diagnostic purposes
@@ -27561,9 +27559,8 @@
 	
 	        this.restoreOriginalMatrixState();
 	
-	        for (circuitElm of this.Circuit.getElements()) {
+	        for (circuitElm of this.Circuit.getElements())
 	          circuitElm.doStep(this.Stamper);
-	        }
 	
 	        if (this.circuitNonLinear) {
 	          if (this.converged && (subiter > 0))
@@ -27577,9 +27574,8 @@
 	        // backsolve and update each component current/voltage...
 	        for (var j = 0; j < this.circuitMatrixFullSize; ++j) {
 	          var res = this.getValueFromNode(j);
-	          if (!this.updateComponent(j, res)) {
+	          if (!this.updateComponent(j, res))
 	            break;
-	          }
 	        }
 	
 	        if (this.circuitLinear()) {
@@ -27676,12 +27672,11 @@
 	        gotGround = true;
 	        break;
 	      }
-	      if (Util.typeOf(ce, RailElm)) {
+	      if (Util.typeOf(ce, RailElm))
 	        gotRail = true;
-	      }
-	      if ((volt == null) && Util.typeOf(ce, VoltageElm)) {
+	
+	      if ((volt == null) && Util.typeOf(ce, VoltageElm))
 	        volt = ce;
-	      }
 	    }
 	
 	    var circuitNode = new CircuitNode(this);
@@ -27695,7 +27690,7 @@
 	      circuitNode.y = pt.y;
 	    }
 	
-	    return this.Circuit.addCircuitNode(circuitNode);
+	    this.Circuit.addCircuitNode(circuitNode);
 	  }
 	
 	  buildComponentNodes() {
@@ -27703,71 +27698,70 @@
 	    var internalLink, internalNode;
 	    var voltageSourceCount = 0;
 	
-	    return this.Circuit.getElements().map((circuitElm) =>
-	        (internalNodeCount = circuitElm.numInternalNodes(),
-	            internalVSCount = circuitElm.numVoltageSources(),
-	            postCount = circuitElm.numPosts(),
+	    for (var i = 0; i < this.Circuit.getElements().length; ++i) {
 	
-	            // allocate a node for each post and match postCount to nodes
-	            (() => {
-	              var result = [];
-	              for (var postIdx = 0, end = postCount, asc = 0 <= end; asc ? postIdx < end : postIdx > end; asc ? postIdx++ : postIdx--) {
-	                var circuitNode, nodeIdx;
-	                var item;
-	                var postPt = circuitElm.getPost(postIdx);
+	      var circuitElm = this.Circuit.getElmByIdx(i);
+	      internalNodeCount = circuitElm.numInternalNodes();
+	      internalVSCount = circuitElm.numVoltageSources();
+	      postCount = circuitElm.numPosts();
 	
-	                for (nodeIdx = 0, end1 = this.Circuit.numNodes(), asc1 = 0 <= end1; asc1 ? nodeIdx < end1 : nodeIdx > end1; asc1 ? nodeIdx++ : nodeIdx--) {
-	                  var asc1, end1;
-	                  circuitNode = this.Circuit.getNode(nodeIdx);
-	                  if (Util.overlappingPoints(postPt, circuitNode)) {
-	                    break;
-	                  }
-	                }
+	      // allocate a node for each post and match postCount to nodes
+	      var result = [];
+	      for (var postIdx = 0; postIdx < postCount; ++postIdx) {
+	        var circuitNode;
+	        var item;
+	        var postPt = circuitElm.getPost(postIdx);
 	
-	                var nodeLink = new CircuitNodeLink();
-	                nodeLink.num = postIdx;
-	                nodeLink.elm = circuitElm;
+	        var nodeIdx;
+	        for (nodeIdx = 0; nodeIdx < this.Circuit.numNodes(); nodeIdx++) {
+	          circuitNode = this.Circuit.getNode(nodeIdx);
+	          if (Util.overlappingPoints(postPt, circuitNode))
+	            break;
+	        }
 	
-	                if (nodeIdx === this.Circuit.numNodes()) {
-	                  circuitNode = new CircuitNode(this, postPt.x, postPt.y);
-	                  circuitNode.links.push(nodeLink);
+	        var nodeLink = new CircuitNodeLink();
+	        nodeLink.num = postIdx;
+	        nodeLink.elm = circuitElm;
 	
-	                  circuitElm.setNode(postIdx, this.Circuit.numNodes());
-	                  item = this.Circuit.addCircuitNode(circuitNode);
+	        if (nodeIdx === this.Circuit.numNodes()) {
+	          circuitNode = new CircuitNode(this, postPt.x, postPt.y);
+	          circuitNode.links.push(nodeLink);
 	
-	                } else {
-	                  this.Circuit.getNode(nodeIdx).links.push(nodeLink);
-	                  circuitElm.setNode(postIdx, nodeIdx);
+	          circuitElm.setNode(postIdx, this.Circuit.numNodes());
+	          item = this.Circuit.addCircuitNode(circuitNode);
 	
-	                  if (nodeIdx === 0) {
-	                    item = circuitElm.setNodeVoltage(postIdx, 0);
-	                  }
-	                }
-	                result.push(item);
-	              }
-	              return result;
-	            })(),
+	        } else {
+	          this.Circuit.getNode(nodeIdx).links.push(nodeLink);
+	          circuitElm.setNode(postIdx, nodeIdx);
 	
-	            __range__(0, internalNodeCount, false).map((internalNodeIdx) =>
-	                (internalLink = new CircuitNodeLink(),
-	                    internalLink.num = internalNodeIdx + postCount,
-	                    internalLink.elm = circuitElm,
+	          if (nodeIdx === 0)
+	            item = circuitElm.setNodeVoltage(postIdx, 0);
 	
-	                    internalNode = new CircuitNode(this, -1, -1, true),
-	                    internalNode.links.push(internalLink),
-	                    circuitElm.setNode(internalLink.num, this.Circuit.numNodes()),
+	        }
+	        result.push(item);
+	      }
 	
-	                    this.Circuit.addCircuitNode(internalNode))),
+	      for (var internalNodeIdx = 0; i < internalNodeCount; ++i) {
+	        internalLink = new CircuitNodeLink();
+	        internalLink.num = internalNodeIdx + postCount;
+	        internalLink.elm = circuitElm;
 	
-	            voltageSourceCount += internalVSCount));
+	        internalNode = new CircuitNode(this, -1, -1, true);
+	        internalNode.links.push(internalLink);
+	        circuitElm.setNode(internalLink.num, this.Circuit.numNodes());
+	
+	        this.Circuit.addCircuitNode(internalNode);
+	      }
+	
+	      voltageSourceCount += internalVSCount
+	    }
 	  }
 	
 	
-	  // Circuit nodal analysis
+	// Circuit nodal analysis
 	  constructCircuitGraph() {
 	    // Allocate nodes and voltage sources
 	    this.buildComponentNodes();
-	
 	    this.Circuit.voltageSources = new Array(voltageSourceCount);
 	
 	    var voltageSourceCount = 0;
@@ -27775,9 +27769,8 @@
 	
 	    // Determine if circuit is nonlinear
 	    for (var circuitElement of this.Circuit.getElements()) {
-	      if (circuitElement.nonLinear()) {
+	      if (circuitElement.nonLinear())
 	        this.circuitNonLinear = true;
-	      }
 	
 	      for (var voltSourceIdx = 0; voltSourceIdx < circuitElement.numVoltageSources(); ++voltSourceIdx) {
 	        this.Circuit.voltageSources[voltageSourceCount] = circuitElement;
@@ -27817,59 +27810,48 @@
 	    closure[0] = true;
 	    var changed = true;
 	
-	    return (() => {
-	      var result = [];
-	      while (changed) {
-	        changed = false;
-	        for (var circuitElm of this.Circuit.getElements()) {
+	    while (changed) {
+	      changed = false;
+	      for (var circuitElm of this.Circuit.getElements()) {
 	
-	          // Loop through all ce's nodes to see if they are connected to other nodes not in closure
-	          for (var postIdx = 0; postIdx < circuitElm.numPosts(); ++postIdx) {
-	            if (!closure[circuitElm.getNode(postIdx)]) {
-	              if (circuitElm.hasGroundConnection(postIdx)) {
-	                changed = true;
-	                closure[circuitElm.getNode(postIdx)] = true;
-	              }
-	              continue;
-	            }
-	
-	            for (var siblingPostIdx = 0, end1 = circuitElm.numPosts(), asc1 = 0 <= end1; asc1 ? siblingPostIdx < end1 : siblingPostIdx > end1; asc1 ? siblingPostIdx++ : siblingPostIdx--) {
-	              if (postIdx === siblingPostIdx) {
-	                continue;
-	              }
-	
-	              var siblingNode = circuitElm.getNode(siblingPostIdx);
-	              if (circuitElm.getConnection(postIdx, siblingPostIdx) && !closure[siblingNode]) {
-	                closure[siblingNode] = true;
-	                changed = true;
-	              }
-	            }
-	          }
-	        }
-	
-	        if (changed) {
-	          continue;
-	        }
-	
-	        // connect unconnected nodes
-	        result.push((() => {
-	          var result1 = [];
-	          for (var nodeIdx = 0, end2 = this.Circuit.numNodes(), asc2 = 0 <= end2; asc2 ? nodeIdx < end2 : nodeIdx > end2; asc2 ? nodeIdx++ : nodeIdx--) {
-	            var item;
-	            if (!closure[nodeIdx] && !this.Circuit.nodeList[nodeIdx].intern) {
-	              console.warn(`Node ${nodeIdx} unconnected! -> ${this.Circuit.nodeList[nodeIdx].toString()}`);
-	              this.Stamper.stampResistor(0, nodeIdx, 1e8);
-	              closure[nodeIdx] = true;
+	        // Loop through all ce's nodes to see if they are connected to other nodes not in closure
+	        for (var postIdx = 0; postIdx < circuitElm.numPosts(); ++postIdx) {
+	          if (!closure[circuitElm.getNode(postIdx)]) {
+	            if (circuitElm.hasGroundConnection(postIdx)) {
 	              changed = true;
-	              break;
+	              closure[circuitElm.getNode(postIdx)] = true;
 	            }
-	            result1.push(item);
+	            continue;
 	          }
-	          return result1;
-	        })());
+	
+	          for (var siblingPostIdx = 0; siblingPostIdx < circuitElm.numPosts(); siblingPostIdx++) {
+	            if (postIdx === siblingPostIdx)
+	              continue;
+	
+	            var siblingNode = circuitElm.getNode(siblingPostIdx);
+	            if (circuitElm.getConnection(postIdx, siblingPostIdx) && !closure[siblingNode]) {
+	              closure[siblingNode] = true;
+	              changed = true;
+	            }
+	          }
+	        }
 	      }
-	      return result;
-	    })();
+	
+	      if (changed)
+	        continue;
+	
+	      // connect unconnected nodes
+	      for (var nodeIdx = 0; nodeIdx < this.Circuit.numNodes(); ++nodeIdx) {
+	        if (!closure[nodeIdx] && !this.Circuit.nodeList[nodeIdx].intern) {
+	          console.warn(`Node ${nodeIdx} unconnected! -> ${this.Circuit.nodeList[nodeIdx].toString()}`);
+	          this.Stamper.stampResistor(0, nodeIdx, 1e8);
+	          closure[nodeIdx] = true;
+	          changed = true;
+	
+	          break;
+	        }
+	      }
+	    }
 	  }
 	
 	
@@ -27891,7 +27873,6 @@
 	          console.warn("No path for current source!", ce);
 	        }
 	      }
-	      //return
 	
 	      // Look for voltage source loops:
 	      if ((Util.typeOf(ce, VoltageElm) && (ce.numPosts() === 2)) || ce instanceof WireElm) {
@@ -27901,7 +27882,6 @@
 	          this.Circuit.halt("Voltage source/wire loop with no resistance!", ce);
 	        }
 	      }
-	      // return
 	
 	      // Look for shorted caps or caps with voltage but no resistance
 	      if (ce instanceof CapacitorElm) {
@@ -27930,9 +27910,8 @@
 	      row += 1;
 	
 	      var re = this.circuitRowInfo[row];
-	      if (re.lsChanges || re.dropRow || re.rsChanges) {
+	      if (re.lsChanges || re.dropRow || re.rsChanges)
 	        continue;
-	      }
 	
 	      var rsadd = 0;
 	      var qm = -1;
@@ -28073,11 +28052,11 @@
 	        circuitRowInfo.mapRow = newIdx;
 	        for (col = 0; col < this.matrixSize; ++col) {
 	          rowInfo = this.circuitRowInfo[col];
-	          if (rowInfo.type === RowInfo.ROW_CONST) {
+	
+	          if (rowInfo.type === RowInfo.ROW_CONST)
 	            newRS[newIdx] -= rowInfo.value * this.circuitMatrix[row][col];
-	          } else {
+	          else
 	            newMatx[newIdx][rowInfo.mapCol] += this.circuitMatrix[row][col];
-	          }
 	        }
 	
 	        newIdx++;
@@ -28091,7 +28070,7 @@
 	    this.saveOriginalMatrixState();
 	
 	    this.circuitNeedsMap = true;
-	    return this.analyzeFlag = false;
+	    this.analyzeFlag = false;
 	  }
 	
 	
@@ -28122,11 +28101,10 @@
 	  getValueFromNode(idx) {
 	    var rowInfo = this.circuitRowInfo[idx];
 	
-	    if (rowInfo.type === RowInfo.ROW_CONST) {
+	    if (rowInfo.type === RowInfo.ROW_CONST)
 	      return rowInfo.value;
-	    } else {
+	    else
 	      return this.circuitRightSide[rowInfo.mapCol];
-	    }
 	  }
 	
 	  updateComponent(nodeIdx, value) {
@@ -28137,9 +28115,9 @@
 	
 	    if (nodeIdx < (this.Circuit.numNodes() - 1)) {
 	      var circuitNode = this.Circuit.nodeList[nodeIdx + 1];
-	      for (var circuitNodeLink of circuitNode.links) {
+	
+	      for (var circuitNodeLink of circuitNode.links)
 	        circuitNodeLink.elm.setNodeVoltage(circuitNodeLink.num, value);
-	      }
 	
 	    } else {
 	      var ji = nodeIdx - (this.Circuit.numNodes() - 1);
@@ -28325,438 +28303,10 @@
 	CircuitSolver.initClass();
 	
 	module.exports = CircuitSolver;
-	
-	function __range__(left, right, inclusive) {
-	  var range = [];
-	  var ascending = left < right;
-	  var end = !inclusive ? right : ascending ? right + 1 : right - 1;
-	  for (var i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-	    range.push(i);
-	  }
-	  return range;
-	}
+
 
 /***/ },
 /* 80 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let RowInfo = __webpack_require__(81);
-	let Util = __webpack_require__(5);
-	
-	class MatrixStamper {
-	
-	  constructor(Circuit) {
-	    this.Circuit = Circuit;
-	  }
-	
-	  /**
-	  control voltage source vs with voltage from n1 to n2 (must also call stampVoltageSource())
-	  */
-	  stampVCVS(n1, n2, coef, vs) {
-	    if (isNaN(vs) || isNaN(coef)) {
-	      console.warn("NaN in stampVCVS");
-	    }
-	
-	    let vn = this.Circuit.numNodes() + vs;
-	
-	    this.stampMatrix(vn, n1, coef);
-	    return this.stampMatrix(vn, n2, -coef);
-	  }
-	
-	
-	  // stamp independent voltage source #vs, from n1 to n2, amount v
-	  stampVoltageSource(n1, n2, vs, v) {
-	    if (v == null) { v = null; }
-	    let vn = this.Circuit.numNodes() + vs;
-	
-	    this.stampMatrix(vn, n1, -1);
-	    this.stampMatrix(vn, n2, 1);
-	    this.stampRightSide(vn, v);
-	    this.stampMatrix(n1, vn, 1);
-	    return this.stampMatrix(n2, vn, -1);
-	  }
-	
-	
-	  updateVoltageSource(n1, n2, vs, voltage) {
-	    if (isNaN(voltage) || Util.isInfinite(voltage)) {
-	      this.Circuit.halt(`updateVoltageSource: bad voltage ${voltage} at ${n1} ${n2} ${vs}`);
-	    }
-	
-	    let vn = this.Circuit.numNodes() + vs;
-	    return this.stampRightSide(vn, voltage);
-	  }
-	
-	
-	  stampResistor(n1, n2, r) {
-	    return this.stampConductance(n1, n2, 1 / r);
-	  }
-	
-	
-	  stampConductance(n1, n2, g) {
-	    if (isNaN(g) || Util.isInfinite(g)) {
-	      this.Circuit.halt(`bad conductance at ${n1} ${n2}`);
-	    }
-	
-	    this.stampMatrix(n1, n1, g);
-	    this.stampMatrix(n2, n2, g);
-	    this.stampMatrix(n1, n2, -g);
-	    return this.stampMatrix(n2, n1, -g);
-	  }
-	
-	
-	  /**
-	  current from cn1 to cn2 is equal to voltage from vn1 to 2, divided by g
-	  */
-	  stampVCCurrentSource(cn1, cn2, vn1, vn2, value) {
-	    if (isNaN(value) || Util.isInfinite(value)) {
-	      this.Circuit.halt(`Invalid gain ${value} on voltage controlled current source`);
-	    }
-	
-	    this.stampMatrix(cn1, vn1, value);
-	    this.stampMatrix(cn2, vn2, value);
-	    this.stampMatrix(cn1, vn2, -value);
-	
-	    return this.stampMatrix(cn2, vn1, -value);
-	  }
-	
-	
-	  stampCurrentSource(n1, n2, value) {
-	    this.stampRightSide(n1, -value);
-	    return this.stampRightSide(n2, value);
-	  }
-	
-	
-	  /**
-	  stamp a current source from n1 to n2 depending on current through vs
-	  */
-	  stampCCCS(n1, n2, vs, gain) {
-	    if (isNaN(gain) || Util.isInfinite(gain)) {
-	      this.Circuit.halt(`Invalid gain on current source: (was ${gain})`);
-	    }
-	
-	    let vn = this.Circuit.numNodes() + vs;
-	    this.stampMatrix(n1, vn, gain);
-	    return this.stampMatrix(n2, vn, -gain);
-	  }
-	
-	
-	  /**
-	  stamp value x in row i, column j, meaning that a voltage change
-	  of dv in node j will increase the current into node i by x dv.
-	  (Unless i or j is a voltage source node.)
-	  */
-	  stampMatrix(row, col, value) {
-	    if (isNaN(value) || Util.isInfinite(value) || value == null || value == undefined) {
-	      this.Circuit.halt(`attempted to stamp Matrix with invalid value (${value}) at ${row} ${col}`);
-	    }
-	
-	    if ((row > 0) && (col > 0)) {
-	      if (this.Circuit.Solver.circuitNeedsMap) {
-	        row = this.Circuit.Solver.circuitRowInfo[row - 1].mapRow;
-	        let rowInfo = this.Circuit.Solver.circuitRowInfo[col - 1];
-	        if (rowInfo.type === RowInfo.ROW_CONST) {
-	          this.Circuit.Solver.circuitRightSide[row] -= value * rowInfo.value;
-	          return;
-	        }
-	        col = rowInfo.mapCol;
-	      } else {
-	        row--;
-	        col--;
-	      }
-	
-	      return this.Circuit.Solver.circuitMatrix[row][col] += value;
-	    }
-	  }
-	
-	
-	  /**
-	  Stamp value x on the right side of row i, representing an
-	  independent current source flowing into node i
-	  */
-	  stampRightSide(row, value) {
-	    if (isNaN(value) || (value === null)) {
-	      if (row > 0) {
-	        return this.Circuit.Solver.circuitRowInfo[row - 1].rsChanges = true;
-	      }
-	    } else {
-	      if (row > 0) {
-	        if (this.Circuit.Solver.circuitNeedsMap) {
-	          row = this.Circuit.Solver.circuitRowInfo[row - 1].mapRow;
-	        } else {
-	          row--;
-	        }
-	
-	        return this.Circuit.Solver.circuitRightSide[row] += value;
-	      }
-	    }
-	  }
-	
-	
-	  /**
-	  Indicate that the values on the left side of row i change in doStep()
-	  */
-	  stampNonLinear(row) {
-	    if (isNaN(row) || (row === null)) {
-	      console.error("null/NaN in stampNonlinear");
-	    }
-	    if (row > 0) { return this.Circuit.Solver.circuitRowInfo[row - 1].lsChanges = true; }
-	  }
-	}
-	
-	
-	module.exports = MatrixStamper;
-
-
-/***/ },
-/* 81 */
-/***/ function(module, exports) {
-
-	class RowInfo {
-	  static initClass() {
-	    this.ROW_NORMAL = 0;
-	    this.ROW_CONST = 1;
-	    this.ROW_EQUAL = 2;
-	  }
-	
-	  constructor() {
-	    this.type = RowInfo.ROW_NORMAL;
-	
-	    this.nodeEq = 0;
-	    this.mapCol = 0;
-	    this.mapRow = 0;
-	
-	    this.value = 0;
-	    this.rsChanges = false;
-	    this.lsChanges = false;
-	    this.dropRow = false;
-	  }
-	
-	  toJson() {
-	    return {
-	      nodeEq: this.nodeEq,
-	      mapCol: this.mapCol,
-	      mapRow: this.mapRow,
-	      value: this.value,
-	      rsChanges: this.rsChanges,
-	      lsChanges: this.lsChanges,
-	      dropRow: this.dropRow,
-	      type: this.type
-	    };
-	  }
-	
-	  typeToStr(type) {
-	    if (type == 0)
-	      return "NORMAL";
-	
-	    if (type == 1)
-	      return "CONST";
-	
-	    if (type == 2)
-	      return "EQ";
-	  }
-	
-	  toString() {
-	    return `RowInfo: ${this.typeToStr(this.type)}, nodeEq: ${this.nodeEq}, mapCol: ${this.mapCol}, mapRow: ${this.mapRow}, value: ${this.value}, rsChanges: ${this.rsChanges}, lsChanges: ${this.lsChanges}, dropRow: ${this.dropRow}`;
-	  }
-	}
-	RowInfo.initClass();
-	
-	module.exports = RowInfo;
-
-
-/***/ },
-/* 82 */
-/***/ function(module, exports, __webpack_require__) {
-
-	let VoltageElm = __webpack_require__(18);
-	let CurrentElm = __webpack_require__(29);
-	let ResistorElm = __webpack_require__(21);
-	let InductorElm = __webpack_require__(27);
-	let CapacitorElm = __webpack_require__(26);
-	let Util = __webpack_require__(5);
-	
-	class Pathfinder {
-	  static initClass() {
-	    this.INDUCT = 1;
-	    this.VOLTAGE = 2;
-	    this.SHORT = 3;
-	    this.CAP_V = 4;
-	  }
-	
-	  constructor(type, firstElm, dest, elementList, numNodes) {
-	    this.type = type;
-	    this.firstElm = firstElm;
-	    this.dest = dest;
-	    this.elementList = elementList;
-	    this.used = new Array(numNodes);
-	  }
-	
-	  validElm(ce) {
-	    return (ce === this.firstElm) ||
-	    ((ce instanceof CurrentElm) && (this.type === Pathfinder.INDUCT)) ||
-	    ((this.type === Pathfinder.VOLTAGE) && !(ce.isWire() || Util.typeOf(ce, VoltageElm))) ||
-	    ((this.type === Pathfinder.SHORT) && !ce.isWire()) ||
-	    ((this.type === Pathfinder.CAP_V) && !(ce.isWire() || ce instanceof CapacitorElm || Util.typeOf(ce, VoltageElm)));
-	  }
-	
-	  // TODO: Spanning tree?
-	
-	  /**
-	   * Find an Eulerian path from node n1 to this.dest no longer than depth.
-	   *
-	   * Cycle Space/Bond space
-	   */
-	  findPath(n1, depth) {
-	    if (n1 === this.dest) {
-	//      console.log("n1 is @dest")
-	      return true;
-	    }
-	    if (depth-- === 0) {
-	      return false;
-	    }
-	
-	    if (this.used[n1]) {
-	//      console.log("used " + n1)
-	      return false;
-	    }
-	
-	    this.used[n1] = true;
-	
-	    for (let ce of Array.from(this.elementList)) {
-	      var j;
-	      if (this.validElm(ce)) { continue; }
-	
-	      if (n1 === 0) {
-	        // Look for posts which have a ground connection. Our path can go through ground!
-	        for (j = 0, end = ce.numPosts(), asc = 0 <= end; asc ? j < end : j > end; asc ? j++ : j--) {
-	          var asc, end;
-	          if (ce.hasGroundConnection(j) && this.findPath(ce.getNode(j), depth)) {
-	//            console.log(ce + " has ground (n1 is 0)")
-	            this.used[0] = false;
-	            return true;
-	          }
-	        }
-	      }
-	
-	      for (j = 0, end1 = ce.numPosts(), asc1 = 0 <= end1; asc1 ? j < end1 : j > end1; asc1 ? j++ : j--) {
-	//        console.log("get post " + ce.dump() + " " + ce.getNode(j))
-	        var asc1, end1;
-	        if (ce.getNode(j) === n1) {
-	          break;
-	        }
-	      }
-	
-	      // TODO: ENSURE EQUALITY HERE
-	      if (j === ce.numPosts()) {
-	        continue;
-	      }
-	
-	      if (ce.hasGroundConnection(j) && this.findPath(0, depth)) {
-	//        console.log(ce + " has ground")
-	        this.used[n1] = false;
-	        return true;
-	      }
-	
-	      if ((this.type === Pathfinder.INDUCT) && ce instanceof InductorElm) {
-	        let current = ce.getCurrent();
-	        if (j === 0) {
-	          current = -current;
-	        }
-	
-	//        console.log(ce + " > " + @firstElm + " >> matching " + ce + " to " + @firstElm.getCurrent())
-	        if (Math.abs(current - this.firstElm.getCurrent()) > 1e-10) {
-	          continue;
-	        }
-	      }
-	
-	      for (let k = 0, end2 = ce.numPosts(), asc2 = 0 <= end2; asc2 ? k < end2 : k > end2; asc2 ? k++ : k--) {
-	        if (j === k) { continue; }
-	
-	//        console.log(ce + " " + ce.getNode(j) + " - " + ce.getNode(k))
-	        if (ce.getConnection(j, k) && this.findPath(ce.getNode(k), depth)) {
-	//          console.log("got findpath #{n1}")
-	          //            console.log("got findpath j: #{ce.getNode(j).toString()}, k: #{ce.getNode(k).toString()} on element " + ce)
-	          this.used[n1] = false;
-	          return true;
-	        }
-	      }
-	    }
-	
-	    //      console.log(n1 + " failed")
-	    this.used[n1] = false;
-	    return false;
-	  }
-	}
-	Pathfinder.initClass();
-	
-	module.exports = Pathfinder;
-
-
-/***/ },
-/* 83 */
-/***/ function(module, exports) {
-
-	class CircuitNode {
-	  constructor(solver, x = 0, y = 0, intern = false, links = []) {
-	    this.solver = solver;
-	    this.x = x;
-	    this.y = y;
-	    this.intern = intern;
-	    this.links = links;
-	  }
-	
-	  toJson() {
-	    return {
-	      x: this.x,
-	      y: this.y,
-	      internal: this.intern,
-	      links: this.links.map(link => link.toJson())
-	    };
-	  }
-	
-	  toString() {
-	    return `Node: ${this.x} ${this.y} [${this.links}]`;
-	  }
-	
-	  getVoltage() {
-	    return this.links.map(link => link.elm.nodes);
-	  }
-	      
-	  getNeighboringElements() {
-	    return this.links.map(link => link.elm);
-	  }
-	}
-	
-	module.exports = CircuitNode;
-
-
-/***/ },
-/* 84 */
-/***/ function(module, exports) {
-
-	class CircuitNodeLink {
-	  constructor(num = 0, elm = null) {
-	    this.num = num;
-	    this.elm = elm;
-	  }
-	
-	  toJson() {
-	    return {
-	      num: this.num,
-	      elm: this.elm.toJson()
-	    };
-	  }
-	
-	  toString() {
-	    return `${this.num} ${this.elm}`;
-	  }
-	}
-	
-	module.exports = CircuitNodeLink;
-
-
-/***/ },
-/* 85 */
 /***/ function(module, exports) {
 
 	class Observer {
@@ -28793,13 +28343,13 @@
 
 
 /***/ },
-/* 86 */
+/* 81 */
 /***/ function(module, exports) {
 
 
 
 /***/ },
-/* 87 */
+/* 82 */
 /***/ function(module, exports) {
 
 	class Hint {
@@ -28895,13 +28445,13 @@
 
 
 /***/ },
-/* 88 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let Rectangle = __webpack_require__(3);
-	let CircuitCanvas = __webpack_require__(89);
-	let SvgRenderer = __webpack_require__(92);
-	let Observer = __webpack_require__(85);
+	let CircuitCanvas = __webpack_require__(84);
+	let SvgRenderer = __webpack_require__(87);
+	let Observer = __webpack_require__(80);
 	let Util = __webpack_require__(5);
 	let Settings = __webpack_require__(2);
 	
@@ -29397,10 +28947,10 @@
 
 
 /***/ },
-/* 89 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let Observer = __webpack_require__(85);
+	let Observer = __webpack_require__(80);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
 	let Settings = __webpack_require__(2);
@@ -29409,7 +28959,7 @@
 	let CircuitComponent = __webpack_require__(1);
 	let environment = __webpack_require__(9);
 	
-	let d3 = __webpack_require__(90);
+	let d3 = __webpack_require__(85);
 	
 	class CircuitCanvas extends Observer {
 	  constructor(Circuit, circuitUI) {
@@ -30041,12 +29591,12 @@
 
 
 /***/ },
-/* 90 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-shape/ Version 1.0.4. Copyright 2016 Mike Bostock.
 	(function (global, factory) {
-	   true ? factory(exports, __webpack_require__(91)) :
+	   true ? factory(exports, __webpack_require__(86)) :
 	  typeof define === 'function' && define.amd ? define(['exports', 'd3-path'], factory) :
 	  (factory((global.d3 = global.d3 || {}),global.d3));
 	}(this, (function (exports,d3Path) { 'use strict';
@@ -31865,7 +31415,7 @@
 
 
 /***/ },
-/* 91 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-path/ Version 1.0.3. Copyright 2016 Mike Bostock.
@@ -32010,10 +31560,10 @@
 
 
 /***/ },
-/* 92 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let Observer = __webpack_require__(85);
+	let Observer = __webpack_require__(80);
 	let Util = __webpack_require__(5);
 	let Point = __webpack_require__(4);
 	let Settings = __webpack_require__(2);
@@ -32021,9 +31571,9 @@
 	
 	let CircuitComponent = __webpack_require__(1);
 	let environment = __webpack_require__(9);
-	let ScopeCanvas = __webpack_require__(93);
+	let ScopeCanvas = __webpack_require__(88);
 	
-	let d3 = __webpack_require__(94);
+	let d3 = __webpack_require__(89);
 	
 	class SvgRenderer extends Observer {
 	
@@ -32954,7 +32504,7 @@
 
 
 /***/ },
-/* 93 */
+/* 88 */
 /***/ function(module, exports) {
 
 	class ScopeCanvas {
@@ -32995,7 +32545,7 @@
 
 
 /***/ },
-/* 94 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org Version 4.5.0. Copyright 2017 Mike Bostock.
@@ -49406,10 +48956,10 @@
 
 
 /***/ },
-/* 95 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let ScopeCanvas = __webpack_require__(93);
+	let ScopeCanvas = __webpack_require__(88);
 	let Util = __webpack_require__(5);
 	
 	class RickshawScopeCanvas extends ScopeCanvas {
@@ -49532,15 +49082,15 @@
 
 
 /***/ },
-/* 96 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
-	let _DiacElm = __webpack_require__(97);
-	let _LampElm = __webpack_require__(98);
-	let _PhotoResistorElm = __webpack_require__(99);
-	let _ThermistorElm = __webpack_require__(100);
-	let _TriacElm = __webpack_require__(101);
-	let ACRailElm = __webpack_require__(102);
+	let _DiacElm = __webpack_require__(92);
+	let _LampElm = __webpack_require__(93);
+	let _PhotoResistorElm = __webpack_require__(94);
+	let _ThermistorElm = __webpack_require__(95);
+	let _TriacElm = __webpack_require__(96);
+	let ACRailElm = __webpack_require__(97);
 	let AdcElm = __webpack_require__(63);
 	let AnalogSwitch2Elm = __webpack_require__(49);
 	let AnalogSwitchElm = __webpack_require__(48);
@@ -49576,7 +49126,7 @@
 	let PhaseCompElm = __webpack_require__(65);
 	let PotElm = __webpack_require__(72);
 	let ProbeElm = __webpack_require__(39);
-	let PushSwitchElm = __webpack_require__(103);
+	let PushSwitchElm = __webpack_require__(98);
 	let RailElm = __webpack_require__(17);
 	let RelayElm = __webpack_require__(51);
 	let ResistorElm = __webpack_require__(21);
@@ -49669,7 +49219,7 @@
 
 
 /***/ },
-/* 97 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -49767,7 +49317,7 @@
 
 
 /***/ },
-/* 98 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -49808,7 +49358,7 @@
 
 
 /***/ },
-/* 99 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -49837,7 +49387,7 @@
 
 
 /***/ },
-/* 100 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -49867,7 +49417,7 @@
 
 
 /***/ },
-/* 101 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -49904,7 +49454,7 @@
 
 
 /***/ },
-/* 102 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let RailElm = __webpack_require__(17);
@@ -49926,7 +49476,7 @@
 
 
 /***/ },
-/* 103 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let CircuitComponent = __webpack_require__(1);
@@ -49941,6 +49491,425 @@
 	}
 	
 	module.exports = PushSwitchElm;
+
+
+/***/ },
+/* 99 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let RowInfo = __webpack_require__(100);
+	let Util = __webpack_require__(5);
+	
+	class MatrixStamper {
+	
+	  constructor(Circuit) {
+	    this.Circuit = Circuit;
+	  }
+	
+	  /**
+	  control voltage source vs with voltage from n1 to n2 (must also call stampVoltageSource())
+	  */
+	  stampVCVS(n1, n2, coef, vs) {
+	    if (isNaN(vs) || isNaN(coef)) {
+	      console.warn("NaN in stampVCVS");
+	    }
+	
+	    let vn = this.Circuit.numNodes() + vs;
+	
+	    this.stampMatrix(vn, n1, coef);
+	    return this.stampMatrix(vn, n2, -coef);
+	  }
+	
+	
+	  // stamp independent voltage source #vs, from n1 to n2, amount v
+	  stampVoltageSource(n1, n2, vs, v) {
+	    if (v == null) { v = null; }
+	    let vn = this.Circuit.numNodes() + vs;
+	
+	    this.stampMatrix(vn, n1, -1);
+	    this.stampMatrix(vn, n2, 1);
+	    this.stampRightSide(vn, v);
+	    this.stampMatrix(n1, vn, 1);
+	    return this.stampMatrix(n2, vn, -1);
+	  }
+	
+	
+	  updateVoltageSource(n1, n2, vs, voltage) {
+	    if (isNaN(voltage) || Util.isInfinite(voltage)) {
+	      this.Circuit.halt(`updateVoltageSource: bad voltage ${voltage} at ${n1} ${n2} ${vs}`);
+	    }
+	
+	    let vn = this.Circuit.numNodes() + vs;
+	    return this.stampRightSide(vn, voltage);
+	  }
+	
+	
+	  stampResistor(n1, n2, r) {
+	    return this.stampConductance(n1, n2, 1 / r);
+	  }
+	
+	
+	  stampConductance(n1, n2, g) {
+	    if (isNaN(g) || Util.isInfinite(g)) {
+	      this.Circuit.halt(`bad conductance at ${n1} ${n2}`);
+	    }
+	
+	    this.stampMatrix(n1, n1, g);
+	    this.stampMatrix(n2, n2, g);
+	    this.stampMatrix(n1, n2, -g);
+	    return this.stampMatrix(n2, n1, -g);
+	  }
+	
+	
+	  /**
+	  current from cn1 to cn2 is equal to voltage from vn1 to 2, divided by g
+	  */
+	  stampVCCurrentSource(cn1, cn2, vn1, vn2, value) {
+	    if (isNaN(value) || Util.isInfinite(value)) {
+	      this.Circuit.halt(`Invalid gain ${value} on voltage controlled current source`);
+	    }
+	
+	    this.stampMatrix(cn1, vn1, value);
+	    this.stampMatrix(cn2, vn2, value);
+	    this.stampMatrix(cn1, vn2, -value);
+	
+	    return this.stampMatrix(cn2, vn1, -value);
+	  }
+	
+	
+	  stampCurrentSource(n1, n2, value) {
+	    this.stampRightSide(n1, -value);
+	    return this.stampRightSide(n2, value);
+	  }
+	
+	
+	  /**
+	  stamp a current source from n1 to n2 depending on current through vs
+	  */
+	  stampCCCS(n1, n2, vs, gain) {
+	    if (isNaN(gain) || Util.isInfinite(gain)) {
+	      this.Circuit.halt(`Invalid gain on current source: (was ${gain})`);
+	    }
+	
+	    let vn = this.Circuit.numNodes() + vs;
+	    this.stampMatrix(n1, vn, gain);
+	    return this.stampMatrix(n2, vn, -gain);
+	  }
+	
+	
+	  /**
+	  stamp value x in row i, column j, meaning that a voltage change
+	  of dv in node j will increase the current into node i by x dv.
+	  (Unless i or j is a voltage source node.)
+	  */
+	  stampMatrix(row, col, value) {
+	    if (isNaN(value) || Util.isInfinite(value) || value == null || value == undefined) {
+	      this.Circuit.halt(`attempted to stamp Matrix with invalid value (${value}) at ${row} ${col}`);
+	    }
+	
+	    if ((row > 0) && (col > 0)) {
+	      if (this.Circuit.Solver.circuitNeedsMap) {
+	        row = this.Circuit.Solver.circuitRowInfo[row - 1].mapRow;
+	        let rowInfo = this.Circuit.Solver.circuitRowInfo[col - 1];
+	        if (rowInfo.type === RowInfo.ROW_CONST) {
+	          this.Circuit.Solver.circuitRightSide[row] -= value * rowInfo.value;
+	          return;
+	        }
+	        col = rowInfo.mapCol;
+	      } else {
+	        row--;
+	        col--;
+	      }
+	
+	      return this.Circuit.Solver.circuitMatrix[row][col] += value;
+	    }
+	  }
+	
+	
+	  /**
+	  Stamp value x on the right side of row i, representing an
+	  independent current source flowing into node i
+	  */
+	  stampRightSide(row, value) {
+	    if (isNaN(value) || (value === null)) {
+	      if (row > 0) {
+	        return this.Circuit.Solver.circuitRowInfo[row - 1].rsChanges = true;
+	      }
+	    } else {
+	      if (row > 0) {
+	        if (this.Circuit.Solver.circuitNeedsMap) {
+	          row = this.Circuit.Solver.circuitRowInfo[row - 1].mapRow;
+	        } else {
+	          row--;
+	        }
+	
+	        return this.Circuit.Solver.circuitRightSide[row] += value;
+	      }
+	    }
+	  }
+	
+	
+	  /**
+	  Indicate that the values on the left side of row i change in doStep()
+	  */
+	  stampNonLinear(row) {
+	    if (isNaN(row) || (row === null)) {
+	      console.error("null/NaN in stampNonlinear");
+	    }
+	    if (row > 0) { return this.Circuit.Solver.circuitRowInfo[row - 1].lsChanges = true; }
+	  }
+	}
+	
+	
+	module.exports = MatrixStamper;
+
+
+/***/ },
+/* 100 */
+/***/ function(module, exports) {
+
+	class RowInfo {
+	  static initClass() {
+	    this.ROW_NORMAL = 0;
+	    this.ROW_CONST = 1;
+	    this.ROW_EQUAL = 2;
+	  }
+	
+	  constructor() {
+	    this.type = RowInfo.ROW_NORMAL;
+	
+	    this.nodeEq = 0;
+	    this.mapCol = 0;
+	    this.mapRow = 0;
+	
+	    this.value = 0;
+	    this.rsChanges = false;
+	    this.lsChanges = false;
+	    this.dropRow = false;
+	  }
+	
+	  toJson() {
+	    return {
+	      nodeEq: this.nodeEq,
+	      mapCol: this.mapCol,
+	      mapRow: this.mapRow,
+	      value: this.value,
+	      rsChanges: this.rsChanges,
+	      lsChanges: this.lsChanges,
+	      dropRow: this.dropRow,
+	      type: this.type
+	    };
+	  }
+	
+	  typeToStr(type) {
+	    if (type == 0)
+	      return "NORMAL";
+	
+	    if (type == 1)
+	      return "CONST";
+	
+	    if (type == 2)
+	      return "EQ";
+	  }
+	
+	  toString() {
+	    return `RowInfo: ${this.typeToStr(this.type)}, nodeEq: ${this.nodeEq}, mapCol: ${this.mapCol}, mapRow: ${this.mapRow}, value: ${this.value}, rsChanges: ${this.rsChanges}, lsChanges: ${this.lsChanges}, dropRow: ${this.dropRow}`;
+	  }
+	}
+	RowInfo.initClass();
+	
+	module.exports = RowInfo;
+
+
+/***/ },
+/* 101 */
+/***/ function(module, exports, __webpack_require__) {
+
+	let VoltageElm = __webpack_require__(18);
+	let CurrentElm = __webpack_require__(29);
+	let ResistorElm = __webpack_require__(21);
+	let InductorElm = __webpack_require__(27);
+	let CapacitorElm = __webpack_require__(26);
+	let Util = __webpack_require__(5);
+	
+	class Pathfinder {
+	  static initClass() {
+	    this.INDUCT = 1;
+	    this.VOLTAGE = 2;
+	    this.SHORT = 3;
+	    this.CAP_V = 4;
+	  }
+	
+	  constructor(type, firstElm, dest, elementList, numNodes) {
+	    this.type = type;
+	    this.firstElm = firstElm;
+	    this.dest = dest;
+	    this.elementList = elementList;
+	    this.used = new Array(numNodes);
+	  }
+	
+	  validElm(ce) {
+	    return (ce === this.firstElm) ||
+	    ((ce instanceof CurrentElm) && (this.type === Pathfinder.INDUCT)) ||
+	    ((this.type === Pathfinder.VOLTAGE) && !(ce.isWire() || Util.typeOf(ce, VoltageElm))) ||
+	    ((this.type === Pathfinder.SHORT) && !ce.isWire()) ||
+	    ((this.type === Pathfinder.CAP_V) && !(ce.isWire() || ce instanceof CapacitorElm || Util.typeOf(ce, VoltageElm)));
+	  }
+	
+	  // TODO: Spanning tree?
+	
+	  /**
+	   * Find an Eulerian path from node n1 to this.dest no longer than depth.
+	   *
+	   * Cycle Space/Bond space
+	   */
+	  findPath(n1, depth) {
+	    if (n1 === this.dest) {
+	//      console.log("n1 is @dest")
+	      return true;
+	    }
+	    if (depth-- === 0) {
+	      return false;
+	    }
+	
+	    if (this.used[n1]) {
+	//      console.log("used " + n1)
+	      return false;
+	    }
+	
+	    this.used[n1] = true;
+	
+	    for (let ce of Array.from(this.elementList)) {
+	      var j;
+	      if (this.validElm(ce)) { continue; }
+	
+	      if (n1 === 0) {
+	        // Look for posts which have a ground connection. Our path can go through ground!
+	        for (j = 0, end = ce.numPosts(), asc = 0 <= end; asc ? j < end : j > end; asc ? j++ : j--) {
+	          var asc, end;
+	          if (ce.hasGroundConnection(j) && this.findPath(ce.getNode(j), depth)) {
+	//            console.log(ce + " has ground (n1 is 0)")
+	            this.used[0] = false;
+	            return true;
+	          }
+	        }
+	      }
+	
+	      for (j = 0, end1 = ce.numPosts(), asc1 = 0 <= end1; asc1 ? j < end1 : j > end1; asc1 ? j++ : j--) {
+	//        console.log("get post " + ce.dump() + " " + ce.getNode(j))
+	        var asc1, end1;
+	        if (ce.getNode(j) === n1) {
+	          break;
+	        }
+	      }
+	
+	      // TODO: ENSURE EQUALITY HERE
+	      if (j === ce.numPosts()) {
+	        continue;
+	      }
+	
+	      if (ce.hasGroundConnection(j) && this.findPath(0, depth)) {
+	//        console.log(ce + " has ground")
+	        this.used[n1] = false;
+	        return true;
+	      }
+	
+	      if ((this.type === Pathfinder.INDUCT) && ce instanceof InductorElm) {
+	        let current = ce.getCurrent();
+	        if (j === 0) {
+	          current = -current;
+	        }
+	
+	//        console.log(ce + " > " + @firstElm + " >> matching " + ce + " to " + @firstElm.getCurrent())
+	        if (Math.abs(current - this.firstElm.getCurrent()) > 1e-10) {
+	          continue;
+	        }
+	      }
+	
+	      for (let k = 0, end2 = ce.numPosts(), asc2 = 0 <= end2; asc2 ? k < end2 : k > end2; asc2 ? k++ : k--) {
+	        if (j === k) { continue; }
+	
+	//        console.log(ce + " " + ce.getNode(j) + " - " + ce.getNode(k))
+	        if (ce.getConnection(j, k) && this.findPath(ce.getNode(k), depth)) {
+	//          console.log("got findpath #{n1}")
+	          //            console.log("got findpath j: #{ce.getNode(j).toString()}, k: #{ce.getNode(k).toString()} on element " + ce)
+	          this.used[n1] = false;
+	          return true;
+	        }
+	      }
+	    }
+	
+	    //      console.log(n1 + " failed")
+	    this.used[n1] = false;
+	    return false;
+	  }
+	}
+	Pathfinder.initClass();
+	
+	module.exports = Pathfinder;
+
+
+/***/ },
+/* 102 */
+/***/ function(module, exports) {
+
+	class CircuitNode {
+	  constructor(solver, x = 0, y = 0, intern = false, links = []) {
+	    this.solver = solver;
+	    this.x = x;
+	    this.y = y;
+	    this.intern = intern;
+	    this.links = links;
+	  }
+	
+	  toJson() {
+	    return {
+	      x: this.x,
+	      y: this.y,
+	      internal: this.intern,
+	      links: this.links.map(link => link.toJson())
+	    };
+	  }
+	
+	  toString() {
+	    return `Node: ${this.x} ${this.y} [${this.links}]`;
+	  }
+	
+	  getVoltage() {
+	    return this.links.map(link => link.elm.nodes);
+	  }
+	      
+	  getNeighboringElements() {
+	    return this.links.map(link => link.elm);
+	  }
+	}
+	
+	module.exports = CircuitNode;
+
+
+/***/ },
+/* 103 */
+/***/ function(module, exports) {
+
+	class CircuitNodeLink {
+	  constructor(num = 0, elm = null) {
+	    this.num = num;
+	    this.elm = elm;
+	  }
+	
+	  toJson() {
+	    return {
+	      num: this.num,
+	      elm: this.elm.toJson()
+	    };
+	  }
+	
+	  toString() {
+	    return `${this.num} ${this.elm}`;
+	  }
+	}
+	
+	module.exports = CircuitNodeLink;
 
 
 /***/ }

@@ -73,9 +73,8 @@ class CircuitSolver {
     this.optimize();
 
     // if a matrix is linear, we can do the lu_factor here instead of needing to do it every frame
-    if (this.circuitLinear()) {
+    if (this.circuitLinear())
       return this.luFactor(this.circuitMatrix, this.circuitPermute);
-    }
   }
 
   solveCircuit() {
@@ -101,9 +100,8 @@ class CircuitSolver {
       var subiter;
       ++this.steps;
 
-      for (var circuitElm of this.Circuit.getElements()) {
+      for (var circuitElm of this.Circuit.getElements())
         circuitElm.startIteration();
-      }
 
       // Sub iteration
       // TODO: Quantify convergence rate for diagnostic purposes
@@ -113,9 +111,8 @@ class CircuitSolver {
 
         this.restoreOriginalMatrixState();
 
-        for (circuitElm of this.Circuit.getElements()) {
+        for (circuitElm of this.Circuit.getElements())
           circuitElm.doStep(this.Stamper);
-        }
 
         if (this.circuitNonLinear) {
           if (this.converged && (subiter > 0))
@@ -129,9 +126,8 @@ class CircuitSolver {
         // backsolve and update each component current/voltage...
         for (var j = 0; j < this.circuitMatrixFullSize; ++j) {
           var res = this.getValueFromNode(j);
-          if (!this.updateComponent(j, res)) {
+          if (!this.updateComponent(j, res))
             break;
-          }
         }
 
         if (this.circuitLinear()) {
@@ -228,12 +224,11 @@ class CircuitSolver {
         gotGround = true;
         break;
       }
-      if (Util.typeOf(ce, RailElm)) {
+      if (Util.typeOf(ce, RailElm))
         gotRail = true;
-      }
-      if ((volt == null) && Util.typeOf(ce, VoltageElm)) {
+
+      if ((volt == null) && Util.typeOf(ce, VoltageElm))
         volt = ce;
-      }
     }
 
     var circuitNode = new CircuitNode(this);
@@ -247,7 +242,7 @@ class CircuitSolver {
       circuitNode.y = pt.y;
     }
 
-    return this.Circuit.addCircuitNode(circuitNode);
+    this.Circuit.addCircuitNode(circuitNode);
   }
 
   buildComponentNodes() {
@@ -255,71 +250,70 @@ class CircuitSolver {
     var internalLink, internalNode;
     var voltageSourceCount = 0;
 
-    return this.Circuit.getElements().map((circuitElm) =>
-        (internalNodeCount = circuitElm.numInternalNodes(),
-            internalVSCount = circuitElm.numVoltageSources(),
-            postCount = circuitElm.numPosts(),
+    for (var i = 0; i < this.Circuit.getElements().length; ++i) {
 
-            // allocate a node for each post and match postCount to nodes
-            (() => {
-              var result = [];
-              for (var postIdx = 0, end = postCount, asc = 0 <= end; asc ? postIdx < end : postIdx > end; asc ? postIdx++ : postIdx--) {
-                var circuitNode, nodeIdx;
-                var item;
-                var postPt = circuitElm.getPost(postIdx);
+      var circuitElm = this.Circuit.getElmByIdx(i);
+      internalNodeCount = circuitElm.numInternalNodes();
+      internalVSCount = circuitElm.numVoltageSources();
+      postCount = circuitElm.numPosts();
 
-                for (nodeIdx = 0, end1 = this.Circuit.numNodes(), asc1 = 0 <= end1; asc1 ? nodeIdx < end1 : nodeIdx > end1; asc1 ? nodeIdx++ : nodeIdx--) {
-                  var asc1, end1;
-                  circuitNode = this.Circuit.getNode(nodeIdx);
-                  if (Util.overlappingPoints(postPt, circuitNode)) {
-                    break;
-                  }
-                }
+      // allocate a node for each post and match postCount to nodes
+      var result = [];
+      for (var postIdx = 0; postIdx < postCount; ++postIdx) {
+        var circuitNode;
+        var item;
+        var postPt = circuitElm.getPost(postIdx);
 
-                var nodeLink = new CircuitNodeLink();
-                nodeLink.num = postIdx;
-                nodeLink.elm = circuitElm;
+        var nodeIdx;
+        for (nodeIdx = 0; nodeIdx < this.Circuit.numNodes(); nodeIdx++) {
+          circuitNode = this.Circuit.getNode(nodeIdx);
+          if (Util.overlappingPoints(postPt, circuitNode))
+            break;
+        }
 
-                if (nodeIdx === this.Circuit.numNodes()) {
-                  circuitNode = new CircuitNode(this, postPt.x, postPt.y);
-                  circuitNode.links.push(nodeLink);
+        var nodeLink = new CircuitNodeLink();
+        nodeLink.num = postIdx;
+        nodeLink.elm = circuitElm;
 
-                  circuitElm.setNode(postIdx, this.Circuit.numNodes());
-                  item = this.Circuit.addCircuitNode(circuitNode);
+        if (nodeIdx === this.Circuit.numNodes()) {
+          circuitNode = new CircuitNode(this, postPt.x, postPt.y);
+          circuitNode.links.push(nodeLink);
 
-                } else {
-                  this.Circuit.getNode(nodeIdx).links.push(nodeLink);
-                  circuitElm.setNode(postIdx, nodeIdx);
+          circuitElm.setNode(postIdx, this.Circuit.numNodes());
+          item = this.Circuit.addCircuitNode(circuitNode);
 
-                  if (nodeIdx === 0) {
-                    item = circuitElm.setNodeVoltage(postIdx, 0);
-                  }
-                }
-                result.push(item);
-              }
-              return result;
-            })(),
+        } else {
+          this.Circuit.getNode(nodeIdx).links.push(nodeLink);
+          circuitElm.setNode(postIdx, nodeIdx);
 
-            __range__(0, internalNodeCount, false).map((internalNodeIdx) =>
-                (internalLink = new CircuitNodeLink(),
-                    internalLink.num = internalNodeIdx + postCount,
-                    internalLink.elm = circuitElm,
+          if (nodeIdx === 0)
+            item = circuitElm.setNodeVoltage(postIdx, 0);
 
-                    internalNode = new CircuitNode(this, -1, -1, true),
-                    internalNode.links.push(internalLink),
-                    circuitElm.setNode(internalLink.num, this.Circuit.numNodes()),
+        }
+        result.push(item);
+      }
 
-                    this.Circuit.addCircuitNode(internalNode))),
+      for (var internalNodeIdx = 0; i < internalNodeCount; ++i) {
+        internalLink = new CircuitNodeLink();
+        internalLink.num = internalNodeIdx + postCount;
+        internalLink.elm = circuitElm;
 
-            voltageSourceCount += internalVSCount));
+        internalNode = new CircuitNode(this, -1, -1, true);
+        internalNode.links.push(internalLink);
+        circuitElm.setNode(internalLink.num, this.Circuit.numNodes());
+
+        this.Circuit.addCircuitNode(internalNode);
+      }
+
+      voltageSourceCount += internalVSCount
+    }
   }
 
 
-  // Circuit nodal analysis
+// Circuit nodal analysis
   constructCircuitGraph() {
     // Allocate nodes and voltage sources
     this.buildComponentNodes();
-
     this.Circuit.voltageSources = new Array(voltageSourceCount);
 
     var voltageSourceCount = 0;
@@ -327,9 +321,8 @@ class CircuitSolver {
 
     // Determine if circuit is nonlinear
     for (var circuitElement of this.Circuit.getElements()) {
-      if (circuitElement.nonLinear()) {
+      if (circuitElement.nonLinear())
         this.circuitNonLinear = true;
-      }
 
       for (var voltSourceIdx = 0; voltSourceIdx < circuitElement.numVoltageSources(); ++voltSourceIdx) {
         this.Circuit.voltageSources[voltageSourceCount] = circuitElement;
@@ -369,59 +362,48 @@ class CircuitSolver {
     closure[0] = true;
     var changed = true;
 
-    return (() => {
-      var result = [];
-      while (changed) {
-        changed = false;
-        for (var circuitElm of this.Circuit.getElements()) {
+    while (changed) {
+      changed = false;
+      for (var circuitElm of this.Circuit.getElements()) {
 
-          // Loop through all ce's nodes to see if they are connected to other nodes not in closure
-          for (var postIdx = 0; postIdx < circuitElm.numPosts(); ++postIdx) {
-            if (!closure[circuitElm.getNode(postIdx)]) {
-              if (circuitElm.hasGroundConnection(postIdx)) {
-                changed = true;
-                closure[circuitElm.getNode(postIdx)] = true;
-              }
-              continue;
-            }
-
-            for (var siblingPostIdx = 0, end1 = circuitElm.numPosts(), asc1 = 0 <= end1; asc1 ? siblingPostIdx < end1 : siblingPostIdx > end1; asc1 ? siblingPostIdx++ : siblingPostIdx--) {
-              if (postIdx === siblingPostIdx) {
-                continue;
-              }
-
-              var siblingNode = circuitElm.getNode(siblingPostIdx);
-              if (circuitElm.getConnection(postIdx, siblingPostIdx) && !closure[siblingNode]) {
-                closure[siblingNode] = true;
-                changed = true;
-              }
-            }
-          }
-        }
-
-        if (changed) {
-          continue;
-        }
-
-        // connect unconnected nodes
-        result.push((() => {
-          var result1 = [];
-          for (var nodeIdx = 0, end2 = this.Circuit.numNodes(), asc2 = 0 <= end2; asc2 ? nodeIdx < end2 : nodeIdx > end2; asc2 ? nodeIdx++ : nodeIdx--) {
-            var item;
-            if (!closure[nodeIdx] && !this.Circuit.nodeList[nodeIdx].intern) {
-              console.warn(`Node ${nodeIdx} unconnected! -> ${this.Circuit.nodeList[nodeIdx].toString()}`);
-              this.Stamper.stampResistor(0, nodeIdx, 1e8);
-              closure[nodeIdx] = true;
+        // Loop through all ce's nodes to see if they are connected to other nodes not in closure
+        for (var postIdx = 0; postIdx < circuitElm.numPosts(); ++postIdx) {
+          if (!closure[circuitElm.getNode(postIdx)]) {
+            if (circuitElm.hasGroundConnection(postIdx)) {
               changed = true;
-              break;
+              closure[circuitElm.getNode(postIdx)] = true;
             }
-            result1.push(item);
+            continue;
           }
-          return result1;
-        })());
+
+          for (var siblingPostIdx = 0; siblingPostIdx < circuitElm.numPosts(); siblingPostIdx++) {
+            if (postIdx === siblingPostIdx)
+              continue;
+
+            var siblingNode = circuitElm.getNode(siblingPostIdx);
+            if (circuitElm.getConnection(postIdx, siblingPostIdx) && !closure[siblingNode]) {
+              closure[siblingNode] = true;
+              changed = true;
+            }
+          }
+        }
       }
-      return result;
-    })();
+
+      if (changed)
+        continue;
+
+      // connect unconnected nodes
+      for (var nodeIdx = 0; nodeIdx < this.Circuit.numNodes(); ++nodeIdx) {
+        if (!closure[nodeIdx] && !this.Circuit.nodeList[nodeIdx].intern) {
+          console.warn(`Node ${nodeIdx} unconnected! -> ${this.Circuit.nodeList[nodeIdx].toString()}`);
+          this.Stamper.stampResistor(0, nodeIdx, 1e8);
+          closure[nodeIdx] = true;
+          changed = true;
+
+          break;
+        }
+      }
+    }
   }
 
 
@@ -443,7 +425,6 @@ class CircuitSolver {
           console.warn("No path for current source!", ce);
         }
       }
-      //return
 
       // Look for voltage source loops:
       if ((Util.typeOf(ce, VoltageElm) && (ce.numPosts() === 2)) || ce instanceof WireElm) {
@@ -453,7 +434,6 @@ class CircuitSolver {
           this.Circuit.halt("Voltage source/wire loop with no resistance!", ce);
         }
       }
-      // return
 
       // Look for shorted caps or caps with voltage but no resistance
       if (ce instanceof CapacitorElm) {
@@ -482,9 +462,8 @@ class CircuitSolver {
       row += 1;
 
       var re = this.circuitRowInfo[row];
-      if (re.lsChanges || re.dropRow || re.rsChanges) {
+      if (re.lsChanges || re.dropRow || re.rsChanges)
         continue;
-      }
 
       var rsadd = 0;
       var qm = -1;
@@ -625,11 +604,11 @@ class CircuitSolver {
         circuitRowInfo.mapRow = newIdx;
         for (col = 0; col < this.matrixSize; ++col) {
           rowInfo = this.circuitRowInfo[col];
-          if (rowInfo.type === RowInfo.ROW_CONST) {
+
+          if (rowInfo.type === RowInfo.ROW_CONST)
             newRS[newIdx] -= rowInfo.value * this.circuitMatrix[row][col];
-          } else {
+          else
             newMatx[newIdx][rowInfo.mapCol] += this.circuitMatrix[row][col];
-          }
         }
 
         newIdx++;
@@ -643,7 +622,7 @@ class CircuitSolver {
     this.saveOriginalMatrixState();
 
     this.circuitNeedsMap = true;
-    return this.analyzeFlag = false;
+    this.analyzeFlag = false;
   }
 
 
@@ -674,11 +653,10 @@ class CircuitSolver {
   getValueFromNode(idx) {
     var rowInfo = this.circuitRowInfo[idx];
 
-    if (rowInfo.type === RowInfo.ROW_CONST) {
+    if (rowInfo.type === RowInfo.ROW_CONST)
       return rowInfo.value;
-    } else {
+    else
       return this.circuitRightSide[rowInfo.mapCol];
-    }
   }
 
   updateComponent(nodeIdx, value) {
@@ -689,9 +667,9 @@ class CircuitSolver {
 
     if (nodeIdx < (this.Circuit.numNodes() - 1)) {
       var circuitNode = this.Circuit.nodeList[nodeIdx + 1];
-      for (var circuitNodeLink of circuitNode.links) {
+
+      for (var circuitNodeLink of circuitNode.links)
         circuitNodeLink.elm.setNodeVoltage(circuitNodeLink.num, value);
-      }
 
     } else {
       var ji = nodeIdx - (this.Circuit.numNodes() - 1);
@@ -877,13 +855,3 @@ class CircuitSolver {
 CircuitSolver.initClass();
 
 module.exports = CircuitSolver;
-
-function __range__(left, right, inclusive) {
-  var range = [];
-  var ascending = left < right;
-  var end = !inclusive ? right : ascending ? right + 1 : right - 1;
-  for (var i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-    range.push(i);
-  }
-  return range;
-}
