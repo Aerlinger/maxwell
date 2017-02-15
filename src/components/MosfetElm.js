@@ -67,8 +67,6 @@ class MosfetElm extends CircuitComponent {
 
     this.params['pnp'] = this.pnp;
 
-    //this.setBboxPt(this.point1, this.point2, this.hs);
-
     this.place()
   }
 
@@ -87,9 +85,6 @@ class MosfetElm extends CircuitComponent {
   static get NAME() {
     return "MOSFET Transistor";
   }
-
-//  drawDigital: ->
-//    (@flags & MosfetElm.FLAG_DIGITAL) isnt 0
 
   reset() {
     return this.lastv1 = this.lastv2 = this.volts[0] = this.volts[1] = this.volts[2] = this.curcount = 0;
@@ -278,9 +273,7 @@ class MosfetElm extends CircuitComponent {
 //      return
 
     if (vgs < this.vt) {
-
-      // should be all zero, but that causes a singular matrix,
-      // so instead we treat it as a large resistor
+      // should be all zero, but that causes a singular matrix, so instead we treat it as a large resistor
       Gds = 1e-8;
       this.ids = vds * Gds;
       this.mode = 0;
@@ -328,6 +321,7 @@ class MosfetElm extends CircuitComponent {
     return !((n1 === 0) || (n2 === 0));
   }
 }
+
 MosfetElm.initClass();
 
 module.exports = MosfetElm;

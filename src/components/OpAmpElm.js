@@ -22,7 +22,6 @@ class OpAmpElm extends CircuitComponent {
         default_value: 15,
         data_type: parseFloat,
         range: [-Infinity, Infinity],
-        type: "physical"
       },
       "minOut": {
         name: "Voltage",

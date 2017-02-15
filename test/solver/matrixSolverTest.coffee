@@ -11,7 +11,7 @@ describe "Matrix Solver", ->
                   [4, 5, 6],
                   [7, 8, 10]]
 
-      @result = @Solver.luFactor(@matrix3, 3, @circuitPermute)
+      @result = @Solver.luFactor(@matrix3, @circuitPermute)
 
     it "replaces first param with factored result", ->
       match = [
@@ -82,7 +82,7 @@ describe "Matrix Solver", ->
                   [-2, 0, 0],
                   [4, 6, 1]]
       @solvedMatrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-      @result = @Solver.luFactor(@matrix3, 3, @circuitPermute)
+      @result = @Solver.luFactor(@matrix3, @circuitPermute)
 
     it "still returns the factored matrix", ->
       expect(@matrix3).to.deep.equal(

@@ -514,6 +514,32 @@
 	
 	class CircuitComponent {
 	
+	  /**
+	   *
+	   * Definition of field params for this component
+	   *
+	   * Params:
+	   * @name (required) Literal name of the field
+	   * @label (required) Readable name for this field
+	   * @unit (optional) Physical unit of this field if applicable
+	   * @symbol: short symbol
+	   * field_type: [select, textfield, integer, boolean, slider]
+	   * @default_value (optional, but should be specified in most cases) Default value for this parameter
+	   * @data_type: function to convert a string into a valid type for this field
+	   * @range: Minimum and maximum Allowable range of values
+	   * or...
+	   * @select_values: {"NPN": -1, "PNP": 1}
+	   *
+	   * Example:
+	   *
+	   * name: "Voltage",
+	   * unit: "Voltage",
+	   * symbol: "V",
+	   * description: "Maximum allowable output voltage of the Op Amp",
+	   * default_value: 15,
+	   * data_type: parseFloat,
+	   * range: [-Infinity, Infinity],
+	   */
 	  static get Fields() {
 	    return {}
 	  }
@@ -18141,12 +18167,10 @@
 	      case VoltageElm.WF_PULSE:
 	        yc += wl / 2;
 	
-	        renderContext.beginPath();
 	        renderContext.drawLine(xc - wl, yc - wl, xc - wl, yc, color);
 	        renderContext.drawLine(xc - wl, yc - wl, xc - wl/2, yc - wl, color);
 	        renderContext.drawLine(xc - wl/2, yc - wl, xc - wl/2, yc, color);
 	        renderContext.drawLine(xc - wl/2, yc, xc + wl, yc, color);
-	        renderContext.closePath();
 	
 	        renderContext.drawValue(25, 0, this, this.params.maxVoltage + "V @ " + this.params.frequency + "Hz");
 	
@@ -19848,8 +19872,6 @@
 	
 	    this.params['pnp'] = this.pnp;
 	
-	    //this.setBboxPt(this.point1, this.point2, this.hs);
-	
 	    this.place()
 	  }
 	
@@ -19868,9 +19890,6 @@
 	  static get NAME() {
 	    return "MOSFET Transistor";
 	  }
-	
-	//  drawDigital: ->
-	//    (@flags & MosfetElm.FLAG_DIGITAL) isnt 0
 	
 	  reset() {
 	    return this.lastv1 = this.lastv2 = this.volts[0] = this.volts[1] = this.volts[2] = this.curcount = 0;
@@ -20059,9 +20078,7 @@
 	//      return
 	
 	    if (vgs < this.vt) {
-	
-	      // should be all zero, but that causes a singular matrix,
-	      // so instead we treat it as a large resistor
+	      // should be all zero, but that causes a singular matrix, so instead we treat it as a large resistor
 	      Gds = 1e-8;
 	      this.ids = vds * Gds;
 	      this.mode = 0;
@@ -20109,6 +20126,7 @@
 	    return !((n1 === 0) || (n2 === 0));
 	  }
 	}
+	
 	MosfetElm.initClass();
 	
 	module.exports = MosfetElm;
@@ -20476,11 +20494,12 @@
 	    if ((vnew > this.vcrit) && (Math.abs(vnew - vold) > (2*this.vt))) {
 	      if (vold > 0) {
 	        arg = 1 + ((vnew - vold) / this.vt);
-	        if (arg > 0) {
+	
+	        if (arg > 0)
 	          vnew = vold + (this.vt * Math.log(arg));
-	        } else {
+	        else
 	          vnew = this.vcrit;
-	        }
+	
 	      } else {
 	        vnew = this.vt * Math.log(vnew / this.vt);
 	      }
@@ -20498,41 +20517,40 @@
 	
 	  // TODO: DI refactor by passing solver object
 	  doStep(stamper) {
-	    let {subIterations} = this.getParentCircuit().Solver;
+	    var {subIterations} = this.getParentCircuit().Solver;
 	
-	    let vbc = this.volts[0] - this.volts[1]; // typically negative
-	    let vbe = this.volts[0] - this.volts[2]; // typically positive
+	    var vbc = this.volts[0] - this.volts[1]; // typically negative
+	    var vbe = this.volts[0] - this.volts[2]; // typically positive
 	
-	    let convergenceEpsilon = 0.01;
+	    var convergenceEpsilon = 0.01;
 	    if ((Math.abs(vbc - this.lastvbc) > convergenceEpsilon) || (Math.abs(vbe - this.lastvbe) > convergenceEpsilon)) {
 	      this.getParentCircuit().Solver.converged = false;
 	    }
 	
 	    // "Damping" method (Najm p. 182)
 	    this.gmin = 0;
+	
 	    if (subIterations > 100) {
 	      // TODO: Check validity here
 	      // if we have trouble converging, put a conductance in parallel with all P-N junctions.
 	      // Gradually increase the conductance value for each iteration.
 	      this.gmin = Math.exp(-9 * Math.log(10) * (1 - (subIterations / 3000.0)));
-	      if (this.gmin > .1) {
+	      if (this.gmin > .1)
 	        this.gmin = .1;
-	      }
 	    }
 	
 	    vbc = this.pnp * this.limitStep(this.pnp * vbc, this.pnp * this.lastvbc);
 	    vbe = this.pnp * this.limitStep(this.pnp * vbe, this.pnp * this.lastvbe);
 	    this.lastvbc = vbc;
 	    this.lastvbe = vbe;
-	    let pcoef = this.vdcoef * this.pnp;
-	    let expbc = Math.exp(vbc * pcoef);
+	    var pcoef = this.vdcoef * this.pnp;
+	    var expbc = Math.exp(vbc * pcoef);
 	
 	    //if (expbc > 1e13 || Double.isInfinite(expbc))
 	    //     expbc = 1e13;
-	    let expbe = Math.exp(vbe * pcoef);
-	    if (expbe < 1) {
+	    var expbe = Math.exp(vbe * pcoef);
+	    if (expbe < 1)
 	      expbe = 1;
-	    }
 	
 	    //if (expbe > 1e13 || Double.isInfinite(expbe))
 	    //     expbe = 1e13;
@@ -20540,13 +20558,17 @@
 	    this.ic = this.pnp * this.leakage * ((this.fgain * (expbe - 1)) - (expbc - 1));
 	    this.ib = -(this.ie + this.ic);
 	
-	    let gee = -this.leakage * this.vdcoef * expbe;
-	    let gec = this.rgain * this.leakage * this.vdcoef * expbc;
-	    let gce = -gee * this.fgain;
-	    let gcc = -gec * (1 / this.rgain);
+	    var gee = -this.leakage * this.vdcoef * expbe;
+	    var gec = this.rgain * this.leakage * this.vdcoef * expbc;
+	    var gce = -gee * this.fgain;
+	    var gcc = -gec * (1 / this.rgain);
 	
-	    // stamps from page 302 of Pillage.  Node 0 is the base, node 1 the collector, node 2 the emitter.  Also stamp
-	    // minimum conductance (gmin) between b,e and b,c
+	    /**
+	     * Matrix stamps from p. 302 of Pillage.
+	     *
+	     * Node 0 is the base, node 1 the collector, node 2 the emitter.
+	     * Also stamp minimum conductance (gmin) between b,e and b,c
+	     */
 	
 	    // Stamp BASE junction:
 	    stamper.stampMatrix(this.nodes[0], this.nodes[0], (-gee - gec - gce - gcc) + (this.gmin * 2));
@@ -20563,21 +20585,20 @@
 	    stamper.stampMatrix(this.nodes[2], this.nodes[1], -gec);
 	    stamper.stampMatrix(this.nodes[2], this.nodes[2], -gee + this.gmin);
 	
-	    // we are solving for v(k+1), not delta v, so we use formula
-	    // 10.5.13, multiplying J by v(k)
+	    // we are solving for v(k+1), not delta v, so we use formula 10.5.13, multiplying J by v(k)
 	    stamper.stampRightSide(this.nodes[0], -this.ib - ((gec + gcc) * vbc) - ((gee + gce) * vbe));
 	    stamper.stampRightSide(this.nodes[1], -this.ic + (gce * vbe) + (gcc * vbc));
-	    return stamper.stampRightSide(this.nodes[2], -this.ie + (gee * vbe) + (gec * vbc));
+	    stamper.stampRightSide(this.nodes[2], -this.ie + (gee * vbe) + (gec * vbc));
 	  }
 	
 	  getSummary() {
-	    let arr = [];
+	    var arr = [];
 	
 	    arr[0] = `(${(this.pnp === -1) ? "PNP)" : "NPN)"}`;
 	
-	    let vbc = this.volts[0] - this.volts[1];
-	    let vbe = this.volts[0] - this.volts[2];
-	    let vce = this.volts[1] - this.volts[2];
+	    var vbc = this.volts[0] - this.volts[1];
+	    var vbe = this.volts[0] - this.volts[2];
+	    var vce = this.volts[1] - this.volts[2];
 	
 	    if ((vbc * this.pnp) > 0.2) {
 	      arr[1] = ((vbe * this.pnp) > 0.2 ? "Saturation" : "Reverse active");
@@ -20721,7 +20742,6 @@
 	        default_value: 15,
 	        data_type: parseFloat,
 	        range: [-Infinity, Infinity],
-	        type: "physical"
 	      },
 	      "minOut": {
 	        name: "Voltage",
@@ -26980,8 +27000,8 @@
 	    str += "Circuit Matrix:\n";
 	    str += this.Solver.dumpFrame() + "\n";
 	
-	    str += "Orig Matrix:\n";
-	    str += this.Solver.dumpOrigFrame() + "\n";
+	    // str += "Orig Matrix:\n";
+	    // str += this.Solver.dumpOrigFrame() + "\n";
 	
 	    return str;
 	  }
@@ -27426,206 +27446,232 @@
 /* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CapacitorElm, CircuitNode, CircuitNodeLink, CircuitSolver, CurrentElm, GroundElm, InductorElm, MatrixStamper, Pathfinder, RailElm, RowInfo, Setting, SimulationFrame, Util, VoltageElm, WireElm;
+	var MatrixStamper = __webpack_require__(80);
 	
-	MatrixStamper = __webpack_require__(80);
+	var Pathfinder = __webpack_require__(82);
+	var CircuitNode = __webpack_require__(83);
+	var CircuitNodeLink = __webpack_require__(84);
+	var RowInfo = __webpack_require__(81);
+	var Setting = __webpack_require__(2);
+	var Util = __webpack_require__(5);
 	
-	Pathfinder = __webpack_require__(82);
+	var SimulationFrame = __webpack_require__(78);
 	
-	CircuitNode = __webpack_require__(83);
+	var GroundElm = __webpack_require__(22);
+	var RailElm = __webpack_require__(17);
+	var VoltageElm = __webpack_require__(18);
+	var WireElm = __webpack_require__(19);
+	var CapacitorElm = __webpack_require__(26);
+	var InductorElm = __webpack_require__(27);
+	var CurrentElm = __webpack_require__(29);
 	
-	CircuitNodeLink = __webpack_require__(84);
+	class CircuitSolver {
+	  static initClass() {
+	    this.SIZE_LIMIT = 100;
+	    this.MAXIMUM_SUBITERATIONS = 5000;
+	  }
 	
-	RowInfo = __webpack_require__(81);
-	
-	Setting = __webpack_require__(2);
-	
-	Util = __webpack_require__(5);
-	
-	SimulationFrame = __webpack_require__(78);
-	
-	GroundElm = __webpack_require__(22);
-	
-	RailElm = __webpack_require__(17);
-	
-	VoltageElm = __webpack_require__(18);
-	
-	WireElm = __webpack_require__(19);
-	
-	CapacitorElm = __webpack_require__(26);
-	
-	InductorElm = __webpack_require__(27);
-	
-	CurrentElm = __webpack_require__(29);
-	
-	CircuitSolver = (function() {
-	  CircuitSolver.SIZE_LIMIT = 100;
-	
-	  CircuitSolver.MAXIMUM_SUBITERATIONS = 5000;
-	
-	  function CircuitSolver(Circuit) {
+	  constructor(Circuit) {
 	    this.Circuit = Circuit;
-	    this.scaleFactors = Util.zeroArray(400);
 	    this.reset();
 	    this.Stamper = new MatrixStamper(this.Circuit);
 	  }
 	
-	  CircuitSolver.prototype.reset = function() {
+	  reset() {
 	    this.Circuit.time = 0;
 	    this.iterations = 0;
-	    this.converged = true;
+	
+	    this.converged = true; // true if numerical analysis has converged
 	    this.subIterations = 5000;
+	
 	    this.circuitMatrix = [];
 	    this.circuitRightSide = [];
+	
 	    this.origMatrix = [];
 	    this.origRightSide = [];
+	
 	    this.circuitRowInfo = [];
 	    this.circuitPermute = [];
+	
 	    this.circuitNonLinear = false;
+	
 	    this.lastTime = 0;
 	    this.secTime = 0;
 	    this.lastFrameTime = 0;
 	    this.lastIterTime = 0;
-	    this.analyzeFlag = true;
-	    return this.simulationFrames = [];
-	  };
 	
-	  CircuitSolver.prototype.reconstruct = function() {
+	    this.analyzeFlag = true;
+	
+	    this.simulationFrames = [];
+	  }
+	
+	  reconstruct() {
 	    if (!this.analyzeFlag || (this.Circuit.numElements() === 0)) {
 	      return;
 	    }
+	
 	    this.Circuit.clearErrors();
 	    this.Circuit.resetNodes();
+	
 	    this.discoverGroundReference();
 	    this.constructCircuitGraph();
 	    this.constructMatrixEquations();
 	    this.checkConnectivity();
 	    this.findInvalidPaths();
 	    this.optimize();
-	    if (this.circuitLinear()) {
-	      return this.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute);
-	    }
-	  };
 	
-	  CircuitSolver.prototype.solveCircuit = function() {
-	    var circuitElm, iter, j, lit, res, scope, stepRate, subiter, tm, _i, _j, _k, _l, _len, _len1, _len2, _m, _ref, _ref1, _ref2, _ref3, _ref4;
-	    if ((this.circuitMatrix == null) || this.Circuit.numElements() === 0) {
+	    // if a matrix is linear, we can do the lu_factor here instead of needing to do it every frame
+	    if (this.circuitLinear()) {
+	      return this.luFactor(this.circuitMatrix, this.circuitPermute);
+	    }
+	  }
+	
+	  solveCircuit() {
+	    if ((this.circuitMatrix == null) || (this.Circuit.numElements() === 0)) {
 	      this.circuitMatrix = null;
+	      //console.error("Called solve circuit when circuit Matrix not initialized")
 	      return;
 	    }
+	
 	    this.sysTime = (new Date()).getTime();
-	    stepRate = Math.floor(160 * this.getIterCount());
-	    tm = (new Date()).getTime();
-	    lit = this.lastIterTime;
+	
+	    var stepRate = Math.floor(160 * this.getIterCount());
+	
+	    var tm = (new Date()).getTime();
+	    var lit = this.lastIterTime;
+	
 	    if (1000 >= (stepRate * (tm - this.lastIterTime))) {
 	      return;
 	    }
-	    iter = 1;
+	
+	    var iter = 1;
 	    while (true) {
+	      var subiter;
 	      ++this.steps;
-	      _ref = this.Circuit.getElements();
-	      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-	        circuitElm = _ref[_i];
+	
+	      for (var circuitElm of this.Circuit.getElements()) {
 	        circuitElm.startIteration();
 	      }
-	      for (subiter = _j = 0, _ref1 = CircuitSolver.MAXIMUM_SUBITERATIONS; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; subiter = 0 <= _ref1 ? ++_j : --_j) {
+	
+	      // Sub iteration
+	      // TODO: Quantify convergence rate for diagnostic purposes
+	      for (subiter = 0; subiter < CircuitSolver.MAXIMUM_SUBITERATIONS; ++subiter) {
 	        this.converged = true;
 	        this.subIterations = subiter;
+	
 	        this.restoreOriginalMatrixState();
-	        _ref2 = this.Circuit.getElements();
-	        for (_k = 0, _len1 = _ref2.length; _k < _len1; _k++) {
-	          circuitElm = _ref2[_k];
+	
+	        for (circuitElm of this.Circuit.getElements()) {
 	          circuitElm.doStep(this.Stamper);
 	        }
+	
 	        if (this.circuitNonLinear) {
-	          if (this.converged && subiter > 0) {
+	          if (this.converged && (subiter > 0))
 	            break;
-	          }
-	          this.sub_luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute);
+	
+	          this.luFactor(this.circuitMatrix, this.circuitPermute);
 	        }
+	
 	        this.luSolve(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute, this.circuitRightSide);
-	        for (j = _l = 0, _ref3 = this.circuitMatrixFullSize; 0 <= _ref3 ? _l < _ref3 : _l > _ref3; j = 0 <= _ref3 ? ++_l : --_l) {
-	          res = this.getValueFromNode(j);
+	
+	        // backsolve and update each component current/voltage...
+	        for (var j = 0; j < this.circuitMatrixFullSize; ++j) {
+	          var res = this.getValueFromNode(j);
 	          if (!this.updateComponent(j, res)) {
 	            break;
 	          }
 	        }
+	
 	        if (this.circuitLinear()) {
 	          break;
 	        }
 	      }
+	
 	      if (subiter >= CircuitSolver.MAXIMUM_SUBITERATIONS) {
-	        this.halt("Convergence failed: " + subiter, null);
+	        this.halt(`Convergence failed: ${subiter}`, null);
 	        break;
 	      }
+	
 	      this.Circuit.time += this.Circuit.timeStep();
-	      if ((iter + 20) % 21 === 0) {
-	        _ref4 = this.Circuit.scopes;
-	        for (_m = 0, _len2 = _ref4.length; _m < _len2; _m++) {
-	          scope = _ref4[_m];
+	
+	      if (((iter + 20) % 21) === 0) {
+	        for (var scope of this.Circuit.scopes) {
 	          if (scope.circuitElm) {
 	            scope.sampleVoltage(this.Circuit.time, scope.circuitElm.getVoltageDiff());
 	            scope.sampleCurrent(this.Circuit.time, scope.circuitElm.getCurrent());
 	          }
 	        }
 	      }
+	
 	      tm = (new Date()).getTime();
 	      lit = tm;
+	
 	      if ((tm - this.lastFrameTime) > 2000) {
+	//        console.log("force break", iter)
 	        break;
 	      }
+	
 	      if ((iter * 1000) >= (stepRate * (tm - this.lastIterTime))) {
+	//        console.log("Break", iter)
 	        break;
 	      }
+	
 	      ++iter;
 	    }
+	
 	    this.frames++;
 	    this.Circuit.iterations++;
+	
 	    this.simulationFrames.push(new SimulationFrame(this.Circuit));
-	    return this._updateTimings(lit);
-	  };
 	
-	  CircuitSolver.prototype.circuitLinear = function() {
+	    this._updateTimings(lit);
+	  }
+	
+	  circuitLinear() {
 	    return !this.circuitNonLinear;
-	  };
+	  }
 	
-	  CircuitSolver.prototype._updateTimings = function(lastIterationTime) {
-	    var currentSpeed, inc, sysTime;
+	  _updateTimings(lastIterationTime) {
 	    this.lastIterTime = lastIterationTime;
-	    sysTime = (new Date()).getTime();
+	
+	    var sysTime = (new Date()).getTime();
+	
 	    if (this.lastTime !== 0) {
-	      inc = Math.floor(sysTime - this.lastTime);
-	      currentSpeed = Math.exp(this.Circuit.currentSpeed() / 3.5 - 14.2);
+	      var inc = Math.floor(sysTime - this.lastTime);
+	      var currentSpeed = Math.exp((this.Circuit.currentSpeed() / 3.5) - 14.2);
+	
 	      this.Circuit.Params.setCurrentMult(1.7 * inc * currentSpeed);
 	    }
+	
 	    if ((sysTime - this.secTime) >= 1000) {
+	      // console.log("Reset!")
 	      this.frames = 0;
 	      this.steps = 0;
 	      this.secTime = sysTime;
 	    }
+	
 	    this.lastTime = sysTime;
 	    this.lastFrameTime = this.lastTime;
 	    return this.iterations++;
-	  };
+	  }
 	
-	  CircuitSolver.prototype.getStamper = function() {
+	
+	  getStamper() {
 	    return this.Stamper;
-	  };
+	  }
 	
-	  CircuitSolver.prototype.getIterCount = function() {
-	    var sim_speed;
-	    sim_speed = this.Circuit.simSpeed();
+	  getIterCount() {
+	    var sim_speed = this.Circuit.simSpeed();
 	    return 0.1 * Math.exp((sim_speed - 61.0) / 24.0);
-	  };
+	  }
 	
-	  CircuitSolver.prototype.discoverGroundReference = function() {
-	    var ce, circuitNode, gotGround, gotRail, pt, volt, _i, _len, _ref;
-	    gotGround = false;
-	    gotRail = false;
-	    volt = null;
-	    _ref = this.Circuit.getElements();
-	    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-	      ce = _ref[_i];
+	  discoverGroundReference() {
+	    var gotGround = false;
+	    var gotRail = false;
+	    var volt = null;
+	
+	    // Check if this circuit has a voltage rail and if it has a voltage element.
+	    for (var ce of this.Circuit.getElements()) {
 	      if (ce instanceof GroundElm) {
 	        gotGround = true;
 	        break;
@@ -27637,184 +27683,227 @@
 	        volt = ce;
 	      }
 	    }
-	    circuitNode = new CircuitNode(this);
+	
+	    var circuitNode = new CircuitNode(this);
 	    circuitNode.x = circuitNode.y = -1;
+	
+	    // If no ground and no rails then voltage element's first terminal is referenced to ground:
 	    if (!gotGround && !gotRail && (volt != null)) {
-	      pt = volt.getPost(0);
+	      var pt = volt.getPost(0);
+	
 	      circuitNode.x = pt.x;
 	      circuitNode.y = pt.y;
 	    }
+	
 	    return this.Circuit.addCircuitNode(circuitNode);
-	  };
+	  }
 	
-	  CircuitSolver.prototype.buildComponentNodes = function() {
-	    var circuitElm, circuitNode, internalLink, internalNode, internalNodeCount, internalNodeIdx, internalVSCount, nodeIdx, nodeLink, postCount, postIdx, postPt, voltageSourceCount, _i, _j, _k, _l, _len, _ref, _ref1, _results;
-	    voltageSourceCount = 0;
-	    _ref = this.Circuit.getElements();
-	    _results = [];
-	    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-	      circuitElm = _ref[_i];
-	      internalNodeCount = circuitElm.numInternalNodes();
-	      internalVSCount = circuitElm.numVoltageSources();
-	      postCount = circuitElm.numPosts();
-	      for (postIdx = _j = 0; 0 <= postCount ? _j < postCount : _j > postCount; postIdx = 0 <= postCount ? ++_j : --_j) {
-	        postPt = circuitElm.getPost(postIdx);
-	        for (nodeIdx = _k = 0, _ref1 = this.Circuit.numNodes(); 0 <= _ref1 ? _k < _ref1 : _k > _ref1; nodeIdx = 0 <= _ref1 ? ++_k : --_k) {
-	          circuitNode = this.Circuit.getNode(nodeIdx);
-	          if (Util.overlappingPoints(postPt, circuitNode)) {
-	            break;
-	          }
-	        }
-	        nodeLink = new CircuitNodeLink();
-	        nodeLink.num = postIdx;
-	        nodeLink.elm = circuitElm;
-	        if (nodeIdx === this.Circuit.numNodes()) {
-	          circuitNode = new CircuitNode(this, postPt.x, postPt.y);
-	          circuitNode.links.push(nodeLink);
-	          circuitElm.setNode(postIdx, this.Circuit.numNodes());
-	          this.Circuit.addCircuitNode(circuitNode);
-	        } else {
-	          this.Circuit.getNode(nodeIdx).links.push(nodeLink);
-	          circuitElm.setNode(postIdx, nodeIdx);
-	          if (nodeIdx === 0) {
-	            circuitElm.setNodeVoltage(postIdx, 0);
-	          }
-	        }
-	      }
-	      for (internalNodeIdx = _l = 0; 0 <= internalNodeCount ? _l < internalNodeCount : _l > internalNodeCount; internalNodeIdx = 0 <= internalNodeCount ? ++_l : --_l) {
-	        internalLink = new CircuitNodeLink();
-	        internalLink.num = internalNodeIdx + postCount;
-	        internalLink.elm = circuitElm;
-	        internalNode = new CircuitNode(this, -1, -1, true);
-	        internalNode.links.push(internalLink);
-	        circuitElm.setNode(internalLink.num, this.Circuit.numNodes());
-	        this.Circuit.addCircuitNode(internalNode);
-	      }
-	      _results.push(voltageSourceCount += internalVSCount);
-	    }
-	    return _results;
-	  };
+	  buildComponentNodes() {
+	    var internalNodeCount, internalVSCount, postCount;
+	    var internalLink, internalNode;
+	    var voltageSourceCount = 0;
 	
-	  CircuitSolver.prototype.constructCircuitGraph = function() {
-	    var circuitElement, voltSourceIdx, voltageSourceCount, _i, _j, _len, _ref, _ref1;
+	    return this.Circuit.getElements().map((circuitElm) =>
+	        (internalNodeCount = circuitElm.numInternalNodes(),
+	            internalVSCount = circuitElm.numVoltageSources(),
+	            postCount = circuitElm.numPosts(),
+	
+	            // allocate a node for each post and match postCount to nodes
+	            (() => {
+	              var result = [];
+	              for (var postIdx = 0, end = postCount, asc = 0 <= end; asc ? postIdx < end : postIdx > end; asc ? postIdx++ : postIdx--) {
+	                var circuitNode, nodeIdx;
+	                var item;
+	                var postPt = circuitElm.getPost(postIdx);
+	
+	                for (nodeIdx = 0, end1 = this.Circuit.numNodes(), asc1 = 0 <= end1; asc1 ? nodeIdx < end1 : nodeIdx > end1; asc1 ? nodeIdx++ : nodeIdx--) {
+	                  var asc1, end1;
+	                  circuitNode = this.Circuit.getNode(nodeIdx);
+	                  if (Util.overlappingPoints(postPt, circuitNode)) {
+	                    break;
+	                  }
+	                }
+	
+	                var nodeLink = new CircuitNodeLink();
+	                nodeLink.num = postIdx;
+	                nodeLink.elm = circuitElm;
+	
+	                if (nodeIdx === this.Circuit.numNodes()) {
+	                  circuitNode = new CircuitNode(this, postPt.x, postPt.y);
+	                  circuitNode.links.push(nodeLink);
+	
+	                  circuitElm.setNode(postIdx, this.Circuit.numNodes());
+	                  item = this.Circuit.addCircuitNode(circuitNode);
+	
+	                } else {
+	                  this.Circuit.getNode(nodeIdx).links.push(nodeLink);
+	                  circuitElm.setNode(postIdx, nodeIdx);
+	
+	                  if (nodeIdx === 0) {
+	                    item = circuitElm.setNodeVoltage(postIdx, 0);
+	                  }
+	                }
+	                result.push(item);
+	              }
+	              return result;
+	            })(),
+	
+	            __range__(0, internalNodeCount, false).map((internalNodeIdx) =>
+	                (internalLink = new CircuitNodeLink(),
+	                    internalLink.num = internalNodeIdx + postCount,
+	                    internalLink.elm = circuitElm,
+	
+	                    internalNode = new CircuitNode(this, -1, -1, true),
+	                    internalNode.links.push(internalLink),
+	                    circuitElm.setNode(internalLink.num, this.Circuit.numNodes()),
+	
+	                    this.Circuit.addCircuitNode(internalNode))),
+	
+	            voltageSourceCount += internalVSCount));
+	  }
+	
+	
+	  // Circuit nodal analysis
+	  constructCircuitGraph() {
+	    // Allocate nodes and voltage sources
 	    this.buildComponentNodes();
+	
 	    this.Circuit.voltageSources = new Array(voltageSourceCount);
-	    voltageSourceCount = 0;
+	
+	    var voltageSourceCount = 0;
 	    this.circuitNonLinear = false;
-	    _ref = this.Circuit.getElements();
-	    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-	      circuitElement = _ref[_i];
+	
+	    // Determine if circuit is nonlinear
+	    for (var circuitElement of this.Circuit.getElements()) {
 	      if (circuitElement.nonLinear()) {
 	        this.circuitNonLinear = true;
 	      }
-	      for (voltSourceIdx = _j = 0, _ref1 = circuitElement.numVoltageSources(); 0 <= _ref1 ? _j < _ref1 : _j > _ref1; voltSourceIdx = 0 <= _ref1 ? ++_j : --_j) {
+	
+	      for (var voltSourceIdx = 0; voltSourceIdx < circuitElement.numVoltageSources(); ++voltSourceIdx) {
 	        this.Circuit.voltageSources[voltageSourceCount] = circuitElement;
 	        circuitElement.setVoltageSource(voltSourceIdx, voltageSourceCount++);
 	      }
 	    }
-	    this.Circuit.voltageSourceCount = voltageSourceCount;
-	    return this.matrixSize = this.Circuit.numNodes() + voltageSourceCount - 1;
-	  };
 	
-	  CircuitSolver.prototype.constructMatrixEquations = function() {
-	    var circuitElm, rowIdx, _i, _j, _len, _ref, _ref1, _results;
+	    this.Circuit.voltageSourceCount = voltageSourceCount;
+	
+	    return this.matrixSize = (this.Circuit.numNodes() + voltageSourceCount) - 1;
+	  }
+	
+	  constructMatrixEquations() {
 	    this.circuitMatrixSize = this.circuitMatrixFullSize = this.matrixSize;
+	
 	    this.circuitMatrix = Util.zeroArray2(this.matrixSize, this.matrixSize);
 	    this.origMatrix = Util.zeroArray2(this.matrixSize, this.matrixSize);
+	
 	    this.circuitRightSide = Util.zeroArray(this.matrixSize);
 	    this.origRightSide = Util.zeroArray(this.matrixSize);
 	    this.circuitRowInfo = Util.zeroArray(this.matrixSize);
 	    this.circuitPermute = Util.zeroArray(this.matrixSize);
-	    for (rowIdx = _i = 0, _ref = this.matrixSize; 0 <= _ref ? _i < _ref : _i > _ref; rowIdx = 0 <= _ref ? ++_i : --_i) {
+	
+	    for (var rowIdx = 0; rowIdx < this.matrixSize; ++rowIdx) {
 	      this.circuitRowInfo[rowIdx] = new RowInfo();
 	    }
-	    this.circuitNeedsMap = false;
-	    _ref1 = this.Circuit.getElements();
-	    _results = [];
-	    for (_j = 0, _len = _ref1.length; _j < _len; _j++) {
-	      circuitElm = _ref1[_j];
-	      _results.push(circuitElm.stamp(this.Stamper));
-	    }
-	    return _results;
-	  };
 	
-	  CircuitSolver.prototype.checkConnectivity = function() {
-	    var changed, circuitElm, closure, nodeIdx, postIdx, siblingNode, siblingPostIdx, _i, _j, _k, _len, _ref, _ref1, _ref2, _results;
-	    closure = new Array(this.Circuit.numNodes());
+	    this.circuitNeedsMap = false;
+	
+	    // Construct Matrix Equations
+	    this.Circuit.getElements().map((circuitElm) =>
+	        circuitElm.stamp(this.Stamper));
+	  }
+	
+	  checkConnectivity() {// Determine nodes that are unconnected
+	    var closure = new Array(this.Circuit.numNodes());
 	    closure[0] = true;
-	    changed = true;
-	    _results = [];
-	    while (changed) {
-	      changed = false;
-	      _ref = this.Circuit.getElements();
-	      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-	        circuitElm = _ref[_i];
-	        for (postIdx = _j = 0, _ref1 = circuitElm.numPosts(); 0 <= _ref1 ? _j < _ref1 : _j > _ref1; postIdx = 0 <= _ref1 ? ++_j : --_j) {
-	          if (!closure[circuitElm.getNode(postIdx)]) {
-	            if (circuitElm.hasGroundConnection(postIdx)) {
-	              changed = true;
-	              closure[circuitElm.getNode(postIdx)] = true;
-	            }
-	            continue;
-	          }
-	          for (siblingPostIdx = _k = 0, _ref2 = circuitElm.numPosts(); 0 <= _ref2 ? _k < _ref2 : _k > _ref2; siblingPostIdx = 0 <= _ref2 ? ++_k : --_k) {
-	            if (postIdx === siblingPostIdx) {
+	    var changed = true;
+	
+	    return (() => {
+	      var result = [];
+	      while (changed) {
+	        changed = false;
+	        for (var circuitElm of this.Circuit.getElements()) {
+	
+	          // Loop through all ce's nodes to see if they are connected to other nodes not in closure
+	          for (var postIdx = 0; postIdx < circuitElm.numPosts(); ++postIdx) {
+	            if (!closure[circuitElm.getNode(postIdx)]) {
+	              if (circuitElm.hasGroundConnection(postIdx)) {
+	                changed = true;
+	                closure[circuitElm.getNode(postIdx)] = true;
+	              }
 	              continue;
 	            }
-	            siblingNode = circuitElm.getNode(siblingPostIdx);
-	            if (circuitElm.getConnection(postIdx, siblingPostIdx) && !closure[siblingNode]) {
-	              closure[siblingNode] = true;
-	              changed = true;
+	
+	            for (var siblingPostIdx = 0, end1 = circuitElm.numPosts(), asc1 = 0 <= end1; asc1 ? siblingPostIdx < end1 : siblingPostIdx > end1; asc1 ? siblingPostIdx++ : siblingPostIdx--) {
+	              if (postIdx === siblingPostIdx) {
+	                continue;
+	              }
+	
+	              var siblingNode = circuitElm.getNode(siblingPostIdx);
+	              if (circuitElm.getConnection(postIdx, siblingPostIdx) && !closure[siblingNode]) {
+	                closure[siblingNode] = true;
+	                changed = true;
+	              }
 	            }
 	          }
 	        }
-	      }
-	      if (changed) {
-	        continue;
-	      }
-	      _results.push((function() {
-	        var _l, _ref3, _results1;
-	        _results1 = [];
-	        for (nodeIdx = _l = 0, _ref3 = this.Circuit.numNodes(); 0 <= _ref3 ? _l < _ref3 : _l > _ref3; nodeIdx = 0 <= _ref3 ? ++_l : --_l) {
-	          if (!closure[nodeIdx] && !this.Circuit.nodeList[nodeIdx].intern) {
-	            console.warn("Node " + nodeIdx + " unconnected! -> " + (this.Circuit.nodeList[nodeIdx].toString()));
-	            this.Stamper.stampResistor(0, nodeIdx, 1e8);
-	            closure[nodeIdx] = true;
-	            changed = true;
-	            break;
-	          } else {
-	            _results1.push(void 0);
-	          }
-	        }
-	        return _results1;
-	      }).call(this));
-	    }
-	    return _results;
-	  };
 	
-	  CircuitSolver.prototype.findInvalidPaths = function() {
-	    var ce, fpi, pathfinder, _i, _len, _ref;
-	    _ref = this.Circuit.getElements();
-	    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-	      ce = _ref[_i];
+	        if (changed) {
+	          continue;
+	        }
+	
+	        // connect unconnected nodes
+	        result.push((() => {
+	          var result1 = [];
+	          for (var nodeIdx = 0, end2 = this.Circuit.numNodes(), asc2 = 0 <= end2; asc2 ? nodeIdx < end2 : nodeIdx > end2; asc2 ? nodeIdx++ : nodeIdx--) {
+	            var item;
+	            if (!closure[nodeIdx] && !this.Circuit.nodeList[nodeIdx].intern) {
+	              console.warn(`Node ${nodeIdx} unconnected! -> ${this.Circuit.nodeList[nodeIdx].toString()}`);
+	              this.Stamper.stampResistor(0, nodeIdx, 1e8);
+	              closure[nodeIdx] = true;
+	              changed = true;
+	              break;
+	            }
+	            result1.push(item);
+	          }
+	          return result1;
+	        })());
+	      }
+	      return result;
+	    })();
+	  }
+	
+	
+	  findInvalidPaths() {
+	    for (var ce of this.Circuit.getElements()) {
+	      var fpi;
 	      if (ce instanceof InductorElm) {
 	        fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
+	
 	        if (!fpi.findPath(ce.getNode(0), 5) && !fpi.findPath(ce.getNode(0))) {
 	          ce.reset();
 	        }
 	      }
+	
+	      // look for current sources with no current path
 	      if (ce instanceof CurrentElm) {
 	        fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
 	        if (!fpi.findPath(ce.getNode(0))) {
 	          console.warn("No path for current source!", ce);
 	        }
 	      }
-	      if ((Util.typeOf(ce, VoltageElm) && ce.numPosts() === 2) || ce instanceof WireElm) {
-	        pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
+	      //return
+	
+	      // Look for voltage source loops:
+	      if ((Util.typeOf(ce, VoltageElm) && (ce.numPosts() === 2)) || ce instanceof WireElm) {
+	        var pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
+	
 	        if (pathfinder.findPath(ce.getNode(0))) {
 	          this.Circuit.halt("Voltage source/wire loop with no resistance!", ce);
 	        }
 	      }
+	      // return
+	
+	      // Look for shorted caps or caps with voltage but no resistance
 	      if (ce instanceof CapacitorElm) {
 	        fpi = new Pathfinder(Pathfinder.SHORT, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
 	        if (fpi.findPath(ce.getNode(0))) {
@@ -27828,104 +27917,134 @@
 	        }
 	      }
 	    }
-	  };
+	  }
 	
 	
 	  /*
-	  Apply Sparse Tableau Analysis to reduce dimensionality of circuit equations.
+	   Apply Sparse Tableau Analysis to reduce dimensionality of circuit equations.
 	   */
-	
-	  CircuitSolver.prototype.optimize = function() {
-	    var circuitRowInfo, col, elt, j, k, lastVal, newIdx, newMatDim, newMatx, newRS, newSize, qm, qp, qq, re, row, rowInfo, rowNodeEq, rsadd, _i, _j, _k, _l, _m, _n, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
-	    row = -1;
-	    while (row < this.matrixSize - 1) {
+	  optimize() {
+	    var col, rowInfo, rowNodeEq;
+	    var row = -1;
+	    while (row < (this.matrixSize - 1)) {
 	      row += 1;
-	      re = this.circuitRowInfo[row];
+	
+	      var re = this.circuitRowInfo[row];
 	      if (re.lsChanges || re.dropRow || re.rsChanges) {
 	        continue;
 	      }
-	      rsadd = 0;
-	      qm = -1;
-	      qp = -1;
-	      lastVal = 0;
-	      for (col = _i = 0, _ref = this.matrixSize; 0 <= _ref ? _i < _ref : _i > _ref; col = 0 <= _ref ? ++_i : --_i) {
+	
+	      var rsadd = 0;
+	      var qm = -1;
+	      var qp = -1;
+	      var lastVal = 0;
+	
+	      // look for rows that can be removed
+	      for (col = 0; col < this.matrixSize; ++col) {
 	        if (this.circuitRowInfo[col].type === RowInfo.ROW_CONST) {
+	          // Keep a running total of var values that have been removed already
 	          rsadd -= this.circuitRowInfo[col].value * this.circuitMatrix[row][col];
 	        } else if (this.circuitMatrix[row][col] === 0) {
-	
-	        } else if (qp === -1) {
-	          qp = col;
+	        } else if (qp === -1) { // First col
+	          qp = col;  // First nonzero value is qp
 	          lastVal = this.circuitMatrix[row][col];
-	        } else if (qm === -1 && (this.circuitMatrix[row][col] === -lastVal)) {
+	        } else if ((qm === -1) && (this.circuitMatrix[row][col] === -lastVal)) {
 	          qm = col;
 	        } else {
 	          break;
 	        }
 	      }
+	
 	      if (col === this.matrixSize) {
 	        if (qp === -1) {
-	          this.Circuit.halt("Matrix error qp (row with all zeros) (rsadd = " + rsadd + ")", null);
+	          this.Circuit.halt(`Matrix error qp (row with all zeros) (rsadd = ${rsadd})`, null);
 	          return;
 	        }
-	        elt = this.circuitRowInfo[qp];
+	
+	        var elt = this.circuitRowInfo[qp];
+	
+	        // We found a row with only one nonzero entry, that value is constant
 	        if (qm === -1) {
-	          k = 0;
-	          while (elt.type === RowInfo.ROW_EQUAL && k < CircuitSolver.SIZE_LIMIT) {
+	          var k = 0;
+	          while ((elt.type === RowInfo.ROW_EQUAL) && (k < CircuitSolver.SIZE_LIMIT)) {
+	            // Follow the chain
 	            qp = elt.nodeEq;
 	            elt = this.circuitRowInfo[qp];
 	            ++k;
 	          }
-	          if (elt.type === RowInfo.ROW_EQUAL) {
-	            elt.type = RowInfo.ROW_NORMAL;
-	          } else if (elt.type !== RowInfo.ROW_NORMAL) {
 	
+	          if (elt.type === RowInfo.ROW_EQUAL) {
+	            // break equal chains
+	            elt.type = RowInfo.ROW_NORMAL;
+	
+	          } else if (elt.type !== RowInfo.ROW_NORMAL) {
 	          } else {
 	            elt.type = RowInfo.ROW_CONST;
 	            elt.value = (this.circuitRightSide[row] + rsadd) / lastVal;
+	
 	            this.circuitRowInfo[row].dropRow = true;
-	            row = -1;
+	
+	            row = -1; // start over from scratch
 	          }
+	
+	          // We found a row with only two nonzero entries, and one is the negative of the other -> the values are equal
 	        } else if ((this.circuitRightSide[row] + rsadd) === 0) {
 	          if (elt.type !== RowInfo.ROW_NORMAL) {
-	            qq = qm;
+	            var qq = qm;
 	            qm = qp;
 	            qp = qq;
 	            elt = this.circuitRowInfo[qp];
+	
 	            if (elt.type !== RowInfo.ROW_NORMAL) {
+	              // We should follow the chain here, but this hardly ever happens so it's not worth worrying about
+	              //console.warn("elt.type != RowInfo.ROW_NORMAL", elt)
 	              continue;
 	            }
 	          }
+	
 	          elt.type = RowInfo.ROW_EQUAL;
 	          elt.nodeEq = qm;
 	          this.circuitRowInfo[row].dropRow = true;
 	        }
 	      }
 	    }
-	    newMatDim = 0;
-	    for (row = _j = 0, _ref1 = this.matrixSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; row = 0 <= _ref1 ? ++_j : --_j) {
+	
+	    // END WHILE row < @matrixSize-1
+	
+	    // Find size of new matrix:
+	    var newMatDim = 0;
+	    for (var row = 0; row < this.matrixSize; ++row) {
 	      rowInfo = this.circuitRowInfo[row];
+	
 	      if (rowInfo.type === RowInfo.ROW_NORMAL) {
 	        rowInfo.mapCol = newMatDim++;
+	
 	      } else {
 	        if (rowInfo.type === RowInfo.ROW_EQUAL) {
-	          for (j = _k = 0, _ref2 = CircuitSolver.SIZE_LIMIT; 0 <= _ref2 ? _k < _ref2 : _k > _ref2; j = 0 <= _ref2 ? ++_k : --_k) {
+	          // resolve chains of equality; 100 max steps to avoid loops
+	          for (var j = 0; j < CircuitSolver.SIZE_LIMIT; ++j) {
 	            rowNodeEq = this.circuitRowInfo[rowInfo.nodeEq];
+	
 	            if ((rowNodeEq.type !== RowInfo.ROW_EQUAL) || (row === rowNodeEq.nodeEq)) {
 	              break;
 	            }
+	
 	            rowInfo.nodeEq = rowNodeEq.nodeEq;
 	          }
 	        }
+	
 	        if (rowInfo.type === RowInfo.ROW_CONST) {
 	          rowInfo.mapCol = -1;
 	        }
 	      }
 	    }
-	    for (row = _l = 0, _ref3 = this.matrixSize; 0 <= _ref3 ? _l < _ref3 : _l > _ref3; row = 0 <= _ref3 ? ++_l : --_l) {
+	
+	    for (var row = 0; row < this.matrixSize; ++row) {
 	      rowInfo = this.circuitRowInfo[row];
 	      if (rowInfo.type === RowInfo.ROW_EQUAL) {
 	        rowNodeEq = this.circuitRowInfo[rowInfo.nodeEq];
 	        if (rowNodeEq.type === RowInfo.ROW_CONST) {
+	          // if something is equal to a const, it's a const
 	          rowInfo.type = rowNodeEq.type;
 	          rowInfo.value = rowNodeEq.value;
 	          rowInfo.mapCol = -1;
@@ -27934,19 +28053,25 @@
 	        }
 	      }
 	    }
-	    newSize = newMatDim;
-	    newMatx = Util.zeroArray2(newSize, newSize);
-	    newRS = new Array(newSize);
+	
+	    // make the new, simplified matrix
+	    var newSize = newMatDim;
+	    var newMatx = Util.zeroArray2(newSize, newSize);
+	    var newRS = new Array(newSize);
+	
 	    Util.zeroArray(newRS);
-	    newIdx = 0;
-	    for (row = _m = 0, _ref4 = this.matrixSize; 0 <= _ref4 ? _m < _ref4 : _m > _ref4; row = 0 <= _ref4 ? ++_m : --_m) {
-	      circuitRowInfo = this.circuitRowInfo[row];
+	
+	    var newIdx = 0;
+	    for (var row = 0; row < this.matrixSize; ++row) {
+	      var circuitRowInfo = this.circuitRowInfo[row];
+	
 	      if (circuitRowInfo.dropRow) {
 	        circuitRowInfo.mapRow = -1;
 	      } else {
 	        newRS[newIdx] = this.circuitRightSide[row];
+	
 	        circuitRowInfo.mapRow = newIdx;
-	        for (col = _n = 0, _ref5 = this.matrixSize; 0 <= _ref5 ? _n < _ref5 : _n > _ref5; col = 0 <= _ref5 ? ++_n : --_n) {
+	        for (col = 0; col < this.matrixSize; ++col) {
 	          rowInfo = this.circuitRowInfo[col];
 	          if (rowInfo.type === RowInfo.ROW_CONST) {
 	            newRS[newIdx] -= rowInfo.value * this.circuitMatrix[row][col];
@@ -27954,128 +28079,133 @@
 	            newMatx[newIdx][rowInfo.mapCol] += this.circuitMatrix[row][col];
 	          }
 	        }
+	
 	        newIdx++;
 	      }
 	    }
+	
 	    this.circuitMatrix = newMatx;
 	    this.circuitRightSide = newRS;
 	    this.matrixSize = this.circuitMatrixSize = newSize;
+	
 	    this.saveOriginalMatrixState();
+	
 	    this.circuitNeedsMap = true;
 	    return this.analyzeFlag = false;
-	  };
+	  }
 	
-	  CircuitSolver.prototype.saveOriginalMatrixState = function() {
-	    var col, row, _i, _j, _ref, _ref1, _results;
-	    for (row = _i = 0, _ref = this.matrixSize; 0 <= _ref ? _i < _ref : _i > _ref; row = 0 <= _ref ? ++_i : --_i) {
+	
+	  saveOriginalMatrixState() {
+	    for (var row = 0; row < this.matrixSize; ++row)
 	      this.origRightSide[row] = this.circuitRightSide[row];
-	    }
-	    if (this.circuitNonLinear) {
-	      _results = [];
-	      for (row = _j = 0, _ref1 = this.matrixSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; row = 0 <= _ref1 ? ++_j : --_j) {
-	        _results.push((function() {
-	          var _k, _ref2, _results1;
-	          _results1 = [];
-	          for (col = _k = 0, _ref2 = this.matrixSize; 0 <= _ref2 ? _k < _ref2 : _k > _ref2; col = 0 <= _ref2 ? ++_k : --_k) {
-	            _results1.push(this.origMatrix[row][col] = this.circuitMatrix[row][col]);
-	          }
-	          return _results1;
-	        }).call(this));
-	      }
-	      return _results;
-	    }
-	  };
 	
-	  CircuitSolver.prototype.restoreOriginalMatrixState = function() {
-	    var col, row, _i, _j, _ref, _ref1, _results;
-	    for (row = _i = 0, _ref = this.circuitMatrixSize; 0 <= _ref ? _i < _ref : _i > _ref; row = 0 <= _ref ? ++_i : --_i) {
+	    if (this.circuitNonLinear) {
+	      for (var row = 0; row < this.matrixSize; ++row) {
+	        for (var col = 0; col < this.matrixSize; ++col) {
+	          this.origMatrix[row][col] = this.circuitMatrix[row][col];
+	        }
+	      }
+	    }
+	  }
+	
+	  restoreOriginalMatrixState() {
+	    for (var row = 0; row < this.circuitMatrixSize; ++row)
 	      this.circuitRightSide[row] = this.origRightSide[row];
-	    }
-	    if (this.circuitNonLinear) {
-	      _results = [];
-	      for (row = _j = 0, _ref1 = this.circuitMatrixSize; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; row = 0 <= _ref1 ? ++_j : --_j) {
-	        _results.push((function() {
-	          var _k, _ref2, _results1;
-	          _results1 = [];
-	          for (col = _k = 0, _ref2 = this.circuitMatrixSize; 0 <= _ref2 ? _k < _ref2 : _k > _ref2; col = 0 <= _ref2 ? ++_k : --_k) {
-	            _results1.push(this.circuitMatrix[row][col] = this.origMatrix[row][col]);
-	          }
-	          return _results1;
-	        }).call(this));
-	      }
-	      return _results;
-	    }
-	  };
 	
-	  CircuitSolver.prototype.getValueFromNode = function(idx) {
-	    var rowInfo;
-	    rowInfo = this.circuitRowInfo[idx];
+	    if (this.circuitNonLinear) {
+	      for (var row = 0; row < this.circuitMatrixSize; ++row)
+	        for (var col = 0; col < this.circuitMatrixSize; ++col)
+	          this.circuitMatrix[row][col] = this.origMatrix[row][col];
+	    }
+	  }
+	
+	  getValueFromNode(idx) {
+	    var rowInfo = this.circuitRowInfo[idx];
+	
 	    if (rowInfo.type === RowInfo.ROW_CONST) {
 	      return rowInfo.value;
 	    } else {
 	      return this.circuitRightSide[rowInfo.mapCol];
 	    }
-	  };
+	  }
 	
-	  CircuitSolver.prototype.updateComponent = function(nodeIdx, value) {
-	    var circuitNode, circuitNodeLink, ji, _i, _len, _ref;
+	  updateComponent(nodeIdx, value) {
 	    if (isNaN(value)) {
 	      this.converged = false;
 	      return false;
 	    }
+	
 	    if (nodeIdx < (this.Circuit.numNodes() - 1)) {
-	      circuitNode = this.Circuit.nodeList[nodeIdx + 1];
-	      _ref = circuitNode.links;
-	      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-	        circuitNodeLink = _ref[_i];
+	      var circuitNode = this.Circuit.nodeList[nodeIdx + 1];
+	      for (var circuitNodeLink of circuitNode.links) {
 	        circuitNodeLink.elm.setNodeVoltage(circuitNodeLink.num, value);
 	      }
+	
 	    } else {
-	      ji = nodeIdx - (this.Circuit.numNodes() - 1);
+	      var ji = nodeIdx - (this.Circuit.numNodes() - 1);
 	      this.Circuit.voltageSources[ji].setCurrent(ji, value);
 	    }
-	    return true;
-	  };
 	
-	  CircuitSolver.prototype.sub_luFactor = function(circuitMatrix, matrixSize, pivotArray) {
+	    return true;
+	  }
+	
+	  /*
+	   luFactor: finds a solution to a factored matrix through LU (Lower-Upper) factorization
+	
+	   Called once each frame for resistive circuits, otherwise called many times each frame
+	
+	   returns a falsy value if the provided circuitMatrix can't be factored
+	
+	   @param (input/output) circuitMatrix 2D matrix to be solved
+	   @param (input) matrixSize number or rows/columns in the matrix
+	   @param (output) pivotArray pivot index
+	   */
+	  luFactor(circuitMatrix, pivotArray) {
 	    var i, j, k, largest, largestRow, matrix_ij, mult, x;
-	    i = 0;
-	    while (i < matrixSize) {
+	
+	    var matrixSize = circuitMatrix.length;
+	
+	    var scaleFactors = new Array(matrixSize);
+	
+	    // i = 0;
+	    i = matrixSize;
+	    while (i--) {
 	      largest = 0;
-	      j = 0;
-	      while (j < matrixSize) {
+	
+	      j = matrixSize;
+	      while (j--) {
 	        x = Math.abs(circuitMatrix[i][j]);
-	        if (x > largest) {
+	        if (x > largest)
 	          largest = x;
-	        }
-	        ++j;
 	      }
-	      this.scaleFactors[i] = 1.0 / largest;
-	      ++i;
+	      scaleFactors[i] = 1.0 / largest;
 	    }
+	
 	    j = 0;
 	    while (j < matrixSize) {
 	      i = 0;
 	      while (i < j) {
 	        matrix_ij = circuitMatrix[i][j];
-	        k = 0;
-	        while (k !== i) {
+	
+	        k = i;
+	        while (k--)
 	          matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
-	          ++k;
-	        }
+	
 	        circuitMatrix[i][j] = matrix_ij;
 	        ++i;
 	      }
+	
 	      largest = 0;
 	      largestRow = -1;
+	
 	      i = j;
 	      while (i < matrixSize) {
 	        matrix_ij = circuitMatrix[i][j];
-	        k = 0;
-	        while (k < j) {
+	
+	        k = j;
+	        while (k--)
 	          matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
-	          ++k;
-	        }
+	
 	        circuitMatrix[i][j] = matrix_ij;
 	        x = Math.abs(matrix_ij);
 	        if (x >= largest) {
@@ -28084,6 +28214,7 @@
 	        }
 	        ++i;
 	      }
+	
 	      if (j !== largestRow) {
 	        k = 0;
 	        while (k < matrixSize) {
@@ -28092,12 +28223,14 @@
 	          circuitMatrix[j][k] = x;
 	          ++k;
 	        }
-	        this.scaleFactors[largestRow] = this.scaleFactors[j];
+	
+	        scaleFactors[largestRow] = scaleFactors[j];
 	      }
+	
 	      pivotArray[j] = largestRow;
-	      if (circuitMatrix[j][j] === 0) {
+	      if (circuitMatrix[j][j] === 0)
 	        circuitMatrix[j][j] = 1e-18;
-	      }
+	
 	      if (j !== matrixSize - 1) {
 	        mult = 1 / circuitMatrix[j][j];
 	        i = j + 1;
@@ -28106,117 +28239,30 @@
 	          ++i;
 	        }
 	      }
+	
 	      ++j;
 	    }
-	    return true;
-	  };
+	  }
 	
 	
 	  /*
-	    luFactor: finds a solution to a factored matrix through LU (Lower-Upper) factorization
-	  
-	    Called once each frame for resistive circuits, otherwise called many times each frame
-	  
-	    returns a falsy value if the provided circuitMatrix can't be factored
-	  
-	    @param (input/output) circuitMatrix 2D matrix to be solved
-	    @param (input) matrixSize number or rows/columns in the matrix
-	    @param (output) pivotArray pivot index
+	   Step 2: `lu_solve`: (Called by lu_factor)
+	   finds a solution to a factored matrix through LU (Lower-Upper) factorization
+	
+	   Called once each frame for resistive circuits, otherwise called many times each frame
+	
+	   @param circuitMatrix matrix to be solved
+	   @param numRows dimension
+	   @param pivotVector pivot index
+	   @param circuitRightSide Right-side (dependent) matrix
 	   */
-	
-	  CircuitSolver.prototype.luFactor = function(circuitMatrix, matrixSize, pivotArray) {
-	    var i, j, k, largest, largestRow, matrix_ij, mult, x;
-	    i = 0;
-	    while (i < matrixSize) {
-	      largest = 0;
-	      j = 0;
-	      while (j < matrixSize) {
-	        x = Math.abs(circuitMatrix[i][j]);
-	        if (x > largest) {
-	          largest = x;
-	        }
-	        ++j;
-	      }
-	      this.scaleFactors[i] = 1.0 / largest;
-	      ++i;
-	    }
-	    j = 0;
-	    while (j < matrixSize) {
-	      i = 0;
-	      while (i < j) {
-	        matrix_ij = circuitMatrix[i][j];
-	        k = 0;
-	        while (k !== i) {
-	          matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
-	          ++k;
-	        }
-	        circuitMatrix[i][j] = matrix_ij;
-	        ++i;
-	      }
-	      largest = 0;
-	      largestRow = -1;
-	      i = j;
-	      while (i < matrixSize) {
-	        matrix_ij = circuitMatrix[i][j];
-	        k = 0;
-	        while (k < j) {
-	          matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
-	          ++k;
-	        }
-	        circuitMatrix[i][j] = matrix_ij;
-	        x = Math.abs(matrix_ij);
-	        if (x >= largest) {
-	          largest = x;
-	          largestRow = i;
-	        }
-	        ++i;
-	      }
-	      if (j !== largestRow) {
-	        k = 0;
-	        while (k < matrixSize) {
-	          x = circuitMatrix[largestRow][k];
-	          circuitMatrix[largestRow][k] = circuitMatrix[j][k];
-	          circuitMatrix[j][k] = x;
-	          ++k;
-	        }
-	        this.scaleFactors[largestRow] = this.scaleFactors[j];
-	      }
-	      pivotArray[j] = largestRow;
-	      if (circuitMatrix[j][j] === 0) {
-	        circuitMatrix[j][j] = 1e-18;
-	      }
-	      if (j !== matrixSize - 1) {
-	        mult = 1 / circuitMatrix[j][j];
-	        i = j + 1;
-	        while (i !== matrixSize) {
-	          circuitMatrix[i][j] *= mult;
-	          ++i;
-	        }
-	      }
-	      ++j;
-	    }
-	    return true;
-	  };
-	
-	
-	  /*
-	    Step 2: `lu_solve`: (Called by lu_factor)
-	    finds a solution to a factored matrix through LU (Lower-Upper) factorization
-	  
-	    Called once each frame for resistive circuits, otherwise called many times each frame
-	  
-	    @param circuitMatrix matrix to be solved
-	    @param numRows dimension
-	    @param pivotVector pivot index
-	    @param circuitRightSide Right-side (dependent) matrix
-	   */
-	
-	  CircuitSolver.prototype.luSolve = function(circuitMatrix, numRows, pivotVector, circuitRightSide) {
-	    var bi, i, j, row, swap, tot, total, _results;
-	    i = 0;
+	  luSolve(circuitMatrix, numRows, pivotVector, circuitRightSide) {
+	    // Find first nonzero element of circuitRightSide
+	    var j, row;
+	    var i = 0;
 	    while (i < numRows) {
 	      row = pivotVector[i];
-	      swap = circuitRightSide[row];
+	      var swap = circuitRightSide[row];
 	      circuitRightSide[row] = circuitRightSide[i];
 	      circuitRightSide[i] = swap;
 	      if (swap !== 0) {
@@ -28224,11 +28270,14 @@
 	      }
 	      ++i;
 	    }
-	    bi = i++;
+	
+	    var bi = i++;
 	    while (i < numRows) {
 	      row = pivotVector[i];
-	      tot = circuitRightSide[row];
+	      var tot = circuitRightSide[row];
 	      circuitRightSide[row] = circuitRightSide[i];
+	
+	      // Forward substitution by using the lower triangular matrix
 	      j = bi;
 	      while (j < i) {
 	        tot -= circuitMatrix[i][j] * circuitRightSide[j];
@@ -28237,94 +28286,55 @@
 	      circuitRightSide[i] = tot;
 	      ++i;
 	    }
+	
 	    i = numRows - 1;
-	    _results = [];
+	
 	    while (i >= 0) {
-	      total = circuitRightSide[i];
+	      var total = circuitRightSide[i];
+	
+	      // back-substitution using the upper triangular matrix
 	      j = i + 1;
 	      while (j !== numRows) {
 	        total -= circuitMatrix[i][j] * circuitRightSide[j];
 	        ++j;
 	      }
-	      circuitRightSide[i] = total / circuitMatrix[i][i];
-	      _results.push(i--);
-	    }
-	    return _results;
-	  };
 	
-	  CircuitSolver.prototype.dump = function() {
-	    var out, rowInfo, _i, _len, _ref;
-	    out = "";
+	      circuitRightSide[i] = total / circuitMatrix[i][i];
+	
+	      i--;
+	    }
+	  }
+	
+	  dump() {
+	    var out = "";
+	
 	    out += this.Circuit.Params.toString() + "\n";
-	    _ref = this.circuitRowInfo;
-	    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-	      rowInfo = _ref[_i];
+	
+	    for (var rowInfo of this.circuitRowInfo) {
 	      out += rowInfo.toString() + "\n";
 	    }
-	    out += "\nCircuit permute: " + Util.printArray(this.circuitPermute);
+	
+	    out += `\nCircuit permute: ${Util.printArray(this.circuitPermute)}`;
+	
 	    return out + "\n";
-	  };
+	  }
 	
-	  CircuitSolver.prototype.dumpOrigFrame = function() {
-	    var circuitMatrixDump, circuitRightSideDump, i, j, matrixRowCount, out, _i, _j;
-	    matrixRowCount = this.origRightSide.length;
-	    circuitMatrixDump = "";
-	    circuitRightSideDump = "  RS: [";
-	    for (i = _i = 0; 0 <= matrixRowCount ? _i < matrixRowCount : _i > matrixRowCount; i = 0 <= matrixRowCount ? ++_i : --_i) {
-	      circuitRightSideDump += Util.tidyFloat(this.origRightSide[i]);
-	      circuitMatrixDump += "  [";
-	      for (j = _j = 0; 0 <= matrixRowCount ? _j < matrixRowCount : _j > matrixRowCount; j = 0 <= matrixRowCount ? ++_j : --_j) {
-	        circuitMatrixDump += Util.tidyFloat(this.origMatrix[i][j]);
-	        if (j !== matrixRowCount - 1) {
-	          circuitMatrixDump += ", ";
-	        }
-	      }
-	      circuitMatrixDump += "]\n";
-	      if (i !== matrixRowCount - 1) {
-	        circuitRightSideDump += ", ";
-	      }
-	    }
-	    out = "";
-	    out += circuitMatrixDump + "\n";
-	    out += circuitRightSideDump + "]";
-	    return out;
-	  };
 	
-	  CircuitSolver.prototype.dumpFrame = function() {
-	    var circuitMatrixDump, circuitRightSideDump, i, j, matrixRowCount, out, _i, _j;
-	    matrixRowCount = this.circuitRightSide.length;
-	    if (!this.circuitMatrix || !!this.circuitMatrix[0]) {
-	      return "";
-	    }
-	    circuitMatrixDump = "";
-	    circuitRightSideDump = "  RS: [";
-	    for (i = _i = 0; 0 <= matrixRowCount ? _i < matrixRowCount : _i > matrixRowCount; i = 0 <= matrixRowCount ? ++_i : --_i) {
-	      circuitRightSideDump += Util.tidyFloat(this.circuitRightSide[i]);
-	      circuitMatrixDump += "  [";
-	      for (j = _j = 0; 0 <= matrixRowCount ? _j < matrixRowCount : _j > matrixRowCount; j = 0 <= matrixRowCount ? ++_j : --_j) {
-	        circuitMatrixDump += Util.tidyFloat(this.circuitMatrix[i][j]);
-	        if (j !== matrixRowCount - 1) {
-	          circuitMatrixDump += ", ";
-	        }
-	      }
-	      circuitMatrixDump += "]\n";
-	      if (i !== matrixRowCount - 1) {
-	        circuitRightSideDump += ", ";
-	      }
-	    }
-	    out = "";
-	    out += "  iter: " + this.Circuit.iterations + ", time: " + (this.Circuit.time.toFixed(7)) + ", subiter: " + this.subIterations + " rows: " + matrixRowCount + "\n";
-	    out += circuitMatrixDump + "\n";
-	    out += circuitRightSideDump + "]";
-	    return out;
-	  };
+	}
 	
-	  return CircuitSolver;
-	
-	})();
+	CircuitSolver.initClass();
 	
 	module.exports = CircuitSolver;
-
+	
+	function __range__(left, right, inclusive) {
+	  var range = [];
+	  var ascending = left < right;
+	  var end = !inclusive ? right : ascending ? right + 1 : right - 1;
+	  for (var i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
+	    range.push(i);
+	  }
+	  return range;
+	}
 
 /***/ },
 /* 80 */

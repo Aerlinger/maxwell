@@ -248,12 +248,10 @@ class VoltageElm extends CircuitComponent {
       case VoltageElm.WF_PULSE:
         yc += wl / 2;
 
-        renderContext.beginPath();
         renderContext.drawLine(xc - wl, yc - wl, xc - wl, yc, color);
         renderContext.drawLine(xc - wl, yc - wl, xc - wl/2, yc - wl, color);
         renderContext.drawLine(xc - wl/2, yc - wl, xc - wl/2, yc, color);
         renderContext.drawLine(xc - wl/2, yc, xc + wl, yc, color);
-        renderContext.closePath();
 
         renderContext.drawValue(25, 0, this, this.params.maxVoltage + "V @ " + this.params.frequency + "Hz");
 

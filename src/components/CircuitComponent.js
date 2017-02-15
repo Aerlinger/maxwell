@@ -24,6 +24,32 @@ let _ = require("lodash");
 
 class CircuitComponent {
 
+  /**
+   *
+   * Definition of field params for this component
+   *
+   * Params:
+   * @name (required) Literal name of the field
+   * @label (required) Readable name for this field
+   * @unit (optional) Physical unit of this field if applicable
+   * @symbol: short symbol
+   * field_type: [select, textfield, integer, boolean, slider]
+   * @default_value (optional, but should be specified in most cases) Default value for this parameter
+   * @data_type: function to convert a string into a valid type for this field
+   * @range: Minimum and maximum Allowable range of values
+   * or...
+   * @select_values: {"NPN": -1, "PNP": 1}
+   *
+   * Example:
+   *
+   * name: "Voltage",
+   * unit: "Voltage",
+   * symbol: "V",
+   * description: "Maximum allowable output voltage of the Op Amp",
+   * default_value: 15,
+   * data_type: parseFloat,
+   * range: [-Infinity, Infinity],
+   */
   static get Fields() {
     return {}
   }
