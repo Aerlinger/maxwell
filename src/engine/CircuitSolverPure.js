@@ -716,19 +716,19 @@ class CircuitSolver {
   luFactor(circuitMatrix, matrixSize, pivotArray) {
     var i, j, k, largest, largestRow, matrix_ij, mult, x;
 
-    i = 0;
-    while (i < matrixSize) {
+    // i = 0;
+    i = matrixSize;
+    while (i--) {
       largest = 0;
-      j = 0;
-      while (j < matrixSize) {
+
+      j = matrixSize;
+      while (j--) {
         x = Math.abs(circuitMatrix[i][j]);
-        if (x > largest) {
+        if (x > largest)
           largest = x;
-        }
-        ++j;
+
       }
       this.scaleFactors[i] = 1.0 / largest;
-      ++i;
     }
 
     j = 0;
@@ -736,25 +736,26 @@ class CircuitSolver {
       i = 0;
       while (i < j) {
         matrix_ij = circuitMatrix[i][j];
-        k = 0;
-        while (k !== i) {
+
+        k = i;
+        while (k--)
           matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
-          ++k;
-        }
+
         circuitMatrix[i][j] = matrix_ij;
         ++i;
       }
+
       largest = 0;
       largestRow = -1;
 
       i = j;
       while (i < matrixSize) {
         matrix_ij = circuitMatrix[i][j];
-        k = 0;
-        while (k < j) {
+
+        k = j;
+        while (k--)
           matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
-          ++k;
-        }
+
         circuitMatrix[i][j] = matrix_ij;
         x = Math.abs(matrix_ij);
         if (x >= largest) {
@@ -776,9 +777,8 @@ class CircuitSolver {
       }
 
       pivotArray[j] = largestRow;
-      if (circuitMatrix[j][j] === 0) {
+      if (circuitMatrix[j][j] === 0)
         circuitMatrix[j][j] = 1e-18;
-      }
 
       if (j !== matrixSize - 1) {
         mult = 1 / circuitMatrix[j][j];
