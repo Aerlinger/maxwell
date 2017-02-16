@@ -12,7 +12,11 @@ body {
 
 
   background-color: #FCFCFF !important;
-  background-image: linear-gradient(rgba(221, 223, 244, 0.69) 1px, transparent 1px), linear-gradient(90deg, rgba(221, 223, 244, 0.69) 1px, transparent 1px), linear-gradient(rgba(205, 205, 255, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(205, 205, 255, 0.3) 1px, transparent 1px) !important;
+  background-image:
+          linear-gradient(rgba(26, 39, 244, 0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(26, 39, 244, 0.08) 1px, transparent 1px),
+          linear-gradient(rgba(205, 205, 255, 0.3) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(205, 205, 255, 0.3) 1px, transparent 1px) !important;
   background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px !important;
 }
 

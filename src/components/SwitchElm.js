@@ -69,33 +69,28 @@ class SwitchElm extends CircuitComponent {
     this.calcLeads(32);
     //this.setBboxPt(this.point1, this.point2, this.openhs/2);
 
-    this.ps = new Point(0, 0);
-    this.ps2 = new Point(0, 0);
-
-    let hs1 = ((this.position === 1) ? 0 : 2);
-    let hs2 = ((this.position === 1) ? this.openhs : 2);
-
     renderContext.drawLeads(this);
 
-    this.ps = Util.interpolate(this.lead1, this.lead2, -0.05, hs1);
-    this.ps2 = Util.interpolate(this.lead1, this.lead2, 1.05, hs2);
-
     this.updateDots();
-    if (this.position === 0) {
+    if (this.position === 0)
       renderContext.drawDots(this.point1, this.point2, this);
-    }
 
     // Draw switch "Lever"
-    renderContext.drawLinePt(this.ps, this.ps2, Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
+    let baseOffset = (this.position === 1) ? 0 : 2;
+    let armOffset = (this.position === 1) ? this.openhs : 2;
 
-    renderContext.drawCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
-    renderContext.drawCircle(this.lead2.x, this.lead2.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
+    this.ps = Util.interpolate(this.lead1, this.lead2, -0.05, baseOffset);
+    this.ps2 = Util.interpolate(this.lead1, this.lead2, 1.05, armOffset);
+
+    renderContext.drawLinePt(this.ps, this.ps2, Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
+    renderContext.drawCircle(this.lead2.x, this.lead2.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR);
+    renderContext.drawCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR);
+
 
     renderContext.drawPosts(this);
 
-    if (this.Circuit && this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled())
       super.debugDraw(renderContext);
-    }
   }
 
   static get NAME() {

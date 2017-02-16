@@ -41,8 +41,6 @@ class Switch2Elm extends SwitchElm {
 
   place() {
     super.place();
-    //super.setPoints(...arguments);
-    // @calcLeads(32);
 
     this.swposts = Util.newPointArray(2);
     this.swpoles = Util.newPointArray(3);
@@ -98,7 +96,6 @@ class Switch2Elm extends SwitchElm {
 
     // Switch lever
     renderContext.drawLinePt(this.lead1, this.swpoles[this.position], Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
-
 
     renderContext.drawCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
 

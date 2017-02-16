@@ -77,7 +77,6 @@ class InductorElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-    this.updateDots();
 
     let v1 = this.volts[0];
     let v2 = this.volts[1];

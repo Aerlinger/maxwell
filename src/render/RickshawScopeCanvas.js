@@ -5,8 +5,6 @@ let d3 = require('d3');
 window.d3 = d3;
 let Rickshaw = require('rickshaw');
 
-console.log(Rickshaw);
-
 class RickshawScopeCanvas extends ScopeCanvas {
   constructor(parentUI, scopeDiv, x=800, y=700) {
     super(parentUI, scopeDiv, x, y);
