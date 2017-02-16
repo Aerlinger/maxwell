@@ -29036,7 +29036,7 @@
 	    this.context = this.Canvas.getContext("2d");
 	
 	    if (environment.isBrowser) {
-	      // this.setupScopes();
+	      this.setupScopes();
 	      this.renderPerformance();
 	      window.CircuitUI = this.circuitUI;
 	
@@ -29103,8 +29103,8 @@
 	    this.context.save();
 	    this.context.translate(this.xMargin, this.yMargin);
 	
-	    this.drawText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, Settings.TEXT_COLOR, 1.2 * Settings.TEXT_SIZE);
-	    this.drawText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 600, 8, Settings.TEXT_COLOR, 1.1 * Settings.TEXT_SIZE);
+	    this.drawText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, "#bf4f00", 1.2 * Settings.TEXT_SIZE);
+	    this.drawText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 600, 8, "#000968", 1.1 * Settings.TEXT_SIZE);
 	
 	    if (this.performanceMeter) {
 	      this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
@@ -93000,4 +93000,4 @@
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=bundle.js.map
+//# sourceMappingURL=maxwell.bundle.js.map

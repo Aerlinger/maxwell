@@ -13,6 +13,7 @@ test/fixtures/circuitRenders/**/*.png
 test/fixtures/componentRenders/**/*.png
 test/fixtures/**/*.json
 circuits/v2/
+maxwell.bundle.js
 .env
 **/*.map
 *.graffle

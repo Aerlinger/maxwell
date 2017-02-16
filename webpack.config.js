@@ -6,7 +6,7 @@ module.exports = {
   // debug: true,
   output: {
     path: __dirname + "/dist",
-    filename: "bundle.js"
+    filename: "maxwell.bundle.js"
   },
   module: {
     loaders: [
