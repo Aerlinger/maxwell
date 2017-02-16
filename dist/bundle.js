@@ -20734,10 +20734,7 @@
 	let SwitchElm = __webpack_require__(25);
 	let Util = __webpack_require__(5);
 	
-	let _ = __webpack_require__(13);
 	
-	
-	// Broken
 	class Switch2Elm extends SwitchElm {
 	  static initClass() {
 	
