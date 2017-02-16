@@ -175,10 +175,6 @@ class CircuitSolver {
     this._updateTimings(lit);
   }
 
-  circuitLinear() {
-    return !this.circuitNonLinear;
-  }
-
   _updateTimings(lastIterationTime) {
     this.lastIterTime = lastIterationTime;
 
@@ -203,6 +199,9 @@ class CircuitSolver {
     return this.iterations++;
   }
 
+  circuitLinear() {
+    return !this.circuitNonLinear;
+  }
 
   getStamper() {
     return this.Stamper;
@@ -405,7 +404,6 @@ class CircuitSolver {
       }
     }
   }
-
 
   findInvalidPaths() {
     for (var ce of this.Circuit.getElements()) {
