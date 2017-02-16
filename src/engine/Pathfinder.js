@@ -68,7 +68,7 @@ class Pathfinder {
       var j;
       if (nodeIdx === 0) {
         // Look for posts which have a ground connection. Our path can go through ground!
-        for (j = 0; j < element.getPostCount(); j++) {
+        for (j = 0; j < element.numPosts(); j++) {
           if (element.hasGroundConnection(j) && this.findPath(element.getNode(j), depth)) {
             this.used[0] = false;
             return true;
@@ -76,11 +76,11 @@ class Pathfinder {
         }
       }
 
-      for (j = 0; j < element.getPostCount(); ++j)
+      for (j = 0; j < element.numPosts(); ++j)
         if (element.getNode(j) === nodeIdx) break;
 
       // element Isn't neighboring nodeIdx, continue to the next element
-      if (j === element.getPostCount())
+      if (j === element.numPosts())
         continue;
 
       // Return true if we have a path through ground
@@ -98,7 +98,7 @@ class Pathfinder {
           continue;
       }
 
-      for (var k = 0; k < element.getPostCount(); ++k) {
+      for (var k = 0; k < element.numPosts(); ++k) {
         if (j === k) continue;
 
         if (element.getConnection(j, k) && this.findPath(element.getNode(k), depth)) {
