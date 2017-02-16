@@ -1,0 +1,3 @@
+[submodule "client-app"]
+	path = client-app
+	url = git@github.com:Aerlinger/maxwell-client.git
