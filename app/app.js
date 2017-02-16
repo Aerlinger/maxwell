@@ -46,6 +46,22 @@ var circuit_names = glob.sync(__dirname + "/../circuits/v4/*.json").map(function
   return path.basename(filename, ".json")
 });
 
+app.get('/api/circuits/:circuit_name', function (req, res) {
+  let circuit_name = req.params.circuit_name;
+
+  let circuit_path = path.join(__dirname, `/../circuits/v4/${circuit_name}.json`);
+  console.log(`fetching ${circuit_path}`);
+
+  fs.readFile(circuit_path, function(err, data) {
+    if (!err) {
+      res.json(JSON.parse(data))
+    } else {
+      res.status(500);
+      res.send("Error reading file");
+    }
+  });
+});
+
 app.get('/', function (req, res) {
   res.redirect('/ui')
 });
