@@ -1,3 +1,5 @@
+let webpack = require('webpack');
+
 module.exports = {
   entry: "./src/Maxwell.js",
   devtool: 'source-map',
