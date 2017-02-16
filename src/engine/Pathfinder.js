@@ -58,7 +58,7 @@ class Pathfinder {
 
       if (n1 === 0) {
         // Look for posts which have a ground connection. Our path can go through ground!
-        for (j = 0, end = ce.numPosts(), asc = 0 <= end; asc ? j < end : j > end; asc ? j++ : j--) {
+        for (j = 0; j < ce.numPosts(); ++j) {
           var asc, end;
           if (ce.hasGroundConnection(j) && this.findPath(ce.getNode(j), depth)) {
 //            console.log(ce + " has ground (n1 is 0)")
@@ -68,7 +68,7 @@ class Pathfinder {
         }
       }
 
-      for (j = 0, end1 = ce.numPosts(), asc1 = 0 <= end1; asc1 ? j < end1 : j > end1; asc1 ? j++ : j--) {
+      for (j = 0; j < ce.numPosts(); ++j) {
 //        console.log("get post " + ce.dump() + " " + ce.getNode(j))
         var asc1, end1;
         if (ce.getNode(j) === n1) {
@@ -76,10 +76,8 @@ class Pathfinder {
         }
       }
 
-      // TODO: ENSURE EQUALITY HERE
-      if (j === ce.numPosts()) {
+      if (j === ce.numPosts())
         continue;
-      }
 
       if (ce.hasGroundConnection(j) && this.findPath(0, depth)) {
 //        console.log(ce + " has ground")
@@ -99,7 +97,7 @@ class Pathfinder {
         }
       }
 
-      for (let k = 0, end2 = ce.numPosts(), asc2 = 0 <= end2; asc2 ? k < end2 : k > end2; asc2 ? k++ : k--) {
+      for (let k = 0; k < ce.numPosts(); ++k) {
         if (j === k) { continue; }
 
 //        console.log(ce + " " + ce.getNode(j) + " - " + ce.getNode(k))
@@ -112,7 +110,6 @@ class Pathfinder {
       }
     }
 
-    //      console.log(n1 + " failed")
     this.used[n1] = false;
     return false;
   }

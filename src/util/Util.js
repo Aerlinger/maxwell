@@ -227,7 +227,7 @@ class Util {
 
     let arrayStr = "[";
 
-    for (let i = 0, end = matrixRowCount, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    for (let i = 0; i < matrixRowCount; ++i) {
       arrayStr += Util.tidyFloat(array[i]);
 
       if(i !== (matrixRowCount - 1)) {

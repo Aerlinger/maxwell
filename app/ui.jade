@@ -12,6 +12,73 @@ block header
       return str.length === 1 && str.match(/[a-z]/i);
     }
 
+    function bindKeyEvents(circuitContext) {
+      document.addEventListener('keydown', function (event) {
+        var charCode = String.fromCharCode(event.which);
+        var keycode = isLetter(charCode) ? charCode : event.which;
+
+        switch (keycode) {
+          case "W":
+            console.log("WireElm");
+            circuitContext.setPlaceComponent("WireElm");
+            break;
+          case 'R':
+            circuitContext.setPlaceComponent("ResistorElm");
+            break;
+          case 'G':
+            circuitContext.setPlaceComponent("GroundElm");
+            break;
+          case 'S':
+            circuitContext.setPlaceComponent("SwitchElm");
+            break;
+          case 'C':
+            circuitContext.setPlaceComponent("CapacitorElm");
+            break;
+          case 'I':
+            circuitContext.setPlaceComponent("InductorElm");
+            break;
+          case 'V':
+            circuitContext.setPlaceComponent("VoltageElm");
+            break;
+          case 'A':
+            circuitContext.setPlaceComponent("RailElm");
+            break;
+          case 'O':
+            circuitContext.setPlaceComponent("OpAmpElm");
+            break;
+          case "D":
+            circuitContext.setPlaceComponent("DiodeElm");
+            break;
+          case "T":
+            circuitContext.setPlaceComponent("TransistorElm");
+            break;
+          case "M":
+            circuitContext.setPlaceComponent("MosfetElm");
+            break;
+          case "Q":
+            circuitContext.clearPlaceComponent();
+            break;
+
+            // ESC
+          case 27:
+            circuitContext.resetSelection();
+            break;
+
+            // Backspace
+          case 8:
+            if (document.activeElement && document.activeElement.constructor.name != "HTMLInputElement") {
+              circuitContext.remove(circuitContext.getSelectedComponents());
+            }
+            break;
+
+            // Space
+          case 32:
+            circuitContext.togglePause();
+            break;
+        }
+      })
+    }
+
     function bindCircuitEvents(circuitContext) {
       circuitContext.onSelectionChanged = function (changeObj) {
         console.log("SELECTION CHANGED:", changeObj);
@@ -88,116 +155,24 @@ block header
           });
 
           bindCircuitEvents(circuitContext);
-
-          document.addEventListener('keydown', function (event) {
-            var charCode = String.fromCharCode(event.which);
-            var keycode = isLetter(charCode) ? charCode : event.which;
-
-            switch (keycode) {
-              case "W":
-                console.log("WireElm");
-                circuitContext.setPlaceComponent("WireElm");
-                break;
-              case 'R':
-                circuitContext.setPlaceComponent("ResistorElm");
-                break;
-              case 'G':
-                circuitContext.setPlaceComponent("GroundElm");
-                break;
-              case 'S':
-                circuitContext.setPlaceComponent("SwitchElm");
-                break;
-              case 'C':
-                circuitContext.setPlaceComponent("CapacitorElm");
-                break;
-              case 'I':
-                circuitContext.setPlaceComponent("InductorElm");
-                break;
-              case 'V':
-                circuitContext.setPlaceComponent("VoltageElm");
-                break;
-              case 'A':
-                circuitContext.setPlaceComponent("RailElm");
-                break;
-              case 'O':
-                circuitContext.setPlaceComponent("OpAmpElm");
-                break;
-              case "D":
-                circuitContext.setPlaceComponent("DiodeElm");
-                break;
-              case "T":
-                circuitContext.setPlaceComponent("TransistorElm");
-                break;
-              case "M":
-                circuitContext.setPlaceComponent("MosfetElm");
-                break;
-              case "Q":
-                circuitContext.clearPlaceComponent();
-                break;
-
-                // ESC
-              case 27:
-                circuitContext.resetSelection();
-                break;
-
-                // Backspace
-              case 8:
-                if (document.activeElement && document.activeElement.constructor.name != "HTMLInputElement") {
-                  circuitContext.remove(circuitContext.getSelectedComponents());
-                }
-                break;
-
-                // Space
-              case 32:
-                circuitContext.togglePause();
-                break;
-            }
-          })
+          bindKeyEvents(circuitContext);
         });
       });
 
       if (canvas) {
-        var ctx = canvas.getContext('2d');
-        //ctx = Sketch.augment(ctx, {autoclear: false});
-
-        // resize the canvas to fill browser window dynamically
-        //window.addEventListener('resize', resizeCanvas, false);
-
         function resizeCanvas() {
           canvas.width = window.innerWidth;
           canvas.height = window.innerHeight;
-
-          //grid.width = window.innerWidth;
-          //grid.height = window.innerHeight;
-
-          /**
-           * Your drawings need to be inside this function otherwise they will be reset when
-           * you resize the browser window and the canvas goes will be cleared.
-           */
         }
 
         resizeCanvas();
-
-        function redraw() {
-          // draw updates on resize
-
-          //ctx.style = "#F00";
-          //ctx.fillRect(500, 500, 100, 200);
-        }
-
       }
     });
 
 block content
   canvas#performance_sparkline(width="200", height="40")
-  //canvas#grid.grid
   canvas#canvas.maxwell
 
-  //.plot-pane
-    .plot-context
-    button(class="close-button", aria-label="Close alert", type="button")
-      span(aria-hidden="true")
-        | &times;
 
   #main_nav.top-bar.sidepanel
     .top-bar-left

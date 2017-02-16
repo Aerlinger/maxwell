@@ -241,13 +241,14 @@ class CircuitCanvas extends Observer {
 
     this.context.save();
 
-    let ds = Settings.CURRENT_SEGMENT_LENGTH;
+    var ds = Settings.CURRENT_SEGMENT_LENGTH;
 
-    let dx = ptB.x - ptA.x;
-    let dy = ptB.y - ptA.y;
-    let dn = Math.sqrt((dx * dx) + (dy * dy));
+    var dx = ptB.x - ptA.x;
+    var dy = ptB.y - ptA.y;
+    var dn = Math.sqrt((dx * dx) + (dy * dy));
 
-    let newPos;
+    var newPos;
+
     if (typeof(component) == "number") {
       newPos = component
     } else {
@@ -257,17 +258,17 @@ class CircuitCanvas extends Observer {
     }
 
     while (newPos < dn) {
-      let xOffset = ptA.x + ((newPos * dx) / dn);
-      let yOffset = ptA.y + ((newPos * dy) / dn);
+      var xOffset = ptA.x + ((newPos * dx) / dn);
+      var yOffset = ptA.y + ((newPos * dy) / dn);
 
       if (Settings.CURRENT_DISPLAY_TYPE === Settings.CURENT_TYPE_DOTS) {
         this.drawCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR);
       } else {
-        let xOffset0 = xOffset - ((3 * dx) / dn);
-        let yOffset0 = yOffset - ((3 * dy) / dn);
+        var xOffset0 = xOffset - ((3 * dx) / dn);
+        var yOffset0 = yOffset - ((3 * dy) / dn);
 
-        let xOffset1 = xOffset + ((3 * dx) / dn);
-        let yOffset1 = yOffset + ((3 * dy) / dn);
+        var xOffset1 = xOffset + ((3 * dx) / dn);
+        var yOffset1 = yOffset + ((3 * dy) / dn);
 
         //this.context.save();
         this.context.strokeStyle = Settings.CURRENT_COLOR;
@@ -555,7 +556,7 @@ class CircuitCanvas extends Observer {
   }
 
   drawCircle(x, y, radius, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR, fillColor = Settings.FG_COLOR) {
-    this.context.save();
+    // this.context.save();
 
     this.context.beginPath();
     this.context.arc(x, y, radius, 0, 2 * Math.PI);
@@ -572,7 +573,7 @@ class CircuitCanvas extends Observer {
     }
 
     this.context.closePath();
-    this.context.restore();
+    // this.context.restore();
   }
 
   drawRect(x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR) {

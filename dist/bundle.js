@@ -265,9 +265,8 @@
 	  }
 	
 	  setParameters(component_params) {
-	    if (component_params && (component_params.constructor === Array)) {
+	    if (component_params && (component_params.constructor === Array))
 	      console.error(`component_params ${component_params} is an array on ${this.constructor.name}`)
-	    }
 	
 	    let {Fields} = this.constructor;
 	
@@ -309,13 +308,10 @@
 	      }
 	    }
 	
-	    let unmatched_params = ((() => {
-	      let result = [];
-	      for (let param in component_params) {
-	        result.push(param);
-	      }
-	      return result;
-	    })());
+	    let unmatched_params = [];
+	
+	    for (let param in component_params)
+	      unmatched_params.push(param);
 	
 	    if (unmatched_params.length > 0) {
 	      console.error(`The following parameters [${unmatched_params.join(" ")}] do not belong in ${this.getName()}`);
@@ -485,7 +481,7 @@
 	  // Called on reactive elements such as inductors and capacitors.
 	
 	  getPostAt(x, y) {
-	    for (let postIdx = 0, end = this.numPosts(), asc = 0 <= end; asc ? postIdx < end : postIdx > end; asc ? postIdx++ : postIdx--) {
+	    for (let postIdx = 0; postIdx < this.numPosts(); postIdx++) {
 	      let post = this.getPost(postIdx);
 	
 	      if ((post.x === x) && (post.y === y)) {
@@ -718,14 +714,8 @@
 	  }
 	
 	  setBboxPt(p1, p2, width = 1) {
-	    //let width = Math.max(Math.abs(x2 - x1), 3);
-	    //let height = Math.max(Math.abs(y2 - y1), 3);
-	
 	    let deltaX = (this.dy()/this.dn() * width);
 	    let deltaY = (this.dx()/this.dn() * width);
-	
-	    //let deltaX = 0;
-	    //let deltaY = 0;
 	
 	    this.setBbox(p1.x - deltaX/2, p1.y - deltaY/2, p2.x + deltaX/2, p2.y + deltaY/2);
 	  }
@@ -1640,7 +1630,7 @@
 	
 	    let arrayStr = "[";
 	
-	    for (let i = 0, end = matrixRowCount, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+	    for (let i = 0; i < matrixRowCount; ++i) {
 	      arrayStr += Util.tidyFloat(array[i]);
 	
 	      if(i !== (matrixRowCount - 1)) {
@@ -28263,7 +28253,7 @@
 	
 	      if (n1 === 0) {
 	        // Look for posts which have a ground connection. Our path can go through ground!
-	        for (j = 0, end = ce.numPosts(), asc = 0 <= end; asc ? j < end : j > end; asc ? j++ : j--) {
+	        for (j = 0; j < ce.numPosts(); ++j) {
 	          var asc, end;
 	          if (ce.hasGroundConnection(j) && this.findPath(ce.getNode(j), depth)) {
 	//            console.log(ce + " has ground (n1 is 0)")
@@ -28273,7 +28263,7 @@
 	        }
 	      }
 	
-	      for (j = 0, end1 = ce.numPosts(), asc1 = 0 <= end1; asc1 ? j < end1 : j > end1; asc1 ? j++ : j--) {
+	      for (j = 0; j < ce.numPosts(); ++j) {
 	//        console.log("get post " + ce.dump() + " " + ce.getNode(j))
 	        var asc1, end1;
 	        if (ce.getNode(j) === n1) {
@@ -28281,10 +28271,8 @@
 	        }
 	      }
 	
-	      // TODO: ENSURE EQUALITY HERE
-	      if (j === ce.numPosts()) {
+	      if (j === ce.numPosts())
 	        continue;
-	      }
 	
 	      if (ce.hasGroundConnection(j) && this.findPath(0, depth)) {
 	//        console.log(ce + " has ground")
@@ -28304,7 +28292,7 @@
 	        }
 	      }
 	
-	      for (let k = 0, end2 = ce.numPosts(), asc2 = 0 <= end2; asc2 ? k < end2 : k > end2; asc2 ? k++ : k--) {
+	      for (let k = 0; k < ce.numPosts(); ++k) {
 	        if (j === k) { continue; }
 	
 	//        console.log(ce + " " + ce.getNode(j) + " - " + ce.getNode(k))
@@ -28317,7 +28305,6 @@
 	      }
 	    }
 	
-	    //      console.log(n1 + " failed")
 	    this.used[n1] = false;
 	    return false;
 	  }
@@ -29272,13 +29259,14 @@
 	
 	    this.context.save();
 	
-	    let ds = Settings.CURRENT_SEGMENT_LENGTH;
+	    var ds = Settings.CURRENT_SEGMENT_LENGTH;
 	
-	    let dx = ptB.x - ptA.x;
-	    let dy = ptB.y - ptA.y;
-	    let dn = Math.sqrt((dx * dx) + (dy * dy));
+	    var dx = ptB.x - ptA.x;
+	    var dy = ptB.y - ptA.y;
+	    var dn = Math.sqrt((dx * dx) + (dy * dy));
 	
-	    let newPos;
+	    var newPos;
+	
 	    if (typeof(component) == "number") {
 	      newPos = component
 	    } else {
@@ -29288,17 +29276,17 @@
 	    }
 	
 	    while (newPos < dn) {
-	      let xOffset = ptA.x + ((newPos * dx) / dn);
-	      let yOffset = ptA.y + ((newPos * dy) / dn);
+	      var xOffset = ptA.x + ((newPos * dx) / dn);
+	      var yOffset = ptA.y + ((newPos * dy) / dn);
 	
 	      if (Settings.CURRENT_DISPLAY_TYPE === Settings.CURENT_TYPE_DOTS) {
 	        this.drawCircle(xOffset, yOffset, Settings.CURRENT_RADIUS, 1, Settings.CURRENT_COLOR);
 	      } else {
-	        let xOffset0 = xOffset - ((3 * dx) / dn);
-	        let yOffset0 = yOffset - ((3 * dy) / dn);
+	        var xOffset0 = xOffset - ((3 * dx) / dn);
+	        var yOffset0 = yOffset - ((3 * dy) / dn);
 	
-	        let xOffset1 = xOffset + ((3 * dx) / dn);
-	        let yOffset1 = yOffset + ((3 * dy) / dn);
+	        var xOffset1 = xOffset + ((3 * dx) / dn);
+	        var yOffset1 = yOffset + ((3 * dy) / dn);
 	
 	        //this.context.save();
 	        this.context.strokeStyle = Settings.CURRENT_COLOR;
@@ -29586,7 +29574,7 @@
 	  }
 	
 	  drawCircle(x, y, radius, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR, fillColor = Settings.FG_COLOR) {
-	    this.context.save();
+	    // this.context.save();
 	
 	    this.context.beginPath();
 	    this.context.arc(x, y, radius, 0, 2 * Math.PI);
@@ -29603,7 +29591,7 @@
 	    }
 	
 	    this.context.closePath();
-	    this.context.restore();
+	    // this.context.restore();
 	  }
 	
 	  drawRect(x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR) {

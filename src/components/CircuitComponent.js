@@ -83,9 +83,8 @@ class CircuitComponent {
   }
 
   setParameters(component_params) {
-    if (component_params && (component_params.constructor === Array)) {
+    if (component_params && (component_params.constructor === Array))
       console.error(`component_params ${component_params} is an array on ${this.constructor.name}`)
-    }
 
     let {Fields} = this.constructor;
 
@@ -127,13 +126,10 @@ class CircuitComponent {
       }
     }
 
-    let unmatched_params = ((() => {
-      let result = [];
-      for (let param in component_params) {
-        result.push(param);
-      }
-      return result;
-    })());
+    let unmatched_params = [];
+
+    for (let param in component_params)
+      unmatched_params.push(param);
 
     if (unmatched_params.length > 0) {
       console.error(`The following parameters [${unmatched_params.join(" ")}] do not belong in ${this.getName()}`);
@@ -303,7 +299,7 @@ class CircuitComponent {
   // Called on reactive elements such as inductors and capacitors.
 
   getPostAt(x, y) {
-    for (let postIdx = 0, end = this.numPosts(), asc = 0 <= end; asc ? postIdx < end : postIdx > end; asc ? postIdx++ : postIdx--) {
+    for (let postIdx = 0; postIdx < this.numPosts(); postIdx++) {
       let post = this.getPost(postIdx);
 
       if ((post.x === x) && (post.y === y)) {
@@ -536,14 +532,8 @@ class CircuitComponent {
   }
 
   setBboxPt(p1, p2, width = 1) {
-    //let width = Math.max(Math.abs(x2 - x1), 3);
-    //let height = Math.max(Math.abs(y2 - y1), 3);
-
     let deltaX = (this.dy()/this.dn() * width);
     let deltaY = (this.dx()/this.dn() * width);
-
-    //let deltaX = 0;
-    //let deltaY = 0;
 
     this.setBbox(p1.x - deltaX/2, p1.y - deltaY/2, p2.x + deltaX/2, p2.y + deltaY/2);
   }
