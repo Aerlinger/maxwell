@@ -19,7 +19,7 @@
     "jquery-ui-bundle": "^1.11.4",
     "jquery-ui-dist": "^1.12.1",
     "lodash": "4.1.0",
-    "rickshaw": "1.5.10",
+    "rickshaw": "1.6.0",
     "smoothie": "^1.27.0"
   },
   "devDependencies": {
