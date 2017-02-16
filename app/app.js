@@ -63,18 +63,18 @@ app.get('/api/circuits/:circuit_name', function (req, res) {
 });
 
 app.get('/', function (req, res) {
-  res.redirect('/ui')
+  res.redirect('/circuit')
 });
 
 app.get('/plot', function (req, res) {
   res.render('plot', {});
 });
 
-app.get('/ui', function (req, res) {
-  res.redirect('/ui/opint')
+app.get('/circuit', function (req, res) {
+  res.redirect('/circuit/deccounter')
 });
 
-app.get('/ui/:circuit_name', function (req, res) {
+app.get('/circuit/:circuit_name', function (req, res) {
   res.render('ui', {
     examples: examples,
     circuit_name: req.params.circuit_name,
@@ -96,7 +96,7 @@ app.get('/d3line', function (req, res) {
   res.render('d3line');
 });
 
-app.get('/circuits/:circuit_name', function (req, res) {
+app.get('/orig_circuits/:circuit_name', function (req, res) {
   // console.log(__dirname + "../circuits/v3/*.json")
   console.log(circuit_names);
 

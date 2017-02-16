@@ -181,20 +181,6 @@ block content
         li.menu-text Maxwell
         li
           a(href='#') Circuit
-          ul.menu.vertical
-            li
-              a(href='#') One
-            li
-              a(href='#') Two
-              ul.menu.vertical
-                li
-                  a(href='#') One
-                li
-                  a(href='#') Two
-                li
-                  a(href='#') Three
-            li
-              a(href='#') Three
         li
           a(href='#') Edit
         li
@@ -202,7 +188,7 @@ block content
           ul.menu.vertical
             - for (var example in examples)
               li
-                a.item(href="/ui/" + examples[example])= example
+                a.item(href="/circuit/" + examples[example])= example
 
     .top-bar-right
       ul.menu
@@ -230,20 +216,20 @@ block content
         ul#circuit_list.is-active.menu.vertical(data-accordion-menu)
           - for (var category in library)
             li
-              a.item(href="/ui/" + category)= category
+              a.item(href="/circuit/" + category)= category
               ul.nested.vertical.menu.is-active
                 - for (var circuit in library[category])
                   - if (typeof library[category][circuit] == "object")
                     li
-                      a.item(href="/ui/" + circuit)= circuit
+                      a.item(href="/circuit/" + circuit)= circuit
                       ul.nested.vertical.menu.is-active
                         - for (var subcircuit in library[category][circuit])
                           li
-                            a.item(href="/ui/" + subcircuit)= library[category][circuit][subcircuit]
+                            a.item(href="/circuit/" + subcircuit)= library[category][circuit][subcircuit]
 
                   - else
                     li
-                      a.item(href="/ui/" + circuit)= library[category][circuit]
+                      a.item(href="/circuit/" + circuit)= library[category][circuit]
 
 
   #edit_component_pane.off-canvas.edit-form.position-right(data-off-canvas='')

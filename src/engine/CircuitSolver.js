@@ -671,20 +671,20 @@ class CircuitSolver {
    @param (output) pivotArray pivot index
    */
   luFactor(circuitMatrix, pivotArray) {
-    var i, j, k, largest, largestRow, matrix_ij, mult, x;
+    var j, largest, largestRow;
 
     var matrixSize = circuitMatrix.length;
 
     var scaleFactors = new Array(matrixSize);
 
     // i = 0;
-    i = matrixSize;
+    var i = matrixSize;
     while (i--) {
       largest = 0;
 
       j = matrixSize;
       while (j--) {
-        x = Math.abs(circuitMatrix[i][j]);
+        var x = Math.abs(circuitMatrix[i][j]);
         if (x > largest)
           largest = x;
       }
@@ -695,9 +695,9 @@ class CircuitSolver {
     while (j < matrixSize) {
       i = 0;
       while (i < j) {
-        matrix_ij = circuitMatrix[i][j];
+        var matrix_ij = circuitMatrix[i][j];
 
-        k = i;
+        var k = i;
         while (k--)
           matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
 
@@ -710,14 +710,14 @@ class CircuitSolver {
 
       i = j;
       while (i < matrixSize) {
-        matrix_ij = circuitMatrix[i][j];
+        var matrix_ij = circuitMatrix[i][j];
 
-        k = j;
+        var k = j;
         while (k--)
           matrix_ij -= circuitMatrix[i][k] * circuitMatrix[k][j];
 
         circuitMatrix[i][j] = matrix_ij;
-        x = Math.abs(matrix_ij);
+        var x = Math.abs(matrix_ij);
         if (x >= largest) {
           largest = x;
           largestRow = i;
@@ -726,9 +726,9 @@ class CircuitSolver {
       }
 
       if (j !== largestRow) {
-        k = 0;
+        var k = 0;
         while (k < matrixSize) {
-          x = circuitMatrix[largestRow][k];
+          var x = circuitMatrix[largestRow][k];
           circuitMatrix[largestRow][k] = circuitMatrix[j][k];
           circuitMatrix[j][k] = x;
           ++k;
@@ -742,7 +742,7 @@ class CircuitSolver {
         circuitMatrix[j][j] = 1e-18;
 
       if (j !== matrixSize - 1) {
-        mult = 1 / circuitMatrix[j][j];
+        var mult = 1 / circuitMatrix[j][j];
         i = j + 1;
         while (i !== matrixSize) {
           circuitMatrix[i][j] *= mult;

@@ -21,20 +21,24 @@ class AntennaElm extends RailElm {
     return stamper.stampVoltageSource(0, this.nodes[0], this.voltSource);
   }
 
-
   getVoltage() {
-    this.fmphase += 2 * Math.PI * (2200 + (Math.sin(2 * Math.PI * this.getParentCircuit().getTime() * 13) * 100)) * this.getParentCircuit().timeStep();
 
-    let fm = 3 * Math.sin(this.fmphase);
+    if (this.Circuit) {
+      this.fmphase += 2 * Math.PI * (2200 + (Math.sin(2 * Math.PI * this.Circuit.getTime() * 13) * 100)) * this.getParentCircuit().timeStep();
 
-    let pi = Math.PI;
-    let t = this.getParentCircuit().time;
+      let fm = 3 * Math.sin(this.fmphase);
 
-    let wave1 = Math.sin(2 * pi * t * 3000) * (1.3 + Math.sin(2 * pi * t * 12)) * 3;
-    let wave2 = Math.sin(2 * pi * t * 2710) * (1.3 + Math.sin(2 * pi * t * 13)) * 3;
-    let wave3 = (Math.sin(2 * pi * t * 2433) * (1.3 + Math.sin(2 * pi * t * 14)) * 3) + fm;
+      let pi = Math.PI;
+      let t = this.getParentCircuit().time;
 
-    return wave1 + wave2 + wave3;
+      let wave1 = Math.sin(2 * pi * t * 3000) * (1.3 + Math.sin(2 * pi * t * 12)) * 3;
+      let wave2 = Math.sin(2 * pi * t * 2710) * (1.3 + Math.sin(2 * pi * t * 13)) * 3;
+      let wave3 = (Math.sin(2 * pi * t * 2433) * (1.3 + Math.sin(2 * pi * t * 14)) * 3) + fm;
+
+      return wave1 + wave2 + wave3;
+    } else {
+      return 0;
+    }
   }
 
   static get NAME() {

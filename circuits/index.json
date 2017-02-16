@@ -6,17 +6,12 @@
     "induct": "Inductor",
     "lrc": "LRC Circuit",
     "voltdivide": "Voltage Divider",
-    "pot": "Potentiometer",
-    "potdivide": "Potentiometer Divider",
     "thevenin": "Thevenin's Theorem",
     "norton": "Norton's Theorem"
   },
   "A/C Circuits": {
     "capac": "Capacitor",
     "inductac": "Inductor",
-    "capmultcaps": "Caps of Various Capacitances",
-    "capmultfreq": "Caps w/ Various Frequencies",
-    "indmultind": "Inductors of Various Inductances",
     "indmultfreq": "Inductors w/ Various Frequencies",
     "impedance": "Impedances of Same Magnitude",
     "res-series": "Series Resonance",
@@ -36,28 +31,12 @@
     "ringing": "Band-pass with Ringing"
   },
   "Other Passive Circuits": {
-    "Series/Parallel": {
-      "indseries": "Inductors in Series",
-      "indpar": "Inductors in Parallel",
-      "capseries": "Caps in Series",
-      "cappar": "Caps in Parallel"
-    },
     "Transformers": {
       "transformer": "Transformer",
       "transformerdc": "Transformer w/ DC",
       "transformerup": "Step-Up Transformer",
       "transformerdown": "Step-Down Transformer",
       "longdist": "Long-Distance Power Transmission"
-    },
-    "Relays": {
-      "relay": "Relay",
-      "relayand": "Relay AND",
-      "relayor": "Relay OR",
-      "relayxor": "Relay XOR",
-      "relaymux": "Relay Mux",
-      "relayff": "Relay Flip-Flop",
-      "relaytff": "Relay Toggle Flip-Flop",
-      "relayctr": "Relay Counter"
     },
     "3way": "3-Way Light Switches",
     "4way": "3- and 4-Way Light Switches",
@@ -72,12 +51,7 @@
     "grid": "Resistor Grid",
     "grid2": "Resistor Grid 2",
     "cube": "Resistor Cube",
-    "Coupled LC's": {
-      "coupled1": "LC Modes (2)",
-      "coupled2": "Weak Coupling",
-      "coupled3": "LC Modes (3)",
-      "ladder": "LC Ladder"
-    },
+    "ladder": "LC Ladder",
     "phaseseq": "Phase-Sequence Network",
     "lissa": "Lissajous Figures",
     "Diodes": {
@@ -146,14 +120,12 @@
     "opint-current": "LM741 Current Limits"
   },
   "Transistors": {
-    "npn": "NPN Transistor",
-    "pnp": "PNP Transistor",
     "transswitch": "Switch",
     "follower": "Emitter Follower",
     "Multivibrators": {
-      "multivib-a": "Astable Multivib",
-      "multivib-bi": "Bistable Multivib (Flip-Flop)",
-      "multivib-mono": "Monostable Multivib (One-Shot)"
+      "multivib-a": "Astable Multivibrator",
+      "multivib-bi": "Bistable Multivibrator (Flip-Flop)",
+      "multivib-mono": "Monostable Multivibrator (One-Shot)"
     },
     "ceamp": "Common-Emitter Amplifier",
     "phasesplit": "Unity-Gain Phase Splitter",
@@ -178,12 +150,6 @@
     }
   },
   "MOSFETs": {
-    "nmosfet": "n-MOSFET",
-    "pmosfet": "p-MOSFET",
-    "mosswitch": "Switch",
-    "mosfollower": "Source Follower",
-    "moscurrentsrc": "Current Source",
-    "moscurrentramp": "Current Ramp",
     "mosmirror": "Current Mirror",
     "mosfetamp": "Common-Source Amplifier",
     "cmosinverter": "CMOS Inverter",
@@ -200,9 +166,7 @@
     "inv-osc": "Inverter Oscillator"
   },
   "555 Timer Chip": {
-    "555square": "Square Wave Generator",
     "555int": "555 Timer Internals",
-    "555saw": "Sawtooth Oscillator",
     "555lowduty": "Low-duty-cycle Oscillator",
     "555monostable": "Monostable Multivibrator",
     "555pulsemod": "Pulse Width Modulator",
@@ -218,21 +182,6 @@
     "allpass2": "Allpass w/ Square"
   },
   "Logic Families": {
-    "RTL": {
-      "rtlinverter": "RTL Inverter",
-      "rtlnor": "RTL NOR",
-      "rtlnand": "RTL NAND"
-    },
-    "DTL": {
-      "dtlinverter": "DTL Inverter",
-      "dtlnand": "DTL NAND",
-      "dtlnor": "DTL NOR"
-    },
-    "TTL": {
-      "ttlinverter": "TTL Inverter",
-      "ttlnand": "TTL NAND",
-      "ttlnor": "TTL NOR"
-    },
     "NMOS": {
       "nmosinverter": "NMOS Inverter",
       "nmosinverter2": "NMOS Inverter 2",
@@ -245,17 +194,6 @@
       "cmosxor": "CMOS XOR",
       "cmosff": "CMOS Flip-Flop",
       "cmosmsff": "CMOS Master-Slave Flip-Flop"
-    },
-    "ECL": {
-      "eclnor": "ECL NOR/OR"
-    },
-    "Ternary": {
-      "3-cgand": "CGAND",
-      "3-cgor": "CGOR",
-      "3-invert": "Complement (F210)",
-      "3-f211": "F211",
-      "3-f220": "F220",
-      "3-f221": "F221"
     }
   },
   "Combinational Logic": {
@@ -309,63 +247,16 @@
     "freqdouble": "Frequency Doubler"
   },
   "Transmission Lines": {
-    "tl": "Simple TL",
-    "tlstand": "Standing Wave",
     "tlterm": "Termination",
     "tlmismatch": "Mismatched lines (Pulse)",
-    "tlmis1": "Mismatched lines (Standing Wave)",
     "tlmatch1": "Impedance Matching (L-Section)",
     "tlmatch2": "Impedance Matching (Shunt Stub)",
-    "tlfreq": "Stub Frequency Response",
     "tllopass": "Low-Pass Filter",
     "tllight": "Light Switch"
   },
-  "Misc. Devices": {
-    "JFETs": {
-      "jfetcurrentsrc": "JFET Current Source",
-      "jfetfollower": "JFET Follower",
-      "jfetfollower-nooff": "JFET Follower w/zero offset",
-      "jfetamp": "Common-Source Amplifier",
-      "volume": "Volume Control"
-    },
-    "Tunnel Diodes": {
-      "tdiode": "I/V Curve",
-      "tdosc": "LC Oscillator",
-      "tdrelax": "Relaxation Oscillator"
-    },
-    "Memristors": {
-      "mr": "Memristor",
-      "mr-sine": "Sine Wave",
-      "mr-square": "Square Wave",
-      "mr-triangle": "Triangle Wave",
-      "mr-sine2": "Hard-Switching 1",
-      "mr-sine3": "Hard-Switching 2",
-      "mr-crossbar": "Crossbar Memory"
-    },
-    "Triodes": {
-      "triode": "Triode",
-      "triodeamp": "Amplifier"
-    },
-    "Silicon-Controlled Rectifiers": {
-      "scr": "SCR",
-      "scractrig": "AC Trigger"
-    },
-    "Current Conveyor": {
-      "cc2": "CCII+",
-      "cc2n": "CCII-",
-      "ccinductor": "Inductor Simulator",
-      "cc2imp": "CCII+ Implementation",
-      "cc2impn": "CCII- Implementation",
-      "cciamp": "Current Amplifier",
-      "ccvccs": "VCCS",
-      "ccdiff": "Current Differentiator",
-      "ccint": "Current Integrator",
-      "ccitov": "Current-Controlled Voltage Source"
-    },
-    "Spark Gap": {
-      "spark-sawtooth": "Sawtooth Generator",
-      "tesla": "Tesla Coil",
-      "spark-marx": "Marx Generator"
-    }
+  "Spark Gap": {
+    "spark-sawtooth": "Sawtooth Generator",
+    "tesla": "Tesla Coil",
+    "spark-marx": "Marx Generator"
   }
 }

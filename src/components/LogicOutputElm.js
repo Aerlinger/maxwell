@@ -50,7 +50,7 @@ class LogicOutputElm extends CircuitComponent {
   }
 
   draw(renderContext) {
-    let s = this.volts < this.threshold ? "L" : "H";
+    let s = this.volts < this.threshold ? "0" : "1";
 
     if (this.isTernary()) {
       if (this.volts[0] > 3.75) {

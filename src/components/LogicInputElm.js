@@ -56,7 +56,7 @@ class LogicInputElm extends SwitchElm {
   }
 
   draw(renderContext) {
-    let s = this.position === 0 ? "L" : "H";
+    let s = this.position === 0 ? "0" : "1";
 
     if (this.isNumeric()) {
       s = `${this.position}`;
