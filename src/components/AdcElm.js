@@ -31,7 +31,7 @@ class AdcElm extends ChipElm {
     this.sizeY = (this.bits > 2) ? this.bits : 2;
     this.pins = new Array(this.numPosts());
 
-    for (let i = 0, end = this.bits, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    for (let i = 0; i < this.bits; ++i) {
       this.pins[i] = new ChipElm.Pin(this.bits - 1 - i, ChipElm.SIDE_E, `D${i}`);
       this.pins[i].output = true;
     }
@@ -42,27 +42,14 @@ class AdcElm extends ChipElm {
 
   execute() {
     let imax = (1 << this.bits) - 1;
-
     let val = (imax * this.volts[this.bits]) / this.volts[this.bits + 1];
-
     let ival = Math.floor(val);
 
     ival = Math.min(imax, Math.max(0, ival));
 
-    return __range__(0, this.bits, false).map((i) =>
-      this.pins[i].value = ((ival & (1 << i)) !== 0));
+    for (i=0; i < this.bits; ++i)
+      this.pins[i].value = ((ival & (1 << i)) !== 0)
   }
 }
 
 module.exports = AdcElm;
-
-
-function __range__(left, right, inclusive) {
-  let range = [];
-  let ascending = left < right;
-  let end = !inclusive ? right : ascending ? right + 1 : right - 1;
-  for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-    range.push(i);
-  }
-  return range;
-}

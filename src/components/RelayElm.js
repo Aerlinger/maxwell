@@ -89,37 +89,10 @@ class RelayElm extends CircuitComponent {
 
     this.calcLeads(32);
 
-    this.swposts = ((() => {
-      let result = [];
-      for (j = 0, end = this.poleCount, asc = 0 <= end; asc ? j < end : j > end; asc ? j++ : j--) {
-        var asc, end;
-        result.push((() => {
-          let result1 = [];
-          for (i = 0; i < 3; i++) {
-            result1.push(new Point(0, 0));
-          }
-          return result1;
-        })());
-      }
-      return result;
-    })());
-
-    this.swpoles = ((() => {
-      let result2 = [];
-      for (j = 0, end1 = this.poleCount, asc1 = 0 <= end1; asc1 ? j < end1 : j > end1; asc1 ? j++ : j--) {
-        var asc1, end1;
-        result2.push((() => {
-          let result3 = [];
-          for (i = 0; i < 3; i++) {
-            result3.push(new Point(0, 0));
-          }
-          return result3;
-        })());
-      }
-      return result2;
-    })());
-
     for (let i = 0; i < this.poleCount; ++i) {
+      this.swposts[i] = new Array(3);
+      this.swpoles[i] = new Array(3);
+
       for (j = 0; j < 3; j++) {
         this.swposts[i][j] = new Point(0, 0);
         this.swpoles[i][j] = new Point(0, 0);
@@ -152,7 +125,6 @@ class RelayElm extends CircuitComponent {
     if (n < (3 * this.poleCount))
       return this.swposts[Math.floor(n / 3)][n % 3];
 
-
     return this.coilPosts[n - (3 * this.poleCount)];
   }
 
@@ -176,17 +148,16 @@ class RelayElm extends CircuitComponent {
     this.coilCurrent = 0;
     this.coilCurCount = 0;
 
-    __range__(0, this.poleCount, false).map((i) =>
-      this.switchCurrent[i] = this.switchCurCount[i] = 0);
+    for (let p=0; p<this.poleCount; ++p)
+      this.switchCurrent[i] = this.switchCurCount[i] = 0;
   }
 
   stamp(stamper) {
-    if (this.isTrapezoidal()) {
+    if (this.isTrapezoidal())
       this.compResistance = (2 * this.inductance) / this.getParentCircuit().timeStep();
     // backward euler
-    } else {
+    else
       this.compResistance = this.inductance / this.getParentCircuit().timeStep();
-    }
 
     stamper.stampResistor(this.nodes[this.nCoil1], this.nodes[this.nCoil3], this.compResistance);
     stamper.stampRightSide(this.nodes[this.nCoil1]);
@@ -194,23 +165,18 @@ class RelayElm extends CircuitComponent {
 
     stamper.stampResistor(this.nodes[this.nCoil3], this.nodes[this.nCoil2], this.coilR);
 
-    __range__(0, (3 * this.poleCount), false).map((i) =>
-      //console.log("STAMP! #{@nodes[@nSwitch0 + i]} #{@nodes[@nCoil1]}, #{@nodes[@nCoil2]}, #{@nodes[@nCoil3]}, #{@coilR} -> #{@compResistance}")
-
-//      console.log(@nodes[@nSwitch0 + i])
-      stamper.stampNonLinear(this.nodes[this.nSwitch0 + i]));
+    for (let i=0; i<3 * this.poleCount; ++i)
+      stamper.stampNonLinear(this.nodes[this.nSwitch0 + i]);
   }
 
   startIteration() {
-    // ind.startIteration(@volts[@nCoil1] - @volts[@nCoil3])
     let voltdiff = this.volts[this.nCoil1] - this.volts[this.nCoil3];
 
-    if (this.isTrapezoidal()) {
+    if (this.isTrapezoidal())
       this.curSourceValue = (voltdiff / this.compResistance) + this.tempCurrent;
     // backward euler
-    } else {
+    else
       this.curSourceValue = this.tempCurrent;
-    }
 
     let magic = 1.3;
     let pmult = Math.sqrt(magic + 1);
@@ -218,24 +184,21 @@ class RelayElm extends CircuitComponent {
 
     this.d_position = Math.abs(p * p) - 1.3;
 
-    if (this.d_position < 0) {
+    if (this.d_position < 0)
       this.d_position = 0;
-    }
-    if (this.d_position > 1) {
+
+    if (this.d_position > 1)
       this.d_position = 1;
-    }
-    if (this.d_position < 0.1) {
-      return this.i_position = 0;
-    } else if (this.d_position > 0.9) {
-      return this.i_position = 1;
-    } else {
-      return this.i_position = 2;
-    }
+
+    if (this.d_position < 0.1)
+      this.i_position = 0;
+    else if (this.d_position > 0.9)
+      this.i_position = 1;
+    else
+      this.i_position = 2;
   }
 
   draw(renderContext) {
-    //this.setPoints();
-
     let i;
     for (i = 0; i < 2; i++) {
       renderContext.getVoltageColor(this.volts[this.nCoil1 + i]);
@@ -304,38 +267,30 @@ class RelayElm extends CircuitComponent {
     let res1 = this.i_position === 1 ? this.r_on : this.r_off;
 
     let p = 0;
-    return (() => {
-      let result = [];
-      while (p < (3 * this.poleCount)) {
-        stamper.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch1 + p], res0);
-        stamper.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch2 + p], res1);
 
-        this.nSwitch0 + p;
+    while (p < (3 * this.poleCount)) {
+      stamper.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch1 + p], res0);
+      stamper.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch2 + p], res1);
 
-        result.push(p += 3);
-      }
-      return result;
-    })();
+      this.nSwitch0 + p;
+    }
   }
 
   calculateCurrent() {
     let voltdiff = this.volts[this.nCoil1 - this.volts[this.nCoil3]];
 
-    //  @coilCurrent = ind.calculateCurrent(voltdiff)
-
-    if (this.compResistance > 0) {
+    if (this.compResistance > 0)
       this.tempCurrent = (voltdiff / this.compResistance) + this.curSourceValue;
-    }
 
     this.coilCurrent = this.tempCurrent;
 
-    return __range__(0, this.poleCount, false).map((p) =>
-      this.i_position === 2 ?
-        this.switchCurrent[p] = 0
-      :
-        this.switchCurrent[p] = (this.volts[this.nSwitch0 + (p * 3)] - this.volts[this.nSwitch1 + (p * 3) + this.i_position]) / this.r_on);
+    for (let p=0; p<this.poleCount; ++p) {
+      if (this.i_position === 2)
+        this.switchCurrent[p] = 0;
+      else
+        this.switchCurrent[p] = (this.volts[this.nSwitch0 + (p * 3)] - this.volts[this.nSwitch1 + (p * 3) + this.i_position]) / this.r_on;
+    }
   }
-
 
   getConnection(n1, n2) {
     return Math.floor(n1 / 3) === Math.floor(n2 / 3);
@@ -345,17 +300,7 @@ class RelayElm extends CircuitComponent {
     return true;
   }
 }
+
 RelayElm.initClass();
 
-
 module.exports = RelayElm;
-
-function __range__(left, right, inclusive) {
-  let range = [];
-  let ascending = left < right;
-  let end = !inclusive ? right : ascending ? right + 1 : right - 1;
-  for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-    range.push(i);
-  }
-  return range;
-}

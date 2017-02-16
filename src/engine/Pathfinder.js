@@ -76,10 +76,8 @@ class Pathfinder {
         }
       }
 
-      for (j = 0; j < element.getPostCount(); ++j) {
-        if (element.getNode(j) === nodeIdx)
-          break;
-      }
+      for (j = 0; j < element.getPostCount(); ++j)
+        if (element.getNode(j) === nodeIdx) break;
 
       // element Isn't neighboring nodeIdx, continue to the next element
       if (j === element.getPostCount())

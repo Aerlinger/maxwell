@@ -206,12 +206,12 @@ class CircuitComponent {
 
   setPoints(x1, y1, x2, y2) {
     /*
-    if (!x1 || !y1)
-      console.trace("No x1, y1 location for ", this.getName());
+     if (!x1 || !y1)
+     console.trace("No x1, y1 location for ", this.getName());
 
-    if (!x2 || !y2)
-      console.trace("No x2, y2 location for ", this.getName());
-      */
+     if (!x2 || !y2)
+     console.trace("No x2, y2 location for ", this.getName());
+     */
 
     if (!this.point1)
       this.point1 = new Point(x1, y1);
@@ -281,14 +281,14 @@ class CircuitComponent {
     let tidyVoltage = Util.tidyFloat(this.getVoltageDiff());
     let tidyCurrent = Util.tidyFloat(this.getCurrent());
 
-    let paramStr = ((() => {
-      let result = [];
-      for (let key in this.params) {
-        let val = this.params[key];
-        result.push(val);
-      }
-      return result;
-    })()).join(" ");
+    paramStr = [];
+
+    for (let key in this.params) {
+      let val = this.params[key];
+      paramStr.push(val);
+    }
+
+
 
     return `[v ${tidyVoltage}, i ${tidyCurrent}]\t${this.getName()} ${this.point1.x} ${this.point1.y} ${this.point2.x} ${this.point2.y}`;
   }
@@ -403,14 +403,13 @@ class CircuitComponent {
   }
 
   inspect() {
-    let paramValues = ((() => {
-      let result = [];
-      for (let key in this.params) {
-        let val = this.params[key];
-        result.push(val);
-      }
-      return result;
-    })());
+
+    let paramValues = [];
+
+    for (let key in this.params) {
+      let val = this.params[key];
+      paramValues.push(val);
+    }
 
     return {
       name: this.getName(),
@@ -508,7 +507,7 @@ class CircuitComponent {
     let width = Math.max(this.width(), 5);
     let height = Math.max(this.height(), 5);
 
-    this.setBbox(x-width/2, y-height/2, x + width/2, y+height/2);
+    this.setBbox(x - width / 2, y - height / 2, x + width / 2, y + height / 2);
   }
 
   getBoundingBox() {
@@ -521,7 +520,7 @@ class CircuitComponent {
 
   setBbox(x1, y1, x2, y2) {
     //if (!(Util.isValue(x1) && Util.isValue(y1) && Util.isValue(x2) && Util.isValue(y2) && Util.isValue(this.dpx1()) && Util.isValue(this.dpy1())))
-      //console.trace(`Invalid BBox value for ${this.constructor.name} isPlaced: ${this.isPlaced()} [${this.x1()} ${this.y1()} ${this.x2()} ${this.y2()}] -> bbox(${x1}, ${y1}, ${x2}, ${y2})`);
+    //console.trace(`Invalid BBox value for ${this.constructor.name} isPlaced: ${this.isPlaced()} [${this.x1()} ${this.y1()} ${this.x2()} ${this.y2()}] -> bbox(${x1}, ${y1}, ${x2}, ${y2})`);
 
     let x = Math.min(x1, x2);
     let y = Math.min(y1, y2);
@@ -532,10 +531,10 @@ class CircuitComponent {
   }
 
   setBboxPt(p1, p2, width = 1) {
-    let deltaX = (this.dy()/this.dn() * width);
-    let deltaY = (this.dx()/this.dn() * width);
+    let deltaX = (this.dy() / this.dn() * width);
+    let deltaY = (this.dx() / this.dn() * width);
 
-    this.setBbox(p1.x - deltaX/2, p1.y - deltaY/2, p2.x + deltaX/2, p2.y + deltaY/2);
+    this.setBbox(p1.x - deltaX / 2, p1.y - deltaY / 2, p2.x + deltaX / 2, p2.y + deltaY / 2);
   }
 
 // Extended by subclasses
@@ -552,7 +551,9 @@ class CircuitComponent {
     if (additonalInfo && additonalInfo.length > 0)
       summary = summary.concat(additonalInfo);
 
-    let paramsSummary = Object.keys(this.params).map((param) => {return `  ${param}: ${this.getFieldText(param)}`});
+    let paramsSummary = Object.keys(this.params).map((param) => {
+      return `  ${param}: ${this.getFieldText(param)}`
+    });
 
     return summary.concat(paramsSummary);
   }
@@ -665,11 +666,11 @@ class CircuitComponent {
 
 
     /*
-    for (let i = 0; i < this.numPosts(); ++i) {
-      let post = this.getPost(i);
-      renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
-    }
-    */
+     for (let i = 0; i < this.numPosts(); ++i) {
+     let post = this.getPost(i);
+     renderContext.drawCircle(post.x, post.y, outlineRadius + 2, 1, 'rgba(255,0,255,0.5)')
+     }
+     */
 
   }
 
@@ -681,7 +682,7 @@ class CircuitComponent {
       ds = Settings.CURRENT_SEGMENT_LENGTH;
 
     if (this.Circuit) {
-      this.curcount = this.curcount|| 0;
+      this.curcount = this.curcount || 0;
 
       let currentIncrement = (current || this.current) * this.Circuit.Params.getCurrentMult();
 

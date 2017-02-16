@@ -208,14 +208,12 @@ class ChipElm extends CircuitComponent {
   }
 
   inspect() {
-    let paramValues = ((() => {
-      let result = [];
-      for (let key in this.params) {
-        let val = this.params[key];
-        result.push(val);
-      }
-      return result;
-    })());
+    let paramValues = [];
+
+    for (let key in this.params) {
+      let val = this.params[key];
+      paramValues.push(val);
+    }
 
     return {
       name: this.constructor.name,
@@ -318,7 +316,6 @@ class ChipElm extends CircuitComponent {
 
     this.execute();
 
-    let result = [];
     for (let i = 0; i < this.numPosts(); ++i) {
       p = this.pins[i];
       if (p.output) {

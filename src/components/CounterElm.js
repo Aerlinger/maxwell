@@ -8,8 +8,6 @@ class CounterElm extends ChipElm {
   }
 
   constructor(xa, xb, ya, yb, params, f) {
-    // console.log("FLAG", f)
-
     params = params || {"bits": 4, "volts": [0, 0, 0, 0]};
 
     super(xa, xb, ya, yb, params, f);
@@ -67,13 +65,11 @@ class CounterElm extends ChipElm {
     let i;
     let en = true;
 
-    if (this.hasEnable()) {
+    if (this.hasEnable())
       en = this.pins[this.bits + 2].value;
-    }
 
     if (this.pins[0].value && !this.lastClock && en) {
-      for (start = this.bits - 1, i = start, asc = start <= 0; asc ? i <= 0 : i >= 0; asc ? i++ : i--) {
-        var asc, start;
+      for (i = this.bits - 1; i >= 0; i--) {
         let ii = i + 2;
 
         if (!this.pins[ii].value) {
@@ -85,16 +81,14 @@ class CounterElm extends ChipElm {
       }
     }
 
-    if (!this.pins[1].value) {
-      for (i = 0, end = this.bits, asc1 = 0 <= end; asc1 ? i < end : i > end; asc1 ? i++ : i--) {
-        var asc1, end;
+    if (!this.pins[1].value)
+      for (i = 0; i < this.bits; ++i)
         this.pins[i + 2].value = false;
-      }
-    }
 
-    return this.lastClock = this.pins[0].value;
+    this.lastClock = this.pins[0].value;
   }
 }
+
 CounterElm.initClass();
 
 module.exports = CounterElm;

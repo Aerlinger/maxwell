@@ -65,11 +65,8 @@ class Switch2Elm extends SwitchElm {
     this.swpoles[2] = this.lead2;
 
     [this.swposts[0], this.swposts[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1, this.openhs);
-    if (this.hasCenterOff()) {
-      this.posCount = 3;
-    } else {
-      this.posCount = 2;
-    }
+
+    this.posCount = this.hasCenterOff() ? 3 : 2;
 
     //this.setBboxPt(this.point1, this.point2, this.openhs);
 
@@ -103,15 +100,9 @@ class Switch2Elm extends SwitchElm {
     renderContext.drawCircle(this.swpoles[2].x, this.swpoles[2].y, Settings.POST_RADIUS, 1, Settings.POST_COLOR);
     renderContext.drawCircle(this.swpoles[1].x, this.swpoles[1].y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
 
-
-    if (this.Circuit && this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled())
       super.debugDraw(renderContext);
-    }
-
   }
-
-//    if this.Circuit && this.Circuit.debugModeEnabled()
-//      super(renderContext)
 
   getPost(n) {
     if (n === 0) {

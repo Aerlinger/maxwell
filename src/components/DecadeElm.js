@@ -47,11 +47,8 @@ class DecadeElm extends ChipElm {
   execute() {
     let i;
     if (this.pins[0].value && !this.lastClock) {
-      for (i = 0, end = this.bits, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-        var asc, end;
-        if (this.pins[i + 2].value) {
-          break;
-        }
+      for (i = 0; i < this.bits; ++i) {
+        if (this.pins[i + 2].value) break;
       }
 
       if (i < this.bits) {
@@ -64,15 +61,13 @@ class DecadeElm extends ChipElm {
     }
 
     if (!this.pins[1].value) {
-      for (i = 1, end1 = this.bits, asc1 = 1 <= end1; asc1 ? i < end1 : i > end1; asc1 ? i++ : i--) {
-        var asc1, end1;
+      for (i = 1; i < this.bits; ++i)
         this.pins[i + 2].value = false;
-      }
 
       this.pins[2].value = true;
     }
 
-    return this.lastClock = this.pins[0].value;
+    this.lastClock = this.pins[0].value;
   }
 }
 

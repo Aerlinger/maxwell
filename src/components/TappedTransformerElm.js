@@ -199,7 +199,8 @@ class TappedTransformerElm extends CircuitComponent {
       })(),
 
       this.voltdiff = new Array(3),
-      this.curSourceValue = new Array(3)));
+      this.curSourceValue = new Array(3))
+    );
   }
 
   doStep(stamper) {
