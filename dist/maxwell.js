@@ -123,35 +123,21 @@
 	
 	class Maxwell {
 	  static createContext(circuitName, circuitData, context, onComplete) {
-	    let circuit = null;
-	
 	    if (circuitName) {
-	      if (typeof circuitData === "string") {
-	        circuit = Maxwell.loadCircuitFromFile(circuitData, circuit => onComplete(new CircuitUI(circuit, context)));
+	      let circuit = CircuitLoader.createCircuitFromJsonData(circuitData);
+	      this.Circuits[circuitName] = circuit;
 	
-	      } else if ((typeof circuitData === "object") || (typeof circuitData == "Array")) {
-	        circuit = CircuitLoader.createCircuitFromJsonData(circuitData);
-	        this.Circuits[circuitName] = circuit;
-	
-	        onComplete(new CircuitUI(circuit, context))
-	      } else {
-	        throw new Error(`\
-	Parameter must either be a path to a JSON file or raw JSON data representing the circuit.
-	Use \`Maxwell.createCircuit()\` to create a new empty circuit object.\
-	`);
-	      }
+	      onComplete(new CircuitUI(circuit, context));
 	    } else {
-	      circuit = new Circuit();
+	      console.error(`createContext must be called with a unique circuit name`)
 	    }
-	
-	    this.Circuits[circuitName] = circuit;
 	  }
 	}
 	
 	Maxwell.Renderer = CircuitUI;
 	Maxwell.ScopeCanvas = RickshawScopeCanvas;
 	Maxwell.Circuits = {};
-	Maxwell.version = "0.0.0";
+	Maxwell.version = "0.0.1";
 	Maxwell.Components = Components;
 	
 	if (environment.isBrowser) {
@@ -856,24 +842,21 @@
 	  }
 	
 	  updateDots(ds, current = null) {
-	    if (this.Circuit && this.Circuit.isStopped) {
+	    if (this.Circuit && this.Circuit.isStopped)
 	      return
-	    }
 	
-	    if (ds == null) {
+	    if (ds == null)
 	      ds = Settings.CURRENT_SEGMENT_LENGTH;
-	    }
+	
 	    if (this.Circuit) {
-	      if (!this.curcount) {
-	        this.curcount = 0;
-	      }
+	      this.curcount = this.curcount|| 0;
 	
 	      let currentIncrement = (current || this.current) * this.Circuit.Params.getCurrentMult();
 	
 	      this.curcount = (this.curcount + currentIncrement) % ds;
-	      if (this.curcount < 0) {
+	
+	      if (this.curcount < 0)
 	        this.curcount += ds;
-	      }
 	
 	      return this.curcount;
 	    }
@@ -17967,7 +17950,6 @@
 	  draw(renderContext) {
 	    let s;
 	    renderContext.drawLinePt(this.point1, this.point2, renderContext.getVoltageColor(this.volts[0]));
-	    //  @setBboxPt @point1, @point2, 3
 	
 	    if (this.mustShowCurrent()) {
 	      s = Util.getUnitText(Math.abs(this.getCurrent()), "A");
@@ -17981,9 +17963,8 @@
 	    if (Settings.WIRE_POSTS)
 	      renderContext.drawPosts(this);
 	
-	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled())
 	      return super.debugDraw(renderContext);
-	    }
 	  }
 	
 	  stamp(stamper) {
@@ -18797,33 +18778,28 @@
 	    this.calcLeads(32);
 	    //this.setBboxPt(this.point1, this.point2, this.openhs/2);
 	
-	    this.ps = new Point(0, 0);
-	    this.ps2 = new Point(0, 0);
-	
-	    let hs1 = ((this.position === 1) ? 0 : 2);
-	    let hs2 = ((this.position === 1) ? this.openhs : 2);
-	
 	    renderContext.drawLeads(this);
 	
-	    this.ps = Util.interpolate(this.lead1, this.lead2, -0.05, hs1);
-	    this.ps2 = Util.interpolate(this.lead1, this.lead2, 1.05, hs2);
-	
 	    this.updateDots();
-	    if (this.position === 0) {
+	    if (this.position === 0)
 	      renderContext.drawDots(this.point1, this.point2, this);
-	    }
 	
 	    // Draw switch "Lever"
-	    renderContext.drawLinePt(this.ps, this.ps2, Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
+	    let baseOffset = (this.position === 1) ? 0 : 2;
+	    let armOffset = (this.position === 1) ? this.openhs : 2;
 	
-	    renderContext.drawCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
-	    renderContext.drawCircle(this.lead2.x, this.lead2.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
+	    this.ps = Util.interpolate(this.lead1, this.lead2, -0.05, baseOffset);
+	    this.ps2 = Util.interpolate(this.lead1, this.lead2, 1.05, armOffset);
+	
+	    renderContext.drawLinePt(this.ps, this.ps2, Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
+	    renderContext.drawCircle(this.lead2.x, this.lead2.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR);
+	    renderContext.drawCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR);
+	
 	
 	    renderContext.drawPosts(this);
 	
-	    if (this.Circuit && this.Circuit.debugModeEnabled()) {
+	    if (this.Circuit && this.Circuit.debugModeEnabled())
 	      super.debugDraw(renderContext);
-	    }
 	  }
 	
 	  static get NAME() {
@@ -19141,7 +19117,6 @@
 	  }
 	
 	  draw(renderContext) {
-	    this.updateDots();
 	
 	    let v1 = this.volts[0];
 	    let v2 = this.volts[1];
@@ -20770,8 +20745,6 @@
 	
 	  place() {
 	    super.place();
-	    //super.setPoints(...arguments);
-	    // @calcLeads(32);
 	
 	    this.swposts = Util.newPointArray(2);
 	    this.swpoles = Util.newPointArray(3);
@@ -20827,7 +20800,6 @@
 	
 	    // Switch lever
 	    renderContext.drawLinePt(this.lead1, this.swpoles[this.position], Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
-	
 	
 	    renderContext.drawCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
 	
@@ -29269,15 +29241,15 @@
 	        var xOffset1 = xOffset + ((3 * dx) / dn);
 	        var yOffset1 = yOffset + ((3 * dy) / dn);
 	
-	        //this.context.save();
-	        this.context.strokeStyle = Settings.CURRENT_COLOR;
-	        this.context.lineWidth = Settings.CURRENT_RADIUS;
+	        this.context.save();
 	        this.context.beginPath();
+	        this.context.strokeStyle = Settings.CURRENT_COLOR;
+	        this.context.lineWidth = Settings.LINE_WIDTH + 0.5;
 	        this.context.moveTo(xOffset0, yOffset0);
 	        this.context.lineTo(xOffset1, yOffset1);
 	        this.context.stroke();
 	        this.context.closePath();
-	        //this.context.restore();
+	        this.context.restore();
 	      }
 	
 	      newPos += ds
@@ -78749,8 +78721,6 @@
 	let d3 = __webpack_require__(96);
 	window.d3 = d3;
 	let Rickshaw = __webpack_require__(98);
-	
-	console.log(Rickshaw);
 	
 	class RickshawScopeCanvas extends ScopeCanvas {
 	  constructor(parentUI, scopeDiv, x=800, y=700) {

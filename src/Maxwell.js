@@ -77,35 +77,21 @@ let environment = require("./Environment.js");
 
 class Maxwell {
   static createContext(circuitName, circuitData, context, onComplete) {
-    let circuit = null;
-
     if (circuitName) {
-      if (typeof circuitData === "string") {
-        circuit = Maxwell.loadCircuitFromFile(circuitData, circuit => onComplete(new CircuitUI(circuit, context)));
+      let circuit = CircuitLoader.createCircuitFromJsonData(circuitData);
+      this.Circuits[circuitName] = circuit;
 
-      } else if ((typeof circuitData === "object") || (typeof circuitData == "Array")) {
-        circuit = CircuitLoader.createCircuitFromJsonData(circuitData);
-        this.Circuits[circuitName] = circuit;
-
-        onComplete(new CircuitUI(circuit, context))
-      } else {
-        throw new Error(`\
-Parameter must either be a path to a JSON file or raw JSON data representing the circuit.
-Use \`Maxwell.createCircuit()\` to create a new empty circuit object.\
-`);
-      }
+      onComplete(new CircuitUI(circuit, context));
     } else {
-      circuit = new Circuit();
+      console.error(`createContext must be called with a unique circuit name`)
     }
-
-    this.Circuits[circuitName] = circuit;
   }
 }
 
 Maxwell.Renderer = CircuitUI;
 Maxwell.ScopeCanvas = RickshawScopeCanvas;
 Maxwell.Circuits = {};
-Maxwell.version = "0.0.0";
+Maxwell.version = "0.0.1";
 Maxwell.Components = Components;
 
 if (environment.isBrowser) {
