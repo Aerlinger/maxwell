@@ -5,7 +5,7 @@ fs = require("fs")
 
 describe "JSON output", ->
   before (done) ->
-    @circuit = Maxwell.loadCircuitFromFile("./circuits/v4/ohms.json")
+    @circuit = Maxwell.loadCircuitFromFile("./circuits/v5/ohms.json")
     @circuit.updateCircuit()
 
     @circuit.updateCircuit()

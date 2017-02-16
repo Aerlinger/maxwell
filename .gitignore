@@ -5,7 +5,6 @@ src/**/*.js.map
 .bower-registry
 npm-debug.log
 build/
-scripts/
 dump/*.json
 dump/*.txt
 circuits/*.txt

@@ -11,7 +11,7 @@ describe.skip "Loading Scope from Legacy", ->
       basename = path.basename(circuit_name, '.txt')
 
       circuitData = fs.readFileSync(circuit_name)
-      circuitJson = fs.readFileSync(__dirname + "/../../circuits/v4/" + basename + ".json")
+      circuitJson = fs.readFileSync(__dirname + "/../../circuits/v5/" + basename + ".json")
 
       jsonData = JSON.parse(circuitJson);
 

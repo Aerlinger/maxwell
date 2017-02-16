@@ -1,6 +1,6 @@
 describe "Simple Voltage Divider", ->
   before (done) ->
-    voltdividesimple = JSON.parse(fs.readFileSync("./circuits/v4/voltdividesimple.json"))
+    voltdividesimple = JSON.parse(fs.readFileSync("./circuits/v5/voltdividesimple.json"))
     @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
 
     #    CircuitLoader.createCircuitFromJsonFile "../../circuits/voltdividesimple.json", (circuit) =>

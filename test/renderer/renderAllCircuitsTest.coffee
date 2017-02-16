@@ -5,7 +5,7 @@ describe "CircuitUI", ->
   it "renders all circuits", () ->
     this.timeout(1000000)
 
-    circuit_names = glob.sync(__dirname + "/../../circuits/v4/*.json")
+    circuit_names = glob.sync(__dirname + "/../../circuits/v5/*.json")
 
     for circuit_name in circuit_names
       basename = path.basename(circuit_name, '.json')

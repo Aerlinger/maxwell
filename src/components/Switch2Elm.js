@@ -6,10 +6,7 @@ let Point = require('../geom/Point.js');
 let SwitchElm = require('./SwitchElm.js');
 let Util = require('../util/Util.js');
 
-let _ = require("lodash");
 
-
-// Broken
 class Switch2Elm extends SwitchElm {
   static initClass() {
 
