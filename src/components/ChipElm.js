@@ -318,7 +318,6 @@ class ChipElm extends CircuitComponent {
 
     this.execute();
 
-    let result = [];
     for (let i = 0; i < this.numPosts(); ++i) {
       p = this.pins[i];
       if (p.output) {

@@ -62,7 +62,7 @@ class Util {
     return [new Point(interpX, interpY), new Point(interpXReflection, interpYReflection)];
   }
 
-  static calcArrow(point1, point2, al, aw) {
+  static calcArrow(point1, point2, p, q) {
     if ((arguments.length) !== 4) {
       this.halt(`Wrong arguments (${arguments.length}) in 'calcArrow' ${arguments}`);
     }
@@ -75,7 +75,7 @@ class Util {
 
     poly.addVertex(point2.x, point2.y);
 
-    let [p1, p2] = Util.interpolateSymmetrical(point1, point2, 1 - (al / dist), aw);
+    let [p1, p2] = Util.interpolateSymmetrical(point1, point2, 1 - (p / dist), q);
 
     poly.addVertex(p1.x, p1.y);
     poly.addVertex(p2.x, p2.y);
@@ -95,9 +95,9 @@ class Util {
 
   static createPolygonFromArray(vertexArray) {
     let newPoly = new Polygon();
-    for (let vertex of Array.from(vertexArray)) {
+
+    for (let vertex of Array.from(vertexArray))
       newPoly.addVertex(vertex.x, vertex.y);
-    }
 
     return newPoly;
   }

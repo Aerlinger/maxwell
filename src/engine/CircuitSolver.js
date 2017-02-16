@@ -252,7 +252,6 @@ class CircuitSolver {
       postCount = circuitElm.numPosts();
 
       // allocate a node for each post and match postCount to nodes
-      var result = [];
       for (var postIdx = 0; postIdx < postCount; ++postIdx) {
         var circuitNode;
         var item;
@@ -284,7 +283,6 @@ class CircuitSolver {
             item = circuitElm.setNodeVoltage(postIdx, 0);
 
         }
-        result.push(item);
       }
 
       for (var internalNodeIdx = 0; i < internalNodeCount; ++i) {

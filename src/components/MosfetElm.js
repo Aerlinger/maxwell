@@ -102,11 +102,12 @@ class MosfetElm extends CircuitComponent {
     let segments = 6;
 //      @setPowerColor true
     let segf = 1.0 / segments;
-    for (let i = 0, end = segments, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+    for (let i = 0; i < segments; ++i) {
       let v = this.volts[1] + (((this.volts[2] - this.volts[1]) * i) / segments);
       color = renderContext.getVoltageColor(v);
       let ps1 = Util.interpolate(this.src[1], this.drn[1], i * segf);
       let ps2 = Util.interpolate(this.src[1], this.drn[1], (i + 1) * segf);
+
       renderContext.drawLinePt(ps1, ps2, color);
     }
 
