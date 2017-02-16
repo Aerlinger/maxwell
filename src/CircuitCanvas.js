@@ -11,10 +11,6 @@ let d3 = require("d3-shape");
 
 let { TimeSeries, SmoothieChart } = require("smoothie");
 
-// var jQuery = require('$');
-// require('$-ui');
-// require('$-ui-bundle');
-
 require('jquery-ui');
 
 class CircuitCanvas extends Observer {

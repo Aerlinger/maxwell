@@ -541,17 +541,15 @@ class CircuitSolver {
           for (var j = 0; j < CircuitSolver.SIZE_LIMIT; ++j) {
             rowNodeEq = this.circuitRowInfo[rowInfo.nodeEq];
 
-            if ((rowNodeEq.type !== RowInfo.ROW_EQUAL) || (row === rowNodeEq.nodeEq)) {
+            if ((rowNodeEq.type !== RowInfo.ROW_EQUAL) || (row === rowNodeEq.nodeEq))
               break;
-            }
 
             rowInfo.nodeEq = rowNodeEq.nodeEq;
           }
         }
 
-        if (rowInfo.type === RowInfo.ROW_CONST) {
+        if (rowInfo.type === RowInfo.ROW_CONST)
           rowInfo.mapCol = -1;
-        }
       }
     }
 
