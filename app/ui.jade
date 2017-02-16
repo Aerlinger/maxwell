@@ -139,7 +139,6 @@ block header
     }
 
     $(document).ready(function() {
-      var grid = document.getElementById('grid');
       var canvas = document.getElementById('canvas');
 
       $.ajax({
@@ -159,11 +158,14 @@ block header
         });
       });
 
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      window.addEventListener('resize', resizeCanvas, false);
+
       if (canvas) {
-        function resizeCanvas() {
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
-        }
 
         resizeCanvas();
       }
@@ -172,7 +174,6 @@ block header
 block content
   canvas#performance_sparkline(width="200", height="40")
   canvas#canvas.maxwell
-
 
   #main_nav.top-bar.sidepanel
     .top-bar-left
@@ -209,11 +210,6 @@ block content
           a(href="https://github.com/aerlinger/maxwell", target="_blank")
             img(src="/github-icon.png", width=20, height=20)
             | Source Code
-      //ul.menu
-        li
-          input(type='search', placeholder='Search')
-        li
-          button.button(type='button') Search
 
   #component_sidebar.sidepanel
     ul#deeplinked-tabs.tabs(data-deep-link='true', data-tabs='')
@@ -251,10 +247,6 @@ block content
 
 
   #edit_component_pane.off-canvas.edit-form.position-right(data-off-canvas='')
-    //div#edit_pane.edit-form
-
-  //.off-canvas-content
-    //button.button.float-right(type='button', data-toggle='edit_component_pane') Open
 
   script.
     $(document).foundation();

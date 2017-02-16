@@ -674,24 +674,21 @@ class CircuitComponent {
   }
 
   updateDots(ds, current = null) {
-    if (this.Circuit && this.Circuit.isStopped) {
+    if (this.Circuit && this.Circuit.isStopped)
       return
-    }
 
-    if (ds == null) {
+    if (ds == null)
       ds = Settings.CURRENT_SEGMENT_LENGTH;
-    }
+
     if (this.Circuit) {
-      if (!this.curcount) {
-        this.curcount = 0;
-      }
+      this.curcount = this.curcount|| 0;
 
       let currentIncrement = (current || this.current) * this.Circuit.Params.getCurrentMult();
 
       this.curcount = (this.curcount + currentIncrement) % ds;
-      if (this.curcount < 0) {
+
+      if (this.curcount < 0)
         this.curcount += ds;
-      }
 
       return this.curcount;
     }

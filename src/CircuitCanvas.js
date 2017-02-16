@@ -270,15 +270,15 @@ class CircuitCanvas extends Observer {
         var xOffset1 = xOffset + ((3 * dx) / dn);
         var yOffset1 = yOffset + ((3 * dy) / dn);
 
-        //this.context.save();
-        this.context.strokeStyle = Settings.CURRENT_COLOR;
-        this.context.lineWidth = Settings.CURRENT_RADIUS;
+        this.context.save();
         this.context.beginPath();
+        this.context.strokeStyle = Settings.CURRENT_COLOR;
+        this.context.lineWidth = Settings.LINE_WIDTH + 0.5;
         this.context.moveTo(xOffset0, yOffset0);
         this.context.lineTo(xOffset1, yOffset1);
         this.context.stroke();
         this.context.closePath();
-        //this.context.restore();
+        this.context.restore();
       }
 
       newPos += ds

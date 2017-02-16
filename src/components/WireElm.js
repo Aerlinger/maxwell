@@ -23,7 +23,6 @@ class WireElm extends CircuitComponent {
   draw(renderContext) {
     let s;
     renderContext.drawLinePt(this.point1, this.point2, renderContext.getVoltageColor(this.volts[0]));
-    //  @setBboxPt @point1, @point2, 3
 
     if (this.mustShowCurrent()) {
       s = Util.getUnitText(Math.abs(this.getCurrent()), "A");
@@ -37,9 +36,8 @@ class WireElm extends CircuitComponent {
     if (Settings.WIRE_POSTS)
       renderContext.drawPosts(this);
 
-    if (this.Circuit && this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled())
       return super.debugDraw(renderContext);
-    }
   }
 
   stamp(stamper) {
