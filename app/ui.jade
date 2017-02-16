@@ -75,124 +75,86 @@ block header
       var grid = document.getElementById('grid');
       var canvas = document.getElementById('canvas');
 
-      Maxwell.createContext("ohms", "../circuits/v4/#{circuit_name}.json", canvas, function (circuitContext) {
-        window.circuitContext = circuitContext;
+      $.ajax({
+        url: "/api/circuits/#{circuit_name}"
+      }).success(function(data, status) {
+        Maxwell.createContext("ohms", data, canvas, function (circuitContext) {
+          window.circuitContext = circuitContext;
 
-        $('.component-item').click(function (evt) {
-          var componentName = $(this).data("name");
+          $('.component-item').click(function (evt) {
+            var componentName = $(this).data("name");
 
-          circuitContext.setPlaceComponent(componentName);
-        });
+            circuitContext.setPlaceComponent(componentName);
+          });
 
-        bindCircuitEvents(circuitContext);
+          bindCircuitEvents(circuitContext);
 
-        document.addEventListener('keydown', function(event) {
-          var charCode = String.fromCharCode(event.which);
-          var keycode = isLetter(charCode) ? charCode : event.which;
+          document.addEventListener('keydown', function (event) {
+            var charCode = String.fromCharCode(event.which);
+            var keycode = isLetter(charCode) ? charCode : event.which;
 
-          switch(keycode) {
-            case "W":
-              console.log("WireElm");
-              circuitContext.setPlaceComponent("WireElm");
-              break;
-            case 'R':
-              circuitContext.setPlaceComponent("ResistorElm");
-              break;
-            case 'G':
-              circuitContext.setPlaceComponent("GroundElm");
-              break;
-            case 'S':
-              circuitContext.setPlaceComponent("SwitchElm");
-              break;
-            case 'C':
-              circuitContext.setPlaceComponent("CapacitorElm");
-              break;
-            case 'I':
-              circuitContext.setPlaceComponent("InductorElm");
-              break;
-            case 'V':
-              circuitContext.setPlaceComponent("VoltageElm");
-              break;
-            case 'A':
-              circuitContext.setPlaceComponent("RailElm");
-              break;
-            case 'O':
-              circuitContext.setPlaceComponent("OpAmpElm");
-              break;
-            case "D":
-              circuitContext.setPlaceComponent("DiodeElm");
-              break;
-            case "T":
-              circuitContext.setPlaceComponent("TransistorElm");
-              break;
-            case "M":
-              circuitContext.setPlaceComponent("MosfetElm");
-              break;
-            case "Q":
-              circuitContext.clearPlaceComponent();
-              break;
+            switch (keycode) {
+              case "W":
+                console.log("WireElm");
+                circuitContext.setPlaceComponent("WireElm");
+                break;
+              case 'R':
+                circuitContext.setPlaceComponent("ResistorElm");
+                break;
+              case 'G':
+                circuitContext.setPlaceComponent("GroundElm");
+                break;
+              case 'S':
+                circuitContext.setPlaceComponent("SwitchElm");
+                break;
+              case 'C':
+                circuitContext.setPlaceComponent("CapacitorElm");
+                break;
+              case 'I':
+                circuitContext.setPlaceComponent("InductorElm");
+                break;
+              case 'V':
+                circuitContext.setPlaceComponent("VoltageElm");
+                break;
+              case 'A':
+                circuitContext.setPlaceComponent("RailElm");
+                break;
+              case 'O':
+                circuitContext.setPlaceComponent("OpAmpElm");
+                break;
+              case "D":
+                circuitContext.setPlaceComponent("DiodeElm");
+                break;
+              case "T":
+                circuitContext.setPlaceComponent("TransistorElm");
+                break;
+              case "M":
+                circuitContext.setPlaceComponent("MosfetElm");
+                break;
+              case "Q":
+                circuitContext.clearPlaceComponent();
+                break;
 
-            // ESC
-            case 27:
-              circuitContext.resetSelection();
-              break;
+                // ESC
+              case 27:
+                circuitContext.resetSelection();
+                break;
 
-            // Backspace
-            case 8:
-              if (document.activeElement && document.activeElement.constructor.name != "HTMLInputElement") {
-                circuitContext.remove(circuitContext.getSelectedComponents());
-              }
-              break;
+                // Backspace
+              case 8:
+                if (document.activeElement && document.activeElement.constructor.name != "HTMLInputElement") {
+                  circuitContext.remove(circuitContext.getSelectedComponents());
+                }
+                break;
 
-            // Space
-            case 32:
-              circuitContext.togglePause();
-              break;
-          }
-        })
-      });
-
-      if (grid) {
-        var ctx = grid.getContext('2d');
-
-        function drawGrid() {
-          ctx.fillStyle = "#CCC";
-
-          for (let i = 0; i < grid.width; i += 8) {
-            for (let j = 0; j < grid.height; j += 8) {
-              ctx.fillRect(i, j, 1, 1);
+                // Space
+              case 32:
+                circuitContext.togglePause();
+                break;
             }
-          }
-
-          ctx.fillStyle = "#000";
-        }
-
-        // resize the canvas to fill browser window dynamically
-        //window.addEventListener('resize', resizeCanvas, false);
-
-        function resizeGrid() {
-          grid.width = window.innerWidth;
-          grid.height = window.innerHeight;
-
-          /**
-           * Your drawings need to be inside this function otherwise they will be reset when
-           * you resize the browser window and the canvas goes will be cleared.
-           */
-          drawStuff();
-        }
-
-        resizeGrid();
-
-        function redraw() {
-          drawGrid();
-          // draw updates on resize
-
-          //ctx.style = "#F00";
-          //ctx.fillRect(500, 500, 100, 200);
-        }
-
-        drawStuff();
-      }
+          })
+        });
+      });
 
       if (canvas) {
         var ctx = canvas.getContext('2d');
@@ -212,7 +174,6 @@ block header
            * Your drawings need to be inside this function otherwise they will be reset when
            * you resize the browser window and the canvas goes will be cleared.
            */
-          drawStuff();
         }
 
         resizeCanvas();
@@ -224,7 +185,6 @@ block header
           //ctx.fillRect(500, 500, 100, 200);
         }
 
-        drawStuff();
       }
     });
 
