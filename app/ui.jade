@@ -90,7 +90,7 @@ block header
 
       circuitContext.onComponentHover = function (component) {
         console.log("ON COMPONENT HOVER:", component.toString(), "V:", component.volts);
-        var form = Maxwell.renderEdit(component);
+        var form = renderEdit(component);
 
         console.log("renderEdit\n", form);
 
@@ -104,7 +104,7 @@ block header
       circuitContext.onComponentClick = function (component) {
         console.log("ON COMPONENT CLICK:", component);
 
-        var form = Maxwell.renderEdit(component);
+        var form = renderEdit(component);
         console.log("renderEdit\n", form);
 
         document.getElementById("edit_component_pane").innerHTML = "";
