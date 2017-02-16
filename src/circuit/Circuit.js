@@ -31,8 +31,6 @@ let Rectangle = require('../geom/Rectangle.js');
 let Util = require('../util/Util.js');
 let environment = require("../Environment.js");
 
-fs = require('fs');
-
 class Circuit extends Observer {
   static initClass() {
     this.DEBUG = false;
@@ -573,6 +571,7 @@ class Circuit extends Observer {
     };
   }
 
+  /*
   dumpFrameJson(filename) {
     let circuitFramsJson;
     if (filename == null) {
@@ -588,6 +587,7 @@ class Circuit extends Observer {
 
     return fs.writeFileSync("./dump/#{@Params.name}_ANALYSIS.json", circuitAnalysisJson)
   }
+  */
 }
 
 Circuit.initClass();

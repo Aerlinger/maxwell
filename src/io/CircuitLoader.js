@@ -68,7 +68,6 @@ let SimulationParams = require('../circuit/SimulationParams.js');
 
 let Circuit = require('../circuit/Circuit.js');
 let Hint = require('../engine/Hint.js');
-let fs = require('fs');
 
 let environment = require("../Environment.js");
 
@@ -83,6 +82,7 @@ class CircuitLoader {
   }
 
   static createCircuitFromJsonData(jsonData) {
+
     // Create a defensive copy of jsonData
     jsonData = JSON.parse(JSON.stringify(jsonData));
 
@@ -119,36 +119,12 @@ class CircuitLoader {
     }
 
     if (environment.isBrowser)
-      console.log(circuitParams);
+      console.log(circuit, circuitParams);
 
     if (circuit.getElements().length === 0)
       console.error("No elements loaded. JSON most likely malformed");
 
     return circuit;
-  }
-
-  /**
-    Constructs a circuit from a reference to a circuit JSON file.
-
-   Example: CircuitLoader.createCircuitFromJsonFile("opint.json", function(circuit) { console.log(circuit); })
-  */
-  static createCircuitFromJsonFile(circuitFileName, onComplete=null) {
-    if (environment.isBrowser) {
-      return $.getJSON(circuitFileName, function(jsonData) {
-        let circuit = CircuitLoader.createCircuitFromJsonData(jsonData);
-
-        onComplete && onComplete(circuit);
-      }).fail(function(e) {
-        console.log( "Load error", e );
-
-        let circuit = new Circuit();
-
-        onComplete && onComplete(circuit);
-      })
-    } else {
-     let jsonData = JSON.parse(fs.readFileSync(circuitFileName));
-     return CircuitLoader.createCircuitFromJsonData(jsonData)
-    }
   }
 }
 
