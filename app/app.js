@@ -42,14 +42,14 @@ examples = {
 
 var port = 6502;
 
-var circuit_names = glob.sync(__dirname + "/../circuits/v4/*.json").map(function(filename) {
+var circuit_names = glob.sync(__dirname + "/../circuits/v5/*.json").map(function(filename) {
   return path.basename(filename, ".json")
 });
 
 app.get('/api/circuits/:circuit_name', function (req, res) {
   let circuit_name = req.params.circuit_name;
 
-  let circuit_path = path.join(__dirname, `/../circuits/v4/${circuit_name}.json`);
+  let circuit_path = path.join(__dirname, `/../circuits/v5/${circuit_name}.json`);
   console.log(`fetching ${circuit_path}`);
 
   fs.readFile(circuit_path, function(err, data) {

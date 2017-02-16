@@ -10,7 +10,7 @@ let circuit_names = glob.sync(__dirname + "/../circuits/*.txt");
 
 for (circuit_name of circuit_names) {
   let basename = path.basename(circuit_name, '.txt');
-  let outputPath = __dirname + "/../circuits/v4/";
+  let outputPath = __dirname + "/../circuits/v5/";
 
   console.log("PROCESSING", basename);
 

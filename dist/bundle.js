@@ -17348,15 +17348,6 @@
 	let environment = __webpack_require__(9);
 	
 	class CircuitLoader {
-	  static createEmptyCircuit() {
-	    let circuit = new Circuit();
-	
-	    // Extract circuit simulation params
-	    let circuitParams = jsonData.shift();
-	    circuit.Params = new SimulationParams(circuitParams);
-	    circuit.flags = parseInt(circuitParams['flags']);
-	  }
-	
 	  static createCircuitFromJsonData(jsonData) {
 	
 	    // Create a defensive copy of jsonData
@@ -17365,12 +17356,20 @@
 	    let circuit = new Circuit();
 	
 	    // Extract circuit simulation params
-	    let circuitParams = jsonData.shift();
+	    let circuitParams = jsonData.params;
+	
 	    circuit.Params = new SimulationParams(circuitParams);
 	    circuit.flags = parseInt(circuitParams['flags']);
 	
+	    let circuitComponents = jsonData.components;
+	
+	    if (!circuitParams || !circuitComponents) {
+	      console.warn("Circuit data malformed (Either circuit params or components are missing)")
+	      return
+	    }
+	
 	    // Load each component from JSON data:
-	    for (let elementData of Array.from(jsonData)) {
+	    for (let elementData of Array.from(circuitComponents)) {
 	      let type = elementData['name'];
 	      let ComponentClass = eval(type);
 	

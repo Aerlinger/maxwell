@@ -1,6 +1,6 @@
 describe "Simple 5Vp-p AC Voltage source connected to a 500ohm resistor", ->
   before (done) ->
-    ac_ohm = JSON.parse(fs.readFileSync("./circuits/v4/ac-resistor.json"))
+    ac_ohm = JSON.parse(fs.readFileSync("./circuits/v5/ac-resistor.json"))
 
 
     @circuit = CircuitLoader.createCircuitFromJsonData(ac_ohm)
