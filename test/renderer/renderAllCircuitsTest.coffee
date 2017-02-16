@@ -1,7 +1,7 @@
 glob = require('glob')
 path = require("path")
 
-describe "CircuitUI", ->
+describe.skip "CircuitUI", ->
   it "renders all circuits", () ->
     this.timeout(1000000)
 

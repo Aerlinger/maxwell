@@ -1,9 +1,8 @@
-let VoltageElm = require('../components/VoltageElm.js');
-let CurrentElm = require('../components/CurrentElm.js');
-let ResistorElm = require('../components/ResistorElm.js');
-let InductorElm = require('../components/InductorElm.js');
-let CapacitorElm = require('../components/CapacitorElm.js');
-let Util = require('../util/Util.js');
+var VoltageElm = require('../components/VoltageElm.js');
+var CurrentElm = require('../components/CurrentElm.js');
+var InductorElm = require('../components/InductorElm.js');
+var CapacitorElm = require('../components/CapacitorElm.js');
+var Util = require('../util/Util.js');
 
 class Pathfinder {
   static initClass() {
@@ -21,96 +20,97 @@ class Pathfinder {
     this.used = new Array(numNodes);
   }
 
-  validElm(ce) {
-    return (ce === this.firstElm) ||
-    ((ce instanceof CurrentElm) && (this.type === Pathfinder.INDUCT)) ||
-    ((this.type === Pathfinder.VOLTAGE) && !(ce.isWire() || Util.typeOf(ce, VoltageElm))) ||
-    ((this.type === Pathfinder.SHORT) && !ce.isWire()) ||
-    ((this.type === Pathfinder.CAP_V) && !(ce.isWire() || ce instanceof CapacitorElm || Util.typeOf(ce, VoltageElm)));
+  validElm(circuitElm) {
+    var isFirstElm = circuitElm === this.firstElm;
+
+    var isValid = false;
+
+    if (this.type === Pathfinder.INDUCT)
+      isValid = circuitElm instanceof CurrentElm;
+
+    if (this.type === Pathfinder.VOLTAGE)
+      isValid = !(circuitElm.isWire() || Util.typeOf(circuitElm, VoltageElm));
+
+    if (this.type === Pathfinder.SHORT)
+      isValid = !circuitElm.isWire();
+
+    if (this.type === Pathfinder.CAP_V)
+      isValid = !(circuitElm.isWire() || circuitElm instanceof CapacitorElm || Util.typeOf(circuitElm, VoltageElm));
+
+    return isValid || isFirstElm;
+
+
+    // return (circuitElm === this.firstElm) ||
+    // ((circuitElm instanceof CurrentElm) && (this.type === Pathfinder.INDUCT)) ||
+    // ((this.type === Pathfinder.VOLTAGE) && !(circuitElm.isWire() || Util.typeOf(circuitElm, VoltageElm))) ||
+    // ((this.type === Pathfinder.SHORT) && !circuitElm.isWire()) ||
+    // ((this.type === Pathfinder.CAP_V) && !(circuitElm.isWire() || circuitElm instanceof CapacitorElm || Util.typeOf(circuitElm, VoltageElm)));
   }
 
-  // TODO: Spanning tree?
-
-  /**
-   * Find an Eulerian path from node n1 to this.dest no longer than depth.
-   *
-   * Cycle Space/Bond space
-   */
-  findPath(n1, depth) {
-    if (n1 === this.dest) {
-//      console.log("n1 is @dest")
+  findPath(nodeIdx, depth) {
+    if (nodeIdx === this.dest)
       return true;
-    }
-    if (depth-- === 0) {
+
+    if (depth-- === 0)
       return false;
-    }
 
-    if (this.used[n1]) {
-//      console.log("used " + n1)
+    // We're back to where we started, so start over
+    if (this.used[nodeIdx])
       return false;
-    }
 
-    this.used[n1] = true;
+    // Remember that we've traversed this node
+    this.used[nodeIdx] = true;
 
-    for (let ce of Array.from(this.elementList)) {
+    for (var element of this.elementList) {
+      // Skip valid elements
+      if (this.validElm(element)) continue;
+
       var j;
-      if (this.validElm(ce)) { continue; }
-
-      if (n1 === 0) {
+      if (nodeIdx === 0) {
         // Look for posts which have a ground connection. Our path can go through ground!
-        for (j = 0; j < ce.numPosts(); ++j) {
-          var asc, end;
-          if (ce.hasGroundConnection(j) && this.findPath(ce.getNode(j), depth)) {
-//            console.log(ce + " has ground (n1 is 0)")
+        for (j = 0; j < element.getPostCount(); j++) {
+          if (element.hasGroundConnection(j) && this.findPath(element.getNode(j), depth)) {
             this.used[0] = false;
             return true;
           }
         }
       }
 
-      for (j = 0; j < ce.numPosts(); ++j) {
-//        console.log("get post " + ce.dump() + " " + ce.getNode(j))
-        var asc1, end1;
-        if (ce.getNode(j) === n1) {
+      for (j = 0; j < element.getPostCount(); ++j) {
+        if (element.getNode(j) === nodeIdx)
           break;
-        }
       }
 
-      if (j === ce.numPosts())
+      // element Isn't neighboring nodeIdx, continue to the next element
+      if (j === element.getPostCount())
         continue;
 
-      if (ce.hasGroundConnection(j) && this.findPath(0, depth)) {
-//        console.log(ce + " has ground")
-        this.used[n1] = false;
+      // Return true if we have a path through ground
+      if (element.hasGroundConnection(j) && this.findPath(0, depth)) {
+        this.used[nodeIdx] = false;
         return true;
       }
 
-      if ((this.type === Pathfinder.INDUCT) && ce instanceof InductorElm) {
-        let current = ce.getCurrent();
-        if (j === 0) {
+      if ((this.type === Pathfinder.INDUCT) && element instanceof InductorElm) {
+        var current = element.getCurrent();
+        if (j === 0)
           current = -current;
-        }
 
-//        console.log(ce + " > " + @firstElm + " >> matching " + ce + " to " + @firstElm.getCurrent())
-        if (Math.abs(current - this.firstElm.getCurrent()) > 1e-10) {
+        if (Math.abs(current - this.firstElm.getCurrent()) > 1e-10)
           continue;
-        }
       }
 
-      for (let k = 0; k < ce.numPosts(); ++k) {
-        if (j === k) { continue; }
+      for (var k = 0; k < element.getPostCount(); ++k) {
+        if (j === k) continue;
 
-//        console.log(ce + " " + ce.getNode(j) + " - " + ce.getNode(k))
-        if (ce.getConnection(j, k) && this.findPath(ce.getNode(k), depth)) {
-//          console.log("got findpath #{n1}")
-          //            console.log("got findpath j: #{ce.getNode(j).toString()}, k: #{ce.getNode(k).toString()} on element " + ce)
-          this.used[n1] = false;
+        if (element.getConnection(j, k) && this.findPath(element.getNode(k), depth)) {
+          this.used[nodeIdx] = false;
           return true;
         }
       }
     }
 
-    this.used[n1] = false;
+    this.used[nodeIdx] = false;
     return false;
   }
 }

@@ -83,7 +83,7 @@ class CircuitSolver {
       return;
     }
 
-    let lit = this.lastIterTime;
+    var lit = this.lastIterTime;
     var stepRate = Math.floor(160 * this.getIterCount());
     var tm = (new Date()).getTime();
 
