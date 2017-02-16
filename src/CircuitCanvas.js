@@ -105,7 +105,7 @@ class CircuitCanvas extends Observer {
     this.context.translate(this.xMargin, this.yMargin);
 
     this.drawText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, Settings.TEXT_COLOR, 1.2 * Settings.TEXT_SIZE);
-    this.drawText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 785, 15, Settings.TEXT_COLOR, 1.2 * Settings.TEXT_SIZE);
+    this.drawText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 600, 8, Settings.TEXT_COLOR, 1.1 * Settings.TEXT_SIZE);
 
     if (this.performanceMeter) {
       this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
@@ -310,7 +310,7 @@ class CircuitCanvas extends Observer {
 
       if (summaryArr) {
         for (let idx = 0; idx < summaryArr.length; ++idx) {
-          this.drawText(summaryArr[idx], 500, (idx * 11) + 5, "#1b4e24");
+          this.drawText(summaryArr[idx], 730, 50 + (idx * 11) + 5, "#1b4e24");
         }
       }
     }
