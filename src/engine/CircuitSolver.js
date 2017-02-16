@@ -58,9 +58,8 @@ class CircuitSolver {
   }
 
   reconstruct() {
-    if (!this.analyzeFlag || (this.Circuit.numElements() === 0)) {
+    if (!this.analyzeFlag || (this.Circuit.numElements() === 0))
       return;
-    }
 
     this.Circuit.clearErrors();
     this.Circuit.resetNodes();
@@ -84,12 +83,9 @@ class CircuitSolver {
       return;
     }
 
-    this.sysTime = (new Date()).getTime();
-
+    let lit = this.lastIterTime;
     var stepRate = Math.floor(160 * this.getIterCount());
-
     var tm = (new Date()).getTime();
-    var lit = this.lastIterTime;
 
     if (1000 >= (stepRate * (tm - this.lastIterTime))) {
       return;
@@ -130,9 +126,8 @@ class CircuitSolver {
             break;
         }
 
-        if (this.circuitLinear()) {
+        if (this.circuitLinear())
           break;
-        }
       }
 
       if (subiter >= CircuitSolver.MAXIMUM_SUBITERATIONS) {
@@ -142,27 +137,16 @@ class CircuitSolver {
 
       this.Circuit.time += this.Circuit.timeStep();
 
-      if (((iter + 20) % 21) === 0) {
-        for (var scope of this.Circuit.scopes) {
-          if (scope.circuitElm) {
-            scope.sampleVoltage(this.Circuit.time, scope.circuitElm.getVoltageDiff());
-            scope.sampleCurrent(this.Circuit.time, scope.circuitElm.getCurrent());
-          }
-        }
-      }
+      this.updateScopes(iter);
 
       tm = (new Date()).getTime();
       lit = tm;
 
-      if ((tm - this.lastFrameTime) > 2000) {
-//        console.log("force break", iter)
+      if ((tm - this.lastFrameTime) > 500)
         break;
-      }
 
-      if ((iter * 1000) >= (stepRate * (tm - this.lastIterTime))) {
-//        console.log("Break", iter)
+      if ((iter * 1000) >= (stepRate * (tm - this.lastIterTime)))
         break;
-      }
 
       ++iter;
     }
@@ -173,6 +157,17 @@ class CircuitSolver {
     this.simulationFrames.push(new SimulationFrame(this.Circuit));
 
     this._updateTimings(lit);
+  }
+
+  updateScopes(iter) {
+    if (((iter + 20) % 21) === 0) {
+      for (var scope of this.Circuit.scopes) {
+        if (scope.circuitElm) {
+          scope.sampleVoltage(this.Circuit.time, scope.circuitElm.getVoltageDiff());
+          scope.sampleCurrent(this.Circuit.time, scope.circuitElm.getCurrent());
+        }
+      }
+    }
   }
 
   _updateTimings(lastIterationTime) {
@@ -345,9 +340,8 @@ class CircuitSolver {
     this.circuitRowInfo = Util.zeroArray(this.matrixSize);
     this.circuitPermute = Util.zeroArray(this.matrixSize);
 
-    for (var rowIdx = 0; rowIdx < this.matrixSize; ++rowIdx) {
+    for (var rowIdx = 0; rowIdx < this.matrixSize; ++rowIdx)
       this.circuitRowInfo[rowIdx] = new RowInfo();
-    }
 
     this.circuitNeedsMap = false;
 
@@ -411,26 +405,23 @@ class CircuitSolver {
       if (ce instanceof InductorElm) {
         fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
 
-        if (!fpi.findPath(ce.getNode(0), 5) && !fpi.findPath(ce.getNode(0))) {
+        if (!fpi.findPath(ce.getNode(0), 5) && !fpi.findPath(ce.getNode(0)))
           ce.reset();
-        }
       }
 
       // look for current sources with no current path
       if (ce instanceof CurrentElm) {
         fpi = new Pathfinder(Pathfinder.INDUCT, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
-        if (!fpi.findPath(ce.getNode(0))) {
+        if (!fpi.findPath(ce.getNode(0)))
           console.warn("No path for current source!", ce);
-        }
       }
 
       // Look for voltage source loops:
       if ((Util.typeOf(ce, VoltageElm) && (ce.numPosts() === 2)) || ce instanceof WireElm) {
         var pathfinder = new Pathfinder(Pathfinder.VOLTAGE, ce, ce.getNode(1), this.Circuit.getElements(), this.Circuit.numNodes());
 
-        if (pathfinder.findPath(ce.getNode(0))) {
+        if (pathfinder.findPath(ce.getNode(0)))
           this.Circuit.halt("Voltage source/wire loop with no resistance!", ce);
-        }
       }
 
       // Look for shorted caps or caps with voltage but no resistance
@@ -524,11 +515,9 @@ class CircuitSolver {
             qp = qq;
             elt = this.circuitRowInfo[qp];
 
-            if (elt.type !== RowInfo.ROW_NORMAL) {
-              // We should follow the chain here, but this hardly ever happens so it's not worth worrying about
-              //console.warn("elt.type != RowInfo.ROW_NORMAL", elt)
+            // We should follow the chain here, but this hardly ever happens so it's not worth worrying about
+            if (elt.type !== RowInfo.ROW_NORMAL)
               continue;
-            }
           }
 
           elt.type = RowInfo.ROW_EQUAL;
@@ -537,8 +526,6 @@ class CircuitSolver {
         }
       }
     }
-
-    // END WHILE row < @matrixSize-1
 
     // Find size of new matrix:
     var newMatDim = 0;
@@ -622,7 +609,6 @@ class CircuitSolver {
     this.circuitNeedsMap = true;
     this.analyzeFlag = false;
   }
-
 
   saveOriginalMatrixState() {
     for (var row = 0; row < this.matrixSize; ++row)
@@ -793,9 +779,9 @@ class CircuitSolver {
       var swap = circuitRightSide[row];
       circuitRightSide[row] = circuitRightSide[i];
       circuitRightSide[i] = swap;
-      if (swap !== 0) {
+      if (swap !== 0)
         break;
-      }
+
       ++i;
     }
 
@@ -846,8 +832,6 @@ class CircuitSolver {
 
     return out + "\n";
   }
-
-
 }
 
 CircuitSolver.initClass();
