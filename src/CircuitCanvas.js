@@ -9,6 +9,14 @@ let environment = require('./Environment.js');
 
 let d3 = require("d3-shape");
 
+let { TimeSeries, SmoothieChart } = require("smoothie");
+
+// var jQuery = require('$');
+// require('$-ui');
+// require('$-ui-bundle');
+
+require('jquery-ui');
+
 class CircuitCanvas extends Observer {
   constructor(Circuit, circuitUI) {
     super();
@@ -29,7 +37,7 @@ class CircuitCanvas extends Observer {
     this.context = this.Canvas.getContext("2d");
 
     if (environment.isBrowser) {
-      this.setupScopes();
+      // this.setupScopes();
       this.renderPerformance();
       window.CircuitUI = this.circuitUI;
 

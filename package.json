@@ -2,18 +2,24 @@
   "name": "Maxwell",
   "description": "Maxwell Circuit Simulator",
   "version": "0.0.3",
-  "main": "app/app.js",
+  "main": "src/Maxwell.js",
   "private": true,
   "license": "MIT",
   "directories": {
     "test": "test"
   },
   "dependencies": {
+    "d3": "~3.5.5",
     "dotenv": "^2.0.0",
     "express": "4.13.3",
     "glob": "*",
     "lodash": "4.1.0",
-    "jade": "~0.26.3"
+    "jade": "~0.26.3",
+    "jquery": "^3.1.1",
+    "jquery-ui": "^1.12.1",
+    "jquery-ui-bundle": "^1.11.4",
+    "jquery-ui-dist": "^1.12.1",
+    "rickshaw": "1.5.10"
   },
   "devDependencies": {
     "babel-core": "^6.22.1",

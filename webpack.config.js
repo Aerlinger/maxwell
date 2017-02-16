@@ -15,7 +15,20 @@ module.exports = {
   },
   resolve: {
     // extensions: [".webpack.js", ".web.js", ".js"]
+    alias: {
+      'jquery-ui': 'jquery-ui-dist/jquery-ui.js'
+    }
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      jqy: "jquery",
+      'global.jQuery': 'jquery',
+      'd3': 'd3',
+      'rickshaw': 'rickshaw'
+    })
+  ],
   // TODO: This fixes "module not found" error on the "fs" module used by CircuitLoader et. a
   node: {
     fs: "empty"
