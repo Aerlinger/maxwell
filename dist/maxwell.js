@@ -28918,7 +28918,7 @@
 	    this.context = this.Canvas.getContext("2d");
 	
 	    if (environment.isBrowser) {
-	      // this.setupScopes();
+	      this.setupScopes();
 	      this.renderPerformance();
 	      window.CircuitUI = this.circuitUI;
 	
@@ -29500,14 +29500,14 @@
 	    this.context.restore();
 	  }
 	
-	  drawPolygon(polygon, color = Settings.STROKE_COLOR, fill = Settings.FILL_COLOR) {
+	  drawPolygon(polygon, color = Settings.STROKE_COLOR, fill = Settings.FILL_COLOR, lineWidth = Settings.LINE_WIDTH) {
 	    let numVertices = polygon.numPoints();
 	
 	    this.context.save();
 	
 	    this.context.fillStyle = fill;
 	    this.context.strokeStyle = color;
-	    this.context.lineWidth = Settings.LINE_WIDTH;
+	    this.context.lineWidth = lineWidth;
 	    this.context.beginPath();
 	
 	    this.context.moveTo(polygon.getX(0) + 0.5, polygon.getY(0) + 0.5);
