@@ -7,10 +7,10 @@ let CircuitUI = require('./CircuitUI.js');
 let RickshawScopeCanvas = require("./render/RickshawScopeCanvas");
 
 let Components = require("./components");
+let WireElm = require('./components/WireElm.js');
 
 let AcRailElm = require('./components/ACRailElm.js');
 let AntennaElm = require('./components/AntennaElm.js');
-let WireElm = require('./components/WireElm.js');
 let ResistorElm = require('./components/ResistorElm.js');
 let GroundElm = require('./components/GroundElm.js');
 let VoltageElm = require('./components/VoltageElm.js');
@@ -29,6 +29,7 @@ let VarRailElm = require('./components/VarRailElm.js');
 let OpAmpElm = require('./components/OpAmpElm.js');
 let ZenerElm = require('./components/ZenerElm.js');
 let Switch2Elm = require('./components/Switch2Elm.js');
+let PushSwitchElm = require('./components/PushSwitchElm.js');
 let SweepElm = require('./components/SweepElm.js');
 let TextElm = require('./components/TextElm.js');
 let ProbeElm = require('./components/ProbeElm.js');
@@ -75,10 +76,12 @@ let ClockElm = require('./components/ClockElm.js');
 
 let environment = require("./Environment.js");
 
+let SampleCircuits = require(__dirname + "/../circuits/index.json");
+
 class Maxwell {
   static createContext(circuitName, circuitData, context, onComplete) {
     if (circuitName) {
-      let circuit = CircuitLoader.createCircuitFromJsonData(circuitData);
+      let circuit = CircuitLoader.createCircuitFromJsonData(circuitData, circuitName);
       this.Circuits[circuitName] = circuit;
 
       onComplete(new CircuitUI(circuit, context));
@@ -88,11 +91,83 @@ class Maxwell {
   }
 }
 
+Maxwell.Circuits = {};
+
 Maxwell.Renderer = CircuitUI;
 Maxwell.ScopeCanvas = RickshawScopeCanvas;
-Maxwell.Circuits = {};
+Maxwell.SampleCircuits = SampleCircuits;
 Maxwell.version = "0.0.1";
-Maxwell.Components = Components;
+Maxwell.Components = {
+  "Passive Analog": {
+    "Basic Wire": WireElm,
+    "Ground": GroundElm,
+    "Resistor": ResistorElm,
+    "Capacitor": CapacitorElm,
+    "Inductor": InductorElm,
+    "Switch": SwitchElm,
+    "2-way Switch (SPDT)": Switch2Elm,
+    "Push Switch": PushSwitchElm,
+    "Potentiometer": PotElm,
+    "Spark Gap": SparkGapElm
+  },
+  "Active Analog": {
+    "Bipolar Junction Transistor": TransistorElm,
+    "MOSFET Transistor": MosfetElm,
+    "JFET Transistor": JfetElm,
+    "Operational Amplifier": OpAmpElm,
+    "Transformer": TransformerElm,
+    "Diode": DiodeElm,
+    "Zener Diode": ZenerElm,
+    "Tunnel Diode": TunnelDiodeElm,
+    "Silicon Controller Rectifier (SCR)": ScrElm,
+    "LED": LedElm,
+    "Relay": RelayElm,
+    "Memristor": MemristorElm,
+    "Triode": TriodeElm,
+    "Transmission Line": TransLineElm
+  },
+  "Power Sources": {
+    "Current Source": CurrentElm,
+    "DC Voltage": VoltageElm,
+    "AC Voltage": VoltageElm,
+    "Square Wave (clock)": ClockElm,
+    "Voltage Rail": VarRailElm,
+    "Sawtooth Generator": VoltageElm,
+    "Triangle Generator": VoltageElm,
+    "Pulse Generator": VoltageElm,
+    "Frequency Sweep": SweepElm,
+    "Antenna": AntennaElm,
+  },
+  "Basic Digital": {
+    "Digital Input": LogicInputElm,
+    "Digital Output": LogicOutputElm,
+    "Inverter (NOT)": InverterElm,
+    "AND Gate": AndGateElm,
+    "OR Gate": OrGateElm,
+    "XOR Gate": XorGateElm,
+    "NAND Gate": NandGateElm,
+    "NOR Gate": NorGateElm,
+    "Latch": LatchElm,
+    "JK Flip-Flop": JkFlipFlopElm,
+    "D Flip-Flop": DFlipFlopElm
+  },
+  "Packages": {
+    "Analog to Digital": AdcElm,
+    "Digital to Analoc": DacElm,
+    "Counter": CounterElm,
+    "Decade Counter": DecadeElm,
+    "7-Segment Display": SevenSegElm,
+    "Voltage Controller Oscillator": VcoElm,
+    "Phase Comparator": PhaseCompElm,
+    "555 Timer": TimerElm,
+    "Current Conveyor": CC2Elm
+  },
+  "Inspection": {
+    "Scope Probe": ProbeElm,
+    "Output Node": OutputElm,
+    "Text Label": TextElm
+  }
+};
 
 if (environment.isBrowser) {
   window.Maxwell = Maxwell;
@@ -101,15 +176,4 @@ if (environment.isBrowser) {
   global.Maxwell = Maxwell;
 }
 
-Maxwell.ComponentLibrary = {
-  VoltageElm,
-  RailElm,
-  VarRailElm,
-  ClockElm,
-  AntennaElm,
-  AcRailElm
-};
-
 module.exports = Maxwell;
-
-

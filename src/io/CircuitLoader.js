@@ -72,12 +72,12 @@ let Hint = require('../engine/Hint.js');
 let environment = require("../Environment.js");
 
 class CircuitLoader {
-  static createCircuitFromJsonData(jsonData) {
+  static createCircuitFromJsonData(jsonData, circuit_name) {
 
     // Create a defensive copy of jsonData
     jsonData = JSON.parse(JSON.stringify(jsonData));
 
-    let circuit = new Circuit();
+    let circuit = new Circuit(circuit_name);
 
     // Extract circuit simulation params
     let circuitParams = jsonData.params;

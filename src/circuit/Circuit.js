@@ -89,12 +89,9 @@ class Circuit extends Observer {
     }
   }
 
-  constructor(name) {
+  constructor(name = "untitled") {
     super();
 
-    if (name == null) {
-      name = "untitled";
-    }
     this.name = name;
     this.Params = new SimulationParams();
 
@@ -214,7 +211,7 @@ class Circuit extends Observer {
       str += "  " + rowInfo + "\n";
 
     str += "Circuit Matrix:\n";
-    str += this.Solver.dumpFrame() + "\n";
+    // str += this.Solver.dumpFrame() + "\n";
 
     // str += "Orig Matrix:\n";
     // str += this.Solver.dumpOrigFrame() + "\n";
