@@ -1,14 +1,16 @@
 let Maxwell = require("../src/Maxwell.js");
 
-let Library = Maxwell.ComponentLibrary;
-
+let VoltageElm = require('../src/components/VoltageElm');
+let RailElm = require('../src/components/RailElm');
+let VarRailElm = require('../src/components/VarRailElm');
+let ClockElm = require('../src/components/ClockElm');
 
 /**
  * A simple script to generate and test various voltage sources
  */
 function genVoltageSources() {
   let waveforms = [0, 1, 2, 3, 4, 5, 6];
-  let voltageElms = [Library.VoltageElm, Library.RailElm, Library.VarRailElm, Library.ClockElm]
+  let voltageElms = [VoltageElm, RailElm, VarRailElm, ClockElm];
 
   let circuit = Maxwell.createCircuit("VoltageSources");
 

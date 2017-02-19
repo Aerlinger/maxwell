@@ -4,13 +4,12 @@ let assert = require("assert");
 let fs = require("fs");
 let path = require('path');
 
-var url = 'mongodb://localhost:27017/maxwell';
+var url = 'mongodb://localhost:27017/maxwell_dev';
 
 let circuit_names = glob.sync(__dirname + "/../circuits/v5/*.json");
 
 MongoClient.connect(url, function (err, db) {
-//   assert.equal(null, err);
-  console.log("Connected correctly to server");
+  console.log(`Connected to ${url}`);
 
   circuits = [];
 
@@ -27,10 +26,10 @@ MongoClient.connect(url, function (err, db) {
     });
   }
 
-  db.collection('circuits').insertMany(circuits, function (err, r) {
-
+  db.collection('default_circuits').insertMany(circuits, function (err, r) {
     console.log("Inserted", r.insertedCount, "circuits");
 
     db.close();
   });
+
 });
