@@ -11,7 +11,9 @@ let d3 = require("d3-shape");
 
 let { TimeSeries, SmoothieChart } = require("smoothie");
 
-require('jquery-ui');
+if (environment.isBrowser) {
+  require('jquery-ui');
+}
 
 class CircuitCanvas extends Observer {
   constructor(Circuit, circuitUI) {
@@ -33,7 +35,7 @@ class CircuitCanvas extends Observer {
     this.context = this.Canvas.getContext("2d");
 
     if (environment.isBrowser) {
-      this.setupScopes();
+      // this.setupScopes();
       this.renderPerformance();
       window.CircuitUI = this.circuitUI;
 

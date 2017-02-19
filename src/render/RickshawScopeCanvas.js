@@ -2,7 +2,6 @@ let ScopeCanvas = require("./ScopeCanvas.js");
 let Util = require("../util/Util.js");
 
 let d3 = require('d3');
-window.d3 = d3;
 let Rickshaw = require('rickshaw');
 
 class RickshawScopeCanvas extends ScopeCanvas {
