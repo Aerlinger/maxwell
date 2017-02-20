@@ -65,8 +65,8 @@ class CircuitApplication extends Observer {
     interactionBinding.bind(this)(Circuit, canvas);
 
     if (environment.isBrowser) {
-      // this.setupScopes();
-      // this.renderPerformance();
+      this.setupScopes();
+      this.renderPerformance();
 
       canvas.__circuit_application = this;
     }
