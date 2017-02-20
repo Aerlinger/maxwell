@@ -70,8 +70,6 @@ class CircuitApplication extends Observer {
 
       canvas.__circuit_application = this;
     }
-
-    this.run()
   }
 
   run() {
@@ -89,7 +87,7 @@ class CircuitApplication extends Observer {
 
   rafDraw() {
     if (this.running) {
-      window.requestAnimationFrame(this.rafDraw.bind(this));
+      requestAnimationFrame(this.rafDraw.bind(this));
 
       this.draw()
     }

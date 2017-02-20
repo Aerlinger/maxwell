@@ -145,6 +145,8 @@ block header
         url: "/api/circuits/#{circuit_name}"
       }).success(function(data, status) {
         Maxwell.createContext("#{circuit_name}", data, canvas, function (circuitContext) {
+          circuitContext.run();
+
           window.circuitContext = circuitContext;
 
           $('.component-item').click(function (evt) {
