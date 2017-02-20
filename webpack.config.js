@@ -12,7 +12,7 @@ module.exports = {
     loaders: [
       { test: /\.coffee/, loader: "coffee-loader" },
       { test: /\.(coffee\.md|litcoffee)$/, loader: "coffee-loader?literate" },
-      { test: /circuitSolver.js/, loader: 'babel-loader' }
+      { test: /\.json$/, loader: 'json-loader'}
     ]
   },
   resolve: {

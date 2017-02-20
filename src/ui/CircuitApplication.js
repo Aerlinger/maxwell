@@ -1,11 +1,16 @@
-let Observer = require('./util/Observer');
-let Util = require('./util/Util');
-let Point = require('./geom/Point.js');
-let Settings = require('./Settings.js');
-let Color = require('./util/Color.js');
+let Observer = require('../util/Observer');
+let Util = require('../util/Util');
+let Point = require('../geom/Point.js');
+let Settings = require('../Settings.js');
+let Color = require('../util/Color.js');
 
-let CircuitComponent = require('./components/CircuitComponent');
-let environment = require('./Environment.js');
+let CanvasRenderer = require('./rendering/CanvasRenderStrategy');
+let interactionBinding = require('../ui/InteractionBindings');
+
+let RickshawScopeCanvas = require("./scopes/RickshawScopeCanvas");
+
+let CircuitComponent = require('../components/CircuitComponent');
+let environment = require('../Environment.js');
 
 let { TimeSeries, SmoothieChart } = require("smoothie");
 
@@ -13,44 +18,53 @@ if (environment.isBrowser) {
   require('jquery-ui');
 }
 
-let lineShift = 0;
-
-let interactionBinding = require('./ui/InteractionBindings');
-
-class CircuitCanvas extends Observer {
-  constructor(Circuit, circuitUI, canvas) {
+class CircuitApplication extends Observer {
+  constructor(Circuit, canvas) {
     super();
 
-    // this.circuitUI = circuitUI;
     this.Circuit = Circuit;
     this.Canvas = canvas;
+    this.context = canvas.getContext("2d");
 
-    // TODO: Extract to param
-    this.xMargin = circuitUI.xMargin;
-    this.yMargin = circuitUI.yMargin;
+    this.isDragging = false;
 
     this.draw = this.draw.bind(this);
-    this.drawDots = this.drawDots.bind(this);
 
-    this.context = this.Canvas.getContext("2d");
+    this.xMargin = 200;
+    this.yMargin = 56;
+
+    this.highlightedComponent = null;
+    this.selectedNode = null;
+    this.selectedComponents = [];
+    this.previouslySelectedComponents = [];
+
+    this.placeX = null;
+    this.placeY = null;
+
     this.running = false;
+
+    this.renderer = new CanvasRenderer(this.context, Circuit.Params.voltageRange);
+    interactionBinding.bind(this);
 
     if (environment.isBrowser) {
       // this.setupScopes();
-      this.renderPerformance();
-      this.startRenderLoop()
+      // this.renderPerformance();
     }
 
-    interactionBinding.bind(this)
+    this.run()
   }
 
-  startRenderLoop() {
-    this.running = true;
-    this.rafDraw();
+  run() {
+    if (!this.running) {
+      this.running = true;
+      this.rafDraw();
+    }
   }
 
-  suspendRenderLoop() {
-    this.running = false
+  pause() {
+    if (this.running) {
+      this.running = false;
+    }
   }
 
   rafDraw() {
@@ -70,7 +84,7 @@ class CircuitCanvas extends Observer {
 
       this.Canvas.parentNode.append(scElm);
 
-      let sc = new Maxwell.ScopeCanvas(this, scElm);
+      let sc = new RickshawScopeCanvas(this, scElm);
       scopeElm.setCanvas(sc);
 
       $(scElm).on("resize", function (evt) {
@@ -103,8 +117,8 @@ class CircuitCanvas extends Observer {
     // TODO: Move out of draw
     this.Circuit.updateCircuit();
 
-    if (this.circuitUI.onUpdateComplete) {
-      this.circuitUI.onUpdateComplete();
+    if (this.onUpdateComplete) {
+      this.onUpdateComplete();
     }
     // -----------------------------------------------------------------------------
 
@@ -114,8 +128,8 @@ class CircuitCanvas extends Observer {
     this.context.save();
     this.context.translate(this.xMargin, this.yMargin);
 
-    this.drawText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, "#bf4f00", 1.2 * Settings.TEXT_SIZE);
-    this.drawText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 600, 8, "#000968", 1.1 * Settings.TEXT_SIZE);
+    this.renderer.drawText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, "#bf4f00", 1.2 * Settings.TEXT_SIZE);
+    this.renderer.drawText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 600, 8, "#000968", 1.1 * Settings.TEXT_SIZE);
 
     if (this.performanceMeter) {
       this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
@@ -124,47 +138,46 @@ class CircuitCanvas extends Observer {
     this.drawScopes();
     this.drawComponents();
 
-    this.drawInfoText();
+    this.renderer.drawInfoText(this.highlightedComponent);
 
-    if (this.circuitUI.highlightedNode)
-      this.drawCircle(this.circuitUI.highlightedNode.x + 0.5, this.circuitUI.highlightedNode.y + 0.5, 7, 3, "#0F0");
+    if (this.highlightedNode)
+      this.renderer.drawCircle(this.highlightedNode.x + 0.5, this.highlightedNode.y + 0.5, 7, 3, "#0F0");
 
-    if (this.circuitUI.selectedNode)
-      this.drawRect(this.circuitUI.selectedNode.x - 10 + 0.5, this.circuitUI.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
+    if (this.selectedNode)
+      this.renderer.drawRect(this.selectedNode.x - 10 + 0.5, this.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
 
-    if (this.circuitUI.placeComponent) {
-      this.context.fillText(`Placing ${this.circuitUI.placeComponent.constructor.name}`, this.circuitUI.snapX + 10, this.circuitUI.snapY + 10);
+    if (this.placeComponent) {
+      this.context.fillText(`Placing ${this.placeComponent.constructor.name}`, this.snapX + 10, this.snapY + 10);
 
-      if (this.circuitUI.placeY && this.circuitUI.placeX && this.circuitUI.placeComponent.x2() && this.circuitUI.placeComponent.y2()) {
-        this.drawComponent(this.circuitUI.placeComponent);
+      if (this.placeY && this.placeX && this.placeComponent.x2() && this.placeComponent.y2()) {
+        this.drawComponent(this.placeComponent);
       }
     }
 
-    if (this.circuitUI.highlightedComponent) {
-      this.circuitUI.highlightedComponent.draw(this);
+    if (this.highlightedComponent) {
+      this.highlightedComponent.draw(this);
 
       this.context.save();
       this.context.fillStyle = Settings.POST_COLOR;
 
-      for (let i = 0; i < this.circuitUI.highlightedComponent.numPosts(); ++i) {
-        let post = this.circuitUI.highlightedComponent.getPost(i);
+      for (let i = 0; i < this.highlightedComponent.numPosts(); ++i) {
+        let post = this.highlightedComponent.getPost(i);
 
         this.context.fillRect(post.x - Settings.POST_RADIUS - 1, post.y - Settings.POST_RADIUS - 1, 2 * Settings.POST_RADIUS + 2, 2 * Settings.POST_RADIUS + 2);
       }
 
-      if (this.circuitUI.highlightedComponent.x2())
-        this.context.fillRect(this.circuitUI.highlightedComponent.x2() - 2 * Settings.POST_RADIUS, this.circuitUI.highlightedComponent.y2() - 2 * Settings.POST_RADIUS, 4 * Settings.POST_RADIUS, 4 * Settings.POST_RADIUS);
+      if (this.highlightedComponent.x2())
+        this.context.fillRect(this.highlightedComponent.x2() - 2 * Settings.POST_RADIUS, this.highlightedComponent.y2() - 2 * Settings.POST_RADIUS, 4 * Settings.POST_RADIUS, 4 * Settings.POST_RADIUS);
       this.context.restore();
-      // this.drawRect(this.circuitUI.highlightedComponent.x2(), this.circuitUI.highlightedComponent.y2(), Settings.POST_RADIUS + 2, Settings.POST_RADIUS + 2, 2, Settings.HIGHLIGHT_COLOR);
     }
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
       this.drawDebugInfo();
-      this.drawDebugOverlay();
+      this.drawDebugOverlay(this.circuit);
     }
 
-    if (this.circuitUI.marquee) {
-      this.circuitUI.marquee.draw(this)
+    if (this.marquee) {
+      this.marquee.draw(this)
     }
 
     this.context.restore()
@@ -216,7 +229,7 @@ class CircuitCanvas extends Observer {
   }
 
   drawComponents() {
-    for (var component of this.Circuit.getElements())
+    for (let component of this.Circuit.getElements())
       this.drawComponent(component);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
@@ -230,18 +243,16 @@ class CircuitCanvas extends Observer {
   }
 
   drawComponent(component) {
-    if (component && this.circuitUI.selectedComponents.includes(component)) {
+    if (component && this.selectedComponents.includes(component)) {
       this.drawBoldLines();
-      component.draw(this);
+      component.draw(this.renderer);
     }
 
-    this.drawDefaultLines();
+    this.renderer.drawDefaultLines();
 
     // Main entry point to draw component
-    component.draw(this);
+    component.draw(this.renderer);
   }
-
-
 }
 
-module.exports = CircuitCanvas;
+module.exports = CircuitApplication;

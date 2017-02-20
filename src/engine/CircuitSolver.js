@@ -77,6 +77,8 @@ class CircuitSolver {
   }
 
   solveCircuit() {
+    // console.log("SOLVE", this.Circuit.name);
+
     if ((this.circuitMatrix == null) || (this.Circuit.numElements() === 0)) {
       this.circuitMatrix = null;
       //console.error("Called solve circuit when circuit Matrix not initialized")

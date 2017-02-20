@@ -1,61 +1,27 @@
-let Rectangle = require('./geom/Rectangle.js');
-let CircuitCanvas = require('./CircuitCanvas.js');
-// let SvgRenderer = require('./render/circuit/SvgRenderer');
-let Observer = require('./util/Observer');
-let Util = require('./util/Util');
-let Settings = require('./Settings.js');
+let Util = require('../util/Util');
 
+/**
+ *
+ * @param Circuit
+ * @param canvas
+ *
+ *
+ * This function's 'this' reference is bound to the parent CircuitController
+ */
+let interactionController = function (Circuit, canvas) {
+  canvas.addEventListener('mousemove', mousemove.bind(this));
+  canvas.addEventListener('mousedown', mousedown.bind(this));
+  canvas.addEventListener('mouseup', mouseup.bind(this));
 
-class CircuitUI extends Observer {
-  static initClass() {
-    this.ON_COMPONENT_HOVER = "ON_COMPONENT_HOVER";
-    this.ON_COMPONENT_CLICKED = "ON_COMPONENT_CLICKED";
-    this.ON_COMPONENTS_SELECTED = "ON_COMPONENTS_SELECTED";
-    this.ON_COMPONENTS_DESELECTED = "ON_COMPONENTS_DESELECTED";
-    this.ON_COMPONENTS_MOVED = "ON_COMPONENTS_MOVED";
+  // Callbacks
+  let onSelectionChanged = this.noop;
+  let onComponentClick = this.noop;
+  let onComponentHover = this.noop;
+  let onNodeHover = this.noop;
+  let onNodeClick = this.noop;
+  let onUpdateComplete = this.noop;
 
-    this.MOUSEDOWN = 1;
-  }
-
-  constructor(Circuit, canvas) {
-    super();
-
-    this.Circuit = Circuit;
-
-    // TODO: Extract to param
-    this.xMargin = 200;
-    this.yMargin = 56;
-
-    this.highlightedComponent = null;
-    this.selectedNode = null;
-
-    this.selectedComponents = [];
-    this.previouslySelectedComponents = [];
-
-    this.placeX = null;
-    this.placeY = null;
-
-    new CircuitCanvas(Circuit, this, canvas);
-
-    this.isDragging = false;
-
-    canvas.addEventListener('mousemove', this.mousemove.bind(this));
-    canvas.addEventListener('mousedown', this.mousedown.bind(this));
-    canvas.addEventListener('mouseup', this.mouseup.bind(this));
-
-    // Callbacks
-    this.onSelectionChanged = this.noop;
-    this.onComponentClick = this.noop;
-    this.onComponentHover = this.noop;
-    this.onNodeHover = this.noop;
-    this.onNodeClick = this.noop;
-    this.onUpdateComplete = this.noop;
-  }
-
-  noop() {
-  }
-
-  mousemove(event) {
+  function mousemove(event) {
     let component;
     let x = event.offsetX - this.xMargin;
     let y = event.offsetY - this.yMargin;
@@ -65,8 +31,8 @@ class CircuitUI extends Observer {
     this.lastX = this.snapX;
     this.lastY = this.snapY;
 
-    this.snapX = Util.snapGrid(x);
-    this.snapY = Util.snapGrid(y);
+    this.snapX = this.snapGrid(x);
+    this.snapY = this.snapGrid(y);
 
     // TODO: WIP for interactive element placing
     if (this.placeComponent) {
@@ -95,11 +61,11 @@ class CircuitUI extends Observer {
             this.allSelectedComponents.push(component);
 
             /*
-            if (this.selectedComponents.indexOf(component) < 0) {
-              this.selectedComponents.push(component);
-              this.onSelectionChanged(this.selectedComponents);
-            }
-            */
+             if (this.selectedComponents.indexOf(component) < 0) {
+             this.selectedComponents.push(component);
+             this.onSelectionChanged(this.selectedComponents);
+             }
+             */
           }
         }
 
@@ -218,7 +184,8 @@ class CircuitUI extends Observer {
     }
   }
 
-  mousedown(event) {
+
+  function mousedown(event) {
     let x = event.offsetX - this.xMargin;
     let y = event.offsetY - this.yMargin;
 
@@ -269,7 +236,7 @@ class CircuitUI extends Observer {
     }
   }
 
-  mouseup(event) {
+  function mouseup(event) {
     this.marquee = null;
     this.selectedNode = null;
 
@@ -295,31 +262,22 @@ class CircuitUI extends Observer {
     }
   }
 
-  togglePause() {
+  function togglePause() {
     if (this.Circuit.isStopped)
       this.Circuit.resume();
     else
       this.Circuit.pause();
   }
 
-  pause() {
-  }
-
-  play() {
-  }
-
-  restart() {
-  }
-
-  isSelecting() {
+  function isSelecting() {
     return !!this.marquee;
   }
 
-  isPlacingComponent() {
+  function isPlacingComponent() {
     return !!this.placeComponent;
   }
 
-  getMode() {
+  function getMode() {
     let mode = "";
 
     if (this.isDragging)
@@ -334,13 +292,13 @@ class CircuitUI extends Observer {
     return mode
   }
 
-  clearPlaceComponent() {
+  function clearPlaceComponent() {
     this.placeX = null;
     this.placeY = null;
     this.placeComponent = null;
   }
 
-  resetSelection() {
+  function resetSelection() {
     if (this.selectedComponents && (this.selectedComponents.length > 0))
       this.onSelectionChanged({
         selection: [],
@@ -351,11 +309,11 @@ class CircuitUI extends Observer {
     this.selectedComponents = [];
   }
 
-  getSelectedComponents() {
+  function getSelectedComponents() {
     return this.selectedComponents;
   }
 
-  setPlaceComponent(componentName) {
+  function setPlaceComponent(componentName) {
     let klass = eval(componentName);
 
     this.placeComponent = new klass();
@@ -365,11 +323,18 @@ class CircuitUI extends Observer {
     return this.placeComponent;
   }
 
-  remove(components) {
+  function remove(components) {
     console.log("components", components);
     return this.Circuit.destroy(components);
   }
-}
+};
 
-CircuitUI.initClass();
-module.exports = CircuitUI;
+interactionController.ON_COMPONENT_HOVER = "ON_COMPONENT_HOVER";
+interactionController.ON_COMPONENT_CLICKED = "ON_COMPONENT_CLICKED";
+interactionController.ON_COMPONENTS_SELECTED = "ON_COMPONENTS_SELECTED";
+interactionController.ON_COMPONENTS_DESELECTED = "ON_COMPONENTS_DESELECTED";
+interactionController.ON_COMPONENTS_MOVED = "ON_COMPONENTS_MOVED";
+
+interactionController.MOUSEDOWN = 1;
+
+module.exports = interactionController;

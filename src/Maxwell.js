@@ -4,8 +4,6 @@ let CircuitLoader = require('./io/CircuitLoader.js');
 let Circuit = require('./circuit/Circuit.js');
 let CircuitUI = require('./CircuitUI.js');
 
-let RickshawScopeCanvas = require("./render/RickshawScopeCanvas");
-
 let Components = require("./components");
 let WireElm = require('./components/WireElm.js');
 
@@ -78,13 +76,21 @@ let environment = require("./Environment.js");
 
 let SampleCircuits = require(__dirname + "/../circuits/index.json");
 
+let CircuitApplication = require("./ui/CircuitApplication");
+
 class Maxwell {
+  static clearAllCircuits() {
+    this.Circuits = {};
+  }
+
   static createContext(circuitName, circuitData, context, onComplete) {
     if (circuitName) {
       let circuit = CircuitLoader.createCircuitFromJsonData(circuitData, circuitName);
       this.Circuits[circuitName] = circuit;
 
-      onComplete(new CircuitUI(circuit, context));
+      let CircuitApp = new CircuitApplication(circuit, context);
+
+      onComplete(CircuitApp);
     } else {
       console.error(`createContext must be called with a unique circuit name`)
     }
@@ -94,7 +100,6 @@ class Maxwell {
 Maxwell.Circuits = {};
 
 Maxwell.Renderer = CircuitUI;
-Maxwell.ScopeCanvas = RickshawScopeCanvas;
 Maxwell.SampleCircuits = SampleCircuits;
 Maxwell.version = "0.0.1";
 Maxwell.Components = {

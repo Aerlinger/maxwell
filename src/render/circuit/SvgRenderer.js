@@ -6,7 +6,7 @@ let Color = require('../../util/Color.js');
 
 let CircuitComponent = require('../../components/CircuitComponent');
 let environment = require('../../Environment.js');
-let ScopeCanvas = require('../ScopeCanvas');
+let ScopeCanvas = require('../scopes/ScopeCanvas');
 
 let d3 = require("d3");
 
