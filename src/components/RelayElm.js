@@ -89,6 +89,9 @@ class RelayElm extends CircuitComponent {
 
     this.calcLeads(32);
 
+    this.swposts = new Array(this.poleCount);
+    this.swpoles = new Array(this.poleCount);
+
     for (let i = 0; i < this.poleCount; ++i) {
       this.swposts[i] = new Array(3);
       this.swpoles[i] = new Array(3);

@@ -3,7 +3,7 @@ describe "CircuitUI", ->
     @Canvas = new Canvas(600, 500)
     @Circuit = new Circuit()
 
-    @Renderer = new CircuitUI(@Circuit, @Canvas)
+    @Renderer = new CircuitApplication(@Circuit, @Canvas)
 
     for component_name, Component in Components
       @placeComponent = @Renderer.setPlaceComponent(component_name)

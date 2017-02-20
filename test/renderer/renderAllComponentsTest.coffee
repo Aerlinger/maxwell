@@ -1,6 +1,6 @@
 gm = require("gm")
 
-describe.only "Render all components", ->
+describe "Render all components", ->
   it "can render all components", ->
     this.timeout(5000)
 
@@ -19,7 +19,7 @@ describe.only "Render all components", ->
 
     @Circuit = new Circuit("AllComponents")
 
-    @renderer = new CircuitUI(@Circuit, @canvas)
+    @renderer = new CircuitApplication(@Circuit, @canvas)
     ctx.imageSmoothingEnabled = true
     @renderer.context = ctx
 
@@ -53,8 +53,8 @@ describe.only "Render all components", ->
         @singleComponent.setPoints()
 
         @ComponentCanvas = new Canvas(200, 300);
-        componentUI = new CircuitUI(@ComponentCircuit, @ComponentCanvas);
-        componentUI.CircuitCanvas.drawComponents();
+        componentUI = new CircuitApplication(@ComponentCircuit, @ComponentCanvas);
+        componentUI.drawComponents();
 
         gm(@ComponentCanvas.toBuffer()).trim().write "test/fixtures/componentRenders/#{@component.getName()}_thumb.png", (err) ->
           console.log(err)
@@ -62,7 +62,7 @@ describe.only "Render all components", ->
 
         fs.writeFileSync("test/fixtures/componentRenders/" + @component.getName() + ".png", @ComponentCanvas.toBuffer())
 
-    @renderer.CircuitCanvas.drawComponents()
+    @renderer.drawComponents()
 
     #
 

@@ -81,9 +81,9 @@ describe "CC2", ->
 
     @circuit.updateCircuit()
 
-    @renderer = new CircuitUI(@circuit, @canvas)
+    @renderer = new CircuitApplication(@circuit, @canvas)
 
     ctx = @canvas.getContext('2d')
     @renderer.context = ctx
-    @renderer.CircuitCanvas.drawComponents()
+    @renderer.drawComponents()
     

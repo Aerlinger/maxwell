@@ -112,9 +112,9 @@ describe "Switch element", ->
 
         @canvas = new Canvas(200, 300)
 
-        @renderer = new CircuitUI(@Circuit, @canvas)
+        @renderer = new CircuitApplication(@Circuit, @canvas)
         @renderer.context = @canvas.getContext('2d')
-        @renderer.CircuitCanvas.drawComponents()
+        @renderer.drawComponents()
 
         @componentImageFileName = "test/fixtures/componentRenders/switch_init.png"
 

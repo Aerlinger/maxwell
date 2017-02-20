@@ -219,11 +219,11 @@ describe "CC2 Component", ->
 
         @canvas = new Canvas(200, 300)
 
-        @renderer = new CircuitUI(@Circuit, @canvas)
+        @renderer = new CircuitApplication(@Circuit, @canvas)
         @renderer.context = @canvas.getContext('2d')
 
         @Circuit.updateCircuit()
-        @renderer.CircuitCanvas.drawComponents()
+        @renderer.drawComponents()
 
         @componentImageFileName = "test/fixtures/componentRenders/#{@transistorElm.getName()}_init.png"
 

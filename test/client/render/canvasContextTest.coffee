@@ -1,6 +1,6 @@
 describe.skip "Canvas Context", ->
   beforeEach (done) ->
-    @renderer = new CircuitUI(400, 300)
+    @renderer = new CircuitApplication(400, 300)
     @renderer.clear()
     done()
 
@@ -13,7 +13,7 @@ describe.skip "Canvas Context", ->
 
 
   it "renders (46, 32, 100, 150):  #00A", (done) ->
-    @renderer.CircuitCanvas.drawLine(46, 32, 100, 150, '#00A')
+    @renderer.drawLine(46, 32, 100, 150, '#00A')
     @renderer.getCanvas().toBuffer (err, buf) ->
       throw err if err
       fs.writeFile(__dirname + '/primitives/line.png', buf)
@@ -21,7 +21,7 @@ describe.skip "Canvas Context", ->
 
 
   it "renders polygon:  [46, 32, 100, 150], [150, 46, 32, 100] #0CA", (done) ->
-    @renderer.CircuitCanvas.drawPolygon(Polygon.fromCoordinates([46, 32, 100, 150], [150, 46, 32, 100]), '#0CA')
+    @renderer.drawPolygon(Polygon.fromCoordinates([46, 32, 100, 150], [150, 46, 32, 100]), '#0CA')
     @renderer.getCanvas().toBuffer (err, buf) ->
       throw err if err
       fs.writeFile(__dirname + '/primitives/poly.png', buf)

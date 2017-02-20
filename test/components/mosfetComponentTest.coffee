@@ -42,12 +42,12 @@ describe "MosfetElm", ->
         @Circuit.clearAndReset()
         @Circuit.solder(@mosfetElm)
 
-        @renderer = new CircuitUI(@Circuit, @canvas)
+        @renderer = new CircuitApplication(@Circuit, @canvas)
         @renderer.context = ctx
         done()
 
       it "renders initial circuit", ->
-        @renderer.CircuitCanvas.drawComponents()
+        @renderer.drawComponents()
 
         fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())
 

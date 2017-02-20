@@ -73,12 +73,12 @@ describe "Capacitor Component", ->
       @Circuit.clearAndReset()
       @Circuit.solder(@capacitor)
 
-      @renderer = new CircuitUI(@Circuit, @canvas)
+      @renderer = new CircuitApplication(@Circuit, @canvas)
       @renderer.context = ctx
       done()
 
     it "renders initial circuit", ->
-      @renderer.CircuitCanvas.draw()
+      @renderer.draw()
 
       fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())
 

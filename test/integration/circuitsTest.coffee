@@ -96,10 +96,10 @@ for circuit_name in @files
         @canvas = new Canvas(800, 600)
         ctx = @canvas.getContext('2d')
 
-        @renderer = new CircuitUI(circuit, @canvas)
+        @renderer = new CircuitApplication(circuit, @canvas)
         @renderer.context = ctx
 
-        @renderer.CircuitCanvas.draw()
+        @renderer.draw()
 
         fs.writeFileSync("test/fixtures/circuitRenders/#{circuit_name}_init.png", @canvas.toBuffer())
 

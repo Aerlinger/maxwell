@@ -1,6 +1,6 @@
 chai = require('chai');
 
-require('dotenv').config();
+// require('dotenv').config();
 
 assert = chai.assert;
 expect = chai.expect;

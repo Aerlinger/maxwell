@@ -134,7 +134,7 @@ describe "Base Circuit Component", ->
       @Circuit.clearAndReset()
       @Circuit.solder(@circuitElement)
 
-      @renderer = new CircuitUI(@Circuit, @canvas)
+      @renderer = new CircuitApplication(@Circuit, @canvas)
       @renderer.context = ctx
       done()
 

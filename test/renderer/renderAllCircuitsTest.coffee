@@ -21,11 +21,11 @@ describe.skip "CircuitUI", ->
           @circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
           @circuit.updateCircuit()
 
-          @renderer = new CircuitUI(@circuit, @canvas)
+          @renderer = new CircuitApplication(@circuit, @canvas)
 
           ctx = @canvas.getContext('2d')
           @renderer.context = ctx
-          @renderer.CircuitCanvas.drawComponents()
+          @renderer.drawComponents()
 
           origfont = ctx.font
           ctx.font = "16px serif"
