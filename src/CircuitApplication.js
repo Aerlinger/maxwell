@@ -24,6 +24,22 @@ class CircuitApplication extends Observer {
   constructor(Circuit, canvas) {
     super();
 
+    // A Circuit is already loaded on this canvas so we need to garbage collect it to prevent a memory leak
+    if (canvas.__circuit_application) {
+      let previous_application = canvas.__circuit_application;
+
+      previous_application.pause();
+
+      previous_application.Canvas.onmousemove = null;
+      previous_application.Canvas.onmousedown = null;
+      previous_application.Canvas.onmouseup = null;
+
+      previous_application.Circuit = null;
+      previous_application.Canvas = null;
+      previous_application.renderer = null;
+      previous_application.context = null;
+    }
+
     this.Circuit = Circuit;
     this.Canvas = canvas;
     this.context = canvas.getContext('2d');
@@ -51,6 +67,8 @@ class CircuitApplication extends Observer {
     if (environment.isBrowser) {
       // this.setupScopes();
       // this.renderPerformance();
+
+      canvas.__circuit_application = this;
     }
 
     this.run()

@@ -19,9 +19,6 @@ let SelectionMarquee = require('./SelectionMarquee');
  * This function's 'this' reference is bound to the parent CircuitController
  */
 let interactionController = function (Circuit, canvas) {
-  canvas.addEventListener('mousemove', mousemove.bind(this));
-  canvas.addEventListener('mousedown', mousedown.bind(this));
-  canvas.addEventListener('mouseup', mouseup.bind(this));
 
   // Callbacks
   let onSelectionChanged = this.noop;
@@ -31,7 +28,7 @@ let interactionController = function (Circuit, canvas) {
   let onNodeClick = this.noop;
   let onUpdateComplete = this.noop;
 
-  function mousemove(event) {
+  this.mousemove = function(event) {
     let component;
     let x = event.offsetX - this.xMargin;
     let y = event.offsetY - this.yMargin;
@@ -192,10 +189,9 @@ let interactionController = function (Circuit, canvas) {
         component.move(this.snapX - this.lastX, this.snapY - this.lastY);
       }
     }
-  }
+  };
 
-
-  function mousedown(event) {
+  this.mousedown = function(event) {
     let x = event.offsetX - this.xMargin;
     let y = event.offsetY - this.yMargin;
 
@@ -244,9 +240,9 @@ let interactionController = function (Circuit, canvas) {
         }
       }
     }
-  }
+  };
 
-  function mouseup(event) {
+  this.mouseup = function(event) {
     this.marquee = null;
     this.selectedNode = null;
 
@@ -270,8 +266,11 @@ let interactionController = function (Circuit, canvas) {
     if (this.selectedComponents && this.selectedComponents.length > 0) {
       this.notifyObservers(ON_COMPONENTS_DESELECTED, this.selectedComponents);
     }
-  }
+  };
 
+  canvas.onmousemove =  this.mousemove.bind(this);
+  canvas.onmousedown = this.mousedown.bind(this);
+  canvas.onmouseup = this.mouseup.bind(this);
 };
 
 module.exports = interactionController;
