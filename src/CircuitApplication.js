@@ -4,15 +4,17 @@ let Point = require('./geom/Point.js');
 let Settings = require('./Settings.js');
 let Color = require('./util/Color.js');
 
+let ResistorElm = require('./components/ResistorElm');
+
 let CanvasRenderer = require('./ui/rendering/CanvasRenderStrategy');
 let interactionBinding = require('./ui/InteractionBindings');
 
-let RickshawScopeCanvas = require("./ui/scopes/RickshawScopeCanvas");
+let RickshawScopeCanvas = require('./ui/scopes/RickshawScopeCanvas');
 
 let CircuitComponent = require('./components/CircuitComponent');
 let environment = require('./Environment.js');
 
-let { TimeSeries, SmoothieChart } = require("smoothie");
+let {TimeSeries, SmoothieChart} = require('smoothie');
 
 if (environment.isBrowser) {
   require('jquery-ui');
@@ -24,7 +26,7 @@ class CircuitApplication extends Observer {
 
     this.Circuit = Circuit;
     this.Canvas = canvas;
-    this.context = canvas.getContext("2d");
+    this.context = canvas.getContext('2d');
 
     this.isDragging = false;
 
@@ -44,7 +46,7 @@ class CircuitApplication extends Observer {
     this.running = false;
 
     this.renderer = new CanvasRenderer(this.context, Circuit.Params.voltageRange);
-    interactionBinding.bind(this);
+    interactionBinding.bind(this)(Circuit, canvas);
 
     if (environment.isBrowser) {
       // this.setupScopes();
@@ -87,8 +89,8 @@ class CircuitApplication extends Observer {
       let sc = new RickshawScopeCanvas(this, scElm);
       scopeElm.setCanvas(sc);
 
-      $(scElm).on("resize", function (evt) {
-        let innerElm = $(scElm).find(".plot-context");
+      $(scElm).on('resize', function (evt) {
+        let innerElm = $(scElm).find('.plot-context');
 
         sc.resize(innerElm.width(), innerElm.height() - 5);
       });
@@ -105,7 +107,7 @@ class CircuitApplication extends Observer {
     });
 
     chart.addTimeSeries(this.performanceMeter, {strokeStyle: 'rgba(255, 0, 200, 1)', lineWidth: 1});
-    chart.streamTo(document.getElementById("performance_sparkline"), 500);
+    chart.streamTo(document.getElementById('performance_sparkline'), 500);
   }
 
   clear() {
@@ -128,8 +130,8 @@ class CircuitApplication extends Observer {
     this.context.save();
     this.context.translate(this.xMargin, this.yMargin);
 
-    this.renderer.drawText("Time elapsed: " + Util.getUnitText(this.Circuit.time, "s"), 10, 5, "#bf4f00", 1.2 * Settings.TEXT_SIZE);
-    this.renderer.drawText("Frame Time: " + Math.floor(this.Circuit.lastFrameTime) + "ms", 600, 8, "#000968", 1.1 * Settings.TEXT_SIZE);
+    this.renderer.drawText('Time elapsed: ' + Util.getUnitText(this.Circuit.time, 's'), 10, 5, '#bf4f00', 1.2 * Settings.TEXT_SIZE);
+    this.renderer.drawText('Frame Time: ' + Math.floor(this.Circuit.lastFrameTime) + 'ms', 600, 8, '#000968', 1.1 * Settings.TEXT_SIZE);
 
     if (this.performanceMeter) {
       this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
@@ -141,10 +143,10 @@ class CircuitApplication extends Observer {
     this.renderer.drawInfoText(this.highlightedComponent);
 
     if (this.highlightedNode)
-      this.renderer.drawCircle(this.highlightedNode.x + 0.5, this.highlightedNode.y + 0.5, 7, 3, "#0F0");
+      this.renderer.drawCircle(this.highlightedNode.x + 0.5, this.highlightedNode.y + 0.5, 7, 3, '#0F0');
 
     if (this.selectedNode)
-      this.renderer.drawRect(this.selectedNode.x - 10 + 0.5, this.selectedNode.y - 10 + 0.5, 21, 21, 1, "#0FF");
+      this.renderer.drawRect(this.selectedNode.x - 10 + 0.5, this.selectedNode.y - 10 + 0.5, 21, 21, 1, '#0FF');
 
     if (this.placeComponent) {
       this.context.fillText(`Placing ${this.placeComponent.constructor.name}`, this.snapX + 10, this.snapY + 10);
@@ -155,7 +157,7 @@ class CircuitApplication extends Observer {
     }
 
     if (this.highlightedComponent) {
-      this.highlightedComponent.draw(this);
+      this.highlightedComponent.draw(this.renderer);
 
       this.context.save();
       this.context.fillStyle = Settings.POST_COLOR;
@@ -177,25 +179,25 @@ class CircuitApplication extends Observer {
     }
 
     if (this.marquee) {
-      this.marquee.draw(this)
+      this.marquee.draw(this.renderer)
     }
 
     this.context.restore()
   }
 
   renderScopeCanvas(elementName) {
-    let scopeWrapper = document.createElement("div");
-    scopeWrapper.className = "plot-pane";
+    let scopeWrapper = document.createElement('div');
+    scopeWrapper.className = 'plot-pane';
 
-    let leftAxis = document.createElement("div");
-    leftAxis.className = "left-axis";
+    let leftAxis = document.createElement('div');
+    leftAxis.className = 'left-axis';
 
-    let scopeCanvas = document.createElement("div");
-    scopeCanvas.className = "plot-context";
+    let scopeCanvas = document.createElement('div');
+    scopeCanvas.className = 'plot-context';
 
     if (elementName) {
-      let label = document.createElement("div");
-      label.className = "plot-label";
+      let label = document.createElement('div');
+      label.className = 'plot-label';
       label.innerText = elementName;
 
       scopeWrapper.append(label);
@@ -216,7 +218,7 @@ class CircuitApplication extends Observer {
         this.context.save();
 
         this.context.setLineDash([5, 5]);
-        this.context.strokeStyle = "#FFA500";
+        this.context.strokeStyle = '#FFA500';
         this.context.lineWidth = 1;
         this.context.moveTo(center.x, center.y);
         this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height() / 2);
@@ -228,6 +230,61 @@ class CircuitApplication extends Observer {
     }
   }
 
+  getMode() {
+    let mode = '';
+
+    if (this.isDragging)
+      mode = 'DRAGGING';
+    else if (this.isPlacingComponent())
+      mode = 'PLACING';
+    else if (this.isSelecting())
+      mode = 'SELECTING';
+    else
+      mode = 'IDLE';
+
+    return mode
+  }
+
+  clearPlaceComponent() {
+    this.placeX = null;
+    this.placeY = null;
+    this.placeComponent = null;
+  }
+
+  resetSelection() {
+    if (this.selectedComponents && (this.selectedComponents.length > 0))
+      this.onSelectionChanged({
+        selection: [],
+        added: [],
+        removed: this.selectedComponents
+      });
+
+    this.selectedComponents = [];
+  }
+
+  getSelectedComponents() {
+    return this.selectedComponents;
+  }
+
+  setPlaceComponent(componentName) {
+    let klass = eval(componentName);
+
+    this.placeComponent = new klass();
+
+    this.resetSelection();
+
+    return this.placeComponent;
+  }
+
+  remove(components) {
+    console.log('components', components);
+    return this.Circuit.destroy(components);
+  }
+
+  isPlacingComponent() {
+    return !!this.placeComponent;
+  }
+
   drawComponents() {
     for (let component of this.Circuit.getElements())
       this.drawComponent(component);
@@ -237,14 +294,29 @@ class CircuitApplication extends Observer {
         let voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx));
         let node = this.Circuit.getNode(nodeIdx);
 
-        this.context.fillText(`${nodeIdx}:${voltage}`, node.x + 10, node.y - 10, "#FF8C00");
+        this.context.fillText(`${nodeIdx}:${voltage}`, node.x + 10, node.y - 10, '#FF8C00');
       }
     }
   }
 
+  isPlacingComponent() {
+    return !!this.placeComponent;
+  }
+
+  togglePause() {
+    if (this.Circuit.isStopped)
+      this.Circuit.resume();
+    else
+      this.Circuit.pause();
+  }
+
+  isSelecting() {
+    return !!this.marquee;
+  }
+
   drawComponent(component) {
     if (component && this.selectedComponents.includes(component)) {
-      this.drawBoldLines();
+      this.renderer.drawBoldLines();
       component.draw(this.renderer);
     }
 

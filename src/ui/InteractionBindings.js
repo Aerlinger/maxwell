@@ -1,5 +1,15 @@
 let Util = require('../util/Util');
 
+const ON_COMPONENT_HOVER = "ON_COMPONENT_HOVER";
+const ON_COMPONENT_CLICKED = "ON_COMPONENT_CLICKED";
+const ON_COMPONENTS_SELECTED = "ON_COMPONENTS_SELECTED";
+const ON_COMPONENTS_DESELECTED = "ON_COMPONENTS_DESELECTED";
+const ON_COMPONENTS_MOVED = "ON_COMPONENTS_MOVED";
+
+const MOUSEDOWN = 1;
+
+let SelectionMarquee = require('./SelectionMarquee');
+
 /**
  *
  * @param Circuit
@@ -31,8 +41,8 @@ let interactionController = function (Circuit, canvas) {
     this.lastX = this.snapX;
     this.lastY = this.snapY;
 
-    this.snapX = this.snapGrid(x);
-    this.snapY = this.snapGrid(y);
+    this.snapX = Util.snapGrid(x);
+    this.snapY = Util.snapGrid(y);
 
     // TODO: WIP for interactive element placing
     if (this.placeComponent) {
@@ -159,7 +169,7 @@ let interactionController = function (Circuit, canvas) {
               if (this.onComponentHover && !this.isDragging)
                 this.onComponentHover(this.highlightedComponent);
 
-              this.notifyObservers(CircuitUI.ON_COMPONENT_HOVER, this.highlightedComponent);
+              this.notifyObservers(ON_COMPONENT_HOVER, this.highlightedComponent);
             }
 
           } else {
@@ -173,7 +183,7 @@ let interactionController = function (Circuit, canvas) {
     }
 
     // Move components
-    if (!this.marquee && !this.isPlacingComponent() && !this.selectedNode && (this.selectedComponents && this.selectedComponents.length > 0) && (event.which === CircuitUI.MOUSEDOWN) && ((this.lastX !== this.snapX) || (this.lastY !== this.snapY))) {
+    if (!this.marquee && !this.isPlacingComponent() && !this.selectedNode && (this.selectedComponents && this.selectedComponents.length > 0) && (event.which === MOUSEDOWN) && ((this.lastX !== this.snapX) || (this.lastY !== this.snapY))) {
       this.isDragging = true;
       if (this.onComponentsDrag)
         this.onComponentsDrag(this.selectedComponents);
@@ -218,7 +228,7 @@ let interactionController = function (Circuit, canvas) {
 
       for (let component of this.Circuit.getElements()) {
         if (component.getBoundingBox().contains(x, y)) {
-          this.notifyObservers(CircuitUI.ON_COMPONENT_CLICKED, component);
+          this.notifyObservers(ON_COMPONENT_CLICKED, component);
 
           if (this.onComponentClick)
             this.onComponentClick(component);
@@ -258,83 +268,10 @@ let interactionController = function (Circuit, canvas) {
     this.isDragging = false;
 
     if (this.selectedComponents && this.selectedComponents.length > 0) {
-      this.notifyObservers(CircuitUI.ON_COMPONENTS_DESELECTED, this.selectedComponents);
+      this.notifyObservers(ON_COMPONENTS_DESELECTED, this.selectedComponents);
     }
   }
 
-  function togglePause() {
-    if (this.Circuit.isStopped)
-      this.Circuit.resume();
-    else
-      this.Circuit.pause();
-  }
-
-  function isSelecting() {
-    return !!this.marquee;
-  }
-
-  function isPlacingComponent() {
-    return !!this.placeComponent;
-  }
-
-  function getMode() {
-    let mode = "";
-
-    if (this.isDragging)
-      mode = "DRAGGING";
-    else if(this.isPlacingComponent())
-      mode = "PLACING";
-    else if(this.isSelecting())
-      mode = "SELECTING";
-    else
-      mode = "IDLE";
-
-    return mode
-  }
-
-  function clearPlaceComponent() {
-    this.placeX = null;
-    this.placeY = null;
-    this.placeComponent = null;
-  }
-
-  function resetSelection() {
-    if (this.selectedComponents && (this.selectedComponents.length > 0))
-      this.onSelectionChanged({
-        selection: [],
-        added:[],
-        removed: this.selectedComponents
-      });
-
-    this.selectedComponents = [];
-  }
-
-  function getSelectedComponents() {
-    return this.selectedComponents;
-  }
-
-  function setPlaceComponent(componentName) {
-    let klass = eval(componentName);
-
-    this.placeComponent = new klass();
-
-    this.resetSelection();
-
-    return this.placeComponent;
-  }
-
-  function remove(components) {
-    console.log("components", components);
-    return this.Circuit.destroy(components);
-  }
 };
-
-interactionController.ON_COMPONENT_HOVER = "ON_COMPONENT_HOVER";
-interactionController.ON_COMPONENT_CLICKED = "ON_COMPONENT_CLICKED";
-interactionController.ON_COMPONENTS_SELECTED = "ON_COMPONENTS_SELECTED";
-interactionController.ON_COMPONENTS_DESELECTED = "ON_COMPONENTS_DESELECTED";
-interactionController.ON_COMPONENTS_MOVED = "ON_COMPONENTS_MOVED";
-
-interactionController.MOUSEDOWN = 1;
 
 module.exports = interactionController;
