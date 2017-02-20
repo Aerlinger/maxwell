@@ -2,7 +2,6 @@ let CircuitComponent = require('./components/CircuitComponent.js');
 let CircuitLoader = require('./io/CircuitLoader.js');
 
 let Circuit = require('./circuit/Circuit.js');
-let CircuitUI = require('./CircuitUI.js');
 
 let Components = require("./components");
 let WireElm = require('./components/WireElm.js');
@@ -76,7 +75,7 @@ let environment = require("./Environment.js");
 
 let SampleCircuits = require(__dirname + "/../circuits/index.json");
 
-let CircuitApplication = require("./ui/CircuitApplication");
+let CircuitApplication = require("./CircuitApplication");
 
 class Maxwell {
   static clearAllCircuits() {
@@ -99,7 +98,6 @@ class Maxwell {
 
 Maxwell.Circuits = {};
 
-Maxwell.Renderer = CircuitUI;
 Maxwell.SampleCircuits = SampleCircuits;
 Maxwell.version = "0.0.1";
 Maxwell.Components = {

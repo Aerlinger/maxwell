@@ -48,7 +48,7 @@ CircuitLoader = require("../src/io/CircuitLoader");
 
 // Renderer = require("../src/render/renderer.js");
 // CircuitUI = require("../src/CircuitUI.js");
-// CircuitCanvas = require("../src/CircuitCanvas.js");
+CircuitApplication = require("../src/CircuitApplication");
 MatrixStamper = require('../src/engine/MatrixStamper.js');
 
 CircuitComponent = require('../src/components/CircuitComponent.js');

@@ -1,16 +1,16 @@
-let Observer = require('../util/Observer');
-let Util = require('../util/Util');
-let Point = require('../geom/Point.js');
-let Settings = require('../Settings.js');
-let Color = require('../util/Color.js');
+let Observer = require('./util/Observer');
+let Util = require('./util/Util');
+let Point = require('./geom/Point.js');
+let Settings = require('./Settings.js');
+let Color = require('./util/Color.js');
 
-let CanvasRenderer = require('./rendering/CanvasRenderStrategy');
-let interactionBinding = require('../ui/InteractionBindings');
+let CanvasRenderer = require('./ui/rendering/CanvasRenderStrategy');
+let interactionBinding = require('./ui/InteractionBindings');
 
-let RickshawScopeCanvas = require("./scopes/RickshawScopeCanvas");
+let RickshawScopeCanvas = require("./ui/scopes/RickshawScopeCanvas");
 
-let CircuitComponent = require('../components/CircuitComponent');
-let environment = require('../Environment.js');
+let CircuitComponent = require('./components/CircuitComponent');
+let environment = require('./Environment.js');
 
 let { TimeSeries, SmoothieChart } = require("smoothie");
 
