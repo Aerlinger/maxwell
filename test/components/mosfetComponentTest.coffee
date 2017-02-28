@@ -47,7 +47,7 @@ describe "MosfetElm", ->
         done()
 
       it "renders initial circuit", ->
-        @renderer.drawComponents()
+        @renderer.draw()
 
         fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())
 

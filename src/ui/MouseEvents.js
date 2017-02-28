@@ -6,7 +6,7 @@
  *
  * This function's 'this' reference is bound to the parent CircuitController
  */
-let interactionController = function (Circuit, canvas) {
+let interactionController = function (Circuit, canvas, {xMargin=200, yMargin= 64} = {}) {
   const ON_COMPONENT_HOVER = "ON_COMPONENT_HOVER";
   const ON_COMPONENT_CLICKED = "ON_COMPONENT_CLICKED";
   const ON_COMPONENTS_SELECTED = "ON_COMPONENTS_SELECTED";
@@ -29,8 +29,8 @@ let interactionController = function (Circuit, canvas) {
 
   this.mousemove = function(event) {
     let component;
-    let x = event.offsetX - this.xMargin;
-    let y = event.offsetY - this.yMargin;
+    let x = event.offsetX - xMargin;
+    let y = event.offsetY - yMargin;
 
     this.newlyHighlightedComponent = null;
 
@@ -191,8 +191,8 @@ let interactionController = function (Circuit, canvas) {
   };
 
   this.mousedown = function(event) {
-    let x = event.offsetX - this.xMargin;
-    let y = event.offsetY - this.yMargin;
+    let x = event.offsetX - xMargin;
+    let y = event.offsetY - yMargin;
 
     if (this.placeComponent) {
       if (!this.placeX && !this.placeY) {

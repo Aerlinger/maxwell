@@ -145,7 +145,7 @@ describe "Chip Component", ->
       @renderer.context = @canvas.getContext('2d')
 
       @Circuit.updateCircuit()
-      @renderer.drawComponents()
+      @renderer.draw()
 
       @componentImageFileName = "test/fixtures/componentRenders/#{@cc2Elm.getName()}_init.png"
 

@@ -22,7 +22,7 @@ describe.skip "CircuitUI", ->
 
           ctx = @canvas.getContext('2d')
           @renderer.context = ctx
-          @renderer.drawComponents()
+          @renderer.draw()
 
           origfont = ctx.font
           ctx.font = "16px serif"

@@ -135,7 +135,7 @@ describe "OpAmp Component", ->
 
         @renderer = new CircuitApplication(@Circuit, @canvas)
         @renderer.context = @canvas.getContext('2d')
-        @renderer.drawComponents()
+        @renderer.draw()
 
         @componentImageFileName = "test/fixtures/componentRenders/#{@Circuit.name}_init.png"
 

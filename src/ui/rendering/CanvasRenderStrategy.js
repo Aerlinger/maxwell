@@ -14,13 +14,60 @@ class CanvasRenderStrategy {
     this.fullScaleVRange = fullScaleVRange;
   }
 
-  drawDots(ptA, ptB, component) {
-    /**
-     * Previous behavior was for current to not display when paused
-     if (this.Circuit && this.Circuit.isStopped) {
-      return
+  withMargin(xMargin, yMargin, block) {
+    this.clearCanvas();
+
+    this.context.save();
+    this.context.translate(xMargin, yMargin);
+
+    block();
+
+    this.context.restore();
+  }
+
+  drawComponents(circuit, selectedComponents) {
+    for (let component of circuit.getElements()) {
+      if (component && selectedComponents.includes(component))
+        this.drawBoldLines();
+      else
+        this.drawDefaultLines();
+
+      component.draw(this);
     }
-     */
+
+    this.drawDefaultLines();
+  }
+
+  clearCanvas() {
+    let { canvas } = this.context;
+
+    this.context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
+  }
+
+  drawScopes(scopes) {
+    for (let scopeElm of scopes) {
+      let scopeCanvas = scopeElm.getCanvas();
+
+      if (scopeCanvas) {
+        var center = scopeElm.circuitElm.getCenter();
+        this.context.save();
+
+        this.context.setLineDash([5, 5]);
+        this.context.strokeStyle = '#FFA500';
+        this.context.lineWidth = 1;
+        this.context.moveTo(center.x, center.y);
+        this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height() / 2);
+
+        this.context.stroke();
+
+        this.context.restore();
+      }
+    }
+  }
+
+  drawDots(ptA, ptB, component) {
+    if (component.Circuit && component.Circuit.isStopped)
+      return;
 
     this.context.save();
 
@@ -54,6 +101,7 @@ class CanvasRenderStrategy {
         var yOffset1 = yOffset + ((3 * dy) / dn);
 
         this.context.save();
+
         this.context.beginPath();
         this.context.strokeStyle = Settings.CURRENT_COLOR;
         this.context.lineWidth = Settings.LINE_WIDTH + 0.5;
@@ -61,6 +109,7 @@ class CanvasRenderStrategy {
         this.context.lineTo(xOffset1, yOffset1);
         this.context.stroke();
         this.context.closePath();
+
         this.context.restore();
       }
 
@@ -70,7 +119,10 @@ class CanvasRenderStrategy {
     this.context.restore();
   }
 
-  drawInfoText(highlightedComponent) {
+  drawInfoText(circuit, highlightedComponent) {
+    this.drawText('Time elapsed: ' + Util.getUnitText(circuit.time, 's'), 10, 5, '#bf4f00', 1.2 * Settings.TEXT_SIZE);
+    this.drawText('Frame Time: ' + Math.floor(circuit.lastFrameTime) + 'ms', 600, 8, '#000968', 1.1 * Settings.TEXT_SIZE);
+
     if (highlightedComponent != null) {
       let summaryArr = highlightedComponent.getSummary();
 
@@ -79,6 +131,21 @@ class CanvasRenderStrategy {
           this.drawText(summaryArr[idx], 730, 50 + (idx * 11) + 5, "#1b4e24");
         }
       }
+    }
+  }
+
+  drawMarquee(marquee) {
+    if (!marquee) return;
+
+    this.lineWidth = 0.1;
+    let lineShift = 0.5;
+
+    if ((marquee.x1 != null) && (marquee.x2 != null) && (marquee.y1 != null) && (marquee.y2 != null)) {
+      this.drawLine(marquee.x1 + lineShift, marquee.y1 + lineShift, marquee.x2 + lineShift, marquee.y1 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 0);
+      this.drawLine(marquee.x1 + lineShift, marquee.y2 + lineShift, marquee.x2 + lineShift, marquee.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
+
+      this.drawLine(marquee.x1 + lineShift, marquee.y1 + lineShift, marquee.x1 + lineShift, marquee.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
+      this.drawLine(marquee.x2 + lineShift, marquee.y1 + lineShift, marquee.x2 + lineShift, marquee.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
     }
   }
 
@@ -109,6 +176,50 @@ class CanvasRenderStrategy {
 
     this.context.restore();
   }
+  
+  drawDebugInfo(circuit) {
+    if (circuit && circuit.debugModeEnabled()) {
+      this.drawDebugInfo(this);
+      this.drawDebugOverlay(circuit);
+
+      for (let nodeIdx = 0; nodeIdx < circuit.numNodes(); ++nodeIdx) {
+        let voltage = Util.singleFloat(circuit.getVoltageForNode(nodeIdx));
+        let node = circuit.getNode(nodeIdx);
+
+        this.context.fillText(`${nodeIdx}:${voltage}`, node.x + 10, node.y - 10, '#FF8C00');
+      }
+    }
+  }
+
+  drawHighlightedNode(highlightedNode) {
+    if (highlightedNode)
+      this.drawCircle(highlightedNode.x + 0.5, highlightedNode.y + 0.5, 7, 3, '#0F0');
+  }
+
+  drawSelectedNodes(selectedNode) {
+    if (selectedNode)
+      this.drawRect(selectedNode.x - 10 + 0.5, selectedNode.y - 10 + 0.5, 21, 21, 1, '#0FF');
+  }
+
+  drawHighlightedComponent(highlightedComponent) {
+    if (highlightedComponent) {
+      highlightedComponent.draw(this);
+
+      this.context.save();
+      this.context.fillStyle = Settings.POST_COLOR;
+
+      for (let i = 0; i < highlightedComponent.numPosts(); ++i) {
+        let post = highlightedComponent.getPost(i);
+
+        this.context.fillRect(post.x - Settings.POST_RADIUS - 1, post.y - Settings.POST_RADIUS - 1, 2 * Settings.POST_RADIUS + 2, 2 * Settings.POST_RADIUS + 2);
+      }
+
+      if (highlightedComponent.x2())
+        this.context.fillRect(highlightedComponent.x2() - 2 * Settings.POST_RADIUS, highlightedComponent.y2() - 2 * Settings.POST_RADIUS, 4 * Settings.POST_RADIUS, 4 * Settings.POST_RADIUS);
+
+      this.context.restore();
+    }
+  }
 
   drawDebugInfo(circuitApp, x = 1100, y = 50) {
     if (!circuitApp.Circuit || !circuitApp.context) return;
@@ -137,11 +248,11 @@ class CanvasRenderStrategy {
   }
 
   drawBoldLines() {
-    return this.boldLines = true;
+    this.boldLines = true;
   }
 
   drawDefaultLines() {
-    return this.boldLines = false;
+    this.boldLines = false;
   }
 
   // Draw Primitives
@@ -389,6 +500,7 @@ class CanvasRenderStrategy {
 
     if (!this.pathMode)
       this.context.moveTo(x + lineShift, y + lineShift);
+
     this.context.lineTo(x2 + lineShift, y2 + lineShift);
     this.context.stroke();
 
@@ -411,9 +523,10 @@ class CanvasRenderStrategy {
     this.context.beginPath();
 
     this.context.moveTo(polygon.getX(0) + 0.5, polygon.getY(0) + 0.5);
-    for (let i = 0; i < numVertices; ++i) {
+
+    for (let i = 0; i < numVertices; ++i)
       this.context.lineTo(polygon.getX(i) + 0.5, polygon.getY(i) + 0.5);
-    }
+
 
     this.context.closePath();
     if (fill)

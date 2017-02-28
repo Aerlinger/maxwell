@@ -51,7 +51,7 @@ describe "Render all components", ->
 
         @ComponentCanvas = new Canvas(200, 300);
         componentUI = new CircuitApplication(@ComponentCircuit, @ComponentCanvas);
-        componentUI.drawComponents();
+        componentUI.draw();
 
         gm(@ComponentCanvas.toBuffer()).trim().write "test/fixtures/componentRenders/#{@component.getName()}_thumb.png", (err) ->
           console.log(err)
@@ -59,7 +59,7 @@ describe "Render all components", ->
 
         fs.writeFileSync("test/fixtures/componentRenders/" + @component.getName() + ".png", @ComponentCanvas.toBuffer())
 
-    @renderer.drawComponents()
+    @renderer.draw()
 
     #
 
