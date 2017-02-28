@@ -282,17 +282,13 @@ class RelayElm extends CircuitComponent {
     }
   }
 
-    //    adjustBbox(swpoles[poleCount - 1][0], swposts[poleCount - 1][1]); // XXX
-
   doStep(stamper) {
     stamper.stampCurrentSource(this.nodes[this.nCoil1], this.nodes[this.nCoil3], this.curSourceValue);
 
     let res0 = this.i_position === 0 ? this.r_on : this.r_off;
     let res1 = this.i_position === 1 ? this.r_on : this.r_off;
 
-    let p = 0;
-
-    while (p < (3 * this.poleCount)) {
+    for (let p = 0; p < 3*this.poleCount; ++p) {
       stamper.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch1 + p], res0);
       stamper.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch2 + p], res1);
 

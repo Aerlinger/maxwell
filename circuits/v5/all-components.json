@@ -1,1 +1,484 @@
-{"params":{"type":"default","timeStep":0.000005,"simSpeed":10,"currentSpeed":63,"voltageRange":10,"powerRange":62,"flags":0,"debug":true},"components":[{"name":"AndGateElm","pos":[70,80,70,160],"flags":0,"params":{"inputCount":2,"lastOutput":false}},{"name":"NandGateElm","pos":[210,80,210,160],"flags":0,"params":{"inputCount":2,"lastOutput":false}},{"name":"OrGateElm","pos":[350,80,350,160],"flags":0,"params":{"inputCount":2,"lastOutput":false}},{"name":"NorGateElm","pos":[490,80,490,160],"flags":0,"params":{"inputCount":2,"lastOutput":false}},{"name":"XorGateElm","pos":[630,80,630,160],"flags":0,"params":{"inputCount":2,"lastOutput":false}},{"name":"DFlipFlopElm","pos":[770,80,770,160],"flags":0,"params":{"volts":[4]}},{"name":"JkFlipFlopElm","pos":[910,80,910,160],"flags":0,"params":{"volts":[4]}},{"name":"SevenSegElm","pos":[1050,80,1050,160],"flags":0,"params":{}},{"name":"VcoElm","pos":[70,240,70,320],"flags":0,"params":{}},{"name":"AnalogSwitchElm","pos":[210,240,210,320],"flags":0,"params":{"r_on":20,"r_off":10000000000}},{"name":"AnalogSwitch2Elm","pos":[350,240,350,320],"flags":0,"params":{"r_on":20,"r_off":10000000000}},{"name":"PhaseCompElm","pos":[490,240,490,320],"flags":0,"params":{}},{"name":"LedElm","pos":[630,240,630,320],"flags":0,"params":{"colorR":0,"colorG":0,"colorB":0}},{"name":"DecadeElm","pos":[770,240,770,320],"flags":0,"params":{"volts":[0,0,0,0],"bits":2}},{"name":"CounterElm","pos":[910,240,910,320],"flags":0,"params":{"volts":[0,0,0,0],"bits":4}},{"name":"TimerElm","pos":[1050,240,1050,320],"flags":0,"params":{"volts":[0]}},{"name":"DacElm","pos":[70,400,70,480],"flags":0,"params":{"volts":[0,0,0,0],"bits":2}},{"name":"AdcElm","pos":[210,400,210,480],"flags":0,"params":{"volts":[0,0,0,0],"bits":2}},{"name":"LatchElm","pos":[350,400,350,480],"flags":0,"params":{"volts":[0,0,0,0,0],"bits":2}},{"name":"TappedTransformerElm","pos":[490,400,490,480],"flags":0,"params":{"inductance":4,"ratio":1,"current0":0,"current1":1,"current2":0}},{"name":"TransLineElm","pos":[630,400,630,480],"flags":0,"params":{"delay":5e-9,"imped":75,"channelWidth":20,"resistance":50}},{"name":"VarRailElm","pos":[770,400,770,480],"params":{"waveform":0,"frequency":40,"maxVoltage":5,"bias":0,"phaseShift":0,"dutyCycle":0.5,"sliderText":"Voltage"}},{"name":"TriodeElm","pos":[910,400,910,480],"flags":0,"params":{"mu":93,"kg1":680}},{"name":"PotElm","pos":[1050,400,1050,480],"flags":0,"params":{"maxResistance":10000,"position":0.5,"sliderText":""}},{"name":"TunnelDiodeElm","pos":[70,560,70,640],"flags":0,"params":{}},{"name":"ScrElm","pos":[210,560,210,640],"flags":0,"params":{"lastvac":0,"lastvag":0,"triggerI":0.01,"holdingI":0.0082,"cresistance":50}},{"name":"RelayElm","pos":[350,560,350,640],"flags":0,"params":{"poleCount":1,"inductance":0.2,"coilCurrent":0,"r_on":0.05,"r_off":1000000,"onCurrent":0.02,"coilR":20}},{"name":"CC2Elm","pos":[490,560,490,640],"flags":0,"params":{"gain":1}},{"name":"SparkGapElm","pos":[630,560,630,640],"flags":0,"params":{"onresistance":1000,"offresistance":1000000000,"breakdown":1000,"holdcurrent":0.001}},{"name":"WireElm","pos":[770,560,770,640],"flags":0,"params":{}},{"name":"ResistorElm","pos":[910,560,910,640],"flags":0,"params":{"resistance":1000}},{"name":"GroundElm","pos":[1050,560,1050,640],"flags":0,"params":{}},{"name":"InductorElm","pos":[70,720,70,800],"flags":0,"params":{"inductance":0.001,"current":0}},{"name":"CapacitorElm","pos":[210,720,210,800],"flags":0,"params":{"capacitance":0.000005,"voltdiff":10}},{"name":"VoltageElm","pos":[350,720,350,800],"params":{"waveform":0,"frequency":40,"maxVoltage":5,"bias":0,"phaseShift":0,"dutyCycle":0.5}},{"name":"DiodeElm","pos":[490,720,490,800],"flags":0,"params":{"fwdrop":0.805904783}},{"name":"SwitchElm","pos":[630,720,630,800],"flags":0,"params":{"position":0,"momentary":false}},{"name":"OpAmpElm","pos":[770,720,770,800],"flags":0,"params":{"maxOut":15,"minOut":-15,"gbw":1000000}},{"name":"MosfetElm","pos":[910,720,910,800],"flags":0,"params":{"vt":1.5,"pnp":1}},{"name":"RailElm","pos":[1050,720,1050,800],"params":{"waveform":0,"frequency":40,"maxVoltage":5,"bias":0,"phaseShift":0,"dutyCycle":0.5}},{"name":"ZenerElm","pos":[70,880,70,960],"flags":0,"params":{"fwdrop":0.805904783,"zvoltage":0.805904783}},{"name":"CurrentElm","pos":[210,880,210,960],"flags":0,"params":{"currentValue":0.01}},{"name":"TransistorElm","pos":[350,880,350,960],"flags":0,"params":{"pnp":-1,"lastvbe":0,"lastvbc":0,"beta":100}},{"name":"InverterElm","pos":[490,880,490,960],"flags":0,"params":{"slewRate":0.5}},{"name":"LogicInputElm","pos":[630,880,630,960],"flags":0,"params":{"position":0,"momentary":false,"hiV":5,"loV":0}},{"name":"LogicOutputElm","pos":[770,880,770,960],"flags":0,"params":{"threshold":2.5}},{"name":"Switch2Elm","pos":[910,880,910,960],"flags":0,"params":{"position":0,"momentary":false,"link":0}},{"name":"TextElm","pos":[1050,880,null,null],"flags":0,"params":{"text":"<text>","size":24}},{"name":"ProbeElm","pos":[70,1040,70,1120],"flags":0,"params":{}},{"name":"OutputElm","pos":[210,1040,210,1120],"flags":0,"params":{}},{"name":"TransformerElm","pos":[350,1040,350,1120],"flags":0,"params":{"inductance":0.001,"ratio":1,"current0":0.001,"current1":0.001,"couplingCoef":0.999}},{"name":"JfetElm","pos":[490,1040,490,1120],"flags":0,"params":{"vt":1.5,"pnp":1}},{"name":"MemristorElm","pos":[630,1040,630,1120],"flags":0,"params":{"r_on":100,"r_off":16000,"dopeWidth":0,"totalWidth":1e-8,"mobility":1e-10,"resistance":100}}]}
+{
+  "params": {
+    "type": "default",
+    "timeStep": 0.000005,
+    "simSpeed": 10,
+    "currentSpeed": 63,
+    "voltageRange": 10,
+    "powerRange": 62,
+    "flags": 0,
+    "debug": true
+  },
+  "components": [
+    {
+      "name": "AndGateElm",
+      "pos": [70, 80, 70, 160],
+      "flags": 0,
+      "params": {
+        "inputCount": 2,
+        "lastOutput": false
+      }
+    },
+    {
+      "name": "NandGateElm",
+      "pos": [210, 80, 210, 160],
+      "flags": 0,
+      "params": {
+        "inputCount": 2,
+        "lastOutput": false
+      }
+    },
+    {
+      "name": "OrGateElm",
+      "pos": [350, 80, 350, 160],
+      "flags": 0,
+      "params": {
+        "inputCount": 2,
+        "lastOutput": false
+      }
+    },
+    {
+      "name": "NorGateElm",
+      "pos": [490, 80, 490, 160],
+      "flags": 0,
+      "params": {
+        "inputCount": 2,
+        "lastOutput": false
+      }
+    },
+    {
+      "name": "XorGateElm",
+      "pos": [630, 80, 630, 160],
+      "flags": 0,
+      "params": {
+        "inputCount": 2,
+        "lastOutput": false
+      }
+    },
+    {
+      "name": "DFlipFlopElm",
+      "pos": [770, 80, 770, 160],
+      "flags": 0,
+      "params": {
+        "volts": [4]
+      }
+    },
+    {
+      "name": "JkFlipFlopElm",
+      "pos": [910, 80, 910, 160],
+      "flags": 0,
+      "params": {
+        "volts": [4]
+      }
+    },
+    {
+      "name": "SevenSegElm",
+      "pos": [1050, 80, 1050, 160],
+      "flags": 0,
+      "params": {}
+    },
+    {
+      "name": "VcoElm",
+      "pos": [70, 240, 70, 320],
+      "flags": 0,
+      "params": {}
+    },
+    {
+      "name": "AnalogSwitchElm",
+      "pos": [210, 240, 210, 320],
+      "flags": 0,
+      "params": {
+        "r_on": 20,
+        "r_off": 10000000000
+      }
+    },
+    {
+      "name": "AnalogSwitch2Elm",
+      "pos": [350, 240, 350, 320],
+      "flags": 0,
+      "params": {
+        "r_on": 20,
+        "r_off": 10000000000
+      }
+    },
+    {
+      "name": "PhaseCompElm",
+      "pos": [490, 240, 490, 320],
+      "flags": 0,
+      "params": {}
+    },
+    {
+      "name": "LedElm",
+      "pos": [630, 240, 630, 320],
+      "flags": 0,
+      "params": {
+        "colorR": 0,
+        "colorG": 0,
+        "colorB": 0
+      }
+    },
+    {
+      "name": "DecadeElm",
+      "pos": [770, 240, 770, 320],
+      "flags": 0,
+      "params": {
+        "volts": [0, 0, 0, 0],
+        "bits": 2
+      }
+    },
+    {
+      "name": "CounterElm",
+      "pos": [910, 240, 910, 320],
+      "flags": 0,
+      "params": {
+        "volts": [0, 0, 0, 0],
+        "bits": 4
+      }
+    },
+    {
+      "name": "TimerElm",
+      "pos": [1050, 240, 1050, 320],
+      "flags": 0,
+      "params": {
+        "volts": [0]
+      }
+    },
+    {
+      "name": "DacElm",
+      "pos": [70, 400, 70, 480],
+      "flags": 0,
+      "params": {
+        "volts": [0, 0, 0, 0],
+        "bits": 2
+      }
+    },
+    {
+      "name": "AdcElm",
+      "pos": [210, 400, 210, 480],
+      "flags": 0,
+      "params": {
+        "volts": [0, 0, 0, 0],
+        "bits": 2
+      }
+    },
+    {
+      "name": "LatchElm",
+      "pos": [350, 400, 350, 480],
+      "flags": 0,
+      "params": {
+        "volts": [0, 0, 0, 0, 0],
+        "bits": 2
+      }
+    },
+    {
+      "name": "TappedTransformerElm",
+      "pos": [490, 400, 490, 480],
+      "flags": 0,
+      "params": {
+        "inductance": 4,
+        "ratio": 1,
+        "current0": 0,
+        "current1": 1,
+        "current2": 0
+      }
+    },
+    {
+      "name": "TransLineElm",
+      "pos": [630, 400, 630, 480],
+      "flags": 0,
+      "params": {
+        "delay": 5e-9,
+        "imped": 75,
+        "channelWidth": 20,
+        "resistance": 50
+      }
+    },
+    {
+      "name": "VarRailElm",
+      "pos": [770, 400, 770, 480],
+      "params": {
+        "waveform": 0,
+        "frequency": 40,
+        "maxVoltage": 5,
+        "bias": 0,
+        "phaseShift": 0,
+        "dutyCycle": 0.5,
+        "sliderText": "Voltage"
+      }
+    },
+    {
+      "name": "TriodeElm",
+      "pos": [910, 400, 910, 480],
+      "flags": 0,
+      "params": {
+        "mu": 93,
+        "kg1": 680
+      }
+    },
+    {
+      "name": "PotElm",
+      "pos": [1050, 400, 1050, 480],
+      "flags": 0,
+      "params": {
+        "maxResistance": 10000,
+        "position": 0.5,
+        "sliderText": ""
+      }
+    },
+    {
+      "name": "TunnelDiodeElm",
+      "pos": [70, 560, 70, 640],
+      "flags": 0,
+      "params": {}
+    },
+    {
+      "name": "ScrElm",
+      "pos": [210, 560, 210, 640],
+      "flags": 0,
+      "params": {
+        "lastvac": 0,
+        "lastvag": 0,
+        "triggerI": 0.01,
+        "holdingI": 0.0082,
+        "cresistance": 50
+      }
+    },
+    {
+      "name": "CC2Elm",
+      "pos": [490, 560, 490, 640],
+      "flags": 0,
+      "params": {
+        "gain": 1
+      }
+    },
+    {
+      "name": "SparkGapElm",
+      "pos": [630, 560, 630, 640],
+      "flags": 0,
+      "params": {
+        "onresistance": 1000,
+        "offresistance": 1000000000,
+        "breakdown": 1000,
+        "holdcurrent": 0.001
+      }
+    },
+    {
+      "name": "WireElm",
+      "pos": [770, 560, 770, 640],
+      "flags": 0,
+      "params": {}
+    },
+    {
+      "name": "ResistorElm",
+      "pos": [910, 560, 910, 640],
+      "flags": 0,
+      "params": {
+        "resistance": 1000
+      }
+    },
+    {
+      "name": "GroundElm",
+      "pos": [1050, 560, 1050, 640],
+      "flags": 0,
+      "params": {}
+    },
+    {
+      "name": "InductorElm",
+      "pos": [70, 720, 70, 800],
+      "flags": 0,
+      "params": {
+        "inductance": 0.001,
+        "current": 0
+      }
+    },
+    {
+      "name": "CapacitorElm",
+      "pos": [210, 720, 210, 800],
+      "flags": 0,
+      "params": {
+        "capacitance": 0.000005,
+        "voltdiff": 10
+      }
+    },
+    {
+      "name": "VoltageElm",
+      "pos": [350, 720, 350, 800],
+      "params": {
+        "waveform": 0,
+        "frequency": 40,
+        "maxVoltage": 5,
+        "bias": 0,
+        "phaseShift": 0,
+        "dutyCycle": 0.5
+      }
+    },
+    {
+      "name": "DiodeElm",
+      "pos": [490, 720, 490, 800],
+      "flags": 0,
+      "params": {
+        "fwdrop": 0.805904783
+      }
+    },
+    {
+      "name": "SwitchElm",
+      "pos": [630, 720, 630, 800],
+      "flags": 0,
+      "params": {
+        "position": 0,
+        "momentary": false
+      }
+    },
+    {
+      "name": "OpAmpElm",
+      "pos": [770, 720, 770, 800],
+      "flags": 0,
+      "params": {
+        "maxOut": 15,
+        "minOut": -15,
+        "gbw": 1000000
+      }
+    },
+    {
+      "name": "MosfetElm",
+      "pos": [910, 720, 910, 800],
+      "flags": 0,
+      "params": {
+        "vt": 1.5,
+        "pnp": 1
+      }
+    },
+    {
+      "name": "RailElm",
+      "pos": [1050, 720, 1050, 800],
+      "params": {
+        "waveform": 0,
+        "frequency": 40,
+        "maxVoltage": 5,
+        "bias": 0,
+        "phaseShift": 0,
+        "dutyCycle": 0.5
+      }
+    },
+    {
+      "name": "ZenerElm",
+      "pos": [70, 880, 70, 960],
+      "flags": 0,
+      "params": {
+        "fwdrop": 0.805904783,
+        "zvoltage": 0.805904783
+      }
+    },
+    {
+      "name": "CurrentElm",
+      "pos": [210, 880, 210, 960],
+      "flags": 0,
+      "params": {
+        "currentValue": 0.01
+      }
+    },
+    {
+      "name": "TransistorElm",
+      "pos": [350, 880, 350, 960],
+      "flags": 0,
+      "params": {
+        "pnp": -1,
+        "lastvbe": 0,
+        "lastvbc": 0,
+        "beta": 100
+      }
+    },
+    {
+      "name": "InverterElm",
+      "pos": [490, 880, 490, 960],
+      "flags": 0,
+      "params": {
+        "slewRate": 0.5
+      }
+    },
+    {
+      "name": "LogicInputElm",
+      "pos": [630, 880, 630, 960],
+      "flags": 0,
+      "params": {
+        "position": 0,
+        "momentary": false,
+        "hiV": 5,
+        "loV": 0
+      }
+    },
+    {
+      "name": "LogicOutputElm",
+      "pos": [770, 880, 770, 960],
+      "flags": 0,
+      "params": {
+        "threshold": 2.5
+      }
+    },
+    {
+      "name": "Switch2Elm",
+      "pos": [910, 880, 910, 960],
+      "flags": 0,
+      "params": {
+        "position": 0,
+        "momentary": false,
+        "link": 0
+      }
+    },
+    {
+      "name": "TextElm",
+      "pos": [1050, 880, null, null],
+      "flags": 0,
+      "params": {
+        "text": "<text>",
+        "size": 24
+      }
+    },
+    {
+      "name": "ProbeElm",
+      "pos": [70, 1040, 70, 1120],
+      "flags": 0,
+      "params": {}
+    },
+    {
+      "name": "OutputElm",
+      "pos": [210, 1040, 210, 1120],
+      "flags": 0,
+      "params": {}
+    },
+    {
+      "name": "TransformerElm",
+      "pos": [350, 1040, 350, 1120],
+      "flags": 0,
+      "params": {
+        "inductance": 0.001,
+        "ratio": 1,
+        "current0": 0.001,
+        "current1": 0.001,
+        "couplingCoef": 0.999
+      }
+    },
+    {
+      "name": "JfetElm",
+      "pos": [490, 1040, 490, 1120],
+      "flags": 0,
+      "params": {
+        "vt": 1.5,
+        "pnp": 1
+      }
+    },
+    {
+      "name": "MemristorElm",
+      "pos": [630, 1040, 630, 1120],
+      "flags": 0,
+      "params": {
+        "r_on": 100,
+        "r_off": 16000,
+        "dopeWidth": 0,
+        "totalWidth": 1e-8,
+        "mobility": 1e-10,
+        "resistance": 100
+      }
+    }
+  ]
+}

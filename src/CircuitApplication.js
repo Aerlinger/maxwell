@@ -259,12 +259,12 @@ class CircuitApplication extends Observer {
     }
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      this.drawDebugInfo();
-      this.drawDebugOverlay(this.circuit);
+      this.renderer.drawDebugInfo(this);
+      this.renderer.drawDebugOverlay(this.circuit);
     }
 
     if (this.marquee)
-      this.marquee.draw(this.renderer)
+      this.marquee.draw(this.renderer);
 
     this.context.restore()
   }

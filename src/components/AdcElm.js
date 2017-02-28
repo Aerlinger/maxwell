@@ -42,7 +42,7 @@ class AdcElm extends VariableBitChipElm {
 
     ival = Math.min(imax, Math.max(0, ival));
 
-    for (i=0; i < this.bits; ++i)
+    for (let i=0; i < this.bits; ++i)
       this.pins[i].value = ((ival & (1 << i)) !== 0)
   }
 }
