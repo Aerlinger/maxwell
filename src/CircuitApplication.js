@@ -95,16 +95,9 @@ class CircuitApplication extends Observer {
     if (canvas.__circuit_application) {
       let previous_application = canvas.__circuit_application;
 
-      previous_application.pause();
+      previous_application.reset();
 
-      previous_application.Canvas.onmousemove = null;
-      previous_application.Canvas.onmousedown = null;
-      previous_application.Canvas.onmouseup = null;
-
-      previous_application.Circuit = null;
-      previous_application.Canvas = null;
-      previous_application.renderer = null;
-      previous_application.context = null;
+      previous_application = null;
     }
 
     this.Circuit = Circuit;
@@ -166,6 +159,43 @@ class CircuitApplication extends Observer {
     }
   }
 
+  reset() {
+    console.log("Resetting", this.Circuit.name);
+
+    this.pause();
+
+    if (this.Canvas) {
+      this.Canvas.onmousemove = null;
+      this.Canvas.onmousedown = null;
+      this.Canvas.onmouseup = null;
+    }
+
+    if (this.chart)
+      this.chart.removeTimeSeries(this.performanceMeter);
+
+    if (this.performanceMeter)
+      this.performanceMeter = null;
+
+    this.chart = null;
+
+    this.mousemove = null;
+    this.mousedown = null;
+    this.mouseup = null;
+
+    this.highlightedComponent = null;
+    this.selectedNode = null;
+    this.previouslySelectedComponents = [];
+    this.selectedComponents = [];
+    this.draw = null;
+    this.renderer = null;
+    this.elementList = null;
+    this.HistoryStack = null;
+    this.Circuit = null;
+    this.Canvas = null;
+    this.renderer = null;
+    this.context = null;
+  }
+
   togglePause() {
     if (this.Circuit.isStopped)
       this.Circuit.resume();
@@ -195,22 +225,22 @@ class CircuitApplication extends Observer {
   renderPerformance() {
     this.performanceMeter = new TimeSeries();
 
-    let chart = new SmoothieChart({
+    this.chart = new SmoothieChart({
       millisPerPixel: 35,
       grid: {fillStyle: 'transparent', millisPerLine: 1000, lineWidth: 0.5, verticalSections: 0},
       labels: {fillStyle: '#000000', precision: 0}
     });
 
-    chart.addTimeSeries(this.performanceMeter, {strokeStyle: 'rgba(255, 0, 200, 1)', lineWidth: 1});
-    chart.streamTo(document.getElementById('performance_sparkline'), 500);
+    this.chart.addTimeSeries(this.performanceMeter, {strokeStyle: 'rgba(255, 0, 200, 1)', lineWidth: 1});
+    this.chart.streamTo(document.getElementById('performance_sparkline'), 500);
   }
 
-  clear() {
+  clearCanvas() {
     this.context.clearRect(0, 0, this.Canvas.clientWidth, this.Canvas.clientHeight)
   }
 
   draw() {
-    this.clear();
+    this.clearCanvas();
     // this.drawGrid();
 
     this.context.save();
@@ -219,7 +249,7 @@ class CircuitApplication extends Observer {
     this.renderer.drawText('Time elapsed: ' + Util.getUnitText(this.Circuit.time, 's'), 10, 5, '#bf4f00', 1.2 * Settings.TEXT_SIZE);
     this.renderer.drawText('Frame Time: ' + Math.floor(this.Circuit.lastFrameTime) + 'ms', 600, 8, '#000968', 1.1 * Settings.TEXT_SIZE);
 
-    if (this.performanceMeter)
+    if (this.performanceMeter) 
       this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
 
     this.drawScopes();
