@@ -6,28 +6,8 @@ let Settings = require('../Settings.js');
 
 let self = undefined;
 let Pin = undefined;
+
 class ChipElm extends CircuitComponent {
-
-  static get Fields() {
-    return {
-      "bits": {
-        name: "Number of Bits",
-        default_value: 4,
-        data_type: (v) => {v},
-        range: [0, Infinity]
-      },
-      "volts": {
-        name: "Volts",
-        description: "Initial voltages on output",
-        unit: "Volts",
-        default_value: 0,
-        symbol: "V",
-        data_type: (v) => {v},
-        range: [0, Infinity]
-      }
-    };
-  }
-
   static initClass() {
     this.FLAG_SMALL = 1;
     this.FLAG_FLIP_X = 1024;
@@ -158,14 +138,14 @@ class ChipElm extends CircuitComponent {
 
   constructor(xa, xb, ya, yb, params, f) {
     params = params || {};
-    
+
     super(xa, xb, ya, yb, {}, f);
 
     this.flags = f;
-
+    this.noDiagonal = true;
     this.setSize(((f & ChipElm.FLAG_SMALL) !== 0) ? 1 : 2);
-    
-    // TODO: Needs cleanup 
+    self = this;
+
     if (params['volts']) {
       this.params.volts = params["volts"].slice();
     }
@@ -174,8 +154,6 @@ class ChipElm extends CircuitComponent {
       this.bits = parseInt(params['bits']);
       this.params['bits'] = this.bits;
     }
-
-    self = this;
 
     this.setupPins();
     this._setPoints();
@@ -186,12 +164,9 @@ class ChipElm extends CircuitComponent {
         this.pins[i].value = (this.volts[i] > 2.5);
       }
     }
-
-    this.noDiagonal = true;
   }
 
   setPoints(x1, y1, x2, y2) {
-
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
       if (!x1 || !y1)
         console.trace("No x1, y1 location for ", this.getName());

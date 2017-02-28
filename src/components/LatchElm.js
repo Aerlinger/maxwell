@@ -1,8 +1,8 @@
-let CircuitComponent = require("./CircuitComponent.js");
 let ChipElm = require("./ChipElm.js");
+let VariableBitChipElm = require("./VariableBitChipElm.js");
 let Util = require('../util/Util.js');
 
-class LatchElm extends ChipElm {
+class LatchElm extends VariableBitChipElm {
   constructor(xa, xb, ya, yb, params, f) {
     params = params || {"bits": 2, "volts": [0, 0, 0, 0, 0]};
 
@@ -11,10 +11,6 @@ class LatchElm extends ChipElm {
 
   static get NAME() {
     return "Latch";
-  }
-
-  needsBits() {
-    return true;
   }
 
   numPosts() {

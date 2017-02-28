@@ -77,6 +77,19 @@ class CircuitComponent {
     this.allocNodes();
   }
 
+  copy() {
+    let newElement = new this.constructor(
+        this.x1(),
+        this.y1(),
+        this.x2(),
+        this.y2(),
+        this.params,
+        this.flags
+    );
+
+    return newElement;
+  }
+
   allocNodes() {
     this.nodes = Util.zeroArray(this.numPosts() + this.numInternalNodes());
     this.volts = Util.zeroArray(this.numPosts() + this.numInternalNodes());

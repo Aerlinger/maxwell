@@ -3,6 +3,22 @@ let ChipElm = require("./ChipElm.js");
 let Util = require('../util/Util.js');
 
 class DFlipFlopElm extends ChipElm {
+  static get Fields() {
+    return {
+      "volts": {
+        name: "Volts",
+        description: "Initial voltages on output",
+        unit: "Volts",
+        default_value: 0,
+        symbol: "V",
+        data_type: (v) => {
+          v
+        },
+        range: [0, Infinity]
+      }
+    }
+  }
+
   static initClass() {
     this.FLAG_RESET = 2;
   }
@@ -75,8 +91,7 @@ class DFlipFlopElm extends ChipElm {
     return this.lastClock = this.pins[3].value;
   }
 }
-DFlipFlopElm.initClass();
 
-    //console.log("DFF #{@pins[1].value}")
+DFlipFlopElm.initClass();
 
 module.exports = DFlipFlopElm;

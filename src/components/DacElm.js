@@ -1,17 +1,12 @@
-let CircuitComponent = require("./CircuitComponent.js");
 let ChipElm = require("./ChipElm.js");
+let VariableBitChipElm = require("./VariableBitChipElm.js");
 let Util = require('../util/Util.js');
 
-class DacElm extends ChipElm {
-
+class DacElm extends VariableBitChipElm {
   constructor(xa, xb, ya, yb, params, f) {
     params = params || {"bits": 2, "volts": [0, 0, 0, 0]};
 
     super(xa, xb, ya, yb, params, f);
-  }
-
-  needsBits() {
-    return true;
   }
 
   static get NAME() {

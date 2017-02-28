@@ -1,8 +1,8 @@
-let CircuitComponent = require("./CircuitComponent.js");
 let ChipElm = require("./ChipElm.js");
+let VariableBitChipElm = require("./VariableBitChipElm.js");
 let Util = require('../util/Util.js');
 
-class CounterElm extends ChipElm {
+class CounterElm extends VariableBitChipElm {
   static get FLAG_ENABLE() {
     return 2;
   }
@@ -11,10 +11,6 @@ class CounterElm extends ChipElm {
     params = params || {"bits": 4, "volts": [0, 0, 0, 0]};
 
     super(xa, xb, ya, yb, params, f);
-  }
-
-  needsBits() {
-    return true;
   }
 
   static get NAME() {
