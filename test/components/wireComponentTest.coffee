@@ -18,9 +18,6 @@ describe "Wire Component", ->
   it "is not have any internal voltage sources", ->
     expect(@wireElm.numVoltageSources()).to.equal 1
 
-  it "has correct toString()", ->
-    expect(@wireElm.toString()).to.equal "Wire@[100 100 100 200]"
-
   it "is orphaned", ->
     expect(@wireElm.orphaned()).to.equal true
 

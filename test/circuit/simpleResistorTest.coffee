@@ -5,9 +5,9 @@ chai = require('chai');
 
 
 describe "Simple single resistor circuit", ->
-  beforeEach (done) ->
-    @json = [
-      {
+  beforeEach ->
+    @json = {
+      params: {
         "completion_status": "under_development",
         "created_at": null,
         "current_speed": 50.0,
@@ -23,39 +23,39 @@ describe "Simple single resistor circuit", ->
         "updated_at": null,
         "voltage_range": 5.0
       },
-      {
-        "name": "VarRailElm",
-        "pos": [256, 176, 256, 128],
-        "flags": 0,
-        "params": {
-          "waveform": 6,
-          "frequency": 5,
-          "maxVoltage": 5,
-          "bias": 0,
-          "phaseShift": 0,
-          "dutyCycle": 0.5,
-          "sliderText": "Voltage"
+      components: [
+        {
+          "name": "VarRailElm",
+          "pos": [256, 176, 256, 128],
+          "flags": 0,
+          "params": {
+            "waveform": 6,
+            "frequency": 5,
+            "maxVoltage": 5,
+            "bias": 0,
+            "phaseShift": 0,
+            "dutyCycle": 0.5,
+            "sliderText": "Voltage"
+          }
+        },
+        {
+          "name": "ResistorElm",
+          "pos": [256, 176, 256, 304],
+          "flags": "0",
+          "params": {
+            resistance: 100.0
+          }
+        },
+        {
+          "name": "GroundElm",
+          "pos": [256, 304, 256, 352],
+          "flags": "0",
+          "params": {}
         }
-      },
-      {
-        "name": "ResistorElm",
-        "pos": [256, 176, 256, 304],
-        "flags": "0",
-        "params": {
-          resistance: 100.0
-        }
-      },
-      {
-        "name": "GroundElm",
-        "pos": [256, 304, 256, 352],
-        "flags": "0",
-        "params": {}
-      }
-    ]
+      ]
+    }
 
     @Circuit = CircuitLoader.createCircuitFromJsonData(@json)
-
-    done()
 
 
   it "has 3 elements", ->
@@ -66,9 +66,8 @@ describe "Simple single resistor circuit", ->
     expect(@Circuit.iterations).to.equal(0)
 
   describe "before Analysis", ->
-    beforeEach (done) ->
+    beforeEach ->
       @Solver = @Circuit.Solver
-      done()
 
     it "exists", ->
       expect(@Solver).to.be
@@ -80,9 +79,8 @@ describe "Simple single resistor circuit", ->
       expect(@Solver.origRightSide).to.deep.equal([])
 
     describe "After reconstructing circuit", ->
-      beforeEach (done) ->
+      beforeEach ->
         @Solver.reconstruct()
-        done()
 
       it "Sets circuitMatrix to correct value", ->
         expect(@Solver.circuitMatrix).to.deep.equal(
@@ -145,24 +143,22 @@ describe "Simple single resistor circuit", ->
       it "Sets circuitPermute to correct value", ->
         expect(@Solver.circuitPermute).to.deep.equal([2, 2, 2, 0])
 
-      describe "solving circuit", ->
+      describe.skip "solving circuit", ->
         it "sets correct voltage on resistor", ->
           @Circuit.updateCircuit()
+
           resistor = @Circuit.getElmByIdx(1)
           expect(resistor.getVoltageDiff()).to.eql(5)
 
         it "increments frames", ->
           @Circuit.updateCircuit()
-          @Circuit.updateCircuit()
-          @Circuit.updateCircuit()
+          expect(@Circuit.getIterationCount()).to.equal(1)
 
-          expect(@Circuit.iterations).to.equal(3)
+        it "increments time", ->
+          expect(@Circuit.time).to.equal(0)
 
-        it "increments time", (done)->
           @Circuit.updateCircuit()
-          @Circuit.updateCircuit()
-          @Circuit.updateCircuit()
+          expect(@Circuit.time).to.equal(1 * 5.0e-06)
 
-          expect(@Circuit.time).to.equal(3 * 5.0e-06)
-          done()
+
 

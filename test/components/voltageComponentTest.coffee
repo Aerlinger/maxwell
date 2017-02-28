@@ -12,35 +12,35 @@ describe "Voltage Component", ->
     })
 
   it "has correct defaults", ->
-    @voltageElm.waveform.should.equal VoltageElm.WF_DC
-    @voltageElm.frequency.should.equal 80
-    @voltageElm.maxVoltage.should.equal 6
-    @voltageElm.bias.should.equal 2
-    @voltageElm.phaseShift.should.equal 45
-    @voltageElm.dutyCycle.should.equal 0.75
+    expect(@voltageElm.waveform).to.equal VoltageElm.WF_DC
+    expect(@voltageElm.frequency).to.equal 80
+    expect(@voltageElm.maxVoltage).to.equal 6
+    expect(@voltageElm.bias).to.equal 2
+    expect(@voltageElm.phaseShift).to.equal 45
+    expect(@voltageElm.dutyCycle).to.equal 0.75
 
   it "has correct number of posts", ->
-    @voltageElm.numPosts().should.equal 2
-    @voltageElm.numInternalNodes().should.equal 0
+    expect(@voltageElm.numPosts()).to.equal 2
+    expect(@voltageElm.numInternalNodes()).to.equal 0
 
   it "is not have any internal voltage sources", ->
-    @voltageElm.numVoltageSources().should.equal 1
+    expect(@voltageElm.numVoltageSources()).to.equal 1
 
   it "has correct toString()", ->
-    @voltageElm.toString().should.equal "VoltageElm"
+    expect(@voltageElm.toString()).to.include "Voltage"
 
   it "is orphaned", ->
-    @voltageElm.orphaned().should.equal true
+    expect(@voltageElm.orphaned()).to.equal true
 
   describe "after soldering to circuit", ->
     beforeEach ->
       @Circuit.solder(@voltageElm)
 
     it "can getVoltage correctly", ->
-      @voltageElm.getVoltage().should.equal 6 + 2
+      expect(@voltageElm.getVoltage()).to.equal 6 + 2
 
     it "is not be orphaned", ->
-      @voltageElm.orphaned().should.equal false
+      expect(@voltageElm.orphaned()).to.equal false
 
     it "is stampable", ->
       @voltageElm.stamp(@Stamper)
@@ -67,6 +67,6 @@ describe "Voltage Component", ->
       done()
 
     it "renders initial circuit", ->
-      @renderer.CircuitApplication.drawComponents()
+      @renderer.drawComponents()
 
       fs.writeFileSync("test/fixtures/componentRenders/#{@Circuit.name}_init.png", @canvas.toBuffer())

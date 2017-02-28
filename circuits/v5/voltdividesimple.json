@@ -1,0 +1,66 @@
+{
+  "params": {
+    "type": "voltdivide.txt",
+    "timeStep": 0.000005,
+    "simSpeed": 116,
+    "currentSpeed": 103,
+    "voltageRange": 10,
+    "powerRange": 62,
+    "flags": 1
+  },
+  "components": [
+    {
+      "name": "VoltageElm",
+      "pos": [112, 368, 112, 48],
+      "flags": 0,
+      "params": {
+        "waveform": 0,
+        "frequency": 40,
+        "maxVoltage": 10,
+        "bias": 0,
+        "phaseShift": 0,
+        "dutyCycle": 0.5
+      }
+    },
+    {
+      "name": "WireElm",
+      "pos": [112, 48, 240, 48],
+      "flags": 0,
+      "params": {}
+    },
+    {
+      "name": "ResistorElm",
+      "pos": [240, 48, 240, 368],
+      "flags": 0,
+      "params": {
+        "resistance": 10000
+      }
+    },
+    {
+      "name": "WireElm",
+      "pos": [112, 368, 240, 368],
+      "flags": 0,
+      "params": {}
+    },
+    {
+      "name": "WireElm",
+      "pos": [240, 48, 432, 48],
+      "flags": 0,
+      "params": {}
+    },
+    {
+      "name": "WireElm",
+      "pos": [240, 368, 432, 368],
+      "flags": 0,
+      "params": {}
+    },
+    {
+      "name": "ResistorElm",
+      "pos": [432, 48, 432, 368],
+      "flags": 0,
+      "params": {
+        "resistance": 20000
+      }
+    }
+  ]
+}

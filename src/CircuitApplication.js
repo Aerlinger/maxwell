@@ -1,10 +1,20 @@
+let {TimeSeries, SmoothieChart} = require('smoothie');
+
 let Observer = require('./util/Observer');
 let Util = require('./util/Util');
 let Point = require('./geom/Point.js');
 let Settings = require('./Settings.js');
 let Color = require('./util/Color.js');
+let CanvasRenderer = require('./ui/rendering/CanvasRenderStrategy');
+let interactionBinding = require('./ui/MouseEvents');
 
-let Components = require("./components");
+let RickshawScopeCanvas = require('./ui/scopes/RickshawScopeCanvas');
+let HistoryStack = require('./ui/HistoryStack');
+
+let CircuitComponent = require('./components/CircuitComponent');
+let environment = require('./Environment.js');
+
+// Element includes
 let WireElm = require('./components/WireElm.js');
 
 let AcRailElm = require('./components/ACRailElm.js');
@@ -73,22 +83,12 @@ let PotElm = require('./components/PotElm.js');
 let ClockElm = require('./components/ClockElm.js');
 
 
-let CanvasRenderer = require('./ui/rendering/CanvasRenderStrategy');
-let interactionBinding = require('./ui/MouseEvents');
-
-let RickshawScopeCanvas = require('./ui/scopes/RickshawScopeCanvas');
-
-let CircuitComponent = require('./components/CircuitComponent');
-let environment = require('./Environment.js');
-
-let {TimeSeries, SmoothieChart} = require('smoothie');
-
 if (environment.isBrowser) {
   require('jquery-ui');
 }
 
 class CircuitApplication extends Observer {
-  constructor(Circuit, canvas) {
+  constructor(Circuit, canvas, {xMargin=200, yMargin= 64} = {}) {
     super();
 
     // A Circuit is already loaded on this canvas so we need to garbage collect it to prevent a memory leak
@@ -108,6 +108,7 @@ class CircuitApplication extends Observer {
     }
 
     this.Circuit = Circuit;
+    this.HistoryStack = new HistoryStack();
     this.Canvas = canvas;
     this.context = canvas.getContext('2d');
 
@@ -115,8 +116,8 @@ class CircuitApplication extends Observer {
 
     this.draw = this.draw.bind(this);
 
-    this.xMargin = 200;
-    this.yMargin = 64;
+    this.xMargin = xMargin;
+    this.yMargin = yMargin;
 
     this.highlightedComponent = null;
     this.selectedNode = null;
@@ -139,6 +140,19 @@ class CircuitApplication extends Observer {
     }
   }
 
+  rafDraw() {
+    if (this.running) {
+      requestAnimationFrame(this.rafDraw.bind(this));
+
+      this.Circuit.updateCircuit();
+
+      if (this.onUpdateComplete)
+        this.onUpdateComplete();
+
+      this.draw()
+    }
+  }
+
   run() {
     if (!this.running) {
       this.running = true;
@@ -152,17 +166,15 @@ class CircuitApplication extends Observer {
     }
   }
 
-  rafDraw() {
-    if (this.running) {
-      requestAnimationFrame(this.rafDraw.bind(this));
-
-      this.draw()
-    }
+  togglePause() {
+    if (this.Circuit.isStopped)
+      this.Circuit.resume();
+    else
+      this.Circuit.pause();
   }
 
   setupScopes() {
     for (let scopeElm of this.Circuit.getScopes()) {
-
       let scElm = this.renderScopeCanvas(scopeElm.circuitElm.getName());
       $(scElm).draggable();
       $(scElm).resizable();
@@ -198,15 +210,6 @@ class CircuitApplication extends Observer {
   }
 
   draw() {
-    // UPDATE FRAME ----------------------------------------------------------------
-    // TODO: Move out of draw
-    this.Circuit.updateCircuit();
-
-    if (this.onUpdateComplete) {
-      this.onUpdateComplete();
-    }
-    // -----------------------------------------------------------------------------
-
     this.clear();
     // this.drawGrid();
 
@@ -216,9 +219,8 @@ class CircuitApplication extends Observer {
     this.renderer.drawText('Time elapsed: ' + Util.getUnitText(this.Circuit.time, 's'), 10, 5, '#bf4f00', 1.2 * Settings.TEXT_SIZE);
     this.renderer.drawText('Frame Time: ' + Math.floor(this.Circuit.lastFrameTime) + 'ms', 600, 8, '#000968', 1.1 * Settings.TEXT_SIZE);
 
-    if (this.performanceMeter) {
+    if (this.performanceMeter)
       this.performanceMeter.append(new Date().getTime(), this.Circuit.lastFrameTime);
-    }
 
     this.drawScopes();
     this.drawComponents();
@@ -234,9 +236,8 @@ class CircuitApplication extends Observer {
     if (this.placeComponent) {
       this.context.fillText(`Placing ${this.placeComponent.constructor.name}`, this.snapX + 10, this.snapY + 10);
 
-      if (this.placeY && this.placeX && this.placeComponent.x2() && this.placeComponent.y2()) {
+      if (this.placeY && this.placeX && this.placeComponent.x2() && this.placeComponent.y2())
         this.drawComponent(this.placeComponent);
-      }
     }
 
     if (this.highlightedComponent) {
@@ -253,6 +254,7 @@ class CircuitApplication extends Observer {
 
       if (this.highlightedComponent.x2())
         this.context.fillRect(this.highlightedComponent.x2() - 2 * Settings.POST_RADIUS, this.highlightedComponent.y2() - 2 * Settings.POST_RADIUS, 4 * Settings.POST_RADIUS, 4 * Settings.POST_RADIUS);
+
       this.context.restore();
     }
 
@@ -261,12 +263,38 @@ class CircuitApplication extends Observer {
       this.drawDebugOverlay(this.circuit);
     }
 
-    if (this.marquee) {
+    if (this.marquee)
       this.marquee.draw(this.renderer)
-    }
 
     this.context.restore()
   }
+
+  drawComponents() {
+    for (let component of this.Circuit.getElements())
+      this.drawComponent(component);
+
+    if (this.Circuit && this.Circuit.debugModeEnabled()) {
+      for (let nodeIdx = 0; nodeIdx < this.Circuit.numNodes(); ++nodeIdx) {
+        let voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx));
+        let node = this.Circuit.getNode(nodeIdx);
+
+        this.context.fillText(`${nodeIdx}:${voltage}`, node.x + 10, node.y - 10, '#FF8C00');
+      }
+    }
+  }
+
+  drawComponent(component) {
+    if (component && this.selectedComponents.includes(component)) {
+      this.renderer.drawBoldLines();
+      component.draw(this.renderer);
+    }
+
+    this.renderer.drawDefaultLines();
+
+    // Main entry point to draw component
+    component.draw(this.renderer);
+  }
+
 
   renderScopeCanvas(elementName) {
     let scopeWrapper = document.createElement('div');
@@ -359,54 +387,20 @@ class CircuitApplication extends Observer {
     return this.placeComponent;
   }
 
-  remove(components) {
-    console.log('components', components);
-    return this.Circuit.destroy(components);
-  }
-
   isPlacingComponent() {
     return !!this.placeComponent;
-  }
-
-  drawComponents() {
-    for (let component of this.Circuit.getElements())
-      this.drawComponent(component);
-
-    if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      for (let nodeIdx = 0; nodeIdx < this.Circuit.numNodes(); ++nodeIdx) {
-        let voltage = Util.singleFloat(this.Circuit.getVoltageForNode(nodeIdx));
-        let node = this.Circuit.getNode(nodeIdx);
-
-        this.context.fillText(`${nodeIdx}:${voltage}`, node.x + 10, node.y - 10, '#FF8C00');
-      }
-    }
-  }
-
-  isPlacingComponent() {
-    return !!this.placeComponent;
-  }
-
-  togglePause() {
-    if (this.Circuit.isStopped)
-      this.Circuit.resume();
-    else
-      this.Circuit.pause();
   }
 
   isSelecting() {
     return !!this.marquee;
   }
 
-  drawComponent(component) {
-    if (component && this.selectedComponents.includes(component)) {
-      this.renderer.drawBoldLines();
-      component.draw(this.renderer);
-    }
+  /* ACTIONS */
 
-    this.renderer.drawDefaultLines();
+  remove(components) {
+    this.HistoryStack.pushUndo(this.Circuit);
 
-    // Main entry point to draw component
-    component.draw(this.renderer);
+    return this.Circuit.destroy(components);
   }
 }
 

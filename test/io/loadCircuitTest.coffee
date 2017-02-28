@@ -24,7 +24,7 @@ describe "CircuitLoader", ->
 
       it "has correct unique name", ->
         console.log @circuit.Params.name
-        expect(@circuit.Params.name).to.equal "default"
+        expect(@circuit.name).to.equal "untitled"
 
       it "has correct power range", ->
         expect(@circuit.Params.powerRange).to.equal 62.0

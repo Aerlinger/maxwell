@@ -117,8 +117,6 @@ class PotElm extends CircuitComponent {
   }
 
   setPoints(x1, y1, x2, y2) {
-    let dx;
-    let dy;
     super.setPoints(x1, y1, x2, y2);
 
     let offset = 0;
@@ -158,20 +156,20 @@ class PotElm extends CircuitComponent {
     let bodyLen = 32;
 
     this.calcLeads(bodyLen);
-    this.position = this.sliderValue() * 0.0099 + 0.005;
+    this.position = this.params.position;
     let soff = Math.floor((this.position - 0.5) * bodyLen);
 
     this.post3 = Util.interpolate(this.point1, this.point2, 0.5, offset);
     this.corner2 = Util.interpolate(this.point1, this.point2, (soff / dn) + 0.5, offset);
     this.arrowPoint = Util.interpolate(this.point1, this.point2, (soff / dn) + 0.5, 8 * Math.sign(offset));
-    this.midpoint = Util.interpolate(this.point1, this.point2, (soff / dn) + 0.5);
+    // this.midpoint = Util.interpolate(this.point1, this.point2, (soff / dn) + 0.5);
 
     let clen = Math.abs(offset) - 8;
 
     [this.arrow1, this.arrow2] = Util.interpolateSymmetrical(this.corner2, this.arrowPoint, (clen - 8) / clen, 8);
 
-    this.ps3 = new Point(0, 0);
-    this.ps4 = new Point(0, 0);
+    // this.ps3 = new Point(0, 0);
+    // this.ps4 = new Point(0, 0);
 
     //console.log("POSTS", this.dir, "offset", offset, "dn", dn, clen, this.position, "post3", this.post3, "corner2", this.corner2, "arrowPoint", this.arrowPoint, this.arrow1, this.arrow2, this.midpoint, "p1", this.point1, "p2", this.p2);
   }

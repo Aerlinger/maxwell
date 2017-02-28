@@ -193,7 +193,7 @@ class CircuitSolver {
 
     this.lastTime = sysTime;
     this.lastFrameTime = this.lastTime;
-    return this.iterations++;
+    this.iterations++;
   }
 
   circuitLinear() {
@@ -676,7 +676,6 @@ class CircuitSolver {
     var j, largest, largestRow;
 
     var matrixSize = circuitMatrix.length;
-
     var scaleFactors = new Array(matrixSize);
 
     // i = 0;

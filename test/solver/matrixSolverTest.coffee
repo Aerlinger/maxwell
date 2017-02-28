@@ -1,79 +1,35 @@
 describe "Matrix Solver", ->
-
   beforeEach ->
     @Circuit = new Circuit()
     @Solver = @Circuit.Solver
 
-  describe "calling lu_factor", ->
+  describe "4x4 matrix", ->
     beforeEach ->
-      @circuitPermute = [0, 0, 0]
-      @matrix3 = [[1, 2, 3],
-                  [4, 5, 6],
-                  [7, 8, 10]]
-
-      @result = @Solver.luFactor(@matrix3, @circuitPermute)
-
-    it "replaces first param with factored result", ->
-      match = [
-        [
-          7
-          8
-          10
-        ]
-        [
-          0.14285714285714285
-          0.8571428571428572
-          1.5714285714285716
-        ]
-        [
-          0.5714285714285714
-          0.5000000000000002
-          -0.49999999999999967
-        ]
+      @circuitPermute = [0, 0, 0, 0]
+      @matrix3 = [
+        [2, 1, 1, 0],
+        [4, 3, 3, 1],
+        [8, 7, 9, 5]
+        [6, 7, 9, 8]
       ]
-      
-      expect(@matrix3).to.deep.equal(match)
 
-    it "initializes permute matrix", ->
-      expect(@circuitPermute).to.deep.equal([2, 2, 2])
+      @Solver.luFactor(@matrix3, @circuitPermute)
 
-    it "returns true", ->
-      expect(@result).to.be.ok
+    it "does factorization", ->
+      expect(@matrix3).to.eql([
+        [8, 7, 9, 5],
+        [3/4, 7/4, 9/4, 17/4],
+        [1/2, -2/7, -0.8571428571428572, -0.2857142857142856]
+        [1/4, -3/7, 0.3333333333333334, 0.6666666666666665]
+      ])
 
-    describe "then calling lu_solve", ->
-      beforeEach ->
-        @solvedMatrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-        @result = @Solver.luSolve(@matrix3, 3, @circuitPermute, @solvedMatrix)
+      expect(@circuitPermute).to.eql([2, 3, 3, 3 ])
 
-      it "solves circuit matrix", ->
-        expect(@result).to.deep.equal([2, 1, 0])
+    it "does factorization", ->
+      rightSide = [1, 2, 3, 4]
+      @Solver.luSolve(@matrix3, 4, @circuitPermute, rightSide)
 
-      it "solves circuit matrix", ->
-        expect(@solvedMatrix).to.deep.equal([NaN, NaN, NaN])
-
-      it "doesn't modify circuitMatrix", ->
-        match = [
-          [
-            7
-            8
-            10
-          ]
-          [
-            0.14285714285714285
-            0.8571428571428572
-            1.5714285714285716
-          ]
-          [
-            0.5714285714285714
-            0.5000000000000002
-            -0.49999999999999967
-          ]
-        ]
-
-        expect(@matrix3).to.deep.equal(match)
-
-      it "doesn't modify circuitPermute", ->
-        expect(@circuitPermute).to.deep.equal([2, 2, 2])
+      expect(rightSide).to.eql([0.9999999999999998, 0.5, -1.4999999999999998, 1])
 
   describe "With singular matrix", ->
     beforeEach ->
@@ -91,15 +47,9 @@ describe "Matrix Solver", ->
          [0.25, -0.5, 1e-18]]
       )
 
-    it "still returns true", ->
-      expect(@result).to.be.ok
-
     describe "then calling lu_solve", ->
       beforeEach ->
         @result = @Solver.luSolve(@matrix3, 3, @circuitPermute, @solvedMatrix)
-
-      it "solves circuit matrix", ->
-        expect(@result).to.deep.equal([2, 1, 0])
 
       it "solves circuit matrix", ->
         expect(@solvedMatrix).to.deep.equal([NaN, NaN, NaN])

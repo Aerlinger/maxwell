@@ -105,6 +105,24 @@ class Circuit extends Observer {
     this.clearAndReset();
   }
 
+  copy() {
+    let copyCircuit = new Circuit();
+
+    copyCircuit.name = this.name;
+    copyCircuit.params = this.Params;
+
+    copyCircuit.params = this.flags;
+    copyCircuit.isStopped = this.isStopped;
+    copyCircuit.hintItem1 = this.hintItem1 && this.hintItem1.copy();
+    copyCircuit.hintItem2 = this.hintItem2 && this.hintItem2.copy();
+
+    for (component of this.elementList) {
+      copyCircuit.elementList.push(component.copy())
+    }
+
+    return copyCircuit
+  }
+
   /**
    * Removes all circuit elements and scopes from the workspace and resets time to zero.
    *
@@ -320,7 +338,6 @@ class Circuit extends Observer {
     return this.scopes;
   }
 
-  //TODO: It may be worthwhile to return a defensive copy here
   getElements() {
     return this.elementList;
   }
@@ -333,7 +350,6 @@ class Circuit extends Observer {
     return this.elementList.length;
   }
 
-  //TODO: It may be worthwhile to return a defensive copy here
   getVoltageSources() {
     return this.voltageSources;
   }

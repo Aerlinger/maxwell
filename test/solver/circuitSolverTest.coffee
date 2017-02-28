@@ -7,23 +7,22 @@ describe "Circuit Solver", ->
     it "initiates solver", ->
       @Solver != null
       @Solver.Stamper != null
-      @Solver.scaleFactors.toString().should.equal Util.zeroArray(400).toString()
 
     it "solver belongs to @Circuit", ->
-      @Solver.Circuit.should.equal @Circuit
-      @Circuit.Solver.should.equal @Solver
+      expect(@Solver.Circuit).to.equal @Circuit
+      expect(@Circuit.Solver).to.equal @Solver
 
     it "has correct default values", ->
-      @Solver.Circuit.time.should.equal 0
-      @Solver.converged.should.equal true
-      @Solver.circuitNonLinear.should.equal false
-      @Solver.subIterations == 5000
-      @Solver.analyzeFlag.should.equal true
+      expect(@Solver.Circuit.time).to.equal 0
+      expect(@Solver.converged).to.equal true
+      expect(@Solver.circuitNonLinear).to.equal false
+      expect(@Solver.subIterations).to.equal 5000
+      expect(@Solver.analyzeFlag).to.equal true
 
     it "has empty default matrix values", ->
-      @Solver.circuitMatrix.should.be.empty
-      @Solver.circuitRightSide.should.be.empty
-      @Solver.origMatrix.should.be.empty
-      @Solver.origRightSide.should.be.empty
-      @Solver.circuitRowInfo.should.be.empty
-      @Solver.circuitPermute.should.be.empty
+      expect(@Solver.circuitMatrix).to.be.empty
+      expect(@Solver.circuitRightSide).to.be.empty
+      expect(@Solver.origMatrix).to.be.empty
+      expect(@Solver.origRightSide).to.be.empty
+      expect(@Solver.circuitRowInfo).to.be.empty
+      expect(@Solver.circuitPermute).to.be.empty

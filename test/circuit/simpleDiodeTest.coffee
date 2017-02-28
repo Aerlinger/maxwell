@@ -3,8 +3,8 @@ CircuitLoader = require('../../src/io/CircuitLoader.js')
 
 describe "Simple single diode circuit", ->
   beforeEach (done) ->
-    @json = [
-      {
+    @json = {
+      params: {
         "completion_status": "under_development",
         "created_at": null,
         "current_speed": 100,
@@ -20,34 +20,36 @@ describe "Simple single diode circuit", ->
         "updated_at": null,
         "voltage_range": 2.0
       },
-      {
-        "name": "RailElm",
-        "pos": [288, 208, 288, 160],
-        "flags": 0,
-        "params": {
-          "waveform": 3,
-          "frequency": 50,
-          "maxVoltage": 0.65,
-          "bias": 0.25,
-          "phaseShift": 0,
-          "dutyCycle": 0.5
+      components: [
+        {
+          "name": "RailElm",
+          "pos": [288, 208, 288, 160],
+          "flags": 0,
+          "params": {
+            "waveform": 3,
+            "frequency": 50,
+            "maxVoltage": 0.65,
+            "bias": 0.25,
+            "phaseShift": 0,
+            "dutyCycle": 0.5
+          }
+        },
+        {
+          "name": "DiodeElm",
+          "pos": [288, 208, 288, 288],
+          "flags": 0,
+          "params": {
+            "fwdrop": 0.805904783
+          }
+        },
+        {
+          "name": "GroundElm",
+          "pos": [288, 288, 288, 320],
+          "flags": 0,
+          "params": {}
         }
-      },
-      {
-        "name": "DiodeElm",
-        "pos": [288, 208, 288, 288],
-        "flags": 0,
-        "params": {
-          "fwdrop": 0.805904783
-        }
-      },
-      {
-        "name": "GroundElm",
-        "pos": [288, 288, 288, 320],
-        "flags": 0,
-        "params": {}
-      }
-    ]
+      ]
+    }
 
     @Circuit = CircuitLoader.createCircuitFromJsonData(@json)
 

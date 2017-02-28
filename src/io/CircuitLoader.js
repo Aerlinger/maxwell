@@ -88,7 +88,7 @@ class CircuitLoader {
     let circuitComponents = jsonData.components;
 
     if (!circuitParams || !circuitComponents) {
-      console.warn("Circuit data malformed (Either circuit params or components are missing)")
+      console.warn("Circuit data malformed (Either circuit params or components are missing)");
       return
     }
 

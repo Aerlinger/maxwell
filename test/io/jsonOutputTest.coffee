@@ -1,9 +1,6 @@
 Maxwell = require('../../src/Maxwell.js')
 
-fs = require("fs")
-
-
-describe "JSON output", ->
+describe.skip "JSON output", ->
   before (done) ->
     @circuit = Maxwell.loadCircuitFromFile("./circuits/v5/ohms.json")
     @circuit.updateCircuit()
@@ -42,7 +39,6 @@ describe "JSON output", ->
       ]
 
       expect(@analysisJson).to.have.all.keys analysisJsonKeys
-
 
     it "persists frames to JSON format", ->
       frameJsonKeys = [
