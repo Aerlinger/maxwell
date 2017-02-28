@@ -210,6 +210,8 @@ class Settings {
 
     this.DOTS_COLOR = ColorPalette.yellow;
     this.DOTS_OUTLINE = ColorPalette.orange;
+
+    this.CHIP_OUTLINE_WIDTH = 0;
   
     this.TEXT_COLOR = ColorPalette.black;
     this.TEXT_ERROR_COLOR = ColorPalette.red;

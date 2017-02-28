@@ -94,6 +94,19 @@ class Maxwell {
       console.error(`createContext must be called with a unique circuit name`)
     }
   }
+
+  static createBlankCircuit(circuitName, context, onComplete) {
+    if (circuitName) {
+      let circuit = new Circuit(circuit_name);
+      this.Circuits[circuitName] = circuit;
+
+      let CircuitApp = new CircuitApplication(circuit, context);
+
+      onComplete(CircuitApp);
+    } else {
+      console.error(`createContext must be called with a unique circuit name`)
+    }
+  }
 }
 
 Maxwell.Circuits = {};

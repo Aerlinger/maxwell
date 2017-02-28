@@ -54,7 +54,7 @@ class CC2Elm extends ChipElm {
 
   draw(renderContext) {
     this.pins[2].current = this.pins[0].current * this.gain;
-    return this.drawChip(renderContext);
+    this.drawChip(renderContext);
   }
 
   numPosts() {

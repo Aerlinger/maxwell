@@ -101,7 +101,6 @@ class LogicInputElm extends SwitchElm {
     return this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (12 / this.dn()));
   }
 
-
   setCurrent(vs, c) {
     return this.current = -c;
   }

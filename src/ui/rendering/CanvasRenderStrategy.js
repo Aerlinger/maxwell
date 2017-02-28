@@ -166,11 +166,11 @@ class CanvasRenderStrategy {
       context.lineWidth = Settings.BOLD_LINE_WIDTH;
       context.strokeStyle = Settings.SELECT_COLOR;
     } else {
-      context.lineWidth = Settings.LINE_WIDTH + 1;
+      context.lineWidth = Settings.LINE_WIDTH + 0.5;
     }
 
     let numSegments = 8;
-    let width = 5;
+    let width = 4;
     let parallelOffset = 1 / numSegments;
 
     // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
@@ -194,9 +194,8 @@ class CanvasRenderStrategy {
     context.restore();
   }
 
-  drawCoil(point1, point2, vStart, vEnd, hs) {
+  drawCoil(point1, point2, vStart, vEnd, hs = 6) {
     let color, cx, hsx, voltageLevel;
-    hs = hs || 8;
 
     let segments = 40;
 
@@ -223,7 +222,7 @@ class CanvasRenderStrategy {
       this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
       this.context.strokeStyle = Settings.SELECT_COLOR;
     } else {
-      this.context.lineWidth = Settings.LINE_WIDTH + 1;
+      this.context.lineWidth = Settings.LINE_WIDTH + 0.5;
     }
 
     for (let i = 0; i < segments; ++i) {
@@ -254,16 +253,16 @@ class CanvasRenderStrategy {
       this.drawLinePt(component.lead2, component.point2, this.getVoltageColor(component.volts[1]));
   }
 
-  drawPosts(component, color = Settings.POST_COLOR) {
+  drawPosts(component, color = Settings.POST_COLOR, radius=Settings.POST_RADIUS) {
     let post;
 
     for (let i = 0; i < component.numPosts(); ++i) {
       post = component.getPost(i);
-      this.drawPost(post.x, post.y, color);
+      this.drawPost(post.x, post.y, color, Settings.POST_OUTLINE_COLOR, radius);
     }
   }
 
-  drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_OUTLINE_COLOR) {
+  drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_OUTLINE_COLOR, radius=Settings.POST_RADIUS) {
     let oulineWidth = Settings.POST_OUTLINE_SIZE;
 
     if (this.boldLines) {
@@ -272,7 +271,7 @@ class CanvasRenderStrategy {
       oulineWidth += 3;
     }
 
-    this.drawCircle(x0, y0, Settings.POST_RADIUS, oulineWidth, strokeColor, fillColor);
+    this.drawCircle(x0, y0, radius, oulineWidth, strokeColor, fillColor);
   }
 
   drawText(text, x, y, fillColor = Settings.TEXT_COLOR, size = Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
@@ -405,7 +404,9 @@ class CanvasRenderStrategy {
     this.context.save();
 
     this.context.fillStyle = fill;
-    this.context.strokeStyle = color;
+    if (color)
+      this.context.strokeStyle = color;
+
     this.context.lineWidth = lineWidth;
     this.context.beginPath();
 
@@ -415,10 +416,11 @@ class CanvasRenderStrategy {
     }
 
     this.context.closePath();
-    if (fill) {
+    if (fill)
       this.context.fill();
-    }
-    this.context.stroke();
+
+    if (color)
+      this.context.stroke();
 
     this.context.restore();
   }

@@ -55,7 +55,7 @@ class InverterElm extends CircuitComponent {
 
     renderContext.drawLeads(this);
 
-    renderContext.drawPolygon(this.gatePoly, Settings.STROKE_COLOR, Settings.FILL_COLOR);
+    renderContext.drawPolygon(this.gatePoly, Settings.STROKE_COLOR, Settings.FILL_COLOR, 0);
     renderContext.drawCircle(this.pcircle.x, this.pcircle.y, Settings.POST_RADIUS + 2, 2, Settings.STROKE_COLOR, "#FFFFFF");
 
     this.updateDots();
