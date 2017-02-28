@@ -795,9 +795,13 @@ class CircuitComponent {
   }
 
   update(params) {
+    console.log(`Updating: ${this.getName()}:`, this, params);
+
     for (let paramName in params) {
       this.setValue(paramName, params[paramName])
     }
+
+    this.place && this.place()
   }
 
   setValue(paramName, paramValue) {

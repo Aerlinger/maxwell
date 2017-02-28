@@ -79,7 +79,7 @@ class TransistorElm extends CircuitComponent {
   setup() {
     this.vcrit = this.vt * Math.log(this.vt / (Math.sqrt(2) * this.leakage));
     this.fgain = this.beta / (this.beta + 1);
-    return this.noDiagonal = true;
+    this.noDiagonal = true;
   }
 
   nonLinear() {

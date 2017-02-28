@@ -136,8 +136,8 @@ class SvgRenderer extends Observer {
 
 
       /*
-       if (this.context.clear) {
-       this.context.clear();
+       if (this.context.clearCanvas) {
+       this.context.clearCanvas();
        }
 
        // this.drawGrid();

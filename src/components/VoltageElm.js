@@ -102,7 +102,7 @@ class VoltageElm extends CircuitComponent {
 
   reset() {
     this.freqTimeZero = 0;
-    return this.curcount = 0;
+    this.curcount = 0;
   }
 
   triangleFunc(x) {
@@ -114,17 +114,15 @@ class VoltageElm extends CircuitComponent {
   }
 
   stamp(stamper) {
-    if (this.waveform === VoltageElm.WF_DC) {
-      return stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
-    } else {
-      return stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource);
-    }
+    if (this.waveform === VoltageElm.WF_DC)
+      stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
+    else
+      stamper.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource);
   }
 
   doStep(stamper) {
-    if (this.waveform !== VoltageElm.WF_DC) {
-      return stamper.updateVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
-    }
+    if (this.waveform !== VoltageElm.WF_DC)
+      stamper.updateVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
   }
 
   getVoltage() {
@@ -136,28 +134,24 @@ class VoltageElm extends CircuitComponent {
 
     switch (this.waveform) {
       case VoltageElm.WF_DC:
-        return this.maxVoltage + this.bias;
+        return this.params.maxVoltage + this.bias;
       case VoltageElm.WF_AC:
-        return (Math.sin(omega) * this.maxVoltage) + this.bias;
+        return (Math.sin(omega) * this.params.maxVoltage) + this.bias;
       case VoltageElm.WF_SQUARE:
-        return this.bias + (((omega % (2 * Math.PI)) > (2 * Math.PI * this.dutyCycle)) ? -this.maxVoltage : this.maxVoltage);
+        return this.bias + (((omega % (2 * Math.PI)) > (2 * Math.PI * this.dutyCycle)) ? -this.params.maxVoltage : this.params.maxVoltage);
       case VoltageElm.WF_TRIANGLE:
-        return this.bias + (this.triangleFunc(omega % (2 * Math.PI)) * this.maxVoltage);
+        return this.bias + (this.triangleFunc(omega % (2 * Math.PI)) * this.params.maxVoltage);
       case VoltageElm.WF_SAWTOOTH:
-        return (this.bias + ((omega % (2 * Math.PI)) * (this.maxVoltage / Math.PI))) - this.maxVoltage;
+        return (this.bias + ((omega % (2 * Math.PI)) * (this.params.maxVoltage / Math.PI))) - this.params.maxVoltage;
       case VoltageElm.WF_PULSE:
         if ((omega % (2 * Math.PI)) < 1) {
-          return this.maxVoltage + this.bias;
+          return this.params.maxVoltage + this.bias;
         } else {
           return this.bias;
         }
       default:
         return 0;
     }
-  }
-
-  setPoints() {
-    return super.setPoints(...arguments);
   }
 
   draw(renderContext) {
@@ -198,9 +192,8 @@ class VoltageElm extends CircuitComponent {
 
     renderContext.drawPosts(this);
 
-    if (this.Circuit && this.Circuit.debugModeEnabled()) {
+    if (this.Circuit && this.Circuit.debugModeEnabled())
       super.debugDraw(renderContext);
-    }
   }
 
   static get NAME() {
@@ -341,7 +334,7 @@ class VoltageElm extends CircuitComponent {
 
     if ((this.waveform !== VoltageElm.WF_DC) && (this.waveform !== VoltageElm.WF_VAR)) {
       arr[3] = `f = ${Util.getUnitText(this.frequency, "Hz")}`;
-      arr[4] = `Vmax = ${Util.getUnitText(this.maxVoltage, "V")}`;
+      arr[4] = `Vmax = ${Util.getUnitText(this.params.maxVoltage, "V")}`;
       let i = 5;
       if (this.bias !== 0) {
         arr[i++] = `Voff = ${Util.getUnitText(this.bias, "V")}`;
