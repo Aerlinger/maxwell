@@ -4,13 +4,13 @@ let Polygon = require('../geom/Polygon.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
 let Util = require('../util/Util.js');
-//Maxwell = require('../Maxwell.js')
 
 class ResistorElm extends CircuitComponent {
   static get Fields() {
     return {
       "resistance": {
         name: "Resistance",
+        title: "Resistance",
         description: "Amount of current per unit voltage applied to this resistor (ideal).",
         unit: "Ohms",
         default_value: 1000,

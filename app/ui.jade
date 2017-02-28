@@ -20,40 +20,40 @@ block header
         switch (keycode) {
           case "W":
             console.log("WireElm");
-            circuitContext.setPlaceComponent("WireElm");
+            circuitContext.setPlaceElement("WireElm");
             break;
           case 'R':
-            circuitContext.setPlaceComponent("ResistorElm");
+            circuitContext.setPlaceElement("ResistorElm");
             break;
           case 'G':
-            circuitContext.setPlaceComponent("GroundElm");
+            circuitContext.setPlaceElement("GroundElm");
             break;
           case 'S':
-            circuitContext.setPlaceComponent("SwitchElm");
+            circuitContext.setPlaceElement("SwitchElm");
             break;
           case 'C':
-            circuitContext.setPlaceComponent("CapacitorElm");
+            circuitContext.setPlaceElement("CapacitorElm");
             break;
           case 'I':
-            circuitContext.setPlaceComponent("InductorElm");
+            circuitContext.setPlaceElement("InductorElm");
             break;
           case 'V':
-            circuitContext.setPlaceComponent("VoltageElm");
+            circuitContext.setPlaceElement("VoltageElm");
             break;
           case 'A':
-            circuitContext.setPlaceComponent("RailElm");
+            circuitContext.setPlaceElement("RailElm");
             break;
           case 'O':
-            circuitContext.setPlaceComponent("OpAmpElm");
+            circuitContext.setPlaceElement("OpAmpElm");
             break;
           case "D":
-            circuitContext.setPlaceComponent("DiodeElm");
+            circuitContext.setPlaceElement("DiodeElm");
             break;
           case "T":
-            circuitContext.setPlaceComponent("TransistorElm");
+            circuitContext.setPlaceElement("TransistorElm");
             break;
           case "M":
-            circuitContext.setPlaceComponent("MosfetElm");
+            circuitContext.setPlaceElement("MosfetElm");
             break;
           case "Q":
             circuitContext.clearPlaceComponent();
@@ -152,7 +152,7 @@ block header
           $('.component-item').click(function (evt) {
             var componentName = $(this).data("name");
 
-            circuitContext.setPlaceComponent(componentName);
+            circuitContext.setPlaceElement(componentName);
           });
 
           bindCircuitEvents(circuitContext);

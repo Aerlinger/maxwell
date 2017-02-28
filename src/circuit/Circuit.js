@@ -522,7 +522,8 @@ class Circuit extends Observer {
       }
     }
 
-    let circuitObj = [{
+    let circuitObj = {
+      params: {
           type: this.Params.name,
           timeStep: this.timeStep(),
           simSpeed: this.simSpeed(),
@@ -530,13 +531,9 @@ class Circuit extends Observer {
           voltageRange: this.voltageRange(),
           powerRange: this.powerRange(),
           flags: this.flags
-        }]
-            .concat(this.elementList.map(element => element.serialize()))
-            .concat(this.scopes.map(scope => scope.serialize()))
-        ;
-
-    if (hint)
-      circuitObj.push(hint);
+        },
+      components: this.elementList.map(element => element.serialize())
+    };
 
     return circuitObj
   }

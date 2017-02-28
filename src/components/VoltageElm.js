@@ -7,6 +7,7 @@ class VoltageElm extends CircuitComponent {
     return {
       "waveform": {
         name: "Waveform",
+        title: "Waveform",
         default_value: 0,
         data_type: parseInt,
         range: [0, 6],
@@ -23,27 +24,31 @@ class VoltageElm extends CircuitComponent {
       },
       "frequency": {
         name: "Frequency",
+        title: "Frequency",
         unit: "Hertz",
         default_value: 40,
         symbol: "Hz",
         data_type: parseFloat
       },
       "maxVoltage": {
-        name: "Max Voltage",
+        name: "maxVoltage",
+        title: "Max Voltage",
         unit: "Voltage",
         symbol: "V",
         default_value: 5,
         data_type: parseFloat
       },
       "bias": {
-        name: "Voltage Bias",
+        name: "bias",
+        title: "Voltage Bias",
         unit: "Voltage",
         symbol: "V",
         default_value: 0,
         data_type: parseFloat
       },
       "phaseShift": {
-        name: "Phase Shift",
+        name: "phaseShift",
+        title: "Phase Shift",
         unit: "degrees",
         default_value: 0,
         symbol: "deg",
@@ -53,7 +58,8 @@ class VoltageElm extends CircuitComponent {
         field_type: "slider"
       },
       "dutyCycle": {
-        name: "Duty Cycle",
+        name: "dutyCycle",
+        title: "Duty Cycle",
         unit: "",
         default_value: 0.5,
         symbol: "%",

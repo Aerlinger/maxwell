@@ -179,6 +179,11 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
 ###Plotting and adding Oscilloscopes:
 
   **(Work in progress)**
+  
+###TODO
+
+- Unique IDs for CircuitComponent
+- Consistent fields for CircuitComponent
 
 ## License
 

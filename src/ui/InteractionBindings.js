@@ -1,15 +1,3 @@
-let Util = require('../util/Util');
-
-const ON_COMPONENT_HOVER = "ON_COMPONENT_HOVER";
-const ON_COMPONENT_CLICKED = "ON_COMPONENT_CLICKED";
-const ON_COMPONENTS_SELECTED = "ON_COMPONENTS_SELECTED";
-const ON_COMPONENTS_DESELECTED = "ON_COMPONENTS_DESELECTED";
-const ON_COMPONENTS_MOVED = "ON_COMPONENTS_MOVED";
-
-const MOUSEDOWN = 1;
-
-let SelectionMarquee = require('./SelectionMarquee');
-
 /**
  *
  * @param Circuit
@@ -19,6 +7,17 @@ let SelectionMarquee = require('./SelectionMarquee');
  * This function's 'this' reference is bound to the parent CircuitController
  */
 let interactionController = function (Circuit, canvas) {
+  const ON_COMPONENT_HOVER = "ON_COMPONENT_HOVER";
+  const ON_COMPONENT_CLICKED = "ON_COMPONENT_CLICKED";
+  const ON_COMPONENTS_SELECTED = "ON_COMPONENTS_SELECTED";
+  const ON_COMPONENTS_DESELECTED = "ON_COMPONENTS_DESELECTED";
+  const ON_COMPONENTS_MOVED = "ON_COMPONENTS_MOVED";
+
+  const MOUSEDOWN = 1;
+
+
+  let Util = require('../util/Util');
+  let SelectionMarquee = require('./SelectionMarquee');
 
   // Callbacks
   let onSelectionChanged = this.noop;
