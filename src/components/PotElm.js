@@ -8,20 +8,21 @@ class PotElm extends CircuitComponent {
   static get Fields() {
     return {
       "maxResistance": {
-        name: "Max Resistance",
+        title: "Max Resistance",
         default_value: 1e4,
         data_type: parseFloat,
         range: [0, Infinity],
+        unit: "Ohms",
         symbol: "Ω"
       },
       "position": {
-        name: "Position",
+        title: "Position",
         default_value: 0.5,
-        range: [0, 1e5],
+        range: [0, 1],
         data_type: parseFloat
       },
       "sliderText": {
-        name: "Slider Text",
+        title: "Slider Text",
         default_value: "",
         data_type(x) {
           return x;

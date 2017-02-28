@@ -2,7 +2,6 @@ let ChipElm = require("./ChipElm.js");
 let VariableBitChipElm = require("./VariableBitChipElm.js");
 
 class DecadeElm extends VariableBitChipElm {
-
   constructor(xa, xb, ya, yb, params, f) {
     params = params || {"bits": 2, "volts": [0, 0, 0, 0]};
 

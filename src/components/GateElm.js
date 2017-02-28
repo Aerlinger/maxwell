@@ -10,13 +10,13 @@ class GateElm extends CircuitComponent {
   static get Fields() {
     return {
       inputCount: {
-        name: "Input count",
+        title: "Input count",
         data_type: parseInt,
         default_value: 2,
-        field: "integer"
+        range: [0, Infinity]
       },
       lastOutput: {
-        name: "Initial State",
+        title: "Initial output state",
         data_type(x) {
           return x > 2.5;
         },

@@ -7,10 +7,9 @@ let Util = require('../util/Util.js');
 
 class SwitchElm extends CircuitComponent {
   static get Fields() {
-  
     return {
       "position": {
-        name: "Position",
+        title: "Position",
         default_value: 0,
         data_type(str){
           str = str.toString();
@@ -23,10 +22,11 @@ class SwitchElm extends CircuitComponent {
             return parseInt(str);
           }
         },
-        field_type: "boolean"
+        field_type: "select",
+        select_values: {"ON": 1, "OFF": 0}
       },
       "momentary": {
-        name: "Momentary",
+        title: "Momentary",
         default_value: false,
         data_type(str) { return str.toString() === 'true'; },
         field_type: "boolean"

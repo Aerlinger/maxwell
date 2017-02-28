@@ -3,7 +3,6 @@ let ChipElm = require("./ChipElm.js");
 let Util = require('../util/Util.js');
 
 class JkFlipFlopElm extends ChipElm {
-
   constructor(xa, xb, ya, yb, params, f) {
     // Set [4] as default value for params['volts']
     params = params || {};

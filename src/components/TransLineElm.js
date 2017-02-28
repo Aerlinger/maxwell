@@ -6,25 +6,32 @@ class TransLineElm extends CircuitComponent {
   static get Fields() {
     return {
       delay: {
-        name: "Delay",
+        title: "Delay",
         data_type: parseFloat,
         default_value: 1000 * 5e-12,
-        symbol: "s"
+        unit: "time",
+        symbol: "s",
+        range: [0, Infinity]
       },
       imped: {
-        name: "Impedance",
+        title: "Impedance",
         data_type: parseFloat,
-        default_value: 75
+        default_value: 75,
+        range: [0, Infinity]
       },
       channelWidth: {
-        name: "Channel Width (m)",
+        title: "Channel Width (m)",
         data_type: parseFloat,
-        default_value: 20
+        default_value: 20,
+        range: [0, Infinity]
       },
       resistance: {
-        name: "Resistance",
+        title: "Resistance",
         data_type: parseFloat,
-        default_value: 50
+        default_value: 50,
+        unit: "Ohms",
+        symbol: "Ω",
+        range: [0, Infinity]
       }
     };
   }

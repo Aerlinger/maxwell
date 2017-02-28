@@ -28,15 +28,18 @@ class CircuitComponent {
    *
    * Definition of field params for this component
    *
+   * Possible types: float, integer, array (chip and gate elms), boolean, text, enum
+   *
    * Params:
-   * @name (required) Literal name of the field
-   * @label (required) Readable name for this field
-   * @unit (optional) Physical unit of this field if applicable
+   * @name (required) identifier of the field
+   * @title (required) Readable name for this field
+   * @unit (text, optional) Physical unit of this field if applicable
+   * @description (optional) Physical unit of this field if applicable
    * @symbol: short symbol
-   * field_type: [select, textfield, integer, boolean, slider]
+   * field_type: (string, textfield by default) [select, textfield, integer, boolean, slider]
    * @default_value (optional, but should be specified in most cases) Default value for this parameter
-   * @data_type: function to convert a string into a valid type for this field
-   * @range: Minimum and maximum Allowable range of values
+   * @data_type (function, optional): to convert a string into a valid type for this field
+   * @range (array, optional): Minimum and maximum Allowable range of values
    * or...
    * @select_values: {"NPN": -1, "PNP": 1}
    *

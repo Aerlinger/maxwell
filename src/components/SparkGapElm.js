@@ -9,40 +9,36 @@ class SparkGapElm extends CircuitComponent {
   static get Fields() {
     return {
       "onresistance": {
-        name: "On Resistance",
+        title: "On Resistance",
         unit: "Ohms",
         default_value: 1e3,
         symbol: "Ω",
         data_type: parseFloat,
-        range: [0, Infinity],
-        type: "physical"
+        range: [0, Infinity]
       },
       "offresistance": {
-        name: "Off Resistance",
+        title: "Off Resistance",
         unit: "Ohms",
-        default_value: 1e9,
         symbol: "Ω",
+        default_value: 1e9,
         data_type: parseFloat,
-        range: [0, Infinity],
-        type: "physical"
+        range: [0, Infinity]
       },
       "breakdown": {
-        name: "Breakdown Voltage",
+        title: "Breakdown Voltage",
         unit: "Voltage",
         symbol: "V",
         default_value: 1e3,
         data_type: parseFloat,
-        range: [-Infinity, Infinity],
-        type: "physical"
+        range: [0, Infinity]
       },
       "holdcurrent": {
+        title: "Hold Current",
         unit: "Amperes",
-        name: "Hold Current",
         symbol: "A",
         default_value: 0.001,
         data_type: parseFloat,
-        range: [-Infinity, Infinity],
-        type: "physical"
+        range: [-Infinity, Infinity]
       },
     };
   }

@@ -7,40 +7,49 @@ class MemristorElm extends CircuitComponent {
   
     return {
       r_on: {
-        name: "On resistance",
+        title: "On resistance",
         data_type: parseFloat,
         default_value: 100,
-        symbol: "Ω"
+        unit: "Ohms",
+        symbol: "Ω",
+        range: [0, Infinity]
       },
       r_off: {
-        name: "Off resistance",
+        title: "Off resistance",
         data_type: parseFloat,
         default_value: 160 * 100,
-        symbol: "Ω"
+        unit: "Oms",
+        symbol: "Ω",
+        range: [0, Infinity]
       },
       dopeWidth: {
-        name: "Doping Width",
+        title: "Doping Width",
         data_type: parseFloat,
         default_value: 0,
-        symbol: "m"
+        symbol: "m",
+        range: [0, Infinity]
       },
       totalWidth: {
-        name: "Total Width",
+        title: "Total Width",
         data_type: parseFloat,
         default_value: 10e-9,
-        symbol: "m"
+        symbol: "m",
+        range: [0, Infinity]
       },
       mobility: {
-        name: "Majority carrier mobility",
+        title: "Majority carrier mobility",
         data_type: parseFloat,
         default_value: 1e-10,
-        symbol: "cm2/(V·s)"
+        symbol: "cm2/(V·s)",
+        range: [0, Infinity]
       },
       resistance: {
-        name: "Overall resistance",
+        title: "Overall resistance",
         data_type: parseFloat,
         default_value: 100,
-        symbol: "Ω"
+        unit: "Ohms",
+        symbol: "Ω",
+        range: [0, Infinity]
       }
     };
   }

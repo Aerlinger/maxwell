@@ -6,12 +6,12 @@ class TriodeElm extends CircuitComponent {
   static get Fields() {
     return {
       mu: {
-        name: "Mu",
+        title: "Mu",
         data_type: parseFloat,
         default_value: 93
       },
       kg1: {
-        name: "kg1",
+        title: "kg1",
         data_type: parseFloat,
         default_value: 680
       }

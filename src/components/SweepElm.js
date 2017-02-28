@@ -15,29 +15,31 @@ class SweepElm extends CircuitComponent {
   static get Fields() {
     return {
       "minF": {
-        name: "Min. Frequency",
+        title: "Min. Frequency",
         unit: "Hertz",
-        default_value: 20,
         symbol: "Hz",
-        data_type: parseFloat
+        default_value: 20,
+        data_type: parseFloat,
+        range: [0, Infinity]
       },
       "maxF": {
-        name: "Min. Frequency",
+        title: "Max. Frequency",
         unit: "Hertz",
-        default_value: 4e4,
         symbol: "Hz",
-        data_type: parseFloat
+        default_value: 4e4,
+        data_type: parseFloat,
+        range: [0, Infinity]
       },
       "maxV": {
-        name: "Voltage",
+        title: "Voltage",
         unit: "Voltage",
         symbol: "V",
         default_value: 5,
         data_type: parseFloat
       },
       "sweepTime": {
+        title: "Time",
         unit: "seconds",
-        name: "Time",
         symbol: "s",
         default_value: 0.1,
         data_type: parseFloat,

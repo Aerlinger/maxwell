@@ -15,9 +15,11 @@ class LogicOutputElm extends CircuitComponent {
   static get Fields() {
     return {
       threshold: {
-        name: "Threshold Voltage",
+        title: "Threshold Voltage",
         data_type: parseFloat,
-        default_value: 2.5
+        default_value: 2.5,
+        unit: "Voltage",
+        symbol: "V",
       }
     };
   }

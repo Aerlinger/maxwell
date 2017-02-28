@@ -41,7 +41,6 @@ describe "Resistor Component", ->
 #      console.log("PARAMS", @resistor.getFieldWithValue("resistance"))
       expect(@resistor.getFieldWithValue("resistance")).to.eql({
         "default_value": 1000
-        "name": "Resistance"
         "title": "Resistance"
         "description": "Amount of current per unit voltage applied to this resistor (ideal)."
         "range": [
@@ -49,7 +48,6 @@ describe "Resistor Component", ->
           Infinity
         ]
         "symbol": "Ω"
-        "type": "physical"
         "unit": "Ohms"
         "value": 50
       })

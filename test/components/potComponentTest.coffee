@@ -1,6 +1,6 @@
 describe "Potentiometer", ->
   before ->
-    @potElm = new PotElm(50, 50, 50, 150, { maxResistance: 1e6, position: 50, sliderText: "placeholder" })
+    @potElm = new PotElm(50, 50, 50, 150, { maxResistance: 1e6, position: 0.5, sliderText: "placeholder" })
 
   it "has correct position", ->
     expect(@potElm.x1()).to.equal(50)
@@ -11,7 +11,7 @@ describe "Potentiometer", ->
   it "has correct parameters", ->
     expect(@potElm.maxResistance).to.equal(1e6)
     expect(@potElm.sliderText).to.equal("placeholder")
-    expect(@potElm.position).to.equal(50)
+    expect(@potElm.position).to.equal(0.5)
 #    expect(@potElm.getSliderValue()).to.equal(5000)
 
   describe "Rendering", ->

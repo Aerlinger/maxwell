@@ -34,7 +34,7 @@ describe "Simple Voltage Divider", ->
       expect(@circuit.Solver.circuitNeedsMap).to.equal true
 
     it "has correct voltage sources", ->
-      voltageSources = "Voltage@[112 368 112 48] {waveform: 0 , frequency: 40.0 Hz, maxVoltage: 10.0 V, bias: 0 V, phaseShift: 0 deg, dutyCycle: 500.0 m%},Wire@[112 48 240 48] {},Wire@[112 368 240 368] {},Wire@[240 48 432 48] {},Wire@[240 368 432 368] {}"
+      voltageSources = "Voltage@[112 368 112 48] {waveform: 0 , frequency: 40.0 Hz, maxVoltage: 10.0 V, bias: 0 V, phaseShift: 0 deg, dutyCycle: 500.0 m},Wire@[112 48 240 48] {},Wire@[112 368 240 368] {},Wire@[240 48 432 48] {},Wire@[240 368 432 368] {}"
       expect(@circuit.getVoltageSources().toString()).to.equal voltageSources
 
     describe "current rowInfos", ->
@@ -62,8 +62,8 @@ describe "Simple Voltage Divider", ->
       expect(@circuit.Solver.circuitRowInfo.length).to.equal 10
 
     it "has correct nodes", ->
-      expect(@circuit.getNode(0).toString()).to.equal "Node: 112 368 [0 Voltage@[112 368 112 48] {waveform: 0 , frequency: 40.0 Hz, maxVoltage: 10.0 V, bias: 0 V, phaseShift: 0 deg, dutyCycle: 500.0 m%},0 Wire@[112 368 240 368] {}]"
-      expect(@circuit.getNode(1).toString()).to.equal 'Node: 112 48 [1 Voltage@[112 368 112 48] {waveform: 0 , frequency: 40.0 Hz, maxVoltage: 10.0 V, bias: 0 V, phaseShift: 0 deg, dutyCycle: 500.0 m%},0 Wire@[112 48 240 48] {}]'
+      expect(@circuit.getNode(0).toString()).to.equal "Node: 112 368 [0 Voltage@[112 368 112 48] {waveform: 0 , frequency: 40.0 Hz, maxVoltage: 10.0 V, bias: 0 V, phaseShift: 0 deg, dutyCycle: 500.0 m},0 Wire@[112 368 240 368] {}]"
+      expect(@circuit.getNode(1).toString()).to.equal 'Node: 112 48 [1 Voltage@[112 368 112 48] {waveform: 0 , frequency: 40.0 Hz, maxVoltage: 10.0 V, bias: 0 V, phaseShift: 0 deg, dutyCycle: 500.0 m},0 Wire@[112 48 240 48] {}]'
       expect(@circuit.getNode(2).toString()).to.equal 'Node: 240 48 [1 Wire@[112 48 240 48] {},0 Resistor@[240 48 240 368] {resistance: 10.0 kΩ},0 Wire@[240 48 432 48] {}]'
       expect(@circuit.getNode(3).toString()).to.equal 'Node: 240 368 [1 Resistor@[240 48 240 368] {resistance: 10.0 kΩ},1 Wire@[112 368 240 368] {},0 Wire@[240 368 432 368] {}]'
       expect(@circuit.getNode(4).toString()).to.equal 'Node: 432 48 [1 Wire@[240 48 432 48] {},0 Resistor@[432 48 432 368] {resistance: 20.0 kΩ}]'

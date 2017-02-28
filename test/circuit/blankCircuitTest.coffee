@@ -27,7 +27,7 @@ describe "Circuit", ->
       expect(@Circuit.getNodes()).to.be.empty
       expect(@Circuit.getScopes()).to.be.empty
 
-    specify "GetElmByIdx should return an empty array", ->
+    specify "GetElmByIdx returns an empty array", ->
       @Circuit.getElmByIdx(0) == null
 
     describe "Adding components", ->

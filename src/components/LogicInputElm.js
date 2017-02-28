@@ -10,10 +10,9 @@ class LogicInputElm extends SwitchElm {
   }
 
   static get Fields() {
-  
     return {
       "position": {
-        name: "Position",
+        title: "Position",
         default_value: 0,
         data_type(str){
           str = str.toString();
@@ -29,19 +28,23 @@ class LogicInputElm extends SwitchElm {
         field_type: "boolean"
       },
       "momentary": {
-        name: "Momentary",
+        title: "Momentary",
         default_value: 0,
         data_type(str) { return str.toString() === 'true'; },
         field_type: "boolean"
       },
       hiV: {
-        name: "Voltage High",
+        title: "Voltage High",
         data_type: parseFloat,
+        unit: "Voltage",
+        symbol: "V",
         default_value: 5
       },
       loV: {
-        name: "Voltage Low",
+        title: "Voltage Low",
         data_type: parseFloat,
+        unit: "Voltage",
+        symbol: "V",
         default_value: 0
       }
     };

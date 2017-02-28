@@ -1,14 +1,8 @@
-let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
-let Polygon = require('../geom/Polygon.js');
-let Rectangle = require('../geom/Rectangle.js');
-let Point = require('../geom/Point.js');
 let Util = require('../util/Util.js');
 
 let MosfetElm = require('./MosfetElm.js');
 
 class JfetElm extends MosfetElm {
-
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
     this.noDiagonal = true;

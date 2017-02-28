@@ -2,7 +2,6 @@ let OrGateElm = require("./OrGateElm.js");
 let Util = require('../util/Util.js');
 
 class XorGateElm extends OrGateElm {
-
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
   }

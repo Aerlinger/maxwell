@@ -9,13 +9,12 @@ class CurrentElm extends CircuitComponent {
   static get Fields() {
     return {
       "currentValue": {
+        title: "Current",
         unit: "Amperes",
-        name: "Current",
         symbol: "A",
         default_value: 0.01,
         data_type: parseFloat,
-        range: [-Infinity, Infinity],
-        type: "physical"
+        range: [-Infinity, Infinity]
       }
     };
   }

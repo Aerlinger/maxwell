@@ -11,16 +11,20 @@ class AnalogSwitchElm extends CircuitComponent {
   static get Fields() {
     return {
       r_on: {
-        name: "On Resistance",
-        data_type: parseFloat,
+        title: "On Resistance",
         default_value: 20,
-        symbol: "Ω"
+        unit: "Ohms",
+        symbol: "Ω",
+        data_type: parseFloat,
+        range: [0, Infinity]
       },
       r_off: {
-        name: "Off Resistance",
-        data_type: parseFloat,
+        title: "Off Resistance",
         default_value: 1e10,
-        symbol: "Ω"
+        unit: "Ohms",
+        symbol: "Ω",
+        data_type: parseFloat,
+        range: [0, Infinity]
       }
     };
   }

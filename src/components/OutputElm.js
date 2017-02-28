@@ -7,7 +7,6 @@ let Util = require('../util/Util.js');
 
 class OutputElm extends CircuitComponent {
   static initClass() {
-  
     this.FLAG_VALUE = 1;
   }
 

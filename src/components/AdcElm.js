@@ -3,7 +3,6 @@ let VariableBitChipElm = require("./VariableBitChipElm.js");
 let Util = require('../util/Util.js');
 
 class AdcElm extends VariableBitChipElm {
-
   constructor(xa, xb, ya, yb, params, f) {
     params = params || {"bits": 2, "volts": [0, 0, 0, 0]};
 

@@ -13,18 +13,18 @@ class CapacitorElm extends CircuitComponent {
   static get Fields() {
     return {
       "capacitance": {
-        name: "Capacitance",
-        unit: "Farads",
+        title: "Capacitance",
         default_value: 5e-6,
+        unit: "Farads",
         symbol: "F",
         data_type: parseFloat,
         range: [0, Infinity]
       },
       "voltdiff": {
-        name: "Volts",
+        title: "Initial Voltage",
         unit: "Volts",
-        default_value: 10,
         symbol: "V",
+        default_value: 10,
         data_type: parseFloat,
         range: [-Infinity, Infinity]
       }

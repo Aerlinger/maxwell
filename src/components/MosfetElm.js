@@ -19,16 +19,16 @@ class MosfetElm extends CircuitComponent {
   static get Fields() {
     return {
       "vt": {
-        data_type: parseFloat,
-        name: "Threshold Voltage",
+        title: "Threshold Voltage",
         description: "Threshold voltage",
         units: "Volts",
         symbol: "V",
         default_value: 1.5,
+        data_type: parseFloat,
         range: [-Infinity, Infinity]
       },
       "pnp": {
-        name: "Polarity",
+        title: "Polarity",
         description: "Current multiplier",
         default_value: 1,
         data_type: Math.sign,

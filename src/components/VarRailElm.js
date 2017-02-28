@@ -12,10 +12,8 @@ class VarRailElm extends RailElm {
   static get Fields() {
     return Util.extend(RailElm.Fields, {
       "sliderText": {
-        name: "sliderText",
-        unit: "",
+        title: "sliderText",
         default_value: "Voltage",
-        symbol: "%",
         data_type(x) { return x; }
       }
     });

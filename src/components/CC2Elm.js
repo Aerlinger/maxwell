@@ -3,12 +3,14 @@ let ChipElm = require("./ChipElm.js");
 let Util = require('../util/Util.js');
 
 class CC2Elm extends ChipElm {
-//  @Fields = {
-//    gain: {
-//      name: "Gain"
-//      data_type: parseFloat
-//    }
-//  }
+  static get Fields() {
+    return {
+      gain: {
+        title: "Gain",
+        data_type: parseFloat
+      }
+    }
+ }
 
   constructor(xa, xb, ya, yb, params, f) {
     super(xa, xb, ya, yb, params, f);

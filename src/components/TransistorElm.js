@@ -9,7 +9,7 @@ class TransistorElm extends CircuitComponent {
   static get Fields() {
     return {
       "pnp": {
-        name: "Polarity",
+        title: "Polarity",
         description: "Current multiplier",
         default_value: -1,
         data_type: Math.sign,
@@ -17,7 +17,7 @@ class TransistorElm extends CircuitComponent {
         select_values: {"NPN": -1, "PNP": 1}
       },
       "lastvbe": {
-        name: "Initial VBE",
+        title: "Initial VBE",
         unit: "Voltage",
         symbol: "V",
         default_value: 0,
@@ -25,14 +25,14 @@ class TransistorElm extends CircuitComponent {
         type: "physical"
       },
       "lastvbc": {
-        name: "Initial VBC",
+        title: "Initial VBC",
         unit: "Voltage",
         symbol: "V",
         default_value: 0,
         data_type: parseFloat
       },
       "beta": {
-        name: "Beta",
+        title: "Beta",
         description: "Current gain",
         default_value: 100,
         data_type: parseFloat,

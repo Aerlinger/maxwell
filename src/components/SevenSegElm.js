@@ -3,7 +3,6 @@ let Settings = require('../Settings.js');
 let ChipElm = require("./ChipElm.js");
 
 class SevenSegElm extends ChipElm {
-
   constructor(xa, xb, ya, yb, params, f) {
     super(xa, xb, ya, yb, params, f);
   }

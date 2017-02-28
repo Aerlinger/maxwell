@@ -6,9 +6,10 @@ class InverterElm extends CircuitComponent {
   static get Fields() {
     return {
       slewRate: {
-        name: "Slew Rate",
+        title: "Slew Rate",
         data_type: parseFloat,
-        default_value: 0.5
+        default_value: 0.5,
+        range: [0, Infinity]
       }
     };
   }

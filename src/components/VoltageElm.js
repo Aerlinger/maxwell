@@ -6,11 +6,9 @@ class VoltageElm extends CircuitComponent {
   static get Fields() {
     return {
       "waveform": {
-        name: "Waveform",
         title: "Waveform",
         default_value: 0,
         data_type: parseInt,
-        range: [0, 6],
         field_type: "select",
         select_values: {
           "DC Source": VoltageElm.WF_DC,
@@ -23,15 +21,14 @@ class VoltageElm extends CircuitComponent {
         }
       },
       "frequency": {
-        name: "Frequency",
         title: "Frequency",
         unit: "Hertz",
-        default_value: 40,
         symbol: "Hz",
-        data_type: parseFloat
+        default_value: 40,
+        data_type: parseFloat,
+        range: [0, Infinity]
       },
       "maxVoltage": {
-        name: "maxVoltage",
         title: "Max Voltage",
         unit: "Voltage",
         symbol: "V",
@@ -39,7 +36,6 @@ class VoltageElm extends CircuitComponent {
         data_type: parseFloat
       },
       "bias": {
-        name: "bias",
         title: "Voltage Bias",
         unit: "Voltage",
         symbol: "V",
@@ -47,25 +43,19 @@ class VoltageElm extends CircuitComponent {
         data_type: parseFloat
       },
       "phaseShift": {
-        name: "phaseShift",
         title: "Phase Shift",
         unit: "degrees",
-        default_value: 0,
         symbol: "deg",
+        default_value: 0,
         data_type: parseFloat,
         range: [-360, 360],
-        type: parseFloat,
         field_type: "slider"
       },
       "dutyCycle": {
-        name: "dutyCycle",
         title: "Duty Cycle",
-        unit: "",
         default_value: 0.5,
-        symbol: "%",
         data_type: parseFloat,
-        range: [0, 100],
-        type: parseFloat,
+        range: [0, 1],
         field_type: "slider"
       }
     };

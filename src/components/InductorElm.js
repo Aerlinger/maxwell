@@ -13,14 +13,15 @@ class InductorElm extends CircuitComponent {
   static get Fields() {
     return {
       "inductance": {
-        name: "inductance",
+        title: "Inductance",
         unit: "Henries",
         symbol: "H",
         default_value: 1e-3,
-        data_type: parseFloat
+        data_type: parseFloat,
+        range: [0, Infinity]
       },
       "current": {
-        name: "current",
+        title: "Initial Current",
         unit: "Amperes",
         symbol: "A",
         default_value: 0,

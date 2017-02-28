@@ -8,15 +8,13 @@ class ResistorElm extends CircuitComponent {
   static get Fields() {
     return {
       "resistance": {
-        name: "Resistance",
         title: "Resistance",
+        default_value: 1000,
         description: "Amount of current per unit voltage applied to this resistor (ideal).",
         unit: "Ohms",
-        default_value: 1000,
         symbol: "Ω",
         data_type: parseFloat,
-        range: [0, Infinity],
-        type: "physical"
+        range: [0, Infinity]
       }
     };
   }

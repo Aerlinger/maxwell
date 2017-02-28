@@ -6,7 +6,6 @@ let Point = require('../geom/Point.js');
 let RailElm = require('./RailElm.js');
 
 class AntennaElm extends RailElm {
-
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
     this.waveform = RailElm.WF_DC;

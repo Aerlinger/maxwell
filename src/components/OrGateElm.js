@@ -3,7 +3,6 @@ let Util = require('../util/Util.js');
 let Point = require('../geom/Point.js');
 
 class OrGateElm extends GateElm {
-
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
   }

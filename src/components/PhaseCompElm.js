@@ -3,7 +3,6 @@ let ChipElm = require("./ChipElm.js");
 let Util = require('../util/Util.js');
 
 class PhaseCompElm extends ChipElm {
-
   constructor(xa, xb, ya, yb, params, f) {
     super(xa, xb, ya, yb, params, f);
     

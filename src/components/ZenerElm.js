@@ -10,7 +10,7 @@ class ZenerElm extends DiodeElm {
   static get Fields() {
     return Util.extend(DiodeElm.Fields, {
       zvoltage: {
-        name: "Voltage",
+        title: "Voltage",
         unit: "Voltage",
         symbol: "V",
         default_value: DiodeElm.DEFAULT_DROP,

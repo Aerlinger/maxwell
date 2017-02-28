@@ -7,19 +7,25 @@ class LedElm extends DiodeElm {
   static get Fields() {
     return {
       colorR: {
-        name: "Red Intensity",
+        title: "Red Intensity",
         data_type: parseFloat,
-        default_value: 0
+        default_value: 0,
+        range: [0, 1],
+        field_type: "slider"
       },
       colorG: {
-        name: "Green Intensity",
+        title: "Green Intensity",
         data_type: parseFloat,
-        default_value: 0
+        default_value: 0,
+        range: [0, 1],
+        field_type: "slider"
       },
       colorB: {
-        name: "Blue Intensity",
+        title: "Blue Intensity",
         data_type: parseFloat,
-        default_value: 0
+        default_value: 0,
+        range: [0, 1],
+        field_type: "slider"
       }
       //    fwdrop: {
       //      name: "Voltage drop"

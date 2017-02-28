@@ -5,7 +5,6 @@ let Point = require('../geom/Point.js');
 let Settings = require('../Settings.js');
 
 class AnalogSwitch2Elm extends AnalogSwitchElm {
-
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
     this.openhs = 16;
@@ -14,7 +13,6 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
   }
 
   place() {
-
     this.calcLeads(32);
 
     this.swposts = Util.newPointArray(2);

@@ -1,12 +1,7 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
-let Polygon = require('../geom/Polygon.js');
-let Rectangle = require('../geom/Rectangle.js');
-let Point = require('../geom/Point.js');
 let Util = require('../util/Util.js');
 
 class GroundElm extends CircuitComponent {
-
   constructor(xa, ya, xb, yb, params, f) {
     super(xa, ya, xb, yb, params, f);
   }

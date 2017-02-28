@@ -13,19 +13,18 @@ class TextElm extends CircuitComponent {
   static get Fields() {
     return {
       text: {
+        title: "Text value",
         default_value: "<text>",
-        name: "Text value",
         type: "attribute",
         data_type(x) { return x; }
       },
       size: {
-        name: "Text Size",
+        title: "Text Size",
         unit: "pt",
         symbol: "pt",
         default_value: 24,
         data_type: parseInt,
-        range: [0, 500],
-        type: "attribute"
+        range: [0, 500]
       }
     };
   }

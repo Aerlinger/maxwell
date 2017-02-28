@@ -5,32 +5,37 @@ class TappedTransformerElm extends CircuitComponent {
   static get Fields() {
     return {
       inductance: {
-        name: "Inductance",
+        title: "Inductance",
         data_type: parseFloat,
         default_value: 4,
+        unit: "Henries",
         symbol: "H"
       },
       ratio: {
-        name: "Ratio",
+        title: "Ratio",
         data_type: parseFloat,
-        default_value: 1
+        default_value: 1,
+        range: [0, Infinity]
       },
       current0: {
-        name: "Current0",
+        title: "Current0",
         data_type: parseFloat,
         default_value: 0,
+        unit: "Amperes",
         symbol: "A"
       },
       current1: {
-        name: "Current1",
+        title: "Current1",
         data_type: parseFloat,
         default_value: 1,
+        unit: "Amperes",
         symbol: "A"
       },
       current2: {
-        name: "Current2",
+        title: "Current2",
         data_type: parseFloat,
         default_value: 0,
+        unit: "Amperes",
         symbol: "A"
       }
     };

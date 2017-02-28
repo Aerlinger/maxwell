@@ -6,27 +6,38 @@ let Util = require('../util/Util.js');
 // TODO: Extend from Diode?
 class ScrElm extends CircuitComponent {
   static get Fields() {
-  
     return {
       lastvac: {
+        title: 'Initial Collector Voltage',
         data_type: parseFloat,
         default_value: 0
       },
       lastvag: {
+        title: 'Initial Gate Voltage',
         data_type: parseFloat,
         default_value: 0
       },
       triggerI: {
+        title: 'Trigger Current',
         data_type: parseFloat,
-        default_value: 0.01
+        default_value: 0.01,
+        unit: "Amperes",
+        symbol: "A",
       },
       holdingI: {
+        title: 'Holding Current',
         data_type: parseFloat,
-        default_value: 0.0082
+        default_value: 0.0082,
+        unit: "Amperes",
+        symbol: "A",
       },
       cresistance: {
+        title: 'Gate-Cathode Resistance',
+        default_value: 50,
+        unit: "Ohms",
+        symbol: "Ω",
         data_type: parseFloat,
-        default_value: 50
+        range: [0, Infinity]
       }
     };
   }

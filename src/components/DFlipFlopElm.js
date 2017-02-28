@@ -6,7 +6,7 @@ class DFlipFlopElm extends ChipElm {
   static get Fields() {
     return {
       "volts": {
-        name: "Volts",
+        title: "Volts",
         description: "Initial voltages on output",
         unit: "Volts",
         default_value: 0,

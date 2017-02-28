@@ -15,7 +15,7 @@ class DiodeElm extends CircuitComponent {
   static get Fields() {
     return {
       fwdrop: {
-        name: "Voltage Drop",
+        title: "Voltage Drop",
         unit: "Voltage",
         symbol: "V",
         default_value: DiodeElm.DEFAULT_DROP,

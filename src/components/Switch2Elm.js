@@ -16,8 +16,7 @@ class Switch2Elm extends SwitchElm {
   static get Fields() {
     return Util.extend(SwitchElm.Fields, {
       "link": {
-        name: "link",
-        unit: "",
+        title: "Link",
         default_value: 0,
         data_type: parseInt,
         range: [0, 2],

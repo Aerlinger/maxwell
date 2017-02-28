@@ -15,33 +15,31 @@ class OpAmpElm extends CircuitComponent {
   static get Fields() {
     return {
       "maxOut": {
-        name: "Voltage",
-        unit: "Voltage",
+        title: "Maximum Voltage",
         description: "Maximum allowable output voltage of the Op Amp",
+        unit: "Voltage",
         symbol: "V",
         default_value: 15,
         data_type: parseFloat,
         range: [-Infinity, Infinity],
       },
       "minOut": {
-        name: "Voltage",
+        title: "Minimum Voltage",
         unit: "Voltage",
         description: "Minimum allowable output voltage of the Op Amp",
         symbol: "V",
         default_value: -15,
         data_type: parseFloat,
         range: [-Infinity, Infinity],
-        type: "physical"
       },
       "gbw": {
-        name: "Gain",
+        title: "Gain bandwidth",
         unit: "",
         description: "Gutput gain",
         symbol: "",
         default_value: 1e6,
         data_type: parseFloat,
-        range: [-Infinity, Infinity],
-        type: "physical"
+        range: [0, Infinity],
       }
     };
   }

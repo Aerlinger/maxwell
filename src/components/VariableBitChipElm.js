@@ -4,7 +4,7 @@ class VariableBitChipElm extends ChipElm {
   static get Fields() {
     return {
       "bits": {
-        name: "Number of Bits",
+        title: "Number of Bits",
         default_value: 4,
         data_type: (v) => {
           v
@@ -12,7 +12,7 @@ class VariableBitChipElm extends ChipElm {
         range: [0, Infinity]
       },
       "volts": {
-        name: "Volts",
+        title: "Volts",
         description: "Initial voltages on output",
         unit: "Volts",
         default_value: 0,

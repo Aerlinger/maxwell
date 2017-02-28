@@ -9,32 +9,33 @@ class TransformerElm extends CircuitComponent {
   static get Fields() {
     return {
       inductance: {
-        name: "Inductance",
+        title: "Inductance",
         default_value: 1e-3,
         data_type: parseFloat,
+        unit: "Henries",
         symbol: "H"
       },
       ratio: {
-        name: "Ratio",
+        title: "Ratio",
         default_value: 1,
         data_type: parseFloat,
         field_type: "integer"
       },
       // TODO: Name collision
       current0: {
-        name: "Current L",
+        title: "Current L",
         data_type: parseFloat,
         default_value: 1e-3,
         symbol: "A"
       },
       current1: {
-        name: "Current R",
+        title: "Current R",
         data_type: parseFloat,
         default_value: 1e-3,
         symbol: "A"
       },
       couplingCoef: {
-        name: "Coupling Coefficient",
+        title: "Coupling Coefficient",
         default_value: 0.999,
         data_type: parseFloat
       }
