@@ -109,14 +109,14 @@ class Circuit extends Observer {
     let copyCircuit = new Circuit();
 
     copyCircuit.name = this.name;
-    copyCircuit.params = this.Params;
+    copyCircuit.Params = Object.assign({}, this.Params);
 
-    copyCircuit.params = this.flags;
+    copyCircuit.flags = this.flags;
     copyCircuit.isStopped = this.isStopped;
     copyCircuit.hintItem1 = this.hintItem1 && this.hintItem1.copy();
     copyCircuit.hintItem2 = this.hintItem2 && this.hintItem2.copy();
 
-    for (component of this.elementList) {
+    for (let component of this.elementList) {
       copyCircuit.elementList.push(component.copy())
     }
 

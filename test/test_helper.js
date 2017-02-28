@@ -120,9 +120,7 @@ Rectangle = require('../src/geom/Rectangle.js');
 
 Maxwell = require("../src/Maxwell.js");
 
-
 require('coffee-script/register');
-
 
 if (!fs.existsSync("test/fixtures/componentRenders/"))
   fs.mkdirSync("test/fixtures/componentRenders/");

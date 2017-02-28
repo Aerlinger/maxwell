@@ -9,7 +9,7 @@ describe "Circuit", ->
       @Circuit.stopElm == null
 
     it "has no observers", ->
-      @Circuit.getObservers().should == []
+      expect(@Circuit.getObservers()).to == []
 
     it "has a time of zero", ->
       expect(@Circuit.time).to.equal(0)
@@ -22,10 +22,10 @@ describe "Circuit", ->
       expect(@Circuit.Solver.analyzeFlag).to.eq(true)
 
     it "has no components or nodes", ->
-      @Circuit.getElements().should.be.empty
-      @Circuit.getVoltageSources().should.be.empty
-      @Circuit.getNodes().should.be.empty
-      @Circuit.getScopes().should.be.empty
+      expect(@Circuit.getElements()).to.be.empty
+      expect(@Circuit.getVoltageSources()).to.be.empty
+      expect(@Circuit.getNodes()).to.be.empty
+      expect(@Circuit.getScopes()).to.be.empty
 
     specify "GetElmByIdx should return an empty array", ->
       @Circuit.getElmByIdx(0) == null

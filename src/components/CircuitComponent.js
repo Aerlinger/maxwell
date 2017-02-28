@@ -83,7 +83,7 @@ class CircuitComponent {
         this.y1(),
         this.x2(),
         this.y2(),
-        this.params,
+        Object.assign({}, this.params),
         this.flags
     );
 
