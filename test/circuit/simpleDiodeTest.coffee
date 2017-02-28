@@ -1,6 +1,3 @@
-CircuitLoader = require('../../src/io/CircuitLoader.js')
-#Circuit = require('../../src/circuit/circuit.js')
-
 describe "Simple single diode circuit", ->
   beforeEach (done) ->
     @json = {

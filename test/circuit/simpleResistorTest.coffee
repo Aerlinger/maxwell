@@ -1,9 +1,3 @@
-Circuit = require('../../src/circuit/Circuit.js')
-CircuitLoader = require('../../src/io/CircuitLoader.js')
-
-chai = require('chai');
-
-
 describe "Simple single resistor circuit", ->
   beforeEach ->
     @json = {

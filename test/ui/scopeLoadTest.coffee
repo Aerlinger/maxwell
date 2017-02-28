@@ -1,6 +1,3 @@
-glob = require('glob')
-path = require("path")
-
 describe.skip "Loading Scope from Legacy", ->
   this.timeout(1000000)
 

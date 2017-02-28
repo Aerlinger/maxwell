@@ -1,5 +1,3 @@
-diff = require('deep-diff').diff
-
 describe "Utility test", ->
   it "tests approximate equality", ->
     epsilon = 1e-4

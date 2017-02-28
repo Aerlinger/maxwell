@@ -1,5 +1,3 @@
-CircuitNode = require('../../src/engine/CircuitNode.js')
-
 describe "Circuit Node", ->
   beforeEach ->
     @CircuitNode1 = new CircuitNode()

@@ -1,5 +1,3 @@
-gm = require("gm")
-
 describe "Render all components", ->
   it "can render all components", ->
     this.timeout(5000)
@@ -12,7 +10,6 @@ describe "Render all components", ->
     offsetX = 140
     nCols = 8
 
-    Canvas = require('canvas')
     @canvas = new Canvas((nCols + 1) * offsetX, 2 * height * (Math.ceil(nComponents / nCols)))
 
     ctx = @canvas.getContext('2d')

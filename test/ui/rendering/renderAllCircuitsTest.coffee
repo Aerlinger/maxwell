@@ -1,6 +1,3 @@
-glob = require('glob')
-path = require("path")
-
 describe.skip "CircuitUI", ->
   it "renders all circuits", () ->
     this.timeout(1000000)

@@ -10,8 +10,13 @@ sinon = require('sinon');
 diff = require('deep-diff').diff;
 _ = require('lodash');
 fs = require('fs');
+path = require("path");
+glob = require('glob');
 Canvas = require('canvas');
+gm = require("gm");
 resemble = require("node-resemble-js");
+jsondiffpatch = require('jsondiffpatch').create({});
+diff = require('deep-diff').diff
 
 approx_diff = function(lhs, rhs) {
   epsilon = 2e-2;
@@ -37,8 +42,8 @@ Canvas.prototype.addEventListener = function() {
 
 Circuit = require('../src/circuit/Circuit.js');
 
-CircuitNode = require('../src/engine/CircuitNode');
 Hint = require('../src/engine/Hint.js');
+CircuitNode = require('../src/engine/CircuitNode');
 CircuitNodeLink = require('../src/engine/CircuitNodeLink');
 SimulationParams = require('../src/circuit/SimulationParams.js');
 MatrixStamper = require('../src/engine/MatrixStamper.js');
@@ -113,7 +118,11 @@ Point = require('../src/geom/Point.js');
 Polygon = require('../src/geom/Polygon.js');
 Rectangle = require('../src/geom/Rectangle.js');
 
+Maxwell = require("../src/Maxwell.js");
+
+
 require('coffee-script/register');
+
 
 if (!fs.existsSync("test/fixtures/componentRenders/"))
   fs.mkdirSync("test/fixtures/componentRenders/");

@@ -1,4 +1,3 @@
-Maxwell = require("../../src/Maxwell.js");
 components = Maxwell.Components;
 
 describe.skip "VoltageSources", ->

@@ -1,13 +1,9 @@
-CircuitLoader = require("../../src/io/CircuitLoader.js")
-fs = require 'fs'
-
 describe "CircuitLoader", ->
   describe "reads voltdividesimple.json and", ->
-    before (done) ->
+    before ->
       voltdividesimple = JSON.parse(fs.readFileSync("./circuits/v5/voltdividesimple.json"))
 
       @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
-      done()
 
     it "have only 7 elements", ->
       expect(@circuit.numElements()).to.equal 7

@@ -1,6 +1,3 @@
-Circuit = require('../../src/circuit/Circuit.js')
-ResistorElm = require('../../src/components/ResistorElm.js')
-
 describe "Circuit", ->
   beforeEach (done)->
     @Circuit = new Circuit()

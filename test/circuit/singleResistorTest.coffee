@@ -1,9 +1,3 @@
-Circuit = require('../../src/circuit/Circuit.js')
-GroundElm = require('../../src/components/GroundElm.js')
-WireElm = require('../../src/components/WireElm.js')
-VoltageElm = require('../../src/components/VoltageElm.js')
-ResistorElm = require('../../src/components/ResistorElm.js')
-
 describe "1V grounded DC Source with 1 ohm grounded resistor", ->
   beforeEach ->
     @Circuit = new Circuit()

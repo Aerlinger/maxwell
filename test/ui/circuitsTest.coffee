@@ -1,8 +1,3 @@
-glob = require("glob")
-path = require("path")
-jsondiffpatch = require('jsondiffpatch').create({});
-_ = require('lodash');
-
 filenames = glob.sync "./circuits/*.txt", {}
 
 @files = filenames.map (file) ->
@@ -92,7 +87,6 @@ for circuit_name in @files
 
 #        circuit.updateCircuit()
 
-        Canvas = require('canvas')
         @canvas = new Canvas(800, 600)
         ctx = @canvas.getContext('2d')
 

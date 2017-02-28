@@ -1,5 +1,4 @@
 describe "Polygon", ->
-
   it "can create a triangle with 3 pairs of vertices", ->
     poly = new Polygon([0, 0, 1, 1, 2, 3])
     expect(poly.numPoints()).to.equal 3
@@ -15,7 +14,6 @@ describe "Polygon", ->
 
 
 describe "Point", ->
-
   it "defaults to (undefined, undefined) when no parameters are entered", ->
     point = new Point()
     expect(point.x).to.equal undefined
