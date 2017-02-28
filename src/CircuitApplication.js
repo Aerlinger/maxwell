@@ -74,7 +74,7 @@ let ClockElm = require('./components/ClockElm.js');
 
 
 let CanvasRenderer = require('./ui/rendering/CanvasRenderStrategy');
-let interactionBinding = require('./ui/InteractionBindings');
+let interactionBinding = require('./ui/MouseEvents');
 
 let RickshawScopeCanvas = require('./ui/scopes/RickshawScopeCanvas');
 
