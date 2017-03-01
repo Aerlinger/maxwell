@@ -189,7 +189,7 @@ class CircuitApplication extends Observer {
       renderer.drawHighlightedComponent(this.highlightedComponent);
 
       renderer.drawInfoText(this.Circuit, this.highlightedComponent);
-      renderer.drawDebugInfo(this.Circuit);
+      renderer.drawDebugInfo(this);
 
       renderer.drawMarquee(this.marquee);
     })

@@ -23,7 +23,7 @@ let GateElm = require("./GateElm.js");
 let GroundElm = require("./GroundElm.js");
 let InductorElm = require("./InductorElm.js");
 let InverterElm = require("./InverterElm.js");
-let JFetElm = require("./JFetElm.js");
+let JfetElm = require("./JFetElm.js");
 let JkFlipFlopElm = require("./JkFlipFlopElm.js");
 let LatchElm = require("./LatchElm.js");
 let LedElm = require("./LedElm.js");
@@ -43,7 +43,7 @@ let PushSwitchElm = require("./PushSwitchElm.js");
 let RailElm = require("./RailElm.js");
 let RelayElm = require("./RelayElm.js");
 let ResistorElm = require("./ResistorElm.js");
-let SCRElm = require("./SCRElm.js");
+let ScrElm = require("./SCRElm.js");
 let SevenSegElm = require("./SevenSegElm.js");
 let SparkGapElm = require("./SparkGapElm.js");
 let SweepElm = require("./SweepElm.js");
@@ -88,7 +88,7 @@ module.exports = {
   GroundElm,
   InductorElm,
   InverterElm,
-  JFetElm,
+  JfetElm,
   JkFlipFlopElm,
   LatchElm,
   LedElm,
@@ -108,7 +108,7 @@ module.exports = {
   RailElm,
   RelayElm,
   ResistorElm,
-  SCRElm,
+  ScrElm,
   SevenSegElm,
   SparkGapElm,
   SweepElm,

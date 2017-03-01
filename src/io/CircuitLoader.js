@@ -18,10 +18,14 @@ class CircuitLoader {
     let circuitParams = jsonData.params;
     let circuitComponents = jsonData.components;
 
-    if (!circuitParams || !circuitComponents || !circuitParams['flags']) {
-      console.error("Circuit data malformed (Either circuit params or components are missing)");
-      return
-    }
+    if (!circuitParams)
+      console.error("Circuit params missing");
+
+    if (!circuitComponents)
+      console.error("Circuit components missing");
+
+    if ((circuitParams['flags'] == null) || (circuitParams['flags'] == undefined))
+      console.error("Circuit flags missing");
 
     circuit.Params = new SimulationParams(circuitParams);
     circuit.flags = parseInt(circuitParams['flags']);
