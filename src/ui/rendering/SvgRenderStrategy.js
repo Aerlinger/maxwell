@@ -1,5 +1,6 @@
 let Util = require('../../util/Util');
 let Point = require('../../geom/Point');
+let Polygon = require('../../geom/Polygon');
 let Color = require('../../util/Color');
 
 let CircuitComponent = require('../../components/CircuitComponent');
@@ -10,103 +11,145 @@ let d3 = require("d3");
 module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
   Object.assign(this, config);
 
-  this.svg = d3.select("body").append("svg")
-      .attr("width", this.Canvas.width + this.xMargin)
-      .attr("height", this.Canvas.height + this.yMargin)
-      .append("g")
-      .attr("transform", "translate(" + this.xMargin + "," + this.yMargin + ")");
+  this.drawHighlightedComponent = function (highlightedComponent) {
 
-  this.testDraw = function () {
-    this.svg.append("circle")
-        .style("stroke-width", 2)
-        .style("stroke", "black")
-        .style("fill", "red")
-        .attr("cx", 600)
-        .attr("cy", 75)
-        .attr("r", 50)
+    if (highlightedComponent) {
+      highlightedComponent.draw(this);
 
-    /*
-     this.svg.append("polyline")
-     .attr("points", [[5,30] [15,10] [25,30]])
-     .attr("stroke-width", "2px")
-     .attr("stroke", "black");
-     */
+      for (let i = 0; i < highlightedComponent.numPosts(); ++i) {
+        let post = highlightedComponent.getPost(i);
 
-    this.svg.append("text")
-        .attr("x", "50px")
-        .attr("y", "50px")
-        .attr("class", "text")
-        .text("This is a sample text.");
+        this.drawRect(post.x - config.POST_RADIUS - 1, post.y - config.POST_RADIUS - 1, 2 * config.POST_RADIUS + 2, 2 * config.POST_RADIUS + 2, {fillColor: config.POST_COLOR});
+      }
 
-    this.svg.append("rect")
-        .attr("x", "10px")
-        .attr("y", "300px")
-        .attr("width", "50px")
-        .attr("height", "100px");
-
-    var poly = [{"x": 0.0, "y": 25.0},
-      {"x": 8.5, "y": 23.4},
-      {"x": 13.0, "y": 21.0},
-      {"x": 19.0, "y": 15.5}];
-
-    this.svg.append("polyline")
-        .data([poly])
-        .attr("points", function (d) {
-          return d.map(function (d) {
-            return [d.x, d.y].join(",");
-          }).join(" ");
-        })
-        .attr("stroke-width", "2px")
-        .attr("stroke", "black");
+      if (highlightedComponent.x2())
+        this.drawRect(highlightedComponent.x2() - 2 * config.POST_RADIUS, highlightedComponent.y2() - 2 * config.POST_RADIUS, 4 * config.POST_RADIUS, 4 * config.POST_RADIUS, {fillColor: config.POST_COLOR});
+    }
   };
 
+  this.clearCanvas = function () {
+    this.svg.selectAll("*").remove();
+  };
+
+
+  this.drawHighlightedNode = function (highlightedNode) {
+    if (highlightedNode)
+      this.drawCircle(highlightedNode.x + 0.5, highlightedNode.y + 0.5, 7, 3, '#0F0');
+  };
+
+  this.drawMarquee = function (marquee) {
+    if (!marquee) return;
+
+    let lineWidth = 0.1;
+    let lineShift = 0.5;
+
+    if ((marquee.x != null) && (marquee.x != null) && (marquee.height != null) && (marquee.width != null)) {
+      this.drawLine(marquee.x1() + lineShift, marquee.y1() + lineShift, marquee.x2() + lineShift, marquee.y1() + lineShift, config.SELECTION_MARQUEE_COLOR, 1);
+      this.drawLine(marquee.x1() + lineShift, marquee.y2() + lineShift, marquee.x2() + lineShift, marquee.y2() + lineShift, config.SELECTION_MARQUEE_COLOR, 1);
+
+      this.drawLine(marquee.x1() + lineShift, marquee.y1() + lineShift, marquee.x1() + lineShift, marquee.y2() + lineShift, config.SELECTION_MARQUEE_COLOR, 1);
+      this.drawLine(marquee.x2() + lineShift, marquee.y1() + lineShift, marquee.x2() + lineShift, marquee.y2() + lineShift, config.SELECTION_MARQUEE_COLOR, 1);
+    }
+  };
+
+  this.drawScopes = function (scopes) {
+    /*
+     for (let scopeElm of scopes) {
+     let scopeCanvas = scopeElm.getCanvas();
+
+     if (scopeCanvas) {
+     let center = scopeElm.circuitElm.getCenter();
+
+     context.setLineDash([5, 5]);
+     context.strokeStyle = '#FFA500';
+     context.lineWidth = 1;
+     context.moveTo(center.x, center.y);
+     context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height() / 2);
+
+     context.stroke();
+     }
+     }
+     */
+  };
+
+  this.drawSelectedNodes = function (selectedNode) {
+    if (selectedNode)
+      this.drawRect(selectedNode.x - 10 + 0.5, selectedNode.y - 10 + 0.5, 21, 21, {lineWidth: 1, lineColor: '#0FF'});
+  };
 
   this.withMargin = function (xMargin, yMargin, block) {
+    this.clearCanvas();
+
+    let topNavHeight = 42;
+    this.svg.attr("transform", "translate(" + xMargin + "," + (yMargin - topNavHeight) + ")");
+
     // TOOD:
-    func(this)
+    block(this);
   };
 
-  this.drawInfoText = function () {
-    if (this.circuitUI.highlightedComponent != null) {
-      let summaryArr = this.circuitUI.highlightedComponent.getSummary();
+  this.drawInfoText = function (circuit, highlightedComponent) {
+    this.drawText('Time elapsed: ' + Util.getUnitText(circuit.time, 's'), 10, 5, '#bf4f00', 1.2 * config.TEXT_SIZE);
+    this.drawText('Frame Time: ' + Math.floor(circuit.lastFrameTime) + 'ms', 600, 8, '#000968', 1.1 * config.TEXT_SIZE);
+
+    if (highlightedComponent != null) {
+      let summaryArr = highlightedComponent.getSummary();
 
       if (summaryArr) {
         for (let idx = 0; idx < summaryArr.length; ++idx) {
-          this.fillText(summaryArr[idx], 500, (idx * 11) + 5, "#1b4e24");
+          this.drawText(summaryArr[idx], 730, 50 + (idx * 11) + 5, "#1b4e24");
         }
       }
     }
   };
 
-  this.drawComponents = function () {
-    for (var component of this.Circuit.getElements())
-      this.drawComponent(component);
-  };
+  this.drawComponents = function (circuit, selectedComponents) {
+    for (let component of circuit.getElements())
+      component.draw(this, config);
 
-  this.drawComponent = function (component) {
-    if (component && Array.from(this.circuitUI.selectedComponents).includes(component)) {
-      this.drawBoldLines();
-      component.draw(this);
-      /*
-       for (let i = 0; i < component.numPosts(); ++i) {
-       let post = component.getPost(i);
-       this.drawCircle(post.x, post.y, config.POST_RADIUS + 2, 2, config.SELECT_COLOR);
-       }
-       */
-    }
-
-    this.drawDefaultLines();
-
-    // Main entry point to draw component
-    component.draw(this);
   };
 
   // TODO: Move to CircuitComponent
   this.drawDots = function (ptA, ptB, component) {
-    throw new Error("`drawDots` is not implemented in SvgRenderStrategy")
+    if (component.Circuit && component.Circuit.isStopped)
+      return;
+
+    var ds = config.CURRENT_SEGMENT_LENGTH;
+
+    var dx = ptB.x - ptA.x;
+    var dy = ptB.y - ptA.y;
+    var dn = Math.sqrt((dx * dx) + (dy * dy));
+
+    var newPos;
+
+    if (typeof(component) == "number") {
+      newPos = component
+    } else {
+      if (!component)
+        return;
+      newPos = component.curcount;
+    }
+
+    while (newPos < dn) {
+      var xOffset = ptA.x + ((newPos * dx) / dn);
+      var yOffset = ptA.y + ((newPos * dy) / dn);
+
+      if (config.CURRENT_DISPLAY_TYPE === config.CURRENT_TYPE_DOTS) {
+        this.drawCircle(xOffset, yOffset, config.CURRENT_RADIUS, 1, config.CURRENT_COLOR);
+      } else {
+        var xOffset0 = xOffset - ((3 * dx) / dn);
+        var yOffset0 = yOffset - ((3 * dy) / dn);
+
+        var xOffset1 = xOffset + ((3 * dx) / dn);
+        var yOffset1 = yOffset + ((3 * dy) / dn);
+
+        this.drawLine(xOffset0, yOffset0, xOffset1, yOffset1, config.CURRENT_COLOR, config.LINE_WIDTH + 0.5)
+      }
+
+      newPos += ds
+    }
   };
 
-  this.drawDebugOverlay = function () {
+  function drawDebugOverlay() {
     if (!this.Circuit || !this.context) {
       return;
     }
@@ -137,8 +180,41 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
     // Nodes
   };
 
-  this.drawDebugInfo = function (x = 1100, y = 50) {
-    throw new Error("`drawDebugInfo` is not implemented in SvgRenderStrategy")
+  this.drawDebugInfo = function (circuitApp, x = 1100, y = 50) {
+    let circuit = circuitApp.Circuit;
+
+    if (!circuit || !circuit.debugModeEnabled()) return;
+
+    let str = `UI: ${circuitApp.width}x${circuitApp.height}\n`;
+    str += circuitApp.getMode() + "\n";
+
+    str += "Highlighted Node: :" + circuitApp.highlightedNode + "\n";
+    str += "Selected Node: :" + circuitApp.selectedNode + "\n";
+    str += "Highlighted Component: " + circuitApp.highlightedComponent + "\n";
+    // str += `Selection [${this.marquee || ""}]\n  - `;
+    str += circuitApp.selectedComponents.join("\n  - ") + "\n";
+
+    str += "\nCircuit:\n";
+
+    // Name
+    str += circuitApp.Circuit.toString();
+
+    let lineHeight = 10;
+    let nLines = 0;
+    for (let line of str.split("\n")) {
+      context.fillText(line, x, y + nLines * lineHeight);
+
+      nLines++;
+    }
+
+    drawDebugOverlay(circuit);
+
+    for (let nodeIdx = 0; nodeIdx < circuit.numNodes(); ++nodeIdx) {
+      let voltage = Util.singleFloat(circuit.getVoltageForNode(nodeIdx));
+      let node = circuit.getNode(nodeIdx);
+
+      this.drawText(`${nodeIdx}:${voltage}`, node.x + 10, node.y - 10, '#FF8C00');
+    }
   };
 
   this.measureText = function (text) {
@@ -154,124 +230,105 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
   };
 
   this.drawZigZag = function (point1, point2, vStart, vEnd) {
-    let positions = [];
+    var lineData = [];
 
-    let lineFunction = d3.line()
-        .x(function (d) {
-          return d.x;
-        })
-        .y(function (d) {
-          return d.y;
-        });
+    lineData.push({x: point1.x, y: point1.y});
+
+    /*
+     if (boldLines) {
+       context.lineWidth = config.BOLD_LINE_WIDTH;
+       context.strokeStyle = config.SELECT_COLOR;
+     } else {
+       context.lineWidth = config.LINE_WIDTH + 0.5;
+     }
+     */
 
     let numSegments = 8;
-    let width = 5;
+    let width = 4;
     let parallelOffset = 1 / numSegments;
-
-    let voltColor0 = this.getVoltageColor(vStart);
-    let voltColor1 = this.getVoltageColor(vEnd);
 
     // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
     let offsets = [1, -1];
 
-    positions.push(point1);
-
     let startPosition = Util.interpolate(point1, point2, parallelOffset / 2, width);
-    positions.push(startPosition);
+
+    lineData.push({x: startPosition.x, y: startPosition.y});
 
     // Draw resistor "zig-zags"
     for (let n = 1; n < numSegments; n++) {
       startPosition = Util.interpolate(point1, point2, n * parallelOffset + parallelOffset / 2, width * offsets[n % 2]);
 
-      positions.push(startPosition);
+      lineData.push({x: startPosition.x, y: startPosition.y});
     }
 
-    positions.push(point2);
+    lineData.push({x: point2.x, y: point2.y});
 
-    this.svg.append("path")
-        .attr("d", lineFunction(positions))
-        .attr("stroke", "blue")
-        .attr("stroke-width", 2)
-        .attr("fill", "none");
+    let v = point1.diff(point2);
 
-    /*
-     let context = this.context;
-     context.save();
-     context.beginPath();
+    let vx = v.x / Math.sqrt(v.norm());
+    let vy = v.y / Math.sqrt(v.norm());
 
-     context.moveTo(point1.x, point1.y);
-     context.lineJoin = 'bevel';
+    let gradient_id = `res-volt-gradient-${vStart}-${vEnd}`;
 
-     let grad = context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
-     let voltColor0 = this.getVoltageColor(vStart);
-     let voltColor1 = this.getVoltageColor(vEnd);
+    var gradient = this.svg.append("linearGradient")
+        .attr("id", gradient_id)
+        .attr("x1", Math.max(vx, 0))
+        .attr("x2", Math.max(-vx, 0))
+        .attr("y1", Math.max(vy, 0))
+        .attr("y2", Math.max(-vy, 0));
 
-     grad.addColorStop(0, voltColor0);
-     grad.addColorStop(1, voltColor1);
+    gradient.append("stop")
+        .attr('class', 'start')
+        .attr("offset", 0)
+        .attr("stop-color", this.getVoltageColor(vStart))
+        .attr("stop-opacity", 1);
 
-     context.strokeStyle = grad;
+    gradient.append("stop")
+        .attr('class', 'end')
+        .attr("offset", 1)
+        .attr("stop-color", this.getVoltageColor(vEnd))
+        .attr("stop-opacity", 1);
 
-     if (this.boldLines) {
-     context.lineWidth = config.BOLD_LINE_WIDTH;
-     context.strokeStyle = config.SELECT_COLOR;
-     } else {
-     context.lineWidth = config.LINE_WIDTH + 1;
-     }
-
-     let numSegments = 8;
-     let width = 5;
-     let parallelOffset = 1 / numSegments;
-
-     // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
-     let offsets = [1, -1];
-
-     let startPosition = Util.interpolate(point1, point2, parallelOffset/2, width);
-     context.lineTo(startPosition.x + this.lineShift, startPosition.y + this.lineShift);
-
-     // Draw resistor "zig-zags"
-     for (let n = 1; n < numSegments; n++) {
-     startPosition = Util.interpolate(point1, point2, n*parallelOffset + parallelOffset/2, width*offsets[n % 2]);
-
-     context.lineTo(startPosition.x + this.lineShift, startPosition.y + this.lineShift);
-     }
-
-     context.lineTo(point2.x + this.lineShift, point2.y + this.lineShift);
-
-     context.stroke();
-
-     context.closePath();
-     context.restore();
-     */
-  }
-
-  this.drawCoil = function (point1, point2, vStart, vEnd, hs) {
-    let positions = [];
-
-    let lineFunction = d3.line()
+    var lineFunction = d3.svg.line()
         .x(function (d) {
           return d.x;
         })
         .y(function (d) {
           return d.y;
-        });
+        })
+        .interpolate("linear");
+
+    this.svg.append("path")
+        .attr("d", lineFunction(lineData))
+        .attr("stroke", `url(#${gradient_id})`)
+        .attr("stroke-width", 2)
+        .attr("fill", "none");
+
+  };
+
+  this.drawCoil = function (point1, point2, vStart, vEnd, hs=6) {
+    var lineData = [];
 
     let color, cx, hsx, voltageLevel;
-    hs = hs || 8;
 
     let segments = 40;
 
     let ps1 = new Point(0, 0);
     let ps2 = new Point(0, 0);
 
-    let dn = point2.diff(point1);
-
     ps1.x = point1.x;
     ps1.y = point1.y;
 
-    let voltColor0 = this.getVoltageColor(vStart);
-    let voltColor1 = this.getVoltageColor(vEnd);
+    lineData.push({x: ps1.x, y: ps1.y});
 
-    positions.push(point1);
+    /*
+    if (boldLines) {
+      context.lineWidth = config.BOLD_LINE_WIDTH;
+      context.strokeStyle = config.SELECT_COLOR;
+    } else {
+      context.lineWidth = config.LINE_WIDTH + 0.5;
+    }
+    */
 
     for (let i = 0; i < segments; ++i) {
       cx = (((i + 1) * 8 / segments) % 2) - 1;
@@ -281,81 +338,53 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
       voltageLevel = vStart + (vEnd - vStart) * i / segments;
       color = this.getVoltageColor(voltageLevel);
 
-      // this.context.lineTo(ps2.x + this.lineShift, ps2.y + this.lineShift);
-
-      positions.push(ps2);
+      lineData.push({x: ps2.x, y: ps2.y});
 
       ps1.x = ps2.x;
       ps1.y = ps2.y;
     }
 
-    // positions.push(ps1);
+    let v = point1.diff(point2);
+    
+    let vx = v.x / Math.sqrt(v.norm());
+    let vy = v.y / Math.sqrt(v.norm());
 
-    // this.context.lineTo(ps1.x + this.lineShift + dn.x/10, ps1.y + this.lineShift + dn.y/10);
+    let gradient_id = `res-coil-gradient-${vStart}-${vEnd}`;
 
+    var gradient = this.svg.append("linearGradient")
+        .attr("id", gradient_id)
+        .attr("x1", Math.max(vx, 0))
+        .attr("x2", Math.max(-vx, 0))
+        .attr("y1", Math.max(vy, 0))
+        .attr("y2", Math.max(-vy, 0));
+
+    gradient.append("stop")
+        .attr('class', 'start')
+        .attr("offset", "0%")
+        .attr("stop-color", this.getVoltageColor(vStart))
+        .attr("stop-opacity", 1);
+
+    gradient.append("stop")
+        .attr('class', 'end')
+        .attr("offset", "100%")
+        .attr("stop-color", this.getVoltageColor(vEnd))
+        .attr("stop-opacity", 1);
+
+    var lineFunction = d3.svg.line()
+        .x(function (d) {
+          return d.x;
+        })
+        .y(function (d) {
+          return d.y;
+        })
+        .interpolate("linear");
 
     this.svg.append("path")
-        .attr("d", lineFunction(positions))
-        .attr("stroke", "blue")
+        .attr("d", lineFunction(lineData))
+        .attr("stroke", `url(#${gradient_id})`)
         .attr("stroke-width", 2)
         .attr("fill", "none");
-
-    /*
-     let color, cx, hsx, voltageLevel;
-     hs = hs || 8;
-
-     let segments = 40;
-
-     let ps1 = new Point(0, 0);
-     let ps2 = new Point(0, 0);
-
-     let dn = point2.diff(point1);
-
-     ps1.x = point1.x;
-     ps1.y = point1.y;
-
-     this.context.save();
-
-     this.context.beginPath();
-     this.context.lineJoin = 'bevel';
-
-     let grad = this.context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
-     grad.addColorStop(0, this.getVoltageColor(vStart));
-     grad.addColorStop(1, this.getVoltageColor(vEnd));
-
-     this.context.strokeStyle = grad;
-
-     this.context.moveTo(ps1.x + this.lineShift, ps1.y + this.lineShift);
-
-     if (this.boldLines) {
-     this.context.lineWidth = config.BOLD_LINE_WIDTH;
-     this.context.strokeStyle = config.SELECT_COLOR;
-     } else {
-     this.context.lineWidth = config.LINE_WIDTH + 1;
-     }
-
-     for (let i = 0; i < segments; ++i) {
-     cx = (((i + 1) * 8 / segments) % 2) - 1;
-     hsx = Math.sqrt(1 - cx * cx);
-
-     ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs);
-     voltageLevel = vStart + (vEnd - vStart) * i / segments;
-     color = this.getVoltageColor(voltageLevel);
-
-     this.context.lineTo(ps2.x + this.lineShift, ps2.y + this.lineShift);
-
-     ps1.x = ps2.x;
-     ps1.y = ps2.y;
-     }
-
-     // this.context.lineTo(ps1.x + this.lineShift + dn.x/10, ps1.y + this.lineShift + dn.y/10);
-
-     this.context.stroke();
-
-     this.context.closePath();
-     this.context.restore()
-     */
-  }
+  };
 
   // TODO: Move to CircuitComponent
   this.drawLeads = function (component) {
@@ -368,7 +397,7 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
   };
 
   // TODO: Move to CircuitComponent
-  this.drawPosts = function (component, color = config.POST_COLOR) {
+  this.drawPosts = function (component, color = config.POST_COLOR, radius = config.POST_RADIUS) {
     let post;
 
     for (let i = 0; i < component.numPosts(); ++i) {
@@ -377,7 +406,7 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
     }
   };
 
-  this.drawPost = function (x0, y0, fillColor = config.POST_COLOR, strokeColor = config.POST_OUTLINE_COLOR) {
+  this.drawPost = function (x0, y0, fillColor = config.POST_COLOR, strokeColor = config.POST_OUTLINE_COLOR, radius = config.POST_RADIUS) {
     let oulineWidth = config.POST_OUTLINE_SIZE;
 
     if (this.boldLines) {
@@ -386,25 +415,45 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
       oulineWidth += 3;
     }
 
-    this.fillCircle(x0, y0, config.POST_RADIUS, oulineWidth, fillColor, strokeColor);
+    this.drawCircle(x0, y0, radius, oulineWidth, strokeColor, fillColor);
   };
 
   this.drawText = function (text, x, y, fillColor = config.TEXT_COLOR, size = config.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
-    throw new Error("`drawText` is not implemented in SvgRenderStrategy")
+    this.svg.append("text")
+        .attr("x", x)
+        .attr("y", y)
+        .attr("font-size", 1.5 * size)
+        .attr("class", "text")
+        .attr("fill", fillColor)
+        .text(text);
   };
 
   this.drawValue = function (perpindicularOffset, parallelOffset, component, text = null, text_size = config.TEXT_SIZE) {
-    throw new Error("`drawValue` is not implemented in SvgRenderStrategy")
+    let x, y;
+
+    context.save();
+    context.textAlign = "center";
+
+    context.font = "bold 7pt Courier";
+
+    let theta = Math.atan(component.dy() / component.dx());
+
+    context.fillStyle = config.TEXT_COLOR;
+
+    ({x} = component.getCenter()); //+ perpindicularOffset
+    ({y} = component.getCenter()); //+ parallelOffset - stringHeight / 2.0
+
+    this.drawText(text, x + parallelOffset, y - perpindicularOffset, config.TEXT_COLOR, text_size);
+
+    context.restore();
   };
 
   this.getVoltageColor = function (volts) {
-    let fullScaleVRange = this.Circuit.Params.voltageRange;
-
     let scale = Color.Gradients.voltage_default;
-
     let numColors = scale.length - 1;
 
     let value = Math.floor(((volts + fullScaleVRange) * numColors) / (2 * fullScaleVRange));
+
     if (value < 0) {
       value = 0;
     } else if (value >= numColors) {
@@ -414,25 +463,11 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
     return scale[value];
   };
 
-  this.drawCircle = function (x, y, radius, lineWidth = config.LINE_WIDTH, lineColor = "#000000") {
-    /*
-     this.context.save();
-
-     this.context.strokeStyle = lineColor;
-     this.context.lineWidth = lineWidth;
-
-     this.context.beginPath();
-     this.context.arc(x, y, radius, 0, 2 * Math.PI, true);
-     this.context.stroke();
-     this.context.closePath();
-
-     this.context.restore();
-     */
-
+  this.drawCircle = function (x, y, radius, lineWidth = config.LINE_WIDTH, lineColor = "#000", fillColor = config.FG_COLOR) {
     this.svg.append("circle")
-        .attr("stroke-width", lineWidth)
+        .attr("stroke-width", lineWidth / 2)
         .attr("stroke", lineColor)
-        .attr("fill", "#F0F")
+        .attr("fill", fillColor)
         .attr("cx", x)
         .attr("cy", y)
         .attr("r", radius)
@@ -440,25 +475,15 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
 
   this.drawRect = function (x, y, width, height, {
       lineWidth = config.LINE_WIDTH,
-      lineColor = config.STROKE_COLOR
+      lineColor = config.STROKE_COLOR,
+      fillColor = config.FILL_COLOR
   } = {}) {
-    /*
-     this.context.save();
-
-     this.context.strokeStyle = lineColor;
-     this.context.lineJoin = 'miter';
-     this.context.lineWidth = lineWidth;
-     this.context.strokeRect(x + this.lineShift, y + this.lineShift, width, height);
-     this.context.stroke();
-
-     this.context.restore();
-     */
-
     this.svg.append("rect")
         .attr("x", x)
         .attr("y", y)
         .attr("stroke-width", lineWidth)
         .attr("stroke", lineColor)
+        .attr("fill", fillColor)
         .attr("width", width)
         .attr("height", height);
   };
@@ -468,41 +493,13 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
   };
 
   this.drawLine = function (x1, y1, x2, y2, color = config.STROKE_COLOR, lineWidth = config.LINE_WIDTH) {
-
-    /*
-     this.context.save();
-
-     this.context.lineCap = "round";
-
-     if (!this.pathMode)
-     this.context.beginPath();
-
-     if (this.boldLines) {
-     this.context.lineWidth = config.BOLD_LINE_WIDTH;
-     this.context.strokeStyle = config.SELECT_COLOR;
-     } else {
-     this.context.lineWidth = lineWidth;
-     this.context.strokeStyle = color;
-     }
-
-     if (!this.pathMode)
-     this.context.moveTo(x + this.lineShift, y + this.lineShift);
-     this.context.lineTo(x2 + this.lineShift, y2 + this.lineShift);
-     this.context.stroke();
-
-     if (!this.pathMode)
-     this.context.closePath();
-
-     this.context.restore();
-     */
-
     this.svg.append("line")
-        .style("stroke", "black")
+        .style("stroke", color)
+        .attr("stroke-width", lineWidth)
         .attr("x1", x1)
         .attr("y1", y1)
         .attr("x2", x2)
         .attr("y2", y2)
-
   };
 
   this.drawPolygon = function (polygon, {
@@ -510,28 +507,33 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
       fill = config.FILL_COLOR,
       lineWidth = config.POLY_LINE_WIDTH
   } = {}) {
-    /*
-     let numVertices = polygon.numPoints();
-
-     this.context.save();
-
-     this.context.fillStyle = fill;
-     this.context.strokeStyle = color;
-     this.context.beginPath();
-
-     this.context.moveTo(polygon.getX(0), polygon.getY(0));
-     for (let i = 0; i < numVertices; ++i) {
-     this.context.lineTo(polygon.getX(i), polygon.getY(i));
-     }
-
-     this.context.closePath();
-     this.context.fill();
-     this.context.stroke();
-
-     this.context.restore();
-     */
-
     let poly = polygon.getVertices();
+
+    this.svg.append("polygon")
+        .data([poly])
+        .attr("points", function (d) {
+          return d.map(function (d) {
+            return [d.x, d.y].join(",");
+          }).join(" ");
+        })
+        .attr("stroke-width", lineWidth)
+        .attr("stroke", stroke)
+        .attr("fill", fill);
+  };
+
+  this.testDraw = function () {
+    this.drawText("SAMPLE text", 100, 10, '#0FF', 18, '#0F0');
+    this.drawRect(100, 50, 200, 75, {lineWidth: 2, lineColor: '#0FF', fillColor: "#F00"});
+    this.drawCircle(100, 50, 25, 3, '#0F0');
+    this.drawLine(100, 50, 200, 75, '#0F0', 2);
+
+    let polygon = new Polygon([[100, 50], [200, 75], [100, 100], [50, 75]]);
+    this.drawPolygon(polygon, {stroke: '#0F0', fill: '#00F', lineWidth: 2});
+
+    var poly = [{"x": 0.0, "y": 25.0},
+      {"x": 8.5, "y": 23.4},
+      {"x": 13.0, "y": 21.0},
+      {"x": 19.0, "y": 15.5}];
 
     this.svg.append("polyline")
         .data([poly])
@@ -540,8 +542,15 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
             return [d.x, d.y].join(",");
           }).join(" ");
         })
-        .attr("stroke-width", 1)
-        .attr("stroke", "black")
-        .attr("fill", "white");
-  }
-}
+        .attr("stroke-width", "2px")
+        .attr("stroke", "black");
+  };
+
+  this.svg = d3.select("body").append("svg")
+      .attr("width", context.canvas.width)
+      .attr("height", context.canvas.height)
+      .append("g");
+
+
+  // this.testDraw();
+};

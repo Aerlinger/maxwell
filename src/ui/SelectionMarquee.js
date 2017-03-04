@@ -19,3 +19,4 @@ class SelectionMarquee extends Rectangle {
 }
 
 module.exports = SelectionMarquee;
+

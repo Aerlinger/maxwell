@@ -12,6 +12,10 @@ class Point {
     return new Point(this.x - otherPoint.x, this.y - otherPoint.y);
   }
 
+  norm() {
+    return (this.x * this.x) + (this.y * this.y);
+  }
+
   static distanceSq(x1, y1, x2, y2) {
     x2 -= x1;
     y2 -= y1;

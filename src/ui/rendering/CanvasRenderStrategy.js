@@ -23,7 +23,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     context.restore();
   };
 
-  this.drawComponents = function (circuit, selectedComponents) {
+  this.drawComponents = function(circuit, selectedComponents) {
     for (let component of circuit.getElements()) {
       if (component && selectedComponents.includes(component))
         drawBoldLines();
