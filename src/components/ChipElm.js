@@ -368,7 +368,6 @@ class ChipElm extends CircuitComponent {
       renderContext.drawPost(this.pins[i].post.x, this.pins[i].post.y, this.nodes[i]);
     }
 
-    renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), {stroke: Settings.FILL_COLOR, fill: null, lineWidth: 3});
     renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), {stroke: Settings.STROKE_COLOR, fill: null, lineWidth: 0});
 
     // renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), Settings.STROKE_COLOR, null);

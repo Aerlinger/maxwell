@@ -131,7 +131,6 @@ class GateElm extends CircuitComponent {
     return stamper.updateVoltageSource(0, this.nodes[this.inputCount], this.voltSource, res);
   }
 
-
   draw(renderContext, Settings){
     for (let i = 0; i < this.inputCount; i++) {
       renderContext.drawLinePt(this.inPosts[i], this.inGates[i], renderContext.getVoltageColor(this.volts[i]));
