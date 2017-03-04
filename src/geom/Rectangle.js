@@ -8,6 +8,22 @@ class Rectangle {
     this.height = height;
   }
 
+  x1() {
+    return Math.min(this.x, this.x + this.width);
+  }
+
+  y1() {
+    return Math.min(this.y, this.y + this.height);
+  }
+
+  x2() {
+    return Math.max(this.x, this.x + this.width);
+  }
+
+  y2() {
+    return Math.max(this.y, this.y + this.height);
+  }
+
   contains(x, y) {
     return ((x >= this.x) && (x <= (this.x + this.width)) && (y >= this.y) && (y <= (this.y + this.height)));
   }
@@ -27,15 +43,8 @@ class Rectangle {
   }
 
   intersects(otherRect) {
-    this.x2 = this.x + this.width;
-    this.y2 = this.y + this.height;
-
-    let otherX = otherRect.x;
-    let otherY = otherRect.y;
-    let otherX2 = otherRect.x + otherRect.width;
-    let otherY2 = otherRect.y + otherRect.height;
-
-    return (this.x < otherX2) && (this.x2 > otherX) && (this.y < otherY2) && (this.y2 > otherY);
+    return (this.x1() < otherRect.x2()) && (this.x2() > otherRect.x1()) &&
+           (this.y1() < otherRect.y2()) && (this.y2() > otherRect.y1())
   }
 
   collidesWithComponent(circuitComponent) {

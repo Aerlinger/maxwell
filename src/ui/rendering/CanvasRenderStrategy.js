@@ -102,12 +102,12 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     let lineWidth = 0.1;
     let lineShift = 0.5;
 
-    if ((marquee.x1 != null) && (marquee.x2 != null) && (marquee.y1 != null) && (marquee.y2 != null)) {
-      this.drawLine(marquee.x1 + lineShift, marquee.y1 + lineShift, marquee.x2 + lineShift, marquee.y1 + lineShift, config.SELECTION_MARQUEE_COLOR, 1);
-      this.drawLine(marquee.x1 + lineShift, marquee.y2 + lineShift, marquee.x2 + lineShift, marquee.y2 + lineShift, config.SELECTION_MARQUEE_COLOR, 1);
+    if ((marquee.x != null) && (marquee.x != null) && (marquee.height != null) && (marquee.width != null)) {
+      this.drawLine(marquee.x1() + lineShift, marquee.y1() + lineShift, marquee.x2() + lineShift, marquee.y1() + lineShift, config.SELECTION_MARQUEE_COLOR, 1);
+      this.drawLine(marquee.x1() + lineShift, marquee.y2() + lineShift, marquee.x2() + lineShift, marquee.y2() + lineShift, config.SELECTION_MARQUEE_COLOR, 1);
 
-      this.drawLine(marquee.x1 + lineShift, marquee.y1 + lineShift, marquee.x1 + lineShift, marquee.y2 + lineShift, config.SELECTION_MARQUEE_COLOR, 1);
-      this.drawLine(marquee.x2 + lineShift, marquee.y1 + lineShift, marquee.x2 + lineShift, marquee.y2 + lineShift, config.SELECTION_MARQUEE_COLOR, 1);
+      this.drawLine(marquee.x1() + lineShift, marquee.y1() + lineShift, marquee.x1() + lineShift, marquee.y2() + lineShift, config.SELECTION_MARQUEE_COLOR, 1);
+      this.drawLine(marquee.x2() + lineShift, marquee.y1() + lineShift, marquee.x2() + lineShift, marquee.y2() + lineShift, config.SELECTION_MARQUEE_COLOR, 1);
     }
   };
 

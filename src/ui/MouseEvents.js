@@ -1,3 +1,5 @@
+let SelectionMarquee = require('./SelectionMarquee');
+
 /**
  *
  * @param Circuit
@@ -15,8 +17,6 @@ let interactionController = function (Circuit, canvas, {xMargin=200, yMargin= 64
 
   const MOUSEDOWN = 1;
 
-  let SelectionMarquee = require('./SelectionMarquee');
-
   /**
    * Callback triggered by the mouse moving on the circuit canvas
    *
@@ -31,7 +31,6 @@ let interactionController = function (Circuit, canvas, {xMargin=200, yMargin= 64
    * @param event JS event object
    */
   this.mousemove = function(event) {
-    let component;
     let x = event.offsetX - xMargin;
     let y = event.offsetY - yMargin;
 
