@@ -610,7 +610,7 @@ class CircuitComponent {
     let post;
     let color = Util.getColorForId(this.component_id);
 
-    renderContext.drawRect(this.boundingBox.x - 2, this.boundingBox.y - 2, this.boundingBox.width + 2, this.boundingBox.height + 2, 0.5, color);
+    renderContext.drawRect(this.boundingBox.x - 2, this.boundingBox.y - 2, this.boundingBox.width + 2, this.boundingBox.height + 2, {lineWidth: 0.5, lineColor: color});
 
     let outlineRadius = 7;
 
@@ -620,7 +620,7 @@ class CircuitComponent {
     }
 
     if (this.point2) {
-      renderContext.drawRect(this.point2.x - (outlineRadius / 2), this.point2.y - (outlineRadius / 2), outlineRadius - 1, outlineRadius - 1, 2, color);
+      renderContext.drawRect(this.point2.x - (outlineRadius / 2), this.point2.y - (outlineRadius / 2), outlineRadius - 1, outlineRadius - 1, {lineWidth: 2, lineColor: color});
     }
   }
 
@@ -628,7 +628,7 @@ class CircuitComponent {
     let post;
     let color = Util.getColorForId(this.component_id);
 
-    renderContext.drawRect(this.boundingBox.x, this.boundingBox.y, this.boundingBox.width, this.boundingBox.height, 0, color);
+    renderContext.drawRect(this.boundingBox.x, this.boundingBox.y, this.boundingBox.width, this.boundingBox.height, {lineWidth: 0, lineColor: color});
 
     // renderContext.drawValue 10, -15, this, @constructor.name
     // renderContext.drawValue(12, -15 + (height * i), this, `${name}: ${value}`);

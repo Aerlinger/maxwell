@@ -1,4 +1,3 @@
-let Settings = require("../../Settings");
 let Color = require('../../util/Color.js');
 let Util = require('../../util/Util.js');
 let Point = require('../../geom/Point.js');
@@ -11,7 +10,7 @@ let lineShift = 0;
 module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange) {
   let boldLines = false;
 
-  this.withMargin = function(xMargin, yMargin, block) {
+  this.withMargin = function (xMargin, yMargin, block) {
     clearCanvas();
 
     context.save();
@@ -22,7 +21,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     context.restore();
   };
 
-  this.drawComponents = function(circuit, selectedComponents) {
+  this.drawComponents = function (circuit, selectedComponents) {
     for (let component of circuit.getElements()) {
       if (component && selectedComponents.includes(component))
         drawBoldLines();
@@ -35,17 +34,17 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     drawDefaultLines();
   };
 
-  this.drawHighlightedNode = function(highlightedNode) {
+  this.drawHighlightedNode = function (highlightedNode) {
     if (highlightedNode)
       this.drawCircle(highlightedNode.x + 0.5, highlightedNode.y + 0.5, 7, 3, '#0F0');
   };
 
-  this.drawSelectedNodes = function(selectedNode) {
+  this.drawSelectedNodes = function (selectedNode) {
     if (selectedNode)
-      this.drawRect(selectedNode.x - 10 + 0.5, selectedNode.y - 10 + 0.5, 21, 21, 1, '#0FF');
+      this.drawRect(selectedNode.x - 10 + 0.5, selectedNode.y - 10 + 0.5, 21, 21, {lineWidth: 1, lineColor: '#0FF'});
   };
 
-  this.drawHighlightedComponent = function(highlightedComponent) {
+  this.drawHighlightedComponent = function (highlightedComponent) {
     if (highlightedComponent) {
       highlightedComponent.draw(this);
 
@@ -62,7 +61,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     }
   };
 
-  this.drawScopes = function(scopes) {
+  this.drawScopes = function (scopes) {
     for (let scopeElm of scopes) {
       let scopeCanvas = scopeElm.getCanvas();
 
@@ -80,7 +79,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     }
   };
 
-  this.drawInfoText = function(circuit, highlightedComponent) {
+  this.drawInfoText = function (circuit, highlightedComponent) {
     this.drawText('Time elapsed: ' + Util.getUnitText(circuit.time, 's'), 10, 5, '#bf4f00', 1.2 * config.TEXT_SIZE);
     this.drawText('Frame Time: ' + Math.floor(circuit.lastFrameTime) + 'ms', 600, 8, '#000968', 1.1 * config.TEXT_SIZE);
 
@@ -95,7 +94,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     }
   };
 
-  this.drawMarquee = function(marquee) {
+  this.drawMarquee = function (marquee) {
     if (!marquee) return;
 
     let lineWidth = 0.1;
@@ -110,7 +109,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     }
   };
 
-  this.drawDebugInfo = function(circuitApp, x = 1100, y = 50) {
+  this.drawDebugInfo = function (circuitApp, x = 1100, y = 50) {
     let circuit = circuitApp.Circuit;
 
     if (!circuit || !circuit.debugModeEnabled()) return;
@@ -150,12 +149,12 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
   // Private
 
   function clearCanvas() {
-    let { canvas } = context;
+    let {canvas} = context;
 
     context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
   }
 
-  this.drawDots = function(ptA, ptB, component) {
+  this.drawDots = function (ptA, ptB, component) {
     if (component.Circuit && component.Circuit.isStopped)
       return;
 
@@ -233,7 +232,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
   }
 
   // Draw Primitives
-  this.drawZigZag = function(point1, point2, vStart, vEnd) {
+  this.drawZigZag = function (point1, point2, vStart, vEnd) {
     context.beginPath();
 
     context.moveTo(point1.x, point1.y);
@@ -279,7 +278,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     context.closePath();
   };
 
-  this.drawCoil = function(point1, point2, vStart, vEnd, hs = 6) {
+  this.drawCoil = function (point1, point2, vStart, vEnd, hs = 6) {
     let color, cx, hsx, voltageLevel;
 
     let segments = 40;
@@ -327,7 +326,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     context.closePath();
   };
 
-  this.drawLeads = function(component) {
+  this.drawLeads = function (component) {
     if ((component.point1 != null) && (component.lead1 != null))
       this.drawLinePt(component.point1, component.lead1, this.getVoltageColor(component.volts[0]));
 
@@ -335,7 +334,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
       this.drawLinePt(component.lead2, component.point2, this.getVoltageColor(component.volts[1]));
   };
 
-  this.drawPosts = function(component, color = config.POST_COLOR, radius=config.POST_RADIUS) {
+  this.drawPosts = function (component, color = config.POST_COLOR, radius = config.POST_RADIUS) {
     let post;
 
     for (let i = 0; i < component.numPosts(); ++i) {
@@ -344,7 +343,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     }
   };
 
-  this.drawPost = function(x0, y0, fillColor = config.POST_COLOR, strokeColor = config.POST_OUTLINE_COLOR, radius=config.POST_RADIUS) {
+  this.drawPost = function (x0, y0, fillColor = config.POST_COLOR, strokeColor = config.POST_OUTLINE_COLOR, radius = config.POST_RADIUS) {
     let oulineWidth = config.POST_OUTLINE_SIZE;
 
     if (boldLines) {
@@ -356,7 +355,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     this.drawCircle(x0, y0, radius, oulineWidth, strokeColor, fillColor);
   };
 
-  this.drawText = function(text, x, y, fillColor = config.TEXT_COLOR, size = config.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
+  this.drawText = function (text, x, y, fillColor = config.TEXT_COLOR, size = config.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
     context.fillStyle = fillColor;
     context.strokeStyle = strokeColor;
     context.font = `${config.TEXT_STYLE} ${size}pt ${config.FONT}`;
@@ -370,11 +369,11 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     return textMetrics;
   };
 
-  this.measureText = function(text) {
+  this.measureText = function (text) {
     return context.measureText(text);
   };
 
-  this.getVoltageColor = function(volts) {
+  this.getVoltageColor = function (volts) {
     let scale = Color.Gradients.voltage_default;
     let numColors = scale.length - 1;
 
@@ -389,7 +388,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     return scale[value];
   };
 
-  this.drawValue = function(perpindicularOffset, parallelOffset, component, text = null, text_size = config.TEXT_SIZE) {
+  this.drawValue = function (perpindicularOffset, parallelOffset, component, text = null, text_size = config.TEXT_SIZE) {
     let x, y;
 
     context.save();
@@ -414,7 +413,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     context.restore();
   };
 
-  this.drawCircle = function(x, y, radius, lineWidth = config.LINE_WIDTH, lineColor = config.STROKE_COLOR, fillColor = config.FG_COLOR) {
+  this.drawCircle = function (x, y, radius, lineWidth = config.LINE_WIDTH, lineColor = config.STROKE_COLOR, fillColor = config.FG_COLOR) {
     context.beginPath();
     context.arc(x, y, radius, 0, 2 * Math.PI);
 
@@ -432,7 +431,10 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     context.closePath();
   };
 
-  this.drawRect = function(x, y, width, height, lineWidth = config.LINE_WIDTH, lineColor = config.STROKE_COLOR) {
+  this.drawRect = function (x, y, width, height, {
+      lineWidth = config.LINE_WIDTH,
+      lineColor = config.STROKE_COLOR
+  } = {}) {
     context.strokeStyle = lineColor;
     context.lineJoin = 'miter';
     context.lineWidth = lineWidth;
@@ -440,11 +442,11 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     context.stroke();
   };
 
-  this.drawLinePt = function(pa, pb, color = config.STROKE_COLOR, lineWidth = config.LINE_WIDTH) {
+  this.drawLinePt = function (pa, pb, color = config.STROKE_COLOR, lineWidth = config.LINE_WIDTH) {
     this.drawLine(pa.x, pa.y, pb.x, pb.y, color, lineWidth);
   };
 
-  this.drawLine = function(x, y, x2, y2, color = config.STROKE_COLOR, lineWidth = config.LINE_WIDTH) {
+  this.drawLine = function (x, y, x2, y2, color = config.STROKE_COLOR, lineWidth = config.LINE_WIDTH) {
     context.lineCap = "round";
 
     context.beginPath();
@@ -464,12 +466,16 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     context.closePath();
   };
 
-  this.drawPolygon = function(polygon, color = config.STROKE_COLOR, fill = config.FILL_COLOR, lineWidth = config.LINE_WIDTH) {
+  this.drawPolygon = function (polygon, {
+      stroke = config.STROKE_COLOR,
+      fill = config.FILL_COLOR,
+      lineWidth = config.POLY_LINE_WIDTH
+  } = {}) {
     let numVertices = polygon.numPoints();
 
     context.fillStyle = fill;
-    if (color)
-      context.strokeStyle = color;
+    if (stroke)
+      context.strokeStyle = stroke;
 
     context.lineWidth = lineWidth;
     context.beginPath();
@@ -483,7 +489,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     if (fill)
       context.fill();
 
-    if (color)
+    if (stroke)
       context.stroke();
   }
 };

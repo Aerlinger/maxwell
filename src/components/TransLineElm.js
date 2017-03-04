@@ -133,7 +133,7 @@ class TransLineElm extends CircuitComponent {
     let segf = 1. / segments;
 
     //renderContext.setColor(Color.darkGray);
-    renderContext.drawRect(this.inner[2].x, this.inner[2].y, this.inner[1].x - this.inner[2].x, this.inner[1].y - this.inner[2].y + 1, Settings.GRAY);
+    renderContext.drawRect(this.inner[2].x, this.inner[2].y, this.inner[1].x - this.inner[2].x, this.inner[1].y - this.inner[2].y + 1, {lineColor: Settings.GRAY});
 
     for (let i = 0; i != 4; i++) {
       let color = renderContext.getVoltageColor(this.volts[i]);

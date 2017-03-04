@@ -46,7 +46,7 @@ class CurrentElm extends CircuitComponent {
 //     renderContext.drawCircle(this.center.x, this.center.y, cr);
     renderContext.drawCircle(this.center.x, this.center.y, cr, 2*Settings.LINE_WIDTH);
     renderContext.drawLinePt(this.ashaft1, this.ashaft2);
-    renderContext.drawPolygon(this.arrow, Settings.STROKE_COLOR, Settings.STROKE_COLOR);
+    renderContext.drawPolygon(this.arrow, {fill: Settings.STROKE_COLOR});
 
 //      if Circuit.showValuesCheckItem
 //        s = DrawHelper.getShortUnitText(@currentValue, "A")

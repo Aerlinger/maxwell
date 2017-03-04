@@ -109,7 +109,7 @@ class DiodeElm extends CircuitComponent {
     // draw arrow
     //this.setPowerColor(true);
     let color = renderContext.getVoltageColor(v1);
-    renderContext.drawPolygon(this.poly, color, Settings.FILL_COLOR, 0);
+    renderContext.drawPolygon(this.poly, {stroke: color});
 
     //g.fillPolygon(poly);
 

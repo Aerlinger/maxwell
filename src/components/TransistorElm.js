@@ -149,7 +149,7 @@ class TransistorElm extends CircuitComponent {
     if(this.arrowPoly && this.arrowPoly.numPoints() > 0) {
 
       try {
-        renderContext.drawPolygon(this.arrowPoly, Settings.STROKE_COLOR);
+        renderContext.drawPolygon(this.arrowPoly);
       } catch(e) {
         console.log(this.pnp);
         console.log(this.arrowPoly);
@@ -178,7 +178,7 @@ class TransistorElm extends CircuitComponent {
 //      @setPowerColor true
 
     //g.fillPolygon(rectPoly);
-    renderContext.drawPolygon(this.rectPoly, color);
+    renderContext.drawPolygon(this.rectPoly, {stroke: color});
 
 //      if (@needsHighlight() or Circuit.dragElm is this) and @dy() is 0
 //        g.setColor(Color.white);

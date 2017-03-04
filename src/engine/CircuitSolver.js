@@ -388,7 +388,8 @@ class CircuitSolver {
       // connect unconnected nodes
       for (var nodeIdx = 0; nodeIdx < this.Circuit.numNodes(); ++nodeIdx) {
         if (!closure[nodeIdx] && !this.Circuit.nodeList[nodeIdx].intern) {
-          console.warn(`Node ${nodeIdx} unconnected! -> ${this.Circuit.nodeList[nodeIdx].toString()}`);
+          // TODO: First frame only
+          // console.warn(`Node ${nodeIdx} unconnected! -> ${this.Circuit.nodeList[nodeIdx].toString()}`);
           this.Stamper.stampResistor(0, nodeIdx, 1e8);
           closure[nodeIdx] = true;
           changed = true;
@@ -477,7 +478,7 @@ class CircuitSolver {
 
       if (col === this.matrixSize) {
         if (qp === -1) {
-          this.Circuit.halt(`Matrix error qp (row with all zeros) (rsadd = ${rsadd})`, null);
+          // this.Circuit.halt(`Matrix error qp (row with all zeros) (rsadd = ${rsadd})`, null);
           return;
         }
 

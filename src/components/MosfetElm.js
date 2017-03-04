@@ -119,7 +119,7 @@ class MosfetElm extends CircuitComponent {
 
     if (!this.drawDigital()) {
       color = renderContext.getVoltageColor((this.pnp === 1 ? this.volts[1] : this.volts[2]));
-      renderContext.drawPolygon(this.arrowPoly, color);
+      renderContext.drawPolygon(this.arrowPoly, {stroke: color});
     }
 
     renderContext.drawPolygon(this.arrowPoly);

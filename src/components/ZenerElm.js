@@ -50,7 +50,7 @@ class ZenerElm extends DiodeElm {
     // draw arrow vector
     // setPowerColor(g, true)
     let color = renderContext.getVoltageColor(v1);
-    renderContext.drawPolygon(this.poly, color);
+    renderContext.drawPolygon(this.poly, {stroke: color});
 
     // PLATE:
     // setVoltageColor(g, v2)

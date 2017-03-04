@@ -4,7 +4,7 @@ let Observer = require('./util/Observer');
 let Util = require('./util/Util');
 let Point = require('./geom/Point.js');
 let Settings = require('./Settings.js');
-let Config = require('./Config');
+let Config = require('./Config.js');
 
 let Color = require('./util/Color.js');
 let CanvasRenderer = require('./ui/rendering/CanvasRenderStrategy');
@@ -13,7 +13,6 @@ let MouseEvents = require('./ui/MouseEvents');
 let RickshawScopeCanvas = require('./ui/scopes/RickshawScopeCanvas');
 let HistoryStack = require('./ui/HistoryStack');
 
-let CircuitComponent = require('./components/CircuitComponent');
 let Components = require('./components');
 
 let environment = require('./Environment.js');
@@ -36,7 +35,7 @@ class CircuitApplication extends Observer {
     }
 
     this.Circuit = Circuit;
-    this.Config = Config;
+    this.Config = new Config();
     this.HistoryStack = new HistoryStack();
 
     this.isDragging = false;
@@ -50,7 +49,7 @@ class CircuitApplication extends Observer {
 
     this.running = false;
 
-    let renderer = new CanvasRenderer(canvas.getContext('2d'), Config, Circuit.Params.voltageRange);
+    let renderer = new CanvasRenderer(canvas.getContext('2d'), this.Config, Circuit.Params.voltageRange);
 
     this.draw = this.draw.bind(this, renderer, xMargin, yMargin);
     MouseEvents.bind(this)(Circuit, canvas, {xMargin, yMargin});

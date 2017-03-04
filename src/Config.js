@@ -14,6 +14,7 @@ module.exports = class Config {
   CURRENT_RADIUS = 2;
   CURRENT_COLOR = 'rgba(255, 255, 255, 0.7)';
   LINE_WIDTH = 2;
+  POLY_LINE_WIDTH = 0;
   BOLD_LINE_WIDTH = 4;
 
   // GRID

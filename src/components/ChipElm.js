@@ -318,7 +318,7 @@ class ChipElm extends CircuitComponent {
   drawChip(renderContext) {
     //let i;
     // this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
-    renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), null, Settings.FILL_COLOR, 3);
+    renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), {stroke: null, lineWidth: 3});
 
     for (let i = 0; i < this.numPosts(); i++) {
       if (this.pins[i]) {
@@ -368,8 +368,8 @@ class ChipElm extends CircuitComponent {
       renderContext.drawPost(this.pins[i].post.x, this.pins[i].post.y, this.nodes[i]);
     }
 
-    renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), Settings.FILL_COLOR, null, 3);
-    renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), Settings.STROKE_COLOR, null, 0);
+    renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), {stroke: Settings.FILL_COLOR, fill: null, lineWidth: 3});
+    renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), {stroke: Settings.STROKE_COLOR, fill: null, lineWidth: 0});
 
     // renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), Settings.STROKE_COLOR, null);
   }
