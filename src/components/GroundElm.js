@@ -14,7 +14,7 @@ class GroundElm extends CircuitComponent {
     return "Ground"
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     this.updateDots();
 
     let color = renderContext.getVoltageColor(0);
@@ -35,7 +35,7 @@ class GroundElm extends CircuitComponent {
     }
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
     }
   }
 

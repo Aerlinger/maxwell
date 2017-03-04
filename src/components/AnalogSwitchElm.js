@@ -1,7 +1,7 @@
 let CircuitComponent = require("./CircuitComponent.js");
 let Util = require('../util/Util.js');
 let Point = require('../geom/Point.js');
-let Settings = require('../Settings.js');
+
 
 class AnalogSwitchElm extends CircuitComponent {
   static initClass() {
@@ -48,7 +48,7 @@ class AnalogSwitchElm extends CircuitComponent {
     this.setBboxPt(this.point1, this.point2, openhs);
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     let openhs = 16;
 
     let hs = this.open ? openhs : 0;
@@ -68,7 +68,7 @@ class AnalogSwitchElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      return super.debugdraw(renderContext, Settings);
     }
   }
 

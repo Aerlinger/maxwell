@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Polygon = require('../geom/Polygon.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
@@ -83,7 +83,7 @@ class SparkGapElm extends CircuitComponent {
     return true;
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     this.updateDots();
 
     let dist = 16;
@@ -106,7 +106,7 @@ class SparkGapElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
     }
   }
 

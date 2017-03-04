@@ -455,6 +455,10 @@ class CircuitComponent {
     return this.simpleString() + paramStr;
   }
 
+  getGridSize() {
+    return Settings.GRID_SIZE;
+  }
+
   numVoltageSources() {
     return 0;
   }
@@ -606,7 +610,7 @@ class CircuitComponent {
     return false;
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     let post;
     let color = Util.getColorForId(this.component_id);
 
@@ -624,7 +628,7 @@ class CircuitComponent {
     }
   }
 
-  debugDraw(renderContext) {
+  debugdraw(renderContext, Settings) {
     let post;
     let color = Util.getColorForId(this.component_id);
 

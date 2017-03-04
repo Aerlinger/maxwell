@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Rectangle = require('../geom/Rectangle.js');
 let Util = require("../util/Util.js");
 
@@ -23,7 +23,7 @@ class RailElm extends VoltageElm {
     return "Voltage Rail"
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (VoltageElm.circleSize / this.dn()));
 
     //this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
@@ -63,11 +63,11 @@ class RailElm extends VoltageElm {
       if (clock) { s = "CLK"; }
 
     } else {
-      this.drawWaveform(this.point2, renderContext);
+      this.drawWaveform(this.point2, renderContext, Settings);
     }
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
     }
   }
 

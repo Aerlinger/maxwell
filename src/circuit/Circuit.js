@@ -199,6 +199,10 @@ class Circuit extends Observer {
     this.recomputeBounds();
   }
 
+  getGridSize() {
+    return Settings.GRID_SIZE;
+  }
+
   debugModeEnabled() {
     return Circuit.DEBUG || this.Params.debug;
   }

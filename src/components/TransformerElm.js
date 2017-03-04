@@ -118,7 +118,7 @@ class TransformerElm extends CircuitComponent {
     this.curcount[1] = 0;
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     let i;
     for (i = 0; i < 4; i++) {
       let color = renderContext.getVoltageColor(this.volts[i]);
@@ -143,7 +143,7 @@ class TransformerElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      return super.debugdraw(renderContext, Settings);
     }
   }
 

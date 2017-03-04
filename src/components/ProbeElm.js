@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Rectangle = require('../geom/Rectangle.js');
 let Util = require('../util/Util.js');
 
@@ -29,9 +29,9 @@ class ProbeElm extends CircuitComponent {
     return "Scope Probe"
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
     }
 
     let hs = 8;

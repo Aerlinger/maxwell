@@ -2,7 +2,7 @@ let CircuitComponent = require("./CircuitComponent.js");
 let AnalogSwitchElm = require("./AnalogSwitchElm.js");
 let Util = require('../util/Util.js');
 let Point = require('../geom/Point.js');
-let Settings = require('../Settings.js');
+
 
 class AnalogSwitch2Elm extends AnalogSwitchElm {
   constructor(xa, ya, xb, yb, params, f) {
@@ -42,7 +42,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
     }
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     this.setBboxPt(this.point1, this.point2, this.openhs);
 
     let color = renderContext.getVoltageColor(this.volts[0]);
@@ -73,7 +73,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
     }
   }
 

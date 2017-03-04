@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Rectangle = require('../geom/Rectangle.js');
 let Util = require('../util/Util.js');
 let GateElm = require('./GateElm.js');
@@ -18,7 +18,7 @@ class WireElm extends CircuitComponent {
     return "Wire";
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     let s;
     renderContext.drawLinePt(this.point1, this.point2, renderContext.getVoltageColor(this.volts[0]));
 
@@ -35,7 +35,7 @@ class WireElm extends CircuitComponent {
       renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled())
-      return super.debugDraw(renderContext);
+      return super.debugdraw(renderContext, Settings);
   }
 
   stamp(stamper) {

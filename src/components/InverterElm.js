@@ -1,6 +1,6 @@
 let CircuitComponent = require("./CircuitComponent.js");
 let Util = require('../util/Util.js');
-let Settings = require('../Settings.js');
+
 
 class InverterElm extends CircuitComponent {
   static get Fields() {
@@ -50,7 +50,7 @@ class InverterElm extends CircuitComponent {
     this.setBboxPt(this.lead1, this.lead2, 2*this.hs);
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     //this.setBboxPt(this.point1, this.point2, this.hs);
 
     renderContext.drawLeads(this);
@@ -64,7 +64,7 @@ class InverterElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      return super.debugdraw(renderContext, Settings);
     }
   }
 

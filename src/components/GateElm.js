@@ -1,6 +1,6 @@
 let CircuitComponent = require("./CircuitComponent.js");
 let Util = require('../util/Util.js');
-let Settings = require('../Settings.js');
+
 
 class GateElm extends CircuitComponent {
   static initClass() {
@@ -132,7 +132,7 @@ class GateElm extends CircuitComponent {
   }
 
 
-  draw(renderContext){
+  draw(renderContext, Settings){
     for (let i = 0; i < this.inputCount; i++) {
       renderContext.drawLinePt(this.inPosts[i], this.inGates[i], renderContext.getVoltageColor(this.volts[i]));
     }
@@ -164,7 +164,7 @@ class GateElm extends CircuitComponent {
     }
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
     }
   }
 

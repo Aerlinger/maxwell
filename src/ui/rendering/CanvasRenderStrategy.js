@@ -28,7 +28,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
       else
         drawDefaultLines();
 
-      component.draw(this);
+      component.draw(this, config);
     }
 
     drawDefaultLines();
@@ -46,7 +46,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
 
   this.drawHighlightedComponent = function (highlightedComponent) {
     if (highlightedComponent) {
-      highlightedComponent.draw(this);
+      highlightedComponent.draw(this, config);
 
       context.fillStyle = config.POST_COLOR;
 

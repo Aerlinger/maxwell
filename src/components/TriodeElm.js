@@ -1,6 +1,6 @@
 let CircuitComponent = require("./CircuitComponent.js");
 let Util = require('../util/Util.js');
-let Settings = require("../Settings.js");
+
 
 class TriodeElm extends CircuitComponent {
   static get Fields() {
@@ -58,7 +58,7 @@ class TriodeElm extends CircuitComponent {
     }
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     //this.setBbox(this.point1, this.plate[0], 16);
 
     renderContext.drawCircle(this.point2.x, this.point2.y, this.circler, Settings.LINE_WIDTH, Settings.STROKE_COLOR, Settings.FG_COLOR);
@@ -102,7 +102,7 @@ class TriodeElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
     }
   }
 

@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Polygon = require('../geom/Polygon.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
@@ -32,7 +32,7 @@ class OutputElm extends CircuitComponent {
     this.setBboxPt(this.lead1, this.point1, 8);
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     renderContext.drawValue(-13, 35, this, this.s, 1.5*Settings.TEXT_SIZE);
 
     let color = renderContext.getVoltageColor(this.volts[0]);
@@ -42,7 +42,7 @@ class OutputElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      return super.debugdraw(renderContext, Settings);
     }
   }
 

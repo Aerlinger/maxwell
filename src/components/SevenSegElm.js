@@ -1,5 +1,5 @@
 let CircuitComponent = require("./CircuitComponent.js");
-let Settings = require('../Settings.js');
+
 let ChipElm = require("./ChipElm.js");
 
 class SevenSegElm extends ChipElm {
@@ -34,8 +34,8 @@ class SevenSegElm extends ChipElm {
     this.pins[6] = new ChipElm.Pin(3, ChipElm.SIDE_S, "g");
   }
 
-  draw(renderContext) {
-    this.drawChip(renderContext);
+  draw(renderContext, Settings) {
+    this.drawChip(renderContext, Settings);
 
     let xl = this.point1.x + this.cspc * 5;
     let yl = this.point1.y + this.cspc;

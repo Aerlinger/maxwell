@@ -1,7 +1,7 @@
 let CircuitComponent = require('./CircuitComponent.js');
 let SwitchElm = require("./SwitchElm.js");
 let Util = require('../util/Util.js');
-let Settings = require('../Settings.js');
+
 
 class LogicInputElm extends SwitchElm {
   static initClass() {
@@ -58,7 +58,7 @@ class LogicInputElm extends SwitchElm {
     }
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     let s = this.position === 0 ? "0" : "1";
 
     if (this.isNumeric()) {
@@ -75,7 +75,7 @@ class LogicInputElm extends SwitchElm {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      return super.debugdraw(renderContext, Settings);
     }
   }
 

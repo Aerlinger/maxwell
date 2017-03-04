@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Polygon = require('../geom/Polygon.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
@@ -83,7 +83,7 @@ class OpAmpElm extends CircuitComponent {
     return true;
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     // this.setBbox(this.point1.x, this.in1p[0].y, this.point2.x, this.in2p[0].y);
     //this.setBboxPt(this.point1, this.point2, Math.floor(this.opheight * this.dsign()));
 
@@ -116,7 +116,7 @@ class OpAmpElm extends CircuitComponent {
     }
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      return super.debugdraw(renderContext, Settings);
     }
   }
 

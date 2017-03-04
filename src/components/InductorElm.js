@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Polygon = require('../geom/Polygon.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
@@ -77,7 +77,7 @@ class InductorElm extends CircuitComponent {
     return stamper.stampCurrentSource(this.nodes[0], this.nodes[1], this.curSourceValue);
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
 
     let v1 = this.volts[0];
     let v2 = this.volts[1];
@@ -98,7 +98,7 @@ class InductorElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      return super.debugdraw(renderContext, Settings);
     }
   }
 

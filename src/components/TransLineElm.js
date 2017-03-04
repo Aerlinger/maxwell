@@ -1,6 +1,5 @@
 let CircuitComponent = require("./CircuitComponent.js");
 let Util = require('../util/Util.js');
-let Settings = require('../Settings.js');
 
 class TransLineElm extends CircuitComponent {
   static get Fields() {
@@ -81,7 +80,7 @@ class TransLineElm extends CircuitComponent {
     let p3 = Util.interpolate(this.point1, this.point2, 0, -Math.floor(this.channelWidth * ds));
     let p4 = Util.interpolate(this.point1, this.point2, 1, -Math.floor(this.channelWidth * ds));
 
-    let sep = Settings.GRID_SIZE / 2;
+    let sep = this.getGridSize() / 2;
     let p5 = Util.interpolate(this.point1, this.point2, 0, -Math.floor((this.channelWidth / 2) - sep) * ds);
     let p6 = Util.interpolate(this.point1, this.point2, 1, -Math.floor((this.channelWidth / 2) - sep) * ds);
     let p7 = Util.interpolate(this.point1, this.point2, 0, -Math.floor((this.channelWidth / 2) + sep) * ds);
@@ -125,7 +124,7 @@ class TransLineElm extends CircuitComponent {
     }
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     //this.setBboxPt(this.posts[0], this.posts[3], 5);
     let segments = Math.floor(this.dn() / 2);
 

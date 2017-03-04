@@ -2,7 +2,7 @@ let CircuitComponent = require("./CircuitComponent.js");
 let Util = require('../util/Util.js');
 let Point = require('../geom/Point.js');
 let Polygon = require('../geom/Polygon.js');
-let Settings = require('../Settings.js');
+
 
 let self = undefined;
 let Pin = undefined;
@@ -43,7 +43,7 @@ class ChipElm extends CircuitComponent {
         this.current = 0;
       }
   
-      updateDots(currentMult=1, ds = Settings.CURRENT_SEGMENT_LENGTH) {
+      updateDots(currentMult=1, ds) {
         if (!this.curcount) { this.curcount = 0; }
   
         let currentIncrement = this.current * currentMult;
@@ -311,11 +311,11 @@ class ChipElm extends CircuitComponent {
     }
   }
 
-  draw(renderContext) {
-    this.drawChip(renderContext);
+  draw(renderContext, Settings) {
+    this.drawChip(renderContext, Settings);
   }
 
-  drawChip(renderContext) {
+  drawChip(renderContext, Settings) {
     //let i;
     // this.setBbox(Math.min(...this.rectPointsX), Math.min(...this.rectPointsY), Math.max(...this.rectPointsX), Math.max(...this.rectPointsY));
     renderContext.drawPolygon(Polygon.fromCoordinates(this.rectPointsX, this.rectPointsY), {stroke: null, lineWidth: 3});
@@ -336,7 +336,7 @@ class ChipElm extends CircuitComponent {
         }
 
         if (this.Circuit)
-          p.updateDots(this.Circuit.Params.getCurrentMult());
+          p.updateDots(this.Circuit.Params.getCurrentMult(), Settings.CURRENT_SEGMENT_LENGTH);
 
         renderContext.drawDots(b, a, p);
 
@@ -361,7 +361,7 @@ class ChipElm extends CircuitComponent {
     }
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
     }
 
     for (let i = 0; i < this.numPosts(); ++i) {

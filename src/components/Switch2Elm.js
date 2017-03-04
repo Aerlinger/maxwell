@@ -1,5 +1,4 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
 let Polygon = require('../geom/Polygon.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
@@ -54,7 +53,7 @@ class Switch2Elm extends SwitchElm {
     this.setBboxPt(this.point1, this.point2, 2*this.openhs);
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     this.calcLeads(32);
 
     this.swpoles = Util.newPointArray(3);
@@ -93,14 +92,14 @@ class Switch2Elm extends SwitchElm {
     // Switch lever
     renderContext.drawLinePt(this.lead1, this.swpoles[this.position], Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
 
-    renderContext.drawCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
+    renderContext.drawCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1);
 
-    renderContext.drawCircle(this.swpoles[0].x, this.swpoles[0].y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
+    renderContext.drawCircle(this.swpoles[0].x, this.swpoles[0].y, Settings.POST_RADIUS, 1);
     renderContext.drawCircle(this.swpoles[2].x, this.swpoles[2].y, Settings.POST_RADIUS, 1, Settings.POST_COLOR);
-    renderContext.drawCircle(this.swpoles[1].x, this.swpoles[1].y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
+    renderContext.drawCircle(this.swpoles[1].x, this.swpoles[1].y, Settings.POST_RADIUS, 1);
 
     if (this.Circuit && this.Circuit.debugModeEnabled())
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
   }
 
   getPost(n) {

@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
 let Util = require('../util/Util.js');
@@ -27,7 +27,7 @@ class ResistorElm extends CircuitComponent {
     return this.resistance;
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     this.calcLeads(32);
 
     renderContext.drawLeads(this);
@@ -43,7 +43,7 @@ class ResistorElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
     }
   }
 

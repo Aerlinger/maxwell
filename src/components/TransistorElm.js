@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Polygon = require('../geom/Polygon.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
@@ -95,9 +95,9 @@ class TransistorElm extends CircuitComponent {
     return `Bipolar Junction Transistor`
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
     }
 
     //@dsign() = -@dsign()  unless (@flags & TransistorElm.FLAG_FLIP) is 0

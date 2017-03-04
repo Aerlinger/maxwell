@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Util = require('../util/Util.js');
 
 class VoltageElm extends CircuitComponent {
@@ -154,7 +154,7 @@ class VoltageElm extends CircuitComponent {
     }
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     this.updateDots();
 
     if ((this.waveform === VoltageElm.WF_DC) || (this.waveform === VoltageElm.WF_VAR)) {
@@ -187,24 +187,24 @@ class VoltageElm extends CircuitComponent {
     } else {
       // this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
       let ps1 = Util.interpolate(this.lead1, this.lead2, 0.5);
-      this.drawWaveform(ps1, renderContext);
+      this.drawWaveform(ps1, renderContext, Settings);
     }
 
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled())
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
   }
 
   static get NAME() {
     return "Voltage Source"
   }
 
-  drawWaveform(center, renderContext) {
+  drawWaveform(center, renderContext, Settings) {
     let xc = center.x;
     let yc = center.y;
 
-    renderContext.drawCircle(xc, yc, VoltageElm.circleSize, 2, Settings.FILL_COLOR);
+    renderContext.drawCircle(xc, yc, VoltageElm.circleSize, 2);
 
     let color = Settings.SECONDARY_COLOR;
 

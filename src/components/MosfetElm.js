@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Polygon = require('../geom/Polygon.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
@@ -90,7 +90,7 @@ class MosfetElm extends CircuitComponent {
     return this.lastv1 = this.lastv2 = this.volts[0] = this.volts[1] = this.volts[2] = this.curcount = 0;
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     //this.setBboxPt(this.point1, this.point2, this.hs);
 
     let color = renderContext.getVoltageColor(this.volts[1]);
@@ -158,7 +158,7 @@ class MosfetElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      return super.debugdraw(renderContext, Settings);
     }
   }
 

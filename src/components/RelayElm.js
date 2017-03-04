@@ -1,7 +1,7 @@
 let CircuitComponent = require('./CircuitComponent.js');
 let Util = require('../util/Util.js');
 let Point = require('../geom/Point.js');
-let Settings = require('../Settings.js');
+
 
 class RelayElm extends CircuitComponent {
   static initClass() {
@@ -222,7 +222,7 @@ class RelayElm extends CircuitComponent {
       this.i_position = 2;
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     let i;
     for (i = 0; i < 2; i++) {
       renderContext.getVoltageColor(this.volts[this.nCoil1 + i]);
@@ -278,7 +278,7 @@ class RelayElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
     }
   }
 

@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Point = require('../geom/Point.js');
 let Util = require('../util/Util.js');
 
@@ -106,7 +106,7 @@ class ScrElm extends CircuitComponent {
     this.gate = new Array(2);
     let leadlen = (this.dn() - 16) / 2;
 
-    let gatelen = 2*Settings.GRID_SIZE;
+    let gatelen = 2*this.getGridSize();
     //gatelen = gatelen + (leadlen % 2*Settings.GRID_SIZE);
 
     gatelen = 24;
@@ -126,7 +126,7 @@ class ScrElm extends CircuitComponent {
     // console.trace("leadlen");
 
     this.gate[0] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, gatelen * dir);
-    this.gate[1] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, Settings.GRID_SIZE * 4 * dir);
+    this.gate[1] = Util.interpolate(this.lead2, this.point2, gatelen / leadlen, this.getGridSize() * 4 * dir);
 
     this.setBboxPt(this.point1, this.point2, this.hs)
 
@@ -161,7 +161,7 @@ class ScrElm extends CircuitComponent {
     return true;
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     //this.setPoints()
     this.setBboxPt(this.point1, this.point2, this.hs)
 //    adjustBbox(@gate[0], @gate[1])
@@ -203,7 +203,7 @@ class ScrElm extends CircuitComponent {
 
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
     }
   }
 

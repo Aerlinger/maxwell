@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Polygon = require('../geom/Polygon.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
@@ -68,7 +68,7 @@ class DiodeElm extends CircuitComponent {
     }
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     this.calcLeads(16);
 
     this.cathode = Util.newPointArray(2);
@@ -84,7 +84,7 @@ class DiodeElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      return super.debugdraw(renderContext, Settings);
     }
   }
 

@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Polygon = require('../geom/Polygon.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
@@ -51,7 +51,7 @@ class LogicOutputElm extends CircuitComponent {
     return "Logic Output Terminal"
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     let s = this.volts < this.threshold ? "0" : "1";
 
     if (this.isTernary()) {
@@ -75,7 +75,7 @@ class LogicOutputElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      return super.debugdraw(renderContext, Settings);
     }
   }
 

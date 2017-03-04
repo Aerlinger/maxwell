@@ -1,6 +1,6 @@
 let CircuitComponent = require("./CircuitComponent.js");
 let Util = require("../util/Util.js");
-let Settings = require('../Settings.js');
+
 
 let Point = require("../geom/Point.js");
 
@@ -44,7 +44,7 @@ class PotElm extends CircuitComponent {
 //
 //    @getParentCircuit.halt("Draw not yet implemented for #{this}")
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     this.calcLeads(32);
 
 //    @setBboxPt @point1, @point2, width
@@ -81,7 +81,7 @@ class PotElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      return super.debugdraw(renderContext, Settings);
     }
   }
 
@@ -133,7 +133,7 @@ class PotElm extends CircuitComponent {
 
       //this.point2.y = this.point1.y;
 
-      offset = Util.snapGrid(-offset/2 + 2*Settings.GRID_SIZE*this.dir);
+      offset = Util.snapGrid(-offset/2 + 2*this.getGridSize()*this.dir);
     } else {
       //dy = Util.snapGrid(this.dy() / 2) * 2;
       // this.point2.y = this.point1.y + dy;
@@ -141,7 +141,7 @@ class PotElm extends CircuitComponent {
 
       this.dir = Math.sign(this.dy());
 
-      offset = Util.snapGrid(8*Settings.GRID_SIZE);
+      offset = Util.snapGrid(8*this.getGridSize());
       //this.point2.x = this.point1.x;
     }
 
@@ -149,7 +149,7 @@ class PotElm extends CircuitComponent {
     //console.log(this.point1, this.point2, this.dx(), this.dy());
 
     if (offset === 0) {
-      offset = 2 * Settings.GRID_SIZE;
+      offset = 2 * this.getGridSize();
     }
 
     let dn = this.dn(); //Math.sqrt(Math.pow(this.point1.x - this.point2.x, 2), Math.pow(this.point1.y - this.point2.y, 2));

@@ -75,7 +75,7 @@ class MemristorElm extends CircuitComponent {
     return this.dopeWidth = 0;
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     let segments = 6;
     let ox = 0;
     let v1 = this.volts[0];
@@ -115,7 +115,7 @@ class MemristorElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      return super.debugdraw(renderContext, Settings);
     }
   }
 

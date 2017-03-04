@@ -1,7 +1,7 @@
 let CircuitComponent = require("./CircuitComponent.js");
 let DiodeElm = require("./DiodeElm.js");
 let Util = require('../util/Util.js');
-let Settings = require('../Settings.js');
+
 
 class LedElm extends DiodeElm {
   static get Fields() {
@@ -87,7 +87,7 @@ class LedElm extends DiodeElm {
     return false;
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     let cr = 12;
     
     this.setBboxPt(this.point1, this.point2, cr);
@@ -118,7 +118,7 @@ class LedElm extends DiodeElm {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
     }
   }
 }

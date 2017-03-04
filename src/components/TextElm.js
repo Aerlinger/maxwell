@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Polygon = require('../geom/Polygon.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
@@ -68,7 +68,7 @@ class TextElm extends CircuitComponent {
     this.setBbox(this.point1.x, this.point1.y - this.size, this.point1.x + 5 * this.text.length, this.point1.y + this.size);
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     let color = Settings.LABEL_COLOR;
     //this.setBbox(this.point1.x, this.point1.y, this.point2.x, this.point2.y);
 
@@ -80,7 +80,7 @@ class TextElm extends CircuitComponent {
     //this.setBbox(this.x1(), this.y1() - this.size + 1, this.x1() + mt.width, this.y1());
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugDraw(renderContext);
+      return super.debugdraw(renderContext, Settings);
     }
   }
 

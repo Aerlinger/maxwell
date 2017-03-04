@@ -1,5 +1,5 @@
 let CircuitComponent = require('./CircuitComponent.js');
-let Settings = require('../Settings.js');
+
 let Polygon = require('../geom/Polygon.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Point = require('../geom/Point.js');
@@ -66,9 +66,9 @@ class SweepElm extends CircuitComponent {
     return 1;
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugDraw(renderContext);
+      super.debugdraw(renderContext, Settings);
     }
 
     let color = renderContext.getVoltageColor(this.volts[0]);

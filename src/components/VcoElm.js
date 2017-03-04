@@ -97,9 +97,9 @@ class VcoElm extends ChipElm {
   }
 
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     this.computeCurrent();
-    return this.drawChip(renderContext);
+    this.drawChip(renderContext, Settings);
   }
 }
 

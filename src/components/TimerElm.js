@@ -1,7 +1,7 @@
 let CircuitComponent = require("./CircuitComponent.js");
 let ChipElm = require("./ChipElm.js");
 let Util = require('../util/Util.js');
-let Settings = require('../Settings.js');
+
 
 class TimerElm extends ChipElm {
   static initClass() {
@@ -43,9 +43,9 @@ class TimerElm extends ChipElm {
     return (this.flags & TimerElm.FLAG_RESET) !== 0;
   }
 
-  draw(renderContext) {
+  draw(renderContext, Settings) {
     //this.setPoints();
-    this.drawChip(renderContext);
+    this.drawChip(renderContext, Settings);
 
     let textSize = this.csize == 1 ? 8 : 11;
 
