@@ -15,17 +15,21 @@ let interactionController = function (Circuit, canvas, {xMargin=200, yMargin= 64
 
   const MOUSEDOWN = 1;
 
-
   let SelectionMarquee = require('./SelectionMarquee');
 
-  // Callbacks
-  let onSelectionChanged = this.noop;
-  let onComponentClick = this.noop;
-  let onComponentHover = this.noop;
-  let onNodeHover = this.noop;
-  let onNodeClick = this.noop;
-  let onUpdateComplete = this.noop;
-
+  /**
+   * Callback triggered by the mouse moving on the circuit canvas
+   *
+   * Updates circuit application state for the following actions
+   * - user is placing a component
+   * - user is pasting components
+   * - user is dragging a component
+   * - user is making a selection (marquee update)
+   * - user hovers over a node
+   * - user hovers over a component
+   *
+   * @param event JS event object
+   */
   this.mousemove = function(event) {
     let component;
     let x = event.offsetX - xMargin;
@@ -87,7 +91,6 @@ let interactionController = function (Circuit, canvas, {xMargin=200, yMargin= 64
           for (let previouslySelectedComponent of this.previouslySelectedComponents)
             if (this.allSelectedComponents.indexOf(previouslySelectedComponent) < 0)
               newlyUnselectedComponents.push(previouslySelectedComponent);
-
 
           if (newlySelectedComponents.length > 0 || newlyUnselectedComponents.length > 0) {
             this.onSelectionChanged({
@@ -189,6 +192,18 @@ let interactionController = function (Circuit, canvas, {xMargin=200, yMargin= 64
     }
   };
 
+  /**
+   * Callback triggered by a primary mouse or touch action
+   *
+   * Updates circuit application state for the following actions
+   * - user is finalizing placement of a component
+   * - user is initiating moving component(s)
+   * - user is initiating marquee selection
+   * - user is selecting a component
+   * - user is selecting a node
+   *
+   * @param event JS event object
+   */
   this.mousedown = function(event) {
     let x = event.offsetX - xMargin;
     let y = event.offsetY - yMargin;
@@ -240,6 +255,15 @@ let interactionController = function (Circuit, canvas, {xMargin=200, yMargin= 64
     }
   };
 
+  /**
+   * Callback triggered by releasing primary mouse or touch action
+   *
+   * Updates circuit application state for the following actions
+   * - user is finalizing movement of component(s)
+   * - user is finalizing marquee selection
+   *
+   * @param event JS event object
+   */
   this.mouseup = function(event) {
     this.marquee = null;
     this.selectedNode = null;

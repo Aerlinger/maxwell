@@ -6,7 +6,7 @@ let Point = require('./geom/Point');
 let Config = require('./Config');
 
 let Color = require('./util/Color');
-let CanvasRenderer = require('./ui/rendering/CanvasRenderStrategy');
+let RenderStrategy = require('./ui/rendering/RenderStrategy');
 let MouseEvents = require('./ui/MouseEvents');
 
 let RickshawScopeCanvas = require('./ui/scopes/RickshawScopeCanvas');
@@ -46,7 +46,7 @@ class CircuitApplication extends Observer {
 
     this.running = false;
 
-    let renderer = new CanvasRenderer(canvas.getContext('2d'), this.Config, Circuit.Params.voltageRange);
+    let renderer = new RenderStrategy(canvas.getContext('2d'), this.Config, Circuit.Params.voltageRange);
 
     this.draw = this.draw.bind(this, renderer, xMargin, yMargin);
     MouseEvents.bind(this)(Circuit, canvas, {xMargin, yMargin});
@@ -245,10 +245,26 @@ class CircuitApplication extends Observer {
 
   /* ACTIONS */
 
-  remove(components) {
+  removeComponents(components) {
     this.HistoryStack.pushUndo(this.Circuit);
 
     return this.Circuit.destroy(components);
+  }
+
+  placeComponents(components) {
+    // TODO
+  }
+
+  moveComponents(components) {
+    // TODO
+  }
+
+  updateComponent(component, params) {
+    // TODO
+  }
+
+  updateCircuit(params) {
+    // TODO
   }
 }
 

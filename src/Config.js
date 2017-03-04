@@ -1,4 +1,6 @@
 module.exports = class Config {
+  RENDER_STRATEGY = 'canvas';
+
   CURRENT_TYPE_DOTS = 'DOTS';
   CURENT_TYPE_DOTS = 'DOTS';
   CURRENT_TYPE_DASHES = 'DASHES';
