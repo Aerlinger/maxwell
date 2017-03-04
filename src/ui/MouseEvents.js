@@ -16,7 +16,6 @@ let interactionController = function (Circuit, canvas, {xMargin=200, yMargin= 64
   const MOUSEDOWN = 1;
 
 
-  let Util = require('../util/Util');
   let SelectionMarquee = require('./SelectionMarquee');
 
   // Callbacks
@@ -37,8 +36,8 @@ let interactionController = function (Circuit, canvas, {xMargin=200, yMargin= 64
     this.lastX = this.snapX;
     this.lastY = this.snapY;
 
-    this.snapX = Util.snapGrid(x);
-    this.snapY = Util.snapGrid(y);
+    this.snapX = this.Circuit.snapGrid(x);
+    this.snapY = this.Circuit.snapGrid(y);
 
     // TODO: WIP for interactive element placing
     if (this.placeComponent) {

@@ -4,7 +4,6 @@ var Pathfinder = require('./Pathfinder.js');
 var CircuitNode = require('./CircuitNode.js');
 var CircuitNodeLink = require('./CircuitNodeLink.js');
 var RowInfo = require('./RowInfo.js');
-var Setting = require('../Settings.js');
 var Util = require('../util/Util.js');
 
 var SimulationFrame = require('../circuit/SimulationFrame.js');

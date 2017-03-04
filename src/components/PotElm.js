@@ -1,7 +1,5 @@
 let CircuitComponent = require("./CircuitComponent.js");
 let Util = require("../util/Util.js");
-
-
 let Point = require("../geom/Point.js");
 
 class PotElm extends CircuitComponent {
@@ -133,7 +131,7 @@ class PotElm extends CircuitComponent {
 
       //this.point2.y = this.point1.y;
 
-      offset = Util.snapGrid(-offset/2 + 2*this.getGridSize()*this.dir);
+      offset = this.snapGrid(-offset/2 + 2*this.getGridSize()*this.dir);
     } else {
       //dy = Util.snapGrid(this.dy() / 2) * 2;
       // this.point2.y = this.point1.y + dy;
@@ -141,7 +139,7 @@ class PotElm extends CircuitComponent {
 
       this.dir = Math.sign(this.dy());
 
-      offset = Util.snapGrid(8*this.getGridSize());
+      offset = this.snapGrid(8*this.getGridSize());
       //this.point2.x = this.point1.x;
     }
 

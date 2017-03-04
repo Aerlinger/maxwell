@@ -78,6 +78,9 @@ class CircuitComponent {
 
     this.setPoints(x1, y1, x2, y2);
     this.allocNodes();
+
+    // TODO: DRY from Circuit.grid_size
+    this.grid_size = 8;
   }
 
   copy() {
@@ -373,8 +376,8 @@ class CircuitComponent {
   }
 
   drag(newX, newY) {
-    newX = Util.snapGrid(newX);
-    newY = Util.snapGrid(newY);
+    newX = this.snapGrid(newX);
+    newY = this.snapGrid(newY);
 
     if (this.noDiagonal) {
       if (Math.abs(this.point1.x - newX) < Math.abs(this.point1.y - newY)) {
@@ -407,19 +410,23 @@ class CircuitComponent {
     }
   }
 
+  /**
+   * TODO: Dry from circuitComponent
+   * @param x
+   * @returns {number}
+   */
+  snapGrid(x) {
+    return this.grid_size * Math.round(x/this.grid_size);
+  }
+
   moveTo(x, y) {
-    let deltaX = Util.snapGrid(x - this.getCenter().x);
-    let deltaY = Util.snapGrid(y - this.getCenter().y);
+    let deltaX = this.snapGrid(x - this.getCenter().x);
+    let deltaY = this.snapGrid(y - this.getCenter().y);
 
     return this.move(deltaX, deltaY);
   }
 
-  stamp() {
-    return this.Circuit.halt(`Called abstract function stamp() in Circuit ${this.constructor.name}`);
-  }
-
   inspect() {
-
     let paramValues = [];
 
     for (let key in this.params) {
@@ -456,7 +463,7 @@ class CircuitComponent {
   }
 
   getGridSize() {
-    return Settings.GRID_SIZE;
+    return this.grid_size;
   }
 
   numVoltageSources() {
@@ -694,12 +701,9 @@ class CircuitComponent {
 
   }
 
-  updateDots(ds, current = null) {
+  updateDots(ds = Settings.CURRENT_SEGMENT_LENGTH, current = null) {
     if (this.Circuit && this.Circuit.isStopped)
-      return
-
-    if (ds == null)
-      ds = Settings.CURRENT_SEGMENT_LENGTH;
+      return;
 
     if (this.Circuit) {
       this.curcount = this.curcount || 0;
@@ -890,6 +894,15 @@ class CircuitComponent {
       return paramValue;
     }
   };
+
+  /**
+   * Abstract stamp function
+   *
+   * @returns {*}
+   */
+  stamp() {
+    return this.Circuit.halt(`Called abstract function stamp() in Circuit ${this.constructor.name}`);
+  }
 }
 
 module.exports = CircuitComponent;

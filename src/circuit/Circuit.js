@@ -1,26 +1,25 @@
-//###################################################################################################################
-
-// Circuit:
-//     Top-level class for defining a Circuit. An array of components, and nodes are managed by a central
-//     solver that updates and recalculates the conductance matrix every frame.
-//
-// @author Anthony Erlinger
-// @date 2011-2013
-//
-// Uses the Observer Design Pattern:
-//   Observes: <none>
-//   Observed By: Solver, Render
-//
-//
-// Event Message Passing interface:
-//   ON_UPDATE
-//   ON_PAUSE
-//   ON_RESUME
-//
-//   ON_ADD_COMPONENT
-//   ON_REMOVE_COMPONENT
-//
-//###################################################################################################################
+/**
+ * Circuit:
+ *     Top-level class for defining a Circuit. An array of components, and nodes are managed by a central
+ *     solver that updates and recalculates the conductance matrix every frame.
+ *
+ * @author Anthony Erlinger
+ * @date 2011-2013
+ *
+ * Uses the Observer Design Pattern:
+ *   Observes: <none>
+ *   Observed By: Solver, Render
+ *
+ *
+ * Event Message Passing interface:
+ *   ON_UPDATE
+ *   ON_PAUSE
+ *   ON_RESUME
+ *
+ *   ON_ADD_COMPONENT
+ *   ON_REMOVE_COMPONENT
+ *
+ */
 
 let Logger = require('../io/Logger.js');
 let SimulationParams = require('./SimulationParams.js');
@@ -29,39 +28,10 @@ let CircuitSolver = require('../engine/CircuitSolver.js');
 let Observer = require('../util/Observer.js');
 let Rectangle = require('../geom/Rectangle.js');
 let Util = require('../util/Util.js');
-let environment = require("../Environment.js");
 
 class Circuit extends Observer {
   static initClass() {
     this.DEBUG = false;
-
-    this.components = [
-      // Working
-      "WireElm",
-      "ResistorElm",
-      "GroundElm",
-      "InductorElm",
-      "CapacitorElm",
-      "VoltageElm",
-      "DiodeElm",
-      "SwitchElm",
-      "SparkGapElm",
-      "OpAmpElm",
-      "MosfetElm",
-
-      // Testing
-      "RailElm",
-      "VarRailElm",
-      "ZenerElm",
-      "CurrentElm",
-      "TransistorElm",
-
-      // In progress:
-      "Switch2Elm",  // Needs interaction
-      "TextElm",
-      "ProbeElm",
-      "OutputElm"
-    ];
 
     // Messages Dispatched to listeners:
 
@@ -101,6 +71,8 @@ class Circuit extends Observer {
 
     this.flags = 0;
     this.isStopped = false;
+
+    this.grid_size = 8;
 
     this.clearAndReset();
   }
@@ -200,7 +172,11 @@ class Circuit extends Observer {
   }
 
   getGridSize() {
-    return Settings.GRID_SIZE;
+    return this.grid_size;
+  }
+
+  snapGrid(x) {
+    return this.grid_size * Math.round(x / this.grid_size);
   }
 
   debugModeEnabled() {
@@ -544,14 +520,14 @@ class Circuit extends Observer {
 
     let circuitObj = {
       params: {
-          type: this.Params.name,
-          timeStep: this.timeStep(),
-          simSpeed: this.simSpeed(),
-          currentSpeed: this.currentSpeed(),
-          voltageRange: this.voltageRange(),
-          powerRange: this.powerRange(),
-          flags: this.flags
-        },
+        type: this.Params.name,
+        timeStep: this.timeStep(),
+        simSpeed: this.simSpeed(),
+        currentSpeed: this.currentSpeed(),
+        voltageRange: this.voltageRange(),
+        powerRange: this.powerRange(),
+        flags: this.flags
+      },
       components: this.elementList.map(element => element.serialize())
     };
 
@@ -586,22 +562,22 @@ class Circuit extends Observer {
   }
 
   /*
-  dumpFrameJson(filename) {
-    let circuitFramsJson;
-    if (filename == null) {
-      filename = `./dump/${this.Params.name}_FRAMES.json`;
-    }
-    circuitFramsJson = JSON.stringify(this.frameJson(), null, 2);
+   dumpFrameJson(filename) {
+   let circuitFramsJson;
+   if (filename == null) {
+   filename = `./dump/${this.Params.name}_FRAMES.json`;
+   }
+   circuitFramsJson = JSON.stringify(this.frameJson(), null, 2);
 
-    return fs.writeFileSync(filename, circuitFramsJson)
-  }
+   return fs.writeFileSync(filename, circuitFramsJson)
+   }
 
-  dumpAnalysisJson() {
-    let circuitAnalysisJson = JSON.stringify(this.toJson(), null, 2);
+   dumpAnalysisJson() {
+   let circuitAnalysisJson = JSON.stringify(this.toJson(), null, 2);
 
-    return fs.writeFileSync("./dump/#{@Params.name}_ANALYSIS.json", circuitAnalysisJson)
-  }
-  */
+   return fs.writeFileSync("./dump/#{@Params.name}_ANALYSIS.json", circuitAnalysisJson)
+   }
+   */
 }
 
 Circuit.initClass();

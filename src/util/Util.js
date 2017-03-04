@@ -1,6 +1,5 @@
 let Point = require('../geom/Point.js');
 let Polygon = require('../geom/Polygon.js');
-let Settings = require('../Settings.js');
 let Color = require('./Color.js');
 let environment = require("../Environment.js");
 
@@ -176,10 +175,6 @@ class Util {
     if (absValue < 1e6) { return (value * 1e-3).toFixed(decimalPoints) + " k" + unit; }
     if (absValue < 1e9) { return (value * 1e-6).toFixed(decimalPoints) + " M" + unit; }
     return (value * 1e-9).toFixed(decimalPoints) + " G" + unit;
-  }
-
-  static snapGrid(x) {
-    return Settings.GRID_SIZE * Math.round(x/Settings.GRID_SIZE);
   }
 
   static showFormat(decimalNum) {
