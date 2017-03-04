@@ -28,20 +28,6 @@ class SelectionMarquee extends Rectangle {
     this.width = _x2 - _x1;
     this.height = _y2 - _y1;
   }
-
-  draw(renderContext) {
-    renderContext.lineWidth = 0.1;
-
-    let lineShift = 0.5;
-
-    if ((this.x1 != null) && (this.x2 != null) && (this.y1 != null) && (this.y2 != null)) {
-      renderContext.drawLine(this.x1 + lineShift, this.y1 + lineShift, this.x2 + lineShift, this.y1 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 0);
-      renderContext.drawLine(this.x1 + lineShift, this.y2 + lineShift, this.x2 + lineShift, this.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
-
-      renderContext.drawLine(this.x1 + lineShift, this.y1 + lineShift, this.x1 + lineShift, this.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
-      renderContext.drawLine(this.x2 + lineShift, this.y1 + lineShift, this.x2 + lineShift, this.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
-    }
-  }
 }
 
 module.exports = SelectionMarquee

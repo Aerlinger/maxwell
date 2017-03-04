@@ -8,88 +8,154 @@ let lineShift = 0;
 /**
  * A set of primitive rendering definitions responsible for drawing components of the circuit
  */
-class CanvasRenderStrategy {
-  constructor(context, fullScaleVRange) {
-    this.context = context;
-    this.fullScaleVRange = fullScaleVRange;
-  }
+module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange) {
+  let boldLines = false;
 
-  withMargin(xMargin, yMargin, block) {
-    this.clearCanvas();
+  this.withMargin = function(xMargin, yMargin, block) {
+    clearCanvas();
 
-    this.context.save();
-    this.context.translate(xMargin, yMargin);
+    context.save();
+    context.translate(xMargin, yMargin);
 
     block();
 
-    this.context.restore();
-  }
+    context.restore();
+  };
 
-  drawComponents(circuit, selectedComponents) {
+  this.drawComponents = function(circuit, selectedComponents) {
     for (let component of circuit.getElements()) {
       if (component && selectedComponents.includes(component))
-        this.drawBoldLines();
+        drawBoldLines();
       else
-        this.drawDefaultLines();
+        drawDefaultLines();
 
       component.draw(this);
     }
 
-    this.drawDefaultLines();
-  }
+    drawDefaultLines();
+  };
 
-  drawHighlightedNode(highlightedNode) {
+  this.drawHighlightedNode = function(highlightedNode) {
     if (highlightedNode)
       this.drawCircle(highlightedNode.x + 0.5, highlightedNode.y + 0.5, 7, 3, '#0F0');
-  }
+  };
 
-  drawSelectedNodes(selectedNode) {
+  this.drawSelectedNodes = function(selectedNode) {
     if (selectedNode)
       this.drawRect(selectedNode.x - 10 + 0.5, selectedNode.y - 10 + 0.5, 21, 21, 1, '#0FF');
-  }
+  };
 
-  drawHighlightedComponent(highlightedComponent) {
+  this.drawHighlightedComponent = function(highlightedComponent) {
     if (highlightedComponent) {
       highlightedComponent.draw(this);
 
-      this.context.fillStyle = Settings.POST_COLOR;
+      context.fillStyle = Settings.POST_COLOR;
 
       for (let i = 0; i < highlightedComponent.numPosts(); ++i) {
         let post = highlightedComponent.getPost(i);
 
-        this.context.fillRect(post.x - Settings.POST_RADIUS - 1, post.y - Settings.POST_RADIUS - 1, 2 * Settings.POST_RADIUS + 2, 2 * Settings.POST_RADIUS + 2);
+        context.fillRect(post.x - Settings.POST_RADIUS - 1, post.y - config.post_radius - 1, 2 * Settings.POST_RADIUS + 2, 2 * Settings.POST_RADIUS + 2);
       }
 
       if (highlightedComponent.x2())
-        this.context.fillRect(highlightedComponent.x2() - 2 * Settings.POST_RADIUS, highlightedComponent.y2() - 2 * Settings.POST_RADIUS, 4 * Settings.POST_RADIUS, 4 * Settings.POST_RADIUS);
+        context.fillRect(highlightedComponent.x2() - 2 * Settings.POST_RADIUS, highlightedComponent.y2() - 2 * Settings.POST_RADIUS, 4 * Settings.POST_RADIUS, 4 * Settings.POST_RADIUS);
     }
-  }
+  };
 
-  clearCanvas() {
-    let { canvas } = this.context;
-
-    this.context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
-  }
-
-  drawScopes(scopes) {
+  this.drawScopes = function(scopes) {
     for (let scopeElm of scopes) {
       let scopeCanvas = scopeElm.getCanvas();
 
       if (scopeCanvas) {
-        var center = scopeElm.circuitElm.getCenter();
+        let center = scopeElm.circuitElm.getCenter();
 
-        this.context.setLineDash([5, 5]);
-        this.context.strokeStyle = '#FFA500';
-        this.context.lineWidth = 1;
-        this.context.moveTo(center.x, center.y);
-        this.context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height() / 2);
+        context.setLineDash([5, 5]);
+        context.strokeStyle = '#FFA500';
+        context.lineWidth = 1;
+        context.moveTo(center.x, center.y);
+        context.lineTo(scopeCanvas.x(), scopeCanvas.y() + scopeCanvas.height() / 2);
 
-        this.context.stroke();
+        context.stroke();
       }
     }
+  };
+
+  this.drawInfoText = function(circuit, highlightedComponent) {
+    this.drawText('Time elapsed: ' + Util.getUnitText(circuit.time, 's'), 10, 5, '#bf4f00', 1.2 * Settings.TEXT_SIZE);
+    this.drawText('Frame Time: ' + Math.floor(circuit.lastFrameTime) + 'ms', 600, 8, '#000968', 1.1 * Settings.TEXT_SIZE);
+
+    if (highlightedComponent != null) {
+      let summaryArr = highlightedComponent.getSummary();
+
+      if (summaryArr) {
+        for (let idx = 0; idx < summaryArr.length; ++idx) {
+          this.drawText(summaryArr[idx], 730, 50 + (idx * 11) + 5, "#1b4e24");
+        }
+      }
+    }
+  };
+
+  this.drawMarquee = function(marquee) {
+    if (!marquee) return;
+
+    let lineWidth = 0.1;
+    let lineShift = 0.5;
+
+    if ((marquee.x1 != null) && (marquee.x2 != null) && (marquee.y1 != null) && (marquee.y2 != null)) {
+      this.drawLine(marquee.x1 + lineShift, marquee.y1 + lineShift, marquee.x2 + lineShift, marquee.y1 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
+      this.drawLine(marquee.x1 + lineShift, marquee.y2 + lineShift, marquee.x2 + lineShift, marquee.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
+
+      this.drawLine(marquee.x1 + lineShift, marquee.y1 + lineShift, marquee.x1 + lineShift, marquee.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
+      this.drawLine(marquee.x2 + lineShift, marquee.y1 + lineShift, marquee.x2 + lineShift, marquee.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
+    }
+  };
+
+  this.drawDebugInfo = function(circuitApp, x = 1100, y = 50) {
+    let circuit = circuitApp.Circuit;
+
+    if (!circuit || !circuit.debugModeEnabled()) return;
+
+    let str = `UI: ${circuitApp.width}x${circuitApp.height}\n`;
+    str += circuitApp.getMode() + "\n";
+
+    str += "Highlighted Node: :" + circuitApp.highlightedNode + "\n";
+    str += "Selected Node: :" + circuitApp.selectedNode + "\n";
+    str += "Highlighted Component: " + circuitApp.highlightedComponent + "\n";
+    // str += `Selection [${this.marquee || ""}]\n  - `;
+    str += circuitApp.selectedComponents.join("\n  - ") + "\n";
+
+    str += "\nCircuit:\n";
+
+    // Name
+    str += circuitApp.Circuit.toString();
+
+    let lineHeight = 10;
+    let nLines = 0;
+    for (let line of str.split("\n")) {
+      context.fillText(line, x, y + nLines * lineHeight);
+
+      nLines++;
+    }
+
+    drawDebugOverlay(circuit);
+
+    for (let nodeIdx = 0; nodeIdx < circuit.numNodes(); ++nodeIdx) {
+      let voltage = Util.singleFloat(circuit.getVoltageForNode(nodeIdx));
+      let node = circuit.getNode(nodeIdx);
+
+      context.fillText(`${nodeIdx}:${voltage}`, node.x + 10, node.y - 10, '#FF8C00');
+    }
+  };
+
+  // Private
+
+  function clearCanvas() {
+    let { canvas } = context;
+
+    context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
   }
 
-  drawDots(ptA, ptB, component) {
+  this.drawDots = function(ptA, ptB, component) {
     if (component.Circuit && component.Circuit.isStopped)
       return;
 
@@ -122,101 +188,34 @@ class CanvasRenderStrategy {
         var xOffset1 = xOffset + ((3 * dx) / dn);
         var yOffset1 = yOffset + ((3 * dy) / dn);
 
-        this.context.beginPath();
-        this.context.strokeStyle = Settings.CURRENT_COLOR;
-        this.context.lineWidth = Settings.LINE_WIDTH + 0.5;
-        this.context.moveTo(xOffset0, yOffset0);
-        this.context.lineTo(xOffset1, yOffset1);
-        this.context.stroke();
-        this.context.closePath();
+        context.beginPath();
+        context.strokeStyle = Settings.CURRENT_COLOR;
+        context.lineWidth = Settings.LINE_WIDTH + 0.5;
+        context.moveTo(xOffset0, yOffset0);
+        context.lineTo(xOffset1, yOffset1);
+        context.stroke();
+        context.closePath();
       }
 
       newPos += ds
     }
-  }
+  };
 
-  drawInfoText(circuit, highlightedComponent) {
-    this.drawText('Time elapsed: ' + Util.getUnitText(circuit.time, 's'), 10, 5, '#bf4f00', 1.2 * Settings.TEXT_SIZE);
-    this.drawText('Frame Time: ' + Math.floor(circuit.lastFrameTime) + 'ms', 600, 8, '#000968', 1.1 * Settings.TEXT_SIZE);
-
-    if (highlightedComponent != null) {
-      let summaryArr = highlightedComponent.getSummary();
-
-      if (summaryArr) {
-        for (let idx = 0; idx < summaryArr.length; ++idx) {
-          this.drawText(summaryArr[idx], 730, 50 + (idx * 11) + 5, "#1b4e24");
-        }
-      }
-    }
-  }
-
-  drawMarquee(marquee) {
-    if (!marquee) return;
-
-    this.lineWidth = 0.1;
-    let lineShift = 0.5;
-
-    if ((marquee.x1 != null) && (marquee.x2 != null) && (marquee.y1 != null) && (marquee.y2 != null)) {
-      this.drawLine(marquee.x1 + lineShift, marquee.y1 + lineShift, marquee.x2 + lineShift, marquee.y1 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
-      this.drawLine(marquee.x1 + lineShift, marquee.y2 + lineShift, marquee.x2 + lineShift, marquee.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
-
-      this.drawLine(marquee.x1 + lineShift, marquee.y1 + lineShift, marquee.x1 + lineShift, marquee.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
-      this.drawLine(marquee.x2 + lineShift, marquee.y1 + lineShift, marquee.x2 + lineShift, marquee.y2 + lineShift, Settings.SELECTION_MARQUEE_COLOR, 1);
-    }
-  }
-
-  drawDebugInfo(circuitApp, x = 1100, y = 50) {
-    let circuit = circuitApp.Circuit;
-
-    if (!circuit || !circuit.debugModeEnabled()) return;
-
-    let str = `UI: ${circuitApp.width}x${circuitApp.height}\n`;
-    str += circuitApp.getMode() + "\n";
-
-    str += "Highlighted Node: :" + circuitApp.highlightedNode + "\n";
-    str += "Selected Node: :" + circuitApp.selectedNode + "\n";
-    str += "Highlighted Component: " + circuitApp.highlightedComponent + "\n";
-    // str += `Selection [${this.marquee || ""}]\n  - `;
-    str += circuitApp.selectedComponents.join("\n  - ") + "\n";
-
-    str += "\nCircuit:\n";
-
-    // Name
-    str += circuitApp.Circuit.toString();
-
-    let lineHeight = 10;
-    let nLines = 0;
-    for (let line of str.split("\n")) {
-      this.context.fillText(line, x, y + nLines * lineHeight);
-
-      nLines++;
-    }
-
-    this.drawDebugOverlay(circuit);
-
-    for (let nodeIdx = 0; nodeIdx < circuit.numNodes(); ++nodeIdx) {
-      let voltage = Util.singleFloat(circuit.getVoltageForNode(nodeIdx));
-      let node = circuit.getNode(nodeIdx);
-
-      this.context.fillText(`${nodeIdx}:${voltage}`, node.x + 10, node.y - 10, '#FF8C00');
-    }
-  }
-
-  drawDebugOverlay(circuit) {
+  function drawDebugOverlay(circuit) {
     if (!circuit) return;
 
     // Nodes
     let nodeIdx = 0;
     for (let node of circuit.getNodes()) {
-      this.context.beginPath();
-      this.context.arc(node.x, node.y, 1, 0, 2 * Math.PI, true);
-      this.context.strokeStyle = "#ff00ab";
-      this.context.stroke();
-      this.context.fillText(nodeIdx, node.x + 5, node.y + 20);
+      context.beginPath();
+      context.arc(node.x, node.y, 1, 0, 2 * Math.PI, true);
+      context.strokeStyle = "#ff00ab";
+      context.stroke();
+      context.fillText(nodeIdx, node.x + 5, node.y + 20);
 
       let yOffset = 30;
       for (let link of node.links) {
-        //this.context.drawText(link.elm.getName(), node.x + 5, node.y + yOffset);
+        //context.drawText(link.elm.getName(), node.x + 5, node.y + yOffset);
 
         yOffset += 10;
       }
@@ -224,18 +223,17 @@ class CanvasRenderStrategy {
       nodeIdx++;
     }
   }
-  
-  drawBoldLines() {
-    this.boldLines = true;
+
+  function drawBoldLines() {
+    boldLines = true;
   }
 
-  drawDefaultLines() {
-    this.boldLines = false;
+  function drawDefaultLines() {
+    boldLines = false;
   }
 
   // Draw Primitives
-  drawZigZag(point1, point2, vStart, vEnd) {
-    let context = this.context;
+  this.drawZigZag = function(point1, point2, vStart, vEnd) {
     context.beginPath();
 
     context.moveTo(point1.x, point1.y);
@@ -250,7 +248,7 @@ class CanvasRenderStrategy {
 
     context.strokeStyle = grad;
 
-    if (this.boldLines) {
+    if (boldLines) {
       context.lineWidth = Settings.BOLD_LINE_WIDTH;
       context.strokeStyle = Settings.SELECT_COLOR;
     } else {
@@ -279,9 +277,9 @@ class CanvasRenderStrategy {
     context.stroke();
 
     context.closePath();
-  }
+  };
 
-  drawCoil(point1, point2, vStart, vEnd, hs = 6) {
+  this.drawCoil = function(point1, point2, vStart, vEnd, hs = 6) {
     let color, cx, hsx, voltageLevel;
 
     let segments = 40;
@@ -292,22 +290,22 @@ class CanvasRenderStrategy {
     ps1.x = point1.x;
     ps1.y = point1.y;
 
-    this.context.beginPath();
-    this.context.lineJoin = 'bevel';
+    context.beginPath();
+    context.lineJoin = 'bevel';
 
-    let grad = this.context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
+    let grad = context.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
     grad.addColorStop(0, this.getVoltageColor(vStart));
     grad.addColorStop(1, this.getVoltageColor(vEnd));
 
-    this.context.strokeStyle = grad;
+    context.strokeStyle = grad;
 
-    this.context.moveTo(ps1.x + lineShift, ps1.y + lineShift);
+    context.moveTo(ps1.x + lineShift, ps1.y + lineShift);
 
-    if (this.boldLines) {
-      this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
-      this.context.strokeStyle = Settings.SELECT_COLOR;
+    if (boldLines) {
+      context.lineWidth = Settings.BOLD_LINE_WIDTH;
+      context.strokeStyle = Settings.SELECT_COLOR;
     } else {
-      this.context.lineWidth = Settings.LINE_WIDTH + 0.5;
+      context.lineWidth = Settings.LINE_WIDTH + 0.5;
     }
 
     for (let i = 0; i < segments; ++i) {
@@ -318,63 +316,65 @@ class CanvasRenderStrategy {
       voltageLevel = vStart + (vEnd - vStart) * i / segments;
       color = this.getVoltageColor(voltageLevel);
 
-      this.context.lineTo(ps2.x + lineShift, ps2.y + lineShift);
+      context.lineTo(ps2.x + lineShift, ps2.y + lineShift);
 
       ps1.x = ps2.x;
       ps1.y = ps2.y;
     }
 
-    this.context.stroke();
+    context.stroke();
 
-    this.context.closePath();
-  }
+    context.closePath();
+  };
 
-  drawLeads(component) {
+  this.drawLeads = function(component) {
     if ((component.point1 != null) && (component.lead1 != null))
       this.drawLinePt(component.point1, component.lead1, this.getVoltageColor(component.volts[0]));
 
     if ((component.point2 != null) && (component.lead2 != null))
       this.drawLinePt(component.lead2, component.point2, this.getVoltageColor(component.volts[1]));
-  }
+  };
 
-  drawPosts(component, color = Settings.POST_COLOR, radius=Settings.POST_RADIUS) {
+  this.drawPosts = function(component, color = Settings.POST_COLOR, radius=Settings.POST_RADIUS) {
     let post;
 
     for (let i = 0; i < component.numPosts(); ++i) {
       post = component.getPost(i);
       this.drawPost(post.x, post.y, color, Settings.POST_OUTLINE_COLOR, radius);
     }
-  }
+  };
 
-  drawPost(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_OUTLINE_COLOR, radius=Settings.POST_RADIUS) {
+  this.drawPost = function(x0, y0, fillColor = Settings.POST_COLOR, strokeColor = Settings.POST_OUTLINE_COLOR, radius=Settings.POST_RADIUS) {
     let oulineWidth = Settings.POST_OUTLINE_SIZE;
 
-    if (this.boldLines) {
+    if (boldLines) {
       strokeColor = Settings.POST_SELECT_OUTLINE_COLOR;
       fillColor = Settings.POST_SELECT_COLOR;
       oulineWidth += 3;
     }
 
     this.drawCircle(x0, y0, radius, oulineWidth, strokeColor, fillColor);
-  }
+  };
 
-  drawText(text, x, y, fillColor = Settings.TEXT_COLOR, size = Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
-    this.context.fillStyle = fillColor;
-    this.context.strokeStyle = strokeColor;
-    this.context.font = `${Settings.TEXT_STYLE} ${size}pt ${Settings.FONT}`;
-    this.context.fillText(text, x, y);
+  this.drawText = function(text, x, y, fillColor = Settings.TEXT_COLOR, size = Settings.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
+    context.fillStyle = fillColor;
+    context.strokeStyle = strokeColor;
+    context.font = `${Settings.TEXT_STYLE} ${size}pt ${Settings.FONT}`;
+    context.fillText(text, x, y);
 
-    this.context.lineWidth = 0;
-    this.context.strokeText(text, x, y);
+    context.lineWidth = 0;
+    context.strokeText(text, x, y);
 
-    let textMetrics = this.context.measureText(text);
+    let textMetrics = context.measureText(text);
 
     return textMetrics;
-  }
+  };
 
-  getVoltageColor(volts) {
-    let fullScaleVRange = this.fullScaleVRange;
+  this.measureText = function(text) {
+    return context.measureText(text);
+  };
 
+  this.getVoltageColor = function(volts) {
     let scale = Color.Gradients.voltage_default;
     let numColors = scale.length - 1;
 
@@ -387,109 +387,104 @@ class CanvasRenderStrategy {
     }
 
     return scale[value];
-  }
+  };
 
-  drawValue(perpindicularOffset, parallelOffset, component, text = null, text_size = Settings.TEXT_SIZE) {
+  this.drawValue = function(perpindicularOffset, parallelOffset, component, text = null, text_size = Settings.TEXT_SIZE) {
     let x, y;
 
-    this.context.save();
-    this.context.textAlign = "center";
+    context.save();
+    context.textAlign = "center";
 
-    this.context.font = "bold 7pt Courier";
+    context.font = "bold 7pt Courier";
 
     let theta = Math.atan(component.dy() / component.dx());
 
-    let stringWidth = this.context.measureText(text).width;
-    let stringHeight = this.context.measureText(text).actualBoundingBoxAscent || 0;
+    let stringWidth = context.measureText(text).width;
+    let stringHeight = context.measureText(text).actualBoundingBoxAscent || 0;
 
-    this.context.fillStyle = Settings.TEXT_COLOR;
+    context.fillStyle = Settings.TEXT_COLOR;
 
     ({x} = component.getCenter()); //+ perpindicularOffset
     ({y} = component.getCenter()); //+ parallelOffset - stringHeight / 2.0
 
-    this.context.translate(x, y);
-    this.context.rotate(theta);
+    context.translate(x, y);
+    context.rotate(theta);
     this.drawText(text, parallelOffset, -perpindicularOffset, Settings.TEXT_COLOR, text_size);
 
-    this.context.restore();
-  }
+    context.restore();
+  };
 
-  drawCircle(x, y, radius, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR, fillColor = Settings.FG_COLOR) {
-    this.context.beginPath();
-    this.context.arc(x, y, radius, 0, 2 * Math.PI);
+  this.drawCircle = function(x, y, radius, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR, fillColor = Settings.FG_COLOR) {
+    context.beginPath();
+    context.arc(x, y, radius, 0, 2 * Math.PI);
 
     if (lineColor && lineWidth > 0) {
-      this.context.lineWidth = lineWidth;
-      this.context.strokeStyle = lineColor;
-      this.context.stroke();
+      context.lineWidth = lineWidth;
+      context.strokeStyle = lineColor;
+      context.stroke();
     }
 
     if (fillColor) {
-      this.context.fillStyle = fillColor;
-      this.context.fill();
+      context.fillStyle = fillColor;
+      context.fill();
     }
 
-    this.context.closePath();
-  }
+    context.closePath();
+  };
 
-  drawRect(x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR) {
-    this.context.strokeStyle = lineColor;
-    this.context.lineJoin = 'miter';
-    this.context.lineWidth = lineWidth;
-    this.context.strokeRect(x + lineShift, y + lineShift, width, height);
-    this.context.stroke();
-  }
+  this.drawRect = function(x, y, width, height, lineWidth = Settings.LINE_WIDTH, lineColor = Settings.STROKE_COLOR) {
+    context.strokeStyle = lineColor;
+    context.lineJoin = 'miter';
+    context.lineWidth = lineWidth;
+    context.strokeRect(x + lineShift, y + lineShift, width, height);
+    context.stroke();
+  };
 
-  drawLinePt(pa, pb, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
+  this.drawLinePt = function(pa, pb, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
     this.drawLine(pa.x, pa.y, pb.x, pb.y, color, lineWidth);
-  }
+  };
 
-  drawLine(x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
-    this.context.lineCap = "round";
+  this.drawLine = function(x, y, x2, y2, color = Settings.STROKE_COLOR, lineWidth = Settings.LINE_WIDTH) {
+    context.lineCap = "round";
 
-    if (!this.pathMode)
-      this.context.beginPath();
+    context.beginPath();
 
-    if (this.boldLines) {
-      this.context.lineWidth = Settings.BOLD_LINE_WIDTH;
-      this.context.strokeStyle = Settings.SELECT_COLOR;
+    if (boldLines) {
+      context.lineWidth = Settings.BOLD_LINE_WIDTH;
+      context.strokeStyle = Settings.SELECT_COLOR;
     } else {
-      this.context.lineWidth = lineWidth;
-      this.context.strokeStyle = color;
+      context.lineWidth = lineWidth;
+      context.strokeStyle = color;
     }
 
-    if (!this.pathMode)
-      this.context.moveTo(x + lineShift, y + lineShift);
+    context.moveTo(x + lineShift, y + lineShift);
+    context.lineTo(x2 + lineShift, y2 + lineShift);
+    context.stroke();
 
-    this.context.lineTo(x2 + lineShift, y2 + lineShift);
-    this.context.stroke();
+    context.closePath();
+  };
 
-    if (!this.pathMode)
-      this.context.closePath();
-  }
-
-  drawPolygon(polygon, color = Settings.STROKE_COLOR, fill = Settings.FILL_COLOR, lineWidth = Settings.LINE_WIDTH) {
+  this.drawPolygon = function(polygon, color = Settings.STROKE_COLOR, fill = Settings.FILL_COLOR, lineWidth = Settings.LINE_WIDTH) {
     let numVertices = polygon.numPoints();
 
-    this.context.fillStyle = fill;
+    context.fillStyle = fill;
     if (color)
-      this.context.strokeStyle = color;
+      context.strokeStyle = color;
 
-    this.context.lineWidth = lineWidth;
-    this.context.beginPath();
+    context.lineWidth = lineWidth;
+    context.beginPath();
 
-    this.context.moveTo(polygon.getX(0) + 0.5, polygon.getY(0) + 0.5);
+    context.moveTo(polygon.getX(0) + 0.5, polygon.getY(0) + 0.5);
 
     for (let i = 0; i < numVertices; ++i)
-      this.context.lineTo(polygon.getX(i) + 0.5, polygon.getY(i) + 0.5);
+      context.lineTo(polygon.getX(i) + 0.5, polygon.getY(i) + 0.5);
 
-    this.context.closePath();
+    context.closePath();
     if (fill)
-      this.context.fill();
+      context.fill();
 
     if (color)
-      this.context.stroke();
+      context.stroke();
   }
 }
 
-module.exports = CanvasRenderStrategy;

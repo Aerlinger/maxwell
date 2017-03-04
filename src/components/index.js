@@ -64,6 +64,9 @@ let WireElm = require("./WireElm.js");
 let XorGateElm = require("./XorGateElm.js");
 let ZenerElm = require("./ZenerElm.js");
 
+let Scope = require('../circuit/Scope.js');
+let Hint = require('../engine/Hint.js');
+
 module.exports = {
   _DiacElm,
   _LampElm,
@@ -127,5 +130,7 @@ module.exports = {
   VoltageElm,
   WireElm,
   XorGateElm,
-  ZenerElm
+  ZenerElm,
+  Scope,
+  Hint
 };

@@ -342,7 +342,7 @@ class ChipElm extends CircuitComponent {
 
         let textSize = this.csize == 1 ? 6 : 8;
 
-        let mt = renderContext.context.measureText(p.text);
+        let mt = renderContext.measureText(p.text);
         renderContext.drawText(p.text, p.textloc.x-mt.width/2, p.textloc.y+3, Settings.PIN_LABEL_COLOR, textSize);
 
         if (p.lineOver) {
