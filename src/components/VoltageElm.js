@@ -1,6 +1,6 @@
-let CircuitComponent = require('./CircuitComponent.js');
+let CircuitComponent = require('./CircuitComponent');
 
-let Util = require('../util/Util.js');
+let Util = require('../util/Util');
 
 class VoltageElm extends CircuitComponent {
   static get Fields() {

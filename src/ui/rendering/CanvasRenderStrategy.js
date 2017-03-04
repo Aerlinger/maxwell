@@ -1,6 +1,6 @@
-let Color = require('../../util/Color.js');
-let Util = require('../../util/Util.js');
-let Point = require('../../geom/Point.js');
+let Color = require('../../util/Color');
+let Util = require('../../util/Util');
+let Point = require('../../geom/Point');
 
 let lineShift = 0;
 

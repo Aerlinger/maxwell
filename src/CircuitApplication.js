@@ -2,11 +2,11 @@ let {TimeSeries, SmoothieChart} = require('smoothie');
 
 let Observer = require('./util/Observer');
 let Util = require('./util/Util');
-let Point = require('./geom/Point.js');
-let Settings = require('./Settings.js');
-let Config = require('./Config.js');
+let Point = require('./geom/Point');
+let Settings = require('./Settings');
+let Config = require('./Config');
 
-let Color = require('./util/Color.js');
+let Color = require('./util/Color');
 let CanvasRenderer = require('./ui/rendering/CanvasRenderStrategy');
 let MouseEvents = require('./ui/MouseEvents');
 
@@ -15,7 +15,7 @@ let HistoryStack = require('./ui/HistoryStack');
 
 let Components = require('./components');
 
-let environment = require('./Environment.js');
+let environment = require('./Environment');
 
 if (environment.isBrowser) {
   require('jquery-ui');

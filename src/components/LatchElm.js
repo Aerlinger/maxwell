@@ -1,6 +1,6 @@
 let ChipElm = require("./ChipElm.js");
 let VariableBitChipElm = require("./VariableBitChipElm.js");
-let Util = require('../util/Util.js');
+let Util = require('../util/Util');
 
 class LatchElm extends VariableBitChipElm {
   constructor(xa, xb, ya, yb, params, f) {

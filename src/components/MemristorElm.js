@@ -1,6 +1,6 @@
 let CircuitComponent = require("./CircuitComponent.js");
-let Util = require('../util/Util.js');
-let Point = require('../geom/Point.js');
+let Util = require('../util/Util');
+let Point = require('../geom/Point');
 
 class MemristorElm extends CircuitComponent {
   static get Fields() {

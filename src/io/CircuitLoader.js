@@ -1,7 +1,7 @@
-let Circuit = require('../circuit/Circuit.js');
-let Scope = require('../circuit/Scope.js');
-let SimulationParams = require('../circuit/SimulationParams.js');
-let Hint = require('../engine/Hint.js');
+let Circuit = require('../circuit/Circuit');
+let Scope = require('../circuit/Scope');
+let SimulationParams = require('../circuit/SimulationParams');
+let Hint = require('../engine/Hint');
 let Components = require('../components');
 
 let environment = require("../Environment.js");

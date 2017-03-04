@@ -1,6 +1,6 @@
-let Util = require('../util/Util.js');
+let Util = require('../util/Util');
 
-let MosfetElm = require('./MosfetElm.js');
+let MosfetElm = require('./MosfetElm');
 
 class JfetElm extends MosfetElm {
   constructor(xa, ya, xb, yb, params, f) {

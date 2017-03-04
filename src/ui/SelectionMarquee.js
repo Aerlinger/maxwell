@@ -1,4 +1,4 @@
-let Rectangle = require('../geom/Rectangle.js');
+let Rectangle = require('../geom/Rectangle');
 
 class SelectionMarquee extends Rectangle {
   constructor(x1, y1) {

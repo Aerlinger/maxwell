@@ -1,5 +1,5 @@
-let RailElm = require('./RailElm.js');
-let VoltageElm = require('./VoltageElm.js');
+let RailElm = require('./RailElm');
+let VoltageElm = require('./VoltageElm');
 
 class ClockElm extends RailElm {
   // TODO: Needs params!!

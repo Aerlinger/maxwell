@@ -1,4 +1,4 @@
-let Point = require('./Point.js');
+let Point = require('./Point');
 
 class Polygon {
   static fromCoordinates(xList, yList) {

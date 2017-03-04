@@ -1,7 +1,7 @@
-let CircuitComponent = require('./CircuitComponent.js');
+let CircuitComponent = require('./CircuitComponent');
 
-let Point = require('../geom/Point.js');
-let Util = require('../util/Util.js');
+let Point = require('../geom/Point');
+let Util = require('../util/Util');
 
 // TODO: Extend from Diode?
 class ScrElm extends CircuitComponent {

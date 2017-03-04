@@ -1,5 +1,5 @@
-let CircuitComponent = require('./CircuitComponent.js');
-let Util = require('../util/Util.js');
+let CircuitComponent = require('./CircuitComponent');
+let Util = require('../util/Util');
 
 class GroundElm extends CircuitComponent {
   constructor(xa, ya, xb, yb, params, f) {

@@ -1,20 +1,20 @@
-MatrixStamper = require('./MatrixStamper.js')
+MatrixStamper = require('./MatrixStamper')
 
-Pathfinder = require('./Pathfinder.js')
-CircuitNode = require('./CircuitNode.js')
-CircuitNodeLink = require('./CircuitNodeLink.js')
-RowInfo = require('./RowInfo.js')
-Util = require('../util/Util.js')
+Pathfinder = require('./Pathfinder')
+CircuitNode = require('./CircuitNode')
+CircuitNodeLink = require('./CircuitNodeLink')
+RowInfo = require('./RowInfo')
+Util = require('../util/Util')
 
-SimulationFrame = require('../circuit/SimulationFrame.js')
+SimulationFrame = require('../circuit/SimulationFrame')
 
-GroundElm = require('../components/GroundElm.js')
-RailElm = require('../components/RailElm.js')
-VoltageElm = require('../components/VoltageElm.js')
-WireElm = require('../components/WireElm.js')
-CapacitorElm = require('../components/CapacitorElm.js')
-InductorElm = require('../components/InductorElm.js')
-CurrentElm = require('../components/CurrentElm.js')
+GroundElm = require('../components/GroundElm')
+RailElm = require('../components/RailElm')
+VoltageElm = require('../components/VoltageElm')
+WireElm = require('../components/WireElm')
+CapacitorElm = require('../components/CapacitorElm')
+InductorElm = require('../components/InductorElm')
+CurrentElm = require('../components/CurrentElm')
 
 class CircuitSolver
   @SIZE_LIMIT = 100

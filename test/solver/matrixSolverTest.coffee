@@ -27,7 +27,7 @@ describe "Matrix Solver", ->
 
     it "does factorization", ->
       rightSide = [1, 2, 3, 4]
-      @Solver.luSolve(@matrix3, 4, @circuitPermute, rightSide)
+      @Solver.luSolve(@matrix3, @circuitPermute, rightSide)
 
       expect(rightSide).to.eql([0.9999999999999998, 0.5, -1.4999999999999998, 1])
 
@@ -49,7 +49,7 @@ describe "Matrix Solver", ->
 
     describe "then calling lu_solve", ->
       beforeEach ->
-        @result = @Solver.luSolve(@matrix3, 3, @circuitPermute, @solvedMatrix)
+        @result = @Solver.luSolve(@matrix3, @circuitPermute, @solvedMatrix)
 
       it "solves circuit matrix", ->
         expect(@solvedMatrix).to.deep.equal([NaN, NaN, NaN])

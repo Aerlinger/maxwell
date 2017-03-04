@@ -1,7 +1,7 @@
 let CircuitComponent = require("./CircuitComponent.js");
-let Util = require('../util/Util.js');
-let Point = require('../geom/Point.js');
-let Polygon = require('../geom/Polygon.js');
+let Util = require('../util/Util');
+let Point = require('../geom/Point');
+let Polygon = require('../geom/Polygon');
 
 
 let self = undefined;

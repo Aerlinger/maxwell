@@ -1,6 +1,6 @@
 let CircuitComponent = require("./CircuitComponent.js");
 let ChipElm = require("./ChipElm.js");
-let Util = require('../util/Util.js');
+let Util = require('../util/Util');
 
 class CC2Elm extends ChipElm {
   static get Fields() {

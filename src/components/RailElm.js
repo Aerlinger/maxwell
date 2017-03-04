@@ -1,9 +1,9 @@
-let CircuitComponent = require('./CircuitComponent.js');
+let CircuitComponent = require('./CircuitComponent');
 
-let Rectangle = require('../geom/Rectangle.js');
+let Rectangle = require('../geom/Rectangle');
 let Util = require("../util/Util.js");
 
-let VoltageElm = require('./VoltageElm.js');
+let VoltageElm = require('./VoltageElm');
 
 
 class RailElm extends VoltageElm {

@@ -1,9 +1,9 @@
-let CircuitComponent = require('./CircuitComponent.js');
-let Polygon = require('../geom/Polygon.js');
-let Rectangle = require('../geom/Rectangle.js');
-let Point = require('../geom/Point.js');
-let SwitchElm = require('./SwitchElm.js');
-let Util = require('../util/Util.js');
+let CircuitComponent = require('./CircuitComponent');
+let Polygon = require('../geom/Polygon');
+let Rectangle = require('../geom/Rectangle');
+let Point = require('../geom/Point');
+let SwitchElm = require('./SwitchElm');
+let Util = require('../util/Util');
 
 
 class Switch2Elm extends SwitchElm {

@@ -1,5 +1,5 @@
-let CircuitComponent = require('./CircuitComponent.js');
-let Util = require('../util/Util.js');
+let CircuitComponent = require('./CircuitComponent');
+let Util = require('../util/Util');
 
 class TransformerElm extends CircuitComponent {
   static initClass() {

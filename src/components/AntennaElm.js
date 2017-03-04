@@ -1,9 +1,9 @@
-let CircuitComponent = require('./CircuitComponent.js');
+let CircuitComponent = require('./CircuitComponent');
 
-let Polygon = require('../geom/Polygon.js');
-let Rectangle = require('../geom/Rectangle.js');
-let Point = require('../geom/Point.js');
-let RailElm = require('./RailElm.js');
+let Polygon = require('../geom/Polygon');
+let Rectangle = require('../geom/Rectangle');
+let Point = require('../geom/Point');
+let RailElm = require('./RailElm');
 
 class AntennaElm extends RailElm {
   constructor(xa, ya, xb, yb, params, f) {

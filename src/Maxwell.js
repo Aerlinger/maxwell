@@ -1,7 +1,7 @@
 let CircuitApplication = require("./CircuitApplication");
-let Circuit = require('./circuit/Circuit.js');
-let CircuitComponent = require('./components/CircuitComponent.js');
-let CircuitLoader = require('./io/CircuitLoader.js');
+let Circuit = require('./circuit/Circuit');
+let CircuitComponent = require('./components/CircuitComponent');
+let CircuitLoader = require('./io/CircuitLoader');
 let SampleCircuits = require(__dirname + "/../circuits/index.json");
 
 let environment = require("./Environment.js");

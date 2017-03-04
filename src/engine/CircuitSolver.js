@@ -1,20 +1,20 @@
-var MatrixStamper = require('./MatrixStamper.js');
+var MatrixStamper = require('./MatrixStamper');
 
-var Pathfinder = require('./Pathfinder.js');
-var CircuitNode = require('./CircuitNode.js');
-var CircuitNodeLink = require('./CircuitNodeLink.js');
-var RowInfo = require('./RowInfo.js');
-var Util = require('../util/Util.js');
+var Pathfinder = require('./Pathfinder');
+var CircuitNode = require('./CircuitNode');
+var CircuitNodeLink = require('./CircuitNodeLink');
+var RowInfo = require('./RowInfo');
+var Util = require('../util/Util');
 
-var SimulationFrame = require('../circuit/SimulationFrame.js');
+var SimulationFrame = require('../circuit/SimulationFrame');
 
-var GroundElm = require('../components/GroundElm.js');
-var RailElm = require('../components/RailElm.js');
-var VoltageElm = require('../components/VoltageElm.js');
-var WireElm = require('../components/WireElm.js');
-var CapacitorElm = require('../components/CapacitorElm.js');
-var InductorElm = require('../components/InductorElm.js');
-var CurrentElm = require('../components/CurrentElm.js');
+var GroundElm = require('../components/GroundElm');
+var RailElm = require('../components/RailElm');
+var VoltageElm = require('../components/VoltageElm');
+var WireElm = require('../components/WireElm');
+var CapacitorElm = require('../components/CapacitorElm');
+var InductorElm = require('../components/InductorElm');
+var CurrentElm = require('../components/CurrentElm');
 
 class CircuitSolver {
   static initClass() {
@@ -118,7 +118,7 @@ class CircuitSolver {
           this.luFactor(this.circuitMatrix, this.circuitPermute);
         }
 
-        this.luSolve(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute, this.circuitRightSide);
+        this.luSolve(this.circuitMatrix, this.circuitPermute, this.circuitRightSide);
 
         // backsolve and update each component current/voltage...
         for (var j = 0; j < this.circuitMatrixFullSize; ++j) {
@@ -767,10 +767,12 @@ class CircuitSolver {
    @param pivotVector pivot index
    @param circuitRightSide Right-side (dependent) matrix
    */
-  luSolve(circuitMatrix, numRows, pivotVector, circuitRightSide) {
+  luSolve(circuitMatrix, pivotVector, circuitRightSide) {
     // Find first nonzero element of circuitRightSide
     var j, row;
     var i = 0;
+    var numRows = circuitRightSide.length;
+
     while (i < numRows) {
       row = pivotVector[i];
       var swap = circuitRightSide[row];

@@ -1,7 +1,7 @@
-let CircuitComponent = require('./CircuitComponent.js');
+let CircuitComponent = require('./CircuitComponent');
 
-let Rectangle = require('../geom/Rectangle.js');
-let Util = require('../util/Util.js');
+let Rectangle = require('../geom/Rectangle');
+let Util = require('../util/Util');
 
 class ProbeElm extends CircuitComponent {
   static initClass() {

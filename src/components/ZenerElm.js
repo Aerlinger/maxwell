@@ -1,10 +1,10 @@
-let CircuitComponent = require('./CircuitComponent.js');
+let CircuitComponent = require('./CircuitComponent');
 
-let Polygon = require('../geom/Polygon.js');
-let Rectangle = require('../geom/Rectangle.js');
-let Point = require('../geom/Point.js');
-let DiodeElm = require('./DiodeElm.js');
-let Util = require('../util/Util.js');
+let Polygon = require('../geom/Polygon');
+let Rectangle = require('../geom/Rectangle');
+let Point = require('../geom/Point');
+let DiodeElm = require('./DiodeElm');
+let Util = require('../util/Util');
 
 class ZenerElm extends DiodeElm {
   static get Fields() {

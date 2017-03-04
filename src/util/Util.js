@@ -1,6 +1,6 @@
-let Point = require('../geom/Point.js');
-let Polygon = require('../geom/Polygon.js');
-let Color = require('./Color.js');
+let Point = require('../geom/Point');
+let Polygon = require('../geom/Polygon');
+let Color = require('./Color');
 let environment = require("../Environment.js");
 
 class Util {

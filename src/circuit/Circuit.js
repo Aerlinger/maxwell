@@ -21,13 +21,13 @@
  *
  */
 
-let Logger = require('../io/Logger.js');
-let SimulationParams = require('./SimulationParams.js');
-let SimulationFrame = require('./SimulationFrame.js');
-let CircuitSolver = require('../engine/CircuitSolver.js');
-let Observer = require('../util/Observer.js');
-let Rectangle = require('../geom/Rectangle.js');
-let Util = require('../util/Util.js');
+let Logger = require('../io/Logger');
+let SimulationParams = require('./SimulationParams');
+let SimulationFrame = require('./SimulationFrame');
+let CircuitSolver = require('../engine/CircuitSolver');
+let Observer = require('../util/Observer');
+let Rectangle = require('../geom/Rectangle');
+let Util = require('../util/Util');
 
 class Circuit extends Observer {
   static initClass() {

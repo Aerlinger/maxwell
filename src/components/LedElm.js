@@ -1,6 +1,6 @@
 let CircuitComponent = require("./CircuitComponent.js");
 let DiodeElm = require("./DiodeElm.js");
-let Util = require('../util/Util.js');
+let Util = require('../util/Util');
 
 
 class LedElm extends DiodeElm {

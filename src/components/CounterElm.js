@@ -1,6 +1,6 @@
 let ChipElm = require("./ChipElm.js");
 let VariableBitChipElm = require("./VariableBitChipElm.js");
-let Util = require('../util/Util.js');
+let Util = require('../util/Util');
 
 class CounterElm extends VariableBitChipElm {
   static get FLAG_ENABLE() {

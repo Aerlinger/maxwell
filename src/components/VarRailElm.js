@@ -1,12 +1,12 @@
-let CircuitComponent = require('./CircuitComponent.js');
+let CircuitComponent = require('./CircuitComponent');
 
-let Polygon = require('../geom/Polygon.js');
-let Rectangle = require('../geom/Rectangle.js');
-let Point = require('../geom/Point.js');
-let RailElm = require('./RailElm.js');
-let VoltageElm = require('./VoltageElm.js');
+let Polygon = require('../geom/Polygon');
+let Rectangle = require('../geom/Rectangle');
+let Point = require('../geom/Point');
+let RailElm = require('./RailElm');
+let VoltageElm = require('./VoltageElm');
 
-let Util = require('../util/Util.js');
+let Util = require('../util/Util');
 
 class VarRailElm extends RailElm {
   static get Fields() {

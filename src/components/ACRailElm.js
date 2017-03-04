@@ -1,5 +1,5 @@
-let RailElm = require('./RailElm.js');
-let VoltageElm = require('./VoltageElm.js');
+let RailElm = require('./RailElm');
+let VoltageElm = require('./VoltageElm');
 
 class ACRailElm extends RailElm {
   constructor(xa, ya, xb, yb, params, f) {

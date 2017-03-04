@@ -1,11 +1,11 @@
 let Observer = require('../../util/Observer');
 let Util = require('../../util/Util');
-let Point = require('../../geom/Point.js');
-let Settings = require('../../Settings.js');
-let Color = require('../../util/Color.js');
+let Point = require('../../geom/Point');
+let Settings = require('../../Settings');
+let Color = require('../../util/Color');
 
 let CircuitComponent = require('../../components/CircuitComponent');
-let environment = require('../../Environment.js');
+let environment = require('../../Environment');
 let ScopeCanvas = require('../scopes/ScopeCanvas');
 
 let d3 = require("d3");

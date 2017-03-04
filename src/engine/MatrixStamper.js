@@ -1,5 +1,5 @@
-let RowInfo = require('./RowInfo.js');
-let Util = require('../util/Util.js');
+let RowInfo = require('./RowInfo');
+let Util = require('../util/Util');
 
 class MatrixStamper {
 
