@@ -83,7 +83,7 @@ class CapacitorElm extends CircuitComponent {
     [this.plate2[0], this.plate2[1]] = Util.interpolateSymmetrical(this.point1, this.point2, 1 - f, 12);
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     let hs = 12;
 //    @setBboxPt @point1, @point2, hs
 
@@ -96,15 +96,15 @@ class CapacitorElm extends CircuitComponent {
     renderContext.drawDots(this.lead2, this.point2, this);
 
     // draw plates
-    renderContext.drawLinePt(this.plate1[0], this.plate1[1], renderContext.getVoltageColor(this.volts[0]), Settings.LINE_WIDTH+1);
-    renderContext.drawLinePt(this.plate2[0], this.plate2[1], renderContext.getVoltageColor(this.volts[1]), Settings.LINE_WIDTH+1);
+    renderContext.drawLinePt(this.plate1[0], this.plate1[1], renderContext.getVoltageColor(this.volts[0]), renderContext.LINE_WIDTH+1);
+    renderContext.drawLinePt(this.plate2[0], this.plate2[1], renderContext.getVoltageColor(this.volts[1]), renderContext.LINE_WIDTH+1);
 
-    renderContext.drawValue(17, 0, this, Util.getUnitText(this.capacitance, this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
+    renderContext.drawValue(17, 0, this, Util.getUnitText(this.capacitance, this.unitSymbol(), renderContext.COMPONENT_DECIMAL_PLACES));
 
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
   }
 

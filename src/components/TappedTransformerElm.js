@@ -55,8 +55,8 @@ class TappedTransformerElm extends CircuitComponent {
     this.place()
   }
 
-  draw(renderContext, Settings) {
-    super.debugdraw(renderContext, Settings);
+  draw(renderContext) {
+    super.debugdraw(renderContext);
 
     this.current[3] = this.current[1] - this.current[2];
 

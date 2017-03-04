@@ -50,13 +50,13 @@ class InverterElm extends CircuitComponent {
     this.setBboxPt(this.lead1, this.lead2, 2*this.hs);
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     //this.setBboxPt(this.point1, this.point2, this.hs);
 
     renderContext.drawLeads(this);
 
     renderContext.drawPolygon(this.gatePoly);
-    renderContext.drawCircle(this.pcircle.x, this.pcircle.y, Settings.POST_RADIUS + 2, 2, Settings.STROKE_COLOR, "#FFFFFF");
+    renderContext.drawCircle(this.pcircle.x, this.pcircle.y, renderContext.POST_RADIUS + 2, 2, renderContext.STROKE_COLOR, "#FFFFFF");
 
     this.updateDots();
     renderContext.drawDots(this.point1, this.point2, this);
@@ -64,7 +64,7 @@ class InverterElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugdraw(renderContext, Settings);
+      return super.debugdraw(renderContext);
     }
   }
 

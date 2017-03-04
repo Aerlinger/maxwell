@@ -27,7 +27,7 @@ class ResistorElm extends CircuitComponent {
     return this.resistance;
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     this.calcLeads(32);
 
     renderContext.drawLeads(this);
@@ -36,14 +36,14 @@ class ResistorElm extends CircuitComponent {
     renderContext.drawDots(this.point1, this.lead1, this);
     renderContext.drawDots(this.lead2, this.point2, this);
 
-    renderContext.drawZigZag(this.lead1, this.lead2, this.volts[0], this.volts[1])
+    renderContext.drawZigZag(this.lead1, this.lead2, this.volts[0], this.volts[1]);
 
-    renderContext.drawValue(10, 0, this, Util.getUnitText(this.resistance, this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
+    renderContext.drawValue(10, 0, this, Util.getUnitText(this.resistance, this.unitSymbol(), renderContext.COMPONENT_DECIMAL_PLACES));
 
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
   }
 

@@ -52,9 +52,9 @@ class CC2Elm extends ChipElm {
     return stamper.stampCCCS(0, this.nodes[2], this.pins[0].voltSource, this.gain);
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     this.pins[2].current = this.pins[0].current * this.gain;
-    this.drawChip(renderContext, Settings);
+    this.drawChip(renderContext);
   }
 
   numPosts() {

@@ -617,7 +617,7 @@ class CircuitComponent {
     return false;
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     let post;
     let color = Util.getColorForId(this.component_id);
 
@@ -635,7 +635,7 @@ class CircuitComponent {
     }
   }
 
-  debugdraw(renderContext, Settings) {
+  debugdraw(renderContext) {
     let post;
     let color = Util.getColorForId(this.component_id);
 

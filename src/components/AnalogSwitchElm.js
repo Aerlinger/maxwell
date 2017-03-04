@@ -48,7 +48,7 @@ class AnalogSwitchElm extends CircuitComponent {
     this.setBboxPt(this.point1, this.point2, openhs);
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     let openhs = 16;
 
     let hs = this.open ? openhs : 0;
@@ -58,7 +58,7 @@ class AnalogSwitchElm extends CircuitComponent {
     this.ps = Util.interpolate(this.lead1, this.lead2, 1, hs);
 
     // SWITCH LEVER
-    renderContext.drawLinePt(this.lead1, this.ps, Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
+    renderContext.drawLinePt(this.lead1, this.ps, renderContext.SWITCH_COLOR, renderContext.LINE_WIDTH + 1);
 
     renderContext.drawLinePt(this.point3, this.lead3);
 
@@ -68,7 +68,7 @@ class AnalogSwitchElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugdraw(renderContext, Settings);
+      return super.debugdraw(renderContext);
     }
   }
 

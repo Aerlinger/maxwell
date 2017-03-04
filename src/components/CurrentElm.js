@@ -23,7 +23,7 @@ class CurrentElm extends CircuitComponent {
     super(xa, ya, xb, yb, params, f);
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
 
     this.calcLeads(26);
 
@@ -44,9 +44,9 @@ class CurrentElm extends CircuitComponent {
     let color = renderContext.getVoltageColor((this.volts[0] + this.volts[1]) / 2);
 //      @setPowerColor false
 //     renderContext.drawCircle(this.center.x, this.center.y, cr);
-    renderContext.drawCircle(this.center.x, this.center.y, cr, 2*Settings.LINE_WIDTH);
+    renderContext.drawCircle(this.center.x, this.center.y, cr, 2*renderContext.LINE_WIDTH);
     renderContext.drawLinePt(this.ashaft1, this.ashaft2);
-    renderContext.drawPolygon(this.arrow, {fill: Settings.STROKE_COLOR});
+    renderContext.drawPolygon(this.arrow, {fill: renderContext.STROKE_COLOR});
 
 //      if Circuit.showValuesCheckItem
 //        s = DrawHelper.getShortUnitText(@currentValue, "A")
@@ -57,7 +57,7 @@ class CurrentElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
 
   }

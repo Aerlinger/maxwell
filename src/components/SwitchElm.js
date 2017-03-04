@@ -65,7 +65,7 @@ class SwitchElm extends CircuitComponent {
     }
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     this.calcLeads(32);
     //this.setBboxPt(this.point1, this.point2, this.openhs/2);
 
@@ -82,15 +82,15 @@ class SwitchElm extends CircuitComponent {
     this.ps = Util.interpolate(this.lead1, this.lead2, -0.05, baseOffset);
     this.ps2 = Util.interpolate(this.lead1, this.lead2, 1.05, armOffset);
 
-    renderContext.drawLinePt(this.ps, this.ps2, Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
-    renderContext.drawCircle(this.lead2.x, this.lead2.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR);
-    renderContext.drawCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.STROKE_COLOR);
+    renderContext.drawLinePt(this.ps, this.ps2, renderContext.SWITCH_COLOR, renderContext.LINE_WIDTH + 1);
+    renderContext.drawCircle(this.lead2.x, this.lead2.y, renderContext.POST_RADIUS, 1, renderContext.STROKE_COLOR);
+    renderContext.drawCircle(this.lead1.x, this.lead1.y, renderContext.POST_RADIUS, 1, renderContext.STROKE_COLOR);
 
 
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled())
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
   }
 
   static get NAME() {

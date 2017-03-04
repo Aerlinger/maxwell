@@ -34,8 +34,8 @@ class SevenSegElm extends ChipElm {
     this.pins[6] = new ChipElm.Pin(3, ChipElm.SIDE_S, "g");
   }
 
-  draw(renderContext, Settings) {
-    this.drawChip(renderContext, Settings);
+  draw(renderContext) {
+    this.drawChip(renderContext);
 
     let xl = this.point1.x + this.cspc * 5;
     let yl = this.point1.y + this.cspc;
@@ -44,31 +44,31 @@ class SevenSegElm extends ChipElm {
 
     // TOP
     if (this.pins[0].value > 0)
-      renderContext.drawLine(xl, yl, xl + this.cspc, yl, 2*Settings.LINE_WIDTH);
+      renderContext.drawLine(xl, yl, xl + this.cspc, yl, 2*renderContext.LINE_WIDTH);
 
     // TOP-RIGHT
     if (this.pins[1].value > 0)
-      renderContext.drawLine(xl + this.cspc, yl, xl + this.cspc, yl + this.cspc, 2*Settings.LINE_WIDTH);
+      renderContext.drawLine(xl + this.cspc, yl, xl + this.cspc, yl + this.cspc, 2*renderContext.LINE_WIDTH);
 
     // BOTTOM-RIGHT
     if (this.pins[2].value > 0)
-      renderContext.drawLine(xl + this.cspc, yl + this.cspc, xl + this.cspc, yl + this.cspc2, 2*Settings.LINE_WIDTH);
+      renderContext.drawLine(xl + this.cspc, yl + this.cspc, xl + this.cspc, yl + this.cspc2, 2*renderContext.LINE_WIDTH);
 
     // BOTTOM
     if (this.pins[3].value > 0)
-      renderContext.drawLine(xl, yl + this.cspc2, xl + this.cspc, yl + this.cspc2, 2*Settings.LINE_WIDTH);
+      renderContext.drawLine(xl, yl + this.cspc2, xl + this.cspc, yl + this.cspc2, 2*renderContext.LINE_WIDTH);
 
     // BOTTOM-LEFT
     if (this.pins[4].value > 0)
-      renderContext.drawLine(xl, yl + this.cspc, xl, yl + this.cspc2, 2*Settings.LINE_WIDTH);
+      renderContext.drawLine(xl, yl + this.cspc, xl, yl + this.cspc2, 2*renderContext.LINE_WIDTH);
 
     // TOP-LEFT
     if (this.pins[5].value > 0)
-      renderContext.drawLine(xl, yl, xl, yl + this.cspc, 2*Settings.LINE_WIDTH);
+      renderContext.drawLine(xl, yl, xl, yl + this.cspc, 2*renderContext.LINE_WIDTH);
 
     // MIDDLE
     if (this.pins[6].value > 0)
-      renderContext.drawLine(xl, yl + this.cspc, xl + this.cspc, yl + this.cspc, 2*Settings.LINE_WIDTH);
+      renderContext.drawLine(xl, yl + this.cspc, xl + this.cspc, yl + this.cspc, 2*renderContext.LINE_WIDTH);
 
   }
 

@@ -222,7 +222,7 @@ class RelayElm extends CircuitComponent {
       this.i_position = 2;
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     let i;
     for (i = 0; i < 2; i++) {
       renderContext.getVoltageColor(this.volts[this.nCoil1 + i]);
@@ -258,7 +258,7 @@ class RelayElm extends CircuitComponent {
 
       this.ptSwitch[p] = Util.interpolate(this.swpoles[p][1], this.swpoles[p][2], this.d_position);
 
-      renderContext.drawLinePt(this.swpoles[p][0], this.ptSwitch[p], Settings.LIGHT_POST_COLOR);
+      renderContext.drawLinePt(this.swpoles[p][0], this.ptSwitch[p], renderContext.LIGHT_POST_COLOR);
       //      switchCurCount[p] = updateDotCount(@switchCurrent[p], @switchCurCount[p], this)
 
       this.updateDots();
@@ -278,7 +278,7 @@ class RelayElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
   }
 

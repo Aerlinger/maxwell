@@ -32,17 +32,17 @@ class OutputElm extends CircuitComponent {
     this.setBboxPt(this.lead1, this.point1, 8);
   }
 
-  draw(renderContext, Settings) {
-    renderContext.drawValue(-13, 35, this, this.s, 1.5*Settings.TEXT_SIZE);
+  draw(renderContext) {
+    renderContext.drawValue(-13, 35, this, this.s, 1.5*renderContext.TEXT_SIZE);
 
     let color = renderContext.getVoltageColor(this.volts[0]);
 
     renderContext.drawLinePt(this.point1, this.lead1, color);
-    renderContext.drawCircle(this.lead1.x, this.lead1.y, 2 * Settings.POST_RADIUS, 1, Settings.STROKE_COLOR, Settings.FILL_COLOR);
+    renderContext.drawCircle(this.lead1.x, this.lead1.y, 2 * renderContext.POST_RADIUS, 1, renderContext.STROKE_COLOR, renderContext.FILL_COLOR);
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugdraw(renderContext, Settings);
+      return super.debugdraw(renderContext);
     }
   }
 

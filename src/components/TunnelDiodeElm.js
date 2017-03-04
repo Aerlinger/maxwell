@@ -46,7 +46,7 @@ class TunnelDiodeElm extends CircuitComponent {
     return "Tunnel Diode"
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     let v1 = this.volts[0];
     let v2 = this.volts[1];
 
@@ -72,7 +72,7 @@ class TunnelDiodeElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
   }
 

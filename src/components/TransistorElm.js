@@ -95,9 +95,9 @@ class TransistorElm extends CircuitComponent {
     return `Bipolar Junction Transistor`
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
 
     //@dsign() = -@dsign()  unless (@flags & TransistorElm.FLAG_FLIP) is 0

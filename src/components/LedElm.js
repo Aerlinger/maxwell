@@ -87,7 +87,7 @@ class LedElm extends DiodeElm {
     return false;
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     let cr = 12;
     
     this.setBboxPt(this.point1, this.point2, cr);
@@ -109,7 +109,7 @@ class LedElm extends DiodeElm {
     //console.log("RBG: #{w * @colorR} #{w * @colorG} #{w * @colorB}")
     let hexcolor = Util.rgb2hex(w * this.colorR, w * this.colorG, w * this.colorB);
 
-    renderContext.drawCircle(this.ledCenter.x, this.ledCenter.y, cr, Settings.LINE_WIDTH, Settings.STROKE_COLOR, hexcolor);
+    renderContext.drawCircle(this.ledCenter.x, this.ledCenter.y, cr, renderContext.LINE_WIDTH, renderContext.STROKE_COLOR, hexcolor);
 
     this.updateDots();
     renderContext.drawDots(this.point1, this.ledLead1, this.curcount);
@@ -118,7 +118,7 @@ class LedElm extends DiodeElm {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
   }
 }

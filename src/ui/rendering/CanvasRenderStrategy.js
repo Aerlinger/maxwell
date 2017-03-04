@@ -8,6 +8,8 @@ let lineShift = 0;
  * A set of primitive rendering definitions responsible for drawing components of the circuit
  */
 module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange) {
+  Object.assign(this, config);
+
   let boldLines = false;
 
   this.withMargin = function (xMargin, yMargin, block) {

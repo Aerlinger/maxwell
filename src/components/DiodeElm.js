@@ -68,7 +68,7 @@ class DiodeElm extends CircuitComponent {
     }
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     this.calcLeads(16);
 
     this.cathode = Util.newPointArray(2);
@@ -84,7 +84,7 @@ class DiodeElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugdraw(renderContext, Settings);
+      return super.debugdraw(renderContext);
     }
   }
 

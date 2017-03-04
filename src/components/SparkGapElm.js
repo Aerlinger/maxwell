@@ -83,7 +83,7 @@ class SparkGapElm extends CircuitComponent {
     return true;
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     this.updateDots();
 
     let dist = 16;
@@ -106,7 +106,7 @@ class SparkGapElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
   }
 

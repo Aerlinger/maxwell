@@ -43,13 +43,13 @@ class TimerElm extends ChipElm {
     return (this.flags & TimerElm.FLAG_RESET) !== 0;
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     //this.setPoints();
-    this.drawChip(renderContext, Settings);
+    this.drawChip(renderContext);
 
     let textSize = this.csize == 1 ? 8 : 11;
 
-    renderContext.drawText("555", this.getCenter().x - 14, this.getCenter().y, Settings.LABEL_COLOR, textSize)
+    renderContext.drawText("555", this.getCenter().x - 14, this.getCenter().y, renderContext.LABEL_COLOR, textSize)
   }
 
   setupPins() {

@@ -58,14 +58,14 @@ class LogicInputElm extends SwitchElm {
     }
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     let s = this.position === 0 ? "0" : "1";
 
     if (this.isNumeric()) {
       s = `${this.position}`;
     }
 
-    renderContext.drawText(s, this.point2.x - 5, this.point2.y + 6, Settings.TEXT_COLOR, 1.5*Settings.TEXT_SIZE);
+    renderContext.drawText(s, this.point2.x - 5, this.point2.y + 6, renderContext.TEXT_COLOR, 1.5*renderContext.TEXT_SIZE);
 
     let color = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.lead1, color);
@@ -75,7 +75,7 @@ class LogicInputElm extends SwitchElm {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugdraw(renderContext, Settings);
+      return super.debugdraw(renderContext);
     }
   }
 

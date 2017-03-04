@@ -77,7 +77,7 @@ class InductorElm extends CircuitComponent {
     return stamper.stampCurrentSource(this.nodes[0], this.nodes[1], this.curSourceValue);
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
 
     let v1 = this.volts[0];
     let v2 = this.volts[1];
@@ -86,7 +86,7 @@ class InductorElm extends CircuitComponent {
 //    @setBboxPt @point1, @point2, hs
     renderContext.drawLeads(this);
 
-    renderContext.drawValue(-14, 0, this, Util.getUnitText(this.inductance, "H", Settings.COMPONENT_DECIMAL_PLACES));
+    renderContext.drawValue(-14, 0, this, Util.getUnitText(this.inductance, "H", renderContext.COMPONENT_DECIMAL_PLACES));
 
 //    renderContext.drawDots(@point1, @point2, this)
     this.updateDots();
@@ -98,7 +98,7 @@ class InductorElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugdraw(renderContext, Settings);
+      return super.debugdraw(renderContext);
     }
   }
 

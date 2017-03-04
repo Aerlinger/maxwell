@@ -154,7 +154,7 @@ class VoltageElm extends CircuitComponent {
     }
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     this.updateDots();
 
     if ((this.waveform === VoltageElm.WF_DC) || (this.waveform === VoltageElm.WF_VAR)) {
@@ -174,39 +174,39 @@ class VoltageElm extends CircuitComponent {
     }
 
     if (this.waveform === VoltageElm.WF_DC) {
-      let [ptA, ptB] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, Settings.GRID_SIZE);
+      let [ptA, ptB] = Util.interpolateSymmetrical(this.lead1, this.lead2, 0, renderContext.GRID_SIZE);
       renderContext.drawLinePt(this.lead1, ptA, renderContext.getVoltageColor(this.volts[0]));
 
-      renderContext.drawLinePt(ptA, ptB, renderContext.getVoltageColor(this.volts[0]), Settings.LINE_WIDTH + 1);
+      renderContext.drawLinePt(ptA, ptB, renderContext.getVoltageColor(this.volts[0]), renderContext.LINE_WIDTH + 1);
 
-      // this.setBboxPt(this.point1, this.point2, Settings.GRID_SIZE);
-      [ptA, ptB] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, 2 * Settings.GRID_SIZE);
-      renderContext.drawLinePt(ptA, ptB, renderContext.getVoltageColor(this.volts[1]), Settings.LINE_WIDTH + 1);
+      // this.setBboxPt(this.point1, this.point2, renderContext.GRID_SIZE);
+      [ptA, ptB] = Util.interpolateSymmetrical(this.lead1, this.lead2, 1, 2 * renderContext.GRID_SIZE);
+      renderContext.drawLinePt(ptA, ptB, renderContext.getVoltageColor(this.volts[1]), renderContext.LINE_WIDTH + 1);
 
-      renderContext.drawValue(-25, 0, this, Util.getUnitText(this.getVoltageDiff(), this.unitSymbol(), Settings.COMPONENT_DECIMAL_PLACES));
+      renderContext.drawValue(-25, 0, this, Util.getUnitText(this.getVoltageDiff(), this.unitSymbol(), renderContext.COMPONENT_DECIMAL_PLACES));
     } else {
       // this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
       let ps1 = Util.interpolate(this.lead1, this.lead2, 0.5);
-      this.drawWaveform(ps1, renderContext, Settings);
+      this.drawWaveform(ps1, renderContext);
     }
 
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled())
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
   }
 
   static get NAME() {
     return "Voltage Source"
   }
 
-  drawWaveform(center, renderContext, Settings) {
+  drawWaveform(center, renderContext) {
     let xc = center.x;
     let yc = center.y;
 
     renderContext.drawCircle(xc, yc, VoltageElm.circleSize, 2);
 
-    let color = Settings.SECONDARY_COLOR;
+    let color = renderContext.SECONDARY_COLOR;
 
     let wl = 8;
     let xl = 5;
@@ -284,7 +284,7 @@ class VoltageElm extends CircuitComponent {
         break;
     }
 
-    if (Settings.SHOW_VALUES) {
+    if (renderContext.SHOW_VALUES) {
       let valueString;
       return valueString = Util.getUnitText(this.frequency, "Hz");
     }

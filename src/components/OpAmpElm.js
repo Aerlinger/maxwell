@@ -83,7 +83,7 @@ class OpAmpElm extends CircuitComponent {
     return true;
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     // this.setBbox(this.point1.x, this.in1p[0].y, this.point2.x, this.in2p[0].y);
     //this.setBboxPt(this.point1, this.point2, Math.floor(this.opheight * this.dsign()));
 
@@ -104,8 +104,8 @@ class OpAmpElm extends CircuitComponent {
     // Body
     renderContext.drawPolygon(this.triangle);
 
-    renderContext.drawText("+", this.in1p[1].x + 5, this.in1p[1].y + 5, Settings.LABEL_COLOR);
-    renderContext.drawText("-", this.in2p[1].x + 5, this.in2p[1].y + 5, Settings.LABEL_COLOR);
+    renderContext.drawText("+", this.in1p[1].x + 5, this.in1p[1].y + 5, renderContext.LABEL_COLOR);
+    renderContext.drawText("-", this.in2p[1].x + 5, this.in2p[1].y + 5, renderContext.LABEL_COLOR);
 
     if (this.getParentCircuit() && this.getParentCircuit()) {
       this.updateDots();
@@ -116,7 +116,7 @@ class OpAmpElm extends CircuitComponent {
     }
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugdraw(renderContext, Settings);
+      return super.debugdraw(renderContext);
     }
   }
 

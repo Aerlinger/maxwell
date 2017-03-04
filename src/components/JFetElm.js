@@ -52,9 +52,9 @@ class JfetElm extends MosfetElm {
     this.setBboxPt(this.point1, this.point2, this.hs);
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
 
     let color = renderContext.getVoltageColor(this.volts[1]);

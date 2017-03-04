@@ -90,7 +90,7 @@ class MosfetElm extends CircuitComponent {
     return this.lastv1 = this.lastv2 = this.volts[0] = this.volts[1] = this.volts[2] = this.curcount = 0;
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     //this.setBboxPt(this.point1, this.point2, this.hs);
 
     let color = renderContext.getVoltageColor(this.volts[1]);
@@ -131,7 +131,7 @@ class MosfetElm extends CircuitComponent {
     renderContext.drawLinePt(this.gate[0], this.gate[2], color);
     this.drawDigital() && (this.pnp === -1);
 
-    //Main.getMainCanvas().drawThickCircle(pcircle.x, pcircle.y, pcircler, Settings.FG_COLOR);
+    //Main.getMainCanvas().drawThickCircle(pcircle.x, pcircle.y, pcircler, renderContext.FG_COLOR);
     //drawThickCircle(g, pcircle.x, pcircle.y, pcircler);
 //    unless (@flags & MosfetElm.FLAG_SHOWVT) is 0
 //      s = "" + (@vt * @pnp)
@@ -158,7 +158,7 @@ class MosfetElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugdraw(renderContext, Settings);
+      return super.debugdraw(renderContext);
     }
   }
 

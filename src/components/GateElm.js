@@ -131,7 +131,7 @@ class GateElm extends CircuitComponent {
     return stamper.updateVoltageSource(0, this.nodes[this.inputCount], this.voltSource, res);
   }
 
-  draw(renderContext, Settings){
+  draw(renderContext){
     for (let i = 0; i < this.inputCount; i++) {
       renderContext.drawLinePt(this.inPosts[i], this.inGates[i], renderContext.getVoltageColor(this.volts[i]));
     }
@@ -148,7 +148,7 @@ class GateElm extends CircuitComponent {
     }
 
     if (this.isInverting()) {
-      renderContext.drawCircle(this.pcircle.x, this.pcircle.y, Settings.POST_RADIUS + 2, 2, Settings.STROKE_COLOR, "#FFFFFF");
+      renderContext.drawCircle(this.pcircle.x, this.pcircle.y, renderContext.POST_RADIUS + 2, 2, renderContext.STROKE_COLOR, "#FFFFFF");
     }
 
     this.updateDots();
@@ -163,7 +163,7 @@ class GateElm extends CircuitComponent {
     }
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
   }
 

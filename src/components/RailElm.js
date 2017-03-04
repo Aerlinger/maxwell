@@ -23,19 +23,19 @@ class RailElm extends VoltageElm {
     return "Voltage Rail"
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     this.lead1 = Util.interpolate(this.point1, this.point2, 1 - (VoltageElm.circleSize / this.dn()));
 
     //this.setBboxPt(this.point1, this.point2, VoltageElm.circleSize);
 
-    //renderContext.drawLinePt(this.point2, this.lead1, Settings.STROKE_COLOR, Settings.LINE_WIDTH+1);
+    //renderContext.drawLinePt(this.point2, this.lead1, renderContext.STROKE_COLOR, renderContext.LINE_WIDTH+1);
 
     let pt1, pt2;
     [pt1, pt2] = Util.interpolateSymmetrical(this.point2, this.lead1, 0, 8);
 
-    renderContext.drawLinePt(pt1, pt2, Settings.STROKE_COLOR, Settings.LINE_WIDTH);
+    renderContext.drawLinePt(pt1, pt2, renderContext.STROKE_COLOR, renderContext.LINE_WIDTH);
 
-    renderContext.drawLinePt(this.point2, this.point1, Settings.STROKE_COLOR);
+    renderContext.drawLinePt(this.point2, this.point1, renderContext.STROKE_COLOR);
 
     let color = renderContext.getVoltageColor(this.volts[0]);
     renderContext.drawLinePt(this.point1, this.lead1, color);
@@ -48,7 +48,7 @@ class RailElm extends VoltageElm {
     renderContext.drawPosts(this);
 
     if ((this.waveform === VoltageElm.WF_DC) || (this.waveform === VoltageElm.WF_VAR) || clock) {
-      color = "#FFFFFF";  //((if @needsHighlight() then Settings.SELECT_COLOR else "#FFFFFF"))
+      color = "#FFFFFF";  //((if @needsHighlight() then renderContext.SELECT_COLOR else "#FFFFFF"))
 
       //this.setPowerColor(g, false);
 
@@ -58,16 +58,16 @@ class RailElm extends VoltageElm {
       if (Math.abs(v) < 1) { s = v + "V"; } //showFormat.format(v)
       if (this.getVoltage() > 0) { s = `+${s}`; }
 
-      renderContext.drawText(s, this.point2.x+4, this.point2.y - 7, Settings.TEXT_COLOR, 1.3*Settings.TEXT_SIZE);
+      renderContext.drawText(s, this.point2.x+4, this.point2.y - 7, renderContext.TEXT_COLOR, 1.3*renderContext.TEXT_SIZE);
 
       if (clock) { s = "CLK"; }
 
     } else {
-      this.drawWaveform(this.point2, renderContext, Settings);
+      this.drawWaveform(this.point2, renderContext);
     }
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
   }
 

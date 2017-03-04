@@ -48,7 +48,7 @@ class DiacElm extends CircuitComponent {
     }
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     let v1 = this.volts[0];
     let v2 = this.volts[1];
 

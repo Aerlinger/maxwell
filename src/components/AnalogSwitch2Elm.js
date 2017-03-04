@@ -42,7 +42,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
     }
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     this.setBboxPt(this.point1, this.point2, this.openhs);
 
     let color = renderContext.getVoltageColor(this.volts[0]);
@@ -59,21 +59,21 @@ class AnalogSwitch2Elm extends AnalogSwitchElm {
     let position = this.open ? 1 : 0;
 
     // draw switch Lever
-    renderContext.drawLinePt(this.lead1, this.swpoles[position], Settings.SWITCH_COLOR, Settings.LINE_WIDTH + 1);
+    renderContext.drawLinePt(this.lead1, this.swpoles[position], renderContext.SWITCH_COLOR, renderContext.LINE_WIDTH + 1);
 
     this.updateDots();
 
     renderContext.drawDots(this.point1, this.lead1, this);
     renderContext.drawDots(this.swpoles[position], this.swposts[position], this);
 
-    renderContext.drawCircle(this.lead1.x, this.lead1.y, Settings.POST_RADIUS, 1, Settings.LIGHT_POST_COLOR);
-    renderContext.drawCircle(this.swpoles[1].x, this.swpoles[1].y, Settings.POST_RADIUS, 1, Settings.LIGHT_POST_COLOR);
-    renderContext.drawCircle(this.swpoles[0].x, this.swpoles[0].y, Settings.POST_RADIUS, 1, Settings.LIGHT_POST_COLOR);
+    renderContext.drawCircle(this.lead1.x, this.lead1.y, renderContext.POST_RADIUS, 1, renderContext.LIGHT_POST_COLOR);
+    renderContext.drawCircle(this.swpoles[1].x, this.swpoles[1].y, renderContext.POST_RADIUS, 1, renderContext.LIGHT_POST_COLOR);
+    renderContext.drawCircle(this.swpoles[0].x, this.swpoles[0].y, renderContext.POST_RADIUS, 1, renderContext.LIGHT_POST_COLOR);
 
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
   }
 

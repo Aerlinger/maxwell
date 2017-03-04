@@ -58,10 +58,10 @@ class TriodeElm extends CircuitComponent {
     }
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     //this.setBbox(this.point1, this.plate[0], 16);
 
-    renderContext.drawCircle(this.point2.x, this.point2.y, this.circler, Settings.LINE_WIDTH, Settings.STROKE_COLOR, Settings.FG_COLOR);
+    renderContext.drawCircle(this.point2.x, this.point2.y, this.circler, renderContext.LINE_WIDTH, renderContext.STROKE_COLOR, renderContext.FG_COLOR);
 
     //this.setBbox(this.cath[0].x, this.cath[1].y, this.point2.x + this.circler, this.point2.y + this.circler);
 
@@ -102,7 +102,7 @@ class TriodeElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
   }
 

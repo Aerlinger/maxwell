@@ -107,7 +107,7 @@ class ScrElm extends CircuitComponent {
     let leadlen = (this.dn() - 16) / 2;
 
     let gatelen = 2*this.getGridSize();
-    //gatelen = gatelen + (leadlen % 2*Settings.GRID_SIZE);
+    //gatelen = gatelen + (leadlen % 2*renderContext.GRID_SIZE);
 
     gatelen = 24;
 
@@ -131,8 +131,8 @@ class ScrElm extends CircuitComponent {
     this.setBboxPt(this.point1, this.point2, this.hs)
 
     /*
-    let gatelen = Settings.GRID_SIZE;
-    gatelen = gatelen + (leadlen % 2*Settings.GRID_SIZE);
+    let gatelen = renderContext.GRID_SIZE;
+    gatelen = gatelen + (leadlen % 2*renderContext.GRID_SIZE);
 
     //gatelen = 24;
 
@@ -151,7 +151,7 @@ class ScrElm extends CircuitComponent {
     console.trace("leadlen");
 
     this.gate[0] = Util.interpolate(this.lead2, this.point2, 2 * gatelen / leadlen, 2 * gatelen * dir);
-    this.gate[1] = Util.interpolate(this.lead2, this.point2, 2 * gatelen / leadlen, Settings.GRID_SIZE * 4 * dir);
+    this.gate[1] = Util.interpolate(this.lead2, this.point2, 2 * gatelen / leadlen, renderContext.GRID_SIZE * 4 * dir);
     */
 
     this.setBboxPt(this.point1, this.point2, this.hs)
@@ -161,7 +161,7 @@ class ScrElm extends CircuitComponent {
     return true;
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     //this.setPoints()
     this.setBboxPt(this.point1, this.point2, this.hs)
 //    adjustBbox(@gate[0], @gate[1])
@@ -203,7 +203,7 @@ class ScrElm extends CircuitComponent {
 
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
   }
 

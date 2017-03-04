@@ -66,9 +66,9 @@ class SweepElm extends CircuitComponent {
     return 1;
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
 
     let color = renderContext.getVoltageColor(this.volts[0]);

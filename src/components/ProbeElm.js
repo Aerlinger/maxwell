@@ -29,9 +29,9 @@ class ProbeElm extends CircuitComponent {
     return "Scope Probe"
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      super.debugdraw(renderContext, Settings);
+      super.debugdraw(renderContext);
     }
 
     let hs = 8;
@@ -46,14 +46,14 @@ class ProbeElm extends CircuitComponent {
     this.calcLeads(Math.floor(len));
 
 //    if @isSelected()
-//      color = Settings.SELECT_COLOR
+//      color = renderContext.SELECT_COLOR
 //    else
     let color = renderContext.getVoltageColor(this.volts[0]);
 
     renderContext.drawLinePt(this.point1, this.lead1, color);
 
 //    if @isSelected()
-//      color = Settings.SELECT_COLOR
+//      color = renderContext.SELECT_COLOR
 //    else
     color = renderContext.getVoltageColor(this.volts[1]);
 

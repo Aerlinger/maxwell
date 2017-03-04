@@ -42,7 +42,7 @@ class PotElm extends CircuitComponent {
 //
 //    @getParentCircuit.halt("Draw not yet implemented for #{this}")
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     this.calcLeads(32);
 
 //    @setBboxPt @point1, @point2, width
@@ -79,7 +79,7 @@ class PotElm extends CircuitComponent {
     renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled()) {
-      return super.debugdraw(renderContext, Settings);
+      return super.debugdraw(renderContext);
     }
   }
 

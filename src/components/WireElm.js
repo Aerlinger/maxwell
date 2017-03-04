@@ -18,7 +18,7 @@ class WireElm extends CircuitComponent {
     return "Wire";
   }
 
-  draw(renderContext, Settings) {
+  draw(renderContext) {
     let s;
     renderContext.drawLinePt(this.point1, this.point2, renderContext.getVoltageColor(this.volts[0]));
 
@@ -31,11 +31,11 @@ class WireElm extends CircuitComponent {
     this.updateDots();
     renderContext.drawDots(this.point1, this.point2, this);
 
-    if (Settings.WIRE_POSTS)
+    if (renderContext.WIRE_POSTS)
       renderContext.drawPosts(this);
 
     if (this.Circuit && this.Circuit.debugModeEnabled())
-      return super.debugdraw(renderContext, Settings);
+      return super.debugdraw(renderContext);
   }
 
   stamp(stamper) {
