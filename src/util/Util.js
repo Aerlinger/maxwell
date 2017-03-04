@@ -1,7 +1,6 @@
 let Point = require('../geom/Point');
 let Polygon = require('../geom/Polygon');
 let Color = require('./Color');
-let environment = require("../Environment.js");
 
 class Util {
 
@@ -276,7 +275,7 @@ class Util {
   static halt(message) {
     console.trace(message);
 
-    if (!environment.isBrowser) {
+    if (typeof window === 'undefined') {
       return process.exit(1);
     }
   }

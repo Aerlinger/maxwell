@@ -15,9 +15,7 @@ let HistoryStack = require('./ui/HistoryStack');
 
 let Components = require('./components');
 
-let environment = require('./Environment');
-
-if (environment.isBrowser) {
+if (typeof window !== 'undefined') {
   require('jquery-ui');
 }
 
@@ -54,7 +52,7 @@ class CircuitApplication extends Observer {
     this.draw = this.draw.bind(this, renderer, xMargin, yMargin);
     MouseEvents.bind(this)(Circuit, canvas, {xMargin, yMargin});
 
-    if (environment.isBrowser) {
+    if (typeof window !== 'undefined') {
       // this.setupScopes(canvas.parentNode);
       this.createPerformanceMeter();
 

@@ -66,8 +66,6 @@ let ClockElm = require('../components/ClockElm');
 
 let Scope = require('./Scope');
 
-let environment = require("../Environment.js");
-
 let ComponentDefs = {
   // Working
   'w': WireElm,
@@ -235,7 +233,7 @@ class CircuitLoader {
           console.log("elm: ", elementData);
           console.log(e.stack);
 
-          if (!environment.isBrowser) {
+          if (typeof window == 'undefined') {
             process.exit(1);
           }
         }
@@ -249,11 +247,6 @@ class CircuitLoader {
       console.error("No elements loaded. JSON most likely malformed");
     }
 
-//    unless environment.isBrowser
-//      circuit.ostream ||= fs.createWriteStream("dump/#{circuit.Params.name}")
-
-//    console.log("--------------------------------------------------------------------\n")
-
     return circuit;
   }
 
@@ -262,7 +255,7 @@ class CircuitLoader {
    */
   static createCircuitFromJsonFile(circuitFileName, onComplete) {
     if (onComplete == null) { onComplete = null; }
-    if (environment.isBrowser) {
+    if (typeof window !== 'undefined') {
       return $.getJSON(circuitFileName, function(jsonData) {
         let circuit = CircuitLoader.createCircuitFromJsonData(jsonData);
 

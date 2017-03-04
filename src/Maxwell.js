@@ -4,8 +4,6 @@ let CircuitComponent = require('./components/CircuitComponent');
 let CircuitLoader = require('./io/CircuitLoader');
 let SampleCircuits = require(__dirname + "/../circuits/index.json");
 
-let environment = require("./Environment.js");
-
 class Maxwell {
   static createContext(circuitName, circuitData, context, onComplete) {
     if (circuitName) {
@@ -39,7 +37,7 @@ Maxwell.Circuits = {};
 Maxwell.SampleCircuits = SampleCircuits;
 Maxwell.version = "0.0.1";
 
-if (environment.isBrowser) {
+if (typeof window !== 'undefined') {
   window.Maxwell = Maxwell;
 } else {
   console.log("Not in browser, declaring global Maxwell object");

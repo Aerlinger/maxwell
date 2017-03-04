@@ -4,8 +4,6 @@ let SimulationParams = require('../circuit/SimulationParams');
 let Hint = require('../engine/Hint');
 let Components = require('../components');
 
-let environment = require("../Environment.js");
-
 class CircuitLoader {
   static createCircuitFromJsonData(jsonData, circuit_name) {
 
@@ -55,7 +53,7 @@ class CircuitLoader {
       }
     }
 
-    if (environment.isBrowser)
+    if (typeof window !== 'undefined')
       console.log(circuit, circuitParams);
 
     if (circuit.getElements().length === 0)

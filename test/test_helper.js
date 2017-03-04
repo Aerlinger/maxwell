@@ -34,7 +34,6 @@ global.approx_diff = function(lhs, rhs) {
 };
 
 Canvas.prototype.addEventListener = function() {
-
 };
 
 global.Circuit = require('../src/circuit/Circuit');
