@@ -21,7 +21,9 @@ describe "Render all components", ->
     @renderer.context = ctx
 
     for component_name of Components
-      console.log(component_name)
+      if (component_name == 'Scope' || component_name == 'Hint')
+        continue
+
       Component = Components[component_name]
 
       if (component_name not in ['ChipElm', 'GateElm', '170', 'A', 'o', '$', '%', '?', 'B'] && component_name[0] != "_")
@@ -54,7 +56,8 @@ describe "Render all components", ->
         componentUI.draw();
 
         gm(@ComponentCanvas.toBuffer()).trim().write "test/fixtures/componentRenders/#{@component.getName()}_thumb.png", (err) ->
-          console.log(err)
+          if (err)
+            console.log(err)
 
 
         fs.writeFileSync("test/fixtures/componentRenders/" + @component.getName() + ".png", @ComponentCanvas.toBuffer())

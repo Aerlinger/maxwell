@@ -1,3 +1,5 @@
+glob = require('glob');
+
 filenames = glob.sync "./circuits/*.txt", {}
 
 @files = filenames.map (file) ->

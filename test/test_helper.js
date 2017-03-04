@@ -1,28 +1,25 @@
-chai = require('chai');
+global.chai = require('chai');
 
-// require('dotenv').config();
-
-assert = chai.assert;
-expect = chai.expect;
+global.assert = chai.assert;
+global.expect = chai.expect;
 should = chai.should();
-sinon = require('sinon');
+global.sinon = require('sinon');
 
-diff = require('deep-diff').diff;
-_ = require('lodash');
-fs = require('fs');
-path = require("path");
-glob = require('glob');
-Canvas = require('canvas');
-gm = require("gm");
-resemble = require("node-resemble-js");
-jsondiffpatch = require('jsondiffpatch').create({});
-diff = require('deep-diff').diff
+global._ = require('lodash');
+global.fs = require('fs');
+global.path = require("path");
 
-approx_diff = function(lhs, rhs) {
-  epsilon = 2e-2;
+global.Canvas = require('canvas');
+global.gm = require("gm");
+global.resemble = require("node-resemble-js");
+global.jsondiffpatch = require('jsondiffpatch').create({});
+global.diff = require('deep-diff').diff;
 
-  deltas = diff(lhs, rhs) || [];
-  true_deltas = [];
+global.approx_diff = function(lhs, rhs) {
+  let epsilon = 2e-2;
+
+  let deltas = diff(lhs, rhs) || [];
+  let true_deltas = [];
 
   for (var i=0; i<deltas.length; ++i) {
     var delta = deltas[i];
@@ -40,87 +37,86 @@ Canvas.prototype.addEventListener = function() {
 
 };
 
-Circuit = require('../src/circuit/Circuit.js');
+global.Circuit = require('../src/circuit/Circuit.js');
 
-Hint = require('../src/engine/Hint.js');
-CircuitNode = require('../src/engine/CircuitNode');
-CircuitNodeLink = require('../src/engine/CircuitNodeLink');
-SimulationParams = require('../src/circuit/SimulationParams.js');
-MatrixStamper = require('../src/engine/MatrixStamper.js');
+global.Hint = require('../src/engine/Hint.js');
+global.CircuitNode = require('../src/engine/CircuitNode');
+global.CircuitNodeLink = require('../src/engine/CircuitNodeLink');
+global.SimulationParams = require('../src/circuit/SimulationParams.js');
+global.MatrixStamper = require('../src/engine/MatrixStamper.js');
 
-Components = require('../src/components');
-CircuitLoader = require("../src/io/CircuitLoader");
+global.Components = require('../src/components');
+global.CircuitLoader = require("../src/io/CircuitLoader");
 
 // Renderer = require("../src/render/renderer.js");
 // CircuitUI = require("../src/CircuitUI.js");
-CircuitApplication = require("../src/CircuitApplication");
-MatrixStamper = require('../src/engine/MatrixStamper.js');
+global.CircuitApplication = require("../src/CircuitApplication");
 
-CircuitComponent = require('../src/components/CircuitComponent.js');
-CircuitSolver = require('../src/engine/CircuitSolver.js');
-MatrixStamper = require('../src/engine/MatrixStamper.js');
+global.CircuitComponent = require('../src/components/CircuitComponent.js');
+global.CircuitSolver = require('../src/engine/CircuitSolver.js');
 
-ACRailElm = require('../src/components/ACRailElm.js');
-ADCElm = require('../src/components/ADCElm.js');
-AntennaElm = require('../src/components/AntennaElm.js');
-CapacitorElm = require('../src/components/CapacitorElm.js');
-CC2Elm = require('../src/components/CC2Elm.js');
-ChipElm = require('../src/components/ChipElm.js');
-ClockElm = require('../src/components/ClockElm.js');
-CounterElm = require('../src/components/CounterElm.js');
-CurrentElm = require('../src/components/CurrentElm.js');
-DecadeElm = require('../src/components/DecadeElm.js');
-DFlipFlopElm = require('../src/components/DFlipFlopElm.js');
-DiodeElm = require('../src/components/DiodeElm.js');
-GroundElm = require('../src/components/GroundElm.js');
-JFetElm = require('../src/components/JFetElm.js');
-MosfetElm = require('../src/components/MosfetElm.js');
-PotElm = require('../src/components/PotElm.js');
-InductorElm = require('../src/components/InductorElm.js');
-OpAmpElm = require('../src/components/OpAmpElm.js');
-OutputElm = require('../src/components/OutputElm.js');
-// PhotoResistorElm = require('../src/circuit/components/Ph.js');
-ProbeElm = require('../src/components/ProbeElm.js');
-PushSwitchElm = require('../src/components/PushSwitchElm.js');
-RailElm = require('../src/components/RailElm.js');
-ResistorElm = require('../src/components/ResistorElm.js');
-SparkGapElm = require('../src/components/SparkGapElm.js');
-SwitchElm = require('../src/components/SwitchElm.js');
-Switch2Elm = require('../src/components/Switch2Elm.js');
-SweepElm = require('../src/components/SweepElm.js');
-TextElm = require('../src/components/TextElm.js');
-TappedTransformerElm = require('../src/components/TappedTransformerElm.js');
-TransformerElm = require('../src/components/TransformerElm.js');
-TransistorElm = require('../src/components/TransistorElm.js');
-TransLineElm = require('../src/components/TransLineElm.js');
-TunnelDiodeElm = require('../src/components/TunnelDiodeElm.js');
-WireElm = require('../src/components/WireElm.js');
-VarRailElm = require('../src/components/VarRailElm.js');
-VoltageElm = require('../src/components/VoltageElm.js');
-ZenerElm = require('../src/components/ZenerElm.js');
+global.ACRailElm = require('../src/components/ACRailElm.js');
+global.ADCElm = require('../src/components/ADCElm.js');
+global.AntennaElm = require('../src/components/AntennaElm.js');
+global.CapacitorElm = require('../src/components/CapacitorElm.js');
+global.CC2Elm = require('../src/components/CC2Elm.js');
+global.ChipElm = require('../src/components/ChipElm.js');
+global.ClockElm = require('../src/components/ClockElm.js');
+global.CounterElm = require('../src/components/CounterElm.js');
+global.CurrentElm = require('../src/components/CurrentElm.js');
+global.DecadeElm = require('../src/components/DecadeElm.js');
+global.DFlipFlopElm = require('../src/components/DFlipFlopElm.js');
+global.DiodeElm = require('../src/components/DiodeElm.js');
+global.GroundElm = require('../src/components/GroundElm.js');
+global.JFetElm = require('../src/components/JFetElm.js');
+global.MosfetElm = require('../src/components/MosfetElm.js');
+global.PotElm = require('../src/components/PotElm.js');
+global.InductorElm = require('../src/components/InductorElm.js');
+global.OpAmpElm = require('../src/components/OpAmpElm.js');
+global.OutputElm = require('../src/components/OutputElm.js');
+// global.PhotoResistorElm = require('../src/circuit/components/Ph.js');
+global.ProbeElm = require('../src/components/ProbeElm.js');
+global.PushSwitchElm = require('../src/components/PushSwitchElm.js');
+global.RailElm = require('../src/components/RailElm.js');
+global.ResistorElm = require('../src/components/ResistorElm.js');
+global.SparkGapElm = require('../src/components/SparkGapElm.js');
+global.SwitchElm = require('../src/components/SwitchElm.js');
+global.Switch2Elm = require('../src/components/Switch2Elm.js');
+global.SweepElm = require('../src/components/SweepElm.js');
+global.TextElm = require('../src/components/TextElm.js');
+global.TappedTransformerElm = require('../src/components/TappedTransformerElm.js');
+global.TransformerElm = require('../src/components/TransformerElm.js');
+global.TransistorElm = require('../src/components/TransistorElm.js');
+global.TransLineElm = require('../src/components/TransLineElm.js');
+global.TunnelDiodeElm = require('../src/components/TunnelDiodeElm.js');
+global.WireElm = require('../src/components/WireElm.js');
+global.VarRailElm = require('../src/components/VarRailElm.js');
+global.VoltageElm = require('../src/components/VoltageElm.js');
+global.ZenerElm = require('../src/components/ZenerElm.js');
 
-AndGateElm = require('../src/components/AndGateElm.js');
-NandGateElm = require('../src/components/NandGateElm.js');
-OrGateElm = require('../src/components/OrGateElm.js');
-NorGateElm = require('../src/components/NorGateElm.js');
-XorGateElm = require('../src/components/XorGateElm.js');
-InverterElm = require('../src/components/InverterElm.js');
+global.AndGateElm = require('../src/components/AndGateElm.js');
+global.NandGateElm = require('../src/components/NandGateElm.js');
+global.OrGateElm = require('../src/components/OrGateElm.js');
+global.NorGateElm = require('../src/components/NorGateElm.js');
+global.XorGateElm = require('../src/components/XorGateElm.js');
+global.InverterElm = require('../src/components/InverterElm.js');
 
-LogicInputElm = require('../src/components/LogicInputElm.js');
-LogicOutputElm = require('../src/components/LogicOutputElm.js');
-AnalogSwitchElm = require('../src/components/AnalogSwitchElm.js');
-AnalogSwitch2Elm = require('../src/components/AnalogSwitch2Elm.js');
+global.LogicInputElm = require('../src/components/LogicInputElm.js');
+global.LogicOutputElm = require('../src/components/LogicOutputElm.js');
+global.AnalogSwitchElm = require('../src/components/AnalogSwitchElm.js');
+global.AnalogSwitch2Elm = require('../src/components/AnalogSwitch2Elm.js');
 
-Util = require('../src/util/Util');
+global.Util = require('../src/util/Util');
 
-Scope = require('../src/circuit/Scope.js');
-Point = require('../src/geom/Point.js');
-Polygon = require('../src/geom/Polygon.js');
-Rectangle = require('../src/geom/Rectangle.js');
+global.Scope = require('../src/circuit/Scope.js');
+global.Point = require('../src/geom/Point.js');
+global.Polygon = require('../src/geom/Polygon.js');
+global.Rectangle = require('../src/geom/Rectangle.js');
 
-Maxwell = require("../src/Maxwell.js");
+global.Maxwell = require("../src/Maxwell.js");
 
-require('coffee-script/register');
+// require('coffee-script/register');
 
 if (!fs.existsSync("test/fixtures/componentRenders/"))
   fs.mkdirSync("test/fixtures/componentRenders/");
+
