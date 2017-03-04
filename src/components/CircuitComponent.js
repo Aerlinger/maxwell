@@ -14,7 +14,6 @@
 
  */
 
-let Settings = require('../Settings');
 let Rectangle = require('../geom/Rectangle');
 let Point = require('../geom/Point');
 let Util = require('../util/Util');
@@ -701,7 +700,7 @@ class CircuitComponent {
 
   }
 
-  updateDots(ds = Settings.CURRENT_SEGMENT_LENGTH, current = null) {
+  updateDots(ds = 16, current = null) {
     if (this.Circuit && this.Circuit.isStopped)
       return;
 

@@ -3,7 +3,6 @@ let {TimeSeries, SmoothieChart} = require('smoothie');
 let Observer = require('./util/Observer');
 let Util = require('./util/Util');
 let Point = require('./geom/Point');
-let Settings = require('./Settings');
 let Config = require('./Config');
 
 let Color = require('./util/Color');
