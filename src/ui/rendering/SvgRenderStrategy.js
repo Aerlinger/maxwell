@@ -11,6 +11,13 @@ let d3 = require("d3");
 module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
   Object.assign(this, config);
 
+  let boldLines = false;
+
+  this.svg = d3.select("body").append("svg")
+      .attr("width", context.canvas.width)
+      .attr("height", context.canvas.height)
+      .append("g");
+
   this.drawHighlightedComponent = function (highlightedComponent) {
 
     if (highlightedComponent) {
@@ -74,7 +81,7 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
 
   this.drawSelectedNodes = function (selectedNode) {
     if (selectedNode)
-      this.drawRect(selectedNode.x - 10 + 0.5, selectedNode.y - 10 + 0.5, 21, 21, {lineWidth: 1, lineColor: '#0FF'});
+      return this.drawRect(selectedNode.x - 10 + 0.5, selectedNode.y - 10 + 0.5, 21, 21, {lineWidth: 1, lineColor: '#0FF'});
   };
 
   this.withMargin = function (xMargin, yMargin, block) {
@@ -102,10 +109,23 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
     }
   };
 
+  /**
+   * TODO: DRY with CanvasRenderStrategy
+   *
+   * @param circuit
+   * @param selectedComponents
+   */
   this.drawComponents = function (circuit, selectedComponents) {
-    for (let component of circuit.getElements())
-      component.draw(this, config);
+    for (let component of circuit.getElements()) {
+      if (component && selectedComponents.includes(component))
+        drawBoldLines();
+      else
+        drawDefaultLines();
 
+      component.draw(this, config);
+    }
+
+    drawDefaultLines();
   };
 
   // TODO: Move to CircuitComponent
@@ -221,54 +241,21 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
     throw new Error("`measureText` is not implemented in SvgRenderStrategy")
   };
 
-  this.drawBoldLines = function () {
-    return this.boldLines = true;
-  };
+  function drawBoldLines() {
+    boldLines = true;
+  }
 
-  this.drawDefaultLines = function () {
-    return this.boldLines = false;
-  };
+  function drawDefaultLines() {
+    boldLines = false;
+  }
 
-  this.drawZigZag = function (point1, point2, vStart, vEnd) {
-    var lineData = [];
-
-    lineData.push({x: point1.x, y: point1.y});
-
-    /*
-     if (boldLines) {
-       context.lineWidth = config.BOLD_LINE_WIDTH;
-       context.strokeStyle = config.SELECT_COLOR;
-     } else {
-       context.lineWidth = config.LINE_WIDTH + 0.5;
-     }
-     */
-
-    let numSegments = 8;
-    let width = 4;
-    let parallelOffset = 1 / numSegments;
-
-    // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
-    let offsets = [1, -1];
-
-    let startPosition = Util.interpolate(point1, point2, parallelOffset / 2, width);
-
-    lineData.push({x: startPosition.x, y: startPosition.y});
-
-    // Draw resistor "zig-zags"
-    for (let n = 1; n < numSegments; n++) {
-      startPosition = Util.interpolate(point1, point2, n * parallelOffset + parallelOffset / 2, width * offsets[n % 2]);
-
-      lineData.push({x: startPosition.x, y: startPosition.y});
-    }
-
-    lineData.push({x: point2.x, y: point2.y});
+  this.applyGradient = function(lineData, point1, point2, vStart, vEnd) {
+    let gradient_id = `res-volt-gradient-${vStart}-${vEnd}`;
 
     let v = point1.diff(point2);
 
     let vx = v.x / Math.sqrt(v.norm());
     let vy = v.y / Math.sqrt(v.norm());
-
-    let gradient_id = `res-volt-gradient-${vStart}-${vEnd}`;
 
     var gradient = this.svg.append("linearGradient")
         .attr("id", gradient_id)
@@ -298,20 +285,44 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
         })
         .interpolate("linear");
 
+    let strokeWidth = boldLines ? config.BOLD_LINE_WIDTH : config.LINE_WIDTH;
     this.svg.append("path")
         .attr("d", lineFunction(lineData))
         .attr("stroke", `url(#${gradient_id})`)
-        .attr("stroke-width", 2)
+        .attr("stroke-width", strokeWidth)
         .attr("fill", "none");
+  }
 
+  this.drawZigZag = function (point1, point2, vStart, vEnd) {
+    var lineData = [{x: point1.x, y: point1.y}];
+
+    const SEGMENTS = 8;
+    let width = 4;
+    let parallelOffset = 1 / SEGMENTS;
+
+    // Generate alternating sequence 0, 1, 0, -1, 0 ... to offset perpendicular to wire
+    let offsets = [1, -1];
+
+    let startPosition = Util.interpolate(point1, point2, parallelOffset / 2, width);
+
+    lineData.push({x: startPosition.x, y: startPosition.y});
+
+    // Draw resistor "zig-zags"
+    for (let n = 1; n < SEGMENTS; n++) {
+      startPosition = Util.interpolate(point1, point2, n * parallelOffset + parallelOffset / 2, width * offsets[n % 2]);
+
+      lineData.push({x: startPosition.x, y: startPosition.y});
+    }
+
+    lineData.push({x: point2.x, y: point2.y});
+
+    this.applyGradient(lineData, point1, point2, vStart, vEnd)
   };
 
   this.drawCoil = function (point1, point2, vStart, vEnd, hs=6) {
-    var lineData = [];
+    var lineData = [{x: point1.x, y: point1.y}];
 
-    let color, cx, hsx, voltageLevel;
-
-    let segments = 40;
+    const SEGMENTS = 40;
 
     let ps1 = new Point(0, 0);
     let ps2 = new Point(0, 0);
@@ -319,24 +330,11 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
     ps1.x = point1.x;
     ps1.y = point1.y;
 
-    lineData.push({x: ps1.x, y: ps1.y});
+    for (let i = 0; i < SEGMENTS; ++i) {
+      var cx = (((i + 1) * 8 / SEGMENTS) % 2) - 1;
+      var hsx = Math.sqrt(1 - cx * cx);
 
-    /*
-    if (boldLines) {
-      context.lineWidth = config.BOLD_LINE_WIDTH;
-      context.strokeStyle = config.SELECT_COLOR;
-    } else {
-      context.lineWidth = config.LINE_WIDTH + 0.5;
-    }
-    */
-
-    for (let i = 0; i < segments; ++i) {
-      cx = (((i + 1) * 8 / segments) % 2) - 1;
-      hsx = Math.sqrt(1 - cx * cx);
-
-      ps2 = Util.interpolate(point1, point2, i / segments, hsx * hs);
-      voltageLevel = vStart + (vEnd - vStart) * i / segments;
-      color = this.getVoltageColor(voltageLevel);
+      ps2 = Util.interpolate(point1, point2, i / SEGMENTS, hsx * hs);
 
       lineData.push({x: ps2.x, y: ps2.y});
 
@@ -344,46 +342,7 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
       ps1.y = ps2.y;
     }
 
-    let v = point1.diff(point2);
-    
-    let vx = v.x / Math.sqrt(v.norm());
-    let vy = v.y / Math.sqrt(v.norm());
-
-    let gradient_id = `res-coil-gradient-${vStart}-${vEnd}`;
-
-    var gradient = this.svg.append("linearGradient")
-        .attr("id", gradient_id)
-        .attr("x1", Math.max(vx, 0))
-        .attr("x2", Math.max(-vx, 0))
-        .attr("y1", Math.max(vy, 0))
-        .attr("y2", Math.max(-vy, 0));
-
-    gradient.append("stop")
-        .attr('class', 'start')
-        .attr("offset", "0%")
-        .attr("stop-color", this.getVoltageColor(vStart))
-        .attr("stop-opacity", 1);
-
-    gradient.append("stop")
-        .attr('class', 'end')
-        .attr("offset", "100%")
-        .attr("stop-color", this.getVoltageColor(vEnd))
-        .attr("stop-opacity", 1);
-
-    var lineFunction = d3.svg.line()
-        .x(function (d) {
-          return d.x;
-        })
-        .y(function (d) {
-          return d.y;
-        })
-        .interpolate("linear");
-
-    this.svg.append("path")
-        .attr("d", lineFunction(lineData))
-        .attr("stroke", `url(#${gradient_id})`)
-        .attr("stroke-width", 2)
-        .attr("fill", "none");
+    this.applyGradient(lineData, point1, point2, vStart, vEnd)
   };
 
   // TODO: Move to CircuitComponent
@@ -415,11 +374,11 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
       oulineWidth += 3;
     }
 
-    this.drawCircle(x0, y0, radius, oulineWidth, strokeColor, fillColor);
+    return this.drawCircle(x0, y0, radius, oulineWidth, strokeColor, fillColor);
   };
 
-  this.drawText = function (text, x, y, fillColor = config.TEXT_COLOR, size = config.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)') {
-    this.svg.append("text")
+  this.drawText = function (text, x, y, fillColor = config.TEXT_COLOR, size = config.TEXT_SIZE, strokeColor = 'rgba(255, 255, 255, 0.3)', rotation = 0) {
+    return this.svg.append("text")
         .attr("x", x)
         .attr("y", y)
         .attr("font-size", 1.5 * size)
@@ -431,21 +390,21 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
   this.drawValue = function (perpindicularOffset, parallelOffset, component, text = null, text_size = config.TEXT_SIZE) {
     let x, y;
 
-    context.save();
-    context.textAlign = "center";
+    // context.textAlign = "center";
 
-    context.font = "bold 7pt Courier";
+    // context.font = "bold 7pt Courier";
 
     let theta = Math.atan(component.dy() / component.dx());
 
-    context.fillStyle = config.TEXT_COLOR;
+    // context.fillStyle = config.TEXT_COLOR;
 
     ({x} = component.getCenter()); //+ perpindicularOffset
     ({y} = component.getCenter()); //+ parallelOffset - stringHeight / 2.0
 
-    this.drawText(text, x + parallelOffset, y - perpindicularOffset, config.TEXT_COLOR, text_size);
+    // this.svg.attr("transform", "translate(" + x + "," + y + ")");
 
-    context.restore();
+    return this.drawText(text, x + parallelOffset, y - perpindicularOffset, config.TEXT_COLOR, text_size).attr("transform", `translate(${-x},${y}) rotate(90)`)
+
   };
 
   this.getVoltageColor = function (volts) {
@@ -464,7 +423,7 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
   };
 
   this.drawCircle = function (x, y, radius, lineWidth = config.LINE_WIDTH, lineColor = "#000", fillColor = config.FG_COLOR) {
-    this.svg.append("circle")
+    return this.svg.append("circle")
         .attr("stroke-width", lineWidth / 2)
         .attr("stroke", lineColor)
         .attr("fill", fillColor)
@@ -478,7 +437,7 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
       lineColor = config.STROKE_COLOR,
       fillColor = config.FILL_COLOR
   } = {}) {
-    this.svg.append("rect")
+    return this.svg.append("rect")
         .attr("x", x)
         .attr("y", y)
         .attr("stroke-width", lineWidth)
@@ -493,7 +452,7 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
   };
 
   this.drawLine = function (x1, y1, x2, y2, color = config.STROKE_COLOR, lineWidth = config.LINE_WIDTH) {
-    this.svg.append("line")
+    return this.svg.append("line")
         .style("stroke", color)
         .attr("stroke-width", lineWidth)
         .attr("x1", x1)
@@ -509,7 +468,7 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
   } = {}) {
     let poly = polygon.getVertices();
 
-    this.svg.append("polygon")
+    return this.svg.append("polygon")
         .data([poly])
         .attr("points", function (d) {
           return d.map(function (d) {
@@ -545,12 +504,6 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
         .attr("stroke-width", "2px")
         .attr("stroke", "black");
   };
-
-  this.svg = d3.select("body").append("svg")
-      .attr("width", context.canvas.width)
-      .attr("height", context.canvas.height)
-      .append("g");
-
 
   // this.testDraw();
 };

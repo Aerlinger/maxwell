@@ -32,7 +32,7 @@ class CircuitApplication extends Observer {
     }
 
     this.Circuit = Circuit;
-    this.Config = new Config();
+    this.Config = Config;
     this.HistoryStack = new HistoryStack();
 
     this.isDragging = false;
