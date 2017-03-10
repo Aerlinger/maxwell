@@ -1,16 +1,15 @@
-let Color = require('../../util/Color');
-let Util = require('../../util/Util');
-let Point = require('../../geom/Point');
-
-let lineShift = 0;
-
 /**
  * A set of primitive rendering definitions responsible for drawing components of the circuit
  */
 module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange) {
   Object.assign(this, config);
 
+  let Color = require('../../util/Color');
+  let Util = require('../../util/Util');
+  let Point = require('../../geom/Point');
+
   let boldLines = false;
+  let lineShift = 0;
 
   this.withMargin = function (xMargin, yMargin, block) {
     clearCanvas();
@@ -376,7 +375,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
   };
 
   this.getVoltageColor = function (volts) {
-    let scale = Color.Gradients.voltage_default;
+    let scale = config.Gradients.voltage_default;
     let numColors = scale.length - 1;
 
     let value = Math.floor(((volts + fullScaleVRange) * numColors) / (2 * fullScaleVRange));

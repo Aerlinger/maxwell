@@ -1,15 +1,15 @@
-let Util = require('../../util/Util');
-let Point = require('../../geom/Point');
-let Polygon = require('../../geom/Polygon');
-let Color = require('../../util/Color');
-
-let CircuitComponent = require('../../components/CircuitComponent');
-let ScopeCanvas = require('../scopes/ScopeCanvas');
-
-let d3 = require("d3");
-
 module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
   Object.assign(this, config);
+
+  let Util = require('../../util/Util');
+  let Point = require('../../geom/Point');
+  let Polygon = require('../../geom/Polygon');
+  let Color = require('../../util/Color');
+
+  let CircuitComponent = require('../../components/CircuitComponent');
+  let ScopeCanvas = require('../scopes/ScopeCanvas');
+
+  let d3 = require("d3");
 
   let boldLines = false;
 

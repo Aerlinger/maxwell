@@ -1,14 +1,13 @@
-let SelectionMarquee = require('./SelectionMarquee');
-
 /**
  *
  * @param Circuit
- * @param canvas
- *
+ * @param canvas HTML canvas DOM node
  *
  * This function's 'this' reference is bound to the parent CircuitController
  */
 let interactionController = function (Circuit, canvas, {xMargin=200, yMargin= 64} = {}) {
+  let SelectionMarquee = require('./SelectionMarquee');
+
   const ON_COMPONENT_HOVER = "ON_COMPONENT_HOVER";
   const ON_COMPONENT_CLICKED = "ON_COMPONENT_CLICKED";
   const ON_COMPONENTS_SELECTED = "ON_COMPONENTS_SELECTED";
