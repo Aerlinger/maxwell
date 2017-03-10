@@ -1,7 +1,7 @@
 describe "Cloning a circuit", ->
   it "deep copies original circuit", ->
     voltdividesimple = JSON.parse(fs.readFileSync("./circuits/v5/voltdividesimple.json"))
-    @Circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
+    @Circuit = CircuitLoader.createCircuitFromJsonData("Simple Voltage Divider", voltdividesimple)
 
     @CircuitCopy = @Circuit.copy()
 

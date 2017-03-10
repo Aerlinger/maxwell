@@ -3,7 +3,7 @@ describe "CircuitLoader", ->
     before ->
       voltdividesimple = JSON.parse(fs.readFileSync("./circuits/v5/voltdividesimple.json"))
 
-      @circuit = CircuitLoader.createCircuitFromJsonData(voltdividesimple)
+      @circuit = CircuitLoader.createCircuitFromJsonData("Simple voltage divider", voltdividesimple)
 
     it "have only 7 elements", ->
       expect(@circuit.numElements()).to.equal 7
@@ -20,7 +20,7 @@ describe "CircuitLoader", ->
 
       it "has correct unique name", ->
         console.log @circuit.Params.name
-        expect(@circuit.name).to.equal "untitled"
+        expect(@circuit.name).to.equal "Simple voltage divider"
 
       it "has correct power range", ->
         expect(@circuit.Params.powerRange).to.equal 62.0

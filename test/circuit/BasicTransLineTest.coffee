@@ -70,7 +70,7 @@ describe "Basic TL", ->
       ]
     }
 
-    @circuit = CircuitLoader.createCircuitFromJsonData(@tlCircuit)
+    @circuit = CircuitLoader.createCircuitFromJsonData("Transline", @tlCircuit)
     @circuit.updateCircuit()
 
     done()

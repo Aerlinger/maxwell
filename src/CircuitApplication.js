@@ -19,17 +19,8 @@ if (typeof window !== 'undefined') {
 }
 
 class CircuitApplication extends Observer {
-  constructor(Circuit, canvas, {xMargin=200, yMargin= 64} = {}) {
+  constructor(Circuit, canvas) {
     super();
-
-    // A Circuit is already loaded on this canvas so we need to garbage collect it to prevent a memory leak
-    if (canvas.__circuit_application) {
-      let previous_application = canvas.__circuit_application;
-
-      previous_application.reset();
-
-      previous_application = null;
-    }
 
     this.Circuit = Circuit;
     this.Config = Config;
@@ -46,14 +37,29 @@ class CircuitApplication extends Observer {
 
     this.running = false;
 
-    let renderer = new RenderStrategy(canvas.getContext('2d'), this.Config, Circuit.Params.voltageRange);
+    if(canvas) {
+      this.attach(canvas)
+    }
+  }
+
+  attach(canvas, {xMargin=200, yMargin= 64} = {}) {
+    // A Circuit is already loaded on this canvas so we need to garbage collect it to prevent a memory leak
+    if (canvas.__circuit_application) {
+      let previous_application = canvas.__circuit_application;
+
+      previous_application.reset();
+
+      previous_application = null;
+    }
+
+    let renderer = new RenderStrategy(canvas.getContext('2d'), this.Config, this.Circuit.Params.voltageRange);
 
     this.draw = this.draw.bind(this, renderer, xMargin, yMargin);
-    MouseEvents.bind(this)(Circuit, canvas, {xMargin, yMargin});
+    MouseEvents.bind(this)(this.Circuit, canvas, {xMargin, yMargin});
 
     if (typeof window !== 'undefined') {
       // this.setupScopes(canvas.parentNode);
-      this.createPerformanceMeter();
+      this.createPerformanceMeter(canvas);
 
       canvas.__circuit_application = this;
     }
@@ -165,7 +171,7 @@ class CircuitApplication extends Observer {
     return scopeWrapper;
   }
 
-  createPerformanceMeter() {
+  createPerformanceMeter(canvasElm) {
     this.performanceMeter = new TimeSeries();
 
     this.chart = new SmoothieChart({
@@ -174,8 +180,16 @@ class CircuitApplication extends Observer {
       labels: {fillStyle: '#000', precision: 0}
     });
 
+    let performanceMeter = document.createElement("canvas");
+    performanceMeter.className = 'performance-sparkline';
+    performanceMeter.width = 200;
+    performanceMeter.height = 40;
+
+    canvasElm.parentNode.insertBefore(performanceMeter, canvasElm)
+
+
     this.chart.addTimeSeries(this.performanceMeter, {strokeStyle: 'rgba(255, 0, 200, 1)', lineWidth: 1});
-    this.chart.streamTo(document.getElementById('performance_sparkline'), 500);
+    this.chart.streamTo(performanceMeter, 500);
   }
 
   draw(renderer, xMargin, yMargin) {

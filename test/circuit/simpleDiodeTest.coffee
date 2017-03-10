@@ -48,7 +48,7 @@ describe "Simple single diode circuit", ->
       ]
     }
 
-    @Circuit = CircuitLoader.createCircuitFromJsonData(@json)
+    @Circuit = CircuitLoader.createCircuitFromJsonData("Simple Diode Circuit", @json)
 
     done()
 

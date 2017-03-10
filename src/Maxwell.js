@@ -7,8 +7,8 @@ let SampleCircuits = require(__dirname + "/../circuits/index.json");
 class Maxwell {
   static createContext(circuitName, circuitData, context, onComplete) {
     if (circuitName) {
-      let circuit = CircuitLoader.createCircuitFromJsonData(circuitData, circuitName);
-      this.Circuits[circuitName] = circuit;
+      let circuit = CircuitLoader.createCircuitFromJsonData(circuitName, circuitData);
+      // this.Circuits[circuitName] = circuit;
 
       let CircuitApp = new CircuitApplication(circuit, context);
 
@@ -20,8 +20,8 @@ class Maxwell {
 
   static createBlankCircuit(circuitName, context, onComplete) {
     if (circuitName) {
-      let circuit = new Circuit(circuit_name);
-      this.Circuits[circuitName] = circuit;
+      let circuit = new Circuit(circuitName);
+      // this.Circuits[circuitName] = circuit;
 
       let CircuitApp = new CircuitApplication(circuit, context);
 
@@ -31,6 +31,10 @@ class Maxwell {
     }
   }
 }
+
+Maxwell.Circuit = Circuit;
+Maxwell.CircuitApplication = CircuitApplication;
+Maxwell.CircuitLoader = CircuitLoader;
 
 Maxwell.Circuits = {};
 

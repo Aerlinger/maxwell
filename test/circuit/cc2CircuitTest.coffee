@@ -76,7 +76,7 @@ describe "CC2", ->
 
     @canvas = new Canvas(600, 500)
 
-    @circuit = CircuitLoader.createCircuitFromJsonData(@circuitJson)
+    @circuit = CircuitLoader.createCircuitFromJsonData("CC2 Circuit", @circuitJson)
 
     @circuit.updateCircuit()
 

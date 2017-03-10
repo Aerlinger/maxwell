@@ -5,7 +5,7 @@ let Hint = require('../engine/Hint');
 let Components = require('../components');
 
 class CircuitLoader {
-  static createCircuitFromJsonData(jsonData, circuit_name) {
+  static createCircuitFromJsonData(circuit_name, jsonData) {
 
     // Create a defensive copy of jsonData
     jsonData = JSON.parse(JSON.stringify(jsonData));

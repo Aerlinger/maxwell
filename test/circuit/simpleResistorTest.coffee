@@ -49,7 +49,7 @@ describe "Simple single resistor circuit", ->
       ]
     }
 
-    @Circuit = CircuitLoader.createCircuitFromJsonData(@json)
+    @Circuit = CircuitLoader.createCircuitFromJsonData('Simple resistor test', @json)
 
 
   it "has 3 elements", ->

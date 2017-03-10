@@ -12,7 +12,7 @@ describe.skip "Loading Scope from Legacy", ->
 
       jsonData = JSON.parse(circuitJson);
 
-      @circuit = CircuitLoader.createCircuitFromJsonData(jsonData)
+      @circuit = CircuitLoader.createCircuitFromJsonData("Scope load", jsonData)
 
       inputData = circuitData.toString().split("\n")
       for line in inputData
