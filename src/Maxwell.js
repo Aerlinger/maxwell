@@ -5,30 +5,18 @@ let CircuitLoader = require('./io/CircuitLoader');
 let SampleCircuits = require(__dirname + "/../circuits/index.json");
 
 class Maxwell {
-  static createContext(circuitName, circuitData, context, onComplete) {
-    if (circuitName) {
-      let circuit = CircuitLoader.createCircuitFromJsonData(circuitName, circuitData);
-      // this.Circuits[circuitName] = circuit;
+  static createContext(circuitName, circuitData, context) {
+    let circuit = CircuitLoader.createCircuitFromJsonData(circuitName, circuitData);
+    // this.Circuits[circuitName] = circuit;
 
-      let CircuitApp = new CircuitApplication(circuit, context);
-
-      onComplete(CircuitApp);
-    } else {
-      console.error(`createContext must be called with a unique circuit name`)
-    }
+    return new CircuitApplication(circuit, context);
   }
 
-  static createBlankCircuit(circuitName, context, onComplete) {
-    if (circuitName) {
-      let circuit = new Circuit(circuitName);
-      // this.Circuits[circuitName] = circuit;
+  static createBlankCircuit(circuitName, context) {
+    let circuit = new Circuit(circuitName);
+    // this.Circuits[circuitName] = circuit;
 
-      let CircuitApp = new CircuitApplication(circuit, context);
-
-      onComplete(CircuitApp);
-    } else {
-      console.error(`createContext must be called with a unique circuit name`)
-    }
+    return new CircuitApplication(circuit, context);
   }
 }
 

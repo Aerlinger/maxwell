@@ -144,20 +144,19 @@ block header
       $.ajax({
         url: "/api/circuits/#{circuit_name}"
       }).success(function(data, status) {
-        Maxwell.createContext("#{circuit_name}", data, canvas, function (circuitContext) {
-          circuitContext.run();
+        var circuitContext = Maxwell.createContext("#{circuit_name}", data, canvas);
+        circuitContext.run();
 
-          window.circuitContext = circuitContext;
+        window.circuitContext = circuitContext;
 
-          $('.component-item').click(function (evt) {
-            var componentName = $(this).data("name");
+        $('.component-item').click(function (evt) {
+          var componentName = $(this).data("name");
 
-            circuitContext.setPlaceComponent(componentName);
-          });
-
-          bindCircuitEvents(circuitContext);
-          bindKeyEvents(circuitContext);
+          circuitContext.setPlaceComponent(componentName);
         });
+
+        bindCircuitEvents(circuitContext);
+        bindKeyEvents(circuitContext);
       });
 
       function resizeCanvas() {
