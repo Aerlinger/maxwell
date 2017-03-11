@@ -11,11 +11,11 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
   let boldLines = false;
   let lineShift = 0;
 
-  this.withMargin = function (xMargin, yMargin, block) {
+  this.withMargin = function (marginLeft, marginTop, block) {
     clearCanvas();
 
     context.save();
-    context.translate(xMargin, yMargin);
+    context.translate(marginLeft, marginTop);
 
     block();
 
@@ -37,7 +37,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
 
   this.drawHighlightedNode = function (highlightedNode) {
     if (highlightedNode)
-      this.drawCircle(highlightedNode.x + 0.5, highlightedNode.y + 0.5, 7, 3, '#0F0');
+      this.drawCircle(highlightedNode.x, highlightedNode.y, config.POST_RADIUS + 4, 0, '#0F0', config.HIGHLIGHT_COLOR);
   };
 
   this.drawSelectedNodes = function (selectedNode) {
@@ -49,7 +49,7 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
     if (highlightedComponent) {
       highlightedComponent.draw(this, config);
 
-      context.fillStyle = config.POST_COLOR;
+      context.fillStyle = config.HIGHLIGHT_COLOR;
 
       for (let i = 0; i < highlightedComponent.numPosts(); ++i) {
         let post = highlightedComponent.getPost(i);
@@ -57,8 +57,8 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
         context.fillRect(post.x - config.POST_RADIUS - 1, post.y - config.POST_RADIUS - 1, 2 * config.POST_RADIUS + 2, 2 * config.POST_RADIUS + 2);
       }
 
-      if (highlightedComponent.x2())
-        context.fillRect(highlightedComponent.x2() - 2 * config.POST_RADIUS, highlightedComponent.y2() - 2 * config.POST_RADIUS, 4 * config.POST_RADIUS, 4 * config.POST_RADIUS);
+      // if (highlightedComponent.x2())
+      //   context.fillRect(highlightedComponent.x2() - 2 * config.POST_RADIUS, highlightedComponent.y2() - 2 * config.POST_RADIUS, 4 * config.POST_RADIUS, 4 * config.POST_RADIUS);
     }
   };
 
@@ -156,8 +156,8 @@ module.exports = function CanvasRenderStrategy(context, config, fullScaleVRange)
   }
 
   this.drawDots = function (ptA, ptB, component) {
-    if (component.Circuit && component.Circuit.isStopped)
-      return;
+    // if (component.Circuit && component.Circuit.isStopped)
+    //   return;
 
     var ds = config.CURRENT_SEGMENT_LENGTH;
 

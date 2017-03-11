@@ -85,8 +85,8 @@ class Circuit extends Observer {
 
     copyCircuit.flags = this.flags;
     copyCircuit.isStopped = this.isStopped;
-    copyCircuit.hintItem1 = this.hintItem1 && this.hintItem1.copy();
-    copyCircuit.hintItem2 = this.hintItem2 && this.hintItem2.copy();
+    copyCircuit.hintItem1 = this.hintItem1 && this.hintItem1;
+    copyCircuit.hintItem2 = this.hintItem2 && this.hintItem2;
 
     for (let component of this.elementList) {
       copyCircuit.elementList.push(component.copy())
@@ -121,7 +121,6 @@ class Circuit extends Observer {
     this.clearErrors();
     return this.notifyObservers(this.ON_RESET);
   }
-
 
   /**
    * "Solders" a new element to this circuit (adds it to the element list array).
@@ -481,6 +480,10 @@ class Circuit extends Observer {
 
   simSpeed() {
     return this.Params.simSpeed;
+  }
+
+  updateSimSpeed(simSpeed) {
+    this.Params.simSpeed = simSpeed;
   }
 
   getState() {

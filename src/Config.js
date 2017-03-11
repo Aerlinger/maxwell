@@ -11,8 +11,8 @@ let default_config = {
   WIRE_POSTS: true,
 
   // LINE WIDTHS:
-  POST_RADIUS: 2,
-  POST_OUTLINE_SIZE: 1,
+  POST_RADIUS: 2.1,
+  POST_OUTLINE_SIZE: 0,
   CURRENT_RADIUS: 2,
   CURRENT_COLOR: 'rgba(255, 255, 255, 0.7)',
   LINE_WIDTH: 2,

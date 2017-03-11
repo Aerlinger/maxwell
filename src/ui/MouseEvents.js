@@ -5,7 +5,7 @@
  *
  * This function's 'this' reference is bound to the parent CircuitController
  */
-let interactionController = function (Circuit, canvas, {xMargin=200, yMargin= 64} = {}) {
+let interactionController = function (Circuit, canvas, {marginLeft=200, marginTop= 64} = {}) {
   let SelectionMarquee = require('./SelectionMarquee');
 
   const ON_COMPONENT_HOVER = "ON_COMPONENT_HOVER";
@@ -30,8 +30,8 @@ let interactionController = function (Circuit, canvas, {xMargin=200, yMargin= 64
    * @param event JS event object
    */
   this.mousemove = function(event) {
-    let x = event.offsetX - xMargin;
-    let y = event.offsetY - yMargin;
+    let x = event.offsetX - marginLeft;
+    let y = event.offsetY - marginTop;
 
     this.newlyHighlightedComponent = null;
 
@@ -203,8 +203,8 @@ let interactionController = function (Circuit, canvas, {xMargin=200, yMargin= 64
    * @param event JS event object
    */
   this.mousedown = function(event) {
-    let x = event.offsetX - xMargin;
-    let y = event.offsetY - yMargin;
+    let x = event.offsetX - marginLeft;
+    let y = event.offsetY - marginTop;
 
     if (this.placeComponent) {
       if (!this.placeX && !this.placeY) {
@@ -218,9 +218,8 @@ let interactionController = function (Circuit, canvas, {xMargin=200, yMargin= 64
         this.Circuit.solder(this.placeComponent);
 
         this.placeComponent.place();
-        this.placeComponent = null;
-        this.placeX = null;
-        this.placeY = null;
+
+        this.clearPlaceComponent();
       }
     } else {
 

@@ -7,11 +7,11 @@ class ScopeCanvas {
   }
 
   x() {
-    return this.scopeDiv.offsetLeft - this.parentUI.xMargin;
+    return this.scopeDiv.offsetLeft - this.parentUI.marginLeft;
   }
 
   y() {
-    return this.scopeDiv.offsetTop - this.parentUI.yMargin;
+    return this.scopeDiv.offsetTop - this.parentUI.marginTop;
   }
 
   height() {

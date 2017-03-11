@@ -42,7 +42,7 @@ class CircuitApplication extends Observer {
     }
   }
 
-  attach(canvas, {xMargin=200, yMargin= 64} = {}) {
+  attach(canvas, {marginLeft=200, marginTop= 64} = {}) {
     // A Circuit is already loaded on this canvas so we need to garbage collect it to prevent a memory leak
     if (canvas.__circuit_application) {
       let previous_application = canvas.__circuit_application;
@@ -54,8 +54,8 @@ class CircuitApplication extends Observer {
 
     let renderer = new RenderStrategy(canvas.getContext('2d'), this.Config, this.Circuit.Params.voltageRange);
 
-    this.draw = this.draw.bind(this, renderer, xMargin, yMargin);
-    MouseEvents.bind(this)(this.Circuit, canvas, {xMargin, yMargin});
+    this.draw = this.draw.bind(this, renderer, marginLeft, marginTop);
+    MouseEvents.bind(this)(this.Circuit, canvas, {marginLeft, marginTop});
 
     if (typeof window !== 'undefined') {
       // this.setupScopes(canvas.parentNode);
@@ -192,13 +192,14 @@ class CircuitApplication extends Observer {
     this.chart.streamTo(performanceMeter, 500);
   }
 
-  draw(renderer, xMargin, yMargin) {
-    renderer.withMargin(xMargin, yMargin, () => {
+  draw(renderer, marginLeft, marginTop) {
+    renderer.withMargin(marginLeft, marginTop, () => {
       renderer.drawScopes(this.Circuit.getScopes());
-      renderer.drawComponents(this.Circuit, this.selectedComponents);
-
       renderer.drawHighlightedNode(this.highlightedNode);
       renderer.drawSelectedNodes(this.selectedNode);
+
+      renderer.drawComponents(this.Circuit, this.selectedComponents);
+
       renderer.drawHighlightedComponent(this.highlightedComponent);
 
       renderer.drawInfoText(this.Circuit, this.highlightedComponent);
@@ -220,6 +221,8 @@ class CircuitApplication extends Observer {
   }
 
   clearPlaceComponent() {
+    this.onClearPlaceComponent && this.onClearPlaceComponent();
+
     this.placeX = null;
     this.placeY = null;
     this.placeComponent = null;
@@ -245,7 +248,13 @@ class CircuitApplication extends Observer {
 
     this.placeComponent = new Component();
 
+    this.onPlaceComponent && this.onPlaceComponent(componentName);
+
     this.resetSelection();
+    return this.placeComponent;
+  }
+
+  getPlaceComponent() {
     return this.placeComponent;
   }
 

@@ -84,11 +84,11 @@ module.exports = function SvgRenderStrategy(context, config, fullScaleVRange) {
       return this.drawRect(selectedNode.x - 10 + 0.5, selectedNode.y - 10 + 0.5, 21, 21, {lineWidth: 1, lineColor: '#0FF'});
   };
 
-  this.withMargin = function (xMargin, yMargin, block) {
+  this.withMargin = function (marginLeft, marginTop, block) {
     this.clearCanvas();
 
     let topNavHeight = 42;
-    this.svg.attr("transform", "translate(" + xMargin + "," + (yMargin - topNavHeight) + ")");
+    this.svg.attr("transform", "translate(" + marginLeft + "," + (marginTop - topNavHeight) + ")");
 
     // TOOD:
     block(this);
