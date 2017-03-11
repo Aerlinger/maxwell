@@ -26,10 +26,11 @@
   "devDependencies": {
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.0",
+    "babel-eslint": "^6.1.2",
     "babel-loader": "^6.3.2",
     "babel-polyfill": "^6.3.14",
-    "babel-preset-stage-0": "^6.5.0",
     "babel-preset-es2015": "^6.1.18",
+    "babel-preset-stage-0": "^6.5.0",
     "bower": "~1.3.0",
     "canvas": "1.6.2",
     "chai": "3.5.0",
@@ -43,6 +44,7 @@
     "debug": "^2.2.0",
     "deep-diff": "0.3.3",
     "destroy": "^1.0.3",
+    "eslint": "^3.0.0",
     "foundation-sites": "^6.3.0",
     "globby": "^6.1.0",
     "gm": "^1.23.0",
@@ -66,7 +68,8 @@
   "scripts": {
     "test": "mocha -w --compilers coffee:coffee-script/register",
     "start": "node app/app.js",
-    "benchmark": "node --prof scripts/node-benchmark.js"
+    "benchmark": "node --prof scripts/node-benchmark.js",
+    "lint": "eslint ./src"
   },
   "babel": {
     "presets": [
