@@ -136,7 +136,7 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
 - Show element bounding boxes
 - Show element terminals
 
-#####Configuration and initialization:
+##### Configuration and initialization:
   **Javascript:**
   ```javascript
     var schmittTrigger = Maxwell.createCircuit('Schmitt trigger example', "schmitt_trigger.json");
