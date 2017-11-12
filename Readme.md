@@ -2,7 +2,7 @@
 
 A low-level javascript circuit simulation engine designed to model, simulate, and render complex electronic circuitry.
 
-**Demo Link:** [http://circuitlab.herokuapp.com/ui/opint](http://circuitlab.herokuapp.com/ui/opint)
+**Demo Link:** [http://circuitlab.herokuapp.com/](http://circuitlab.herokuapp.com/)
 
 
 ## Running the App
@@ -46,7 +46,7 @@ var circuitContext = Maxwell.createCircuit("Voltage Divider", "./voltdivide.json
 
 Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms and a capacitance of 20 milliFarads.
 
-#####Setting up the circuit:
+##### Setting up the circuit:
   ```javascript
 
   resistiveCircuit = Maxwell.createCircuit('Simple RC circuit');
@@ -85,7 +85,7 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
 
   ```
 
-#####Querying computed values within the circuit:
+##### Querying computed values within the circuit:
   ```javascript
 
   components  = resistiveCircuit.getComponents();
@@ -121,10 +121,10 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
   ```
 
 
-##Rendering and Plotting:
+## Rendering and Plotting:
   Maxwell can also render to one or more `<canvas>` elements via the `Renderer` object.
 
-#####Setting up the canvas:
+##### Setting up the canvas:
 
   **HTML:**
   ```html
@@ -176,11 +176,11 @@ Consider a simple resistor-capacitor (RC) circuit with a resistance of 50 Ohms a
   The Maxwell Rendering API is an extension of Soulwire's Sketch.js framework. You can find find a list of additional
   methods used to customize the display there.
 
-###Plotting and adding Oscilloscopes:
+### Plotting and adding Oscilloscopes:
 
   **(Work in progress)**
   
-###TODO
+### TODO
 
 - Unique IDs for CircuitComponent
 - Consistent fields for CircuitComponent
